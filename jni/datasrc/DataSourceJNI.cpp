@@ -25,7 +25,7 @@
 	#define D(...)  do {} while (0)
 #endif
 
-const char* CLASS_NAME = "edu/neu/ccs/mhealth/teengame/data/NativeDataSource";
+const char* CLASS_NAME = "edu/neu/android/mhealth/uscteensver1/data/NativeDataSource";
 
 static JavaVM *gJavaVM;
 static DataSource* gDataSrc = DataSource::GetInstance();

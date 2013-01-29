@@ -227,7 +227,7 @@ public class ListView extends AppObject {
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) { // up: -
 		mSpeedY = velocityY / 50;
-		mAccSpeedY = mSpeedY > 0 ? -3 : 3;
+		mAccSpeedY = mSpeedY > 0 ? -1 : 1;
 		mLastAction = e2.getAction();
 		return true;
 	}
