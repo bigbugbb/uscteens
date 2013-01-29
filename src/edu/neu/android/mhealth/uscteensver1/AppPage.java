@@ -1,0 +1,215 @@
+package edu.neu.android.mhealth.uscteensver1;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.os.Handler;
+import android.util.Log;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+
+
+public class AppPage implements OnGestureListener {		
+	// app context
+	protected Context mContext = null;
+	// message handler
+	protected Handler mHandler = null;	
+	// flag to indicate whether this page is enabled
+	protected boolean mEnable = true;
+	// size of the page 
+	protected int mWidth  = 0;
+	protected int mHeight = 0;
+	// UI or game objects
+	protected List<AppObject> mObjects = new ArrayList<AppObject>();
+	// gesture detector
+	protected GestureDetector mGestureDetector = new GestureDetector(this);
+	// the current selected object
+	protected AppObject mSelObject = null; 
+	// the last selected object
+	protected AppObject mLastSelObject = null;
+
+	protected AppPage(Context context, Handler handler) {
+		mContext = context;
+		mHandler = handler;
+		mObjects.clear();
+	}
+	
+	public void resume() {}
+	
+	public void pause() {}
+	
+	public void start() {}
+	
+	public void stop() {}
+	
+	public void reset() {}
+	
+	public void restart() {
+		pause();
+		stop();
+		reset();
+		start();
+		resume();
+	}
+	
+	public void release() {
+		for (AppObject obj : mObjects) {
+			try {
+				obj.release();
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
+		}
+		mObjects.clear();
+		System.gc();
+	}
+	
+	public void setEnable(boolean enable) {
+		mEnable = enable;
+	}
+	
+	public boolean isEnabled() {
+		return mEnable;
+	}
+	
+	public void onAppEvent(AppEvent e) {}	
+
+	protected void setHandler(Handler handler) {
+		mHandler = handler;
+	}	
+	
+	protected void onSizeChanged(int width, int height) {
+		mWidth  = width;
+		mHeight = height;
+		
+		for (AppObject obj : mObjects) {
+			try {
+				obj.onSizeChanged(width, height);
+			} catch (NullPointerException e) {
+	        	e.printStackTrace();
+			}
+		}
+	}
+	
+	protected void onDraw(Canvas c) {} 
+	
+	protected void orderByZ(List<AppObject> objects) {		
+		Collections.sort(objects, new ZOrderComparator());
+	}
+	
+	private class ZOrderComparator implements Comparator<AppObject> {
+		public int compare(AppObject obj1, AppObject obj2) {
+			return obj1.getZOrder() - obj2.getZOrder(); 
+		}
+	}
+	
+	// onTouch should not be handled simultaneously with onDraw
+	public synchronized boolean onTouch(MotionEvent e) {
+		boolean ret = false;
+		
+		if (mGestureDetector.onTouchEvent(e)) {
+			return true;
+		} else {
+			switch (e.getAction()) {
+			case MotionEvent.ACTION_UP: 
+				ret = onUp(e); 
+				break;				
+			default: 
+				ret = false;
+				break;
+			}
+		}
+		
+		return ret;
+	}
+	
+	@Override
+	public boolean onDown(MotionEvent e) {
+		boolean ret = false;
+		float x = e.getX();
+		float y = e.getY();				
+		
+		for (int i = mObjects.size() - 1; i >= 0; --i) {
+			if (mObjects.get(i).contains(x, y)) {				
+				mSelObject = mObjects.get(i);
+				mLastSelObject = mSelObject;
+				mSelObject.setSelected(true);				
+				ret = mSelObject.onDown(e);				
+				break;
+			}
+		}
+		
+		return ret;
+	}
+	
+	public boolean onUp(MotionEvent e) {
+		boolean ret = false;
+
+		if (mSelObject != null) {
+			ret = mSelObject.onUp(e);
+			mSelObject.setSelected(false);
+			mSelObject = null;
+		}
+		
+		return ret;
+	}		
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		boolean ret = false;
+		
+		if (mSelObject != null) {
+			if (mSelObject.contains(e2.getX(), e2.getY())) {
+				ret = mSelObject.onFling(e1, e2, velocityX, velocityY);
+			}
+		}
+
+		return ret;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		boolean ret = false;
+		
+		if (mSelObject != null) {
+			if (mSelObject.contains(e2.getX(), e2.getY())) {
+				ret = mSelObject.onScroll(e1, e2, distanceX, distanceY);
+			} else {
+				Log.d("scroll", "out of range");
+				mSelObject.onCancelSelection(e2);
+				mSelObject.setSelected(false);
+				mSelObject = null;
+				ret = true;
+			}
+		}
+
+		return ret;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false; // do nothing here
+	}
+}
