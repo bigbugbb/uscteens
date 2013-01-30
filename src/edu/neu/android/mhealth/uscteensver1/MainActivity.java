@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.data.NativeDataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.HomePageDialog;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -31,12 +29,12 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 	// all of the pages
 	protected AppPage mCurPage = null;
 	protected List<AppPage> mPages = new ArrayList<AppPage>();
-	// chunk manager
-	protected ChunkManager mChunkManager = null;
 	// data manager
-	protected DataSource mDataSource = null;
-	// native data source, will replace DataSource in the future
-	protected NativeDataSource mNativeDataSource = null;
+	protected DataSource mDataSource = DataSource.getInstance(this);
+	
+	protected enum PageType {  
+		HOME_PAGE, WEEKDAY_PAGE, MAIN_PAGE, WIN_PAGE 
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +48,6 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 		createSensor();		
 		// create app pages and all the UIs in the pages
 		initPages();	
-		// init chunk manager and other things
-		initOthers();
 	}
 	
 	@Override
@@ -95,24 +91,37 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 		// get system sensor manager to deal with sensor issues  
         mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 	}
-	
-	private void initOthers() {
-		mDataSource   = DataSource.getInstance(this);
-		mChunkManager = ChunkManager.getInstance(this);
-		mChunkManager.setUserData(mPages.get(2));
-		
-		mNativeDataSource = NativeDataSource.getDataSource();
-	}
-	
+
 	private void initPages() {
 		// only three pages now		
 		mPages.add(new HomePage(this, mMainView, mHandler));
 		mPages.add(new WeekdayPage(this, mMainView, mHandler));
 		mPages.add(new MainPage(this, mMainView, mHandler));
 		mPages.add(new WinPage(this, mMainView, mHandler));
-		mCurPage = mPages.get(0);
+		mCurPage = mPages.get(indexOfPage(PageType.HOME_PAGE));
 		// set pages to main view
 		mMainView.setPages(mPages);
+	}
+	
+	private int indexOfPage(PageType pageType) {
+		int index = 0;
+		
+		switch (pageType) {
+		case HOME_PAGE:
+			index = 0;
+			break;
+		case WEEKDAY_PAGE:
+			index = 1;
+			break;
+		case MAIN_PAGE:
+			index = 2;
+			break;
+		case WIN_PAGE:
+			index = 3;
+			break;
+		}
+		
+		return index;
 	}
 
 	public void switchPages(int pageTo) {
@@ -171,19 +180,16 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 	
 	// use main looper as the default
 	protected final Handler mHandler = new Handler() {	
-		public void handleMessage(Message msg) {        	
-			Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-			vibrator.vibrate(20);
-	
+		public void handleMessage(Message msg) {        					
 			Intent i = null;		
+			
         	switch (msg.what) {    
         	case AppCmd.BEGIN:        		
-        		switchPages(1);
+        		switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
         		break;
         	case AppCmd.WEEKDAY:
         		mDataSource.setDay((Integer) msg.obj);
-        		if (mDataSource.loadData()) {
-        			mChunkManager.loadChunks(mDataSource);
+        		if (mDataSource.loadData()) {        			
             		switchPages(2);
         		}
             	break;
@@ -199,6 +205,9 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
             default:
             	break;
             }            
+        	
+        	Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+			vibrator.vibrate(20);
         }			
     };
     
@@ -217,13 +226,10 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 			if (mCurPage == mPages.get(0)) { // home page
 				HomePageDialog dialog = new HomePageDialog();
 				dialog.show(getSupportFragmentManager(), "HomePageDialog");
-			} else if (mCurPage == mPages.get(1)) { // main page
-				switchPages(0);				
-			} else if (mCurPage == mPages.get(2)) {
-				mChunkManager.saveChunks();
-				mChunkManager.release();
-				mDataSource.releaseData();
-				switchPages(1);
+			} else if (mCurPage == mPages.get(indexOfPage(PageType.WEEKDAY_PAGE))) {
+				switchPages(indexOfPage(PageType.HOME_PAGE));				
+			} else if (mCurPage == mPages.get(indexOfPage(PageType.MAIN_PAGE))) {
+				switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
 			}
 			return true;
 		}
@@ -243,4 +249,6 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
         	page.finishMerge(data.getStringExtra(WarningDialog.SELECTION));        	
         }
     } 
+	
+	
 }

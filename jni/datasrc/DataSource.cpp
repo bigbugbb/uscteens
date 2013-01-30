@@ -51,7 +51,7 @@ int DataSource::Destroy()
 	return 0;
 }
 
-vector<float>* DataSource::LoadActivityData(const char* pszFile)
+vector<int>* DataSource::LoadActivityData(const char* pszFile)
 {
 	for (vector<ActivityData*>::iterator iter = m_vecActivity.begin();
 			iter != m_vecActivity.end(); ++iter) {
@@ -69,7 +69,7 @@ vector<float>* DataSource::LoadActivityData(const char* pszFile)
 	}
 	float num;
 	while (!feof(fp)) {
-		fscanf(fp, "%f", &num);
+		fscanf(fp, "%d", &num);
 		pData->vecData.push_back(num);
 	}
 	m_vecActivity.push_back(pData);

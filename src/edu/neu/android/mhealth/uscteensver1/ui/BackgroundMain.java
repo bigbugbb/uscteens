@@ -5,6 +5,7 @@ import edu.neu.android.mhealth.uscteensver1.R;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 
 public class BackgroundMain extends Background {
 	
@@ -38,6 +39,7 @@ public class BackgroundMain extends Background {
 
 	@Override
 	public void onDraw(Canvas c) {		
+		c.drawColor(Color.WHITE);
 		c.drawBitmap(mImages.get(0), mX, mY, null);
 	}
 

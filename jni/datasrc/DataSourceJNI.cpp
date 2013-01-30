@@ -7,7 +7,6 @@
 
 #include <jni.h>
 #include <assert.h>
-
 #include "DataSource.h"
 
 #define DEBUG
@@ -25,7 +24,7 @@
 	#define D(...)  do {} while (0)
 #endif
 
-const char* CLASS_NAME = "edu/neu/android/mhealth/uscteensver1/data/NativeDataSource";
+const char* CLASS_NAME = "edu/neu/android/mhealth/uscteensver1/data/DataSource";
 
 static JavaVM *gJavaVM;
 static DataSource* gDataSrc = DataSource::GetInstance();
@@ -57,21 +56,21 @@ jint Destroy(JNIEnv * env, jobject thiz)
 	return nResult;
 }
 
-jfloatArray LoadActivityData(JNIEnv* env, jobject thiz, jstring path)
+jintArray LoadActivityData(JNIEnv* env, jobject thiz, jstring path)
 {
 	jboolean bCopy;
 //	JNIEnv* env = JNI_GetEnv();
 	const char* pszPath = env->GetStringUTFChars(path, &bCopy);
-	vector<float>* pVecData = gDataSrc->LoadActivityData(pszPath);
+	vector<jint>* pVecData = gDataSrc->LoadActivityData(pszPath);
 	env->ReleaseStringUTFChars(path, pszPath);
 
 	jsize size = pVecData->size();
-	jfloatArray result = env->NewFloatArray(size);
+	jintArray result = env->NewIntArray(size);
 	if (result == NULL) {
 		return NULL; /* out of memory error thrown */
 	}
 	// move from the temp structure to the java structure
-	env->SetFloatArrayRegion(result, 0, size, static_cast<jfloat*>(&(*pVecData)[0]));
+	env->SetIntArrayRegion(result, 0, size, static_cast<jint*>(&(*pVecData)[0]));
 
 	return result;
 }
@@ -108,7 +107,6 @@ jintArray LoadChunkData(JNIEnv* env, jobject thiz, jstring path)
 jint UnloadChunkData(JNIEnv * env, jobject thiz, jstring path)
 {
 	jboolean bCopy;
-//	JNIEnv* env = JNI_GetEnv();
 	const char* pszPath = env->GetStringUTFChars(path, &bCopy);
 	jint result = gDataSrc->UnloadChunkData(pszPath);
 	env->ReleaseStringUTFChars(path, pszPath);

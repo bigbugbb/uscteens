@@ -36,26 +36,30 @@ public class ChunkManager {
 	
 	protected int mLastValue = 0;
 	protected Context mContext = null;
-	protected DataSource mDataSource = null;
-	
-	static protected ChunkManager sManager = null;
-	
-	static public ChunkManager getInstance(Context context) {
-		if (sManager == null) {
-			sManager = new ChunkManager(context);
-		}
-		return sManager;
-	}
+	protected DataSource mDataSrc = null;
 
-	protected ChunkManager(Context context) {
+	public ChunkManager(Context context, DataSource dataSrc) {
 		mRes = context.getResources();
-		mContext = context;				
-	}		
+		mContext = context;		
+		mDataSrc = dataSrc;
+	}	
 	
-	public void loadChunks(DataSource src) {
-		mDataSource = src;
-		ArrayList<DataCell> cells = mDataSource.mChkData.getData();
-		float lastValue = mDataSource.mActData.getData().length;
+	protected void load() {
+		
+	}
+	
+	public void start() {
+		loadChunks();
+	}
+	
+	public void stop() {
+		saveChunks();
+		release();
+	}
+	
+	public void loadChunks() {
+		ArrayList<DataCell> cells = mDataSrc.mChkData;
+		float lastValue = mDataSrc.mActData.length;
 		if (mChunks == null) {
 			mChunks = new ArrayList<Chunk>();
 		}
@@ -86,7 +90,7 @@ public class ChunkManager {
 			DataCell cell = new DataCell(c.mValue, c.getActionID());
 			cells.add(cell);
 		}
-		mDataSource.mChkData.saveData(cells);
+		mDataSrc.saveChunkData(cells);
 	}
 	
 	public Chunk getChunk(int index) {

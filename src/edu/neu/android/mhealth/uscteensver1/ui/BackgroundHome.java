@@ -23,6 +23,7 @@ public class BackgroundHome extends Background {
 
 	@Override
 	public void onDraw(Canvas c) {
+		c.drawColor(Color.WHITE);
 		c.drawBitmap(mImages.get(0), mX, mY, null);
 	}
 	

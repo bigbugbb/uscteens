@@ -15,7 +15,7 @@ class DataSource
 public:
 	int  Create();
 	int  Destroy();
-	vector<float>* LoadActivityData(const char* pszFile);
+	vector<int>* LoadActivityData(const char* pszFile);
 	int  UnloadActivityData(const char* pszFile);
 	vector<int>* LoadChunkData(const char* pszFile);
 	int  UnloadChunkData(const char* pszFile);
@@ -27,8 +27,8 @@ protected:
 	virtual ~DataSource();
 
 	struct ActivityData {
-		string 		  strFile;
-		vector<float> vecData;
+		string 		strFile;
+		vector<int> vecData;
 	};
 
 	struct ChunkData {

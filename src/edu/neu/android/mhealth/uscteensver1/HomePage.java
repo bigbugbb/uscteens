@@ -72,14 +72,6 @@ public class HomePage extends AppPage implements OnClickListener {
 	}
 
 	@Override
-	protected void onDraw(Canvas c) {
-		c.drawColor(Color.WHITE);
-		for (AppObject obj : mObjects) {
-			obj.onDraw(c);
-		}
-	}
-
-	@Override
 	public void onClick(AppObject obj) {
 		switch (obj.getID()) {		
 		case BEGIN:

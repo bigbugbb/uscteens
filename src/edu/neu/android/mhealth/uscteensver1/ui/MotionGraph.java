@@ -10,15 +10,14 @@ import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.AppObject;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.data.ActionData;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 
 
 public class MotionGraph extends AppObject {
 		
-	protected ActionData mData = null;
-	protected ChunkManager mManager = ChunkManager.getInstance(null);
+	protected int[] mData = null;
+	protected ChunkManager mManager = null;
 	protected int   mStart = 0;
 	protected int   mEnd   = 0;
 	protected int   mCanvasWidth  = 0;
@@ -27,8 +26,8 @@ public class MotionGraph extends AppObject {
 	protected Paint mPaint = null;
 	protected Paint mAnswerPaint = null;
 	protected Paint mSelChunkPaint = null;
-	protected float[] mActions = null;
-	protected float[] mActionsScaled = null;
+	protected int[] mActions = null;
+	protected int[] mActionsScaled = null;
 	protected int   mLastAction = 0;
 	protected OnGraphMovedListener mListener = null;
 	
@@ -36,8 +35,9 @@ public class MotionGraph extends AppObject {
 		void OnGraphMoved(MotionGraph graph, float progress);
 	}
 
-	public MotionGraph(Resources res) {
-		super(res);						
+	public MotionGraph(Resources res, ChunkManager manager) {
+		super(res);				
+		mManager = manager;
 		loadImages(new int[]{ R.drawable.menubar_background });								
 		
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -58,9 +58,9 @@ public class MotionGraph extends AppObject {
 			
 	}
 	
-	public void setActionData(ActionData data) {
-		mActions = data.getData();	
-		mActionsScaled = new float[mActions.length];
+	public void setActionData(int[] data) {
+		mActions = data;	
+		mActionsScaled = new int[mActions.length];
 	}
 	
 	public void setOnGraphMovedListener(OnGraphMovedListener listener) {
@@ -143,7 +143,7 @@ public class MotionGraph extends AppObject {
 		mEnd   = mStart + (int)mWidth;
 		mEnd   = (mEnd > mActions.length) ? mActions.length : mEnd;
 		for (int i = 0; i < mActions.length; ++i) {
-			mActionsScaled[i] = mHeight * (mActions[i] / 100f);
+			mActionsScaled[i] = (int) (mHeight * (mActions[i] / 100f));
 		}		
 		mRightBound = mActions.length - (int) mWidth;
 		

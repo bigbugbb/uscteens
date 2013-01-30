@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.data.ActionData;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
-import edu.neu.android.mhealth.uscteensver1.data.ChunkData;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.ui.*;
 import edu.neu.android.mhealth.uscteensver1.ui.CustomButton.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph.OnGraphMovedListener;
@@ -38,19 +37,8 @@ public class MainPage extends AppPage implements OnClickListener,
 	protected MainPage(Context context, View view, Handler handler) {
 		super(context, handler);				
 		mView = view;
-	}
-	
-	public boolean isAllFinished() {
-		for (AppObject obj : mObjects) {
-			if (obj.getID() == UIID.QUEST) {
-				ButtonQuest quest = (ButtonQuest) obj;
-				if (!quest.isAnswered()) {
-					return false;
-				}
-			}
-		}
-		
-		return true;
+		mChunkManager = new ChunkManager(context, DataSource.getInstance(null));
+		mChunkManager.setUserData(this);
 	}
 
 	public MotionGraph getMotionGraph() {
@@ -68,14 +56,11 @@ public class MainPage extends AppPage implements OnClickListener,
 			mObjects.add(mBackground);
 			mBackground.setID(UIID.BKGND);			
 		}
-		if (mChunkManager == null) {
-			mChunkManager = ChunkManager.getInstance(mContext);			
-		}
 		if (mMotionGraph == null) {
-			mMotionGraph = new MotionGraph(mContext.getResources());
+			mMotionGraph = new MotionGraph(mContext.getResources(), mChunkManager);
 			mObjects.add(mMotionGraph);
 			mMotionGraph.setID(UIID.GRAPH);					
-			mMotionGraph.setActionData(ActionData.getInstance(mContext));
+			mMotionGraph.setActionData(DataSource.getInstance(null).mActData);
 			mMotionGraph.setOnGraphMovedListener(this);
 		}
 		if (mBtnBack == null) {
@@ -104,6 +89,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	}
 	
 	public void start() {
+		mChunkManager.start();
 		load();		
 		for (AppObject obj : mObjects) {
 			obj.onSizeChanged(mView.getWidth(), mView.getHeight());
@@ -111,12 +97,13 @@ public class MainPage extends AppPage implements OnClickListener,
 	}
 	
 	public void stop() {
+		mChunkManager.stop();
+		
 		mBackground   = null;
 		mMotionGraph  = null;
 		mBtnBack 	  = null;
 		mBtnNext 	  = null;
 		mSlideBar 	  = null;
-		mChunkManager = null;
 		
 		release();								
 	}
@@ -138,8 +125,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	}
 
 	@Override
-	protected void onDraw(Canvas c) {
-		c.drawColor(Color.WHITE);
+	protected void onDraw(Canvas c) {		
 		for (AppObject obj : mObjects) {
 			obj.onDraw(c);
 		}

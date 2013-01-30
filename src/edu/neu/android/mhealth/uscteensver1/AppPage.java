@@ -98,7 +98,11 @@ public class AppPage implements OnGestureListener {
 		}
 	}
 	
-	protected void onDraw(Canvas c) {} 
+	protected void onDraw(Canvas c) {
+		for (AppObject obj : mObjects) {
+			obj.onDraw(c);
+		}
+	}
 	
 	protected void orderByZ(List<AppObject> objects) {		
 		Collections.sort(objects, new ZOrderComparator());
