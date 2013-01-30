@@ -67,7 +67,7 @@ vector<int>* DataSource::LoadActivityData(const char* pszFile)
 	if (fp == NULL) {
 		return NULL;
 	}
-	float num;
+	int num;
 	while (!feof(fp)) {
 		fscanf(fp, "%d", &num);
 		pData->vecData.push_back(num);

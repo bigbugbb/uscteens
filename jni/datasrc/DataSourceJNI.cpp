@@ -9,7 +9,7 @@
 #include <assert.h>
 #include "DataSource.h"
 
-#define DEBUG
+//#define DEBUG
 
 #ifndef NULL
 #define NULL	0
@@ -116,7 +116,7 @@ jint UnloadChunkData(JNIEnv * env, jobject thiz, jstring path)
 static JNINativeMethod methods[] = {
 	{"create", "()I", (void*)Create },
 	{"destroy", "()I", (void*)Destroy },
-	{"loadActivityData", "(Ljava/lang/String;)[F", (void*)LoadActivityData },
+	{"loadActivityData", "(Ljava/lang/String;)[I", (void*)LoadActivityData },
 	{"unloadActivityData", "(Ljava/lang/String;)I", (void*)UnloadActivityData },
 //	{"loadChunkData", "(Ljava/lang/String;)[I", (void*)LoadChunkData },
 //	{"unloadChunkData", "(Ljava/lang/String;)I", (void*)UnloadChunkData },
