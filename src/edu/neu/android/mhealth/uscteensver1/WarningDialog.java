@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.WarningView.OnBackClickedListener;
 import edu.neu.android.mhealth.uscteensver1.WarningView.OnItemClickListener;
 
 import android.app.Activity;
@@ -14,7 +15,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-public class WarningDialog extends Activity implements OnItemClickListener {
+public class WarningDialog extends Activity implements OnItemClickListener, OnBackClickedListener {
 	
 	public static final String KEY = "ACTIONS_TO_MERGE";
 	public static final String SELECTION = "SELECTION_ACTION";
@@ -36,6 +37,7 @@ public class WarningDialog extends Activity implements OnItemClickListener {
 	private void setupViews() {
 		mView = (WarningView) findViewById(R.id.view_warning);
 		mView.setActions(mActions);
+		mView.setOnBackClickedListener(this);
 		mView.setOnItemClickListener(this);
 	}
 	
@@ -56,6 +58,11 @@ public class WarningDialog extends Activity implements OnItemClickListener {
 		Intent i = new Intent();
 		i.putExtra(SELECTION, mActions.get(pos));
 		setResult(pos + 1, i); 
+		finish();
+	}
+
+	@Override
+	public void onBackClickedListener() {
 		finish();
 	}	
 }

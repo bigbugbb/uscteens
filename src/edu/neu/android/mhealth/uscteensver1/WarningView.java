@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.Config;
@@ -27,18 +28,30 @@ public class WarningView extends View {
 	protected boolean mImageLoaded = false;	
 	protected List<Bitmap> mImages = new ArrayList<Bitmap>();
 	protected List<String> mActions = null;
+	protected Paint mPaintText0 = null;
 	protected Paint mPaintText1 = null;
-	protected Paint mPaintText2 = null;
+	protected Paint mPaintText2 = null;	
 	protected List<RectF> mAreas = new ArrayList<RectF>();
 	protected int mSelection = 0;
-	protected OnItemClickListener mListener = null;
+	protected OnItemClickListener   mItemListener = null;
+	protected OnBackClickedListener mBackListener = null;
+	protected RectF mBackArea = new RectF();
+	protected PointF mBackTxtPt = new PointF();
+	
 	
 	public WarningView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
 		mRes = context.getResources();
 		loadImages(new int[]{ R.drawable.warning_back, R.drawable.arrow_warning, 
-				R.drawable.selection, R.drawable.selection_circle });		
+				R.drawable.selection, R.drawable.selection_circle });	
+		
+		mPaintText0 = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mPaintText0.setColor(Color.WHITE);
+		mPaintText0.setStyle(Style.STROKE);
+		mPaintText0.setTextSize(34);
+		mPaintText0.setTypeface(Typeface.SERIF);
+		mPaintText0.setFakeBoldText(false);
 		
 		mPaintText1 = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText1.setColor(Color.BLACK);
@@ -55,14 +68,26 @@ public class WarningView extends View {
 		mPaintText2.setFakeBoldText(false);
 		mPaintText2.setTextSize(40);
 		mPaintText2.setTextAlign(Paint.Align.LEFT);
+		
+		mBackArea.left   = 10;
+		mBackArea.right  = mBackArea.left + mImages.get(1).getWidth();
+		mBackArea.top    = 5;
+		mBackArea.bottom = mBackArea.top + mImages.get(1).getHeight();
+		
+		mBackTxtPt.x = mBackArea.left + 33;
+		mBackTxtPt.y = mBackArea.bottom - 52;
 	}
 	
 	protected void setActions(ArrayList<String> actions) {
 		mActions = actions;		
 	}
 	
+	protected void setOnBackClickedListener(OnBackClickedListener listener) {
+		mBackListener = listener;
+	}
+	
 	protected void setOnItemClickListener(OnItemClickListener listener) {
-		mListener = listener;
+		mItemListener = listener;
 	}
 
 	protected void loadImages(int[] resIDs) {
@@ -82,6 +107,8 @@ public class WarningView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawBitmap(mImages.get(0), 0, 0, null);
+		canvas.drawBitmap(mImages.get(1), mBackArea.left, mBackArea.top, null);
+		canvas.drawText("BACK", mBackTxtPt.x, mBackTxtPt.y, mPaintText0);
 		canvas.drawText("Do you want to merge", getWidth() / 2, 220, mPaintText1);
 		canvas.drawText("this activities to:", getWidth() / 2, 310, mPaintText1);
 		
@@ -110,20 +137,41 @@ public class WarningView extends View {
 			for (int i = 0; i < mAreas.size(); ++i) {
 				if (mAreas.get(i).contains(event.getX(), event.getY())) {
 					mSelection = i;	
-					if (mListener != null) {
-						mListener.onItemClick(this, mSelection);
+					if (mItemListener != null) {
+						mItemListener.onItemClick(this, mSelection);
 					}
 					ret = true;				
 					break;
 				}
 			}
 			
+			if (mBackArea.contains(event.getX(), event.getY())) {
+//				mBackArea.offset(2, 2);
+//				mBackTxtPt.offset(2, 2);
+				if (mBackListener != null) {
+					mBackListener.onBackClickedListener();
+				}
+			}
+			
 			if (ret == true) {
 				invalidate();
 			}
-		}
+		} 
+//		else if (event.getAction() == MotionEvent.ACTION_UP) {
+//			if (mBackArea.contains(event.getX(), event.getY())) {
+//				mBackArea.offset(-2, -2);
+//				mBackTxtPt.offset(-2, -2);
+//				if (mBackListener != null) {
+//					mBackListener.onBackClickedListener();
+//				}
+//			}
+//		}
 		
 		return ret;
+	}
+	
+	public interface OnBackClickedListener {
+		void onBackClickedListener();
 	}
 	
 	public interface OnItemClickListener {

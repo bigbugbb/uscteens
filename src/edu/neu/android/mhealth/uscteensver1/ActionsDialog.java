@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.TitleView.OnBackClickedListener;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,10 +22,11 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 
-public class ActionsDialog extends Activity {
+public class ActionsDialog extends Activity implements OnBackClickedListener {
 	
-	protected ListView    mLvAction = null;
-	protected ImageButton mBtnNext  = null;
+	protected TitleView   mTitleView = null;
+	protected ListView    mLvAction  = null;
+	protected ImageButton mBtnNext   = null;
 	public static final String ACTION_NAME = "ACTION_NAME";
 	public static final String[] ACTIONS = new String[] {  		
 		"Reading/Homework", "Watching TV/Movies", "Using the computer",
@@ -64,8 +66,9 @@ public class ActionsDialog extends Activity {
 	}
 	
 	private void setupViews() {
-		mLvAction = (ListView) findViewById(R.id.lv_actions);
-		mBtnNext  = (ImageButton) findViewById(R.id.btn_next_actions);
+		mTitleView = (TitleView) findViewById(R.id.view_action_title);
+		mLvAction  = (ListView) findViewById(R.id.lv_actions);
+		mBtnNext   = (ImageButton) findViewById(R.id.btn_next_actions);
 		
 		mLvAction.setAdapter(new SimpleAdapter(this, getData(), R.layout.action_list_item,   
                 new String[]{ "img_pre", "text" },   
@@ -80,6 +83,9 @@ public class ActionsDialog extends Activity {
 				finish();
 			}             
 		}); 
+		
+		mTitleView.setOnBackClickedListener(this);
+		mTitleView.loadImages(new int[]{ R.drawable.popup_win_background, R.drawable.back_blue });	
 	}
 	
 	private void adjustLayout() {
@@ -106,5 +112,9 @@ public class ActionsDialog extends Activity {
         }  
           
         return list;  
-    } 
+    }
+
+	public void OnBackClicked() {
+		finish();
+	} 
 }
