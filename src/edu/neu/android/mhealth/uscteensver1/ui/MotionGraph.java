@@ -203,7 +203,7 @@ public class MotionGraph extends AppObject {
 		if (Math.abs((int) mSpeedX) > 0) {
 			mSpeedX = 0;
 		}
-		mStart = (int) x;
+		mStart = (int) ((x > mActLenInPix - mWidth) ? mActLenInPix - mWidth : x);
 		mEnd   = mStart + (int) mWidth;
 		mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;
 		

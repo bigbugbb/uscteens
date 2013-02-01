@@ -199,7 +199,7 @@ public class MainPage extends AppPage implements OnClickListener,
 		Chunk prevUnmarked = mChunkManager.getPreviousUnmarkedChunk();
 		if (prevUnmarked != null) {
 			mMotionGraph.moveGraph(prevUnmarked.mValue, 0);				
-			float progress = (float) prevUnmarked.mValue * DataSource.PIXEL_SCALE / mMotionGraph.getRightBound();
+			float progress = (float) prevUnmarked.mValue / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
 		}
 	}
@@ -208,7 +208,7 @@ public class MainPage extends AppPage implements OnClickListener,
 		Chunk nextUnmarked = mChunkManager.getNextUnmarkedChunk();
 		if (nextUnmarked != null) {
 			mMotionGraph.moveGraph(nextUnmarked.mValue, 0);			
-			float progress = (float) nextUnmarked.mValue * DataSource.PIXEL_SCALE / mMotionGraph.getRightBound();
+			float progress = (float) nextUnmarked.mValue / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
 		}
 	}
