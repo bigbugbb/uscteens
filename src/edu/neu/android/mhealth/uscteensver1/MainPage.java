@@ -19,6 +19,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 
 public class MainPage extends AppPage implements OnClickListener,
@@ -59,8 +60,7 @@ public class MainPage extends AppPage implements OnClickListener,
 		if (mMotionGraph == null) {
 			mMotionGraph = new MotionGraph(mContext.getResources(), mChunkManager);
 			mObjects.add(mMotionGraph);
-			mMotionGraph.setID(UIID.GRAPH);					
-			mMotionGraph.setActionData(DataSource.getInstance(null).mActData);
+			mMotionGraph.setID(UIID.GRAPH);							
 			mMotionGraph.setOnGraphMovedListener(this);
 		}
 		if (mBtnBack == null) {
@@ -198,8 +198,8 @@ public class MainPage extends AppPage implements OnClickListener,
 	private void tryToBack(ButtonBack back) {
 		Chunk prevUnmarked = mChunkManager.getPreviousUnmarkedChunk();
 		if (prevUnmarked != null) {
-			mMotionGraph.moveGraph(prevUnmarked.mValue, 0);	
-			float progress = (float) prevUnmarked.mValue / mMotionGraph.getRightBound();
+			mMotionGraph.moveGraph(prevUnmarked.mValue, 0);				
+			float progress = (float) prevUnmarked.mValue * DataSource.PIXEL_SCALE / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
 		}
 	}
@@ -207,8 +207,8 @@ public class MainPage extends AppPage implements OnClickListener,
 	private void tryToNext(ButtonNext next) {
 		Chunk nextUnmarked = mChunkManager.getNextUnmarkedChunk();
 		if (nextUnmarked != null) {
-			mMotionGraph.moveGraph(nextUnmarked.mValue, 0);
-			float progress = (float) nextUnmarked.mValue / mMotionGraph.getRightBound();
+			mMotionGraph.moveGraph(nextUnmarked.mValue, 0);			
+			float progress = (float) nextUnmarked.mValue * DataSource.PIXEL_SCALE / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
 		}
 	}
@@ -221,8 +221,11 @@ public class MainPage extends AppPage implements OnClickListener,
 	}
 	
 	private void tryToSplit(ButtonSplit split) {		
-		mChunkManager.splitChunk(split.getHost());
-		mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
+		if (mChunkManager.splitChunk(split.getHost())) {
+			mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
+		} else {
+			Toast.makeText(mContext, "Not enough space to split!", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 	private void tryToMerge(ButtonMerge merge) {		

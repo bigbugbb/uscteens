@@ -20,8 +20,8 @@ import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 
 public class Chunk extends AppObject {
 	
-	public int mValue;
-	public int mNext;
+	public int mValue; // in pixel
+	public int mNext;  // in pixel
 	public MainPage mPage;
 	public ButtonQuest mQuest;
 	public ButtonClock mClock;

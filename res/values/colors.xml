@@ -10,5 +10,6 @@
     <color name="black">#000</color>
     <color name="bk_blue">#ffc6ebf5</color>
     <color name="bk_gray">#ffb3b5b5</color>
+    <color name="bd_blue">#ff00b7df</color>
     
 </resources>

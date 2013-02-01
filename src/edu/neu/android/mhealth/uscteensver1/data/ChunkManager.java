@@ -20,6 +20,8 @@ public class ChunkManager {
 	public Object mUserData = null;			
 	public ArrayList<Chunk> mChunks = null;
 	
+	protected final static int MINIMUM_SPACE = 480;
+	
 	protected int   mSelected = -1; // -1 indicates no chunk has been selected
 	protected RectF mSelectedArea = new RectF();
 	protected ButtonClock mClockL = null;
@@ -29,13 +31,12 @@ public class ChunkManager {
 	protected ButtonSplit mSplit  = null;
 	
 	protected float mDispOffsetX  = 0;
-	protected float mDispOffsetY  = 0;	
-	protected float mViewWidth    = 0;
+	protected float mDispOffsetY  = 0; // not really useful here
+	protected float mViewWidth    = 0; // the area to draw the activity data
 	protected float mViewHeight   = 0;
 	protected float mCanvasWidth  = 0;
 	protected float mCanvasHeight = 0;
-	
-	protected int mLastValue = 0;
+		
 	protected Context mContext = null;
 	protected DataSource mDataSrc = null;
 
@@ -60,19 +61,26 @@ public class ChunkManager {
 	
 	public void loadChunks() {
 		ArrayList<DataCell> cells = mDataSrc.mChkData;
-		float lastValue = mDataSrc.mActData.length;
+		
 		if (mChunks == null) {
 			mChunks = new ArrayList<Chunk>();
 		}
-		mLastValue = (int) lastValue;
+		
 		for (int i = 0; i < cells.size(); ++i) {
-			insertChunk(i);		
-			mChunks.get(i).update(cells.get(i).mPosition, 
-				(i + 1 == cells.size()) ? (int) lastValue : cells.get(i + 1).mPosition);			
-			mChunks.get(i).mQuest.setAnswer(
-				cells.get(i).mActionID == -1 ? R.drawable.question_btn : Actions.ACTION_IMGS[cells.get(i).mActionID], 
-				cells.get(i).mActionID == -1 ? "None" : Actions.ACTION_NAMES[cells.get(i).mActionID]);
-		}						
+			Chunk chunk = insertChunk(i);	
+			DataCell cell = cells.get(i);
+			chunk.update(
+				cell.mPosition * DataSource.PIXEL_SCALE, 
+				(i == cells.size() - 1) ? mDataSrc.getActLengthInPixel() : 
+				cells.get(i + 1).mPosition * DataSource.PIXEL_SCALE
+			);			
+			chunk.mQuest.setAnswer(
+				cell.mActionID == -1 ? R.drawable.question_btn : Actions.ACTION_IMGS[cell.mActionID], 
+				cell.mActionID == -1 ? "None" : Actions.ACTION_NAMES[cell.mActionID]
+			);
+		}
+		// select the first chunk
+		selectChunk(0);
 	}
 	
 	public void release() {
@@ -88,7 +96,7 @@ public class ChunkManager {
 		ArrayList<DataCell> cells = new ArrayList<DataCell>();
 		for (int i = 0; i < mChunks.size(); ++i) {
 			Chunk c = mChunks.get(i);
-			DataCell cell = new DataCell(c.mValue, c.getActionID());
+			DataCell cell = new DataCell(c.mValue / DataSource.PIXEL_SCALE, c.getActionID());
 			cells.add(cell);
 		}
 		mDataSrc.saveChunkData(cells);
@@ -126,18 +134,21 @@ public class ChunkManager {
 		}
 	}
 
-	public void insertChunk(int index) {
-		Chunk c = new Chunk(mRes, mUserData);			
-		mChunks.add(index, c);
+	public Chunk insertChunk(int index) {
+		Chunk chunk = new Chunk(mRes, mUserData);			
+		mChunks.add(index, chunk);
+		return chunk;
 	}		
 
-	public void deleteChunk(Chunk c) {
-		mChunks.remove(c);
-		c.release();
+	public void deleteChunk(Chunk chunk) {
+		mChunks.remove(chunk);
+		chunk.release();
 	}
 	
 	public void scaleChunk(int scale) {
 		int i = 0;
+		
+		// look for the selected chunk
 		for (i = 0; i < mChunks.size(); ++i) {
 			Chunk c = mChunks.get(i);
 			if (c.mClock.isSelected()) {			
@@ -153,10 +164,10 @@ public class ChunkManager {
 		Chunk next = (i == mChunks.size() - 1) ? null : mChunks.get(i + 1);
 		boolean success = true;
 		if (prev != null) {
-			success = prev.update(prev.mValue, (int) (curr.mValue + scale));
+			success = prev.update(prev.mValue, curr.mValue + scale);
 		}
 		if (success) {
-			curr.update((int) (curr.mValue + scale), next == null ? mLastValue : next.mValue);
+			curr.update(curr.mValue + scale, next == null ? curr.mNext : next.mValue);
 		}
 		
 		if (mSelected > -1) {
@@ -227,10 +238,11 @@ public class ChunkManager {
 		selectChunk(mChunks.indexOf(chunk));
 	}
 	
-	public void selectChunk(int i) {
-		mSelected = i;
+	public void selectChunk(int index) { ///////////////
+		assert(index >= 0 && index < mChunks.size());
+		mSelected = index;
 		
-		// set buttons invisible
+		// set buttons of the last selected chunk invisible
 		if (mClockL != null) {
 			mClockL.setVisible(false);
 			mClockL = null;
@@ -250,27 +262,26 @@ public class ChunkManager {
 		if (mSplit != null) {
 			mSplit.setVisible(false);
 			mSplit = null;
+		}		
+
+		Chunk c = mChunks.get(index); ///////////////////////
+		mClockL = c.mClock;
+		mMergeL = c.mMerge;
+		mSplit  = c.mSplit;
+		c = (index == mChunks.size() - 1) ? null : mChunks.get(index + 1);
+		if (c != null) {
+			mClockR = c.mClock;
+			mMergeR = c.mMerge;
 		}
-		
-		if (i > -1) {
-			Chunk c = mChunks.get(i);
-			mClockL = c.mClock;
-			mMergeL = c.mMerge;
-			mSplit  = c.mSplit;
-			c = (i == mChunks.size() - 1) ? null : mChunks.get(i + 1);
-			if (c != null) {
-				mClockR = c.mClock;
-				mMergeR = c.mMerge;
-			}
-		}	
+	
 		// set buttons visible
-		if (mClockL != null && i != 0) {
+		if (mClockL != null && index != 0) {
 			mClockL.setVisible(true);
 		}
 		if (mClockR != null) {
 			mClockR.setVisible(true);
 		}
-		if (mMergeL != null && i != 0) {
+		if (mMergeL != null && index != 0) {
 			mMergeL.setVisible(true);
 		}
 		if (mMergeR != null) {
@@ -280,36 +291,37 @@ public class ChunkManager {
 			mSplit.setVisible(true);
 		}
 		
-		if (i > -1) {
-			updateSelectedArea();
-		}
+		updateSelectedArea();
 	}
 	
 	public boolean selectChunk(float x, float y) {					
 		
-		for (int i = 0; i < mChunks.size(); ++i) {
+		int i = 0;
+		for (; i < mChunks.size(); ++i) {
 			Chunk c = mChunks.get(i);
 			if (c.contains(x, y)) {
-				mSelected = i;							
+				selectChunk(i);						
 				break;
 			}
 		}
-		selectChunk(mSelected);
 								
-		return mSelected > -1;
+		return i < mChunks.size();
 	}
 	
 	public ArrayList<Chunk> getMergingChunks(ButtonMerge merge) {
 		ArrayList<Chunk> chunks = new ArrayList<Chunk>();		
 		int size = mChunks.size();
+		
 		for (int i = 1; i < size; ++i) {
 			Chunk right = mChunks.get(i);
 			if (right.mMerge == merge) {
 				Chunk left = mChunks.get(i - 1);
 				chunks.add(left);
 				chunks.add(right);
+				break;
 			}
 		}		
+		
 		return chunks;
 	}
 	
@@ -317,21 +329,20 @@ public class ChunkManager {
 		ArrayList<Float> range = new ArrayList<Float>();
 
 		boolean found = false;
-		for (int i = 0; i < mChunks.size(); ++i) {
-			Chunk c = mChunks.get(i);
+		for (Chunk c : mChunks) {
 			if (!c.mQuest.isAnswered()) {
 				if (!found) { // header
-					range.add((float) c.mValue / mLastValue);					
+					range.add((float) c.mValue / mDataSrc.mActData.length);					
 					found = true;
 				}								
 			} else {
 				if (found) {
-					range.add((float) c.mValue / mLastValue);
+					range.add((float) c.mValue / mDataSrc.mActData.length);
 					found = false;
 				}
 			}
 		}
-		// add the last one
+		// add the last
 		if (found) {
 			range.add(1f);
 		}
@@ -353,13 +364,12 @@ public class ChunkManager {
 	}
 	
 	public boolean splitChunk(Chunk chunkToSplit) {
-		if (chunkToSplit.mNext - chunkToSplit.mValue < 480) {
+		if (chunkToSplit.mNext - chunkToSplit.mValue < MINIMUM_SPACE) {
 			return false;
 		}
-		int i = mChunks.indexOf(chunkToSplit);
-		insertChunk(i + 1);
 		
-		Chunk newChunk = getChunk(i + 1);
+		int i = mChunks.indexOf(chunkToSplit);				
+		Chunk newChunk = insertChunk(i + 1); // insert a new chunk, which should be updated later
 		newChunk.setHeight(chunkToSplit.getHeight());
 		int centerX = (chunkToSplit.mValue + chunkToSplit.mNext) / 2;
 		newChunk.update(centerX, chunkToSplit.mNext);
@@ -405,8 +415,8 @@ public class ChunkManager {
 	protected void updateSelectedArea() {
 		mSelectedArea.left   = mChunks.get(mSelected).mValue + 2;
 		mSelectedArea.top    = 2;
-		mSelectedArea.right  = 
-			(mSelected == mChunks.size() - 1) ? mLastValue : mChunks.get(mSelected + 1).mValue - 2;
+		mSelectedArea.right  = (mSelected == mChunks.size() - 1) ? 
+			mDataSrc.mActData.length : mChunks.get(mSelected + 1).mValue - 2;
 		mSelectedArea.bottom = mViewHeight - 2;
 	}	
 }

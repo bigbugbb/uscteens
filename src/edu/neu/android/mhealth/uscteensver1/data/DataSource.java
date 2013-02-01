@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 public class DataSource {
 	
+	public static final int PIXEL_SCALE = 1;
+	
 	public int[] mActData = null;
 	//public int[] mChkData = null;
 	public ArrayList<DataCell> mChkData = null;
@@ -69,6 +71,10 @@ public class DataSource {
 		}
 				
 		return result;		
+	}
+	
+	public int getActLengthInPixel() {
+		return mActData.length * PIXEL_SCALE;
 	}
 	
 	private boolean loadChkData() {
