@@ -90,7 +90,7 @@ public class ButtonQuest extends ChunkButton {
 	@Override
 	public void onDraw(Canvas c) {
 		c.drawBitmap(mAnswer == R.drawable.question_btn ? sImages.get(0) : mImages.get(0), 
-				mX + mOffsetX, mY + mOffsetY, null);
+				mX + mOffsetX + mOffsetInChunkX, mY + mOffsetY + mOffsetInChunkY, null);
 	}
 
 	@Override

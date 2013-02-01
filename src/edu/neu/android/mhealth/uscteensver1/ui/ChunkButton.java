@@ -8,6 +8,8 @@ public class ChunkButton extends CustomButton {
 	
 	protected float mOffsetX = 0;
 	protected float mOffsetY = 0;
+	protected float mOffsetInChunkX = 0;
+	protected float mOffsetInChunkY = 0;
 	protected Chunk mHost = null;	
 	
 	public ChunkButton(Resources res, Chunk host) {
@@ -22,6 +24,11 @@ public class ChunkButton extends CustomButton {
 	public void setDisplayOffset(float offsetX, float offsetY) {
 		mOffsetX = offsetX;
 		mOffsetY = offsetY;
+	}
+	
+	public void setOffsetInChunk(float offsetX, float offsetY) {
+		mOffsetInChunkX = offsetX;
+		mOffsetInChunkY = offsetY;
 	}
 
 	@Override

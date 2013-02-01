@@ -59,7 +59,8 @@ public class ButtonMerge extends ChunkButton {
 	@Override
 	public void onDraw(Canvas c) {
 		if (mVisible) {
-			c.drawBitmap(sImages.get(0), mX + mOffsetX, mY + mOffsetY, null);
+			c.drawBitmap(sImages.get(0), mX + mOffsetX, 
+				mY + mOffsetY, null);
 		}
 	}
 	
@@ -85,4 +86,5 @@ public class ButtonMerge extends ChunkButton {
 		mX -= 3;
 		mY -= 3;
 	}
+	
 }

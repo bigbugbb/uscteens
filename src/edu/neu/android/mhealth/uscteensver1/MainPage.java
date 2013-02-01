@@ -201,7 +201,13 @@ public class MainPage extends AppPage implements OnClickListener,
 			mMotionGraph.moveGraph(prevUnmarked.mValue, 0);				
 			float progress = (float) prevUnmarked.mValue / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
+			// enable the next button
+			//mBtnNext.setVisible(true);
 		}
+		
+//		if (mChunkManager.getPreviousUnmarkedChunk() == null) {
+//			back.setVisible(false);
+//		}
 	}
 	
 	private void tryToNext(ButtonNext next) {
@@ -210,7 +216,13 @@ public class MainPage extends AppPage implements OnClickListener,
 			mMotionGraph.moveGraph(nextUnmarked.mValue, 0);			
 			float progress = (float) nextUnmarked.mValue / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
+			// enable the back button
+//			mBtnBack.setVisible(true);
 		}
+		
+//		if (mChunkManager.getNextUnmarkedChunk() == null) {
+//			next.setVisible(false);
+//		}
 	}
 	
 	private void tryToQuest(ButtonQuest quest) {
@@ -260,6 +272,12 @@ public class MainPage extends AppPage implements OnClickListener,
 		synchronized (this) {
 			mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
 		}
+		
+//		if (mChunkManager.hasAllMarked()) {					
+//			Message msg = mHandler.obtainMessage();						
+//			msg.what = AppCmd.REWARD;
+//			mHandler.sendMessage(msg);
+//    	}
 	}		
 	
 	public void finishMerge(Object... params) {
@@ -283,5 +301,11 @@ public class MainPage extends AppPage implements OnClickListener,
     		mChunkManager.mergeChunk(mChunksToMerge.get(0), mChunksToMerge.get(1), maintain);
     		mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
     	}
+    	
+//    	if (mChunkManager.hasAllMarked()) {    					
+//			Message msg = mHandler.obtainMessage();						
+//			msg.what = AppCmd.REWARD;
+//			mHandler.sendMessage(msg);
+//    	}
 	}
 }

@@ -135,7 +135,7 @@ public class ChunkManager {
 	}
 
 	public Chunk insertChunk(int index) {
-		Chunk chunk = new Chunk(mRes, mUserData);			
+		Chunk chunk = new Chunk(mRes, this, mUserData);			
 		mChunks.add(index, chunk);
 		return chunk;
 	}		
@@ -419,5 +419,15 @@ public class ChunkManager {
 			mDataSrc.getActLengthInPixel() : mChunks.get(mSelected + 1).mValue - 2;
 		mSelectedArea.bottom = mViewHeight - 2;
 	}	
+	
+	public boolean hasAllMarked() {
+		for (Chunk c : mChunks) {
+			if (!c.mQuest.isAnswered()) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 }
 

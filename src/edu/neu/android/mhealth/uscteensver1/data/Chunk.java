@@ -20,6 +20,8 @@ import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 
 public class Chunk extends AppObject {
 	
+	protected final static int MINIMUM_SPACE = 240;
+	
 	public int mValue; // in pixel
 	public int mNext;  // in pixel
 	public MainPage mPage;
@@ -35,6 +37,8 @@ public class Chunk extends AppObject {
 	protected static Paint   sPaint;
 	protected static boolean sPaintCreated = false;
 	
+	protected ChunkManager mManager = null;
+	
 	protected static void createPaint() {
 		if (!sPaintCreated) {
 			sPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -46,11 +50,12 @@ public class Chunk extends AppObject {
 		}
 	}
 	
-	public Chunk(Resources res, Object userData) {
+	public Chunk(Resources res, ChunkManager manager, Object userData) {
 		super(res);
 		mKind = CHUNK;
 		mZOrder = ZOrders.CHUNK;
 		
+		mManager = manager;
 		mPage = (MainPage) userData;		
 		
 		mQuest = new ButtonQuest(res, this, mPage);
@@ -95,7 +100,7 @@ public class Chunk extends AppObject {
 	
 	public boolean update(int current, int next) {
 		// next must be bigger than the current
-		if (next - current < 240) {
+		if (next - current < MINIMUM_SPACE) {
 			return false; // just ignore, because the space for one chunk will be too small
 		}
 		mValue = current;
@@ -123,13 +128,30 @@ public class Chunk extends AppObject {
 		mDispOffsetY = offsetY;
 		
 		mQuest.setDisplayOffset(offsetX, offsetY);
-		mClock.setDisplayOffset(offsetX, offsetY);
 		mMerge.setDisplayOffset(offsetX, offsetY);
+		mClock.setDisplayOffset(offsetX, offsetY);		
 		mSplit.setDisplayOffset(offsetX, offsetY);
+		
+		float x = mQuest.getX();
+		float w = mQuest.getWidth();
+		float offsetInChunkX = 0;
+		if (mNext + offsetX > 0 && x + offsetX < 0) {			
+			offsetInChunkX = Math.min(-(x + offsetX), mNext - w - x);
+			
+		} else if (mValue + offsetX < mManager.mViewWidth && x + offsetX + w > mManager.mViewWidth) {
+			//offsetInChunkX = mValue - x + (mManager.mViewWidth - (mValue + offsetX));
+			offsetInChunkX = (mManager.mViewWidth - (mValue + offsetX) <= w) ?
+				mValue - x : mManager.mViewWidth - w - (x + offsetX);
+		}
+		
+		mQuest.setOffsetInChunk(offsetInChunkX, 0);
 	}
 
 	@Override
 	public void onDraw(Canvas c) {
+		if (mValue + mDispOffsetX < 0 && mValue + mDispOffsetX > mManager.mViewWidth) {
+			return;
+		}
 		c.drawLine(mValue + mDispOffsetX, 0, mValue + mDispOffsetX, mHeight, sPaint);		
 	}
 }
