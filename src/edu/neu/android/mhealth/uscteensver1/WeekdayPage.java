@@ -163,7 +163,6 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 		for (int i = mObjects.size() - 1; i >= 0; --i) {
 			if (mObjects.get(i).contains(x, y)) {				
 				mSelObject = mObjects.get(i);
-				mLastSelObject = mSelObject;
 				mSelObject.setSelected(true);				
 				ret = mSelObject.onDown(e);				
 				break;

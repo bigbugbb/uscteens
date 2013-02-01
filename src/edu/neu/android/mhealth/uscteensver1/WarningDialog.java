@@ -62,7 +62,7 @@ public class WarningDialog extends Activity implements OnItemClickListener, OnBa
 	}
 
 	@Override
-	public void onBackClickedListener() {
+	public void onBackClicked() {
 		finish();
 	}	
 }

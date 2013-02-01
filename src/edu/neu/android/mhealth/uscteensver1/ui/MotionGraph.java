@@ -31,6 +31,8 @@ public class MotionGraph extends AppObject {
 	protected int   mLastAction = 0;
 	protected OnGraphMovedListener mListener = null;
 	
+	protected static final float ACTIVITY_DATA_LIMIT = 256f;
+	
 	public interface OnGraphMovedListener {
 		void OnGraphMoved(MotionGraph graph, float progress);
 	}
@@ -143,7 +145,7 @@ public class MotionGraph extends AppObject {
 		mEnd   = mStart + (int)mWidth;
 		mEnd   = (mEnd > mActions.length) ? mActions.length : mEnd;
 		for (int i = 0; i < mActions.length; ++i) {
-			mActionsScaled[i] = (int) (mHeight * (mActions[i] / 100f));
+			mActionsScaled[i] = (int) (mHeight * (mActions[i] / ACTIVITY_DATA_LIMIT));
 		}		
 		mRightBound = mActions.length - (int) mWidth;
 		

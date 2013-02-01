@@ -234,7 +234,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	
 	private void tryToMerge(ButtonMerge merge) {		
 		// get the chunks to merge according to the pressed merge button
-		ArrayList<Chunk> mChunksToMerge = mChunkManager.getChunksToMerge(merge);
+		ArrayList<Chunk> mChunksToMerge = mChunkManager.getMergingChunks(merge);
 		String actionL = mChunksToMerge.get(0).mQuest.getStringAnswer();
 		String actionR = mChunksToMerge.get(1).mQuest.getStringAnswer();
 		ArrayList<String> actions = new ArrayList<String>();
@@ -259,7 +259,8 @@ public class MainPage extends AppPage implements OnClickListener,
 	
 	public void finishQuest(Object... params) {
 		ButtonQuest quest = (ButtonQuest) mLastSelObject;
-		quest.setAnswer((Integer) params[0], (String) params[1]);
+		int index = (Integer) params[0];
+		quest.setAnswer(Actions.ACTION_IMGS[index], Actions.ACTION_NAMES[index]);
 		synchronized (this) {
 			mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
 		}
@@ -269,7 +270,7 @@ public class MainPage extends AppPage implements OnClickListener,
 		ButtonMerge merge = (ButtonMerge) mLastSelObject;
 		String selection = (String) params[0];
 		Chunk maintain = null; 		
-		ArrayList<Chunk> mChunksToMerge = mChunkManager.getChunksToMerge(merge);
+		ArrayList<Chunk> mChunksToMerge = mChunkManager.getMergingChunks(merge);
 		String actionL = mChunksToMerge.get(0).mQuest.getStringAnswer();
 		String actionR = mChunksToMerge.get(1).mQuest.getStringAnswer();
 		

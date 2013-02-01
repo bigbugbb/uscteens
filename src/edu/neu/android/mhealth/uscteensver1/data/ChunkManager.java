@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.RectF;
+import edu.neu.android.mhealth.uscteensver1.Actions;
 import edu.neu.android.mhealth.uscteensver1.ActionsDialog;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonClock;
@@ -69,8 +70,8 @@ public class ChunkManager {
 			mChunks.get(i).update(cells.get(i).mPosition, 
 				(i + 1 == cells.size()) ? (int) lastValue : cells.get(i + 1).mPosition);			
 			mChunks.get(i).mQuest.setAnswer(
-				cells.get(i).mActionID == -1 ? R.drawable.question_btn : ActionsDialog.ACTION_IMGS[cells.get(i).mActionID], 
-				cells.get(i).mActionID == -1 ? "None" : ActionsDialog.ACTIONS[cells.get(i).mActionID]);
+				cells.get(i).mActionID == -1 ? R.drawable.question_btn : Actions.ACTION_IMGS[cells.get(i).mActionID], 
+				cells.get(i).mActionID == -1 ? "None" : Actions.ACTION_NAMES[cells.get(i).mActionID]);
 		}						
 	}
 	
@@ -283,7 +284,7 @@ public class ChunkManager {
 		return mSelected > -1;
 	}
 	
-	public ArrayList<Chunk> getChunksToMerge(ButtonMerge merge) {
+	public ArrayList<Chunk> getMergingChunks(ButtonMerge merge) {
 		ArrayList<Chunk> chunks = new ArrayList<Chunk>();		
 		int size = mChunks.size();
 		for (int i = 1; i < size; ++i) {

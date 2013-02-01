@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
+import edu.neu.android.mhealth.uscteensver1.Actions;
 import edu.neu.android.mhealth.uscteensver1.ActionsDialog;
 import edu.neu.android.mhealth.uscteensver1.AppObject;
 import edu.neu.android.mhealth.uscteensver1.MainPage;
@@ -68,8 +69,8 @@ public class Chunk extends AppObject {
 	
 	public int getActionID() {
 		if (mQuest.isAnswered()) {					
-			for (int i = 0; i < ActionsDialog.ACTION_IMGS.length; ++i) {
-				if (mQuest.getAnswer() == ActionsDialog.ACTION_IMGS[i]) {
+			for (int i = 0; i < Actions.ACTION_IMGS.length; ++i) {
+				if (mQuest.getAnswer() == Actions.ACTION_IMGS[i]) {
 					return i;
 				}
 			}

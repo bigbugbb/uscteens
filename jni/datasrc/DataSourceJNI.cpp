@@ -59,7 +59,6 @@ jint Destroy(JNIEnv * env, jobject thiz)
 jintArray LoadActivityData(JNIEnv* env, jobject thiz, jstring path)
 {
 	jboolean bCopy;
-//	JNIEnv* env = JNI_GetEnv();
 	const char* pszPath = env->GetStringUTFChars(path, &bCopy);
 	vector<jint>* pVecData = gDataSrc->LoadActivityData(pszPath);
 	env->ReleaseStringUTFChars(path, pszPath);

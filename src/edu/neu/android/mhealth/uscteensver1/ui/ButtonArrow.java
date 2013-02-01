@@ -11,8 +11,8 @@ import android.graphics.Paint.Style;
 
 public class ButtonArrow extends CustomButton { 
 	
-	private Paint mPaint = null;
-	private boolean mDown = true;
+	protected Paint mPaint = null;
+	protected boolean mDown = true;
 
 	public ButtonArrow(Resources res) {
 		super(res);
@@ -40,7 +40,7 @@ public class ButtonArrow extends CustomButton {
 	@Override
 	public void onDraw(Canvas c) {
 		c.drawRect(mX, mY, mX + mCanvasWidth / 2, mY + 100, mPaint);
-		c.drawBitmap(mImages.get(mDown ? 1 : 0), mX + mCanvasWidth / 4 - mWidth / 2, mY + mHeight * 0.65f, null);
+		c.drawBitmap(mImages.get(mDown ? 0 : 1), mX + mCanvasWidth / 4 - mWidth / 2, mY + mHeight * 0.65f, null);
 	}
 
 }

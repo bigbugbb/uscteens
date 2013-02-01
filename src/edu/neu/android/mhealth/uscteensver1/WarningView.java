@@ -149,7 +149,7 @@ public class WarningView extends View {
 //				mBackArea.offset(2, 2);
 //				mBackTxtPt.offset(2, 2);
 				if (mBackListener != null) {
-					mBackListener.onBackClickedListener();
+					mBackListener.onBackClicked();
 				}
 			}
 			
@@ -171,7 +171,7 @@ public class WarningView extends View {
 	}
 	
 	public interface OnBackClickedListener {
-		void onBackClickedListener();
+		void onBackClicked();
 	}
 	
 	public interface OnItemClickListener {

@@ -199,6 +199,7 @@ public class ListView extends AppObject {
 			if (li.contains(e.getX(), e.getY())) {
 				Paint paint = li.getPaintBackground();
 				paint.setColor(Color.rgb(198, 235, 245));
+				break;
 			}
 		}
 		
