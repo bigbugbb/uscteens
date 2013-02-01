@@ -243,7 +243,7 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
     		return;
     	} else if (requestCode == AppCmd.QUEST) {    
         	MainPage page = (MainPage) mCurPage;
-        	page.finishQuest(resultCode);       	        	
+        	page.finishQuest(resultCode - 1);       	        	
         } else if (requestCode == AppCmd.MERGE) {        	
         	MainPage page = (MainPage) mCurPage;
         	page.finishMerge(data.getStringExtra(WarningDialog.SELECTION));        	

@@ -60,7 +60,7 @@ public class ActionsDialog extends Activity implements OnBackClickedListener {
 	
 	protected void setResultAndExit(int index) {
 		Intent i = new Intent();	
-		setResult(index, i); 
+		setResult(index + 1, i); // plus one to distinguish from the cancel result
 		finish();
 	}
 	

@@ -332,12 +332,12 @@ public class ChunkManager {
 		for (Chunk c : mChunks) {
 			if (!c.mQuest.isAnswered()) {
 				if (!found) { // header
-					range.add((float) c.mValue / mDataSrc.mActData.length);					
+					range.add((float) c.mValue / mDataSrc.getActLengthInPixel());					
 					found = true;
 				}								
 			} else {
 				if (found) {
-					range.add((float) c.mValue / mDataSrc.mActData.length);
+					range.add((float) c.mValue / mDataSrc.getActLengthInPixel());
 					found = false;
 				}
 			}
@@ -416,7 +416,7 @@ public class ChunkManager {
 		mSelectedArea.left   = mChunks.get(mSelected).mValue + 2;
 		mSelectedArea.top    = 2;
 		mSelectedArea.right  = (mSelected == mChunks.size() - 1) ? 
-			mDataSrc.mActData.length : mChunks.get(mSelected + 1).mValue - 2;
+			mDataSrc.getActLengthInPixel() : mChunks.get(mSelected + 1).mValue - 2;
 		mSelectedArea.bottom = mViewHeight - 2;
 	}	
 }
