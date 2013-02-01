@@ -201,14 +201,7 @@ public class MainPage extends AppPage implements OnClickListener,
 			mMotionGraph.moveGraph(prevUnmarked.mValue, 0);	
 			float progress = (float) prevUnmarked.mValue / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
-//			// disable the back button if there is no previous one
-//			prevUnmarked = mChunkManager.getPreviousUnmarkedChunk();
-//			if (prevUnmarked == null) {
-//				back.setVisible(false);
-//			}
 		}
-		
-		
 	}
 	
 	private void tryToNext(ButtonNext next) {

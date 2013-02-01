@@ -168,20 +168,28 @@ public class ChunkManager {
 		Chunk prev = null;
 		float current = -mDispOffsetX;		
 		
-		boolean found = false;
 		for (int i = mChunks.size() - 1; i >= 0; --i) {
 			Chunk c = mChunks.get(i);
 			if (c.mValue <= current) {
 				if (c.mQuest.isAnswered()) {
-					found = true;				
-				} else {
-					if (found) {
-						prev = c;						
+					// check the right chunk
+					Chunk right = (i >= mChunks.size() - 1) ? null : mChunks.get(i + 1);
+					if (right != null && right.mValue < current) {
+						if (!right.mQuest.isAnswered()) {
+							prev = right;
+							break; // found, then return
+						}
+					}
+					// check the left chunk
+					Chunk left = (i <= 0) ? null : mChunks.get(i - 1);
+					if (left != null && !left.mQuest.isAnswered()) {			
+						// definitely smaller than current position
+						prev = left;
 						break;
 					}
 				}
 			}
-		}
+		}	
 		
 		return prev;
 	}
@@ -190,17 +198,24 @@ public class ChunkManager {
 		Chunk next = null;
 		float current = -mDispOffsetX;		
 		
-		boolean found = false;
 		for (int i = 0; i < mChunks.size(); ++i) {
 			Chunk c = mChunks.get(i);
 			if (c.mValue >= current) {
 				if (c.mQuest.isAnswered()) {
-					found = true;				
-				} else {
-					if (found) {
-						next = c;						
-						break;
+					// check the left chunk
+					Chunk left = (i <= 0) ? null : mChunks.get(i - 1);
+					if (left != null && left.mValue > current) {			
+						if (!left.mQuest.isAnswered()) {
+							next = left; // found
+							break;
+						}
 					}
+					// check the right chunk
+					Chunk right = (i >= mChunks.size() - 1) ? null : mChunks.get(i + 1);
+					if (right != null && !right.mQuest.isAnswered()) {						
+						next = right;
+						break; // found, then return						
+					}					
 				}
 			}
 		}
