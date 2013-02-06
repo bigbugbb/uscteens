@@ -28,7 +28,7 @@ public class ButtonClock extends ChunkButton {
 		
 		sPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		sPaint.setColor(Color.argb(255, 156, 156, 156));
-		sPaint.setStrokeWidth(8.0f);
+		sPaint.setStrokeWidth(sAppScale.doScaleW(8.0f));
 		sPaint.setStyle(Style.STROKE);
 		sPaint.setFakeBoldText(true);
 	}
@@ -41,12 +41,30 @@ public class ButtonClock extends ChunkButton {
 			return;
 		}
 		sImageLoaded = true;
-		
-		BitmapFactory.Options options = new BitmapFactory.Options(); 
+        
+        BitmapFactory.Options options = new BitmapFactory.Options(); 
         options.inPurgeable = true;
-        options.inPreferredConfig = Config.RGB_565; 
+        options.inPreferredConfig = Config.RGB_565;        
         for (int id : resIDs) {
-        	sImages.add(BitmapFactory.decodeResource(res, id, options));
+        	Bitmap origin = BitmapFactory.decodeResource(res, id, options);
+        	Bitmap scaled = null;
+        	// scale the image according to the current screen resolution
+        	float dstWidth  = origin.getWidth(),
+        	      dstHeight = origin.getHeight();        	
+        	if (sAppScale != null) {
+        		dstWidth  = sAppScale.doScaleW(dstWidth);
+        		dstHeight = sAppScale.doScaleH(dstHeight);
+        		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+        			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+        		}
+            }        	
+    		// add to the image list
+        	if (scaled != null) {
+	    		origin.recycle(); // explicit call to avoid out of memory
+	    		sImages.add(scaled);
+	        } else {
+	        	sImages.add(origin);
+	        }
         }
 	}
 	
@@ -81,7 +99,8 @@ public class ButtonClock extends ChunkButton {
 		if (mVisible) {
 			c.drawBitmap(sImages.get(0), mX + mOffsetX, mY + mOffsetY, null);
 			if (isSelected()) {
-				c.drawCircle(mX + mWidth / 2 + mOffsetX, mY + mHeight / 2 + mOffsetY, 47, sPaint);
+				c.drawCircle(mX + mWidth / 2 + mOffsetX, 
+					mY + mHeight / 2 + mOffsetY, sAppScale.doScaleH(47), sPaint);
 			}
 		}
 	}	

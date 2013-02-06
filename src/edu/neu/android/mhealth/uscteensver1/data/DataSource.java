@@ -60,16 +60,22 @@ public class DataSource {
 	private boolean loadActData() {		
 		boolean result = false;
 		String fileName = "/sdcard/TestData/day" + mDay + ".txt";
-		
-		try { 
-			FileInputStream fin = new FileInputStream(fileName);		
-		    fin.close(); 
-		    result = true;		    
-		    mActData = DataSource.getInstance(null).loadActivityData(fileName);		    
-		} catch (Exception e) { 
-			e.printStackTrace(); 
-		}
-				
+//		
+//		try { 
+//			FileInputStream fin = new FileInputStream(fileName);		
+//		    fin.close(); 
+//		    result = true;		    
+//		    mActData = loadActivityData(fileName);		    
+//		} catch (Exception e) { 
+//			e.printStackTrace(); 
+//		}
+//				
+		mActData = new int[3600];
+	    for (int i = 0; i < mActData.length; ++i) {
+	    	mActData[i] = i % 100; 
+	    }
+	    result = true;
+	    
 		return result;		
 	}
 	
@@ -78,7 +84,7 @@ public class DataSource {
 	}
 	
 	private boolean loadChkData() {
-		boolean result = false;
+/*		boolean result = false;
 		String fileName = "/sdcard/TestData/chunk" + mDay + ".txt";
 		String res = "";     
 
@@ -104,7 +110,17 @@ public class DataSource {
 			e.printStackTrace(); 
 			// ....
 		}		
-		
+	*/
+		///////////////////////////////////////////////////////////////////////
+		boolean result = false;
+		mChkData = new ArrayList<DataCell>();
+		for (int i = 0; i < 9; ++i) {			
+			DataCell cell = new DataCell(400 * i, -1);
+			mChkData.add(cell);
+		}
+		DataCell cell = mChkData.get(mChkData.size() - 1);
+		result = true;
+		///////////////////////////////////////////////////////////////////////
 		return result;
 	}
 	

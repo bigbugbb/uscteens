@@ -24,7 +24,7 @@ public class ButtonBack extends CustomButton {
 		mPaintText.setStyle(Style.FILL);
 		mPaintText.setTypeface(Typeface.SERIF);
 		mPaintText.setFakeBoldText(false);
-		mPaintText.setTextSize(34);
+		mPaintText.setTextSize(sAppScale.doScaleT(34));
 		mPaintText.setTextAlign(Paint.Align.CENTER);
 	}
 

@@ -63,7 +63,7 @@ public class SlideBar extends AppObject {
 		mPaintText.setStyle(Style.FILL);
 		mPaintText.setTypeface(Typeface.SERIF);
 		mPaintText.setFakeBoldText(false);
-		mPaintText.setTextSize(24);
+		mPaintText.setTextSize(sAppScale.doScaleT(24));
 		mPaintText.setTextAlign(Paint.Align.CENTER);
 	}
 
@@ -130,22 +130,22 @@ public class SlideBar extends AppObject {
 		
 		// scale the slide bar button image
 		float radio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();	
-		int scaledWidth  = (int) (width * 0.033f);
-		int scaledHeight = (int) (scaledWidth * radio);
+		float dstWidth  = width * 0.033f;
+		float dstHeight = width * 0.033f * radio;
 
 		Bitmap newImage = 
-			Bitmap.createScaledBitmap(mImages.get(0), scaledWidth, scaledHeight, true);	
+			Bitmap.createScaledBitmap(mImages.get(0), (int) dstWidth, (int) dstHeight, true);	
 		mImages.get(0).recycle(); // explicit call to avoid out of memory
 		mImages.set(0, newImage);
 		System.gc();
 		
 		mSliderBarBtnX = width * 0.15f + 2;
-		mSliderBarBtnY = height * 0.92f + 2 - (scaledHeight - (height * 0.04f - 4)) / 2;
+		mSliderBarBtnY = height * 0.92f + 2 - (dstHeight - (height * 0.04f - 4)) / 2;
 		
 		mX = width * 0.15f + 2;
 		mY = mSliderBarBtnY;
 		mWidth  = width * 0.7f - 4;
-		mHeight = scaledHeight;
+		mHeight = dstHeight;
 		
 		// when updateUnmarkedRange is first called in MainPage, the mCanvasWidth is zero
 		for (int i = 0; i < mRange.size(); ++i) {

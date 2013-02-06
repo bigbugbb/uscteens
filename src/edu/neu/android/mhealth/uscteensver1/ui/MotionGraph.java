@@ -38,8 +38,7 @@ public class MotionGraph extends AppObject {
 		mManager = manager;
 		mDataSrc = DataSource.getInstance(null);
 		mActions = mDataSrc.mActData;
-		mActLenInPix = mDataSrc.getActLengthInPixel();
-		loadImages(new int[]{ R.drawable.menubar_background });								
+		mActLenInPix = mDataSrc.getActLengthInPixel();								
 		
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.BLACK);
@@ -123,12 +122,16 @@ public class MotionGraph extends AppObject {
 
 	@Override
 	public void onSizeChanged(int width, int height) {
-		float radio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();				
+		loadImages(new int[]{ R.drawable.menubar_background });
+		float radio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();	
+		mImages.get(0).recycle();
+		mImages.remove(0);
+		// get the region size
 		mWidth  = width;
 		mHeight = height - (int)(width * radio);
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
-		
+
 		for (Chunk chunk : mManager.mChunks) {
 			chunk.setHeight(mHeight);
 		}

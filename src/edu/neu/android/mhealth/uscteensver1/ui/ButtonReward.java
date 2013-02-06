@@ -25,7 +25,7 @@ public class ButtonReward extends CustomButton {
 		mPaintText.setStyle(Style.FILL);
 		mPaintText.setTypeface(Typeface.SERIF);
 		mPaintText.setFakeBoldText(true);
-		mPaintText.setTextSize(46);
+		mPaintText.setTextSize(sAppScale.doScaleT(46));
 		mPaintText.setTextAlign(Paint.Align.CENTER);
 	}
 
