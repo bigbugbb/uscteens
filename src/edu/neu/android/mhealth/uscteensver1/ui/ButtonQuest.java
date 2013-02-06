@@ -69,17 +69,39 @@ public class ButtonQuest extends ChunkButton {
 		BitmapFactory.Options options = new BitmapFactory.Options(); 
         options.inPurgeable = true;
         options.inPreferredConfig = Config.RGB_565; 
+        
 		if (answer != mAnswer) {
-			// change answer
-			if (mImages.size() == 0) {
-				mImages.add(BitmapFactory.decodeResource(mRes, answer, options));				
-			} else {
+			Bitmap image  = null;
+			Bitmap origin = BitmapFactory.decodeResource(mRes, answer, options);
+        	Bitmap scaled = null;
+        	// scale the image according to the current screen resolution
+        	float dstWidth  = origin.getWidth(),
+        	      dstHeight = origin.getHeight();        	
+        	if (sAppScale != null) {
+        		dstWidth  = sAppScale.doScaleW(dstWidth);
+        		dstHeight = sAppScale.doScaleH(dstHeight);
+        		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+        			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+        		}
+            }        	
+    		// add to the image list
+        	if (scaled != null) {
+	    		origin.recycle(); // explicit call to avoid out of memory
+	    		image = scaled;
+	        } else {
+	        	image = origin;
+	        } 
+			// change answer			
+			if (mImages.size() == 0) { // initialize
+				mImages.add(image);				
+			} else { // update the answer
 				mImages.get(0).recycle();			
-				mImages.set(0, BitmapFactory.decodeResource(mRes, answer, options));
+				mImages.set(0, image);
 			}
 			mAnswer = answer;	
 			mActionName = actionName;
-		}		
+		}
+    
 	}
 	
 	public int getAnswer() {

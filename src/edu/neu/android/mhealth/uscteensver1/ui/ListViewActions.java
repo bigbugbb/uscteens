@@ -22,7 +22,7 @@ public class ListViewActions extends ListView {
 			
 			mPaintTxt.setColor(Color.BLACK);
 			mPaintTxt.setStyle(Style.STROKE);
-			mPaintTxt.setTextSize(45);
+			mPaintTxt.setTextSize(sAppScale.doScaleT(45));
 			mPaintTxt.setTypeface(Typeface.SERIF);
 			mPaintTxt.setTextAlign(Align.CENTER);
 			mPaintTxt.setFakeBoldText(false);
@@ -49,9 +49,28 @@ public class ListViewActions extends ListView {
 	public void addItem(String text, int drawable) {
 		BitmapFactory.Options options = new BitmapFactory.Options(); 
         options.inPurgeable = true;
-        options.inPreferredConfig = Config.RGB_565;
+        options.inPreferredConfig = Config.RGB_565;     
         
-        Bitmap image = BitmapFactory.decodeResource(mRes, drawable, options);          
+        Bitmap image  = null;
+    	Bitmap origin = BitmapFactory.decodeResource(mRes, drawable, options);
+    	Bitmap scaled = null;
+    	// scale the image according to the current screen resolution
+    	float dstWidth  = origin.getWidth(),
+    	      dstHeight = origin.getHeight();        	
+    	if (sAppScale != null) {
+    		dstWidth  = sAppScale.doScaleW(dstWidth);
+    		dstHeight = sAppScale.doScaleH(dstHeight);
+    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+    		}
+        }        	
+		// add to the image list
+    	if (scaled != null) {
+    		origin.recycle(); // explicit call to avoid out of memory
+    		image = scaled;
+        } else {
+        	image = origin;
+        }               
        	ListItem li = new ActionItem(this, text, image);
        	mItems.add(li);
        	li.register();
@@ -73,7 +92,7 @@ public class ListViewActions extends ListView {
 	@Override
 	public void onSizeChanged(int width, int height) {
 		mWidth  = width;
-		mHeight = height - 130 - 70;
+		mHeight = sAppScale.doScaleH(height - sAppScale.doScaleH(130 + 100));
 		mItemWidth  = (int) mWidth;
 		mItemHeight = (int) mHeight / 4;
 		

@@ -22,11 +22,9 @@ import android.graphics.Paint.Style;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
-import android.view.View;
 import android.widget.ImageView;
 
 public class ActionsView extends ImageView implements OnGestureListener, 
@@ -36,7 +34,8 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	protected ButtonArrow mArrowUp   = null;
 	protected ButtonArrow mArrowDown = null;
 	protected ListViewActions mListViewActions = null;
-	protected AppObject mSelObject = null;
+	protected AppScale  mAppScale  = AppScale.getInstance();
+	protected AppObject mSelObject = null;	
 	protected ArrayList<AppObject> mObjects = new ArrayList<AppObject>();
 	
 	protected boolean mImageLoaded = false;
@@ -46,7 +45,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	protected Paint  mPaintText = null;	
 	protected Handler mHandler = null;
 	
-	protected int mExpectedWidth  = 0;	
+	protected int mExpectedWidth = 0;	
 	
 	// gesture detector
 	protected GestureDetector mGestureDetector = new GestureDetector(this);
@@ -66,11 +65,11 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		loadImages(new int[]{ 
 			R.drawable.popup_win_background, R.drawable.back_blue  
 		});
-		
+				
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText.setColor(Color.WHITE);
 		mPaintText.setStyle(Style.STROKE);
-		mPaintText.setTextSize(34);
+		mPaintText.setTextSize(mAppScale.doScaleT(34));
 		mPaintText.setTypeface(Typeface.SERIF);
 		mPaintText.setFakeBoldText(false);		
 	}
@@ -100,23 +99,39 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		
 		BitmapFactory.Options options = new BitmapFactory.Options(); 
         options.inPurgeable = true;
-        options.inPreferredConfig = Config.RGB_565; 
+        options.inPreferredConfig = Config.RGB_565;        
         for (int id : resIDs) {
-        	mImages.add(BitmapFactory.decodeResource(
-        		getContext().getResources(), id, options)
-        	);
+        	Bitmap origin = BitmapFactory.decodeResource(getContext().getResources(), id, options);
+        	Bitmap scaled = null;
+        	// scale the image according to the current screen resolution
+        	float dstWidth  = origin.getWidth(),
+        	      dstHeight = origin.getHeight();        	
+        	if (mAppScale != null) {
+        		dstWidth  = mAppScale.doScaleW(dstWidth);
+        		dstHeight = mAppScale.doScaleH(dstHeight);
+        		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+        			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+        		}
+            }        	
+    		// add to the image list
+        	if (scaled != null) {
+	    		origin.recycle(); // explicit call to avoid out of memory
+	    		mImages.add(scaled);
+	        } else {
+	        	mImages.add(origin);
+	        }
         }
         
-        AppScale scale = AppScale.getInstance();        
-        mExpectedWidth  = (int) (mImages.get(0).getWidth() * scale.getScaleW());        
+        mExpectedWidth = (int) (mImages.get(0).getWidth());        
         
-		mBackArea.left   = 10;
+        // the area for the back button
+		mBackArea.left   = mAppScale.doScaleW(10);
 		mBackArea.right  = mBackArea.left + mImages.get(1).getWidth();
-		mBackArea.top    = 5;
+		mBackArea.top    = mAppScale.doScaleH(5);
 		mBackArea.bottom = mBackArea.top + mImages.get(1).getHeight();
 				
-		mBackTxtPt.x = mBackArea.left + 33;
-		mBackTxtPt.y = mBackArea.bottom - 52;
+		mBackTxtPt.x = mBackArea.left + mAppScale.doScaleW(33);
+		mBackTxtPt.y = mBackArea.bottom - mAppScale.doScaleH(52);
 	}
 	
 	public int getExpectedWidth() {
@@ -125,8 +140,6 @@ public class ActionsView extends ImageView implements OnGestureListener,
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		// TODO Auto-generated method stub
-		//super.onDraw(canvas);
 		canvas.drawBitmap(mImages.get(0), 0, 0, null);
 		canvas.drawBitmap(mImages.get(1), mBackArea.left, mBackArea.top, null);
 		canvas.drawText("BACK", mBackTxtPt.x, mBackTxtPt.y, mPaintText);
@@ -167,21 +180,21 @@ public class ActionsView extends ImageView implements OnGestureListener,
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		mListViewActions.setPosn(1, mImages.get(0).getHeight());
+		mListViewActions.setPosn(0, mImages.get(0).getHeight());
 		mListViewActions.onSizeChanged(w, h);		
 		mArrowUp.setX((w - mArrowUp.getWidth()) / 2);
-		mArrowUp.setY(h - 55);
+		mArrowUp.setY(mAppScale.doScaleH(130));
 		mArrowUp.onSizeChanged(w, h);
 		mArrowDown.setX((w - mArrowDown.getWidth()) / 2);
-		mArrowDown.setY(h - 55);
+		mArrowDown.setY(h - mAppScale.doScaleH(50));
 		mArrowDown.onSizeChanged(w, h);
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
 	
-	public boolean onDown(MotionEvent e) {
-		boolean ret = false;
+	public boolean onDown(MotionEvent e) {		
 		float x = e.getX();
-		float y = e.getY();			
+		float y = e.getY();
+		boolean ret = false;
 		
 		if (mBackArea.contains(e.getX(), e.getY())) {
 			if (mListener != null) {
@@ -224,8 +237,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		if (mSelObject != null) {
 			if (mSelObject.contains(e2.getX(), e2.getY())) {
 				ret = mSelObject.onFling(e1, e2, velocityX, velocityY);
-			}
-		
+			}		
 			mSelObject.onCancelSelection(e2);
 			mSelObject.setSelected(false);
 			mSelObject = null;	
