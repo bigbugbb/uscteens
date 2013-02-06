@@ -17,13 +17,13 @@ import edu.neu.android.mhealth.uscteensver1.AppObject;
 
 public class ListView extends AppObject {
 	
-	protected int   mStart = 0;
-	protected int   mEnd   = 0;	
-	protected int   mItemWidth  = 0;
-	protected int   mItemHeight = 0;	
-	protected int   mOffsetY = 0;
-	protected int   mLastAction = 0;
-	protected int   mBorderWidth = 3;
+	protected int    mStart = 0;
+	protected int    mEnd   = 0;	
+	protected int    mItemWidth  = 0;
+	protected int    mItemHeight = 0;	
+	protected int    mOffsetY = 0;
+	protected int    mLastAction = 0;
+	protected int    mBorderWidth = 3;
 	protected Canvas mInnerCanvas = null;
 	protected ArrayList<ListItem> mItems = new ArrayList<ListItem>();
 	protected OnReachedEndListener mOnReachedEndListener = null;
@@ -57,7 +57,7 @@ public class ListView extends AppObject {
 			mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
 			mPaintTxt.setColor(Color.BLACK);
 			mPaintTxt.setStyle(Style.STROKE);
-			mPaintTxt.setTextSize(45);
+			mPaintTxt.setTextSize(sAppScale.doScaleT(45));
 			mPaintTxt.setTypeface(Typeface.SERIF);
 			mPaintTxt.setFakeBoldText(false);
 			
@@ -83,10 +83,12 @@ public class ListView extends AppObject {
 		
 		protected void onDraw(Canvas c) {						
 			c.drawRect(0, mOffsetY + mHeight * mPosn + mBorderWidth, mWidth - mBorderWidth, 
-					mOffsetY + mHeight * (mPosn + 1), mPaintBkg);			
+				mOffsetY + mHeight * (mPosn + 1), mPaintBkg);			
 			c.drawRect(0, 0, mWidth - mBorderWidth, mBorderWidth, mPaintLine);		
-			c.drawText(mText, mWidth / 2 - 250, mOffsetY + mHeight * mPosn + mHeight * 0.6f, mPaintTxt);
-			c.drawBitmap(mImage, mWidth - mImage.getWidth() * 1.6f, mOffsetY + mHeight * mPosn + 26, null);
+			c.drawText(mText, mWidth / 2 - sAppScale.doScaleW(250), 
+				mOffsetY + mHeight * mPosn + mHeight * 0.6f, mPaintTxt);
+			c.drawBitmap(mImage, mWidth - mImage.getWidth() * 1.6f, 
+				mOffsetY + mHeight * mPosn + sAppScale.doScaleH(26), null);
 		}
 		
 		public void setPaintBackground(Paint background) {
@@ -116,11 +118,29 @@ public class ListView extends AppObject {
 			if (mImage != null) {
 				mImage.recycle();
 			}
-			
+
 			BitmapFactory.Options options = new BitmapFactory.Options(); 
 	        options.inPurgeable = true;
-	        options.inPreferredConfig = Config.RGB_565;         
-	       	mImage = BitmapFactory.decodeResource(mRes, drawable, options);	       	
+	        options.inPreferredConfig = Config.RGB_565;
+	        
+	       	Bitmap origin = BitmapFactory.decodeResource(mRes, drawable, options);
+        	Bitmap scaled = null;
+        	// scale the image according to the current screen resolution
+        	float dstWidth  = origin.getWidth(),
+        	      dstHeight = origin.getHeight();        	
+        	if (sAppScale != null) {
+        		dstWidth  = sAppScale.doScaleW(dstWidth);
+        		dstHeight = sAppScale.doScaleH(dstHeight);
+        		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+        			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+        		}
+            }        	    		
+        	if (scaled != null) {
+	    		origin.recycle(); // explicit call to avoid out of memory
+	    		mImage = scaled;
+	        } else {
+	        	mImage = origin;
+	        }
 		}
 	}
 
@@ -131,8 +151,27 @@ public class ListView extends AppObject {
 	public void addItem(String text, int drawable) {
 		BitmapFactory.Options options = new BitmapFactory.Options(); 
         options.inPurgeable = true;
-        options.inPreferredConfig = Config.RGB_565;         
-       	Bitmap image = BitmapFactory.decodeResource(mRes, drawable, options);
+        options.inPreferredConfig = Config.RGB_565;
+        
+       	Bitmap origin = BitmapFactory.decodeResource(mRes, drawable, options);
+    	Bitmap scaled = null;    	
+    	// scale the image according to the current screen resolution
+    	float dstWidth  = origin.getWidth(),
+    	      dstHeight = origin.getHeight();        	
+    	if (sAppScale != null) {
+    		dstWidth  = sAppScale.doScaleW(dstWidth);
+    		dstHeight = sAppScale.doScaleH(dstHeight);
+    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+    		}
+        }        	
+    	Bitmap image = null;
+    	if (scaled != null) {
+    		origin.recycle(); // explicit call to avoid out of memory
+    		image = scaled;
+        } else {
+        	image = origin;
+        }
        	
        	ListItem li = new ListItem(this, text, image);
        	mItems.add(li);

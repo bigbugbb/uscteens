@@ -20,7 +20,7 @@ public class BackgroundWeekday extends Background {
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.WHITE);
 		mPaint.setStyle(Style.FILL);
-		mPaint.setTextSize(45);
+		mPaint.setTextSize(sAppScale.doScaleW(45));
 		mPaint.setTypeface(Typeface.SERIF);
 		mPaint.setTextAlign(Align.CENTER);
 		mPaint.setFakeBoldText(true);	
@@ -36,8 +36,8 @@ public class BackgroundWeekday extends Background {
 	public void onDraw(Canvas c) {
 		c.drawColor(Color.rgb(179, 181, 181));
 		c.drawBitmap(mImages.get(0), 1, 0, null);
-		c.drawText("WEEK 1", mWidth * 0.25f, 80, mPaint);
+		c.drawText("WEEK 1", mWidth * 0.25f, sAppScale.doScaleH(80), mPaint);
 		c.drawBitmap(mImages.get(1), mWidth / 2 + 1, 0, null);
-		c.drawText("WEEK 2", mWidth * 0.75f, 80, mPaint);
+		c.drawText("WEEK 2", mWidth * 0.75f, sAppScale.doScaleH(80), mPaint);
 	}
 }

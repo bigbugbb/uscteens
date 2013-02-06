@@ -19,14 +19,14 @@ public class ButtonReturn extends CustomButton {
 		mPaintText.setStyle(Style.FILL);
 		mPaintText.setTypeface(Typeface.SERIF);
 		mPaintText.setFakeBoldText(false);
-		mPaintText.setTextSize(36);
+		mPaintText.setTextSize(sAppScale.doScaleH(36));
 		mPaintText.setTextAlign(Paint.Align.CENTER);
 	}
 
 	@Override
 	public void onDraw(Canvas c) {
 		c.drawBitmap(mImages.get(0), mX, mY, null);
-		c.drawText("BACK", mX, mY + 10, mPaintText);
+		c.drawText("BACK", mX, mY + sAppScale.doScaleH(10), mPaintText);
 	}
 	
 }

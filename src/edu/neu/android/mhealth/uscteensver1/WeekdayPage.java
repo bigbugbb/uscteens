@@ -33,7 +33,7 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 	protected ButtonArrow		mArrowLeftUp  = null;
 	protected ButtonArrow		mArrowRightUp = null;
 	protected ButtonArrow		mArrowLeftBottom  = null;
-	protected ButtonArrow		mArrowRightBottom = null;	
+	protected ButtonArrow		mArrowRightBottom = null;
 	protected ButtonReturn		mBtnReturn  = null;
 	
 	protected View mView = null;
