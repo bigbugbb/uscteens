@@ -13,6 +13,7 @@ public class ButtonArrow extends CustomButton {
 	
 	protected Paint mPaint = null;
 	protected boolean mDown = true;
+	protected boolean mAlignCenter = true;
 
 	public ButtonArrow(Resources res) {
 		super(res);
@@ -25,6 +26,10 @@ public class ButtonArrow extends CustomButton {
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG); 
 		mPaint.setColor(Color.WHITE);
 		mPaint.setStyle(Style.FILL);
+	}
+	
+	public void alignCenter(boolean alignCenter) {
+		mAlignCenter = alignCenter;
 	}
 	
 	public void changeArrowDir(boolean down) {
@@ -41,7 +46,13 @@ public class ButtonArrow extends CustomButton {
 	public void onDraw(Canvas c) {		
 		c.drawRect(mX, mY, mX + mCanvasWidth / 2, mY + sAppScale.doScaleH(50), mPaint);
 		if (mVisible) {
-			c.drawBitmap(mImages.get(mDown ? 0 : 1), mX + mCanvasWidth / 4 - mWidth / 2, mY + mHeight * 0.15f, null);
+			if (mAlignCenter) {
+				c.drawBitmap(mImages.get(mDown ? 0 : 1), 
+					(mCanvasWidth - mWidth) / 2, mY + mHeight * 0.15f, null);
+			} else {
+				c.drawBitmap(mImages.get(mDown ? 0 : 1), 
+					mX + mCanvasWidth / 4 - mWidth / 2, mY + mHeight * 0.15f, null);
+			}
 		}
 	}
 

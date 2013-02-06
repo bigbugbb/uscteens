@@ -92,7 +92,7 @@ public class ListViewActions extends ListView {
 	@Override
 	public void onSizeChanged(int width, int height) {
 		mWidth  = width;
-		mHeight = sAppScale.doScaleH(height - sAppScale.doScaleH(130 + 100));
+		mHeight = height - sAppScale.doScaleH(130 + 100);
 		mItemWidth  = (int) mWidth;
 		mItemHeight = (int) mHeight / 4;
 		

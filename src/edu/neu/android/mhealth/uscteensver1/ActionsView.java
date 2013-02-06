@@ -54,7 +54,9 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		super(context, attrs);	
 		
 		mArrowUp   = new ButtonArrow(context.getResources());
-		mArrowDown = new ButtonArrow(context.getResources());
+		mArrowUp.changeArrowDir(false);
+		//mArrowUp.setVisible(false);
+		mArrowDown = new ButtonArrow(context.getResources());		
 		mListViewActions = new ListViewActions(context.getResources());
 		mListViewActions.setOnItemClickListener(this);
 		mListViewActions.setOnReachedEndListener(this);
@@ -180,7 +182,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		mListViewActions.setPosn(0, mImages.get(0).getHeight());
+		mListViewActions.setPosn(0, mImages.get(0).getHeight() + mAppScale.doScaleH(50));
 		mListViewActions.onSizeChanged(w, h);		
 		mArrowUp.setX((w - mArrowUp.getWidth()) / 2);
 		mArrowUp.setY(mAppScale.doScaleH(130));

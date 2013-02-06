@@ -76,6 +76,7 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mArrowLeftUp.setX(0);
 			mArrowLeftUp.setY(appScale.doScaleH(128));
 			mArrowLeftUp.setVisible(false);
+			mArrowLeftUp.alignCenter(false);
 			mArrowLeftUp.changeArrowDir(false);
 		}
 		if (mArrowRightUp == null) {
@@ -85,6 +86,7 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mArrowRightUp.setX(appScale.doScaleW(640));
 			mArrowRightUp.setY(appScale.doScaleH(128));	
 			mArrowRightUp.setVisible(false);
+			mArrowRightUp.alignCenter(false);
 			mArrowRightUp.changeArrowDir(false);
 		}
 		if (mArrowLeftBottom == null) {
@@ -93,13 +95,15 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mArrowLeftBottom.setOnClickListener(this);
 			mArrowLeftBottom.setX(0);
 			mArrowLeftBottom.setY(appScale.doScaleH(670));
+			mArrowLeftBottom.alignCenter(false);
 		}
 		if (mArrowRightBottom == null) {
 			mArrowRightBottom = new ButtonArrow(mContext.getResources());
 			mObjects.add(mArrowRightBottom);
 			mArrowRightBottom.setOnClickListener(this);
 			mArrowRightBottom.setX(appScale.doScaleW(640));
-			mArrowRightBottom.setY(appScale.doScaleH(670));		
+			mArrowRightBottom.setY(appScale.doScaleH(670));	
+			mArrowRightBottom.alignCenter(false);
 		}
 		// order by Z
 		orderByZ(mObjects);
