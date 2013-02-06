@@ -58,7 +58,8 @@ public class ButtonSplit extends ChunkButton {
 	@Override
 	public void onDraw(Canvas c) {
 		if (mVisible) {
-			c.drawBitmap(sImages.get(0), mX + mOffsetX, mY + mOffsetY, null);
+			c.drawBitmap(sImages.get(0), mX + mOffsetX + mOffsetInChunkX, 
+					mY + mOffsetY + mOffsetInChunkY, null);
 		}
 	}
 	

@@ -1,9 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import java.util.ArrayList;
-
 import edu.neu.android.mhealth.uscteensver1.Actions;
-import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,8 +30,8 @@ public class ListViewActions extends ListView {
 
 		protected void onDraw(Canvas c) {				
 			c.drawBitmap(mImage, 8, mOffsetY + mHeight * mPosn + 6, null);
-			c.drawRect(mImage.getWidth() + 16, mOffsetY + mHeight * mPosn + mUpperBoarder,
-				mWidth - 3, mOffsetY + mHeight * (mPosn + 1) - mBottomBoarder, mPaintBkg);
+			c.drawRect(mImage.getWidth() + 16, mOffsetY + mHeight * mPosn,
+				mWidth - 3, mOffsetY + mHeight * (mPosn + 1), mPaintBkg);
 			c.drawText(mText, (mWidth + mImage.getWidth()) / 2, 
 				mOffsetY + mHeight * mPosn + mHeight * 0.6f, mPaintTxt);
 		}
@@ -52,9 +49,9 @@ public class ListViewActions extends ListView {
 	public void addItem(String text, int drawable) {
 		BitmapFactory.Options options = new BitmapFactory.Options(); 
         options.inPurgeable = true;
-        options.inPreferredConfig = Config.RGB_565;         
-       	Bitmap image = BitmapFactory.decodeResource(mRes, drawable, options);
-       	
+        options.inPreferredConfig = Config.RGB_565;
+        
+        Bitmap image = BitmapFactory.decodeResource(mRes, drawable, options);          
        	ListItem li = new ActionItem(this, text, image);
        	mItems.add(li);
        	li.register();

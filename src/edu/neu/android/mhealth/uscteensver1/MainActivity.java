@@ -14,7 +14,9 @@ import android.os.Vibrator;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -40,6 +42,8 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		// setup scale param according to the screen resolution
+		setupScale();
 		// get views and set listeners
 		setupViews();
 		// adjust layouts according to the screen resolution
@@ -68,6 +72,15 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
+	}
+	
+	private void setupScale() {
+		DisplayMetrics dm = new DisplayMetrics();  
+        getWindowManager().getDefaultDisplay().getMetrics(dm);	
+        
+		AppScale appScale = AppScale.getInstance();
+		appScale.calcScale(dm.widthPixels, dm.heightPixels);
+		AppObject.setAppScale(appScale);
 	}
 
 	private void setupViews() {

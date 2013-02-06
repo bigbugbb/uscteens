@@ -142,9 +142,21 @@ public class Chunk extends AppObject {
 			//offsetInChunkX = mValue - x + (mManager.mViewWidth - (mValue + offsetX));
 			offsetInChunkX = (mManager.mViewWidth - (mValue + offsetX) <= w) ?
 				mValue - x : mManager.mViewWidth - w - (x + offsetX);
-		}
-		
+		}		
 		mQuest.setOffsetInChunk(offsetInChunkX, 0);
+		
+//		x = mSplit.getX();
+//		w = mSplit.getWidth();
+//		offsetInChunkX = 0;
+//		if (mNext + offsetX > 0 && x + offsetX < 0) {			
+//			offsetInChunkX = Math.min(-(x + offsetX), mNext - w - x);
+//			
+//		} else if (mValue + offsetX < mManager.mViewWidth && x + offsetX + w > mManager.mViewWidth) {
+//			//offsetInChunkX = mValue - x + (mManager.mViewWidth - (mValue + offsetX));
+//			offsetInChunkX = (mManager.mViewWidth - (mValue + offsetX) <= w) ?
+//				mValue - x : mManager.mViewWidth - w - (x + offsetX);
+//		}		
+		mSplit.setOffsetInChunk(offsetInChunkX, 0);
 	}
 
 	@Override

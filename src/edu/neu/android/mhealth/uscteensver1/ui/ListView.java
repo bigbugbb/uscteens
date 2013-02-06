@@ -22,13 +22,13 @@ public class ListView extends AppObject {
 	protected int   mItemWidth  = 0;
 	protected int   mItemHeight = 0;	
 	protected int   mOffsetY = 0;
-	protected int   mUpperBoarder  = 0;
-	protected int   mBottomBoarder = 3;
 	protected int   mLastAction = 0;
+	protected int   mBorderWidth = 3;
 	protected Canvas mInnerCanvas = null;
 	protected ArrayList<ListItem> mItems = new ArrayList<ListItem>();
 	protected OnReachedEndListener mOnReachedEndListener = null;
 	protected OnItemClickListener  mOnItemClickListener  = null;
+	protected OnListViewScrollingListener mOnListViewScrollingListener = null;
 	
 	public class ListItem {
 		protected float    mX;
@@ -38,8 +38,9 @@ public class ListView extends AppObject {
 		protected int	   mPosn;
 		protected String   mText;
 		protected Bitmap   mImage;
-		protected Paint    mPaintBkg;
+		protected Paint    mPaintBkg;		
 		protected Paint    mPaintTxt;
+		protected Paint	   mPaintLine;
 		protected ListView mParent;
 		
 		public ListItem(ListView parent, String text, Bitmap image) {
@@ -59,6 +60,10 @@ public class ListView extends AppObject {
 			mPaintTxt.setTextSize(45);
 			mPaintTxt.setTypeface(Typeface.SERIF);
 			mPaintTxt.setFakeBoldText(false);
+			
+			mPaintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
+			mPaintLine.setStyle(Style.FILL);		
+			mPaintLine.setColor(Color.rgb(179, 181, 181));
 		}
 		
 		protected boolean contains(float x, float y) {
@@ -76,12 +81,12 @@ public class ListView extends AppObject {
 			
 		}
 		
-		protected void onDraw(Canvas c) {				
-			c.drawRect(0, mOffsetY + mHeight * mPosn + mUpperBoarder, mWidth - 3, 
-					mOffsetY + mHeight * (mPosn + 1) - mBottomBoarder, mPaintBkg);
+		protected void onDraw(Canvas c) {						
+			c.drawRect(0, mOffsetY + mHeight * mPosn + mBorderWidth, mWidth - mBorderWidth, 
+					mOffsetY + mHeight * (mPosn + 1), mPaintBkg);			
+			c.drawRect(0, 0, mWidth - mBorderWidth, mBorderWidth, mPaintLine);		
 			c.drawText(mText, mWidth / 2 - 250, mOffsetY + mHeight * mPosn + mHeight * 0.6f, mPaintTxt);
-			c.drawBitmap(
-				mImage, mWidth - mImage.getWidth() * 1.6f, mOffsetY + mHeight * mPosn + 26, null);
+			c.drawBitmap(mImage, mWidth - mImage.getWidth() * 1.6f, mOffsetY + mHeight * mPosn + 26, null);
 		}
 		
 		public void setPaintBackground(Paint background) {
@@ -138,6 +143,10 @@ public class ListView extends AppObject {
 		return mItems.get(pos);
 	}	
 
+	public int getItemCount() {
+		return mItems.size();
+	}
+	
 	@Override
 	public void onDraw(Canvas c) {
 		if (Math.abs(mSpeedY) > 0) {
@@ -150,16 +159,12 @@ public class ListView extends AppObject {
 		}		
 				
 		if (mOffsetY > 0) {
-			mOffsetY = 0;
-			mUpperBoarder  = 0;
-			mBottomBoarder = 3;
+			mOffsetY = 0;			
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, true, false);
 			}
 		} else if (mOffsetY + mItemHeight * mItems.size() < mHeight) {
 			mOffsetY = (int) (mHeight - mItemHeight * mItems.size());
-			mUpperBoarder  = 3;
-			mBottomBoarder = 0;
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, false, false);
 			}
@@ -227,7 +232,7 @@ public class ListView extends AppObject {
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) { // up: -
-		mSpeedY = velocityY / 50;
+		mSpeedY = velocityY / 100;
 		mAccSpeedY = mSpeedY > 0 ? -1 : 1;
 		mLastAction = e2.getAction();
 		return true;
@@ -240,17 +245,17 @@ public class ListView extends AppObject {
 		
 		if (mOffsetY > 0) {
 			mOffsetY = 0;
-			mUpperBoarder  = 0;
-			mBottomBoarder = 3;
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, true, false);
 			}
 		} else if (mOffsetY + mItemHeight * mItems.size() < mHeight) {
 			mOffsetY = (int) (mHeight - mItemHeight * mItems.size());
-			mUpperBoarder  = 3;
-			mBottomBoarder = 0;
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, false, false);
+			}
+		} else {
+			if (mOnListViewScrollingListener != null) {
+				mOnListViewScrollingListener.onListViewScrolling(this, 0, (int) distanceY);
 			}
 		}
 		
@@ -266,12 +271,20 @@ public class ListView extends AppObject {
 		mOnItemClickListener = listener;
 	}
 	
+	public void setOnListViewScrollingListener(OnListViewScrollingListener listener) {
+		mOnListViewScrollingListener = listener;
+	}
+	
 	public interface OnItemClickListener {
 		void onItemClicked(ListView view, int posn);
 	}
 
 	public interface OnReachedEndListener {
 		void onReachedEnd(ListView view, boolean top, boolean left);
+	}
+	
+	public interface OnListViewScrollingListener {
+		void onListViewScrolling(ListView view, int dx, int dy);
 	}
 
 	@Override

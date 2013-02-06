@@ -66,14 +66,14 @@ public class ActionsDialog extends Activity implements OnBackClickedListener {
 	
 	protected final Handler mHandler = new Handler() {	
 		public void handleMessage(Message msg) {        									
-        	switch (msg.what) {    
-        	case 1:
-        		int index = (Integer) msg.obj;
-        		setResultAndExit(index);
-        		break;
-            default:
-            	break;
-            }            
+	    	switch (msg.what) {    
+	    	case 1:
+	    		int index = (Integer) msg.obj;
+	    		setResultAndExit(index);
+	    		break;
+	        default:
+	        	break;
+	        }            
         }			
     };
 }

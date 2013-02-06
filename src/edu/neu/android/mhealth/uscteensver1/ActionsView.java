@@ -2,7 +2,7 @@ package edu.neu.android.mhealth.uscteensver1;
 
 import java.util.ArrayList;
 
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow2;
+import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
@@ -22,6 +22,7 @@ import android.graphics.Paint.Style;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
@@ -32,7 +33,8 @@ public class ActionsView extends ImageView implements OnGestureListener,
 													  OnItemClickListener, 
 													  OnReachedEndListener {
 	
-	protected ButtonArrow2 mArrow = null;
+	protected ButtonArrow mArrowUp   = null;
+	protected ButtonArrow mArrowDown = null;
 	protected ListViewActions mListViewActions = null;
 	protected AppObject mSelObject = null;
 	protected ArrayList<AppObject> mObjects = new ArrayList<AppObject>();
@@ -44,8 +46,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	protected Paint  mPaintText = null;	
 	protected Handler mHandler = null;
 	
-	protected int mExpectedWidth  = 0;
-	protected int mExpectedHeight = 0;
+	protected int mExpectedWidth  = 0;	
 	
 	// gesture detector
 	protected GestureDetector mGestureDetector = new GestureDetector(this);
@@ -53,11 +54,13 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	public ActionsView(Context context, AttributeSet attrs) {
 		super(context, attrs);	
 		
-		mArrow = new ButtonArrow2(context.getResources());
+		mArrowUp   = new ButtonArrow(context.getResources());
+		mArrowDown = new ButtonArrow(context.getResources());
 		mListViewActions = new ListViewActions(context.getResources());
 		mListViewActions.setOnItemClickListener(this);
 		mListViewActions.setOnReachedEndListener(this);
-		mObjects.add(mArrow);
+		mObjects.add(mArrowUp);
+		mObjects.add(mArrowDown);
 		mObjects.add(mListViewActions);
 		
 		loadImages(new int[]{ 
@@ -104,8 +107,8 @@ public class ActionsView extends ImageView implements OnGestureListener,
         	);
         }
         
-        mExpectedWidth  = mImages.get(0).getWidth();
-        mExpectedHeight = 720;
+        AppScale scale = AppScale.getInstance();        
+        mExpectedWidth  = (int) (mImages.get(0).getWidth() * scale.getScaleW());        
         
 		mBackArea.left   = 10;
 		mBackArea.right  = mBackArea.left + mImages.get(1).getWidth();
@@ -118,11 +121,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	
 	public int getExpectedWidth() {
 		return mExpectedWidth;
-	}
-	
-	public int getExpectedHeight() {
-		return mExpectedHeight;
-	}
+	}	
 
 	@Override
 	protected void onDraw(Canvas canvas) {
@@ -131,7 +130,8 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		canvas.drawBitmap(mImages.get(0), 0, 0, null);
 		canvas.drawBitmap(mImages.get(1), mBackArea.left, mBackArea.top, null);
 		canvas.drawText("BACK", mBackTxtPt.x, mBackTxtPt.y, mPaintText);
-		mArrow.onDraw(canvas);
+		mArrowUp.onDraw(canvas);
+		mArrowDown.onDraw(canvas);
 		mListViewActions.onDraw(canvas);		
 	}
 	
@@ -169,9 +169,12 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		mListViewActions.setPosn(1, mImages.get(0).getHeight());
 		mListViewActions.onSizeChanged(w, h);		
-		mArrow.setX((w - mArrow.getWidth()) / 2);
-		mArrow.setY(h - 55);
-		mArrow.onSizeChanged(w, h);
+		mArrowUp.setX((w - mArrowUp.getWidth()) / 2);
+		mArrowUp.setY(h - 55);
+		mArrowUp.onSizeChanged(w, h);
+		mArrowDown.setX((w - mArrowDown.getWidth()) / 2);
+		mArrowDown.setY(h - 55);
+		mArrowDown.onSizeChanged(w, h);
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
 	
@@ -268,15 +271,15 @@ public class ActionsView extends ImageView implements OnGestureListener,
 
 	@Override
 	public void onReachedEnd(ListView view, boolean top, boolean left) {				
-		if (top) {
-			mListViewActions.setPosn(1, mImages.get(0).getHeight());		
-			mArrow.setY(getHeight() - 55);
-			mArrow.changeArrowDir(true);			
-		} else {			
-			mListViewActions.setPosn(1, 200);							
-			mArrow.setY(145);
-			mArrow.changeArrowDir(false);			
-		}
+//		if (top) {
+//			mListViewActions.setPosn(1, mImages.get(0).getHeight());		
+//			mArrow.setY(getHeight() - 55);
+//			mArrow.changeArrowDir(true);			
+//		} else {			
+//			mListViewActions.setPosn(1, 200);							
+//			mArrow.setY(145);
+//			mArrow.changeArrowDir(false);			
+//		}
 	}
 
 	@Override

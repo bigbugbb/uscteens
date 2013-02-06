@@ -38,7 +38,7 @@ public class ListViewWeek extends ListView {
 	@Override
 	public void onSizeChanged(int width, int height) {
 		mWidth  = width / 2;
-		mHeight = height - 128 - 100;
+		mHeight = height - 128 - 103;
 		mItemWidth  = (int) mWidth;
 		mItemHeight = (int) mHeight / 4;
 		

@@ -6,6 +6,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.BackgroundWeekday;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonReturn;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
+import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListViewWeek;
 import edu.neu.android.mhealth.uscteensver1.ui.CustomButton.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
@@ -23,13 +24,16 @@ import android.view.View;
 
 public class WeekdayPage extends AppPage implements OnClickListener,
 													OnReachedEndListener,
-													OnItemClickListener {
+													OnItemClickListener,
+													OnListViewScrollingListener {
 	
 	protected BackgroundWeekday mBackground = null;
 	protected ListViewWeek      mListViewWeek1 = null;
 	protected ListViewWeek      mListViewWeek2 = null;
-	protected ButtonArrow		mArrowLeft  = null;
-	protected ButtonArrow		mArrowRight = null;
+	protected ButtonArrow		mArrowLeftUp  = null;
+	protected ButtonArrow		mArrowRightUp = null;
+	protected ButtonArrow		mArrowLeftBottom  = null;
+	protected ButtonArrow		mArrowRightBottom = null;	
 	protected ButtonReturn		mBtnReturn  = null;
 	
 	protected View mView = null;
@@ -50,31 +54,51 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mListViewWeek1 = new ListViewWeek(mContext.getResources());
 			mObjects.add(mListViewWeek1);	
 			mListViewWeek1.setX(0);
-			mListViewWeek1.setY(128);
+			mListViewWeek1.setY(178);
 			mListViewWeek1.setOnReachedEndListener(this);
 			mListViewWeek1.setOnItemClickListener(this);
+			mListViewWeek1.setOnListViewScrollingListener(this);
 		}
 		if (mListViewWeek2 == null) {
 			mListViewWeek2 = new ListViewWeek(mContext.getResources());
 			mObjects.add(mListViewWeek2);
 			mListViewWeek2.setX(643);
-			mListViewWeek2.setY(128);
+			mListViewWeek2.setY(178);
 			mListViewWeek2.setOnReachedEndListener(this);
 			mListViewWeek2.setOnItemClickListener(this);
+			mListViewWeek2.setOnListViewScrollingListener(this);
 		}
-		if (mArrowLeft == null) {
-			mArrowLeft = new ButtonArrow(mContext.getResources());
-			mObjects.add(mArrowLeft);
-			mArrowLeft.setOnClickListener(this);
-			mArrowLeft.setX(0);
-			mArrowLeft.setY(620);
+		if (mArrowLeftUp == null) {
+			mArrowLeftUp = new ButtonArrow(mContext.getResources());
+			mObjects.add(mArrowLeftUp);
+			mArrowLeftUp.setOnClickListener(this);
+			mArrowLeftUp.setX(0);
+			mArrowLeftUp.setY(128);
+			mArrowLeftUp.setVisible(false);
+			mArrowLeftUp.changeArrowDir(false);
 		}
-		if (mArrowRight == null) {
-			mArrowRight = new ButtonArrow(mContext.getResources());
-			mObjects.add(mArrowRight);
-			mArrowRight.setOnClickListener(this);
-			mArrowRight.setX(640);
-			mArrowRight.setY(620);		
+		if (mArrowRightUp == null) {
+			mArrowRightUp = new ButtonArrow(mContext.getResources());
+			mObjects.add(mArrowRightUp);
+			mArrowRightUp.setOnClickListener(this);
+			mArrowRightUp.setX(640);
+			mArrowRightUp.setY(128);	
+			mArrowRightUp.setVisible(false);
+			mArrowRightUp.changeArrowDir(false);
+		}
+		if (mArrowLeftBottom == null) {
+			mArrowLeftBottom = new ButtonArrow(mContext.getResources());
+			mObjects.add(mArrowLeftBottom);
+			mArrowLeftBottom.setOnClickListener(this);
+			mArrowLeftBottom.setX(0);
+			mArrowLeftBottom.setY(670);
+		}
+		if (mArrowRightBottom == null) {
+			mArrowRightBottom = new ButtonArrow(mContext.getResources());
+			mObjects.add(mArrowRightBottom);
+			mArrowRightBottom.setOnClickListener(this);
+			mArrowRightBottom.setX(640);
+			mArrowRightBottom.setY(670);		
 		}
 		// order by Z
 		orderByZ(mObjects);
@@ -105,44 +129,22 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 	}
 
 	@Override
-	public void onClick(AppObject obj) {
-//		switch (obj.getID()) {		
-//		case BEGIN:
-//			Message msg = mHandler.obtainMessage();     	
-//	        msg.what = AppCmd.BEGIN;
-//	        mHandler.sendMessage(msg);
-//			break;
-//		default:
-//			break;
-//		}
-	}
-
-	@Override
 	public void onReachedEnd(ListView view, boolean top, boolean left) { // ignore left here
 		if (top) {
-			if (view == mListViewWeek1) {				
-				mListViewWeek1.setPosn(0, 128);				
-				mArrowLeft.setX(0);
-				mArrowLeft.setY(620);
-				mArrowLeft.changeArrowDir(true);
-			} else {
-				mListViewWeek2.setPosn(643, 128);
-				mListViewWeek2.setY(128);
-				mArrowRight.setX(640);
-				mArrowRight.setY(620);
-				mArrowRight.changeArrowDir(true);
+			if (view == mListViewWeek1) {
+				mArrowLeftUp.setVisible(false);
+				mArrowLeftBottom.setVisible(true);
+			} else {		
+				mArrowRightUp.setVisible(false);
+				mArrowRightBottom.setVisible(true);
 			}
 		} else {
-			if (view == mListViewWeek1) {
-				mListViewWeek1.setPosn(0, 228);				
-				mArrowLeft.setX(0);
-				mArrowLeft.setY(128);
-				mArrowLeft.changeArrowDir(false);
+			if (view == mListViewWeek1) {	
+				mArrowLeftUp.setVisible(true);
+				mArrowLeftBottom.setVisible(false);
 			} else {
-				mListViewWeek2.setPosn(643, 228);				
-				mArrowRight.setX(640);
-				mArrowRight.setY(128);
-				mArrowRight.changeArrowDir(false);
+				mArrowRightUp.setVisible(true);
+				mArrowRightBottom.setVisible(false);
 			}
 		}
 	}
@@ -153,6 +155,17 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 		msg.obj  = Integer.valueOf(view == mListViewWeek1 ? posn + 1 : posn + 8);
 		msg.what = AppCmd.WEEKDAY;
 		mHandler.sendMessage(msg);
+	}
+	
+	@Override
+	public void onListViewScrolling(ListView view, int dx, int dy) {
+		if (view == mListViewWeek1) {
+			mArrowLeftUp.setVisible(true);
+			mArrowLeftBottom.setVisible(true);
+		} else {		
+			mArrowRightUp.setVisible(true);
+			mArrowRightBottom.setVisible(true);
+		}	
 	}
 
 	public boolean onDown(MotionEvent e) {
@@ -231,4 +244,11 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 //		}
 		return false; // do nothing here
 	}
+
+	@Override
+	public void onClick(AppObject obj) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

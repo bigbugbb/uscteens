@@ -22,7 +22,7 @@ public class DataSource {
 	static protected DataSource sManager = null;
 	
 	static {
-		System.loadLibrary("datasrc");			
+		System.loadLibrary("datasrc");
 	}
 	
 	static public DataSource getInstance(Context context) {

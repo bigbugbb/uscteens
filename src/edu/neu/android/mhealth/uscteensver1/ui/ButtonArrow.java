@@ -38,9 +38,11 @@ public class ButtonArrow extends CustomButton {
 	}
 
 	@Override
-	public void onDraw(Canvas c) {
-		c.drawRect(mX, mY, mX + mCanvasWidth / 2, mY + 100, mPaint);
-		c.drawBitmap(mImages.get(mDown ? 0 : 1), mX + mCanvasWidth / 4 - mWidth / 2, mY + mHeight * 0.65f, null);
+	public void onDraw(Canvas c) {		
+		c.drawRect(mX, mY, mX + mCanvasWidth / 2, mY + 50, mPaint);
+		if (mVisible) {
+			c.drawBitmap(mImages.get(mDown ? 0 : 1), mX + mCanvasWidth / 4 - mWidth / 2, mY + mHeight * 0.15f, null);
+		}
 	}
 
 }
