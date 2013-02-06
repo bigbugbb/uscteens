@@ -45,6 +45,7 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 	}
 	
 	public List<AppObject> load() {
+		AppScale appScale = AppScale.getInstance();
 		// create game objects
 		if (mBackground == null) {
 			mBackground = new BackgroundWeekday(mContext.getResources());			
@@ -54,7 +55,7 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mListViewWeek1 = new ListViewWeek(mContext.getResources());
 			mObjects.add(mListViewWeek1);	
 			mListViewWeek1.setX(0);
-			mListViewWeek1.setY(178);
+			mListViewWeek1.setY(appScale.doScaleH(178));
 			mListViewWeek1.setOnReachedEndListener(this);
 			mListViewWeek1.setOnItemClickListener(this);
 			mListViewWeek1.setOnListViewScrollingListener(this);
@@ -62,8 +63,8 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 		if (mListViewWeek2 == null) {
 			mListViewWeek2 = new ListViewWeek(mContext.getResources());
 			mObjects.add(mListViewWeek2);
-			mListViewWeek2.setX(643);
-			mListViewWeek2.setY(178);
+			mListViewWeek2.setX(appScale.doScaleW(643));
+			mListViewWeek2.setY(appScale.doScaleH(178));
 			mListViewWeek2.setOnReachedEndListener(this);
 			mListViewWeek2.setOnItemClickListener(this);
 			mListViewWeek2.setOnListViewScrollingListener(this);
@@ -73,7 +74,7 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mObjects.add(mArrowLeftUp);
 			mArrowLeftUp.setOnClickListener(this);
 			mArrowLeftUp.setX(0);
-			mArrowLeftUp.setY(128);
+			mArrowLeftUp.setY(appScale.doScaleH(128));
 			mArrowLeftUp.setVisible(false);
 			mArrowLeftUp.changeArrowDir(false);
 		}
@@ -81,8 +82,8 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mArrowRightUp = new ButtonArrow(mContext.getResources());
 			mObjects.add(mArrowRightUp);
 			mArrowRightUp.setOnClickListener(this);
-			mArrowRightUp.setX(640);
-			mArrowRightUp.setY(128);	
+			mArrowRightUp.setX(appScale.doScaleW(640));
+			mArrowRightUp.setY(appScale.doScaleH(128));	
 			mArrowRightUp.setVisible(false);
 			mArrowRightUp.changeArrowDir(false);
 		}
@@ -91,14 +92,14 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mObjects.add(mArrowLeftBottom);
 			mArrowLeftBottom.setOnClickListener(this);
 			mArrowLeftBottom.setX(0);
-			mArrowLeftBottom.setY(670);
+			mArrowLeftBottom.setY(appScale.doScaleH(670));
 		}
 		if (mArrowRightBottom == null) {
 			mArrowRightBottom = new ButtonArrow(mContext.getResources());
 			mObjects.add(mArrowRightBottom);
 			mArrowRightBottom.setOnClickListener(this);
-			mArrowRightBottom.setX(640);
-			mArrowRightBottom.setY(670);		
+			mArrowRightBottom.setX(appScale.doScaleW(640));
+			mArrowRightBottom.setY(appScale.doScaleH(670));		
 		}
 		// order by Z
 		orderByZ(mObjects);
