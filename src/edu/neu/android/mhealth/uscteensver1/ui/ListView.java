@@ -270,8 +270,8 @@ public class ListView extends AppObject {
 
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) { // up: -
-		mSpeedY = velocityY / 100;
+			float velocityY) { // up: -		
+		mSpeedY = velocityY / sAppScale.doScaleH(80);
 		mAccSpeedY = mSpeedY > 0 ? -1 : 1;
 		mLastAction = e2.getAction();
 		return true;

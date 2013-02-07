@@ -174,8 +174,8 @@ public class MotionGraph extends AppObject {
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
-		mSpeedX = velocityX / 50;
-		mAccSpeedX = mSpeedX > 0 ? -3 : 3;
+		mSpeedX = velocityX / sAppScale.doScaleW(50);
+		mAccSpeedX = sAppScale.doScaleW(mSpeedX > 0 ? -3 : 3);
 		return true;
 	}
 

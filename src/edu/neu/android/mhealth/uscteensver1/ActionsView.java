@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
+import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListViewActions;
 
@@ -29,7 +30,8 @@ import android.widget.ImageView;
 
 public class ActionsView extends ImageView implements OnGestureListener, 
 													  OnItemClickListener, 
-													  OnReachedEndListener {
+													  OnReachedEndListener,
+													  OnListViewScrollingListener {
 	
 	protected ButtonArrow mArrowUp   = null;
 	protected ButtonArrow mArrowDown = null;
@@ -54,12 +56,14 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		super(context, attrs);	
 		
 		mArrowUp   = new ButtonArrow(context.getResources());
+		mArrowUp.setVisible(false);
 		mArrowUp.changeArrowDir(false);
 		//mArrowUp.setVisible(false);
 		mArrowDown = new ButtonArrow(context.getResources());		
 		mListViewActions = new ListViewActions(context.getResources());
 		mListViewActions.setOnItemClickListener(this);
 		mListViewActions.setOnReachedEndListener(this);
+		mListViewActions.setOnListViewScrollingListener(this);
 		mObjects.add(mArrowUp);
 		mObjects.add(mArrowDown);
 		mObjects.add(mListViewActions);
@@ -285,15 +289,13 @@ public class ActionsView extends ImageView implements OnGestureListener,
 
 	@Override
 	public void onReachedEnd(ListView view, boolean top, boolean left) {				
-//		if (top) {
-//			mListViewActions.setPosn(1, mImages.get(0).getHeight());		
-//			mArrow.setY(getHeight() - 55);
-//			mArrow.changeArrowDir(true);			
-//		} else {			
-//			mListViewActions.setPosn(1, 200);							
-//			mArrow.setY(145);
-//			mArrow.changeArrowDir(false);			
-//		}
+		if (top) {
+			mArrowUp.setVisible(false);
+			mArrowDown.setVisible(true);
+		} else {
+			mArrowUp.setVisible(true);
+			mArrowDown.setVisible(false);
+		}
 	}
 
 	@Override
@@ -302,5 +304,11 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		msg.obj  = Integer.valueOf(posn);
 		msg.what = 1;
 		mHandler.sendMessage(msg);			
+	}
+
+	@Override
+	public void onListViewScrolling(ListView view, int dx, int dy) {	
+		mArrowUp.setVisible(true);
+		mArrowDown.setVisible(true);		
 	}
 }
