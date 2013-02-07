@@ -32,7 +32,7 @@ public class BackgroundWin extends Background {
 		mPaintText1.setStyle(Style.FILL);
 		mPaintText1.setTypeface(Typeface.SERIF);
 		mPaintText1.setFakeBoldText(true);
-		mPaintText1.setTextSize(50);
+		mPaintText1.setTextSize(sAppScale.doScaleT(50));
 		mPaintText1.setTextAlign(Paint.Align.CENTER);
 		
 		mPaintText2 = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -40,7 +40,7 @@ public class BackgroundWin extends Background {
 		mPaintText2.setStyle(Style.FILL);
 		mPaintText2.setTypeface(Typeface.SERIF);
 		mPaintText2.setFakeBoldText(true);
-		mPaintText2.setTextSize(46);
+		mPaintText2.setTextSize(sAppScale.doScaleT(46));
 		mPaintText2.setTextAlign(Paint.Align.CENTER);
 	}
 
@@ -48,16 +48,16 @@ public class BackgroundWin extends Background {
 	public void onSizeChanged(int width, int height) {		
 		for (int i = 0; i < mImages.size(); ++i) {
 			//float radio = mImages.get(i).getWidth() / (float) mImages.get(i).getHeight();	
-			int scaledWidth  = width;
-			int scaledHeight = (int)mImages.get(i).getHeight();
+			int dstWidth  = width;
+			int dstHeight = (int)mImages.get(i).getHeight();
 			
-			if (scaledWidth == mImages.get(i).getWidth() && 
-				scaledHeight == mImages.get(i).getHeight()) {
+			if (dstWidth == mImages.get(i).getWidth() && 
+				dstHeight == mImages.get(i).getHeight()) {
 				continue;
 			}
 			
 			Bitmap newImage = 
-				Bitmap.createScaledBitmap(mImages.get(i), scaledWidth, scaledHeight, true);	
+				Bitmap.createScaledBitmap(mImages.get(i), dstWidth, dstHeight, true);	
 			mImages.get(i).recycle(); // explicit call to avoid out of memory
 			mImages.set(i, newImage);			
 			System.gc();
@@ -81,7 +81,7 @@ public class BackgroundWin extends Background {
 		c.drawText("CONGRATULATIONS", mText1X, mText1Y, mPaintText1);
 		c.drawBitmap(mImages.get(1), (mCanvasWidth - mWidth) / 2, mBarHeight, null);
 		c.drawText("You have completed", mText2X, mText2Y, mPaintText2);
-		c.drawText("the Teen Activity Game", mText2X, mText2Y + 90, mPaintText2);
+		c.drawText("the Teen Activity Game", mText2X, mText2Y + sAppScale.doScaleH(90), mPaintText2);
 	}
 	
 }
