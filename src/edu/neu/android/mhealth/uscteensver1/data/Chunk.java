@@ -134,29 +134,16 @@ public class Chunk extends AppObject {
 		
 		float x = mQuest.getX();
 		float w = mQuest.getWidth();
-		float offsetInChunkX = 0;
+		float inChunkOffsetX = 0;
 		if (mNext + offsetX > 0 && x + offsetX < 0) {			
-			offsetInChunkX = Math.min(-(x + offsetX), mNext - w - x);
-			
+			inChunkOffsetX = Math.min(-(x + offsetX), mNext - w * 1.5f - x);
 		} else if (mValue + offsetX < mManager.mViewWidth && x + offsetX + w > mManager.mViewWidth) {
 			//offsetInChunkX = mValue - x + (mManager.mViewWidth - (mValue + offsetX));
-			offsetInChunkX = (mManager.mViewWidth - (mValue + offsetX) <= w) ?
-				mValue - x : mManager.mViewWidth - w - (x + offsetX);
+			inChunkOffsetX = Math.max(mManager.mViewWidth - (x + offsetX + w),  
+				- (x - mValue - w * 0.5f));
 		}		
-		mQuest.setOffsetInChunk(offsetInChunkX, 0);
-		
-//		x = mSplit.getX();
-//		w = mSplit.getWidth();
-//		offsetInChunkX = 0;
-//		if (mNext + offsetX > 0 && x + offsetX < 0) {			
-//			offsetInChunkX = Math.min(-(x + offsetX), mNext - w - x);
-//			
-//		} else if (mValue + offsetX < mManager.mViewWidth && x + offsetX + w > mManager.mViewWidth) {
-//			//offsetInChunkX = mValue - x + (mManager.mViewWidth - (mValue + offsetX));
-//			offsetInChunkX = (mManager.mViewWidth - (mValue + offsetX) <= w) ?
-//				mValue - x : mManager.mViewWidth - w - (x + offsetX);
-//		}		
-		mSplit.setOffsetInChunk(offsetInChunkX, 0);
+		mQuest.setOffsetInChunk(inChunkOffsetX, 0);	
+		mSplit.setOffsetInChunk(inChunkOffsetX, 0);
 	}
 
 	@Override

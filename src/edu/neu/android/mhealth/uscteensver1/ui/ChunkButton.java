@@ -36,7 +36,7 @@ public class ChunkButton extends CustomButton {
 		if (!mVisible || !mEnable) {
 			return false;
 		}
-		return (x > mX + mOffsetX && x <= mX + mWidth + mOffsetX) && 
+		return (x > mX + mOffsetX + mOffsetInChunkX && x <= mX + mWidth + mOffsetX + mOffsetInChunkX) && 
 			   (y > mY + mOffsetY && y <= mY + mHeight + mOffsetY);
 	}
 }

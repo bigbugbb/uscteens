@@ -154,6 +154,6 @@ public class ButtonQuest extends ChunkButton {
 	public void onCancelSelection(MotionEvent e) {
 		mX -= 3;
 		mY -= 3;
-	}
+	}	
 
 }
