@@ -177,7 +177,9 @@ public class ChunkManager {
 	
 	public Chunk getPreviousUnmarkedChunk() {
 		Chunk prev = null;
-		float current = -mDispOffsetX;		
+		float current = -mDispOffsetX;
+		
+//		current = Math.max(0, Math.min(current, ));
 		
 		for (int i = mChunks.size() - 1; i >= 0; --i) {
 			Chunk c = mChunks.get(i);

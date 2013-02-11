@@ -24,6 +24,10 @@ public class ListView extends AppObject {
 	protected int    mOffsetY = 0;
 	protected int    mLastAction = 0;
 	protected int    mBorderWidth = 3;
+	protected float  mOffsetSpeedX = 0;
+	protected float  mOffsetSpeedY = 0;
+	protected float  mOffsetAccSpeedX = 0;
+	protected float  mOffestAccSpeedY = 0;
 	protected Canvas mInnerCanvas = null;
 	protected ArrayList<ListItem> mItems = new ArrayList<ListItem>();
 	protected OnReachedEndListener mOnReachedEndListener = null;
@@ -82,13 +86,12 @@ public class ListView extends AppObject {
 		}
 		
 		protected void onDraw(Canvas c) {						
-			c.drawRect(0, mOffsetY + mHeight * mPosn + mBorderWidth, mWidth - mBorderWidth, 
-				mOffsetY + mHeight * (mPosn + 1), mPaintBkg);			
-			c.drawRect(0, 0, mWidth - mBorderWidth, mBorderWidth, mPaintLine);		
+			c.drawRect(0, mOffsetY + (mHeight + mBorderWidth) * mPosn, mWidth - mBorderWidth, 
+				mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight, mPaintBkg);		
 			c.drawText(mText, mWidth / 2 - sAppScale.doScaleW(250), 
-				mOffsetY + mHeight * mPosn + mHeight * 0.6f, mPaintTxt);
+				mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight * 0.6f, mPaintTxt);
 			c.drawBitmap(mImage, mWidth - mImage.getWidth() * 1.6f, 
-				mOffsetY + mHeight * mPosn + sAppScale.doScaleH(26), null);
+				mOffsetY + (mHeight + mBorderWidth) * mPosn + sAppScale.doScaleH(26), null);
 		}
 		
 		public void setPaintBackground(Paint background) {
@@ -146,6 +149,9 @@ public class ListView extends AppObject {
 
 	public ListView(Resources res) {
 		super(res);	
+		
+		mOffsetSpeedY = sAppScale.doScaleH(16f);
+		//mOffestAccSpeedY = sAppScale.doScaleH(3f);
 	}
 	
 	public void addItem(String text, int drawable) {
@@ -186,6 +192,15 @@ public class ListView extends AppObject {
 		return mItems.size();
 	}
 	
+	public int getBorderWidth() {
+		return mBorderWidth;
+	}
+	
+	public boolean outOfBound() {
+		return mOffsetY > 0 || 
+			mOffsetY + (mItemHeight + mBorderWidth) * mItems.size() - mBorderWidth < mHeight;
+	}
+	
 	@Override
 	public void onDraw(Canvas c) {
 		if (Math.abs(mSpeedY) > 0) {
@@ -197,13 +212,15 @@ public class ListView extends AppObject {
 			}
 		}		
 				
-		if (mOffsetY > 0) {
-			mOffsetY = 0;			
+		if (mOffsetY > 0) {				
+			mOffsetY = (int) Math.max(0, Math.min(mItemHeight * 1.1f, mOffsetY - mOffsetSpeedY));			
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, true, false);
 			}
-		} else if (mOffsetY + mItemHeight * mItems.size() < mHeight) {
-			mOffsetY = (int) (mHeight - mItemHeight * mItems.size());
+		} else if (mOffsetY + (mItemHeight + mBorderWidth) * mItems.size() - mBorderWidth <= mHeight) {			
+			mOffsetY = (int) Math.min(- (mItemHeight + mBorderWidth) * (mItems.size() - 4), 
+				Math.max(mOffsetY + mOffsetSpeedY, 
+					- (mItemHeight + mBorderWidth) * (mItems.size() - 4) - mItemHeight * 1.1f));
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, false, false);
 			}
@@ -270,9 +287,10 @@ public class ListView extends AppObject {
 
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) { // up: -		
-		mSpeedY = velocityY / sAppScale.doScaleH(80);
-		mAccSpeedY = sAppScale.doScaleH(mSpeedY > 0 ? -3 : 3);
+			float velocityY) { // up: -				
+		mSpeedY = Math.min(Math.abs(velocityY / sAppScale.doScaleH(80)), 80);
+		mSpeedY = velocityY > 0 ? mSpeedY : -mSpeedY;
+		mAccSpeedY = sAppScale.doScaleH(mSpeedY > 0 ? -2.5f : 2.5f);
 		mLastAction = e2.getAction();
 		return true;
 	}
@@ -283,12 +301,13 @@ public class ListView extends AppObject {
 		mOffsetY += (int) -distanceY;
 		
 		if (mOffsetY > 0) {
-			mOffsetY = 0;
+			mOffsetY = (int) Math.min(mOffsetY, mItemHeight * 1.1f);			
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, true, false);
 			}
-		} else if (mOffsetY + mItemHeight * mItems.size() < mHeight) {
-			mOffsetY = (int) (mHeight - mItemHeight * mItems.size());
+		} else if (mOffsetY + (mItemHeight + mBorderWidth) * mItems.size() - mBorderWidth <= mHeight) {			
+			mOffsetY = (int) Math.max(mOffsetY, 
+				- (mItemHeight + mBorderWidth) * (mItems.size() - 4) - mItemHeight * 1.1f);
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, false, false);
 			}

@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 public class DataSource {
 	
-	public static final int PIXEL_SCALE = 3;
+	public static final int PIXEL_SCALE = 1;
 	
 	public int[] mActData = null;
 	//public int[] mChkData = null;

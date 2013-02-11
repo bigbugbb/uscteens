@@ -23,11 +23,18 @@ public class MotionGraph extends AppObject {
 	protected int   mCanvasWidth  = 0;
 	protected int   mCanvasHeight = 0;
 	protected int   mRightBound = 0;
+	protected Paint mBackgroundGray  = null;
+	protected Paint mBackgroundWhite = null;
 	protected Paint mPaint = null;
 	protected Paint mMarkedPaint = null;
 	protected Paint mSelChunkPaint = null;
 	protected int[] mActions = null;
 	protected int   mActLenInPix = 0;
+	
+	protected float mOffsetX = 0;
+	protected float mOffsetY = 0;
+	protected float mOffsetSpeedX = 0;
+	protected float mOffsetSpeedY = 0;
 	
 	protected DataSource   mDataSrc = null;
 	protected ChunkManager mManager = null;	
@@ -38,7 +45,14 @@ public class MotionGraph extends AppObject {
 		mManager = manager;
 		mDataSrc = DataSource.getInstance(null);
 		mActions = mDataSrc.mActData;
-		mActLenInPix = mDataSrc.getActLengthInPixel();								
+		mActLenInPix = mDataSrc.getActLengthInPixel();	
+		
+		mBackgroundGray = new Paint();
+		mBackgroundGray.setColor(Color.rgb(179, 181, 181));
+		mBackgroundGray.setStyle(Style.FILL);
+		mBackgroundWhite = new Paint();
+		mBackgroundWhite.setColor(Color.rgb(255, 255, 255));
+		mBackgroundWhite.setStyle(Style.FILL);
 		
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.BLACK);
@@ -54,7 +68,10 @@ public class MotionGraph extends AppObject {
 		mSelChunkPaint.setColor(Color.argb(255, 0, 183, 223));
 		mSelChunkPaint.setStrokeWidth(5.0f);
 		mSelChunkPaint.setStyle(Style.STROKE);
-		mSelChunkPaint.setFakeBoldText(true);					
+		mSelChunkPaint.setFakeBoldText(true);
+		
+		mOffsetSpeedX = 0;
+		mOffsetSpeedY = 0;
 			
 		manager.setDisplayOffset(0, 0);	
 	}		
@@ -65,6 +82,8 @@ public class MotionGraph extends AppObject {
 
 	@Override
 	public void onDraw(Canvas c) {
+		c.drawRect(0, 0, mWidth, mHeight, mBackgroundGray);
+		c.drawRect(mOffsetX, 0, mWidth + mOffsetX, mHeight, mBackgroundWhite);
 		// draw the border
 		c.drawLine(0, 0, mWidth, 0, mPaint);
 		c.drawLine(0, 0, 0, mHeight, mPaint);
@@ -101,15 +120,15 @@ public class MotionGraph extends AppObject {
 			if (chunk.mQuest.isAnswered()) {
 				if (chunk.mValue - mStart > mWidth || chunk.mNext - mStart < 0)
 					continue;
-				RectF r = new RectF(chunk.mValue - mStart, 0, chunk.mNext - mStart, mHeight);		
+				RectF r = new RectF(chunk.mValue - mStart + mOffsetX, 0, chunk.mNext - mStart + mOffsetX, mHeight);		
 				c.drawRect(r, mMarkedPaint);
 			}
 		}
 		
 		// draw the graph		
 		for (int i = mStart; i < mEnd - DataSource.PIXEL_SCALE; ++i) {			
-			c.drawLine(i - mStart, mActions[i / DataSource.PIXEL_SCALE], 
-				i - mStart + DataSource.PIXEL_SCALE, mActions[i / DataSource.PIXEL_SCALE + 1], mPaint);
+			c.drawLine(i - mStart + mOffsetX, mActions[i / DataSource.PIXEL_SCALE], 
+				i - mStart + DataSource.PIXEL_SCALE + mOffsetX, mActions[i / DataSource.PIXEL_SCALE + 1], mPaint);
 		}
 		// draw the chunk lines and the corresponding buttons
 		for (int i = 0; i < mManager.getChunkSize(); ++i) {
@@ -117,7 +136,7 @@ public class MotionGraph extends AppObject {
 			chunk.onDraw(c);
 		}		
 		// draw the rectangle which indicates the chunk selection		
-		c.drawRect(mManager.getSelectedArea(), mSelChunkPaint);
+		c.drawRect(mManager.getSelectedArea(), mSelChunkPaint);		
 	}
 
 	@Override
@@ -183,17 +202,18 @@ public class MotionGraph extends AppObject {
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
 		int offset = (int) distanceX;		
+		//mOffsetX = -offset;
 		
 		if (mStart + (int) distanceX < 0) {
-			offset = -mStart;
+			offset = -mStart;			
 		} else if (mStart + (int) distanceX > mRightBound) {
-			offset = mRightBound - mStart;
+			offset = mRightBound - mStart;			
 		}
 		mStart = mStart + offset;				
 		mEnd   = mStart + (int) mWidth;
 		mStart = (mStart < 0) ? 0 : mStart;
 		mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;
-		mManager.setDisplayOffset(-mStart, 0);
+		mManager.setDisplayOffset(-mStart + mOffsetX, 0);
 		
 		if (mListener != null) {
 			mListener.OnGraphMoved(this, (float) mStart / mRightBound);

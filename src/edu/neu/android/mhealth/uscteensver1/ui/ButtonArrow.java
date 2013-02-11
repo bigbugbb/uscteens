@@ -40,18 +40,25 @@ public class ButtonArrow extends CustomButton {
 	public void onSizeChanged(int width, int height) {
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
+		mWidth  = mCanvasWidth;
+		mHeight = sAppScale.doScaleH(50);
 	}
 
 	@Override
-	public void onDraw(Canvas c) {		
-		c.drawRect(mX, mY, mX + mCanvasWidth / 2, mY + sAppScale.doScaleH(50), mPaint);
+	public void onDraw(Canvas c) {	
+		if (mAlignCenter) {
+			c.drawRect(mX, mY, mX + mWidth, mY + mHeight, mPaint);
+		} else {
+			c.drawRect(mX, mY, mX + mWidth / 2, mY + mHeight, mPaint);
+		}
+		
 		if (mVisible) {
 			if (mAlignCenter) {
 				c.drawBitmap(mImages.get(mDown ? 0 : 1), 
-					(mCanvasWidth - mWidth) / 2, mY + mHeight * 0.15f, null);
+					(mWidth - mImages.get(0).getWidth()) / 2, mY + mHeight * 0.15f, null);
 			} else {
 				c.drawBitmap(mImages.get(mDown ? 0 : 1), 
-					mX + mCanvasWidth / 4 - mWidth / 2, mY + mHeight * 0.15f, null);
+					mX + (mWidth / 2 - mImages.get(0).getWidth()) / 2, mY + mHeight * 0.15f, null);
 			}
 		}
 	}

@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.Config;
@@ -28,12 +27,12 @@ public class ListViewActions extends ListView {
 			mPaintTxt.setFakeBoldText(false);
 		}		
 
-		protected void onDraw(Canvas c) {				
-			c.drawBitmap(mImage, 8, mOffsetY + mHeight * mPosn + 6, null);
-			c.drawRect(mImage.getWidth() + 16, mOffsetY + mHeight * mPosn,
-				mWidth - 3, mOffsetY + mHeight * (mPosn + 1), mPaintBkg);
+		protected void onDraw(Canvas c) {
+			c.drawBitmap(mImage, 8, mOffsetY + (mHeight + mBorderWidth) * mPosn, null);
+			c.drawRect(mImage.getWidth() + 16, mOffsetY + (mHeight + mBorderWidth) * mPosn,
+				mWidth - 3, mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight, mPaintBkg);
 			c.drawText(mText, (mWidth + mImage.getWidth()) / 2, 
-				mOffsetY + mHeight * mPosn + mHeight * 0.6f, mPaintTxt);
+				mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight * 0.6f, mPaintTxt);
 		}
 
 	}
@@ -83,7 +82,7 @@ public class ListViewActions extends ListView {
 		for (int i = 0; i < mItems.size(); ++i) {
 			ListItem li = mItems.get(i);
 			li.mX = mX;
-			li.mY = mY + mItemHeight * i;
+			li.mY = mY + (mItemHeight + mBorderWidth) * i;
 			li.mWidth  = mItemWidth;
 			li.mHeight = mItemHeight;
 		}
@@ -92,14 +91,14 @@ public class ListViewActions extends ListView {
 	@Override
 	public void onSizeChanged(int width, int height) {
 		mWidth  = width;
-		mHeight = height - sAppScale.doScaleH(130 + 100);
+		mHeight = height - sAppScale.doScaleH(130 + 100) - (2 * mBorderWidth + 1);
 		mItemWidth  = (int) mWidth;
-		mItemHeight = (int) mHeight / 4;
+		mItemHeight = (int) (mHeight - 3 * mBorderWidth) / 4;
 		
 		for (int i = 0; i < mItems.size(); ++i) {
 			ListItem li = mItems.get(i);
 			li.mX = mX;
-			li.mY = mY + mItemHeight * i;
+			li.mY = mY + (mItemHeight + mBorderWidth) * i;
 			li.mWidth  = mItemWidth;
 			li.mHeight = mItemHeight;
 		}

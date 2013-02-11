@@ -35,7 +35,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	
 	protected ButtonArrow mArrowUp   = null;
 	protected ButtonArrow mArrowDown = null;
-	protected ListViewActions mListViewActions = null;
+	protected ListViewActions mActionList = null;
 	protected AppScale  mAppScale  = AppScale.getInstance();
 	protected AppObject mSelObject = null;	
 	protected ArrayList<AppObject> mObjects = new ArrayList<AppObject>();
@@ -60,13 +60,13 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		mArrowUp.changeArrowDir(false);
 		//mArrowUp.setVisible(false);
 		mArrowDown = new ButtonArrow(context.getResources());		
-		mListViewActions = new ListViewActions(context.getResources());
-		mListViewActions.setOnItemClickListener(this);
-		mListViewActions.setOnReachedEndListener(this);
-		mListViewActions.setOnListViewScrollingListener(this);
+		mActionList = new ListViewActions(context.getResources());
+		mActionList.setOnItemClickListener(this);
+		mActionList.setOnReachedEndListener(this);
+		mActionList.setOnListViewScrollingListener(this);
 		mObjects.add(mArrowUp);
 		mObjects.add(mArrowDown);
-		mObjects.add(mListViewActions);
+		mObjects.add(mActionList);
 		
 		loadImages(new int[]{ 
 			R.drawable.popup_win_background, R.drawable.back_blue  
@@ -85,7 +85,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		
 		public void run() {
 			invalidate();
-			if (Math.abs(mListViewActions.getSpeedY()) > 0) {
+			if (Math.abs(mActionList.getSpeedY()) > 0 || mActionList.outOfBound()) {
 				mHandler.postDelayed(this, 10);
 			} else {
 				mHandler.removeCallbacks(this);
@@ -145,13 +145,13 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	}	
 
 	@Override
-	protected void onDraw(Canvas canvas) {
+	protected void onDraw(Canvas canvas) {		
 		canvas.drawBitmap(mImages.get(0), 0, 0, null);
 		canvas.drawBitmap(mImages.get(1), mBackArea.left, mBackArea.top, null);
 		canvas.drawText("BACK", mBackTxtPt.x, mBackTxtPt.y, mPaintText);
 		mArrowUp.onDraw(canvas);
 		mArrowDown.onDraw(canvas);
-		mListViewActions.onDraw(canvas);		
+		mActionList.onDraw(canvas);		
 	}
 	
 	@Override
@@ -186,12 +186,12 @@ public class ActionsView extends ImageView implements OnGestureListener,
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		mListViewActions.setPosn(0, mImages.get(0).getHeight() + mAppScale.doScaleH(50));
-		mListViewActions.onSizeChanged(w, h);		
-		mArrowUp.setX((w - mArrowUp.getWidth()) / 2);
+		mActionList.setPosn(0, mAppScale.doScaleH(180) + mActionList.getBorderWidth());
+		mActionList.onSizeChanged(w, h);		
+		mArrowUp.setX(0);
 		mArrowUp.setY(mAppScale.doScaleH(130));
 		mArrowUp.onSizeChanged(w, h);
-		mArrowDown.setX((w - mArrowDown.getWidth()) / 2);
+		mArrowDown.setX(0);
 		mArrowDown.setY(h - mAppScale.doScaleH(50));
 		mArrowDown.onSizeChanged(w, h);
 		super.onSizeChanged(w, h, oldw, oldh);

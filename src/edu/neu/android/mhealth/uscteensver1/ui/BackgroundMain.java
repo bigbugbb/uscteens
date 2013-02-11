@@ -38,8 +38,7 @@ public class BackgroundMain extends Background {
 	}
 
 	@Override
-	public void onDraw(Canvas c) {		
-		c.drawColor(Color.WHITE);
+	public void onDraw(Canvas c) {				
 		c.drawBitmap(mImages.get(0), mX, mY, null);
 	}
 

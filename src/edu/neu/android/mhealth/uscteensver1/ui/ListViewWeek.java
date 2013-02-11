@@ -29,7 +29,7 @@ public class ListViewWeek extends ListView {
 		for (int i = 0; i < mItems.size(); ++i) {
 			ListItem li = mItems.get(i);
 			li.mX = mX;
-			li.mY = mY + mItemHeight * i;
+			li.mY = mY + (mItemHeight + mBorderWidth) * i;
 			li.mWidth  = mItemWidth;
 			li.mHeight = mItemHeight;
 		}
@@ -38,14 +38,14 @@ public class ListViewWeek extends ListView {
 	@Override
 	public void onSizeChanged(int width, int height) {
 		mWidth  = width / 2;
-		mHeight = height - sAppScale.doScaleH(128 + 103);
+		mHeight = height - sAppScale.doScaleH(128 + 100) - (2 * mBorderWidth + 1);
 		mItemWidth  = (int) mWidth;
-		mItemHeight = (int) mHeight / 4;
+		mItemHeight = (int) (mHeight - 3 * mBorderWidth) / 4;
 		
 		for (int i = 0; i < mItems.size(); ++i) {
 			ListItem li = mItems.get(i);
 			li.mX = mX;
-			li.mY = mY + mItemHeight * i;
+			li.mY = mY + (mItemHeight + mBorderWidth) * i;	
 			li.mWidth  = mItemWidth;
 			li.mHeight = mItemHeight;
 		}

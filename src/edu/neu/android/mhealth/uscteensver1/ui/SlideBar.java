@@ -83,12 +83,12 @@ public class SlideBar extends AppObject {
 	
 	@Override
 	public void onDraw(Canvas c) {		    	    
-	    c.drawRoundRect(mRect2, 12, 12, mPaint2);	
+	    c.drawRoundRect(mRect2, 12, 12, mPaint2);
 	    if (mRange != null) {
 		    for (int i = 0; i < mRange.size(); i += 2) {
 		    	RectF rect = new RectF(mRect3);
 		    	rect.left  = mRange.get(i);
-		    	rect.right = mRange.get(i + 1);	    	
+		    	rect.right = mRange.get(i + 1);
 		    	c.drawRect(rect, mPaint3);
 		    }
 	    }

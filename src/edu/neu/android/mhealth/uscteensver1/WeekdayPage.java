@@ -55,7 +55,7 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mListViewWeek1 = new ListViewWeek(mContext.getResources());
 			mObjects.add(mListViewWeek1);	
 			mListViewWeek1.setX(0);
-			mListViewWeek1.setY(appScale.doScaleH(178));
+			mListViewWeek1.setY(appScale.doScaleH(178 + mListViewWeek1.getBorderWidth()));
 			mListViewWeek1.setOnReachedEndListener(this);
 			mListViewWeek1.setOnItemClickListener(this);
 			mListViewWeek1.setOnListViewScrollingListener(this);
@@ -64,7 +64,7 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mListViewWeek2 = new ListViewWeek(mContext.getResources());
 			mObjects.add(mListViewWeek2);
 			mListViewWeek2.setX(appScale.doScaleW(643));
-			mListViewWeek2.setY(appScale.doScaleH(178));
+			mListViewWeek2.setY(appScale.doScaleH(178 + mListViewWeek2.getBorderWidth()));
 			mListViewWeek2.setOnReachedEndListener(this);
 			mListViewWeek2.setOnItemClickListener(this);
 			mListViewWeek2.setOnListViewScrollingListener(this);
