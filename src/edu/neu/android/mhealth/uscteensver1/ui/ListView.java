@@ -213,14 +213,16 @@ public class ListView extends AppObject {
 		}		
 				
 		if (mOffsetY > 0) {				
-			mOffsetY = (int) Math.max(0, Math.min(mItemHeight * 1.1f, mOffsetY - mOffsetSpeedY));			
+			mOffsetY = (int) Math.max(0, Math.min(mItemHeight * 1.3f, mOffsetY - mOffsetSpeedY));
+			mSpeedY = 0;
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, true, false);
 			}
 		} else if (mOffsetY + (mItemHeight + mBorderWidth) * mItems.size() - mBorderWidth <= mHeight) {			
 			mOffsetY = (int) Math.min(- (mItemHeight + mBorderWidth) * (mItems.size() - 4), 
 				Math.max(mOffsetY + mOffsetSpeedY, 
-					- (mItemHeight + mBorderWidth) * (mItems.size() - 4) - mItemHeight * 1.1f));
+					- (mItemHeight + mBorderWidth) * (mItems.size() - 4) - mItemHeight * 1.3f));
+			mSpeedY = 0;
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, false, false);
 			}
@@ -288,7 +290,7 @@ public class ListView extends AppObject {
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) { // up: -				
-		mSpeedY = Math.min(Math.abs(velocityY / sAppScale.doScaleH(80)), 80);
+		mSpeedY = Math.min(Math.abs(velocityY / sAppScale.doScaleH(60)), 80);
 		mSpeedY = velocityY > 0 ? mSpeedY : -mSpeedY;
 		mAccSpeedY = sAppScale.doScaleH(mSpeedY > 0 ? -2.5f : 2.5f);
 		mLastAction = e2.getAction();
@@ -301,13 +303,13 @@ public class ListView extends AppObject {
 		mOffsetY += (int) -distanceY;
 		
 		if (mOffsetY > 0) {
-			mOffsetY = (int) Math.min(mOffsetY, mItemHeight * 1.1f);			
+			mOffsetY = (int) Math.min(mOffsetY, mItemHeight * 1.3f);			
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, true, false);
 			}
 		} else if (mOffsetY + (mItemHeight + mBorderWidth) * mItems.size() - mBorderWidth <= mHeight) {			
 			mOffsetY = (int) Math.max(mOffsetY, 
-				- (mItemHeight + mBorderWidth) * (mItems.size() - 4) - mItemHeight * 1.1f);
+				- (mItemHeight + mBorderWidth) * (mItems.size() - 4) - mItemHeight * 1.3f);
 			if (mOnReachedEndListener != null) {
 				mOnReachedEndListener.onReachedEnd(this, false, false);
 			}
