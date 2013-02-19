@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.RectF;
 import edu.neu.android.mhealth.uscteensver1.Actions;
 import edu.neu.android.mhealth.uscteensver1.ActionsDialog;
+import edu.neu.android.mhealth.uscteensver1.AppScale;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonClock;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonMerge;
@@ -366,7 +367,8 @@ public class ChunkManager {
 	}
 	
 	public boolean splitChunk(Chunk chunkToSplit) {
-		if (chunkToSplit.mNext - chunkToSplit.mValue < MINIMUM_SPACE) {
+		AppScale appScale = AppScale.getInstance();
+		if (chunkToSplit.mNext - chunkToSplit.mValue < appScale.doScaleW(MINIMUM_SPACE)) {
 			return false;
 		}
 		

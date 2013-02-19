@@ -86,9 +86,9 @@ public class DataSource {
 	}
 	
 	private boolean loadChkData() {
-		boolean result = false;
+//		boolean result = false;
 //		String fileName = "/sdcard/TestData/chunk" + mDay + ".xml";
-		String fileName = "/sdcard/TestData/chunk1.xml";
+//		String fileName = "/sdcard/TestData/chunk1.xml";
 /*		String res = "";     
 
 		try { 
@@ -116,18 +116,18 @@ public class DataSource {
 	*/
 		
 		//public Document read(String fileName) throws MalformedURLException, DocumentException {
-		SAXReader reader = new SAXReader();
-		Document document = null;
-		try {
-			document = reader.read(new File(fileName));
-		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		SAXReader reader = new SAXReader();
+//		Document document = null;
+//		try {
+//			document = reader.read(new File(fileName));
+//		} catch (DocumentException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		//       return document;
 		//    }
 		///////////////////////////////////////////////////////////////////////
-		//boolean result = false;
+		boolean result = false;
 		mChkData = new ArrayList<DataCell>();
 		for (int i = 0; i < 9; ++i) {			
 			DataCell cell = new DataCell(400 * i, -1);
