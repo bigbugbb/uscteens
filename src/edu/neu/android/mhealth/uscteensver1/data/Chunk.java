@@ -100,7 +100,7 @@ public class Chunk extends AppObject {
 	
 	public boolean update(int current, int next) {
 		// next must be bigger than the current
-		if (next - current < MINIMUM_SPACE) {
+		if (next - current < sAppScale.doScaleW(MINIMUM_SPACE)) {
 			return false; // just ignore, because the space for one chunk will be too small
 		}
 		mValue = current;
@@ -117,7 +117,8 @@ public class Chunk extends AppObject {
 
 	@Override
 	public boolean contains(float x, float y) {			
-		if (x >= mValue + mDispOffsetX + 60 && x <= mNext + mDispOffsetX - 60) { 
+		if (x >= mValue + mDispOffsetX + sAppScale.doScaleW(60) && 
+			x <= mNext + mDispOffsetX - sAppScale.doScaleW(60)) { 
 			return true;
 		}
 		return false;

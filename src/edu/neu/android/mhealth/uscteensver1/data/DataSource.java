@@ -1,10 +1,12 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import org.apache.http.util.EncodingUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -84,9 +86,10 @@ public class DataSource {
 	}
 	
 	private boolean loadChkData() {
-/*		boolean result = false;
-		String fileName = "/sdcard/TestData/chunk" + mDay + ".txt";
-		String res = "";     
+		boolean result = false;
+//		String fileName = "/sdcard/TestData/chunk" + mDay + ".xml";
+		String fileName = "/sdcard/TestData/chunk1.xml";
+/*		String res = "";     
 
 		try { 
 			FileInputStream fin = new FileInputStream(fileName);		
@@ -111,8 +114,20 @@ public class DataSource {
 			// ....
 		}		
 	*/
+		
+		//public Document read(String fileName) throws MalformedURLException, DocumentException {
+		SAXReader reader = new SAXReader();
+		Document document = null;
+		try {
+			document = reader.read(new File(fileName));
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//       return document;
+		//    }
 		///////////////////////////////////////////////////////////////////////
-		boolean result = false;
+		//boolean result = false;
 		mChkData = new ArrayList<DataCell>();
 		for (int i = 0; i < 9; ++i) {			
 			DataCell cell = new DataCell(400 * i, -1);
