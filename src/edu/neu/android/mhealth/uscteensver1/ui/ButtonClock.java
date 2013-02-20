@@ -99,7 +99,7 @@ public class ButtonClock extends ChunkButton {
 	public void onSizeChanged(int width, int height) {
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
-		mY = height * 0.083f;		
+		mY = height * 0.083f;
 	}
 	
 	@Override
@@ -110,12 +110,10 @@ public class ButtonClock extends ChunkButton {
 				c.drawCircle(mX + mWidth / 2 + mOffsetX, 
 					mY + mHeight / 2 + mOffsetY, sAppScale.doScaleH(47), sPaint);
 			}
-			int time = mHost.mStart / DataSource.PIXEL_SCALE + mHost.mOffset;
-			int hour   = time / 3600;
-			int minute = (time - 3600 * hour) / 60;
-			String strTime = hour + ":" + (minute > 9 ? minute : "0" + minute);  
-			c.drawText(strTime, mX + mWidth / 2 + mOffsetX + sAppScale.doScaleW(48),
-					mY + mHeight / 2 + sAppScale.doScaleH(10), sTimePaint);
+			 
+			c.drawText(mHost.getChunkRealStartTimeInString(), 
+				mX + mWidth / 2 + mOffsetX + sAppScale.doScaleW(48),
+				mY + mHeight / 2 + sAppScale.doScaleH(10), sTimePaint);
 		}
 	}	
 	

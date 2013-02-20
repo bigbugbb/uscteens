@@ -2,6 +2,8 @@ package edu.neu.android.mhealth.uscteensver1;
 
 import java.util.ArrayList;
 
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
@@ -16,6 +18,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -43,9 +46,14 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	
 	protected boolean mImageLoaded = false;
 	protected ArrayList<Bitmap> mImages = new ArrayList<Bitmap>();	
-	protected RectF  mBackArea  = new RectF();
-	protected PointF mBackTxtPt = new PointF();
-	protected Paint  mPaintText = null;	
+	protected String  mDate = "";
+	protected String  mTime = "";
+	protected String  mTimePostfix = "";
+	protected RectF   mBackArea  = new RectF();
+	protected PointF  mBackTxtPt = new PointF();
+	protected Paint   mPaintText = null;	
+	protected Paint   mPaintDate = null;
+	protected Paint   mPaintTime = null;
 	protected Handler mHandler = null;
 	
 	protected int mExpectedWidth = 0;	
@@ -79,6 +87,38 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		mPaintText.setTextSize(mAppScale.doScaleT(34));
 		mPaintText.setTypeface(Typeface.SERIF);
 		mPaintText.setFakeBoldText(false);		
+		
+		mPaintDate = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mPaintDate.setColor(Color.WHITE);
+		mPaintDate.setStyle(Style.FILL);
+		mPaintDate.setTextSize(mAppScale.doScaleW(45));
+		mPaintDate.setTypeface(Typeface.SERIF);
+		mPaintDate.setTextAlign(Align.CENTER);		
+		mPaintDate.setFakeBoldText(true);		
+		
+		mPaintTime = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mPaintTime.setColor(Color.WHITE);
+		mPaintTime.setStyle(Style.FILL);		
+		mPaintTime.setTypeface(Typeface.SERIF);
+		mPaintTime.setTextAlign(Align.RIGHT);		
+		mPaintTime.setFakeBoldText(false);	
+		
+		DataSource dataSrc = DataSource.getInstance(null);
+		mDate = convertDateToDisplayFormat(dataSrc.getActData().getStartDate());
+	}
+	
+	private String convertDateToDisplayFormat(String date) {
+		String[] MONTHS = {
+			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"			
+		};
+		
+		String[] times = date.split("-");
+		String weekday = WeekdayCalculator.getWeekday(date);
+		String month   = MONTHS[Integer.parseInt(times[1]) - 1];
+		String day     = times[2];		
+		String formatted = " " + weekday.toUpperCase() + "  " + month + "  " + day;
+		
+		return formatted;
 	}
 	
 	// used to update the view for drawing
@@ -93,6 +133,15 @@ public class ActionsView extends ImageView implements OnGestureListener,
 			}
 		}
 	};
+	
+	public void setTime(int time) {
+		int hour   = time / 3600;
+		int minute = (time - hour * 3600) / 60;
+		
+		mTime = (hour > 12 ? hour - 12 : hour) + ":" + 
+					(minute > 9 ? minute : "0" + minute);				
+		mTimePostfix = (hour <= 12) ? "am" : "pm";  
+	}
 	
 	public void setHandler(Handler handler) {
 		mHandler = handler;
@@ -150,6 +199,11 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		canvas.drawBitmap(mImages.get(0), 0, 0, null);
 		canvas.drawBitmap(mImages.get(1), mBackArea.left, mBackArea.top, null);
 		canvas.drawText("BACK", mBackTxtPt.x, mBackTxtPt.y, mPaintText);
+		canvas.drawText(mDate, getWidth() / 2, mAppScale.doScaleH(80), mPaintDate);
+		mPaintTime.setTextSize(mAppScale.doScaleW(38));
+		canvas.drawText(mTime, getWidth() - mAppScale.doScaleW(30), mAppScale.doScaleH(60), mPaintTime);
+		mPaintTime.setTextSize(mAppScale.doScaleW(36));
+		canvas.drawText(mTimePostfix, getWidth() - mAppScale.doScaleW(40), mAppScale.doScaleH(100), mPaintTime);
 		mArrowUp.onDraw(canvas);
 		mArrowDown.onDraw(canvas);
 		mActionList.onDraw(canvas);		

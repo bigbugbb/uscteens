@@ -227,7 +227,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	
 	private void tryToQuest(ButtonQuest quest) {
 		Message msg = mHandler.obtainMessage();
-		msg.obj  = quest;
+		msg.obj  = quest.getHost().getChunkRealStartTime();
 		msg.what = AppCmd.QUEST;
 		mHandler.sendMessage(msg);				
 	}

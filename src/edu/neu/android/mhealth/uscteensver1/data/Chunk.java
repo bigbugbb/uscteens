@@ -85,6 +85,18 @@ public class Chunk extends AppObject {
 		return -1;
 	}
 	
+	public int getChunkRealStartTime() {
+		return mStart / DataSource.PIXEL_SCALE + mOffset;
+	}
+	
+	public String getChunkRealStartTimeInString() {
+		int time = mStart / DataSource.PIXEL_SCALE + mOffset;
+		int hour   = time / 3600;
+		int minute = (time - 3600 * hour) / 60;
+		
+		return hour + ":" + (minute > 9 ? minute : "0" + minute); 
+	}
+	
 	public void release() {
 		super.release();
 		

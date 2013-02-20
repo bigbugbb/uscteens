@@ -208,7 +208,8 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
         		}
             	break;
         	case AppCmd.QUEST:
-        		i = new Intent(getApplicationContext(), ActionsDialog.class);             
+        		i = new Intent(getApplicationContext(), ActionsDialog.class);           		
+        		i.putExtra(ActionsDialog.CHUNK_START_TIME, (Integer) msg.obj);
         		startActivityForResult(i, AppCmd.QUEST);
         		break;
         	case AppCmd.MERGE:
