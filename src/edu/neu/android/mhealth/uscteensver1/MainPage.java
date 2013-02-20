@@ -198,8 +198,8 @@ public class MainPage extends AppPage implements OnClickListener,
 	private void tryToBack(ButtonBack back) {
 		Chunk prevUnmarked = mChunkManager.getPreviousUnmarkedChunk();
 		if (prevUnmarked != null) {
-			mMotionGraph.moveGraph(prevUnmarked.mValue, 0);				
-			float progress = (float) prevUnmarked.mValue / mMotionGraph.getRightBound();
+			mMotionGraph.moveGraph(prevUnmarked.mStart, 0);				
+			float progress = (float) prevUnmarked.mStart / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
 			// enable the next button
 			//mBtnNext.setVisible(true);
@@ -213,8 +213,8 @@ public class MainPage extends AppPage implements OnClickListener,
 	private void tryToNext(ButtonNext next) {
 		Chunk nextUnmarked = mChunkManager.getNextUnmarkedChunk();
 		if (nextUnmarked != null) {
-			mMotionGraph.moveGraph(nextUnmarked.mValue, 0);			
-			float progress = (float) nextUnmarked.mValue / mMotionGraph.getRightBound();
+			mMotionGraph.moveGraph(nextUnmarked.mStart, 0);			
+			float progress = (float) nextUnmarked.mStart / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
 			// enable the back button
 //			mBtnBack.setVisible(true);

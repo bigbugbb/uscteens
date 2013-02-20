@@ -61,20 +61,23 @@ public class ChunkManager {
 	}
 	
 	public void loadChunks() {
-		ArrayList<DataCell> cells = mDataSrc.mChkData;
+		ArrayList<ChunkDataCell> cells = mDataSrc.mChkData;
 		
 		if (mChunks == null) {
 			mChunks = new ArrayList<Chunk>();
 		}
 		
+		int timeOffset = 0;
 		for (int i = 0; i < cells.size(); ++i) {
 			Chunk chunk = insertChunk(i);	
-			DataCell cell = cells.get(i);
-			chunk.update(
-				cell.mPosition * DataSource.PIXEL_SCALE, 
-				(i == cells.size() - 1) ? mDataSrc.getActLengthInPixel() : 
-				cells.get(i + 1).mPosition * DataSource.PIXEL_SCALE
-			);			
+			ChunkDataCell cell = cells.get(i);
+			
+			if (i == 0) { // save the start time offset
+				timeOffset = cell.getStartPosition();
+			}
+			int start = (cell.getStartPosition() - timeOffset) * DataSource.PIXEL_SCALE;
+			int stop  = (cell.getStopPosition() - timeOffset)  * DataSource.PIXEL_SCALE;
+			chunk.update(start, stop);			
 			chunk.mQuest.setAnswer(
 				cell.mActionID == -1 ? R.drawable.question_btn : Actions.ACTION_IMGS[cell.mActionID], 
 				cell.mActionID == -1 ? "None" : Actions.ACTION_NAMES[cell.mActionID]
@@ -94,11 +97,11 @@ public class ChunkManager {
 	}
 	
 	public void saveChunks() {
-		ArrayList<DataCell> cells = new ArrayList<DataCell>();
+		ArrayList<ChunkDataCell> cells = new ArrayList<ChunkDataCell>();
 		for (int i = 0; i < mChunks.size(); ++i) {
-			Chunk c = mChunks.get(i);
-			DataCell cell = new DataCell(c.mValue / DataSource.PIXEL_SCALE, c.getActionID());
-			cells.add(cell);
+//			Chunk c = mChunks.get(i);
+//			DataCell cell = new DataCell(c.mStart / DataSource.PIXEL_SCALE, c.getActionID());
+//			cells.add(cell);
 		}
 		mDataSrc.saveChunkData(cells);
 	}
@@ -165,10 +168,10 @@ public class ChunkManager {
 		Chunk next = (i == mChunks.size() - 1) ? null : mChunks.get(i + 1);
 		boolean success = true;
 		if (prev != null) {
-			success = prev.update(prev.mValue, curr.mValue + scale);
+			success = prev.update(prev.mStart, curr.mStart + scale);
 		}
 		if (success) {
-			curr.update(curr.mValue + scale, next == null ? curr.mNext : next.mValue);
+			curr.update(curr.mStart + scale, curr.mStop);
 		}
 		
 		if (mSelected > -1) {
@@ -184,11 +187,11 @@ public class ChunkManager {
 		
 		for (int i = mChunks.size() - 1; i >= 0; --i) {
 			Chunk c = mChunks.get(i);
-			if (c.mValue <= current) {
+			if (c.mStart <= current) {
 				if (c.mQuest.isAnswered()) {
 					// check the right chunk
 					Chunk right = (i >= mChunks.size() - 1) ? null : mChunks.get(i + 1);
-					if (right != null && right.mValue < current) {
+					if (right != null && right.mStart < current) {
 						if (!right.mQuest.isAnswered()) {
 							prev = right;
 							break; // found, then return
@@ -214,11 +217,11 @@ public class ChunkManager {
 		
 		for (int i = 0; i < mChunks.size(); ++i) {
 			Chunk c = mChunks.get(i);
-			if (c.mValue >= current) {
+			if (c.mStart >= current) {
 				if (c.mQuest.isAnswered()) {
 					// check the left chunk
 					Chunk left = (i <= 0) ? null : mChunks.get(i - 1);
-					if (left != null && left.mValue > current) {			
+					if (left != null && left.mStart > current) {			
 						if (!left.mQuest.isAnswered()) {
 							next = left; // found
 							break;
@@ -335,12 +338,12 @@ public class ChunkManager {
 		for (Chunk c : mChunks) {
 			if (!c.mQuest.isAnswered()) {
 				if (!found) { // header
-					range.add((float) c.mValue / mDataSrc.getActLengthInPixel());					
+					range.add((float) c.mStart / mDataSrc.getActLengthInPixel());					
 					found = true;
 				}								
 			} else {
 				if (found) {
-					range.add((float) c.mValue / mDataSrc.getActLengthInPixel());
+					range.add((float) c.mStart / mDataSrc.getActLengthInPixel());
 					found = false;
 				}
 			}
@@ -368,16 +371,16 @@ public class ChunkManager {
 	
 	public boolean splitChunk(Chunk chunkToSplit) {
 		AppScale appScale = AppScale.getInstance();
-		if (chunkToSplit.mNext - chunkToSplit.mValue < appScale.doScaleW(MINIMUM_SPACE)) {
+		if (chunkToSplit.mStop - chunkToSplit.mStart < appScale.doScaleW(MINIMUM_SPACE)) {
 			return false;
 		}
 		
 		int i = mChunks.indexOf(chunkToSplit);				
 		Chunk newChunk = insertChunk(i + 1); // insert a new chunk, which should be updated later
 		newChunk.setHeight(chunkToSplit.getHeight());
-		int centerX = (chunkToSplit.mValue + chunkToSplit.mNext) / 2;
-		newChunk.update(centerX, chunkToSplit.mNext);
-		chunkToSplit.update(chunkToSplit.mValue, centerX);	
+		int centerX = (chunkToSplit.mStart + chunkToSplit.mStop) / 2;
+		newChunk.update(centerX, chunkToSplit.mStop);
+		chunkToSplit.update(chunkToSplit.mStart, centerX);	
 		
 		newChunk.mClock.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
 		newChunk.mMerge.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
@@ -395,10 +398,10 @@ public class ChunkManager {
 		}
 
 		if (maintain == leftChunk) {			
-			maintain.update(maintain.mValue, rightChunk.mNext);
+			maintain.update(maintain.mStart, rightChunk.mStop);
 			deleteChunk(rightChunk);
 		} else {			
-			maintain.update(leftChunk.mValue, maintain.mNext);
+			maintain.update(leftChunk.mStart, maintain.mStop);
 			deleteChunk(leftChunk);			
 		}
 	
@@ -417,10 +420,10 @@ public class ChunkManager {
 	}
 	
 	protected void updateSelectedArea() {
-		mSelectedArea.left   = mChunks.get(mSelected).mValue + 2;
+		mSelectedArea.left   = mChunks.get(mSelected).mStart + 2;
 		mSelectedArea.top    = 2;
 		mSelectedArea.right  = (mSelected == mChunks.size() - 1) ? 
-			mDataSrc.getActLengthInPixel() : mChunks.get(mSelected + 1).mValue - 2;
+			mDataSrc.getActLengthInPixel() : mChunks.get(mSelected + 1).mStart - 2;
 		mSelectedArea.bottom = mViewHeight - 2;
 	}	
 	

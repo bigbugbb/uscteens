@@ -113,7 +113,7 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 		mPages.add(new WinPage(this, mMainView, mHandler));
 		mCurPage = mPages.get(indexOfPage(PageType.HOME_PAGE));
 		// set pages to main view
-		mMainView.setPages(mPages);
+		mMainView.setPages(mPages);		
 	}
 	
 	private int indexOfPage(PageType pageType) {
@@ -202,6 +202,7 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
         		break;
         	case AppCmd.WEEKDAY:
         		mDataSource.setDay((Integer) msg.obj);
+        		mDataSource.setWeek((Integer) msg.obj > 7 ? 2 : 1);
         		if (mDataSource.loadData()) {        			
             		switchPages(2);
         		}

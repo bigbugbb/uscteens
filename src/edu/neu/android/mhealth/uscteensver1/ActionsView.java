@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
+import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
@@ -299,7 +300,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	}
 
 	@Override
-	public void onItemClicked(ListView view, int posn) {
+	public void onItemClicked(ListView view, ListItem li, int posn) {
 		Message msg = mHandler.obtainMessage();
 		msg.obj  = Integer.valueOf(posn);
 		msg.what = 1;

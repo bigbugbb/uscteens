@@ -16,8 +16,8 @@ public class ListViewActions extends ListView {
 	
 	public class ActionItem extends ListItem {
 		
-		public ActionItem(ListView parent, String text, Bitmap image) {
-			super(parent, text, image);
+		public ActionItem(ListView parent, String text, int drawable, Bitmap image) {
+			super(parent, text, drawable, image);
 			
 			mPaintTxt.setColor(Color.BLACK);
 			mPaintTxt.setStyle(Style.STROKE);
@@ -70,7 +70,7 @@ public class ListViewActions extends ListView {
         } else {
         	image = origin;
         }               
-       	ListItem li = new ActionItem(this, text, image);
+       	ListItem li = new ActionItem(this, text, drawable, image);
        	mItems.add(li);
        	li.register();
 	}

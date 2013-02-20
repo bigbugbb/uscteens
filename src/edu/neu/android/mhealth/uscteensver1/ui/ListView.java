@@ -42,15 +42,17 @@ public class ListView extends AppObject {
 		protected int	   mPosn;
 		protected String   mText;
 		protected Bitmap   mImage;
+		protected int	   mDrawable;
 		protected Paint    mPaintBkg;		
 		protected Paint    mPaintTxt;
 		protected Paint	   mPaintLine;
 		protected ListView mParent;
 		
-		public ListItem(ListView parent, String text, Bitmap image) {
+		public ListItem(ListView parent, String text, int drawable, Bitmap image) {
 			mText   = text;
 			mImage  = image;
 			mParent = parent;
+			mDrawable = drawable;
 			
 			mPaintBkg = new Paint(Paint.ANTI_ALIAS_FLAG);
 			mPaintBkg.setColor(Color.WHITE);
@@ -143,7 +145,11 @@ public class ListView extends AppObject {
 	    		mImage = scaled;
 	        } else {
 	        	mImage = origin;
-	        }
+	        }        	
+		}
+		
+		public int getItemImage() {
+			return mDrawable;
 		}
 	}
 
@@ -179,7 +185,7 @@ public class ListView extends AppObject {
         	image = origin;
         }
        	
-       	ListItem li = new ListItem(this, text, image);
+       	ListItem li = new ListItem(this, text, drawable, image);
        	mItems.add(li);
        	li.register();
 	}
@@ -276,7 +282,7 @@ public class ListView extends AppObject {
 			ListItem li = mItems.get(i);
 			if (li.contains(e.getX(), e.getY())) {
 				if (mOnItemClickListener != null && mLastAction == MotionEvent.ACTION_DOWN) {	
-					mOnItemClickListener.onItemClicked(this, i);					
+					mOnItemClickListener.onItemClicked(this, li, i);					
 				}					
 			}
 			Paint paint = li.getPaintBackground();
@@ -336,7 +342,7 @@ public class ListView extends AppObject {
 	}
 	
 	public interface OnItemClickListener {
-		void onItemClicked(ListView view, int posn);
+		void onItemClicked(ListView view, ListItem li, int posn);
 	}
 
 	public interface OnReachedEndListener {

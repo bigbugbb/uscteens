@@ -44,7 +44,7 @@ public class MotionGraph extends AppObject {
 		super(res);				
 		mManager = manager;
 		mDataSrc = DataSource.getInstance(null);
-		mActions = mDataSrc.mActData;
+		mActions = mDataSrc.getActData().getInternalData();
 		mActLenInPix = mDataSrc.getActLengthInPixel();	
 		
 		mBackgroundGray = new Paint();
@@ -118,9 +118,9 @@ public class MotionGraph extends AppObject {
 		for (int i = 0; i < mManager.getChunkSize(); ++i) {
 			Chunk chunk = mManager.getChunk(i);
 			if (chunk.mQuest.isAnswered()) {
-				if (chunk.mValue - mStart > mWidth || chunk.mNext - mStart < 0)
+				if (chunk.mStart - mStart > mWidth || chunk.mStop - mStart < 0)
 					continue;
-				RectF r = new RectF(chunk.mValue - mStart + mOffsetX, 0, chunk.mNext - mStart + mOffsetX, mHeight);		
+				RectF r = new RectF(chunk.mStart - mStart + mOffsetX, 0, chunk.mStop - mStart + mOffsetX, mHeight);		
 				c.drawRect(r, mMarkedPaint);
 			}
 		}

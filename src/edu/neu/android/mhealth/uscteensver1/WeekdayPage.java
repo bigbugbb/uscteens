@@ -2,6 +2,7 @@ package edu.neu.android.mhealth.uscteensver1;
 
 import java.util.List;
 
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.ui.BackgroundWeekday;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonReturn;
@@ -41,6 +42,8 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 	protected WeekdayPage(Context context, View view, Handler handler) {
 		super(context, handler);
 		mView = view;
+		DataSource.getInstance(context).loadActList(1);
+		DataSource.getInstance(context).loadActList(2);
 		load();
 	}
 	
@@ -52,7 +55,7 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mObjects.add(mBackground);			
 		}
 		if (mListViewWeek1 == null) {
-			mListViewWeek1 = new ListViewWeek(mContext.getResources());
+			mListViewWeek1 = new ListViewWeek(mContext.getResources(), 1);
 			mObjects.add(mListViewWeek1);	
 			mListViewWeek1.setX(0);
 			mListViewWeek1.setY(appScale.doScaleH(178 + mListViewWeek1.getBorderWidth()));
@@ -61,7 +64,7 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			mListViewWeek1.setOnListViewScrollingListener(this);
 		}
 		if (mListViewWeek2 == null) {
-			mListViewWeek2 = new ListViewWeek(mContext.getResources());
+			mListViewWeek2 = new ListViewWeek(mContext.getResources(), 2);
 			mObjects.add(mListViewWeek2);
 			mListViewWeek2.setX(appScale.doScaleW(643));
 			mListViewWeek2.setY(appScale.doScaleH(178 + mListViewWeek2.getBorderWidth()));
@@ -155,7 +158,11 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 	}
 
 	@Override
-	public void onItemClicked(ListView view, int posn) {
+	public void onItemClicked(ListView view, ListItem li, int posn) {
+		if (li.getItemImage() == R.drawable.lock) {
+			return;
+		}
+		
 		Message msg = mHandler.obtainMessage();
 		msg.obj  = Integer.valueOf(view == mListViewWeek1 ? posn + 1 : posn + 8);
 		msg.what = AppCmd.WEEKDAY;

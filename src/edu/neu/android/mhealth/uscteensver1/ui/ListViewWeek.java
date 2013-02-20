@@ -1,25 +1,50 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import java.util.ArrayList;
+
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.data.ActivityData;
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
+import android.view.MotionEvent;
 
 public class ListViewWeek extends ListView {
 
-	public ListViewWeek(Resources res) {
+	static String[] sWeekdays = {
+		"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+	};
+	
+	public ListViewWeek(Resources res, int week) {
 		super(res);
 		
-		addItem("Monday", R.drawable.check_square);
-		addItem("Tuesday", R.drawable.check_square);
-		addItem("Wednesday", R.drawable.check_square);
-		addItem("Thursday", R.drawable.check_square);
-		addItem("Friday", R.drawable.check_square);
-		addItem("Saturday", R.drawable.check_square);
-		addItem("Sunday", R.drawable.check_square);
+		ArrayList<ActivityData> actList = DataSource.getInstance(null).getActList(week);
+		int[] weekday = new int[7];
+		for (int i = 0; i < 7; ++i) {
+			weekday[i] = 0;
+		}
+		for (ActivityData date : actList) {
+			for (int i = 0; i < 7; ++i) {
+				if (date.getWeekday().compareToIgnoreCase(sWeekdays[i]) == 0) {
+					weekday[i] = 1;
+					break;
+				}				
+			}
+		}
+		
+		for (int i = 0; i < 7; ++i) {			
+			if (weekday[i] != 0) {
+				addItem(sWeekdays[i], R.drawable.check_square);
+			} else {
+				addItem(sWeekdays[i], R.drawable.lock);
+			}
+		}		
 	}
 
 	public void setPosn(float x, float y) {

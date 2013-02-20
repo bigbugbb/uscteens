@@ -22,8 +22,8 @@ public class Chunk extends AppObject {
 	
 	protected final static int MINIMUM_SPACE = 240;
 	
-	public int mValue; // in pixel
-	public int mNext;  // in pixel
+	public int mStart; // in pixel
+	public int mStop;  // in pixel
 	public MainPage mPage;
 	public ButtonQuest mQuest;
 	public ButtonClock mClock;
@@ -98,18 +98,18 @@ public class Chunk extends AppObject {
 		mPage.getObjectList().remove(mSplit);
 	}
 	
-	public boolean update(int current, int next) {
+	public boolean update(int start, int stop) {
 		// next must be bigger than the current
-		if (next - current < sAppScale.doScaleW(MINIMUM_SPACE)) {
+		if (stop - start < sAppScale.doScaleW(MINIMUM_SPACE)) {
 			return false; // just ignore, because the space for one chunk will be too small
 		}
-		mValue = current;
-		mNext  = next;
+		mStart = start;
+		mStop  = stop;
 		// move quest button to the center of the chunk
-		float centerX = (current + next - mQuest.getWidth()) / 2;
+		float centerX = (start + stop - mQuest.getWidth()) / 2;
 		mQuest.setX(centerX);
-		mClock.setX(current - mClock.getWidth() / 2);
-		mMerge.setX(current - mMerge.getWidth() / 2);
+		mClock.setX(start - mClock.getWidth() / 2);
+		mMerge.setX(start - mMerge.getWidth() / 2);
 		mSplit.setX(centerX);	
 
 		return true;
@@ -117,8 +117,8 @@ public class Chunk extends AppObject {
 
 	@Override
 	public boolean contains(float x, float y) {			
-		if (x >= mValue + mDispOffsetX + sAppScale.doScaleW(60) && 
-			x <= mNext + mDispOffsetX - sAppScale.doScaleW(60)) { 
+		if (x >= mStart + mDispOffsetX + sAppScale.doScaleW(60) && 
+			x <= mStop + mDispOffsetX - sAppScale.doScaleW(60)) { 
 			return true;
 		}
 		return false;
@@ -136,12 +136,12 @@ public class Chunk extends AppObject {
 		float x = mQuest.getX();
 		float w = mQuest.getWidth();
 		float inChunkOffsetX = 0;
-		if (mNext + offsetX > 0 && x + offsetX < 0) {			
-			inChunkOffsetX = Math.min(-(x + offsetX), mNext - w * 1.5f - x);
-		} else if (mValue + offsetX < mManager.mViewWidth && x + offsetX + w > mManager.mViewWidth) {
+		if (mStop + offsetX > 0 && x + offsetX < 0) {			
+			inChunkOffsetX = Math.min(-(x + offsetX), mStop - w * 1.5f - x);
+		} else if (mStart + offsetX < mManager.mViewWidth && x + offsetX + w > mManager.mViewWidth) {
 			//offsetInChunkX = mValue - x + (mManager.mViewWidth - (mValue + offsetX));
 			inChunkOffsetX = Math.max(mManager.mViewWidth - (x + offsetX + w),  
-				- (x - mValue - w * 0.5f));
+				- (x - mStart - w * 0.5f));
 		}		
 		mQuest.setOffsetInChunk(inChunkOffsetX, 0);	
 		mSplit.setOffsetInChunk(inChunkOffsetX, 0);
@@ -149,9 +149,9 @@ public class Chunk extends AppObject {
 
 	@Override
 	public void onDraw(Canvas c) {
-		if (mValue + mDispOffsetX < 0 && mValue + mDispOffsetX > mManager.mViewWidth) {
+		if (mStart + mDispOffsetX < 0 && mStart + mDispOffsetX > mManager.mViewWidth) {
 			return;
 		}
-		c.drawLine(mValue + mDispOffsetX, 0, mValue + mDispOffsetX, mHeight, sPaint);		
+		c.drawLine(mStart + mDispOffsetX, 0, mStart + mDispOffsetX, mHeight, sPaint);		
 	}
 }
