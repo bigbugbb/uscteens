@@ -19,9 +19,9 @@ import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 public class MotionGraph extends AppObject {
 		
 //	protected int[] mData = null;	
-	protected ActivityData mActData = null;
-	protected int   mStart = 0;
-	protected int   mEnd   = 0;
+	protected ActivityData mActData = null;	
+	protected int   mStart = 0;  // the virtual pixel offset on the left side of the screen
+	protected int   mEnd   = 0;  // the virtual pixel offset on the right side of the screen
 	protected int   mCanvasWidth  = 0;
 	protected int   mCanvasHeight = 0;
 	protected int   mRightBound = 0;
@@ -30,8 +30,9 @@ public class MotionGraph extends AppObject {
 	protected Paint mPaint = null;
 	protected Paint mMarkedPaint = null;
 	protected Paint mSelChunkPaint = null;
+	protected Paint mPaintTxt = null;
 	protected int[] mActions = null;
-	protected int   mActLenInPix = 0;	
+	protected int   mActLenInPix = 0; // total activity data length in pixel(already scaled)
 	
 	protected float mOffsetX = 0;
 	protected float mOffsetY = 0;
@@ -72,6 +73,13 @@ public class MotionGraph extends AppObject {
 		mSelChunkPaint.setStrokeWidth(5.0f);
 		mSelChunkPaint.setStyle(Style.STROKE);
 		mSelChunkPaint.setFakeBoldText(true);
+		
+		mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mPaintTxt.setColor(Color.BLACK);
+		mPaintTxt.setStyle(Style.STROKE);
+		mPaintTxt.setTextSize(sAppScale.doScaleT(38));
+		//mPaintTxt.setTypeface(Typeface.SERIF);
+		mPaintTxt.setFakeBoldText(false);
 		
 		mOffsetSpeedX = 0;
 		mOffsetSpeedY = 0;
@@ -123,7 +131,8 @@ public class MotionGraph extends AppObject {
 			if (chunk.mQuest.isAnswered()) {
 				if (chunk.mStart - mStart > mWidth || chunk.mStop - mStart < 0)
 					continue;
-				RectF r = new RectF(chunk.mStart - mStart + mOffsetX, 0, chunk.mStop - mStart + mOffsetX, mHeight);		
+				RectF r = new RectF(chunk.mStart - mStart + mOffsetX, 0,
+						chunk.mStop - mStart + mOffsetX, mHeight);
 				c.drawRect(r, mMarkedPaint);
 			}
 		}
@@ -136,16 +145,31 @@ public class MotionGraph extends AppObject {
 			float x2 = i - mStart + DataSource.PIXEL_SCALE + mOffsetX;
 			float y2 = mHeight - mActions[i / DataSource.PIXEL_SCALE + 1] * scale;
 			c.drawLine(x1, y1, x2, y2, mPaint);
-		}
+		}		
 		// draw the chunk lines and the corresponding buttons
 		for (int i = 0; i < mManager.getChunkSize(); ++i) {
 			Chunk chunk = mManager.getChunk(i);
 			chunk.onDraw(c);
-		}		
+		}
+		// draw the time interval corresponding to the displayed region
+		String timeStart = toStringTimeFromPosition(mStart);
+		String timeEnd   = toStringTimeFromPosition(mEnd);
+		mPaintTxt.setTextAlign(Paint.Align.LEFT);
+		c.drawText(timeStart, sAppScale.doScaleW(20), sAppScale.doScaleH(mHeight + 36), mPaintTxt);
+		mPaintTxt.setTextAlign(Paint.Align.RIGHT);
+		c.drawText(timeEnd,   sAppScale.doScaleW(mWidth - 20), sAppScale.doScaleH(mHeight + 36), mPaintTxt);
 		// draw the rectangle which indicates the chunk selection		
 		c.drawRect(mManager.getSelectedArea(), mSelChunkPaint);		
 	}
 
+	private String toStringTimeFromPosition(int position) {
+		int hour   = position / 3600 / DataSource.PIXEL_SCALE;
+		int minute = (position - hour * 3600 * DataSource.PIXEL_SCALE) / 60 / DataSource.PIXEL_SCALE; 
+		String time = "" + hour + ":" + (minute > 9 ? minute : "0" + minute);
+		
+		return time; 
+	}
+	
 	@Override
 	public void onSizeChanged(int width, int height) {
 		loadImages(new int[]{ R.drawable.menubar_background });
