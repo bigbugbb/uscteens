@@ -14,25 +14,28 @@ import edu.neu.android.mhealth.uscteensver1.data.ActivityData;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 
 
 public class MotionGraph extends AppObject {
 		
 //	protected int[] mData = null;	
 	protected ActivityData mActData = null;	
-	protected int   mStart = 0;  // the virtual pixel offset on the left side of the screen
-	protected int   mEnd   = 0;  // the virtual pixel offset on the right side of the screen
-	protected int   mCanvasWidth  = 0;
-	protected int   mCanvasHeight = 0;
-	protected int   mRightBound = 0;
-	protected Paint mBackgroundGray  = null;
-	protected Paint mBackgroundWhite = null;
-	protected Paint mPaint = null;
-	protected Paint mMarkedPaint = null;
-	protected Paint mSelChunkPaint = null;
-	protected Paint mPaintTxt = null;
-	protected int[] mActions = null;
-	protected int   mActLenInPix = 0; // total activity data length in pixel(already scaled)
+	protected int    mStart = 0;  // the virtual pixel offset on the left side of the screen
+	protected int    mEnd   = 0;  // the virtual pixel offset on the right side of the screen
+	protected int    mCanvasWidth  = 0;
+	protected int    mCanvasHeight = 0;
+	protected int    mRightBound = 0;
+	protected Paint  mBackgroundGray  = null;
+	protected Paint  mBackgroundWhite = null;
+	protected Paint  mPaint = null;
+	protected Paint  mMarkedPaint = null;
+	protected Paint  mSelChunkPaint = null;
+	protected Paint  mPaintTxt  = null;
+	protected Paint  mPaintDate = null;
+	protected int[]  mActions = null;
+	protected int    mActLenInPix = 0; // total activity data length in pixel(already scaled)
+	protected String mDate = "";
 	
 	protected float mOffsetX = 0;
 	protected float mOffsetY = 0;
@@ -78,14 +81,36 @@ public class MotionGraph extends AppObject {
 		mPaintTxt.setColor(Color.BLACK);
 		mPaintTxt.setStyle(Style.STROKE);
 		mPaintTxt.setTextSize(sAppScale.doScaleT(38));
-		//mPaintTxt.setTypeface(Typeface.SERIF);
 		mPaintTxt.setFakeBoldText(false);
+		
+		mPaintDate = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mPaintDate.setColor(Color.BLACK);
+		mPaintDate.setStyle(Style.STROKE);
+		mPaintDate.setTypeface(Typeface.SERIF);
+		mPaintDate.setTextSize(sAppScale.doScaleT(43));
+		mPaintDate.setFakeBoldText(false);
 		
 		mOffsetSpeedX = 0;
 		mOffsetSpeedY = 0;
+		
+		mDate = convertDateToDisplayFormat(mActData.getStartDate());
 			
 		manager.setDisplayOffset(0, 0);	
 	}		
+	
+	private String convertDateToDisplayFormat(String date) {
+		String[] MONTHS = {
+			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"			
+		};
+		
+		String[] times = date.split("-");
+		String weekday = WeekdayCalculator.getWeekday(date);
+		String month   = MONTHS[Integer.parseInt(times[1]) - 1];
+		String day     = times[2];		
+		String formatted = weekday.toUpperCase() + "  " + month + "  " + day;
+		
+		return formatted;
+	}
 	
 	public int getRightBound() {
 		return mRightBound;
@@ -158,6 +183,9 @@ public class MotionGraph extends AppObject {
 		c.drawText(timeStart, sAppScale.doScaleW(20), sAppScale.doScaleH(mHeight + 36), mPaintTxt);
 		mPaintTxt.setTextAlign(Paint.Align.RIGHT);
 		c.drawText(timeEnd,   sAppScale.doScaleW(mWidth - 20), sAppScale.doScaleH(mHeight + 36), mPaintTxt);
+		// draw date on the bottom
+		mPaintDate.setTextAlign(Paint.Align.CENTER);
+		c.drawText(mDate, mWidth / 2, sAppScale.doScaleH(mHeight + 200), mPaintDate);
 		// draw the rectangle which indicates the chunk selection		
 		c.drawRect(mManager.getSelectedArea(), mSelChunkPaint);		
 	}

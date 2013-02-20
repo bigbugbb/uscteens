@@ -116,7 +116,7 @@ public class ButtonQuest extends ChunkButton {
 	public void measureSize(int width, int height) {
 		mCanvasWidth  = width;
 		mCanvasHeight = height;				
-		mY = height * 0.634f;		
+		mY = height * 0.64f;		
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class ButtonQuest extends ChunkButton {
 		mCanvasWidth  = width;
 		mCanvasHeight = height;		
 		
-		mY = height * 0.634f;		
+		mY = height * 0.64f;		
 	}
 
 	@Override

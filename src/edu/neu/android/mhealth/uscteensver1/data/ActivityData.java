@@ -71,7 +71,7 @@ public class ActivityData {
 		return Integer.parseInt(times[0]) * 3600 + // hour 
 			   Integer.parseInt(times[1]) * 60;    // minute
 	}
-	
+
 	public String getWeekday() {
 		return mWeekday;
 	}
