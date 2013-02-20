@@ -11,6 +11,7 @@ public class ActivityData {
 	protected String mWeekday = "";
 	
 	protected int[]   mData   = null;	
+	protected int	  mMax    = 0;
 	protected boolean mLoaded = false;	
 	
 	public ActivityData(String start, String stop, String create, String modify) {
@@ -27,15 +28,20 @@ public class ActivityData {
 		return mLoaded;
 	}
 	
-	public void setInternalData(int[] data) {
+	public void setInternalData(int[] data, int max) {
 		if (data != null) {
 			mData   = data;
 			mLoaded = true;
 		}
+		mMax = max;
 	}
 	
 	public int[] getInternalData() {
 		return mData;
+	}
+	
+	public int getMaxActivityValue() {
+		return mMax;
 	}
 	
 	public String getStartDate() {

@@ -145,7 +145,9 @@ public class DataSource {
 		ActivityData data = actList.get(index);
 		
 		try {  	    
-		    data.setInternalData(loadActivityData(fileName));	
+			int[] internal = loadActivityData(fileName);
+			int max = getMaxActivityValue(fileName);
+		    data.setInternalData(internal, max);	
 		    result = true;
 		} catch (Exception e) { 
 			e.printStackTrace();
@@ -260,8 +262,9 @@ public class DataSource {
 		return result;
 	}
 	
-	public native int create();
-	public native int destroy();
-    public native int[] loadActivityData(String path);
-    public native int unloadActivityData(String path);
+	private native int create();
+	private native int destroy();
+	private native int[] loadActivityData(String path);
+	private native int unloadActivityData(String path);
+	private native int getMaxActivityValue(String path);
 }

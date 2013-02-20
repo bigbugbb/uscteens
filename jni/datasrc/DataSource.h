@@ -15,6 +15,7 @@ class DataSource
 public:
 	int  Create();
 	int  Destroy();
+	int  GetMaxActivityValue(const char* pszFile);
 	vector<int>* LoadActivityData(const char* pszFile);
 	int  UnloadActivityData(const char* pszFile);
 	vector<int>* LoadChunkData(const char* pszFile);
@@ -29,6 +30,7 @@ protected:
 	struct ActivityData {
 		string 		strFile;
 		vector<int> vecData;
+		int			nMaxValue;
 	};
 
 	struct ChunkData {

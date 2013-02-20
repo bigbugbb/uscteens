@@ -10,6 +10,7 @@ import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.AppObject;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.data.ActivityData;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
@@ -17,7 +18,8 @@ import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 
 public class MotionGraph extends AppObject {
 		
-	protected int[] mData = null;	
+//	protected int[] mData = null;	
+	protected ActivityData mActData = null;
 	protected int   mStart = 0;
 	protected int   mEnd   = 0;
 	protected int   mCanvasWidth  = 0;
@@ -29,7 +31,7 @@ public class MotionGraph extends AppObject {
 	protected Paint mMarkedPaint = null;
 	protected Paint mSelChunkPaint = null;
 	protected int[] mActions = null;
-	protected int   mActLenInPix = 0;
+	protected int   mActLenInPix = 0;	
 	
 	protected float mOffsetX = 0;
 	protected float mOffsetY = 0;
@@ -44,7 +46,8 @@ public class MotionGraph extends AppObject {
 		super(res);				
 		mManager = manager;
 		mDataSrc = DataSource.getInstance(null);
-		mActions = mDataSrc.getActData().getInternalData();
+		mActData = mDataSrc.getActData();		
+		mActions = mActData.getInternalData();
 		mActLenInPix = mDataSrc.getActLengthInPixel();	
 		
 		mBackgroundGray = new Paint();
@@ -126,9 +129,13 @@ public class MotionGraph extends AppObject {
 		}
 		
 		// draw the graph		
-		for (int i = mStart; i < mEnd - DataSource.PIXEL_SCALE; ++i) {			
-			c.drawLine(i - mStart + mOffsetX, mActions[i / DataSource.PIXEL_SCALE], 
-				i - mStart + DataSource.PIXEL_SCALE + mOffsetX, mActions[i / DataSource.PIXEL_SCALE + 1], mPaint);
+		float scale = (float) mHeight / mActData.getMaxActivityValue();
+		for (int i = mStart; i < mEnd - DataSource.PIXEL_SCALE; ++i) {	
+			float x1 = i - mStart + mOffsetX;
+			float y1 = mHeight - mActions[i / DataSource.PIXEL_SCALE] * scale;
+			float x2 = i - mStart + DataSource.PIXEL_SCALE + mOffsetX;
+			float y2 = mHeight - mActions[i / DataSource.PIXEL_SCALE + 1] * scale;
+			c.drawLine(x1, y1, x2, y2, mPaint);
 		}
 		// draw the chunk lines and the corresponding buttons
 		for (int i = 0; i < mManager.getChunkSize(); ++i) {

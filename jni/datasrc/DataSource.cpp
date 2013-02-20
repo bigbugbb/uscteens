@@ -5,7 +5,6 @@ using namespace std;
 
 #include <cstdlib>
 
-
 DataSource* DataSource::GetInstance()
 {
 	static DataSource sDataSrc;
@@ -51,6 +50,23 @@ int DataSource::Destroy()
 	return 0;
 }
 
+int DataSource::GetMaxActivityValue(const char* pszFile)
+{
+	ActivityData* pData = NULL;
+
+	for (vector<ActivityData*>::iterator iter = m_vecActivity.begin();
+			iter != m_vecActivity.end(); ++iter) {
+		pData = *iter;
+		// already loaded
+		if (!strcmp(pData->strFile.c_str(), pszFile)) {
+			break;
+		}
+	}
+	int nMaxValue = pData ? pData->nMaxValue : 0;
+
+	return nMaxValue;
+}
+
 vector<int>* DataSource::LoadActivityData(const char* pszFile)
 {
 	for (vector<ActivityData*>::iterator iter = m_vecActivity.begin();
@@ -63,14 +79,18 @@ vector<int>* DataSource::LoadActivityData(const char* pszFile)
 	}
 
 	ActivityData* pData = new ActivityData(); // ignore the check here
+	pData->nMaxValue = INT_MIN;
 	FILE* fp = fopen(pszFile, "r");
 	if (fp == NULL) {
 		return NULL;
 	}
-	int num;
+	int nNum;
 	while (!feof(fp)) {
-		fscanf(fp, "%d", &num);
-		pData->vecData.push_back(num);
+		fscanf(fp, "%d", &nNum);
+		pData->vecData.push_back(nNum);
+		if (nNum > pData->nMaxValue) {
+			pData->nMaxValue = nNum;
+		}
 	}
 	m_vecActivity.push_back(pData);
 

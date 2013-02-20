@@ -56,6 +56,16 @@ jint Destroy(JNIEnv * env, jobject thiz)
 	return nResult;
 }
 
+jint GetMaxActivityValue(JNIEnv* env, jobject thiz, jstring path)
+{
+	jboolean bCopy;
+	const char* pszPath = env->GetStringUTFChars(path, &bCopy);
+	jint nMaxValue = gDataSrc->GetMaxActivityValue(pszPath);
+	env->ReleaseStringUTFChars(path, pszPath);
+
+	return nMaxValue;
+}
+
 jintArray LoadActivityData(JNIEnv* env, jobject thiz, jstring path)
 {
 	jboolean bCopy;
@@ -117,7 +127,7 @@ static JNINativeMethod methods[] = {
 	{"destroy", "()I", (void*)Destroy },
 	{"loadActivityData", "(Ljava/lang/String;)[I", (void*)LoadActivityData },
 	{"unloadActivityData", "(Ljava/lang/String;)I", (void*)UnloadActivityData },
-//	{"loadChunkData", "(Ljava/lang/String;)[I", (void*)LoadChunkData },
+	{"getMaxActivityValue", "(Ljava/lang/String;)I", (void*)GetMaxActivityValue },
 //	{"unloadChunkData", "(Ljava/lang/String;)I", (void*)UnloadChunkData },
 };
 
