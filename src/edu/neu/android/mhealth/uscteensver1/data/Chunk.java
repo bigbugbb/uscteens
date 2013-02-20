@@ -22,8 +22,9 @@ public class Chunk extends AppObject {
 	
 	protected final static int MINIMUM_SPACE = 240;
 	
-	public int mStart; // in pixel
-	public int mStop;  // in pixel
+	public int mStart; // in pixel, has been scaled by DataSource.PIXEL_SCALE
+	public int mStop;  // in pixel, has been scaled by DataSource.PIXEL_SCALE
+	public int mOffset;// plus to reconstruct the real world value, the offset has not been scaled
 	public MainPage mPage;
 	public ButtonQuest mQuest;
 	public ButtonClock mClock;
@@ -98,13 +99,14 @@ public class Chunk extends AppObject {
 		mPage.getObjectList().remove(mSplit);
 	}
 	
-	public boolean update(int start, int stop) {
+	public boolean update(int start, int stop, int offset) {
 		// next must be bigger than the current
 		if (stop - start < sAppScale.doScaleW(MINIMUM_SPACE)) {
 			return false; // just ignore, because the space for one chunk will be too small
-		}
-		mStart = start;
-		mStop  = stop;
+		}		
+		mStart  = start;
+		mStop   = stop;
+		mOffset = offset;
 		// move quest button to the center of the chunk
 		float centerX = (start + stop - mQuest.getWidth()) / 2;
 		mQuest.setX(centerX);

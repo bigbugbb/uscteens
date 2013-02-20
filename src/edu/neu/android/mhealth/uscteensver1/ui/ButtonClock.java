@@ -13,11 +13,13 @@ import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.ui.CustomButton.OnClickListener;
 
 public class ButtonClock extends ChunkButton {
 
 	protected static Paint sPaint = new Paint();
+	protected static Paint sTimePaint = new Paint();
 	protected static boolean sPaintCreated = false;	
 	
 	protected static void createPaint() {
@@ -31,6 +33,12 @@ public class ButtonClock extends ChunkButton {
 		sPaint.setStrokeWidth(sAppScale.doScaleW(8.0f));
 		sPaint.setStyle(Style.STROKE);
 		sPaint.setFakeBoldText(true);
+		
+		sTimePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		sTimePaint.setColor(Color.BLACK);
+		sTimePaint.setStyle(Style.STROKE);
+		sTimePaint.setTextSize(sAppScale.doScaleT(38));
+		sTimePaint.setFakeBoldText(false);
 	}
 	
 	protected static boolean sImageLoaded = false;
@@ -102,6 +110,12 @@ public class ButtonClock extends ChunkButton {
 				c.drawCircle(mX + mWidth / 2 + mOffsetX, 
 					mY + mHeight / 2 + mOffsetY, sAppScale.doScaleH(47), sPaint);
 			}
+			int time = mHost.mStart / DataSource.PIXEL_SCALE + mHost.mOffset;
+			int hour   = time / 3600;
+			int minute = (time - 3600 * hour) / 60;
+			String strTime = hour + ":" + (minute > 9 ? minute : "0" + minute);  
+			c.drawText(strTime, mX + mWidth / 2 + mOffsetX + sAppScale.doScaleW(48),
+					mY + mHeight / 2 + sAppScale.doScaleH(10), sTimePaint);
 		}
 	}	
 	

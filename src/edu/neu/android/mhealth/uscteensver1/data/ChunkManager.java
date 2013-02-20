@@ -77,7 +77,7 @@ public class ChunkManager {
 			}
 			int start = (cell.getStartPosition() - timeOffset) * DataSource.PIXEL_SCALE;
 			int stop  = (cell.getStopPosition() - timeOffset)  * DataSource.PIXEL_SCALE;
-			chunk.update(start, stop);			
+			chunk.update(start, stop, timeOffset);			
 			chunk.mQuest.setAnswer(
 				cell.mActionID == -1 ? R.drawable.question_btn : Actions.ACTION_IMGS[cell.mActionID], 
 				cell.mActionID == -1 ? "None" : Actions.ACTION_NAMES[cell.mActionID]
@@ -168,10 +168,10 @@ public class ChunkManager {
 		Chunk next = (i == mChunks.size() - 1) ? null : mChunks.get(i + 1);
 		boolean success = true;
 		if (prev != null) {
-			success = prev.update(prev.mStart, curr.mStart + scale);
+			success = prev.update(prev.mStart, curr.mStart + scale, prev.mOffset);
 		}
 		if (success) {
-			curr.update(curr.mStart + scale, curr.mStop);
+			curr.update(curr.mStart + scale, curr.mStop, prev.mOffset);
 		}
 		
 		if (mSelected > -1) {
@@ -379,8 +379,8 @@ public class ChunkManager {
 		Chunk newChunk = insertChunk(i + 1); // insert a new chunk, which should be updated later
 		newChunk.setHeight(chunkToSplit.getHeight());
 		int centerX = (chunkToSplit.mStart + chunkToSplit.mStop) / 2;
-		newChunk.update(centerX, chunkToSplit.mStop);
-		chunkToSplit.update(chunkToSplit.mStart, centerX);	
+		newChunk.update(centerX, chunkToSplit.mStop, chunkToSplit.mOffset);
+		chunkToSplit.update(chunkToSplit.mStart, centerX, chunkToSplit.mOffset);	
 		
 		newChunk.mClock.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
 		newChunk.mMerge.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
@@ -398,10 +398,10 @@ public class ChunkManager {
 		}
 
 		if (maintain == leftChunk) {			
-			maintain.update(maintain.mStart, rightChunk.mStop);
+			maintain.update(maintain.mStart, rightChunk.mStop, maintain.mOffset);
 			deleteChunk(rightChunk);
 		} else {			
-			maintain.update(leftChunk.mStart, maintain.mStop);
+			maintain.update(leftChunk.mStart, maintain.mStop, maintain.mOffset);
 			deleteChunk(leftChunk);			
 		}
 	
