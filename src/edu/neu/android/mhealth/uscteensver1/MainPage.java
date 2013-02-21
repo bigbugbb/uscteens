@@ -275,11 +275,6 @@ public class MainPage extends AppPage implements OnClickListener,
 			mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
 		}
 		
-//		if (mChunkManager.hasAllMarked()) {					
-//			Message msg = mHandler.obtainMessage();						
-//			msg.what = AppCmd.REWARD;
-//			mHandler.sendMessage(msg);
-//    	}
 	}		
 	
 	public void finishMerge(Object... params) {
@@ -304,10 +299,5 @@ public class MainPage extends AppPage implements OnClickListener,
     		mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
     	}
     	
-//    	if (mChunkManager.hasAllMarked()) {    					
-//			Message msg = mHandler.obtainMessage();						
-//			msg.what = AppCmd.REWARD;
-//			mHandler.sendMessage(msg);
-//    	}
 	}
 }

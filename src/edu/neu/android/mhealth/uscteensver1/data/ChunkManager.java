@@ -372,7 +372,7 @@ public class ChunkManager {
 	public boolean splitChunk(Chunk chunkToSplit) {
 		AppScale appScale = AppScale.getInstance();
 		
-		int centerX = (chunkToSplit.mStart + chunkToSplit.mStop) / 2;
+		int   centerX = (chunkToSplit.mStart + chunkToSplit.mStop) / 2;
 		float offsetInChunkX = chunkToSplit.mSplit.getOffsetInChunkX();
 		float splitX = centerX + offsetInChunkX;
 		
@@ -398,8 +398,13 @@ public class ChunkManager {
 		newChunk.mMerge.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
 		newChunk.mSplit.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
 		newChunk.mQuest.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
-		setDisplayOffset(mDispOffsetX, 0);		
-		selectChunk(i);
+		setDisplayOffset(mDispOffsetX, 0);	
+		
+		if (offsetInChunkX > 0) { // split left
+			selectChunk(i + 1);
+		} else {
+			selectChunk(i);
+		}
 		
 		return true;
 	}
@@ -416,6 +421,8 @@ public class ChunkManager {
 			maintain.update(leftChunk.mStart, maintain.mStop, maintain.mOffset);
 			deleteChunk(leftChunk);			
 		}
+		// update the new chunk button offset, especially the offset in chunk
+		setDisplayOffset(mDispOffsetX, mDispOffsetY);
 	
 		selectChunk(maintain);
 		
