@@ -98,13 +98,14 @@ public class ChunkManager {
 	}
 	
 	public void saveChunks() {
-		ArrayList<RawChunk> cells = new ArrayList<RawChunk>();
+		RawChunkList rawChunks = new RawChunkList();
+		
 		for (int i = 0; i < mChunks.size(); ++i) {
-//			Chunk c = mChunks.get(i);
-//			DataCell cell = new DataCell(c.mStart / DataSource.PIXEL_SCALE, c.getActionID());
-//			cells.add(cell);
+			Chunk chunk = mChunks.get(i);
+			RawChunk rawChunk = chunk.toRawChunk();
+			rawChunks.add(rawChunk);
 		}
-		//mDataSrc.saveChunkData(cells);
+		mDataSrc.saveChunkData(rawChunks);
 	}
 	
 	public Chunk getChunk(int index) {
@@ -139,7 +140,7 @@ public class ChunkManager {
 		}
 	}
 
-	public Chunk insertChunk(int index) {
+	public Chunk insertChunk(int index) {		
 		Chunk chunk = new Chunk(mRes, this, mUserData);			
 		mChunks.add(index, chunk);
 		return chunk;

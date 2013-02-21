@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -173,30 +174,26 @@ public class DataSource {
 		return mConfig;
 	}
 
-//	public boolean saveChunkData(ArrayList<RawChunkData> cells) {
-//		boolean result = false;
-////		String toSave = "";
-////		String fileName = "/sdcard/TestData/chunk" + mDay + ".txt";
-////		
-////		for (DataCell cell : cells) {
-////			toSave += cell.mPosition + ":" + cell.mActionID + "\n";
-////		}
-////		
-////		try { 
-////			FileOutputStream fout = new FileOutputStream(fileName);
-////	        byte[] bytes = toSave.getBytes(); 
-////	        fout.write(bytes); 
-////	        fout.close();
-////	        
-////	        result = true;
-////	    } catch(Exception e) { 
-////	    	e.printStackTrace();
-////	    	// ....
-////	    } 	
-//		
-//		return result;
-//	}
-//	
+	public boolean saveChunkData(RawChunkList rawChunks) {
+		boolean result = false;		
+		String path = PATH_PREFIX + mCurSelectedDate + ".xml";
+		File file = new File(path);
+		
+		//DeleteFileUtil.delete(path);
+//		try {
+		//	file.createNewFile();				
+			
+			
+						
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			return false;
+//		}
+		
+		return true;
+	}
+	
 	private native int create();
 	private native int destroy();
 	private native int[] loadActivityData(String path);

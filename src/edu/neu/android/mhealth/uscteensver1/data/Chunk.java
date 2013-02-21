@@ -1,5 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import android.content.res.Resources;
@@ -73,6 +75,31 @@ public class Chunk extends AppObject {
 		createPaint();
 	}
 	
+	public RawChunk toRawChunk() {
+		
+		String startDate = toDateTime(mStart + mOffset);
+		String stopDate  = toDateTime(mStop  + mOffset);		
+		int actionID = getActionID();
+		String activity = (actionID == -1) ? "UNLABELLED" : Actions.ACTION_NAMES[actionID];
+		
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();                               
+		String modifyTime = sf.format(date);
+		
+		RawChunk rawChunk = new RawChunk(startDate, stopDate, activity, modifyTime, modifyTime);
+		
+		return rawChunk;
+	}
+	
+	private String toDateTime(int time) {
+		DataSource dataSrc = DataSource.getInstance(null);
+		
+		int hour   = time / 3600;
+		int minute = (time - hour * 3600) / 60;
+
+		return dataSrc.getCurSelectedDate() + " " + hour + ":" + minute + ":" + "00.000";
+	}	
+
 	public int getActionID() {
 		if (mQuest.isAnswered()) {					
 			for (int i = 0; i < Actions.ACTION_IMGS.length; ++i) {
