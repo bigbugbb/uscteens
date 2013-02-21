@@ -201,8 +201,6 @@ public class MainPage extends AppPage implements OnClickListener,
 			mMotionGraph.moveGraph(prevUnmarked.mStart, 0);				
 			float progress = (float) prevUnmarked.mStart / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
-			// enable the next button
-			//mBtnNext.setVisible(true);
 		}
 		
 		if (mChunkManager.areAllChunksLabelled()) {
@@ -219,8 +217,6 @@ public class MainPage extends AppPage implements OnClickListener,
 			mMotionGraph.moveGraph(nextUnmarked.mStart, 0);			
 			float progress = (float) nextUnmarked.mStart / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
-			// enable the back button
-//			mBtnBack.setVisible(true);
 		}
 		
 		if (mChunkManager.areAllChunksLabelled()) {
@@ -229,9 +225,6 @@ public class MainPage extends AppPage implements OnClickListener,
 			mHandler.sendMessage(msg);
 		}
 		
-//		if (mChunkManager.getNextUnmarkedChunk() == null) {
-//			next.setVisible(false);
-//		}
 	}
 	
 	private void tryToQuest(ButtonQuest quest) {

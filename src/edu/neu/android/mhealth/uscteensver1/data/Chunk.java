@@ -117,7 +117,7 @@ public class Chunk extends AppObject {
 	}
 	
 	public String getChunkRealStartTimeInString() {
-		int time = mStart / DataSource.PIXEL_SCALE + mOffset;
+		int time   = mStart / DataSource.PIXEL_SCALE + mOffset;
 		int hour   = time / 3600;
 		int minute = (time - 3600 * hour) / 60;
 		
@@ -177,10 +177,9 @@ public class Chunk extends AppObject {
 		float x = mQuest.getX();
 		float w = mQuest.getWidth();
 		float inChunkOffsetX = 0;
-		if (mStop + offsetX > 0 && x + offsetX < 0) {			
+		if (mStop + offsetX > 0 && x + offsetX < 0) { // left case		
 			inChunkOffsetX = Math.min(-(x + offsetX), mStop - w * 1.5f - x);
-		} else if (mStart + offsetX < mManager.mViewWidth && x + offsetX + w > mManager.mViewWidth) {
-			//offsetInChunkX = mValue - x + (mManager.mViewWidth - (mValue + offsetX));
+		} else if (mStart + offsetX < mManager.mViewWidth && x + offsetX + w > mManager.mViewWidth) { // right case			
 			inChunkOffsetX = Math.max(mManager.mViewWidth - (x + offsetX + w),  
 				- (x - mStart - w * 0.5f));
 		}		

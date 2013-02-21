@@ -8,7 +8,7 @@ public class ChunkButton extends CustomButton {
 	
 	protected float mOffsetX = 0;
 	protected float mOffsetY = 0;
-	protected float mOffsetInChunkX = 0;
+	protected float mOffsetInChunkX = 0; // offset when the button is about to be out of screen
 	protected float mOffsetInChunkY = 0;
 	protected Chunk mHost = null;	
 	
@@ -29,6 +29,10 @@ public class ChunkButton extends CustomButton {
 	public void setOffsetInChunk(float offsetX, float offsetY) {
 		mOffsetInChunkX = offsetX;
 		mOffsetInChunkY = offsetY;
+	}
+	
+	public float getOffsetInChunkX() {
+		return mOffsetInChunkX;
 	}
 
 	@Override

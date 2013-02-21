@@ -21,7 +21,7 @@ public class ChunkManager {
 	public Object mUserData = null;			
 	public ArrayList<Chunk> mChunks = null;
 	
-	protected final static int MINIMUM_SPACE = 480;
+	protected final static int MINIMUM_SPACE_FOR_SPLIT = 240;
 	
 	protected int   mSelected = -1; // -1 indicates no chunk has been selected
 	protected RectF mSelectedArea = new RectF();
@@ -184,9 +184,7 @@ public class ChunkManager {
 	public Chunk getPreviousUnmarkedChunk() {
 		Chunk prev = null;
 		float current = -mDispOffsetX;
-		
-//		current = Math.max(0, Math.min(current, ));
-		
+
 		for (int i = mChunks.size() - 1; i >= 0; --i) {
 			Chunk c = mChunks.get(i);
 			if (c.mStart <= current) {
@@ -373,16 +371,28 @@ public class ChunkManager {
 	
 	public boolean splitChunk(Chunk chunkToSplit) {
 		AppScale appScale = AppScale.getInstance();
-		if (chunkToSplit.mStop - chunkToSplit.mStart < appScale.doScaleW(MINIMUM_SPACE)) {
-			return false;
-		}
 		
+		int centerX = (chunkToSplit.mStart + chunkToSplit.mStop) / 2;
+		float offsetInChunkX = chunkToSplit.mSplit.getOffsetInChunkX();
+		float splitX = centerX + offsetInChunkX;
+		
+		// check if there is enough space for the split
+		if (offsetInChunkX > 0) {
+			if (chunkToSplit.mStop - splitX < appScale.doScaleW(MINIMUM_SPACE_FOR_SPLIT)) {
+				return false;
+			}
+		} else {
+			if (splitX - chunkToSplit.mStart < appScale.doScaleW(MINIMUM_SPACE_FOR_SPLIT)) {
+				return false;
+			}
+		}		
+		
+		// split at the splitX
 		int i = mChunks.indexOf(chunkToSplit);				
 		Chunk newChunk = insertChunk(i + 1); // insert a new chunk, which should be updated later
-		newChunk.setHeight(chunkToSplit.getHeight());
-		int centerX = (chunkToSplit.mStart + chunkToSplit.mStop) / 2;
-		newChunk.update(centerX, chunkToSplit.mStop, chunkToSplit.mOffset);
-		chunkToSplit.update(chunkToSplit.mStart, centerX, chunkToSplit.mOffset);	
+		newChunk.setHeight(chunkToSplit.getHeight());		
+		newChunk.update((int) splitX, chunkToSplit.mStop, chunkToSplit.mOffset);
+		chunkToSplit.update(chunkToSplit.mStart, (int) splitX, chunkToSplit.mOffset);
 		
 		newChunk.mClock.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
 		newChunk.mMerge.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
