@@ -94,8 +94,8 @@ public class SlideBar extends AppObject {
 	    }
 	    c.drawRoundRect(mRect1, 15, 15, mPaint1);
 	    c.drawLines(mPoints, mPaint1);
-	    c.drawText("am", mCanvasWidth * 0.2f, mCanvasHeight * 0.987f, mPaintText);
-	    c.drawText("pm", mCanvasWidth * 0.8f, mCanvasHeight * 0.987f, mPaintText);
+	    c.drawText("AM", mCanvasWidth * 0.2f, mCanvasHeight * 0.99f, mPaintText);
+	    c.drawText("PM", mCanvasWidth * 0.8f, mCanvasHeight * 0.99f, mPaintText);
 	    c.drawBitmap(mImages.get(0), mSliderBarBtnX, mSliderBarBtnY, null);
 	}
 

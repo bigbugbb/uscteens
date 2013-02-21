@@ -39,7 +39,7 @@ public class DataSource {
 		mContext = context;
 	}
 		
-	public static final int PIXEL_SCALE = 8;	
+	public static final int PIXEL_SCALE = 2;	
 	protected final String PATH_PREFIX = "/sdcard/TestData/";
 	
 	// configuration read from xml
@@ -118,6 +118,8 @@ public class DataSource {
 	}
 	
 	private boolean loadRawChunkData(String path) {
+		mRawChkList.clear();
+		
 		File file = new File(path);
 		
 		if (!file.exists()) {

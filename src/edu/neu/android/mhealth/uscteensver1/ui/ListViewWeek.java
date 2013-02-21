@@ -37,34 +37,50 @@ public class ListViewWeek extends ListView {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();                               
 		String curDate = sf.format(date);  
-		
-		// !!! get duration, suppose current is later than the start
+							
+		initializeItems(week, startDate, curDate);
+	}
+	
+	private void initializeItems(int week, String startDate, String curDate) {						
 		String[] split = startDate.split("-");
-		int start   = Integer.parseInt(split[2]);
+		Date date1 = new Date(Integer.parseInt(split[0]) - 1900, 
+				Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+		int start = Integer.parseInt(split[2]);
+		
 		split = curDate.split("-");
+		Date date2 = new Date(Integer.parseInt(split[0]) - 1900, 
+				Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
 		int current = Integer.parseInt(split[2]);
-		int duration = current - start;
+		boolean bSameWeek = WeekdayCalculator.isSameWeekDates(date1, date2);
+		
+		int intervalDay = 0;
+		while (intervalDay < 14) {
+			String date = WeekdayCalculator.afterNDayFrom(date1, intervalDay);
+			if (date.compareToIgnoreCase(curDate) == 0) {
+				break;
+			}
+			intervalDay++;			
+		}
+		int startWeekday = WeekdayCalculator.getWeekdayInNumber(startDate) - 1; // 0 - 6
 		
 		if (week == 1) { // left list view
-			for (int i = 0; i < 7; ++i) {
-				if (i < duration) {
-					addItem(sWeekdays[i], R.drawable.check_square);
+			for (int i = startWeekday; i < startWeekday + 7; ++i) {
+				if (i <= startWeekday + intervalDay) {
+					addItem(sWeekdays[i % 7], R.drawable.check_square);
 				} else {
-					addItem(sWeekdays[i], R.drawable.lock);
+					addItem(sWeekdays[i % 7], R.drawable.lock);
 				}
 			}
 		} else { // right list view
-			duration -= 7;
-			for (int i = 0; i < 7; ++i) {
-				if (i < duration) {
-					addItem(sWeekdays[i], R.drawable.check_square);
+			intervalDay -= 7;
+			for (int i = startWeekday; i < startWeekday + 7; ++i) {
+				if (i <= startWeekday + intervalDay) {
+					addItem(sWeekdays[i % 7], R.drawable.check_square);
 				} else {
-					addItem(sWeekdays[i], R.drawable.lock);
+					addItem(sWeekdays[i % 7], R.drawable.lock);
 				}
 			} 
-		}
-
-
+		}		
 	}
 
 	public void setPosn(float x, float y) {

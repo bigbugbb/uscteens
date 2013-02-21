@@ -206,6 +206,12 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
             		switchPages(2);
         		}
             	break;
+        	case AppCmd.BACK:
+        		switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
+        		break;
+        	case AppCmd.NEXT:
+        		switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
+        		break;
         	case AppCmd.QUEST:
         		i = new Intent(getApplicationContext(), ActionsDialog.class);           		
         		i.putExtra(ActionsDialog.CHUNK_START_TIME, (Integer) msg.obj);

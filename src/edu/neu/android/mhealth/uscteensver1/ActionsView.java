@@ -140,7 +140,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		
 		mTime = (hour > 12 ? hour - 12 : hour) + ":" + 
 					(minute > 9 ? minute : "0" + minute);				
-		mTimePostfix = (hour <= 12) ? "am" : "pm";  
+		mTimePostfix = (hour <= 12) ? "AM" : "PM";  
 	}
 	
 	public void setHandler(Handler handler) {

@@ -430,7 +430,7 @@ public class ChunkManager {
 		mSelectedArea.bottom = mViewHeight - 2;
 	}	
 	
-	public boolean hasAllMarked() {
+	public boolean areAllChunksLabelled() {
 		for (Chunk c : mChunks) {
 			if (!c.mQuest.isAnswered()) {
 				return false;

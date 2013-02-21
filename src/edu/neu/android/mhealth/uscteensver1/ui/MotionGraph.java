@@ -18,8 +18,7 @@ import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 
 
 public class MotionGraph extends AppObject {
-		
-//	protected int[] mData = null;		
+			
 	protected int    mStart = 0;  // the virtual pixel offset on the left side of the screen
 	protected int    mEnd   = 0;  // the virtual pixel offset on the right side of the screen
 	protected int    mCanvasWidth  = 0;
@@ -28,6 +27,7 @@ public class MotionGraph extends AppObject {
 	protected Paint  mBackgroundGray  = null;
 	protected Paint  mBackgroundWhite = null;
 	protected Paint  mPaint = null;
+	protected Paint	 mDataPaint = null;
 	protected Paint  mMarkedPaint = null;
 	protected Paint  mSelChunkPaint = null;
 	protected Paint  mPaintTxt  = null;
@@ -36,10 +36,10 @@ public class MotionGraph extends AppObject {
 	protected int    mActLenInPix = 0; // total activity data length in pixel(already scaled)
 	protected String mDate = "";
 	
-	protected float mOffsetX = 0;
-	protected float mOffsetY = 0;
-	protected float mOffsetSpeedX = 0;
-	protected float mOffsetSpeedY = 0;
+	protected float  mOffsetX = 0;
+	protected float  mOffsetY = 0;
+	protected float  mOffsetSpeedX = 0;
+	protected float  mOffsetSpeedY = 0;
 	
 	protected DataSource   mDataSrc = null;
 	protected ChunkManager mManager = null;	
@@ -65,11 +65,16 @@ public class MotionGraph extends AppObject {
 		mPaint.setTypeface(Typeface.SERIF);
 		mPaint.setFakeBoldText(false);	
 		
-		mMarkedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mDataPaint = new Paint();
+		mDataPaint.setColor(Color.BLACK);
+		mDataPaint.setStrokeWidth(4.0f);
+		mDataPaint.setFakeBoldText(false);
+		
+		mMarkedPaint = new Paint();
 		mMarkedPaint.setColor(Color.argb(255, 198, 235, 245));
 		mMarkedPaint.setStyle(Style.FILL);	
 		
-		mSelChunkPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mSelChunkPaint = new Paint();
 		mSelChunkPaint.setColor(Color.argb(255, 0, 183, 223));
 		mSelChunkPaint.setStrokeWidth(5.0f);
 		mSelChunkPaint.setStyle(Style.STROKE);
@@ -163,11 +168,14 @@ public class MotionGraph extends AppObject {
 		// draw the graph		
 		float scale = (float) mHeight / mDataSrc.getMaxActivityValue();
 		for (int i = mStart; i < mEnd - DataSource.PIXEL_SCALE; ++i) {	
+			float d1 = mActions[i / DataSource.PIXEL_SCALE];
+			float d2 = mActions[i / DataSource.PIXEL_SCALE + 1];
 			float x1 = i - mStart + mOffsetX;
 			float y1 = mHeight - mActions[i / DataSource.PIXEL_SCALE] * scale;
 			float x2 = i - mStart + DataSource.PIXEL_SCALE + mOffsetX;
 			float y2 = mHeight - mActions[i / DataSource.PIXEL_SCALE + 1] * scale;
-			c.drawLine(x1, y1, x2, y2, mPaint);
+			if (d1 >= 0 && d2 >= 0)
+				c.drawLine(x1, y1, x2, y2, mDataPaint);
 		}		
 		// draw the chunk lines and the corresponding buttons
 		for (int i = 0; i < mManager.getChunkSize(); ++i) {

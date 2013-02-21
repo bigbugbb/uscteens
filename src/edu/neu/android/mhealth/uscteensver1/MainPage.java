@@ -205,9 +205,12 @@ public class MainPage extends AppPage implements OnClickListener,
 			//mBtnNext.setVisible(true);
 		}
 		
-//		if (mChunkManager.getPreviousUnmarkedChunk() == null) {
-//			back.setVisible(false);
-//		}
+		if (mChunkManager.areAllChunksLabelled()) {
+			Message msg = mHandler.obtainMessage();			
+			msg.what = AppCmd.BACK;
+			mHandler.sendMessage(msg);
+		}
+
 	}
 	
 	private void tryToNext(ButtonNext next) {
@@ -220,6 +223,12 @@ public class MainPage extends AppPage implements OnClickListener,
 //			mBtnBack.setVisible(true);
 		}
 		
+		if (mChunkManager.areAllChunksLabelled()) {
+			Message msg = mHandler.obtainMessage();			
+			msg.what = AppCmd.NEXT;
+			mHandler.sendMessage(msg);
+		}
+		
 //		if (mChunkManager.getNextUnmarkedChunk() == null) {
 //			next.setVisible(false);
 //		}
@@ -227,7 +236,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	
 	private void tryToQuest(ButtonQuest quest) {
 		Message msg = mHandler.obtainMessage();
-		msg.obj  = quest.getHost().getChunkRealStartTime();
+		msg.obj  = quest.getHost().getChunkRealStopTime();
 		msg.what = AppCmd.QUEST;
 		mHandler.sendMessage(msg);				
 	}

@@ -87,9 +87,9 @@ vector<int>* DataSource::LoadActivityData(const char* pszFile)
 	int nNum;
 	while (!feof(fp)) {
 		fscanf(fp, "%d", &nNum);
-		pData->vecData.push_back(nNum);
+		pData->vecData.push_back(nNum + 1);
 		if (nNum > pData->nMaxValue) {
-			pData->nMaxValue = nNum;
+			pData->nMaxValue = nNum + 1;
 		}
 	}
 	m_vecActivity.push_back(pData);

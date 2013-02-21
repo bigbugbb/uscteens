@@ -1,5 +1,12 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class WeekdayCalculator {
 
 	static String[] sWeekdays = {
@@ -62,4 +69,76 @@ public class WeekdayCalculator {
 	    
 	    return weekday;
     }
+    
+    /**
+     * 
+     * @param date1 YYYY-MM-DD
+     * @param date2 YYYY-MM-DD
+     * @return
+     */ 
+  
+	public static boolean isSameWeekDates(Date date1, Date date2) {   
+		Calendar cal1 = Calendar.getInstance();   
+		Calendar cal2 = Calendar.getInstance();   
+		cal1.setTime(date1);   
+		cal2.setTime(date2);   
+		int subYear = cal1.get(Calendar.YEAR) - cal2.get(Calendar.YEAR); 
+		
+		if (0 == subYear) {   
+			if (cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR))   
+				return true;   
+		} else if (1 == subYear && 11 == cal2.get(Calendar.MONTH)) {       	     
+			if (cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR))   
+				return true;   
+		} else if (-1 == subYear && 11 == cal1.get(Calendar.MONTH)) {   
+			if (cal1.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR))   
+				return true;   
+		} 
+		
+		return false;   
+	 }   
+    	        	        	 
+    	 public static String  getSeqWeek(){   
+    	  Calendar c = Calendar.getInstance(Locale.US);   
+    	  String week = Integer.toString(c.get(Calendar.WEEK_OF_YEAR));   
+    	  if(week.length()==1)week = "0" + week;   
+    	  String year = Integer.toString(c.get(Calendar.YEAR));     
+    	  return year+week;   
+    	     
+    	 }   
+    	         	   
+    	  public static String getMonday(Date date){   
+    	   Calendar c = Calendar.getInstance();   
+    	   c.setTime(date);   
+    	   c.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);   
+    	   return new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());   
+    	  }   
+    	     
+    	  public static String getFriday(Date date){   
+    	   Calendar c = Calendar.getInstance();   
+    	   c.setTime(date);   
+    	   c.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY);      
+    	   return new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());     
+    	  }   
+
+    	 public static String afterNDay(int n){   
+	        Calendar c=Calendar.getInstance();   
+	        DateFormat df=new SimpleDateFormat("yyyy-MM-dd");   
+	        c.setTime(new Date());   
+	        c.add(Calendar.DATE,n);   
+	        Date d2=c.getTime();   
+	        String s=df.format(d2);   
+	        return s;   
+	    }   
+    	 
+    	 public static String afterNDayFrom(Date date, int n){   
+ 	        Calendar c=Calendar.getInstance();   
+ 	        DateFormat df=new SimpleDateFormat("yyyy-MM-dd");   
+ 	        c.setTime(date);   
+ 	        c.add(Calendar.DATE,n);   
+ 	        Date d2=c.getTime();   
+ 	        String s=df.format(d2);   
+ 	        return s;   
+ 	    } 
+
 }
