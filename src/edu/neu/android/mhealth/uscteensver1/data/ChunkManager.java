@@ -61,26 +61,27 @@ public class ChunkManager {
 	}
 	
 	public void loadChunks() {
-		ArrayList<ChunkDataCell> cells = mDataSrc.mChkData;
+		RawChunkList rawChunks = mDataSrc.getRawChunkList();
 		
 		if (mChunks == null) {
 			mChunks = new ArrayList<Chunk>();
 		}
 		
 		int timeOffset = 0;
-		for (int i = 0; i < cells.size(); ++i) {
+		for (int i = 0; i < rawChunks.size(); ++i) {
 			Chunk chunk = insertChunk(i);	
-			ChunkDataCell cell = cells.get(i);
+			RawChunk rawChunk = rawChunks.get(i);
 			
 			if (i == 0) { // save the start time offset
-				timeOffset = cell.getStartPosition();
+				timeOffset = rawChunk.getStartTime();
 			}
-			int start = (cell.getStartPosition() - timeOffset) * DataSource.PIXEL_SCALE;
-			int stop  = (cell.getStopPosition() - timeOffset)  * DataSource.PIXEL_SCALE;
+			int start = (rawChunk.getStartTime() - timeOffset) * DataSource.PIXEL_SCALE;
+			int stop  = (rawChunk.getStopTime()  - timeOffset) * DataSource.PIXEL_SCALE;
+			int actionID = rawChunk.getActionID();
 			chunk.update(start, stop, timeOffset);			
 			chunk.mQuest.setAnswer(
-				cell.mActionID == -1 ? R.drawable.question_btn : Actions.ACTION_IMGS[cell.mActionID], 
-				cell.mActionID == -1 ? "None" : Actions.ACTION_NAMES[cell.mActionID]
+				actionID == -1 ? R.drawable.question_btn : Actions.ACTION_IMGS[actionID], 
+				actionID == -1 ? "None" : Actions.ACTION_NAMES[actionID]
 			);
 		}
 		// select the first chunk
@@ -97,13 +98,13 @@ public class ChunkManager {
 	}
 	
 	public void saveChunks() {
-		ArrayList<ChunkDataCell> cells = new ArrayList<ChunkDataCell>();
+		ArrayList<RawChunk> cells = new ArrayList<RawChunk>();
 		for (int i = 0; i < mChunks.size(); ++i) {
 //			Chunk c = mChunks.get(i);
 //			DataCell cell = new DataCell(c.mStart / DataSource.PIXEL_SCALE, c.getActionID());
 //			cells.add(cell);
 		}
-		mDataSrc.saveChunkData(cells);
+		//mDataSrc.saveChunkData(cells);
 	}
 	
 	public Chunk getChunk(int index) {
@@ -332,18 +333,18 @@ public class ChunkManager {
 	}
 	
 	public ArrayList<Float> getUnmarkedRange() {
-		ArrayList<Float> range = new ArrayList<Float>();
+		ArrayList<Float> range = new ArrayList<Float>();		
 
 		boolean found = false;
 		for (Chunk c : mChunks) {
 			if (!c.mQuest.isAnswered()) {
 				if (!found) { // header
-					range.add((float) c.mStart / mDataSrc.getActLengthInPixel());					
+					range.add((float) c.mStart / mDataSrc.getActivityLengthInPixel());					
 					found = true;
 				}								
 			} else {
 				if (found) {
-					range.add((float) c.mStart / mDataSrc.getActLengthInPixel());
+					range.add((float) c.mStart / mDataSrc.getActivityLengthInPixel());
 					found = false;
 				}
 			}
@@ -420,10 +421,11 @@ public class ChunkManager {
 	}
 	
 	protected void updateSelectedArea() {
+
 		mSelectedArea.left   = mChunks.get(mSelected).mStart + 2;
 		mSelectedArea.top    = 2;
 		mSelectedArea.right  = (mSelected == mChunks.size() - 1) ? 
-			mDataSrc.getActLengthInPixel() : mChunks.get(mSelected + 1).mStart - 2;
+			mDataSrc.getActivityLengthInPixel() : mChunks.get(mSelected + 1).mStart - 2;
 		mSelectedArea.bottom = mViewHeight - 2;
 	}	
 	

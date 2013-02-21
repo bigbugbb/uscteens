@@ -42,6 +42,7 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
 		// setup scale param according to the screen resolution
 		setupScale();
 		// get views and set listeners
@@ -105,7 +106,7 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
         mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 	}
 
-	private void initPages() {
+	private void initPages() {		
 		// only three pages now		
 		mPages.add(new HomePage(this, mMainView, mHandler));
 		mPages.add(new WeekdayPage(this, mMainView, mHandler));
@@ -201,9 +202,7 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
         		switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
         		break;
         	case AppCmd.WEEKDAY:
-        		mDataSource.setDay((Integer) msg.obj);
-        		mDataSource.setWeek((Integer) msg.obj > 7 ? 2 : 1);
-        		if (mDataSource.loadData()) {        			
+        		if (mDataSource.loadRawData((String) msg.obj)) {        			
             		switchPages(2);
         		}
             	break;

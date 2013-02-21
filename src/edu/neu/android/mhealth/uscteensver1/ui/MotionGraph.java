@@ -10,7 +10,7 @@ import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.AppObject;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.data.ActivityData;
+import edu.neu.android.mhealth.uscteensver1.data.RawActivity;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
@@ -19,8 +19,7 @@ import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 
 public class MotionGraph extends AppObject {
 		
-//	protected int[] mData = null;	
-	protected ActivityData mActData = null;	
+//	protected int[] mData = null;		
 	protected int    mStart = 0;  // the virtual pixel offset on the left side of the screen
 	protected int    mEnd   = 0;  // the virtual pixel offset on the right side of the screen
 	protected int    mCanvasWidth  = 0;
@@ -50,9 +49,8 @@ public class MotionGraph extends AppObject {
 		super(res);				
 		mManager = manager;
 		mDataSrc = DataSource.getInstance(null);
-		mActData = mDataSrc.getActData();		
-		mActions = mActData.getInternalData();
-		mActLenInPix = mDataSrc.getActLengthInPixel();	
+		mActions = mDataSrc.getRawActivityData();
+		mActLenInPix = mDataSrc.getActivityLengthInPixel();	
 		
 		mBackgroundGray = new Paint();
 		mBackgroundGray.setColor(Color.rgb(179, 181, 181));
@@ -93,7 +91,7 @@ public class MotionGraph extends AppObject {
 		mOffsetSpeedX = 0;
 		mOffsetSpeedY = 0;
 		
-		mDate = convertDateToDisplayFormat(mActData.getStartDate());
+		mDate = convertDateToDisplayFormat(mDataSrc.getCurSelectedDate());
 			
 		manager.setDisplayOffset(0, 0);	
 	}		
@@ -163,7 +161,7 @@ public class MotionGraph extends AppObject {
 		}
 		
 		// draw the graph		
-		float scale = (float) mHeight / mActData.getMaxActivityValue();
+		float scale = (float) mHeight / mDataSrc.getMaxActivityValue();
 		for (int i = mStart; i < mEnd - DataSource.PIXEL_SCALE; ++i) {	
 			float x1 = i - mStart + mOffsetX;
 			float y1 = mHeight - mActions[i / DataSource.PIXEL_SCALE] * scale;

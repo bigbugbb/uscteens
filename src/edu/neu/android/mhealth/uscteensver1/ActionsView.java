@@ -104,7 +104,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		mPaintTime.setFakeBoldText(false);	
 		
 		DataSource dataSrc = DataSource.getInstance(null);
-		mDate = convertDateToDisplayFormat(dataSrc.getActData().getStartDate());
+		mDate = convertDateToDisplayFormat(dataSrc.getCurSelectedDate());
 	}
 	
 	private String convertDateToDisplayFormat(String date) {

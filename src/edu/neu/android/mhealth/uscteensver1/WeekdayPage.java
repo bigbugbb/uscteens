@@ -3,6 +3,7 @@ package edu.neu.android.mhealth.uscteensver1;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.ui.BackgroundWeekday;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonReturn;
@@ -42,8 +43,6 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 	protected WeekdayPage(Context context, View view, Handler handler) {
 		super(context, handler);
 		mView = view;
-		DataSource.getInstance(context).loadActList(1);
-		DataSource.getInstance(context).loadActList(2);
 		load();
 	}
 	
@@ -163,8 +162,27 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 			return;
 		}
 		
+		// get the start date
+		DataSource dataSrc = DataSource.getInstance(null);
+		String startDate = dataSrc.getConfiguration().getStartDate();		
+		if (startDate.compareTo("") == 0) {
+			// possibly fail to read the configuration file
+			return;			
+		}
+		
+		// build the new date as a String according to the current selection
+		// !!! suppose start begins on Monday
+		int start  = WeekdayCalculator.getWeekdayInNumber(startDate);
+		int select = (view == mListViewWeek1) ? posn + 1 : posn + 8;
+		String[] times = startDate.split("-");
+		int day = Integer.parseInt(times[2]);
+		day += select - start;	
+		// !!! over month 
+		String selectedDate = times[0] + "-" + times[1] + "-" + day;
+				
+		
 		Message msg = mHandler.obtainMessage();
-		msg.obj  = Integer.valueOf(view == mListViewWeek1 ? posn + 1 : posn + 8);
+		msg.obj  = selectedDate;
 		msg.what = AppCmd.WEEKDAY;
 		mHandler.sendMessage(msg);
 	}

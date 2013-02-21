@@ -8,18 +8,28 @@ public class WeekdayCalculator {
 	
 	// date: yyyy-MM-dd
     public static String getWeekday(String date) {
-        
-        String time[] = date.split("-");
+        int weekday = getWeekdayInNumber(date);
+	    
+	    return sWeekdays[weekday - 1];
+    }      	
+    
+    /**
+     * 
+     * @param date YYYY-MM-DD
+     * @return 1-7 indicates the weekday number from Monday to Sunday
+     */
+    public static int getWeekdayInNumber(String date) {
+    	String time[] = date.split("-");
         
         int year  = Integer.parseInt(time[0]);         
         int month = Integer.parseInt(time[1]);         
         int day   = Integer.parseInt(time[2]);
          
-        int total, week, i;         
+        int total, weekday, i;         
         boolean leap = false;
      
         leap = (year % 400 ==  0) | (year % 100 != 0) & (year % 4 == 0);        
-        week = 1; // starting day: 1979-12-31 is monday     
+        weekday = 1; // starting day: 1979-12-31 is monday     
         total = year - 1980 + (year - 1980 + 3) / 4; // initial value of total         
      
 	    for(i = 1; i <= month - 1; i++) {	         
@@ -45,12 +55,11 @@ public class WeekdayCalculator {
             }	        
 	    }         
 	    total = total + day;	         
-	    week = (week + total) % 7;
-	    if (week == 0) {
-	    	week = 7;
+	    weekday = (weekday + total) % 7;
+	    if (weekday == 0) {
+	    	weekday = 7;
 	    }
 	    
-	    return sWeekdays[week - 1];
-    }      	       
-	   
+	    return weekday;
+    }
 }
