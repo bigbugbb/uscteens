@@ -6,6 +6,7 @@ import java.util.List;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
+import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleListener;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.ui.*;
 import edu.neu.android.mhealth.uscteensver1.ui.CustomButton.OnClickListener;
@@ -24,7 +25,8 @@ import android.widget.Toast;
 
 public class MainPage extends AppPage implements OnClickListener,
 												 OnGraphMovedListener,
-												 OnSlideBarChangeListener {
+												 OnSlideBarChangeListener,
+												 OnBoundaryScaleListener {
 
 	protected BackgroundMain mBackground  = null;
 	protected MotionGraph	 mMotionGraph = null;
@@ -35,11 +37,14 @@ public class MainPage extends AppPage implements OnClickListener,
 	protected View mView = null;
 	protected ChunkManager mChunkManager = null;
 	
+	protected boolean mScrolling = false; // indicate whether we are scrolling the chunk
+	
 	protected MainPage(Context context, View view, Handler handler) {
 		super(context, handler);				
 		mView = view;
 		mChunkManager = new ChunkManager(context, DataSource.getInstance(null));
 		mChunkManager.setUserData(this);
+		mChunkManager.setOnBoundaryScaleListener(this);
 	}
 
 	public MotionGraph getMotionGraph() {
@@ -112,6 +117,38 @@ public class MainPage extends AppPage implements OnClickListener,
 		super.release();
 	}
 
+	// used to update the scale chunk operation if a user try to 
+	// scroll the button clock to the boundary of the screen
+	Runnable mScaleLeft = new Runnable() {				
+		public void run() {			
+
+			synchronized (this) {				
+				mChunkManager.scaleChunkToBoundary(-2);				
+			}
+
+			if (mChunkManager.isScaledToLeftBoundary()) {
+				mHandler.postDelayed(this, 15);
+			} else {
+				mHandler.removeCallbacks(this);				
+			}
+		}
+	};
+	
+	Runnable mScaleRight = new Runnable() {				
+		public void run() {	
+
+			synchronized (this) {				
+				mChunkManager.scaleChunkToBoundary(2);
+			}
+			
+			if (mChunkManager.isScaledToRightBoundary()) {
+				mHandler.postDelayed(this, 15);
+			} else {
+				mHandler.removeCallbacks(this);				
+			}
+		}
+	};
+
 	@Override
 	public void onAppEvent(AppEvent e) {
 		// TODO Auto-generated method stub
@@ -138,6 +175,14 @@ public class MainPage extends AppPage implements OnClickListener,
 	}
 	
 	@Override
+	public boolean onUp(MotionEvent e) {		
+		boolean ret = super.onUp(e);	
+		mHandler.removeCallbacks(mScaleLeft);
+		mHandler.removeCallbacks(mScaleRight);
+		return ret;
+	}
+	
+	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
 		boolean ret = false;
@@ -147,8 +192,20 @@ public class MainPage extends AppPage implements OnClickListener,
 				ret = mSelObject.onScroll(e1, e2, distanceX, distanceY);
 			} else if (mSelObject.getID() == UIID.SLIDE) {  
 				ret = mSelObject.onScroll(e1, e2, distanceX, distanceY);
-			} else if (mSelObject.getID() == UIID.CLOCK) {
+			} else if (mSelObject.getID() == UIID.CLOCK) {				
 				mChunkManager.scaleChunk((int) -distanceX);
+				if (distanceX < 0) {
+					mHandler.removeCallbacks(mScaleLeft);
+					
+				} else {
+					mHandler.removeCallbacks(mScaleRight);
+				}
+				
+				if (mChunkManager.isScaledToLeftBoundary()) {
+					mHandler.postDelayed(mScaleLeft, 15);
+				} else if (mChunkManager.isScaledToRightBoundary()) {
+					mHandler.postDelayed(mScaleRight, 15);
+				}
 				ret = true;
 			} else {
 				Log.d("scroll", "out of range");
@@ -299,5 +356,10 @@ public class MainPage extends AppPage implements OnClickListener,
     		mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
     	}
     	
+	}
+
+	@Override
+	public void onBoundaryScale(float x, float scaleDistance) {
+		mMotionGraph.moveGraph(x, 0);	
 	}
 }

@@ -101,7 +101,7 @@ public class ButtonClock extends ChunkButton {
 		mCanvasHeight = height;
 		mY = height * 0.083f;
 	}
-	
+
 	@Override
 	public void onDraw(Canvas c) {
 		if (mVisible) {
@@ -112,7 +112,7 @@ public class ButtonClock extends ChunkButton {
 			}
 			 
 			c.drawText(mHost.getChunkRealStartTimeInString(), 
-				mX + mWidth / 2 + mOffsetX + sAppScale.doScaleW(48),
+				mX + mWidth / 2 + mOffsetX + sAppScale.doScaleW(50),
 				mY + mHeight / 2 + sAppScale.doScaleH(10), sTimePaint);
 		}
 	}	

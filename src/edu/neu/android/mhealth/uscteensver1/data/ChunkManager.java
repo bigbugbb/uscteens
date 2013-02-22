@@ -13,6 +13,8 @@ import edu.neu.android.mhealth.uscteensver1.ui.ButtonClock;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonMerge;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonSplit;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
+import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph;
+import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph.OnGraphMovedListener;
 
 
 public class ChunkManager {
@@ -151,7 +153,7 @@ public class ChunkManager {
 		chunk.release();
 	}
 	
-	public void scaleChunk(int scale) {
+	public boolean scaleChunk(int scale) {
 		int i = 0;
 		
 		// look for the selected chunk
@@ -161,14 +163,14 @@ public class ChunkManager {
 				break;
 			}
 		}		
-		if (i == mChunks.size()) {
-			return; // clock button has not been selected
-		}
+		assert(i < mChunks.size());
 		
 		Chunk curr = mChunks.get(i);
 		Chunk prev = (i == 0) ? null : mChunks.get(i - 1);
 		Chunk next = (i == mChunks.size() - 1) ? null : mChunks.get(i + 1);
-		boolean success = true;
+		
+		// scale the chunk
+		boolean success = false;
 		if (prev != null) {
 			success = prev.update(prev.mStart, curr.mStart + scale, prev.mOffset);
 		}
@@ -179,6 +181,80 @@ public class ChunkManager {
 		if (mSelected > -1) {
 			updateSelectedArea();
 		}
+		
+		return success;
+	}
+	
+	public boolean scaleChunkToBoundary(int scale) {
+		int i = 0;
+		
+		// look for the selected chunk
+		for (i = 0; i < mChunks.size(); ++i) {
+			Chunk c = mChunks.get(i);
+			if (c.mClock.isSelected()) {			
+				break;
+			}
+		}		
+		assert(i < mChunks.size());
+		
+		Chunk curr = mChunks.get(i);
+		Chunk prev = (i == 0) ? null : mChunks.get(i - 1);
+		Chunk next = (i == mChunks.size() - 1) ? null : mChunks.get(i + 1);
+		
+		// scale the chunk
+		boolean success = false;
+		if (prev != null) {
+			success = prev.update(prev.mStart, curr.mStart + scale, prev.mOffset);
+		}
+		if (success) {
+			curr.update(curr.mStart + scale, curr.mStop, prev.mOffset);
+		}
+		
+		if (mSelected > -1) {
+			updateSelectedArea();
+		}			
+		
+		if (mListener != null) {
+			if (scale > 0) {
+				mListener.onBoundaryScale(curr.mClock.getX() - mCanvasWidth * 0.87f, scale);
+			} else {
+				mListener.onBoundaryScale(curr.mClock.getX() - mCanvasWidth * 0.06f, scale);
+			}
+		}
+		
+		return success;
+	}
+	
+	public boolean isScaledToLeftBoundary() {
+		// look for the selected chunk
+		int i = 0;
+		for (i = 0; i < mChunks.size(); ++i) {
+			Chunk c = mChunks.get(i);
+			if (c.mClock.isSelected()) {			
+				break;
+			}
+		}			
+		Chunk curr = mChunks.get(i);
+		ButtonClock clock = curr.mClock;
+		float clockX = clock.getX() + curr.mDispOffsetX;
+		
+		return clockX < mCanvasWidth * 0.1;
+	}
+	
+	public boolean isScaledToRightBoundary() {
+		// look for the selected chunk
+		int i = 0;		
+		for (i = 0; i < mChunks.size(); ++i) {
+			Chunk c = mChunks.get(i);
+			if (c.mClock.isSelected()) {			
+				break;
+			}
+		}	
+		Chunk curr = mChunks.get(i);
+		ButtonClock clock = curr.mClock;
+		float clockX = clock.getX() + curr.mDispOffsetX;
+		
+		return clockX > mCanvasWidth * 0.85;
 	}
 	
 	public Chunk getPreviousUnmarkedChunk() {
@@ -301,7 +377,6 @@ public class ChunkManager {
 	}
 	
 	public boolean selectChunk(float x, float y) {					
-		
 		int i = 0;
 		for (; i < mChunks.size(); ++i) {
 			Chunk c = mChunks.get(i);
@@ -317,7 +392,7 @@ public class ChunkManager {
 	public ArrayList<Chunk> getMergingChunks(ButtonMerge merge) {
 		ArrayList<Chunk> chunks = new ArrayList<Chunk>();		
 		int size = mChunks.size();
-		
+
 		for (int i = 1; i < size; ++i) {
 			Chunk right = mChunks.get(i);
 			if (right.mMerge == merge) {
@@ -358,24 +433,24 @@ public class ChunkManager {
 	
 	public Chunk getChunkToSplit(ButtonSplit split) {
 		Chunk chunkToSplit = null;
-		
+
 		for (Chunk c : mChunks) {			
 			if (c.mSplit == split) {
 				chunkToSplit = c;
 				break;
 			}
 		}
-		
+
 		return chunkToSplit;
 	}
 	
 	public boolean splitChunk(Chunk chunkToSplit) {
 		AppScale appScale = AppScale.getInstance();
-		
+
 		int   centerX = (chunkToSplit.mStart + chunkToSplit.mStop) / 2;
 		float offsetInChunkX = chunkToSplit.mSplit.getOffsetInChunkX();
 		float splitX = centerX + offsetInChunkX;
-		
+
 		// check if there is enough space for the split
 		if (offsetInChunkX > 0) {
 			if (chunkToSplit.mStop - splitX < appScale.doScaleW(MINIMUM_SPACE_FOR_SPLIT)) {
@@ -386,20 +461,20 @@ public class ChunkManager {
 				return false;
 			}
 		}		
-		
+
 		// split at the splitX
 		int i = mChunks.indexOf(chunkToSplit);				
 		Chunk newChunk = insertChunk(i + 1); // insert a new chunk, which should be updated later
 		newChunk.setHeight(chunkToSplit.getHeight());		
 		newChunk.update((int) splitX, chunkToSplit.mStop, chunkToSplit.mOffset);
 		chunkToSplit.update(chunkToSplit.mStart, (int) splitX, chunkToSplit.mOffset);
-		
+
 		newChunk.mClock.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
 		newChunk.mMerge.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
 		newChunk.mSplit.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
 		newChunk.mQuest.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
 		setDisplayOffset(mDispOffsetX, 0);	
-		
+
 		if (offsetInChunkX > 0) { // split left
 			selectChunk(i + 1);
 		} else {
@@ -455,6 +530,16 @@ public class ChunkManager {
 		}
 		
 		return true;
+	}
+	
+	protected OnBoundaryScaleListener mListener = null;
+	
+	public void setOnBoundaryScaleListener(OnBoundaryScaleListener listener) {
+		mListener = listener;
+	}
+	
+	public interface OnBoundaryScaleListener {
+		void onBoundaryScale(float x, float scaleDistance);
 	}
 }
 
