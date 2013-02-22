@@ -1,7 +1,10 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -12,8 +15,10 @@ import java.util.Iterator;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -179,19 +184,59 @@ public class DataSource {
 	public boolean saveChunkData(RawChunkList rawChunks) {
 		boolean result = false;		
 		String path = PATH_PREFIX + mCurSelectedDate + ".xml";
-		File file = new File(path);
 		
-		//DeleteFileUtil.delete(path);
-//		try {
-		//	file.createNewFile();				
-			
-			
-						
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			return false;
-//		}
+		Document document = DocumentHelper.createDocument();
+        
+		// ACTIVITYDATA
+        Element root = document.addElement("ACTIVITYDATA");
+        root.addAttribute("xmlns", "urn:mites-schema");
+        // ANNOTATIONS
+        Element annotations = root.addElement("ANNOTATIONS")
+        .addAttribute("DATASET", "TeenActivity")
+        .addAttribute("ANNOTATOR", "Simple-Algorithm")
+        .addAttribute("EMAIL", "bigbugbb@gmail.com")
+        .addAttribute("DESCRIPTION", "Teen activity labelling")
+        .addAttribute("METHOD", "based on pre-defined theresholds")
+        .addAttribute("NOTES", "");
+        
+        for (RawChunk rawChunk : rawChunks) {
+	        // ANNOTATION
+	        Element annotation = annotations.addElement("ANNOTATION")
+	        .addAttribute("GUID", "");
+	        // LABEL
+	        Element label = annotation.addElement("LABEL")
+	        .addAttribute("GUID", "")
+	        .addText("1");
+	        // START_DT
+	        Element start_dt = annotation.addElement("START_DT")
+	        .addText(rawChunk.mStartDate);
+	        // STOP_DT
+	        Element stop_dt = annotation.addElement("STOP_DT")
+	        .addText(rawChunk.mStopDate);
+	        // PROPERTIES
+	        Element properties = annotation.addElement("PROPERTIES")
+	        .addAttribute("ANNOTATION_SET", "Teen_Activity_Study")
+	        .addAttribute("ACTIVITY_TYPE", rawChunk.mActivity)
+	        .addAttribute("LAST_MODIFIED", rawChunk.mModifyTime)
+	        .addAttribute("DATE_CREATED", rawChunk.mCreateTime);
+        }
+                
+        XMLWriter writer;
+		try {
+			// The file will be truncated if it exists, and created if it doesn't exist.
+			writer = new XMLWriter(new FileOutputStream(path));
+			writer.write(document);
+	        writer.close();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}                   
 		
 		return true;
 	}

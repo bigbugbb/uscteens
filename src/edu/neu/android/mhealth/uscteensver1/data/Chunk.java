@@ -77,8 +77,8 @@ public class Chunk extends AppObject {
 	
 	public RawChunk toRawChunk() {
 		
-		String startDate = toDateTime(mStart + mOffset);
-		String stopDate  = toDateTime(mStop  + mOffset);		
+		String startDate = toDateTime(mStart / DataSource.PIXEL_SCALE + mOffset);
+		String stopDate  = toDateTime(mStop  / DataSource.PIXEL_SCALE + mOffset);		
 		int actionID = getActionID();
 		String activity = (actionID == -1) ? "UNLABELLED" : Actions.ACTION_NAMES[actionID];
 		
