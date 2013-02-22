@@ -53,7 +53,7 @@ public class ListViewWeek extends ListView {
 		int current = Integer.parseInt(split[2]);
 		boolean bSameWeek = WeekdayCalculator.isSameWeekDates(date1, date2);
 		
-		int intervalDay = 0;
+		int intervalDay = 0;		
 		while (intervalDay < 14) {
 			String date = WeekdayCalculator.afterNDayFrom(date1, intervalDay);
 			if (date.compareToIgnoreCase(curDate) == 0) {
@@ -61,12 +61,21 @@ public class ListViewWeek extends ListView {
 			}
 			intervalDay++;			
 		}
+		ArrayList<String> dates = new ArrayList<String>();
+		for (int i = 0; i < 14; ++i) {
+			String date = WeekdayCalculator.afterNDayFrom(date1, i);
+			dates.add(date);
+		}
 		int startWeekday = WeekdayCalculator.getWeekdayInNumber(startDate) - 1; // 0 - 6
 		
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + intervalDay) {
-					addItem(sWeekdays[i % 7], R.drawable.check_square);
+					if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(i - startWeekday))) {
+						addItem(sWeekdays[i % 7], R.drawable.check_mark);
+					} else {
+						addItem(sWeekdays[i % 7], R.drawable.check_square);
+					}
 				} else {
 					addItem(sWeekdays[i % 7], R.drawable.lock);
 				}
@@ -75,7 +84,11 @@ public class ListViewWeek extends ListView {
 			intervalDay -= 7;
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + intervalDay) {
-					addItem(sWeekdays[i % 7], R.drawable.check_square);
+					if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
+						addItem(sWeekdays[i % 7], R.drawable.check_mark);
+					} else {
+						addItem(sWeekdays[i % 7], R.drawable.check_square);
+					}
 				} else {
 					addItem(sWeekdays[i % 7], R.drawable.lock);
 				}

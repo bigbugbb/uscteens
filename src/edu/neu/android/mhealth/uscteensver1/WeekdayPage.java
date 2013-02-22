@@ -1,5 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1;
 
+import java.util.Date;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
@@ -171,18 +172,13 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 		}
 		
 		// build the new date as a String according to the current selection
-		// !!! suppose start begins on Monday
-		int start  = WeekdayCalculator.getWeekdayInNumber(startDate);
-		int select = (view == mListViewWeek1) ? posn + 1 : posn + 8;
-		String[] times = startDate.split("-");
-		int day = Integer.parseInt(times[2]);
-		day += select - start;	
-		// !!! over month 
-		String selectedDate = times[0] + "-" + times[1] + "-" + day;
-				
+		String[] split = startDate.split("-");
+		Date date = new Date(Integer.parseInt(split[0]) - 1900, 
+				Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
+		String strDate = WeekdayCalculator.afterNDayFrom(date, posn);
 		
 		Message msg = mHandler.obtainMessage();
-		msg.obj  = selectedDate;
+		msg.obj  = strDate;
 		msg.what = AppCmd.WEEKDAY;
 		mHandler.sendMessage(msg);
 	}

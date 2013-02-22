@@ -91,11 +91,11 @@ public class DataSource {
 		path = PATH_PREFIX + date + ".xml"; 
 		file = new File(path);
 		if (!file.exists()) {
-			Toast.makeText(mContext, "Can't find the chunk file!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "Can't find the chunk data xml!", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if (!loadRawChunkData(path)) {
-			Toast.makeText(mContext, "Fail to read the chunk data!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "Fail to read the chunk data file!", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 			
@@ -128,7 +128,7 @@ public class DataSource {
 		File file = new File(path);
 		
 		if (!file.exists()) {
-			Toast.makeText(mContext, "Can't find the chunk data!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "Can't find the chunk data xml!", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		
@@ -145,7 +145,7 @@ public class DataSource {
 			    	   Element label = (Element) k.next();
 			    	   Element start = (Element) k.next();
 			    	   Element stop  = (Element) k.next();
-			    	   Element prop  = (Element) k.next();
+			    	   Element prop  = (Element) k.next();			    	
 			    	   
 			    	   String modify = "";
 			    	   String create = "";
@@ -177,6 +177,43 @@ public class DataSource {
 		return true;
 	}
 	
+	public boolean areAllChunksLabelled(String date) {
+		String path = PATH_PREFIX + date + ".xml";
+		
+		File file = new File(path);		
+		if (!file.exists()) {			
+			return false;
+		}
+		
+		boolean allLabelled = false;
+		SAXReader saxReader = new SAXReader();		
+		try {
+			Document document = saxReader.read(new File(path));								
+			Element root = document.getRootElement();
+
+		    for (Iterator i = root.elementIterator(); i.hasNext();) {
+		       Element annotations = (Element) i.next();		       
+	    	   for (Iterator n = annotations.attributeIterator(); n.hasNext();) {
+	    	       Attribute attribute = (Attribute) n.next();
+	    	       
+	    	       if (attribute.getName().compareTo("ALLLABELLED") == 0) {
+	    	    	   String text = attribute.getText();
+	    	    	   if (text.compareToIgnoreCase("yes") == 0) {
+	    	    		   allLabelled = true;
+	    	    	   } else {
+	    	    		   allLabelled = false;
+	    	    	   }
+	    	       } 
+	    	    }	    	
+		    }
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();			
+		}
+		
+		return allLabelled;
+	}
+	
 	public Configuration getConfiguration() {
 		return mConfig;
 	}
@@ -197,7 +234,8 @@ public class DataSource {
         .addAttribute("EMAIL", "bigbugbb@gmail.com")
         .addAttribute("DESCRIPTION", "Teen activity labelling")
         .addAttribute("METHOD", "based on pre-defined theresholds")
-        .addAttribute("NOTES", "");
+        .addAttribute("NOTES", "")
+        .addAttribute("ALLLABELLED", rawChunks.areAllChunksLabelled() ? "yes" : "no");
         
         for (RawChunk rawChunk : rawChunks) {
 	        // ANNOTATION
@@ -218,7 +256,7 @@ public class DataSource {
 	        .addAttribute("ANNOTATION_SET", "Teen_Activity_Study")
 	        .addAttribute("ACTIVITY_TYPE", rawChunk.mActivity)
 	        .addAttribute("LAST_MODIFIED", rawChunk.mModifyTime)
-	        .addAttribute("DATE_CREATED", rawChunk.mCreateTime);
+	        .addAttribute("DATE_CREATED",  rawChunk.mCreateTime);
         }
                 
         XMLWriter writer;
