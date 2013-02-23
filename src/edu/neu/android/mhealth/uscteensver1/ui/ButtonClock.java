@@ -9,7 +9,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
+import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
+import android.util.Log;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
@@ -106,14 +108,27 @@ public class ButtonClock extends ChunkButton {
 	public void onDraw(Canvas c) {
 		if (mVisible) {
 			c.drawBitmap(sImages.get(0), mX + mOffsetX, mY + mOffsetY, null);
+			// choose to draw left or right based on the clock button position			
+			if (mX + mOffsetX < mCanvasWidth * 0.88f) { // draw on the right
+				if (mX + mWidth / 2 + mOffsetX > sAppScale.doScaleW(-120)) {
+					sTimePaint.setTextAlign(Align.LEFT);
+					c.drawText(mHost.getChunkRealStartTimeInString(), 
+						mX + mWidth / 2 + mOffsetX + sAppScale.doScaleW(50),
+						mY + mHeight / 2 + sAppScale.doScaleH(10), sTimePaint);
+				}
+			} else { // draw on the left
+				if (mX + mWidth / 2 + mOffsetX < mCanvasWidth + sAppScale.doScaleW(120)) {
+					sTimePaint.setTextAlign(Align.RIGHT);
+					c.drawText(mHost.getChunkRealStartTimeInString(), 
+						mX - mWidth / 2 + mOffsetX + sAppScale.doScaleW(30),
+						mY + mHeight / 2 + sAppScale.doScaleH(10), sTimePaint);
+				}
+			}
+			//Log.d("clock button", mX + " " + mY + " " + mOffsetX);
 			if (isSelected()) {
 				c.drawCircle(mX + mWidth / 2 + mOffsetX, 
-					mY + mHeight / 2 + mOffsetY, sAppScale.doScaleH(47), sPaint);
-			}
-			 
-			c.drawText(mHost.getChunkRealStartTimeInString(), 
-				mX + mWidth / 2 + mOffsetX + sAppScale.doScaleW(50),
-				mY + mHeight / 2 + sAppScale.doScaleH(10), sTimePaint);
+					mY + mHeight / 2 + mOffsetY, sAppScale.doScaleH(47), sPaint);								
+			}			 									
 		}
 	}	
 	

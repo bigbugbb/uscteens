@@ -128,7 +128,6 @@ public class MotionGraph extends AppObject {
 		c.drawLine(0, 0, 0, mHeight, mPaint);
 		c.drawLine(mWidth, 0, mWidth, mHeight, mPaint);
 		c.drawLine(0, mHeight, mWidth, mHeight, mPaint);
-//		c.drawRect(0, 0, mWidth, mHeight, mPaint);
 		
 		if (Math.abs((int) mSpeedX) > 0) {
 			int offset = (int) mSpeedX;
@@ -168,13 +167,12 @@ public class MotionGraph extends AppObject {
 		// draw the graph		
 		float scale = (float) mHeight / mDataSrc.getMaxActivityValue();
 		for (int i = mStart; i < mEnd - DataSource.PIXEL_SCALE; ++i) {	
-			float d1 = mActions[i / DataSource.PIXEL_SCALE];
-			float d2 = mActions[i / DataSource.PIXEL_SCALE + 1];
+			int index = i / DataSource.PIXEL_SCALE;		
 			float x1 = i - mStart + mOffsetX;
-			float y1 = mHeight - mActions[i / DataSource.PIXEL_SCALE] * scale;
+			float y1 = mHeight - mActions[index] * scale;
 			float x2 = i - mStart + DataSource.PIXEL_SCALE + mOffsetX;
-			float y2 = mHeight - mActions[i / DataSource.PIXEL_SCALE + 1] * scale;
-			if (d1 >= 0 && d2 >= 0)
+			float y2 = mHeight - mActions[index + 1] * scale;
+			if (mActions[index] >= 0 && mActions[index + 1] >= 0)
 				c.drawLine(x1, y1, x2, y2, mDataPaint);
 		}		
 		// draw the chunk lines and the corresponding buttons
@@ -186,12 +184,12 @@ public class MotionGraph extends AppObject {
 		String timeStart = toStringTimeFromPosition(mStart);
 		String timeEnd   = toStringTimeFromPosition(mEnd);
 		mPaintTxt.setTextAlign(Paint.Align.LEFT);
-		c.drawText(timeStart, sAppScale.doScaleW(20), sAppScale.doScaleH(mHeight + 36), mPaintTxt);
+		c.drawText(timeStart, sAppScale.doScaleW(20), mHeight + sAppScale.doScaleH(36), mPaintTxt);
 		mPaintTxt.setTextAlign(Paint.Align.RIGHT);
-		c.drawText(timeEnd,   sAppScale.doScaleW(mWidth - 20), sAppScale.doScaleH(mHeight + 36), mPaintTxt);
+		c.drawText(timeEnd, mWidth + sAppScale.doScaleW(-20), mHeight + sAppScale.doScaleH(36), mPaintTxt);
 		// draw date on the bottom
 		mPaintDate.setTextAlign(Paint.Align.CENTER);
-		c.drawText(mDate, mWidth / 2, sAppScale.doScaleH(mHeight + 200), mPaintDate);
+		c.drawText(mDate, mWidth / 2, mHeight + sAppScale.doScaleH(200), mPaintDate);
 		// draw the rectangle which indicates the chunk selection		
 		c.drawRect(mManager.getSelectedArea(), mSelChunkPaint);		
 	}

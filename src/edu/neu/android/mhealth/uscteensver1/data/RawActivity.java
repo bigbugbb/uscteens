@@ -1,7 +1,5 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
-import java.util.Calendar;
-import java.util.Date;
 
 public class RawActivity {
 	protected int[]   mData   = null;	

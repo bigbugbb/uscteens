@@ -21,6 +21,10 @@ public class ChunkButton extends CustomButton {
 		return mHost;
 	}
 	
+	public boolean isHostSelected() {
+		return mHost.isSelected();
+	}
+	
 	public void setDisplayOffset(float offsetX, float offsetY) {
 		mOffsetX = offsetX;
 		mOffsetY = offsetY;

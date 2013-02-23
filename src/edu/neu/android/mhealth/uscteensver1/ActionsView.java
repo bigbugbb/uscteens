@@ -93,7 +93,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		mPaintDate.setStyle(Style.FILL);
 		mPaintDate.setTextSize(mAppScale.doScaleW(45));
 		mPaintDate.setTypeface(Typeface.SERIF);
-		mPaintDate.setTextAlign(Align.CENTER);		
+		mPaintDate.setTextAlign(Align.CENTER);
 		mPaintDate.setFakeBoldText(true);		
 		
 		mPaintTime = new Paint(Paint.ANTI_ALIAS_FLAG);

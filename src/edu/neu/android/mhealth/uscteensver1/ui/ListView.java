@@ -92,7 +92,7 @@ public class ListView extends AppObject {
 				mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight, mPaintBkg);		
 			c.drawText(mText, mWidth / 2 - sAppScale.doScaleW(250), 
 				mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight * 0.6f, mPaintTxt);
-			c.drawBitmap(mImage, mWidth - mImage.getWidth() * 1.6f, 
+			c.drawBitmap(mImage, mWidth * 0.86f - mImage.getWidth() * 0.5f, 
 				mOffsetY + (mHeight + mBorderWidth) * mPosn + sAppScale.doScaleH(26), null);
 		}
 		

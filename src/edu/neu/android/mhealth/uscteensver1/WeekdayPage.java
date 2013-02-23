@@ -1,8 +1,11 @@
 package edu.neu.android.mhealth.uscteensver1;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import edu.neu.android.mhealth.uscteensver1.data.Configuration;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.ui.BackgroundWeekday;
@@ -112,6 +115,63 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 		orderByZ(mObjects);
 		
 		return mObjects;
+	}
+	
+	public void resume() {
+		Configuration config = DataSource.getInstance(null).getConfiguration();
+		String startDate = config.getStartDate();
+		// get current date in String
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();                               
+		String curDate = sf.format(date);  
+				
+		String[] split = startDate.split("-");
+		Date date1 = new Date(Integer.parseInt(split[0]) - 1900, 
+				Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));	
+		split = curDate.split("-");
+		
+		int intervalDay = 0;		
+		while (intervalDay < 14) {
+			String strDate = WeekdayCalculator.afterNDayFrom(date1, intervalDay);
+			if (strDate.compareToIgnoreCase(curDate) == 0) {
+				break;
+			}
+			intervalDay++;			
+		}
+		ArrayList<String> dates = new ArrayList<String>();
+		for (int j = 0; j < 14; ++j) {
+			String strDateAfterN = WeekdayCalculator.afterNDayFrom(date1, j);
+			dates.add(strDateAfterN);
+		}
+		int startWeekday = WeekdayCalculator.getWeekdayInNumber(startDate) - 1; // 0 - 6
+		
+		// left list view
+		for (int m = startWeekday; m < startWeekday + 7; ++m) {
+			if (m <= startWeekday + intervalDay) {
+				if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(m - startWeekday))) {						
+					mListViewWeek1.getItem(m - startWeekday).setItemImage(R.drawable.check_mark);
+				} else {
+					mListViewWeek1.getItem(m - startWeekday).setItemImage(R.drawable.check_square);
+				}
+			} else {
+				mListViewWeek1.getItem(m - startWeekday).setItemImage(R.drawable.lock);
+			}
+		}
+		
+		// right list view
+		intervalDay -= 7;
+		for (int m = startWeekday; m < startWeekday + 7; ++m) {
+			if (m <= startWeekday + intervalDay) {
+				if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(m - startWeekday))) {						
+					mListViewWeek2.getItem(m - startWeekday).setItemImage(R.drawable.check_mark);
+				} else {
+					mListViewWeek2.getItem(m - startWeekday).setItemImage(R.drawable.check_square);
+				}
+			} else {
+				mListViewWeek2.getItem(m - startWeekday).setItemImage(R.drawable.lock);
+			}
+		}			
+							
 	}
 	
 	public void release() {

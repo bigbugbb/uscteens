@@ -9,8 +9,7 @@ public class RawChunkList extends ArrayList<RawChunk> {
 			if (rawChunk.mActionID == -1) {
 				return false;
 			}
-		}
-		
+		}	
 		return true;
 	}
 	

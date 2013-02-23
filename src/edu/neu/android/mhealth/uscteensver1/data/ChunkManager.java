@@ -259,27 +259,14 @@ public class ChunkManager {
 	
 	public Chunk getPreviousUnmarkedChunk() {
 		Chunk prev = null;
-		float current = -mDispOffsetX;
+		float current = -mDispOffsetX - 1;
 
 		for (int i = mChunks.size() - 1; i >= 0; --i) {
 			Chunk c = mChunks.get(i);
 			if (c.mStart <= current) {
-				if (c.mQuest.isAnswered()) {
-					// check the right chunk
-					Chunk right = (i >= mChunks.size() - 1) ? null : mChunks.get(i + 1);
-					if (right != null && right.mStart < current) {
-						if (!right.mQuest.isAnswered()) {
-							prev = right;
-							break; // found, then return
-						}
-					}
-					// check the left chunk
-					Chunk left = (i <= 0) ? null : mChunks.get(i - 1);
-					if (left != null && !left.mQuest.isAnswered()) {			
-						// definitely smaller than current position
-						prev = left;
-						break;
-					}
+				if (!c.mQuest.isAnswered()) {
+					prev = c;
+					break;
 				}
 			}
 		}	
@@ -289,26 +276,14 @@ public class ChunkManager {
 	
 	public Chunk getNextUnmarkedChunk() {
 		Chunk next = null;
-		float current = -mDispOffsetX;		
+		float current = -mDispOffsetX + 1;		
 		
 		for (int i = 0; i < mChunks.size(); ++i) {
 			Chunk c = mChunks.get(i);
 			if (c.mStart >= current) {
-				if (c.mQuest.isAnswered()) {
-					// check the left chunk
-					Chunk left = (i <= 0) ? null : mChunks.get(i - 1);
-					if (left != null && left.mStart > current) {			
-						if (!left.mQuest.isAnswered()) {
-							next = left; // found
-							break;
-						}
-					}
-					// check the right chunk
-					Chunk right = (i >= mChunks.size() - 1) ? null : mChunks.get(i + 1);
-					if (right != null && !right.mQuest.isAnswered()) {						
-						next = right;
-						break; // found, then return						
-					}					
+				if (!c.mQuest.isAnswered()) {		
+					next = c;
+					break;
 				}
 			}
 		}
@@ -322,6 +297,9 @@ public class ChunkManager {
 	
 	public void selectChunk(int index) { ///////////////
 		assert(index >= 0 && index < mChunks.size());
+		if (mSelected > -1) {		
+			mChunks.get(mSelected).setSelected(false);
+		}
 		mSelected = index;
 		
 		// set buttons of the last selected chunk invisible
@@ -347,6 +325,7 @@ public class ChunkManager {
 		}		
 
 		Chunk c = mChunks.get(index); ///////////////////////
+		c.setSelected(true);
 		mClockL = c.mClock;
 		mMergeL = c.mMerge;
 		mSplit  = c.mSplit;
@@ -509,7 +488,7 @@ public class ChunkManager {
 		area.left   = mSelectedArea.left + mDispOffsetX;
 		area.top    = mSelectedArea.top;
 		area.right  = mSelectedArea.right + mDispOffsetX;
-		area.bottom = mSelectedArea.bottom;
+		area.bottom = mSelectedArea.bottom + 5;
 		return area;
 	}
 	

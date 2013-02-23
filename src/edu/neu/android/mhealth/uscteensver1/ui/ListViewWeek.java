@@ -36,7 +36,7 @@ public class ListViewWeek extends ListView {
 		// get current date in String
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();                               
-		String curDate = sf.format(date);  
+		String curDate = sf.format(date);
 							
 		initializeItems(week, startDate, curDate);
 	}
@@ -44,14 +44,8 @@ public class ListViewWeek extends ListView {
 	private void initializeItems(int week, String startDate, String curDate) {						
 		String[] split = startDate.split("-");
 		Date date1 = new Date(Integer.parseInt(split[0]) - 1900, 
-				Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
-		int start = Integer.parseInt(split[2]);
-		
+				Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));	
 		split = curDate.split("-");
-		Date date2 = new Date(Integer.parseInt(split[0]) - 1900, 
-				Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
-		int current = Integer.parseInt(split[2]);
-		boolean bSameWeek = WeekdayCalculator.isSameWeekDates(date1, date2);
 		
 		int intervalDay = 0;		
 		while (intervalDay < 14) {
