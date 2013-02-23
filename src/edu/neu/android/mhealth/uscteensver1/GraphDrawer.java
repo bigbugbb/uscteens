@@ -34,17 +34,17 @@ public class GraphDrawer extends BaseThread {
 	public void run() {			
 		Canvas c = null;
 		
-		while (mPause) {
-			if (!mRun) break;			
-			try {
-				sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
 		while (mRun) {
+			
+			if (mPause) {						
+				try {
+					sleep(50);					
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				continue;
+			}
+			
 			handleEvent(mEventQueue.poll());	
 			
 			try {

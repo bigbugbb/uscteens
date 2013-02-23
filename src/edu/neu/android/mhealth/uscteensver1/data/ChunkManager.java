@@ -269,7 +269,7 @@ public class ChunkManager {
 					break;
 				}
 			}
-		}	
+		}
 		
 		return prev;
 	}

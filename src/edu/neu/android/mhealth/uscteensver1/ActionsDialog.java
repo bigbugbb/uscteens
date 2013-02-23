@@ -16,6 +16,7 @@ import android.view.ViewGroup.LayoutParams;
 public class ActionsDialog extends Activity implements OnBackClickedListener {
 	
 	static public String CHUNK_START_TIME = "CHUNK_START_TIME";
+	static public String CHUNK_STOP_TIME  = "CHUNK_STOP_TIME";
 	protected ActionsView mActionsView = null;	
 
 	@Override
@@ -33,8 +34,9 @@ public class ActionsDialog extends Activity implements OnBackClickedListener {
 		mActionsView.setOnBackClickedListener(this);
 		mActionsView.setHandler(mHandler);
 		
-		int time = getIntent().getIntExtra(CHUNK_START_TIME, 0);
-		mActionsView.setTime(time);
+		int start = getIntent().getIntExtra(CHUNK_START_TIME, 0);
+		int stop  = getIntent().getIntExtra(CHUNK_STOP_TIME, 0);
+		mActionsView.setTime(start, stop);
 	}
 	
 	private void adjustLayout() {

@@ -27,8 +27,7 @@ public class HomePage extends AppPage implements OnClickListener {
 
 	protected HomePage(Context context, View view, Handler handler) {
 		super(context, handler);
-		mView = view;
-		load();
+		mView = view;		
 	}
 	
 	public List<AppObject> load() {
@@ -53,6 +52,13 @@ public class HomePage extends AppPage implements OnClickListener {
 		orderByZ(mObjects);
 		
 		return mObjects;
+	}
+	
+	public void start() {
+		load();
+		for (AppObject obj : mObjects) {
+			obj.onSizeChanged(mView.getWidth(), mView.getHeight());
+		}
 	}
 	
 	public void release() {

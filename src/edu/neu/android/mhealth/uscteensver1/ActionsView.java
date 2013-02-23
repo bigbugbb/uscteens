@@ -47,8 +47,10 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	protected boolean mImageLoaded = false;
 	protected ArrayList<Bitmap> mImages = new ArrayList<Bitmap>();	
 	protected String  mDate = "";
-	protected String  mTime = "";
-	protected String  mTimePostfix = "";
+//	protected String  mStartTime = "";
+	protected String  mTime      = "";
+//	protected String  mStopTime  = "";
+//	protected String  mTimePostfix = "";
 	protected RectF   mBackArea  = new RectF();
 	protected PointF  mBackTxtPt = new PointF();
 	protected Paint   mPaintText = null;	
@@ -100,7 +102,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		mPaintTime.setColor(Color.WHITE);
 		mPaintTime.setStyle(Style.FILL);		
 		mPaintTime.setTypeface(Typeface.SERIF);
-		mPaintTime.setTextAlign(Align.RIGHT);		
+		mPaintTime.setTextAlign(Align.CENTER);		
 		mPaintTime.setFakeBoldText(false);	
 		
 		DataSource dataSrc = DataSource.getInstance(null);
@@ -134,13 +136,22 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		}
 	};
 	
-	public void setTime(int time) {
-		int hour   = time / 3600;
-		int minute = (time - hour * 3600) / 60;
+	public void setTime(int start, int stop) {		
+		String s[] = { "", "" };
+		int hour   = 0;
+		int minute = 0;
 		
-		mTime = (hour > 12 ? hour - 12 : hour) + ":" + 
-					(minute > 9 ? minute : "0" + minute);				
-		mTimePostfix = (hour <= 12) ? "AM" : "PM";  
+		int times[] = { start, stop };
+		for (int i = 0; i < 2; ++i) {
+			hour   = times[i] / 3600;
+			minute = (times[i] - hour * 3600) / 60;		
+			s[i] = (hour > 12 ? hour - 12 : hour) + ":" + 
+				(minute > 9 ? minute : "0" + minute);
+			s[i] += (hour <= 12) ? "AM" : "PM";
+		}
+//		mStartTime = s[0];
+//		mStopTime  = s[1];
+		mTime = s[0] + " - " + s[1];		 
 	}
 	
 	public void setHandler(Handler handler) {
@@ -199,11 +210,11 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		canvas.drawBitmap(mImages.get(0), 0, 0, null);
 		canvas.drawBitmap(mImages.get(1), mBackArea.left, mBackArea.top, null);
 		canvas.drawText("BACK", mBackTxtPt.x, mBackTxtPt.y, mPaintText);
-		canvas.drawText(mDate, getWidth() / 2, mAppScale.doScaleH(80), mPaintDate);
-		mPaintTime.setTextSize(mAppScale.doScaleW(38));
-		canvas.drawText(mTime, getWidth() - mAppScale.doScaleW(30), mAppScale.doScaleH(60), mPaintTime);
-		mPaintTime.setTextSize(mAppScale.doScaleW(36));
-		canvas.drawText(mTimePostfix, getWidth() - mAppScale.doScaleW(40), mAppScale.doScaleH(100), mPaintTime);
+		canvas.drawText(mDate, getWidth() / 2, mAppScale.doScaleH(65), mPaintDate);
+		mPaintTime.setTextSize(mAppScale.doScaleT(35));
+		canvas.drawText(mTime, getWidth() / 2, mAppScale.doScaleH(115), mPaintTime);
+		//mPaintTime.setTextSize(mAppScale.doScaleW(36));
+		//canvas.drawText(mTimePostfix, getWidth() - mAppScale.doScaleW(40), mAppScale.doScaleH(100), mPaintTime);
 		mArrowUp.onDraw(canvas);
 		mArrowDown.onDraw(canvas);
 		mActionList.onDraw(canvas);		

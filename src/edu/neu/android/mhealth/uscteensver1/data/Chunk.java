@@ -112,6 +112,10 @@ public class Chunk extends AppObject {
 		return -1;
 	}
 	
+	public int getChunkRealStartTime() {
+		return mStart / DataSource.PIXEL_SCALE + mOffset;
+	}
+	
 	public int getChunkRealStopTime() {
 		return mStop / DataSource.PIXEL_SCALE + mOffset;
 	}
