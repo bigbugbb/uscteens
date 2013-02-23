@@ -149,8 +149,6 @@ public class ActionsView extends ImageView implements OnGestureListener,
 				(minute > 9 ? minute : "0" + minute);
 			s[i] += (hour <= 12) ? "AM" : "PM";
 		}
-//		mStartTime = s[0];
-//		mStopTime  = s[1];
 		mTime = s[0] + " - " + s[1];		 
 	}
 	

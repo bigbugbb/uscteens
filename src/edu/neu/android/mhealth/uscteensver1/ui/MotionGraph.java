@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -30,6 +31,7 @@ public class MotionGraph extends AppObject {
 	protected Paint	 mDataPaint = null;
 	protected Paint  mMarkedPaint = null;
 	protected Paint  mSelChunkPaint = null;
+	protected Paint  mSelChunkBackPaint = null;
 	protected Paint  mPaintTxt  = null;
 	protected Paint  mPaintDate = null;
 	protected int[]  mActions = null;
@@ -40,6 +42,7 @@ public class MotionGraph extends AppObject {
 	protected float  mOffsetY = 0;
 	protected float  mOffsetSpeedX = 0;
 	protected float  mOffsetSpeedY = 0;
+	protected float  mAspectRatio  = 1;
 	
 	protected DataSource   mDataSrc = null;
 	protected ChunkManager mManager = null;	
@@ -51,6 +54,11 @@ public class MotionGraph extends AppObject {
 		mDataSrc = DataSource.getInstance(null);
 		mActions = mDataSrc.getRawActivityData();
 		mActLenInPix = mDataSrc.getActivityLengthInPixel();	
+		
+		loadImages(new int[]{ R.drawable.menubar_background });
+		mAspectRatio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();
+		mImages.get(0).recycle();
+		mImages.remove(0);
 		
 		mBackgroundGray = new Paint();
 		mBackgroundGray.setColor(Color.rgb(179, 181, 181));
@@ -75,10 +83,13 @@ public class MotionGraph extends AppObject {
 		mMarkedPaint.setStyle(Style.FILL);	
 		
 		mSelChunkPaint = new Paint();
-		mSelChunkPaint.setColor(Color.argb(255, 0, 183, 223));
+		mSelChunkPaint.setColor(Color.argb(255, 7, 178, 75));
 		mSelChunkPaint.setStrokeWidth(5.0f);
 		mSelChunkPaint.setStyle(Style.STROKE);
-		mSelChunkPaint.setFakeBoldText(true);
+		
+		mSelChunkBackPaint = new Paint();
+		mSelChunkBackPaint.setColor(Color.argb(255, 209, 227, 155));
+		mSelChunkBackPaint.setStyle(Style.FILL);
 		
 		mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintTxt.setColor(Color.BLACK);
@@ -101,6 +112,17 @@ public class MotionGraph extends AppObject {
 		manager.setDisplayOffset(0, 0);	
 	}		
 	
+	public void release() {
+		for (Bitmap image : mImages) {
+			if (image != null) {
+				image.recycle();
+				image = null;
+			}
+		}
+		mImageLoaded = false;
+		mImages.clear();
+	}
+	
 	private String convertDateToDisplayFormat(String date) {
 		String[] MONTHS = {
 			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"			
@@ -121,7 +143,7 @@ public class MotionGraph extends AppObject {
 
 	@Override
 	public void onDraw(Canvas c) {
-		c.drawRect(0, 0, mWidth, mHeight, mBackgroundGray);
+		//c.drawRect(0, 0, mWidth, mHeight, mBackgroundGray);
 		c.drawRect(mOffsetX, 0, mWidth + mOffsetX, mHeight, mBackgroundWhite);
 		// draw the border
 		c.drawLine(0, 0, mWidth, 0, mPaint);
@@ -155,16 +177,20 @@ public class MotionGraph extends AppObject {
 		// draw the marked region
 		for (int i = 0; i < mManager.getChunkSize(); ++i) {
 			Chunk chunk = mManager.getChunk(i);
-			if (chunk.mQuest.isAnswered()) {
-				if (chunk.mStart - mStart > mWidth || chunk.mStop - mStart < 0)
-					continue;
-				RectF r = new RectF(chunk.mStart - mStart + mOffsetX, 0,
-						chunk.mStop - mStart + mOffsetX, mHeight);
+			// get the right region to draw, clip the part out of screen
+			if (chunk.mStart - mStart > mWidth || chunk.mStop - mStart < 0)
+				continue;
+			RectF r = new RectF(chunk.mStart - mStart + mOffsetX, 0,
+					chunk.mStop - mStart + mOffsetX, mHeight);
+			// check the selection
+			if (chunk.isSelected()) {
+				c.drawRect(r, mSelChunkBackPaint);
+			} else if (chunk.mQuest.isAnswered()) {								
 				c.drawRect(r, mMarkedPaint);
 			}
 		}
 		
-		// draw the graph		
+		// draw the graph
 		float scale = (float) mHeight / mDataSrc.getMaxActivityValue();
 		for (int i = mStart; i < mEnd - DataSource.PIXEL_SCALE; ++i) {	
 			int index = i / DataSource.PIXEL_SCALE;		
@@ -203,14 +229,10 @@ public class MotionGraph extends AppObject {
 	}
 	
 	@Override
-	public void onSizeChanged(int width, int height) {
-		loadImages(new int[]{ R.drawable.menubar_background });
-		float radio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();	
-		mImages.get(0).recycle();
-		mImages.remove(0);
+	public void onSizeChanged(int width, int height) {				
 		// get the region size
 		mWidth  = width;
-		mHeight = height - (int)(width * radio);
+		mHeight = height - (int)(width * mAspectRatio);
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
 

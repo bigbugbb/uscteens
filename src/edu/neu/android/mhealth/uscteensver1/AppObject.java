@@ -92,6 +92,8 @@ public class AppObject {
 				image = null;
 			}
 		}
+		mImageLoaded = false;
+		mImages.clear();
 	}
 	
 	public void setX(float x) { mX = x; }
