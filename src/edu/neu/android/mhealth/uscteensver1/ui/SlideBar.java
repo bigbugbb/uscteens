@@ -13,6 +13,7 @@ import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.AppObject;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 
 
 public class SlideBar extends AppObject {
@@ -34,6 +35,8 @@ public class SlideBar extends AppObject {
 	// slide bar button position
 	protected float mSliderBarBtnX = 0;
 	protected float mSliderBarBtnY = 0;
+	// chunk manager
+	protected ChunkManager mChunkManager = null;
 
 	protected OnSlideBarChangeListener mListener = null;
 	
@@ -41,7 +44,7 @@ public class SlideBar extends AppObject {
 		void onProgressChanged(SlideBar slideBar, int progress);
 	}
 	
-	public SlideBar(Resources res) {
+	public SlideBar(Resources res, ChunkManager chunkManager) {
 		super(res);
 		loadImages(new int[]{ R.drawable.slidebar_btn });
 		
@@ -65,18 +68,22 @@ public class SlideBar extends AppObject {
 		mPaintText.setFakeBoldText(false);
 		mPaintText.setTextSize(sAppScale.doScaleT(24));
 		mPaintText.setTextAlign(Paint.Align.CENTER);
+		
+		mChunkManager = chunkManager;
 	}
 
 	public void setOnSlideBarChangeListener(OnSlideBarChangeListener listener) {
 		mListener = listener;
 	}
 	
-	public void updateUnmarkedRange(ArrayList<Float> range) {
-		mRange = range;
-		
+	public void updateUnmarkedRange() {
+		mRange = mChunkManager.getUnmarkedRange();
+
 		if (mCanvasWidth != 0) {
-			for (int i = 0; i < mRange.size(); ++i) {
-				mRange.set(i, mRange.get(i) * mWidth + mCanvasWidth * 0.15f + 2);
+			for (int i = 0; i < mRange.size(); ++i) {				
+				if (mRange.get(i) >= 0 && mRange.get(i) <= 1) {
+					mRange.set(i, mRange.get(i) * mWidth + mCanvasWidth * 0.15f + 2);
+				}
 			}
 		}
 	}
@@ -147,10 +154,7 @@ public class SlideBar extends AppObject {
 		mWidth  = width * 0.7f - 4;
 		mHeight = dstHeight;
 		
-		// when updateUnmarkedRange is first called in MainPage, the mCanvasWidth is zero
-		for (int i = 0; i < mRange.size(); ++i) {
-			mRange.set(i, mRange.get(i) * mWidth + mCanvasWidth * 0.15f + 2);
-		}
+		updateUnmarkedRange();
 	}
 
 	@Override

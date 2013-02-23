@@ -81,11 +81,10 @@ public class MainPage extends AppPage implements OnClickListener,
 			mBtnNext.setOnClickListener(this);
 		}
 		if (mSlideBar == null) {
-			mSlideBar = new SlideBar(mContext.getResources());
+			mSlideBar = new SlideBar(mContext.getResources(), mChunkManager);
 			mObjects.add(mSlideBar);
 			mSlideBar.setID(UIID.SLIDE);
-			mSlideBar.setOnSlideBarChangeListener(this);
-			mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
+			mSlideBar.setOnSlideBarChangeListener(this);			
 		}		
 		// order by Z
 		orderByZ(mObjects);		
@@ -158,7 +157,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	@Override
 	protected void onSizeChanged(int width, int height) {
 		// TODO Auto-generated method stub
-		super.onSizeChanged(width, height);
+		super.onSizeChanged(width, height);		
 	}
 
 	@Override
@@ -294,7 +293,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	
 	private void tryToSplit(ButtonSplit split) {		
 		if (mChunkManager.splitChunk(split.getHost())) {
-			mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
+			mSlideBar.updateUnmarkedRange();
 		} else {
 			Toast.makeText(mContext, "Not enough space to split!", Toast.LENGTH_SHORT).show();
 		}
@@ -315,7 +314,7 @@ public class MainPage extends AppPage implements OnClickListener,
 		// the left and right chunks are both unanswered, merge them directly
 		if (actions.size() == 0 || actionL.compareTo(actionR) == 0) {
 			mChunkManager.mergeChunk(mChunksToMerge.get(0), mChunksToMerge.get(1), null);	
-			mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
+			mSlideBar.updateUnmarkedRange();
 		} else {
 			actions.add("None");			
 			Message msg = mHandler.obtainMessage();			
@@ -330,7 +329,7 @@ public class MainPage extends AppPage implements OnClickListener,
 		int index = (Integer) params[0];
 		quest.setAnswer(Actions.ACTION_IMGS[index], Actions.ACTION_NAMES[index]);
 		synchronized (this) {
-			mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
+			mSlideBar.updateUnmarkedRange();
 		}
 		
 	}		
@@ -354,7 +353,7 @@ public class MainPage extends AppPage implements OnClickListener,
 		// it's not called from AppPage.onTouch, so explicit synchronized is necessary
     	synchronized (this) {
     		mChunkManager.mergeChunk(mChunksToMerge.get(0), mChunksToMerge.get(1), maintain);
-    		mSlideBar.updateUnmarkedRange(mChunkManager.getUnmarkedRange());
+    		mSlideBar.updateUnmarkedRange();
     	}
     	
 	}
