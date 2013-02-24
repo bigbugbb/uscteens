@@ -297,7 +297,7 @@ public class ChunkManager {
 	
 	public void selectChunk(int index) { ///////////////
 		assert(index >= 0 && index < mChunks.size());
-		if (mSelected > -1) {		
+		if (mSelected > -1 && mSelected < mChunks.size()) {				
 			mChunks.get(mSelected).setSelected(false);
 		}
 		mSelected = index;
