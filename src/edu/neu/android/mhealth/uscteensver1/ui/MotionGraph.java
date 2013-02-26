@@ -73,7 +73,7 @@ public class MotionGraph extends AppObject {
 		mPaint.setTypeface(Typeface.SERIF);
 		mPaint.setFakeBoldText(false);	
 		
-		mDataPaint = new Paint();
+		mDataPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mDataPaint.setColor(Color.BLACK);
 		mDataPaint.setStrokeWidth(4.0f);
 		mDataPaint.setFakeBoldText(false);

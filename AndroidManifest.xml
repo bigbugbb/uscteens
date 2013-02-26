@@ -12,12 +12,284 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
 
-    <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" android:debuggable="true">
-        <activity
+	<permission android:name="android.permission.permRead"
+		android:label="USCMOBILE Content Provider" android:description="@string/permdesc_content_provider"
+		android:protectionLevel="normal" />
+
+	<permission android:name="android.permission.permWrite"
+		android:label="USCMOBILE Content Provider" android:description="@string/permdesc_content_provider"
+		android:protectionLevel="normal" /> 
+
+	<!-- APPLICATION -->
+
+	<application android:name="edu.neu.android.mhealth.uscteensver1.ApplicationManager"
+		android:icon="@drawable/icon" android:label="@string/app_name"
+		android:theme="@style/Theme.CITY" android:debuggable="true">
+	    
+		<provider android:name="edu.neu.android.wocketslib.support.WOCKETSContentProvider"
+			android:authorities="edu.neu.android.mhealth.uscteensver1.provider"
+			android:exported="false" 
+			android:readPermission="android.permission.permRead"
+			android:writePermission="android.permission.permWrite" />
+
+		<!-- Authorication Checker -->
+		<activity android:name="edu.neu.android.wocketslib.support.AuthorizationCheckerActivity"
+		    android:label="Setup" 
+		    android:excludeFromRecents="true"
+			android:screenOrientation="portrait" android:theme="@android:style/Theme.Dialog"/>
+						
+		<!-- Setup -->
+		<activity android:name=".uscmobileapp.SetupInhalerActivity"
+		    android:label="Setup" 
+		    android:excludeFromRecents="true"
+			android:screenOrientation="portrait"/>
+	
+
+
+		<activity android:name="edu.neu.android.wocketslib.activities.wocketsnews.SetupActivity"
+		    android:excludeFromRecents="true"
+			android:screenOrientation="portrait" />
+
+
+		<activity android:name="edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity"
+		    android:excludeFromRecents="true"
+			android:screenOrientation="portrait" />
+
+
+		<activity android:name="edu.neu.android.wocketslib.activities.wocketsnews.NewsViewerActivity"
+			android:screenOrientation="portrait" />
+
+		<!-- ACTIVITY MONITOR -->
+
+
+        <service android:name="edu.neu.android.wocketslib.sensormonitor.BluetoothSensorService" 
+        android:debuggable="false"
+        android:enabled="true"></service>
+		<!-- HELPCOMMENT -->
+
+		<activity android:name="edu.neu.android.wocketslib.activities.helpcomment.SendCommentsActivity"
+			android:label="@string/send_comments" 
+			android:launchMode="singleInstance" android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+			</intent-filter>
+		</activity>
+
+		<activity android:name="edu.neu.android.wocketslib.activities.helpcomment.GetHelpActivity"
+			android:label="@string/get_help" 
+			android:launchMode="singleInstance" android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+			</intent-filter>
+		</activity>
+
+		<activity android:name="edu.neu.android.wocketslib.activities.helpcomment.EmailActivity"
+			android:windowSoftInputMode="stateVisible|adjustResize"
+			android:launchMode="singleInstance"
+			android:screenOrientation="portrait" />
+
+		<activity android:name="edu.neu.android.wocketslib.activities.helpcomment.MessageActivity"
+			android:windowSoftInputMode="stateVisible|adjustResize"
+			android:launchMode="singleInstance"
+			android:screenOrientation="portrait" />
+
+		<activity android:name="edu.neu.android.wocketslib.activities.helpcomment.FAQActivity"
+			android:launchMode="singleInstance"
+			android:screenOrientation="portrait" />
+
+		<activity android:name="edu.neu.android.wocketslib.activities.helpcomment.GetHelpExitMsgActivity"
+			android:launchMode="singleInstance"
+			android:screenOrientation="portrait" />
+
+		<activity android:name="edu.neu.android.wocketslib.activities.helpcomment.SendCommentsExitMsgActivity"
+			android:launchMode="singleInstance"
+			android:screenOrientation="portrait" />
+		
+		<!-- REMIND LATER -->
+
+		<activity android:name="edu.neu.android.wocketslib.activities.remindlater.RemindLaterActivity"
+			android:launchMode="singleInstance"
+			android:screenOrientation="portrait" />
+
+		<!-- GUIDELINES -->
+
+		<activity android:name=".guidelines.GuidelinesActivity"
+			android:label="@string/app_name_guidelines" 
+			android:launchMode="singleInstance" android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+			</intent-filter>
+		</activity>
+
+		<!-- THISWEEK -->
+
+		<activity android:name=".thisweek.ThisWeekActivity"
+			android:label="@string/app_name_thisweek" 
+			android:launchMode="singleInstance" android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+			</intent-filter>
+		</activity>
+		
+		<!-- FILEGRABBERSERVICE -->
+
+<!--		<service android:name=".filetransfer.FileGrabberService"-->
+<!--			android:label="@string/app_name" android:process=":filegrabberservice">-->
+<!--			<intent-filter>-->
+<!--				<action android:name="android.intent.action.MAIN" />-->
+<!--				<category android:name="android.intent.category.HOME" />-->
+<!--			</intent-filter>-->
+<!--		</service>-->
+
+		<!-- CONTROLLERSERVICE -->
+
+<!--		<service android:name=".controllerservice.ControllerService" -->
+<!--			android:label="@string/app_name" android:process=":controllerservice">-->
+<!--			<intent-filter>-->
+<!--				<action android:name="android.intent.action.MAIN" />-->
+<!--				<category android:name="android.intent.category.HOME" />-->
+<!--			</intent-filter>-->
+<!--		</service>-->
+
+<!--		<service android:name=".controllerservice.MonitorService"-->
+<!--			android:label="@string/app_name" android:process=":wocketservice">-->
+<!--			<intent-filter>-->
+<!--				<action android:name="android.intent.action.MAIN" />-->
+<!--				<category android:name="android.intent.category.HOME" />-->
+<!--			</intent-filter>-->
+<!--		</service>-->
+
+		<!--		//android.provider.Telephony.SMS_RECEIVED  -->
+
+
+		<receiver android:name="edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver"
+			android:label="@string/app_name"
+			>
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<action android:name="edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver.StartService" />
+<!--				<action android:name="android.intent.action.ACTION_USER_PRESENT" />-->
+<!--				<action android:name="android.intent.action.ACTION_SCREEN_OFF" />-->
+<!--				<action android:name="android.intent.action.ACTION_SCREEN_ON" />-->
+<!--				<action android:name="android.intent.action.ACTION_BATTERY_LOW" />-->
+<!--				<action android:name="android.intent.action.ACTION_BATTERY_CHANGED" />-->
+				<action android:name="android.intent.action.AIRPLANE_MODE" />
+				<action android:name="android.intent.action.ACTION_ANSWER" />
+				<action android:name="android.intent.action.PHONE_STATE"/> 
+				<action android:name="android.intent.action.CALL_BUTTON" />
+				<action android:name="android.intent.action.CAMERA_BUTTON" />
+				<action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
+				<action android:name="android.intent.action.DOCK_STATE" />
+				<action android:name="android.intent.action.HEADSET_PLUG" />
+				<action android:name="android.intent.action.MEDIA_BAD_REMOVAL" />
+				<action android:name="android.intent.action.MEDIA_REMOVED" />
+				<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+								
+				<action android:name="android.intent.action.POWER_CONNECTED" />
+				<action android:name="android.intent.action.POWER_DISCONNECTED" />
+<!-- Wallpaper only works for static wallpaper				-->
+				<action android:name="android.intent.action.WALLPAPER_CHANGED" />
+				<action android:name="android.intent.action.SHUTDOWN" />
+				<action android:name="android.intent.action.DATE_CHANGED" />
+<!-- 				<action android:name="android.intent.action.TIME_SET" /> -->
+				<action android:name="android.intent.action.TIMEZONE_CHANGED" />
+				<action android:name="android.intent.action.LOCALE_CHANGED" />
+				
+				<category android:name="android.intent.category.HOME" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.PACKAGE_REPLACED" />
+				<action android:name="android.intent.action.PACKAGE_ADDED" />				
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>            
+	            <data android:scheme="package"  />
+			</intent-filter>
+		</receiver>
+		
+		<!-- DataUploaderService -->
+
+        <service
+            android:name="edu.neu.android.wocketslib.dataupload.DataUploaderService"
+            android:label="Wockets Uploader">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </service>
+	
+		<!-- DATAUPLOADER -->
+
+		<receiver android:name="edu.neu.android.wocketslib.dataupload.DataUploaderBroadcastReceiver"
+			android:label="DataUploaderBroadcastReceiver" 
+			>
+			<intent-filter>
+				<action
+					android:name="edu.neu.android.wocketslib.dataupload.DATA_UPLOAD_NOW_BROADCAST" />
+			</intent-filter>
+		</receiver>
+
+<!--		<service android:name=".edu.neu.android.mhealth.ucsmobile.dataupload.DataUploaderService"DataUploaderService" android:process=":datauploader">-->
+<!--			<intent-filter>-->
+<!--				<action android:name="android.intent.action.MAIN" />-->
+<!--				<category android:name="android.intent.category.HOME" />-->
+<!--			</intent-filter>-->
+<!--		</service>-->
+
+
+		<activity android:name=".PackageInstallerActivity">
+			<!--			<intent-filter>-->
+			<!--				<action android:name="android.intent.action.VIEW" />-->
+			<!--				<category android:name="android.intent.category.DEFAULT" />-->
+			<!--				<data android:scheme="content" />-->
+			<!--				<data android:scheme="file" />-->
+			<!--
+				<data android:mimeType="application/vnd.android.package-archive" />
+			-->
+			<!--			</intent-filter>-->
+		</activity>
+
+		<activity android:name=".UninstallerActivity">
+			<!--			<intent-filter>-->
+			<!--				<action android:name="android.intent.action.VIEW" />-->
+			<!--				<action android:name="android.intent.action.DELETE" />-->
+			<!--				<category android:name="android.intent.category.DEFAULT" />-->
+			<!--				<data android:scheme="package" />-->
+			<!--			</intent-filter>-->
+		</activity>
+
+		<!-- FILE TRANSFER -->
+
+		<activity android:name="edu.neu.android.wocketslib.filetransfer.FileTransferActivity"
+			android:label="@string/app_name_file_transfer" 
+			android:launchMode="singleInstance" android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+			</intent-filter>
+		</activity>
+
+		<!-- FILE CLEANER -->
+
+		<activity android:name="edu.neu.android.wocketslib.filetransfer.FileCleanerActivity"
+			android:label="@string/app_name_file_cleaner_activity"
+			android:launchMode="singleInstance"
+			android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+			</intent-filter>
+		</activity>
+		
+	<!-- USC Study -->
+
+		<activity android:name="edu.neu.android.wocketslib.emasurvey.SurveyActivity" 
+			android:label="@string/app_name_uscstudy"
+		    android:excludeFromRecents="true"
+		    android:launchMode="singleInstance"
+			android:screenOrientation="portrait">
+		<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+			</intent-filter>
+		</activity>
+		
+		<activity
             android:name="edu.neu.android.mhealth.uscteensver1.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
@@ -44,7 +316,504 @@
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/DialogTheme">
 		</activity>
+		
+	</application>	
 
-    </application>
+	<!-- PERMISSIONS -->
+
+	<uses-permission android:name="android.permission.permRead" />
+	<uses-permission android:name="android.permission.permWrite" />
+
+	<!--
+		Allows read/write access to the "properties" table in the checkin
+		database, to change values that get uploaded.
+	-->
+<!--	<uses-permission android:name="android.permission.ACCESS_CHECKIN_PROPERTIES" />-->
+
+	<!--
+		Allows an application to access coarse (e.g., Cell-ID, WiFi) location
+	-->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+	<!-- Allows an application to access fine (e.g., GPS) location   -->
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+	<!--
+		Allows an application to access extra location provider commands
+	-->
+	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
+	<!--
+		Allows an application to create mock location providers for testing
+	-->
+<!--	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />-->
+
+	<!-- Allows applications to access information about networks   -->
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+	<!--
+		Allows an application to use SurfaceFlinger's low level features
+	-->
+	<uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
+
+	<!--
+		Allows applications to access information about Wi-Fi networks
+	-->
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+	<!-- Allows applications to call into AccountAuthenticators.  -->
+	<uses-permission android:name="android.permission.ACCOUNT_MANAGER" />
+
+	<!--
+		Allows an application to act as an AccountAuthenticator for the
+		AccountManager
+	-->
+	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+
+	<!-- Allows an application to collect battery statistics   -->
+	<uses-permission android:name="android.permission.BATTERY_STATS" />
+
+	<!--
+		Allows an application to tell the AppWidget service which application
+		can access AppWidget's data.
+	-->
+	<uses-permission android:name="android.permission.BIND_APPWIDGET" />
+
+	<!--
+		Must be required by device administration receiver, to ensure that
+		only the system can interact with it.
+	-->
+<!--	<uses-permission android:name="android.permission.BIND_DEVICE_ADMIN" />-->
+
+	<!--
+		Must be required by an InputMethodService, to ensure that only the
+		system can bind to it.
+	-->
+<!--	<uses-permission android:name="android.permission.BIND_INPUT_METHOD" />-->
+
+	<!--
+		Must be required by a WallpaperService, to ensure that only the system
+		can bind to it.
+	-->
+<!--	<uses-permission android:name="android.permission.BIND_WALLPAPER" />-->
+
+	<!-- Allows applications to connect to paired bluetooth devices   -->
+	<uses-permission android:name="android.permission.BLUETOOTH" />
+
+	<!-- Allows applications to discover and pair bluetooth devices   -->
+	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+	<!--
+		Allows an application to broadcast a notification that an application
+		package has been removed.
+	-->
+	<uses-permission android:name="android.permission.BROADCAST_PACKAGE_REMOVED" />
+
+	<!--
+		Allows an application to broadcast an SMS receipt notification
+	-->
+	<uses-permission android:name="android.permission.BROADCAST_SMS" />
+
+	<!-- Allows an application to broadcast sticky intents.  -->
+	<uses-permission android:name="android.permission.BROADCAST_STICKY" />
+
+	<!--
+		Allows an application to broadcast a WAP PUSH receipt notification
+	-->
+	<uses-permission android:name="android.permission.BROADCAST_WAP_PUSH" />
+
+	<!--
+		Allows an application to initiate a phone call without going through
+		the Dialer user interface for the user to confirm the call being
+		placed.
+	-->
+	<uses-permission android:name="android.permission.CALL_PHONE" />
+
+	<!--
+		Allows an application to call any phone number, including emergency
+		numbers, without going through the Dialer user interface for the user
+		to confirm the call being placed.
+	-->
+	<uses-permission android:name="android.permission.CALL_PRIVILEGED" />
+
+	<!-- Required to be able to access the camera device.  -->
+	<uses-permission android:name="android.permission.CAMERA" />
+
+	<!-- This is necessary so that the app can run on phones such as the Galaxy Y that do not have autofocus cameras (because asking for permission to the camera includes that by default -->
+	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+	
+	<!--
+		Allows an application to change whether an application component
+		(other than its own) is enabled or not.
+	-->
+<!--	<uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE" />-->
+
+	<!--
+		Allows an application to modify the current configuration, such as
+		locale.
+	-->
+<!--	<uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />-->
+
+	<!-- Allows applications to change network connectivity state   -->
+	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+	<!-- Allows applications to enter Wi-Fi Multicast mode   -->
+	<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+
+	<!-- Allows applications to change Wi-Fi connectivity state  -->
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+	<!--
+		Allows an application to clear the caches of all installed
+		applications on the device.
+	-->
+<!--	<uses-permission android:name="android.permission.CLEAR_APP_CACHE" />-->
+
+	<!-- Allows an application to clear user data   -->
+<!--	<uses-permission android:name="android.permission.CLEAR_APP_USER_DATA" />-->
+
+	<!--
+		Allows enabling/disabling location update notifications from the
+		radio.
+	-->
+	<uses-permission android:name="android.permission.CONTROL_LOCATION_UPDATES" />
+
+	<!-- Allows an application to delete cache files.  -->
+<!--	<uses-permission android:name="android.permission.DELETE_CACHE_FILES" />-->
+
+	<!-- Allows an application to delete packages.  -->
+<!--	<uses-permission android:name="android.permission.DELETE_PACKAGES" />-->
+
+	<!-- Allows  low-level access to power management   -->
+	<uses-permission android:name="android.permission.DEVICE_POWER" />
+
+	<!-- Allows  applications to RW to diagnostic resources.  -->
+<!--	<uses-permission android:name="android.permission.DIAGNOSTIC" />-->
+
+	<!-- Allows  applications to disable the keyguard   -->
+<!--	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />-->
+
+	<!--
+		Allows an application to retrieve state dump information from system
+		services.
+	-->
+<!--	<uses-permission android:name="android.permission.DUMP" />-->
+
+	<!-- Allows an application to expand or collapse the status bar.  -->
+	<uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+
+	<!-- Allows  access to the flashlight   -->
+	<uses-permission android:name="android.permission.FLASHLIGHT" />
+
+	<!--
+		Allows an application to force a BACK operation on whatever is the top
+		activity.
+	-->
+	<uses-permission android:name="android.permission.FORCE_BACK" />
+
+	<!--
+		Allows access to the list of accounts in the Accounts Service
+	-->
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+	<!--
+		Allows an application to find out the space used by any package.
+	-->
+	<uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
+
+	<!--
+		Allows an application to get information about the currently or
+		recently running tasks: a thumbnail representation of the tasks, what
+		activities are running in it, etc.
+	-->
+	<uses-permission android:name="android.permission.GET_TASKS" />
+
+	<!--
+		This permission can be used on content providers to allow the global
+		search system to access their data.
+	-->
+	<uses-permission android:name="android.permission.GLOBAL_SEARCH" />
+
+	<!-- Allows  access to hardware peripherals.  -->
+	<uses-permission android:name="android.permission.HARDWARE_TEST" />
+
+	<!--
+		Allows an application to inject user events (keys, touch, trackball)
+		into the event stream and deliver them to ANY window.
+	-->
+	<uses-permission android:name="android.permission.INJECT_EVENTS" />
+
+	<!--
+		Allows an application to install a location provider into the Location
+		Manager
+	-->
+	<uses-permission android:name="android.permission.INSTALL_LOCATION_PROVIDER" />
+
+	<!-- Allows an application to install packages.  -->
+	<uses-permission android:name="android.permission.INSTALL_PACKAGES" />
+
+	<!--
+		Allows an application to open windows that are for use by parts of the
+		system user interface.
+	-->
+	<uses-permission android:name="android.permission.INTERNAL_SYSTEM_WINDOW" />
+
+	<!-- Allows  applications to open network sockets.  -->
+	<uses-permission android:name="android.permission.INTERNET" />
+
+	<!-- Allows an application to call killBackgroundProcesses(String).  -->
+	<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+
+	<!--
+		Allows an applicatiedu.neu.android.mhealth.ucsmobile.USCMobileteens.SurveyActivityer
+	-->
+	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+
+	<!--
+		Allows an application to manage (create, destroy, Z-order) application
+		tokens in the window manager.
+	-->
+	<uses-permission android:name="android.permission.MANAGE_APP_TOKENS" />
+
+	<uses-permission android:name="android.permission.MASTER_CLEAR" />
+
+	<!-- Allows an application to modify global audio settings   -->
+	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+	<!--
+		Allows modification of the telephony state - power on, mmi, etc.
+	-->
+	<uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
+
+	<!-- Allows  formatting file systems for removable storage.  -->
+	<uses-permission android:name="android.permission.MOUNT_FORMAT_FILESYSTEMS" />
+
+	<!--
+		Allows mounting and unmounting file systems for removable storage.
+	-->
+	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+
+	<!-- Allows  applications to directly communicate over NFC   -->
+	<uses-permission android:name="android.permission.NFC" />
+
+	<!--
+		Allows an application to monitor, modify, or abort outgoing calls.
+	-->
+	<uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+
+	<!-- Allows an application to read the user's calendar data.  -->
+	<uses-permission android:name="android.permission.READ_CALENDAR" />
+
+	<!-- Allows an application to read the user's contacts data.  -->
+	<uses-permission android:name="android.permission.READ_CONTACTS" />
+
+	<!--
+		Allows an application to take screen shots and more generally get
+		access to the frame buffer data
+	-->
+	<uses-permission android:name="android.permission.READ_FRAME_BUFFER" />
+
+	<!--
+		Allows an application to read (but not write) the user's browsing
+		history and bookmarks.
+	-->
+	<uses-permission android:name="android.permission.READ_HISTORY_BOOKMARKS" />
+
+	<!--
+		Allows an application to retrieve the current state of keys and
+		switches.
+	-->
+	<uses-permission android:name="android.permission.READ_INPUT_STATE" />
+
+	<!-- Allows an application to read the low-level system log files.  -->
+	<uses-permission android:name="android.permission.READ_LOGS" />
+
+	<!-- Allows  read only access to phone state.  -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+	<!-- Allows an application to read SMS messages.  -->
+	<uses-permission android:name="android.permission.READ_SMS" />
+
+	<!-- Allows  applications to read the sync settings   -->
+	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+
+	<!-- Allows  applications to read the sync stats   -->
+	<uses-permission android:name="android.permission.READ_SYNC_STATS" />
+
+	<!-- Required to be able to reboot the device.  -->
+	<uses-permission android:name="android.permission.REBOOT" />
+
+	<!--
+		Allows an application to receive the ACTION_BOOT_COMPLETED that is
+		broadcast after the system finishes booting.
+	-->
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+	<!--
+		Allows an application to monitor incoming MMS messages, to record or
+		perform processing on them.
+	-->
+	<uses-permission android:name="android.permission.RECEIVE_MMS" />
+
+	<!--
+		Allows an application to monitor incoming SMS messages, to record or
+		perform processing on them.
+	-->
+	<uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+	<!-- Allows an application to monitor incoming WAP push messages.  -->
+	<uses-permission android:name="android.permission.RECEIVE_WAP_PUSH" />
+
+	<!-- Allows an application to record audio   -->
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+	<!-- Allows an application to change the Z-order of tasks   -->
+<!--	<uses-permission android:name="android.permission.REORDER_TASKS" />-->
+
+	<!-- Allows an application to send SMS messages.  -->
+	<uses-permission android:name="android.permission.SEND_SMS" />
+
+	<!--
+		Allows an application to watch and control how activities are started
+		globally in the system.
+	-->
+	<uses-permission android:name="android.permission.SET_ACTIVITY_WATCHER" />
+
+	<!--
+		Allows an application to broadcast an Intent to set an alarm for the
+		user.
+	-->
+	<uses-permission android:name="android.permission.SET_ALARM" />
+
+	<!--
+		Allows an application to control whether activities are immediately
+		finished when put in the background.
+	-->
+	<uses-permission android:name="android.permission.SET_ALWAYS_FINISH" />
+
+	<!-- Modify the global animation scaling factor.  -->
+	<uses-permission android:name="android.permission.SET_ANIMATION_SCALE" />
+
+	<!-- Configure an application for debugging.  -->
+<!--	<uses-permission android:name="android.permission.SET_DEBUG_APP" />-->
+
+	<!--
+		Allows low-level access to setting the orientation (actually rotation)
+		of the screen.
+	-->
+	<uses-permission android:name="android.permission.SET_ORIENTATION" />
+
+	<!--
+		Allows an application to set the maximum number of (not needed)
+		application processes that can be running.
+	-->
+	<uses-permission android:name="android.permission.SET_PROCESS_LIMIT" />
+
+	<!-- Allows  applications to set the system time   -->
+<!--	<uses-permission android:name="android.permission.SET_TIME" />-->
+
+	<!-- Allows  applications to set the system time zone  -->
+<!--	<uses-permission android:name="android.permission.SET_TIME_ZONE" />-->
+
+	<!-- Allows  applications to set the wallpaper   -->
+	<uses-permission android:name="android.permission.SET_WALLPAPER" />
+
+	<!-- Allows  applications to set the wallpaper hints   -->
+	<uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
+
+	<!--
+		Allow an application to request that a signal be sent to all
+		persistent processes
+	-->
+<!--	<uses-permission android:name="android.permission.SIGNAL_PERSISTENT_PROCESSES" />-->
+
+	<!--
+		Allows an application to open, close, or disable the status bar and
+		its icons.
+	-->
+	<uses-permission android:name="android.permission.STATUS_BAR" />
+
+	<!--
+		Allows an application to allow access the subscribed feeds
+		ContentProvider.
+	-->
+	<uses-permission android:name="android.permission.SUBSCRIBED_FEEDS_READ" />
+	<uses-permission android:name="android.permission.SUBSCRIBED_FEEDS_WRITE" />
+
+	<!--
+		Allows an application to open windows using the type
+		TYPE_SYSTEM_ALERT, shown on top of all other applications.
+	-->
+	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+	<!-- Allows an application to update device statistics.  -->
+	<uses-permission android:name="android.permission.UPDATE_DEVICE_STATS" />
+
+	<!--
+		Allows an application to request authtokens from the AccountManager
+	-->
+	<uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
+	<!-- Allows an application to use SIP service   -->
+	<uses-permission android:name="android.permission.USE_SIP" />
+
+	<!-- Allows  access to the vibrator   -->
+	<uses-permission android:name="android.permission.VIBRATE" />
+
+	<!--
+		Allows using PowerManager WakeLocks to keep processor from sleeping or
+		screen from dimming
+	-->
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+
+	<!-- Allows  applications to write the apn settings   -->
+	<uses-permission android:name="android.permission.WRITE_APN_SETTING" />
+
+	<!--
+		Allows an application to write (but not read) the user's calendar
+		data.
+	-->
+	<uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
+	<!--
+		Allows an application to write (but not read) the user's contacts
+		data.
+	-->
+	<uses-permission android:name="android.permission.WRITE_CONTACTS" />
+
+	<!-- Allows an application to write to external storage   -->
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+	<!-- Allows an application to modify the Google service map.  -->
+	<uses-permission android:name="android.permission.WRITE_GSERVICES" />
+
+	<!--
+		Allows an application to write (but not read) the user's browsing
+		history and bookmarks.
+	-->
+	<uses-permission android:name="android.permission.WRITE_HISTORY_BOOKMARKS" />
+
+	<!--
+		Allows an application to read or write the secure system settings.
+	-->
+	<uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+
+	<!-- Allows an application to read or write the system settings.  -->
+	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+	<!-- Allows an application to write SMS messages.  -->
+	<uses-permission android:name="android.permission.WRITE_SMS" />
+
+	<!-- Allows  applications to write the sync settings   -->
+	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+	
+	
+    <!-- <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" android:debuggable="true"> -->
+        
+
 
 </manifest>
