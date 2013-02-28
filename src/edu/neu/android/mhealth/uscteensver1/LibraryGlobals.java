@@ -61,7 +61,7 @@ public class LibraryGlobals {
 		
 		Globals.IS_WOCKETS_ENABLED = false;
 		Globals.IS_BLUETOOTH_ENABLED = true; 
-		Globals.IS_LOCATION_ENABLED = true; 
+		Globals.IS_LOCATION_ENABLED = false; 
 		Globals.IS_READING_SENSOR_ENABLED = true;
 
 		Globals.DEFAULT_MAIL_USERNAME = "wocketssmtp@gmail.com";
@@ -104,6 +104,8 @@ public class LibraryGlobals {
 
 		Globals.classFromKey.put(Globals.GETHELP, edu.neu.android.wocketslib.activities.helpcomment.GetHelpActivity.class);
 		Globals.classFromKey.put(Globals.SURVEY, edu.neu.android.wocketslib.emasurvey.SurveyActivity.class);
+		
+		Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 20000;
 	}
 	
 }
