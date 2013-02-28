@@ -32,8 +32,7 @@ import edu.neu.android.wocketslib.Globals;
 public class LibraryGlobals {
 	private static final String TAG = "LibraryGlobals";	
 
-	public static void initGlobals(Context aContext)
-	{
+	public static void initGlobals(Context aContext) {
 		// By default the logging will go to the apps internal storage, not the external directory
 		Globals.IS_LOG_EXTERNAL = false;
 		Globals.APP_DIRECTORY = ".uscteen";
@@ -89,7 +88,7 @@ public class LibraryGlobals {
 //		Globals.PW_SYNC_PASSWORD = "sync";
 
 		Globals.AUDIO_PROMPT_START_HOUR = 7;
-		Globals.AUDIO_PROMPT_END_HOUR = 23; 
+		Globals.AUDIO_PROMPT_END_HOUR = 23;
 
 		//Appinfo
 		// Order of preference in main menu

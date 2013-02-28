@@ -42,8 +42,8 @@ public class ButtonNext extends CustomButton {
 	public boolean contains(float x, float y) {
 		float left   = mX - mWidth;
 		float right  = mX + mWidth;
-		float upper  = mY - mHeight * 1.5f;
-		float bottom = mY + mHeight * 0.5f;
+		float upper  = mY - mHeight * 2f;
+		float bottom = mY + mHeight;
 		
 		return left < x && x < right && upper < y && y < bottom; 
 	}

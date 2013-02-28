@@ -29,7 +29,7 @@ import android.widget.Toast;
 public class MainActivity extends FragmentActivity implements OnTouchListener {
 	
 	protected MainView 		mMainView 	   = null;
-	protected SensorManager mSensorManager = null;	
+//	protected SensorManager mSensorManager = null;	
 	// all of the pages
 	protected AppPage mCurPage = null;
 	protected List<AppPage> mPages = new ArrayList<AppPage>();
@@ -43,22 +43,18 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main);								
 		
-		Intent bintent = new Intent(
-				MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
-		sendBroadcast(bintent);
-		Toast.makeText(getApplicationContext(),
-				"Starting the service...", Toast.LENGTH_LONG).show();
-
+		// send a broadcast to start the monitor service
+		startMonitor();
 		// setup scale param according to the screen resolution
 		setupScale();
 		// get views and set listeners
 		setupViews();
 		// adjust layouts according to the screen resolution
 		adjustLayout();
-		// create accelerometer
-		createSensor();		
+//		// create accelerometer
+//		createSensor();			
 		// create app pages and all the UIs in the pages
 		initPages();	
 	}
@@ -81,6 +77,14 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
+	}
+	
+	private void startMonitor() {
+		Intent bintent = new Intent(
+				MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
+		sendBroadcast(bintent);
+//		Toast.makeText(getApplicationContext(),
+//				"Starting the service...", Toast.LENGTH_LONG).show();
 	}
 	
 	private void setupScale() {
@@ -109,10 +113,10 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 		);
 	}
 	
-	private void createSensor() {
-		// get system sensor manager to deal with sensor issues  
-        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-	}
+//	private void createSensor() {
+//		// get system sensor manager to deal with sensor issues  
+//        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+//	}
 
 	private void initPages() {		
 		// only three pages now		
