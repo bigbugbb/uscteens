@@ -22,7 +22,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 
 public class Chunk extends AppObject {
 	
-	protected final static int MINIMUM_SPACE = 240;
+	public final static int MINIMUM_SPACE = 240;
 	
 	public int mStart; // in pixel, has been scaled by DataSource.PIXEL_SCALE
 	public int mStop;  // in pixel, has been scaled by DataSource.PIXEL_SCALE

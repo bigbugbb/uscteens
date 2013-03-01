@@ -36,15 +36,6 @@ public class GraphDrawer extends BaseThread {
 		
 		while (mRun) {
 			
-			if (mPause) {						
-				try {
-					sleep(50);					
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				continue;
-			}
-			
 			handleEvent(mEventQueue.poll());	
 			
 			try {
@@ -77,6 +68,13 @@ public class GraphDrawer extends BaseThread {
 				}
 			}
 			
+			while (mPause && mRun) {						
+				try {
+					sleep(50);					
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		super.run();
