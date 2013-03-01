@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.broadcastreceivers.TeensBroadcastReceiver;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.HomePageDialog;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
@@ -81,7 +82,7 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 	
 	private void startMonitor() {
 		Intent bintent = new Intent(
-				MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
+				TeensBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
 		sendBroadcast(bintent);
 //		Toast.makeText(getApplicationContext(),
 //				"Starting the service...", Toast.LENGTH_LONG).show();
