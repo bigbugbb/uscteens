@@ -8,7 +8,6 @@ import android.os.SystemClock;
 import edu.neu.android.mhealth.uscteensver1.services.TeensSensorService;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
-import edu.neu.android.wocketslib.sensormonitor.BluetoothSensorService;
 import edu.neu.android.wocketslib.sensormonitor.DataStore;
 import edu.neu.android.wocketslib.utils.Log;
 
@@ -25,16 +24,11 @@ public class TeensBroadcastReceiver extends MonitorServiceBroadcastReceiver {
 				Log.i(TAG, "Got ACTION START_SENSOR_MONITOR_SERVICE_NOW");
 
 			// Set the alarm for the next minute
-			setAlarmAndStartService(context);
+			setAlarm(context);
+			// And run the service immediately as well
+			Intent i = new Intent(context, TeensSensorService.class);
+			context.startService(i);
 		}
-	}
-	
-	private void setAlarmAndStartService(Context context) {
-		setAlarm(context);
-
-		// And run the service immediately as well
-		Intent mi = new Intent(context, BluetoothSensorService.class);
-		context.startService(mi);
 	}
 
 	private void setAlarm(Context aContext) {
