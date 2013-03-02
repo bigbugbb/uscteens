@@ -1,5 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.services;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +49,8 @@ public class TeensSensorService extends BluetoothSensorService implements Sensor
 
 	private List<android.hardware.Sensor> someSensors = null;
 	private android.hardware.Sensor intAccSensor = null;
+
+	private Date serviceStartDatePlus1Min;
 	
 	@Override
 	// Called when the service is created and needs to be run
@@ -66,6 +69,10 @@ public class TeensSensorService extends BluetoothSensorService implements Sensor
 
 		// get the service start time
 		serviceStartTime = System.currentTimeMillis();
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MINUTE, 1);
+		serviceStartDatePlus1Min = calendar.getTime();
 
 		// Set Sensor + Manager
 		aSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

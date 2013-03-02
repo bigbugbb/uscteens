@@ -83,12 +83,12 @@ public class MotionGraph extends AppObject {
 		mMarkedPaint.setStyle(Style.FILL);	
 		
 		mSelChunkPaint = new Paint();
-		mSelChunkPaint.setColor(Color.argb(255, 7, 178, 75));
+		mSelChunkPaint.setColor(Color.argb(255, 255, 128, 0));
 		mSelChunkPaint.setStrokeWidth(5.0f);
 		mSelChunkPaint.setStyle(Style.STROKE);
 		
 		mSelChunkBackPaint = new Paint();
-		mSelChunkBackPaint.setColor(Color.argb(255, 209, 227, 155));
+		mSelChunkBackPaint.setColor(Color.argb(255, 255, 255, 77));
 		mSelChunkBackPaint.setStyle(Style.FILL);
 		
 		mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
