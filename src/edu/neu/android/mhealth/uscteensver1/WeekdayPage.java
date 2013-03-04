@@ -33,6 +33,7 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 													OnItemClickListener,
 													OnListViewScrollingListener {
 	
+	private final static String TAG = "WeekdayPage";
 	protected BackgroundWeekday mBackground = null;
 	protected ListViewWeek      mListViewWeek1 = null;
 	protected ListViewWeek      mListViewWeek2 = null;
@@ -127,9 +128,9 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 		Configuration config = DataSource.getInstance(null).getConfiguration();
 		String startDate = config.getStartDate();
 		// get current date in String
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();                               
-		String curDate = sf.format(date);  
+		String curDate = dateFormat.format(date);  
 				
 		String[] split = startDate.split("-");
 		Date date1 = new Date(Integer.parseInt(split[0]) - 1900, 
@@ -165,10 +166,11 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 		}
 		
 		// right list view
-		intervalDay -= 7;
+		intervalDay  -= 7;
+		startWeekday += 7;
 		for (int m = startWeekday; m < startWeekday + 7; ++m) {
 			if (m <= startWeekday + intervalDay) {
-				if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(m - startWeekday))) {						
+				if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(m - startWeekday + 7))) {						
 					mListViewWeek2.getItem(m - startWeekday).setItemImage(R.drawable.check_mark);
 				} else {
 					mListViewWeek2.getItem(m - startWeekday).setItemImage(R.drawable.check_square);
@@ -225,15 +227,19 @@ public class WeekdayPage extends AppPage implements OnClickListener,
 
 	@Override
 	public void onItemClicked(ListView view, ListItem li, int posn) {
+		if (view == mListViewWeek2) {
+			posn += 7;			
+		}
 		if (li.getItemImage() == R.drawable.lock) {
 			return;
-		}
+		}				
 		
 		// get the start date
 		DataSource dataSrc = DataSource.getInstance(null);
 		String startDate = dataSrc.getConfiguration().getStartDate();		
 		if (startDate.compareTo("") == 0) {
 			// possibly fail to read the configuration file
+			Log.e(TAG, "Can not get start date!");
 			return;			
 		}
 		

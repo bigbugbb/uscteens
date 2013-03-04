@@ -1,6 +1,8 @@
 #ifndef _DATA_SOURCE_H
 #define _DATA_SOURCE_H
 
+#include "BaseClasses.h"
+
 #include <map>
 using std::map;
 
@@ -10,7 +12,7 @@ using std::vector;
 #include <string>
 using std::string;
 
-class DataSource
+class DataSource : public CBaseObject
 {
 public:
 	int  Create();

@@ -1,4 +1,4 @@
-/Develop/Git/USC_Teen/obj/local/armeabi/objs-debug/datasrc/DataSource.o: \
+/Develop/Git/USC_Teen/obj/local/armeabi/objs/datasrc/DataSource.o: \
  /Develop/Git/USC_Teen/jni/datasrc/DataSource.cpp \
  /Develop/Git/USC_Teen/jni/datasrc/DataSource.h \
  /Develop/Git/USC_Teen/jni/datasrc/BaseClasses.h \

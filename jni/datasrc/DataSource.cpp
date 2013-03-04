@@ -62,7 +62,7 @@ int DataSource::GetMaxActivityValue(const char* pszFile)
 			break;
 		}
 	}
-	int nMaxValue = pData ? pData->nMaxValue : 0;
+	int nMaxValue = pData ? pData->nMaxValue : -1;
 
 	return nMaxValue;
 }
@@ -85,8 +85,13 @@ vector<int>* DataSource::LoadActivityData(const char* pszFile)
 		return NULL;
 	}
 	int nNum;
+	char buffer[32];
 	while (!feof(fp)) {
-		fscanf(fp, "%d", &nNum);
+		fscanf(fp, "%s", buffer);
+		if (buffer[0] == ':') {
+			continue;
+		}
+		nNum = atoi(buffer);
 		pData->vecData.push_back(nNum + 1);
 		if (nNum > pData->nMaxValue) {
 			pData->nMaxValue = nNum + 1;

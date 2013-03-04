@@ -8,6 +8,7 @@ RM := rm
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include obj/local/armeabi/objs/datasrc/subdir.mk
 -include obj/local/armeabi/objs-debug/datasrc/subdir.mk
 -include jni/datasrc/subdir.mk
 -include subdir.mk

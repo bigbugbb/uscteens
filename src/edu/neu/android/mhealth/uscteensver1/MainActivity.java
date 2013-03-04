@@ -215,7 +215,7 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
         		switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
         		break;
         	case AppCmd.WEEKDAY:
-        		if (mDataSource.loadRawData((String) msg.obj)) {        			
+         		if (mDataSource.loadRawData((String) msg.obj)) {        			
             		switchPages(2);
         		}
             	break;
