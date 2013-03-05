@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -20,9 +22,12 @@ import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.DateHelper;
 
-public class SetStartDateActivity extends BaseActivity {
+public class SetStartDateActivity extends BaseActivity implements OnClickListener {
 	
 	private static final String TAG = "SetStartDateActivity";
+	// buttons
+	private Button   mBtnSet;
+	private Button   mBtnCancel;
 	// date selection spinner
 	private Spinner  mSpinnerYears;      
     private Spinner  mSpinnerMonths;   
@@ -84,8 +89,7 @@ public class SetStartDateActivity extends BaseActivity {
 	}
 	
 	@Override
-	public void onPause() {
-		savePreferences();
+	public void onPause() {		
 		super.onPause();
 	}
 	
@@ -98,6 +102,11 @@ public class SetStartDateActivity extends BaseActivity {
 	}
 	
 	private void setupViews() {
+		// get buttons
+		mBtnSet    = (Button) findViewById(R.id.setstartdate_set);
+		mBtnCancel = (Button) findViewById(R.id.setstartdate_cancel);
+		mBtnSet.setOnClickListener(this);
+		mBtnCancel.setOnClickListener(this);
 		// get spinners
 		mSpinnerYears  = (Spinner) findViewById(R.id.spinner_years);
 		mSpinnerMonths = (Spinner) findViewById(R.id.spinner_months);
@@ -186,22 +195,30 @@ public class SetStartDateActivity extends BaseActivity {
         		mDateSplit[2] = (String) parent.getSelectedItem(); 
         	}      
         	
-        	mStartDate = mDateSplit[0] + "-" + mDateSplit[1] + "-" + mDateSplit[2];
-        	
-        	// check whether the start date is nearer than the current date
-        	Date start   = convertDate(mStartDate, "yyyy-MM-dd");
-        	Date current = Calendar.getInstance().getTime();
-        	if (start.before(current)) {
-        		displayToastMessage("The start date is before the current date!");
-        	}
-        	
-        	// save the date selection
-        	savePreferences();        	
+        	mStartDate = mDateSplit[0] + "-" + mDateSplit[1] + "-" + mDateSplit[2];        	        	     	        	       
         }  
   
         public void onNothingSelected(AdapterView<?> parent) {  
         	
         }  
     }
+
+	@Override
+	public void onClick(View v) {
+		if (v == mBtnSet) {
+			// check whether the start date is nearer than the current date
+        	Date start   = convertDate(mStartDate, "yyyy-MM-dd");
+        	Date current = Calendar.getInstance().getTime();
+        	if (start.before(current)) {
+        		displayToastMessage("The start date is before the current date!");
+        	}   
+        	// save start date
+			savePreferences();
+		} else if (v == mBtnCancel) {
+			// do nothing
+		}
+		
+		finish();
+	}
 
 }
