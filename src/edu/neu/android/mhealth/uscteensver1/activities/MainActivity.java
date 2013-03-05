@@ -295,10 +295,11 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 			}
 			return true;
 		} else if (keyCode == KeyEvent.KEYCODE_MENU) {
-			if (!FileHelper.isFileExists(DataSource.PATH_PREFIX + "config.xml")) {
+			// pop up the keyboard only in the home page
+			if (mCurPage == mPages.get(indexOfPage(PageType.HOME_PAGE))) {				
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.toggleSoftInput(0, 0);
-			}	
+				imm.toggleSoftInput(0, 0);				
+			}
 		}
 		
 		if (pwStaff.isMatch(keyCode)) {
