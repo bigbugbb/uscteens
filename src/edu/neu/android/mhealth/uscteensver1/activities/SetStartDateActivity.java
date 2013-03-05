@@ -19,6 +19,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.DateHelper;
 
@@ -93,12 +94,12 @@ public class SetStartDateActivity extends BaseActivity implements OnClickListene
 		super.onPause();
 	}
 	
-	private void loadPreferences() {	
-		mStartDate = getPreferences(MODE_PRIVATE).getString(USCTeensGlobals.START_DATE, "");	
+	private void loadPreferences() {			
+		mStartDate = DataStorage.GetValueString(getApplicationContext(), USCTeensGlobals.START_DATE, "");
 	}
 	
 	private void savePreferences() {	
-		getPreferences(MODE_PRIVATE).edit().putString(USCTeensGlobals.START_DATE, mStartDate).commit();				
+		DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.START_DATE, mStartDate);				
 	}
 	
 	private void setupViews() {

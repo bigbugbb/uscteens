@@ -20,6 +20,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import edu.neu.android.wocketslib.dataupload.DataSender;
@@ -136,18 +137,6 @@ public class SetupTeenGameActivity extends BaseActivity {
 		finishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
 //		uploadLogs = (Button) findViewById(R.id.buttonuploadlogs);
 
-		finishStudy.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				
-				Log.i(TAG, "Send all data and log files");
-				displayToastMessage("Request to finish this study, sending all data to the server now.");
-				finishStudy.setEnabled(false);
-				new SendAllFilesToServerTask().execute();
-			}
-		});
-
 		setStartDate.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -170,6 +159,19 @@ public class SetupTeenGameActivity extends BaseActivity {
 						"Starting the service...", Toast.LENGTH_LONG).show();
 			}
 		});
+		
+		finishStudy.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				
+				Log.i(TAG, "Send all data and log files");
+				displayToastMessage("Request to finish this study, sending all data to the server now.");
+				finishStudy.setEnabled(false);
+				new SendAllFilesToServerTask().execute();
+			}
+		});
+		
 //		checkInhalers.setOnClickListener(new OnClickListener() {
 //
 //			@Override
@@ -361,5 +363,21 @@ public class SetupTeenGameActivity extends BaseActivity {
 	private void setRescueInhalerMAC(String mac){
 		DataStorage.SetValue(SetupTeenGameActivity.this, 
 				KEY_RESCUE_INHALER, mac);
+	}
+
+	@Override
+	public void onResume() {
+		String startDate = DataStorage.GetValueString(getApplicationContext(), USCTeensGlobals.START_DATE, "");
+		if (startDate.compareTo("") != 0) {
+			String[] times = startDate.split("-");
+			setStartDate.setText("Change start date (" + times[1] + "/" + times[2] + "/" + times[0] + ")");
+		}
+		super.onResume();
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
 	}
 }
