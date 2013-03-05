@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
        	   
-	<edu.neu.android.mhealth.uscteensver1.ActionsView
+	<edu.neu.android.mhealth.uscteensver1.views.ActionsView
 	    android:id="@+id/view_action_title"	    
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

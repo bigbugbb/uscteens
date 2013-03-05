@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
    
-	<edu.neu.android.mhealth.uscteensver1.WarningView
+	<edu.neu.android.mhealth.uscteensver1.views.WarningView
 	    android:id="@+id/view_warning"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent" />
