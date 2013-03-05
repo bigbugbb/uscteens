@@ -45,7 +45,7 @@ public class DataSource {
 	}
 		
 	public static final int PIXEL_SCALE = 2;	
-	protected final String PATH_PREFIX = "/sdcard/TestData/";
+	public static final String PATH_PREFIX = "/sdcard/TestData/";
 	
 	// configuration read from xml
 	protected Configuration mConfig = new Configuration();
@@ -56,9 +56,11 @@ public class DataSource {
 	protected int	 mMaxActivityValue = 0;
 	// current selected date
 	protected String mCurSelectedDate = "";
+	// flag to indicate whether the data source is initialized
+	protected boolean mInitialized = false;
 	
 	public void onCreate() {		
-		mConfig.load(PATH_PREFIX + "config.xml");	
+			
 	}
 	
 	public void onStop() {
@@ -67,6 +69,27 @@ public class DataSource {
 	
 	public void onDestory() {
 		
+	}
+	
+	public boolean isInitialized() {
+		File configFile = new File(PATH_PREFIX + "config.xml");
+		if (!configFile.exists()) {
+			mInitialized = false; 
+		}
+		return mInitialized;
+	}
+	
+	public boolean initialize() {		
+		if (!mInitialized) {
+			mInitialized = mConfig.load(PATH_PREFIX + "config.xml");
+		}
+		// check whether the config file exists, in case the it is deleted by user
+		File configFile = new File(PATH_PREFIX + "config.xml");
+		if (!configFile.exists()) {
+			mInitialized = false; 
+		}
+		
+		return mInitialized;
 	}
 		
 	/**

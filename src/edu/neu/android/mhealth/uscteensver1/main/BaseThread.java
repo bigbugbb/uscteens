@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1;
+package edu.neu.android.mhealth.uscteensver1.main;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 

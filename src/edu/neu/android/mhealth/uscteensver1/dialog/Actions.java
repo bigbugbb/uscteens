@@ -1,4 +1,7 @@
-package edu.neu.android.mhealth.uscteensver1;
+package edu.neu.android.mhealth.uscteensver1.dialog;
+
+import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.R.drawable;
 
 public class Actions {
 	public static final String[] ACTION_NAMES = new String[] {  		

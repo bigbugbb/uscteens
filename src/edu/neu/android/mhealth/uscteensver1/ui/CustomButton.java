@@ -6,7 +6,7 @@ import java.util.List;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import edu.neu.android.mhealth.uscteensver1.AppObject;
+import edu.neu.android.mhealth.uscteensver1.main.AppObject;
 
 public class CustomButton extends AppObject {
 

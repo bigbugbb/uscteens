@@ -1,10 +1,12 @@
-package edu.neu.android.mhealth.uscteensver1;
+package edu.neu.android.mhealth.uscteensver1.main;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.R.drawable;
 import edu.neu.android.mhealth.uscteensver1.data.Configuration;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;

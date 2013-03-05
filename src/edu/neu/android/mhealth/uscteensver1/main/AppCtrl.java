@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1;
+package edu.neu.android.mhealth.uscteensver1.main;
 
 public class AppCtrl {
 	public final static int MOVE_NONE  = 0;

@@ -1,9 +1,11 @@
-package edu.neu.android.mhealth.uscteensver1;
+package edu.neu.android.mhealth.uscteensver1.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.R.drawable;
+import edu.neu.android.mhealth.uscteensver1.main.AppScale;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -36,7 +38,7 @@ public class WarningView extends View {
 	protected int mSelection = 0;
 	protected OnItemClickListener   mItemListener = null;
 	protected OnBackClickedListener mBackListener = null;
-	protected RectF mBackArea = new RectF();
+	protected RectF  mBackArea  = new RectF();
 	protected PointF mBackTxtPt = new PointF();
 	
 	

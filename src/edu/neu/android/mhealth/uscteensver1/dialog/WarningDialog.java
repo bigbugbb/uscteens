@@ -1,11 +1,14 @@
-package edu.neu.android.mhealth.uscteensver1;
+package edu.neu.android.mhealth.uscteensver1.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.WarningView.OnBackClickedListener;
-import edu.neu.android.mhealth.uscteensver1.WarningView.OnItemClickListener;
+import edu.neu.android.mhealth.uscteensver1.R.id;
+import edu.neu.android.mhealth.uscteensver1.R.layout;
+import edu.neu.android.mhealth.uscteensver1.dialog.WarningView.OnBackClickedListener;
+import edu.neu.android.mhealth.uscteensver1.dialog.WarningView.OnItemClickListener;
+import edu.neu.android.mhealth.uscteensver1.main.AppScale;
 
 import android.app.Activity;
 import android.content.Intent;

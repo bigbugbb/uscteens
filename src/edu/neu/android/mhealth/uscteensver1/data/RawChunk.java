@@ -1,6 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
-import edu.neu.android.mhealth.uscteensver1.Actions;
+import edu.neu.android.mhealth.uscteensver1.dialog.Actions;
 
 public class RawChunk {
 	// data read directly from xml

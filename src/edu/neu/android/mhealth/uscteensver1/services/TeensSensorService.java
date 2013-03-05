@@ -14,6 +14,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.PowerManager;
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.R;
 import edu.neu.android.wocketslib.activities.datasummaryviewer.GetDataSummaryActivity;
@@ -47,6 +48,7 @@ public class TeensSensorService extends BluetoothSensorService implements Sensor
 	protected DataSaver mWocketDataSaver = null;
 
 	private static String phoneID = null;
+	private final int MINUTES_TO_RECORD = 20; 
 
 	private long serviceStartTime = 0;
 	SensorManager aSensorManager = null;
@@ -328,9 +330,9 @@ public class TeensSensorService extends BluetoothSensorService implements Sensor
 			try {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 				String fileName = dateFormat.format(Calendar.getInstance().getTime()) + ".txt";
-				String filePath = "/sdcard/TestData/";
+				String filePath = DataSource.PATH_PREFIX;
 				File file = new File(filePath, fileName);
-				for (int i = 0; i < 20; ++i) {
+				for (int i = 0; i < MINUTES_TO_RECORD; ++i) {
 					if (FileHelper.isExternalMemoryPathReady()) {
 						try {
 							FileHelper.createDirsIfDontExist(file);

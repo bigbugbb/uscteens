@@ -288,6 +288,13 @@
             android:theme="@style/DialogTheme">
 		</activity>
 		
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.ConfigDialog"
+			android:screenOrientation="landscape"
+		    android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@style/DialogTheme">
+		</activity>
+		
 	</application>	
 
 	<!-- PERMISSIONS -->

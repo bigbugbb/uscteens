@@ -1,12 +1,17 @@
-package edu.neu.android.mhealth.uscteensver1;
+package edu.neu.android.mhealth.uscteensver1.main;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.R.id;
+import edu.neu.android.mhealth.uscteensver1.R.layout;
+import edu.neu.android.mhealth.uscteensver1.R.menu;
 import edu.neu.android.mhealth.uscteensver1.broadcastreceivers.TeensBroadcastReceiver;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.HomePageDialog;
+import edu.neu.android.mhealth.uscteensver1.dialog.WarningDialog;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -29,6 +34,7 @@ import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements OnTouchListener {
 	
+	protected final static String TAG = "MainActivity";
 	protected MainView 		mMainView 	   = null;
 //	protected SensorManager mSensorManager = null;	
 	// all of the pages
@@ -54,7 +60,7 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 		setupViews();
 		// adjust layouts according to the screen resolution
 		adjustLayout();
-//		// create accelerometer
+		// create accelerometer
 //		createSensor();			
 		// create app pages and all the UIs in the pages
 		initPages();	
@@ -189,6 +195,14 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 		super.onResume();	
 		mMainView.onResume();
 		mCurPage.resume();
+		
+		if (!mDataSource.initialize()) {
+			// if the initialize fail, it means the config file does not exist, so create it and initialize again
+			
+			
+//			Intent i = new Intent(getApplicationContext(), ConfigDialog.class);			
+//			startActivityForResult(i, AppCmd.CONFIG);
+		}
 	}
 
 	@Override
@@ -210,9 +224,18 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 		public void handleMessage(Message msg) {        					
 			Intent i = null;		
 			
-        	switch (msg.what) {    
-        	case AppCmd.BEGIN:        		
-        		switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
+        	switch (msg.what) {   
+//        	case AppCmd.CONFIG:
+//        		if (!mDataSource.initialize()) {
+//        			Log.e(TAG, "Fail to config the datasource!");
+//        		}
+//        		break;
+        	case AppCmd.BEGIN:        
+        		if (mDataSource.isInitialized()) {
+        			switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
+        		} else {
+        			Toast.makeText(getApplicationContext(), "Fail to do the configuration!", Toast.LENGTH_SHORT);
+        		}
         		break;
         	case AppCmd.WEEKDAY:
          		if (mDataSource.loadRawData((String) msg.obj)) {        			

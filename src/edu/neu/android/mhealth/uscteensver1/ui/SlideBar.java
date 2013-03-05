@@ -11,9 +11,9 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.view.MotionEvent;
-import edu.neu.android.mhealth.uscteensver1.AppObject;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
+import edu.neu.android.mhealth.uscteensver1.main.AppObject;
 
 
 public class SlideBar extends AppObject {

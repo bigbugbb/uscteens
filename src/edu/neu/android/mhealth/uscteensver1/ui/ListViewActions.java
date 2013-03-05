@@ -1,6 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import edu.neu.android.mhealth.uscteensver1.Actions;
+import edu.neu.android.mhealth.uscteensver1.dialog.Actions;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

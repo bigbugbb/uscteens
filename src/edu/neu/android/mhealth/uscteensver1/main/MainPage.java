@@ -1,13 +1,15 @@
-package edu.neu.android.mhealth.uscteensver1;
+package edu.neu.android.mhealth.uscteensver1.main;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.R.drawable;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleListener;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.dialog.Actions;
 import edu.neu.android.mhealth.uscteensver1.ui.*;
 import edu.neu.android.mhealth.uscteensver1.ui.CustomButton.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph.OnGraphMovedListener;
