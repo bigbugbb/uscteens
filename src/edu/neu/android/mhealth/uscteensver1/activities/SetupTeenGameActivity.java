@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.main;
+package edu.neu.android.mhealth.uscteensver1.activities;
 
 import java.util.Date;
 

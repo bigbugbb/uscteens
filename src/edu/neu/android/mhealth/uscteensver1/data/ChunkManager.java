@@ -8,7 +8,7 @@ import android.graphics.RectF;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.dialog.Actions;
 import edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog;
-import edu.neu.android.mhealth.uscteensver1.main.AppScale;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonClock;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonMerge;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonSplit;

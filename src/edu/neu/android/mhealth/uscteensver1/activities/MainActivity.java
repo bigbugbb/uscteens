@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.main;
+package edu.neu.android.mhealth.uscteensver1.activities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,16 @@ import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.HomePageDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.WarningDialog;
+import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
+import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
+import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
+import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
+import edu.neu.android.mhealth.uscteensver1.pages.MainPage;
+import edu.neu.android.mhealth.uscteensver1.pages.WeekdayPage;
+import edu.neu.android.mhealth.uscteensver1.pages.WinPage;
+import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
+import edu.neu.android.mhealth.uscteensver1.views.MainView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;

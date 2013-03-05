@@ -6,9 +6,10 @@ import java.util.List;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.R.id;
 import edu.neu.android.mhealth.uscteensver1.R.layout;
-import edu.neu.android.mhealth.uscteensver1.dialog.WarningView.OnBackClickedListener;
-import edu.neu.android.mhealth.uscteensver1.dialog.WarningView.OnItemClickListener;
-import edu.neu.android.mhealth.uscteensver1.main.AppScale;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
+import edu.neu.android.mhealth.uscteensver1.views.WarningView;
+import edu.neu.android.mhealth.uscteensver1.views.WarningView.OnBackClickedListener;
+import edu.neu.android.mhealth.uscteensver1.views.WarningView.OnItemClickListener;
 
 import android.app.Activity;
 import android.content.Intent;

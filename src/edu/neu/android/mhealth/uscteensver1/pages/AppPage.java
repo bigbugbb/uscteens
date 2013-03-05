@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.main;
+package edu.neu.android.mhealth.uscteensver1.pages;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,7 +85,7 @@ public class AppPage implements OnGestureListener {
 		mHandler = handler;
 	}	
 	
-	protected void onSizeChanged(int width, int height) {
+	public void onSizeChanged(int width, int height) {
 		mWidth  = width;
 		mHeight = height;
 		
@@ -98,7 +98,7 @@ public class AppPage implements OnGestureListener {
 		}
 	}
 	
-	protected void onDraw(Canvas c) {
+	public void onDraw(Canvas c) {
 		for (AppObject obj : mObjects) {
 			obj.onDraw(c);
 		}

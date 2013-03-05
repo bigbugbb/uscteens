@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.main;
+package edu.neu.android.mhealth.uscteensver1.pages;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class HomePage extends AppPage implements OnClickListener {
 	
 	protected View mView = null;
 
-	protected HomePage(Context context, View view, Handler handler) {
+	public HomePage(Context context, View view, Handler handler) {
 		super(context, handler);
 		mView = view;		
 	}
@@ -81,7 +81,7 @@ public class HomePage extends AppPage implements OnClickListener {
 	}
 
 	@Override
-	protected void onSizeChanged(int width, int height) {
+	public void onSizeChanged(int width, int height) {
 		// TODO Auto-generated method stub
 		super.onSizeChanged(width, height);
 	}

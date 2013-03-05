@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.main;
+package edu.neu.android.mhealth.uscteensver1.pages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	
 	protected boolean mScrolling = false; // indicate whether we are scrolling the chunk
 	
-	protected MainPage(Context context, View view, Handler handler) {
+	public MainPage(Context context, View view, Handler handler) {
 		super(context, handler);				
 		mView = view;
 		mChunkManager = new ChunkManager(context, DataSource.getInstance(null));
@@ -156,13 +156,13 @@ public class MainPage extends AppPage implements OnClickListener,
 	}
 
 	@Override
-	protected void onSizeChanged(int width, int height) {
+	public void onSizeChanged(int width, int height) {
 		// TODO Auto-generated method stub
 		super.onSizeChanged(width, height);		
 	}
 
 	@Override
-	protected void onDraw(Canvas c) {		
+	public void onDraw(Canvas c) {		
 		for (AppObject obj : mObjects) {
 			obj.onDraw(c);
 		}

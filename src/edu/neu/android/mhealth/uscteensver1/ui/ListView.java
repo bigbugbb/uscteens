@@ -12,7 +12,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Paint.Style;
 import android.graphics.Paint;
 import android.view.MotionEvent;
-import edu.neu.android.mhealth.uscteensver1.main.AppObject;
+import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 
 
 public class ListView extends AppObject {

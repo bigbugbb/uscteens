@@ -1,6 +1,9 @@
-package edu.neu.android.mhealth.uscteensver1.main;
+package edu.neu.android.mhealth.uscteensver1.views;
 
 import java.util.List;
+
+import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
+import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 
 import android.content.Context;
 import android.os.Handler;

@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.main;
+package edu.neu.android.mhealth.uscteensver1.pages;
 
 public class AppEvent {
 	public static final int EVENT_STATE   = 0;

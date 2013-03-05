@@ -3,7 +3,7 @@ package edu.neu.android.mhealth.uscteensver1.ui;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.main.AppObject;
+import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 
 public class HomeTitle extends AppObject {
 

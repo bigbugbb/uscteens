@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.main;
+package edu.neu.android.mhealth.uscteensver1.pages;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 	
 	protected View mView = null;
 
-	protected WeekdayPage(Context context, View view, Handler handler) {
+	public WeekdayPage(Context context, View view, Handler handler) {
 		super(context, handler);
 		mView = view;		
 	}
@@ -194,12 +194,12 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 	}
 
 	@Override
-	protected void onSizeChanged(int width, int height) {		
+	public void onSizeChanged(int width, int height) {		
 		super.onSizeChanged(width, height);
 	}
 
 	@Override
-	protected void onDraw(Canvas c) {
+	public void onDraw(Canvas c) {
 		for (AppObject obj : mObjects) {
 			obj.onDraw(c);
 		}

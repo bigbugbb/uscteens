@@ -15,7 +15,7 @@ import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
-import edu.neu.android.mhealth.uscteensver1.main.AppObject;
+import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 
 
 public class MotionGraph extends AppObject {

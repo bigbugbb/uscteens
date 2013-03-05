@@ -261,7 +261,7 @@
 		</activity>
 		
 		<activity
-            android:name="edu.neu.android.mhealth.uscteensver1.main.MainActivity"
+            android:name="edu.neu.android.mhealth.uscteensver1.activities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
@@ -287,7 +287,7 @@
             android:theme="@style/DialogTheme">
 		</activity>
 		
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.main.SetupTeenGameActivity"
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.SetupTeenGameActivity"
 			android:screenOrientation="landscape"
 		    android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden"

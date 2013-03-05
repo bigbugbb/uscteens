@@ -1,5 +1,7 @@
-package edu.neu.android.mhealth.uscteensver1.main;
+package edu.neu.android.mhealth.uscteensver1.threads;
 
+import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
+import edu.neu.android.mhealth.uscteensver1.views.MainView;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.util.Log;

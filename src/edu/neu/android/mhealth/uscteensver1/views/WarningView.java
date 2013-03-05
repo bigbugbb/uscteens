@@ -1,11 +1,11 @@
-package edu.neu.android.mhealth.uscteensver1.dialog;
+package edu.neu.android.mhealth.uscteensver1.views;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.R.drawable;
-import edu.neu.android.mhealth.uscteensver1.main.AppScale;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -81,15 +81,15 @@ public class WarningView extends View {
 		mBackTxtPt.y = mBackArea.bottom - mAppScale.doScaleH(52);
 	}
 	
-	protected void setActions(ArrayList<String> actions) {
+	public void setActions(ArrayList<String> actions) {
 		mActions = actions;		
 	}
 	
-	protected void setOnBackClickedListener(OnBackClickedListener listener) {
+	public void setOnBackClickedListener(OnBackClickedListener listener) {
 		mBackListener = listener;
 	}
 	
-	protected void setOnItemClickListener(OnItemClickListener listener) {
+	public void setOnItemClickListener(OnItemClickListener listener) {
 		mItemListener = listener;
 	}
 

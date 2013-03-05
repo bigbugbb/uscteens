@@ -3,7 +3,8 @@ package edu.neu.android.mhealth.uscteensver1.dialog;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.R.id;
 import edu.neu.android.mhealth.uscteensver1.R.layout;
-import edu.neu.android.mhealth.uscteensver1.dialog.ActionsView.OnBackClickedListener;
+import edu.neu.android.mhealth.uscteensver1.views.ActionsView;
+import edu.neu.android.mhealth.uscteensver1.views.ActionsView.OnBackClickedListener;
 
 import android.app.Activity;
 import android.content.Intent;
