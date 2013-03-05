@@ -41,7 +41,7 @@ public class SetupTeenGameActivity extends BaseActivity {
 	private static final String TAG = "SetupTeenGameActivity"; 
 	public static final String KEY_RESCUE_INHALER = "_KEY_RESCUE_INHALER";
 	private Button startService;
-	private Button setupStartDate;
+	private Button setStartDate;
 	private Button randomEMA;
 	private Button csEMA;
 	private Button finishStudy;
@@ -129,11 +129,11 @@ public class SetupTeenGameActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, TAG);
 		setContentView(R.layout.activity_setup);
-		setupStartDate = (Button) findViewById(R.id.setstartdate);
-		startService   = (Button) findViewById(R.id.startservice);		
-		csEMA          = (Button) findViewById(R.id.csema);
-		randomEMA      = (Button) findViewById(R.id.randomema);
-		finishStudy    = (Button) findViewById(R.id.buttonfinishstudy);
+		setStartDate = (Button) findViewById(R.id.setstartdate);
+		startService = (Button) findViewById(R.id.startservice);		
+		csEMA        = (Button) findViewById(R.id.csema);
+		randomEMA    = (Button) findViewById(R.id.randomema);
+		finishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
 //		uploadLogs = (Button) findViewById(R.id.buttonuploadlogs);
 
 		finishStudy.setOnClickListener(new OnClickListener() {
@@ -148,18 +148,16 @@ public class SetupTeenGameActivity extends BaseActivity {
 			}
 		});
 
-//		uploadLogs.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				
-//				Log.i(TAG, "Send all queued files");
-//				displayToastMessage("Sending logs files right now! (This may take a while)");
-//				uploadLogs.setEnabled(false);
-//				new SendLogFilesTask().execute();
-//			}
-//		});
+		setStartDate.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent i = new Intent(getApplicationContext(), SetStartDateActivity.class);
+				startActivity(i);				
+			}
+		});
+		
 		startService.setOnClickListener(new OnClickListener() {
 
 			@Override
