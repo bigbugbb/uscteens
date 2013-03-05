@@ -20,6 +20,9 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.wocketslib.support.DataStorage;
+
 import android.content.Context;
 import android.widget.Toast;
 
@@ -42,13 +45,14 @@ public class DataSource {
 	
 	protected DataSource(Context context) {
 		mContext = context;
+		mConfig  = new Configuration(context);
 	}
 		
 	public static final int PIXEL_SCALE = 2;	
 	public static final String PATH_PREFIX = "/sdcard/TestData/";
 	
 	// configuration read from xml
-	protected Configuration mConfig = new Configuration();
+	protected Configuration mConfig = null;
 	// raw chunk data
 	protected RawChunkList mRawChkList = new RawChunkList();
 	// raw activity data
@@ -71,26 +75,28 @@ public class DataSource {
 		
 	}
 	
-	public boolean isInitialized() {
-		File configFile = new File(PATH_PREFIX + "config.xml");
-		if (!configFile.exists()) {
-			mInitialized = false; 
-		}
-		return mInitialized;
+	public boolean hasStartDate() {
+//		File configFile = new File(PATH_PREFIX + "config.xml");
+//		if (!configFile.exists()) {
+//			mInitialized = false; 
+//		}
+//		return mInitialized;
+		String startDate = DataStorage.GetValueString(mContext, USCTeensGlobals.START_DATE, "");
+		return startDate.compareTo("") != 0;
 	}
 	
-	public boolean initialize() {		
-		if (!mInitialized) {
-			mInitialized = mConfig.load(PATH_PREFIX + "config.xml");
-		}
-		// check whether the config file exists, in case the it is deleted by user
-		File configFile = new File(PATH_PREFIX + "config.xml");
-		if (!configFile.exists()) {
-			mInitialized = false; 
-		}
-		
-		return mInitialized;
-	}
+//	public boolean initialize() {		
+//		if (!mInitialized) {
+//			mInitialized = mConfig.load(PATH_PREFIX + "config.xml");
+//		}
+//		// check whether the config file exists, in case the it is deleted by user
+//		File configFile = new File(PATH_PREFIX + "config.xml");
+//		if (!configFile.exists()) {
+//			mInitialized = false; 
+//		}
+//		
+//		return mInitialized;
+//	}
 		
 	/**
 	 * 	 

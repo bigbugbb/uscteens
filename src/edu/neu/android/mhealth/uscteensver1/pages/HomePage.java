@@ -2,12 +2,14 @@ package edu.neu.android.mhealth.uscteensver1.pages;
 
 import java.util.List;
 
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.ui.BackgroundHome;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonBegin;
 import edu.neu.android.mhealth.uscteensver1.ui.HomeTitle;
 import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.TextViewSetup;
+import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
 
 import android.content.Context;
@@ -56,6 +58,10 @@ public class HomePage extends AppPage implements OnClickListener {
 			mObjects.add(mTextView);
 			mTextView.setID(SETUP);
 			mTextView.setOnClickListener(this);
+			String startDate = DataStorage.GetValueString(mContext, USCTeensGlobals.START_DATE, "");
+			if (startDate.compareTo("") == 0) {
+				mTextView.setVisible(true);
+			}
 		}
 		// order by Z
 		orderByZ(mObjects);
@@ -96,11 +102,6 @@ public class HomePage extends AppPage implements OnClickListener {
 	        msg.what = AppCmd.BEGIN;
 	        mHandler.sendMessage(msg);
 			break;
-//		case SETUP:
-//			msg = mHandler.obtainMessage();
-//			msg.what = AppCmd.SETUP;
-//			mHandler.sendMessage(msg);
-//			break;
 		default:
 			break;
 		}

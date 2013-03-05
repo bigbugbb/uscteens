@@ -126,7 +126,7 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 	}
 	
 	public void resume() {
-		Configuration config = DataSource.getInstance(null).getConfiguration();
+		Configuration config = DataSource.getInstance(mContext).getConfiguration();
 		String startDate = config.getStartDate();
 		// get current date in String
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

@@ -99,10 +99,10 @@ public class SetupTeenGameActivity extends BaseActivity {
 		}
 	}
 
-//	/**
-//	 * Set the update button on/off depending on if the code detects that the software
-//	 * is or is not at the latest version on the Android Market. 
-//	 */
+	/**
+	 * Set the update button on/off depending on if the code detects that the software
+	 * is or is not at the latest version on the Android Market. 
+	 */
 //	private class SendLogFilesTask extends AsyncTask<Void, Void, Boolean> 
 //	{ 
 //		@Override

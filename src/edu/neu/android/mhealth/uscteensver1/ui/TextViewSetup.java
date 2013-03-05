@@ -1,7 +1,9 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -17,10 +19,11 @@ public class TextViewSetup extends TextView {
 		mPaintTxt.setColor(Color.RED);
 		mPaintTxt.setTextAlign(Align.CENTER);
 		mPaintBoard.setStrokeWidth(3);
-		//mText = res.getString(R.string.need_setup);
-		if (FileHelper.isFileExists(DataSource.PATH_PREFIX + "config.xml")) {
-			setVisible(false);
-		}
+		setVisible(false);
+		//mText = res.getString(R.string.need_setup);		
+//		if (FileHelper.isFileExists(DataSource.PATH_PREFIX + "config.xml")) {
+//			setVisible(false);
+//		}
 	}
 
 	@Override

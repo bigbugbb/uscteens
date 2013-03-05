@@ -53,7 +53,7 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 	protected AppPage mCurPage = null;
 	protected List<AppPage> mPages = new ArrayList<AppPage>();
 	// data manager
-	protected DataSource mDataSource = DataSource.getInstance(this);
+	protected DataSource mDataSource = null;
 	// special password for secret behaviors
 	private PasswordChecker pwStaff = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
 	private PasswordChecker pwSubject = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
@@ -66,7 +66,9 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, "MainActivity");
-		setContentView(R.layout.activity_main);								
+		setContentView(R.layout.activity_main);	
+		
+		mDataSource = DataSource.getInstance(getApplicationContext());
 		
 		// send a broadcast to start the monitor service
 		startMonitor();
@@ -143,10 +145,10 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 
 	private void initPages() {		
 		// only three pages now		
-		mPages.add(new HomePage(this, mMainView, mHandler));
-		mPages.add(new WeekdayPage(this, mMainView, mHandler));
-		mPages.add(new MainPage(this, mMainView, mHandler));
-		mPages.add(new WinPage(this, mMainView, mHandler));
+		mPages.add(new HomePage(getApplicationContext(), mMainView, mHandler));
+		mPages.add(new WeekdayPage(getApplicationContext(), mMainView, mHandler));
+		mPages.add(new MainPage(getApplicationContext(), mMainView, mHandler));
+		mPages.add(new WinPage(getApplicationContext(), mMainView, mHandler));
 		mCurPage = mPages.get(indexOfPage(PageType.HOME_PAGE));
 		// set pages to main view
 		mMainView.setPages(mPages);		
@@ -211,14 +213,6 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 		super.onResume();	
 		mMainView.onResume();
 		mCurPage.resume();
-		
-		if (!mDataSource.initialize()) {
-			// if the initialize fail, it means the config file does not exist, so create it and initialize again		
-//			Intent i = new Intent(getApplicationContext(), ConfigDialog.class);			
-//			startActivityForResult(i, AppCmd.CONFIG);
-			//mInputMethodManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-			//mInputMethodManager.showSoftInput(arg0, 0);
-		}
 	}
 
 	@Override
@@ -242,7 +236,7 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 			
         	switch (msg.what) {   
         	case AppCmd.BEGIN:        
-        		if (mDataSource.isInitialized()) {
+        		if (mDataSource.hasStartDate()) {
         			switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
         		} else {
         			Toast.makeText(getApplicationContext(), "Fail to do the configuration!", Toast.LENGTH_SHORT);
