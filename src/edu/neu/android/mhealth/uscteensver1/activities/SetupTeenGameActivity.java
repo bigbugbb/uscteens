@@ -38,15 +38,13 @@ import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.Util;
 
 public class SetupTeenGameActivity extends BaseActivity {
-	private static final String TAG = "SetupInhalerActivity"; 
+	private static final String TAG = "SetupTeenGameActivity"; 
 	public static final String KEY_RESCUE_INHALER = "_KEY_RESCUE_INHALER";
 	private Button startService;
-	private Button checkInhalers;
-	private Button rescueInhaler;
+	private Button setupStartDate;
 	private Button randomEMA;
 	private Button csEMA;
 	private Button finishStudy;
-//	private Button uploadLogs;
 	private AlertDialog setupRescueInhaler = null;
 	private LinearLayout textDisplay = null;
 	private ScrollView scrollView = null;
@@ -129,14 +127,13 @@ public class SetupTeenGameActivity extends BaseActivity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState, TAG);
 		setContentView(R.layout.activity_setup);
-		startService = (Button) findViewById(R.id.startservice);
-		checkInhalers = (Button) findViewById(R.id.checkinhalers);
-		rescueInhaler = (Button) findViewById(R.id.rescueinhaler);
-		randomEMA = (Button) findViewById(R.id.randomema);
-		csEMA = (Button) findViewById(R.id.csema);
-		finishStudy = (Button) findViewById(R.id.buttonfinishstudy);
+		setupStartDate = (Button) findViewById(R.id.setstartdate);
+		startService   = (Button) findViewById(R.id.startservice);		
+		csEMA          = (Button) findViewById(R.id.csema);
+		randomEMA      = (Button) findViewById(R.id.randomema);
+		finishStudy    = (Button) findViewById(R.id.buttonfinishstudy);
 //		uploadLogs = (Button) findViewById(R.id.buttonuploadlogs);
 
 		finishStudy.setOnClickListener(new OnClickListener() {
@@ -175,32 +172,32 @@ public class SetupTeenGameActivity extends BaseActivity {
 						"Starting the service...", Toast.LENGTH_LONG).show();
 			}
 		});
-		checkInhalers.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				DataStore.init(getApplicationContext());
-
-				String asthmaSensors = "Asthmapolis sensors found: \n";
-				for (int x = 0; x < DataStore.mSensors.size(); x++) {
-					if (DataStore.mSensors.get(x).mType == Sensor.ASTHMA) {
-						asthmaSensors = asthmaSensors
-								+ DataStore.mSensors.get(x).mAddress + "\n";
-					}
-				}
-				Toast.makeText(getApplicationContext(), asthmaSensors,
-						Toast.LENGTH_LONG).show();
-			}
-		});
-
-		rescueInhaler.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				new DetectInhalerAsyncTask().execute(null);
-			}
-		});
+//		checkInhalers.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				DataStore.init(getApplicationContext());
+//
+//				String asthmaSensors = "Asthmapolis sensors found: \n";
+//				for (int x = 0; x < DataStore.mSensors.size(); x++) {
+//					if (DataStore.mSensors.get(x).mType == Sensor.ASTHMA) {
+//						asthmaSensors = asthmaSensors
+//								+ DataStore.mSensors.get(x).mAddress + "\n";
+//					}
+//				}
+//				Toast.makeText(getApplicationContext(), asthmaSensors,
+//						Toast.LENGTH_LONG).show();
+//			}
+//		});
+//
+//		rescueInhaler.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				new DetectInhalerAsyncTask().execute(null);
+//			}
+//		});
 
 		randomEMA.setOnClickListener(new OnClickListener() {
 

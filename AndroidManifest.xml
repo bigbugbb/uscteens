@@ -287,11 +287,16 @@
             android:theme="@style/DialogTheme">
 		</activity>
 		
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.SetupTeenGameActivity"
-			android:screenOrientation="landscape"
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.SetupTeenGameActivity"			
 		    android:launchMode="singleTop"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/DialogTheme">
+            android:excludeFromRecents="true"
+			android:screenOrientation="portrait">
+		</activity>
+		
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.SetStartDateActivity"			
+		    android:launchMode="singleTop"
+            android:excludeFromRecents="true"
+			android:screenOrientation="portrait">
 		</activity>
 		
 	</application>	

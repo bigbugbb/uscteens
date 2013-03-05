@@ -23,6 +23,7 @@ import edu.neu.android.mhealth.uscteensver1.views.MainView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
+import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 import android.hardware.SensorManager;
@@ -44,9 +45,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-public class MainActivity extends FragmentActivity implements OnTouchListener {
+public class MainActivity extends MyBaseActivity implements OnTouchListener {
 	
-	protected final static String TAG = "MainActivity";
 	protected MainView 		mMainView 	   = null;
 //	protected SensorManager mSensorManager = null;	
 	// all of the pages
@@ -64,8 +64,8 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState, "MainActivity");
 		setContentView(R.layout.activity_main);								
 		
 		// send a broadcast to start the monitor service
@@ -83,7 +83,7 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 	}
 	
 	@Override
-	protected void onDestroy() {		
+	public void onDestroy() {		
 		for (AppPage page : mPages) {
 			try {
 				page.release();				
@@ -200,14 +200,14 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 	}
 	
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		mCurPage.pause();
 		mMainView.onPause();
 		super.onPause();		
 	}
 
 	@Override
-	protected void onResume() {		
+	public void onResume() {		
 		super.onResume();	
 		mMainView.onResume();
 		mCurPage.resume();
@@ -222,14 +222,14 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 	}
 
 	@Override
-	protected void onStart() {
+	public void onStart() {
 		mCurPage.start();
 		mMainView.onStart(mCurPage);
 		super.onStart();
 	}
 
 	@Override
-	protected void onStop() {		
+	public void onStop() {		
 		mMainView.onStop();
 		mCurPage.stop();
 		super.onStop();
