@@ -1,7 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.main;
 
 public class AppCmd {
-	public final static int CONFIG   = 0;
+	public final static int SETUP    = 0;
 	public final static int BEGIN    = 1;
 	public final static int BACK     = 2;
 	public final static int NEXT     = 3;

@@ -19,7 +19,8 @@ public class AppObject {
 	public final static int TITLE	   = 2;
 	public final static int CHUNK	   = 3;
 	public final static int BUTTON	   = 4;
-	public final static int SLIDERBAR  = 5;
+	public final static int TEXTVIEW   = 5;
+	public final static int SLIDERBAR  = 6;
 	
 	protected float mX = 0;
 	protected float mY = 0;
@@ -262,7 +263,8 @@ public class AppObject {
 		public static final int TITLE	   = 1;
 		public static final int CHUNK	   = 2;
 		public static final int BUTTON	   = 4;
-		public static final int SLIDERBAR  = 4;
+		public static final int TEXTVIEW   = 4;
+		public static final int SLIDERBAR  = 4;		
 	}
 	
 	public boolean contains(float x, float y) {

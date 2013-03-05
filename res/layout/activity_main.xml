@@ -4,7 +4,7 @@
 	android:layout_height="match_parent"	
 	android:background="@drawable/background_home" >	
 	
-    <edu.neu.android.mhealth.uscteensver1.MainView
+    <edu.neu.android.mhealth.uscteensver1.main.MainView
 	    android:id="@+id/view_main"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent" />

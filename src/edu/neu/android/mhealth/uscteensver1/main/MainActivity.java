@@ -3,17 +3,20 @@ package edu.neu.android.mhealth.uscteensver1.main;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.neu.android.mhealth.uscteensver1.LibraryGlobals;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.R.id;
-import edu.neu.android.mhealth.uscteensver1.R.layout;
-import edu.neu.android.mhealth.uscteensver1.R.menu;
 import edu.neu.android.mhealth.uscteensver1.broadcastreceivers.TeensBroadcastReceiver;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.HomePageDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.WarningDialog;
+import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
+import edu.neu.android.wocketslib.utils.FileHelper;
+import edu.neu.android.wocketslib.utils.PasswordChecker;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,14 +25,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements OnTouchListener {
@@ -42,6 +44,10 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 	protected List<AppPage> mPages = new ArrayList<AppPage>();
 	// data manager
 	protected DataSource mDataSource = DataSource.getInstance(this);
+	// special password for secret behaviors
+	private PasswordChecker pwStaff = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
+	private PasswordChecker pwSubject = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
+	private PasswordChecker pwUninstall = new PasswordChecker("uninstall");
 	
 	protected enum PageType {  
 		HOME_PAGE, WEEKDAY_PAGE, MAIN_PAGE, WIN_PAGE 
@@ -197,11 +203,11 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 		mCurPage.resume();
 		
 		if (!mDataSource.initialize()) {
-			// if the initialize fail, it means the config file does not exist, so create it and initialize again
-			
-			
+			// if the initialize fail, it means the config file does not exist, so create it and initialize again		
 //			Intent i = new Intent(getApplicationContext(), ConfigDialog.class);			
 //			startActivityForResult(i, AppCmd.CONFIG);
+			//mInputMethodManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+			//mInputMethodManager.showSoftInput(arg0, 0);
 		}
 	}
 
@@ -225,11 +231,6 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 			Intent i = null;		
 			
         	switch (msg.what) {   
-//        	case AppCmd.CONFIG:
-//        		if (!mDataSource.initialize()) {
-//        			Log.e(TAG, "Fail to config the datasource!");
-//        		}
-//        		break;
         	case AppCmd.BEGIN:        
         		if (mDataSource.isInitialized()) {
         			switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
@@ -278,8 +279,8 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
     
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		switch (keyCode) {
-		case KeyEvent.KEYCODE_BACK:		
+    	
+		if (keyCode == KeyEvent.KEYCODE_BACK) {		
 			if (mCurPage == mPages.get(0)) { // home page
 				HomePageDialog dialog = new HomePageDialog();
 				dialog.show(getSupportFragmentManager(), "HomePageDialog");
@@ -289,6 +290,23 @@ public class MainActivity extends FragmentActivity implements OnTouchListener {
 				switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
 			}
 			return true;
+		} else if (keyCode == KeyEvent.KEYCODE_MENU) {
+			if (!FileHelper.isFileExists(DataSource.PATH_PREFIX + "config.xml")) {
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.toggleSoftInput(0, 0);
+			}	
+		}
+		
+		if (pwStaff.isMatch(keyCode)) {
+			Intent i = new Intent(this, StaffSetupActivity.class);
+			startActivity(i);
+		} else if (pwSubject.isMatch(keyCode)) {
+			Intent i = new Intent(this, SetupTeenGameActivity.class);
+			startActivity(i);
+		} else if (pwUninstall.isMatch(keyCode)) {
+			Uri packageUri = Uri.parse("package:" + Globals.PACKAGE_NAME);
+			Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageUri);
+			startActivity(uninstallIntent);
 		}
 		
 		return super.onKeyDown(keyCode, event);

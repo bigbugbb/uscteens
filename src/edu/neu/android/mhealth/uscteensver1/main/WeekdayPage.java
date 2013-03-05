@@ -16,7 +16,6 @@ import edu.neu.android.mhealth.uscteensver1.ui.ButtonReturn;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListViewWeek;
-import edu.neu.android.mhealth.uscteensver1.ui.CustomButton.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
@@ -30,7 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-public class WeekdayPage extends AppPage implements OnClickListener,
+public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.uscteensver1.ui.OnClickListener,
 													OnReachedEndListener,
 													OnItemClickListener,
 													OnListViewScrollingListener {

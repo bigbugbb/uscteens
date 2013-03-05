@@ -37,10 +37,6 @@ public class CustomButton extends AppObject {
 	public void setOnClickListener(OnClickListener listener) {
 		mListener = listener;
 	}	
-	
-	public interface OnClickListener {
-		void onClick(AppObject obj);
-	}
 
 	@Override
 	public boolean contains(float x, float y) {

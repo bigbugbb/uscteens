@@ -11,7 +11,6 @@ import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleLis
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.Actions;
 import edu.neu.android.mhealth.uscteensver1.ui.*;
-import edu.neu.android.mhealth.uscteensver1.ui.CustomButton.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph.OnGraphMovedListener;
 import edu.neu.android.mhealth.uscteensver1.ui.SlideBar.OnSlideBarChangeListener;
 import android.content.Context;

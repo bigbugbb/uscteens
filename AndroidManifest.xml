@@ -261,11 +261,10 @@
 		</activity>
 		
 		<activity
-            android:name="edu.neu.android.mhealth.uscteensver1.MainActivity"
+            android:name="edu.neu.android.mhealth.uscteensver1.main.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
-            android:configChanges="orientation|keyboardHidden"
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -274,21 +273,21 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.ActionsDialog"
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog"
 			android:screenOrientation="landscape"
 		    android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/DialogTheme">
 		</activity>
 		
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.WarningDialog"
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.dialog.WarningDialog"
 			android:screenOrientation="landscape"
 		    android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/DialogTheme">
 		</activity>
 		
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.ConfigDialog"
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.main.SetupTeenGameActivity"
 			android:screenOrientation="landscape"
 		    android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden"

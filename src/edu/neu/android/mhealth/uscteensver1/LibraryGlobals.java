@@ -81,7 +81,7 @@ public class LibraryGlobals {
 		Globals.URL_FILE_UPLOAD_SERVLET = Globals.DEFAULT_SERVER_ADDR + "FileUploader/Commonsfileuploadservlet";
 		Globals.URL_GET_WOCKETS_DETAIL = Globals.DEFAULT_SERVER_ADDR + "Wockets/android/getWocketsDetail.html?pId=6809";		
 		
-		Globals.PW_STAFF_PASSWORD = "mytest";
+		Globals.PW_STAFF_PASSWORD = "uscteen";
 		Globals.PW_SUBJECT_PASSWORD = "setup";
 //		Globals.PW_STATDOWN_PASSWORD = "statdb";
 //		Globals.PW_STATDOWN_PASSWORD1 = "stattest";

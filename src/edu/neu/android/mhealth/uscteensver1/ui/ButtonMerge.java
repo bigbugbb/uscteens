@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
-import edu.neu.android.mhealth.uscteensver1.ui.CustomButton.OnClickListener;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

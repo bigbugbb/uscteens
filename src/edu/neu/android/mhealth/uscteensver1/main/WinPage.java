@@ -7,7 +7,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.BackgroundWin;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonBegin;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonReward;
 import edu.neu.android.mhealth.uscteensver1.ui.HomeTitle;
-import edu.neu.android.mhealth.uscteensver1.ui.CustomButton.OnClickListener;
+import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;

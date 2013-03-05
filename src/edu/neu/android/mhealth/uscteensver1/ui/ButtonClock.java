@@ -11,12 +11,11 @@ import android.graphics.Paint;
 import android.graphics.Bitmap.Config;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
-import android.util.Log;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
-import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.ui.CustomButton.OnClickListener;
+
+
 
 public class ButtonClock extends ChunkButton {
 

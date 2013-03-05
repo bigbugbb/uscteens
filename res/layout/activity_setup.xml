@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?pageBackground"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+   <TextView
+        style="?textTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Setup" />
+	
+	<View
+        style="?listDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="2sp" />
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        
+        <TableLayout
+            android:id="@+id/tableLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center" >
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_horizontal" 
+            	android:layout_marginTop="40dp">
+
+                <Button
+                    android:id="@+id/invisibleButton"
+                    style="@style/test"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="3pt"
+                    android:layout_weight="1"
+                    android:shadowDx="1"
+                    android:shadowDy="-1"
+                    android:shadowRadius="1.5"
+                    android:visibility="invisible"
+                    android:clickable="false"/>
+            </TableRow>
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_horizontal" 
+            	android:layout_marginTop="40dp">
+
+                <Button
+                    android:id="@+id/startservice"
+                    style="@style/test"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="3pt"
+                    android:layout_weight="1"
+                    android:shadowDx="1"
+                    android:shadowDy="-1"
+                    android:shadowRadius="1.5"
+                    android:text="Start sensor service"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_horizontal" >
+
+                <Button
+                    android:id="@+id/checkinhalers"
+                    style="@style/test"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="3pt"
+                    android:layout_weight="1"
+                    android:shadowDx="1"
+                    android:shadowDy="-1"
+                    android:shadowRadius="1.5"
+                    android:text="Check for Asthmopolis sensors"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow3"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_horizontal" >
+
+                <Button
+                    android:id="@+id/rescueinhaler"
+                    style="@style/test"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="3pt"
+                    android:layout_weight="1"
+                    android:shadowDx="1"
+                    android:shadowDy="-1"
+                    android:shadowRadius="1.5"
+                    android:text="Determine rescue inhaler"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow4"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_horizontal" >
+
+                <Button
+                    android:id="@+id/randomema"
+                    style="@style/test"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="3pt"
+                    android:layout_weight="1"
+                    android:shadowDx="1"
+                    android:shadowDy="-1"
+                    android:shadowRadius="1.5"
+                    android:text="Test Random EMA Survey"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow5"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_horizontal" >
+
+                <Button
+                    android:id="@+id/csema"
+                    style="@style/test"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="3pt"
+                    android:layout_weight="1"
+                    android:shadowDx="1"
+                    android:shadowDy="-1"
+                    android:shadowRadius="1.5"
+                    android:text="Test CS EMA Survey"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow6"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_horizontal" >
+
+                <Button
+                    android:id="@+id/buttonfinishstudy"
+                    style="@style/test"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="3pt"
+                    android:layout_weight="1"
+                    android:shadowDx="1"
+                    android:shadowDy="-1"
+                    android:shadowRadius="1.5"
+                    android:text="Finish Study"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+            </TableRow>
+
+<!--             <TableRow -->
+<!--                 android:id="@+id/tableRow7" -->
+<!--                 android:layout_width="fill_parent" -->
+<!--                 android:layout_height="wrap_content" -->
+<!--                 android:baselineAligned="false" -->
+<!--                 android:gravity="center_horizontal" > -->
+
+<!--                 <Button -->
+<!--                     android:id="@+id/buttonuploadlogs" -->
+<!--                     style="@style/test" -->
+<!--                     android:layout_width="120dp" -->
+<!--                     android:layout_height="60dp" -->
+<!--                     android:layout_margin="3pt" -->
+<!--                     android:layout_weight="1" -->
+<!--                     android:shadowDx="1" -->
+<!--                     android:shadowDy="-1" -->
+<!--                     android:shadowRadius="1.5" -->
+<!--                     android:text="Upload logs" -->
+<!--                     android:textColor="@color/black" -->
+<!--                     android:textSize="18dp" /> -->
+<!--             </TableRow> -->
+        </TableLayout>
+        <!-- The buttons at the bottom of the screen. -->
+
+    </ScrollView>
+
+</LinearLayout>
