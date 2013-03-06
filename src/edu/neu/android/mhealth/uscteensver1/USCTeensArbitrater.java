@@ -96,9 +96,8 @@ public class USCTeensArbitrater extends Arbitrater {
 	private ArrayList<Integer> someTasks = new ArrayList<Integer>();
 
 	// TODO change to private
-	private void PromptApp(Context aContext, int aKey, boolean isAudible,
-			boolean isPostponed) {
-/*
+	private void PromptApp(Context aContext, int aKey, boolean isAudible, boolean isPostponed) {
+
 		Log.i(TAG, "prompt: " + aKey + ",audible: " + isAudible
 				+ ",postponed: " + isPostponed);
 
@@ -107,8 +106,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		// Will be 0 if none
 		long lastScheduledPromptTime = getLastScheduledPromptTime(
 				System.currentTimeMillis(), somePromptTimes);
-		boolean isReprompt = (System.currentTimeMillis() - lastScheduledPromptTime) > 60 * 1000 ? true
-				: false;
+		boolean isReprompt = (System.currentTimeMillis() - lastScheduledPromptTime) > 60 * 1000;
 		SurveyPromptEvent promptEvent = new SurveyPromptEvent(
 				lastScheduledPromptTime, System.currentTimeMillis());
 		String msg = "";
@@ -134,40 +132,40 @@ public class USCTeensArbitrater extends Arbitrater {
 		String surveyName = null;
 		switch (aKey) {
 		case KEY_CS_EMA:
-			if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-				classType = CSAsthmaSurvey.CS_EMA_DEFAULT;
-			} else {
-				classType = CSAsthmaSurvey.CS_EMA_OPTIONAL;
-			}
-			surveyName = CSAsthmaSurvey.class.getCanonicalName();
-			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, true,
-					PhonePrompter.CHIMES_NAMBOKU1,
-					PhoneVibrator.VIBRATE_INTENSE);
-			String rescueInhaler = SetupInhalerActivity
-					.rescueInhalerMAC(aContext);
-			if (inhaler != null) {
-				if (rescueInhaler != null && inhaler.equals(rescueInhaler))
-					promptEvent.setPromptType("Rescue inhaler");
-				else
-					promptEvent.setPromptType("Inhaler");
-			} else
-				promptEvent.setPromptType("Inhaler");// TODO
+//			if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
+//				classType = CSAsthmaSurvey.CS_EMA_DEFAULT;
+//			} else {
+//				classType = CSAsthmaSurvey.CS_EMA_OPTIONAL;
+//			}
+//			surveyName = CSAsthmaSurvey.class.getCanonicalName();
+//			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, true,
+//					PhonePrompter.CHIMES_NAMBOKU1,
+//					PhoneVibrator.VIBRATE_INTENSE);
+//			String rescueInhaler = SetupInhalerActivity
+//					.rescueInhalerMAC(aContext);
+//			if (inhaler != null) {
+//				if (rescueInhaler != null && inhaler.equals(rescueInhaler))
+//					promptEvent.setPromptType("Rescue inhaler");
+//				else
+//					promptEvent.setPromptType("Inhaler");
+//			} else
+//				promptEvent.setPromptType("Inhaler");// TODO
 			break;
 		case KEY_RANDOM_EMA:
-			if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-				classType = RandomAsthmaSurveyQuestionSet.RANDOM_EMA_DEFAULT;
-			} else {
-				classType = RandomAsthmaSurveyQuestionSet.RANDOM_EMA_OPTIONAL;
-			}
-			surveyName = RandomAsthmaSurveyQuestionSet.class.getCanonicalName();
-			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, isAudible,
-					PhonePrompter.CHIMES_HIKARI, PhoneVibrator.VIBRATE_INTENSE);
-			promptEvent.setPromptType("Random");
-			long[] schedule = DataStorage.getPromptTimesKey(aContext,
-					KEY_SCHEDULE);
-			if (schedule != null && schedule.length >= 3)
-				promptEvent.setPromptSchedule(lastScheduledPromptTime,
-						(int) schedule[0], (int) schedule[1], schedule[2]);
+//			if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
+//				classType = RandomAsthmaSurveyQuestionSet.RANDOM_EMA_DEFAULT;
+//			} else {
+//				classType = RandomAsthmaSurveyQuestionSet.RANDOM_EMA_OPTIONAL;
+//			}
+//			surveyName = RandomAsthmaSurveyQuestionSet.class.getCanonicalName();
+//			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, isAudible,
+//					PhonePrompter.CHIMES_HIKARI, PhoneVibrator.VIBRATE_INTENSE);
+//			promptEvent.setPromptType("Random");
+//			long[] schedule = DataStorage.getPromptTimesKey(aContext,
+//					KEY_SCHEDULE);
+//			if (schedule != null && schedule.length >= 3)
+//				promptEvent.setPromptSchedule(lastScheduledPromptTime,
+//						(int) schedule[0], (int) schedule[1], schedule[2]);
 			break;
 		}
 		if (msg.toLowerCase().contains("silence"))
@@ -202,7 +200,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// }
-*/
+
 	}
 
 	public void getAndPrintPromptingSchedule() {
@@ -584,101 +582,98 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	public void doArbitrate(boolean isNewSoftwareVersion) {
 
-		int i = 0;
-		i += 100;
-		i += 100;
-//		// Debug: save all Asthmapolis and related messages to SD card
-//		// Only for testing purpose
-//		saveRecordsInLogcat(false);
-//
-//		/**
-//		 * This is the app that decides what to do in terms of prompting each
-//		 * time it is called.
-//		 */
-//
-//		boolean isInhalerUsed = false;
-//		inhaler = null;
-//		inhalerUseTime = 0;
-//		String inhalerAddress = "";
-//		for (int x = 0; x < DataStore.mSensors.size(); x++) {
-//			if (DataStore.mSensors.get(x).mType == Sensor.ASTHMA) {
-//				inhalerAddress = DataStore.mSensors.get(x).mAddress;
-//				String nameColon = Util.insertColons(inhalerAddress);
-//				String nameUnder = Util.insertUnderscores(inhalerAddress);
-//
-//				if ((LogcatReader.isInLogcat(nameColon, false))
-//						|| (LogcatReader.isInLogcat(nameUnder, false))) {
-//
-//					// Rule out the case of a reboot of the phone
-//					if (LogcatReader.isInLogcat(
-//							"updateDeviceServiceChannelCache("
-//									+ inhalerAddress.substring(0, 2), false)) {
-//						Log.e(TAG,
-//								"Detected inhaler BT Address but ruled out due to potential reboot.");
-//						isInhalerUsed = false;
-//					} else {
-//						isInhalerUsed = true;
-//						inhaler = inhalerAddress;
-//					}
-//				}
-//			}
-//		}
-//		isInhalerUsed &= LogcatReader.isElapsedWithinTime(120);
-//
-//		LogcatReader.clearLogcat();
-//
-//		if (isInhalerUsed) {
-//
-//			Log.e(TAG, "Inhaler used elapsed just now: " + inhalerAddress);
-//			SetInhalerUsedPromptWithSchedule();
-//		}
-//
-//		// Mark that arbitration taking place
-//		long lastArbitrationTime = DataStorage
-//				.getLastTimeArbitrate(aContext, 0);
-//		DataStorage.setLastTimeArbitrate(aContext, System.currentTimeMillis());
-//		int studyDay = DataStorage.getDayNumber(aContext, true);
-//
-//		// Set which apps are available based on the day of the study
-//		SetAppActivityUsingSchedule(lastArbitrationTime, studyDay,
-//				isNewSoftwareVersion);
-//
-//		getAndPrintPromptingSchedule();
-//
-//		isOkAudioPrompt = isOkAudioPrompt();
-//
-//		// if (Globals.IS_DEBUG)
-//		// Log.e(TAG, "IS OK TO AUDIO PROMPT: " + isOkAudioPrompt);
-//		// // Log.h(TAG, aDataStore.GetSummaryString(getApplicationContext()));
-//		// if (Globals.IS_DEBUG)
-//		// Log.e(TAG, "STUDY DAY: " +
-//		// DataStorage.getDayNumber(getApplicationContext(), true));
-//		// if (Globals.IS_DEBUG)
-//		// Log.e(TAG, AppInfo.AllAppStatus(getApplicationContext()));
-//
-//		// Determine which apps are in the task list as needing to run
-//		// Sets the postponed app info as well
-//		GatherPendingTasks(aContext);
-//
-//		int aKey = 0;
-//
-//		// Now just check tasks
-//		if (someTasks.size() > 0) {
-//			aKey = someTasks.get(0);
-//			PromptApp(aContext, aKey, isOkAudioPrompt, false);
-//		}
-//
-//		// move the data from internal memory to external memory hourly
-//		moveInternalLogToExternal(aContext);
-//
-//		if (Globals.IS_DEBUG)
-//			Log.d(TAG, "End arbitrate");
+		// Debug: save all Asthmapolis and related messages to SD card
+		// Only for testing purpose
+		saveRecordsInLogcat(false);
+
+		/**
+		 * This is the app that decides what to do in terms of prompting each
+		 * time it is called.
+		 */
+
+		boolean isInhalerUsed = false;
+		inhaler = null;
+		inhalerUseTime = 0;
+		String inhalerAddress = "";
+		for (int x = 0; x < DataStore.mSensors.size(); x++) {
+			if (DataStore.mSensors.get(x).mType == Sensor.ASTHMA) {
+				inhalerAddress = DataStore.mSensors.get(x).mAddress;
+				String nameColon = Util.insertColons(inhalerAddress);
+				String nameUnder = Util.insertUnderscores(inhalerAddress);
+
+				if ((LogcatReader.isInLogcat(nameColon, false))
+						|| (LogcatReader.isInLogcat(nameUnder, false))) {
+
+					// Rule out the case of a reboot of the phone
+					if (LogcatReader.isInLogcat(
+							"updateDeviceServiceChannelCache("
+									+ inhalerAddress.substring(0, 2), false)) {
+						Log.e(TAG,
+								"Detected inhaler BT Address but ruled out due to potential reboot.");
+						isInhalerUsed = false;
+					} else {
+						isInhalerUsed = true;
+						inhaler = inhalerAddress;
+					}
+				}
+			}
+		}
+		isInhalerUsed &= LogcatReader.isElapsedWithinTime(120);
+
+		LogcatReader.clearLogcat();
+
+		if (isInhalerUsed) {
+
+			Log.e(TAG, "Inhaler used elapsed just now: " + inhalerAddress);
+			SetInhalerUsedPromptWithSchedule();
+		}
+
+		// Mark that arbitration taking place
+		long lastArbitrationTime = DataStorage
+				.getLastTimeArbitrate(aContext, 0);
+		DataStorage.setLastTimeArbitrate(aContext, System.currentTimeMillis());
+		int studyDay = DataStorage.getDayNumber(aContext, true);
+
+		// Set which apps are available based on the day of the study
+		SetAppActivityUsingSchedule(lastArbitrationTime, studyDay,
+				isNewSoftwareVersion);
+
+		getAndPrintPromptingSchedule();
+
+		isOkAudioPrompt = isOkAudioPrompt();
+
+		// if (Globals.IS_DEBUG)
+		// Log.e(TAG, "IS OK TO AUDIO PROMPT: " + isOkAudioPrompt);
+		// // Log.h(TAG, aDataStore.GetSummaryString(getApplicationContext()));
+		// if (Globals.IS_DEBUG)
+		// Log.e(TAG, "STUDY DAY: " +
+		// DataStorage.getDayNumber(getApplicationContext(), true));
+		// if (Globals.IS_DEBUG)
+		// Log.e(TAG, AppInfo.AllAppStatus(getApplicationContext()));
+
+		// Determine which apps are in the task list as needing to run
+		// Sets the postponed app info as well
+		GatherPendingTasks(aContext);
+
+		int aKey = 0;
+
+		// Now just check tasks
+		if (someTasks.size() > 0) {
+			aKey = someTasks.get(0);
+			PromptApp(aContext, aKey, isOkAudioPrompt, false);
+		}
+
+		// move the data from internal memory to external memory hourly
+		uploadDataAndLogToServer(aContext);
+
+		if (Globals.IS_DEBUG)
+			Log.d(TAG, "End arbitrate");
 	}
 
 	private static final String KEY_MOVE_LOG_TO_EXTERNAL = "_KEY_MOVETOEXTERNAL";
 	private static final String KEY_UPLOAD_JASON = "_KEY_UPLOAD_JASON";
 
-	private void moveInternalLogToExternal(Context aContext) {
+	private void uploadDataAndLogToServer(Context aContext) {
 		long lastUploadJSONToServer = DataStorage.GetValueLong(aContext,
 				KEY_UPLOAD_JASON, -1);
 		long lastMoveLogExternalTime = DataStorage.GetValueLong(aContext,
@@ -688,22 +683,28 @@ public class USCTeensArbitrater extends Arbitrater {
 		if ((currentTime - lastUploadJSONToServer) > 60 * 60 * 1000) {
 			// send JSON file
 			String msg = "Starting 1-hour file upload";
+			//Move JSON to external upload folder
 			RawUploader.moveDataToExternal(aContext, false, true, true, .85);
 
 			if ((currentTime - lastMoveLogExternalTime) > 24 * 60 * 60 * 1000) {
 				// send logs
-				msg += " and 24-hour log file upload";
+				msg += " and 24-hour log and survey files upload";
+				//Move Log files to external upload folder
 				DataSender.sendOldLogsToExternalUploadDir(aContext, new Date(), true);
+				//Move Survey Log files to upload folder
+//				DataSender.sendOldSurveyLogsToExternalUploadDir(aContext, new Date(), true); //////////////////////////
+				
 				DataStorage.SetValue(aContext, KEY_MOVE_LOG_TO_EXTERNAL,
 						currentTime);
 			}
-			
+			Log.i(TAG, msg);
 			ServerLogger.transmitOrQueueNote(aContext, msg, true);
-			// TODO CHANGE to true delete; false backup
+			//Upload JSON files and remove (dont backup)
 			int filesRemaining = RawUploader.uploadDataFromExternal(aContext,
-					true, true, true, true, .85);
-			filesRemaining = RawUploader.uploadDataFromInternal(aContext, true,
-					true, true, true, .85);
+					true, true, true, false, .85);
+			//Upload Log and SurveyLog files, backup and remove
+			filesRemaining = RawUploader.uploadDataFromExternal(aContext,
+					false, true, true, true, .85);
 
 			msg = "Completed file upload after "
 					+ String.format(
@@ -711,6 +712,7 @@ public class USCTeensArbitrater extends Arbitrater {
 							((System.currentTimeMillis() - currentTime) / 1000.0 / 60.0))
 					+ " minutes. Files remaining to upload: " + filesRemaining;
 			ServerLogger.sendNote(aContext, msg, true);
+			Log.i(TAG, msg);
 
 			DataStorage.SetValue(aContext, KEY_UPLOAD_JASON, currentTime);
 		}
