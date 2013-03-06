@@ -51,6 +51,7 @@ import edu.neu.android.wocketslib.wakefulintent.WakefulIntentService;
 
 public class USCTeensArbitrater extends Arbitrater {
 	private static final String TAG = "USCTeensArbitrater";
+	
 	private static final String KEY_RANDOM_PROMPT = "_KEY_RANDOM_PROMPT";
 	private static final String KEY_CS_PROMPT = "_KEY_CS_PROMPT";
 	private static final String KEY_ALL_PROMPT = "_KEY_ALL_PROMPT";
