@@ -63,7 +63,7 @@ public class USCTeensGlobals {
 		Globals.HOTLINE_NUMBER = "3234428206";
 		
 		Globals.IS_WOCKETS_ENABLED = false;
-		Globals.IS_BLUETOOTH_ENABLED = true; 
+		Globals.IS_BLUETOOTH_ENABLED = false; 
 		Globals.IS_LOCATION_ENABLED = false; 
 		Globals.IS_READING_SENSOR_ENABLED = true;
 

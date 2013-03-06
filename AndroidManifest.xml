@@ -68,8 +68,7 @@
 		<!-- ACTIVITY MONITOR -->
 
 
-        <service android:name="edu.neu.android.wocketslib.sensormonitor.BluetoothSensorService" 
-        	android:debuggable="false"
+        <service android:name="edu.neu.android.wocketslib.sensormonitor.BluetoothSensorService"  
         	android:enabled="true">            
         </service>
        

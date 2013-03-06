@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.survey.CSTeensSurvey;
+import edu.neu.android.mhealth.uscteensver1.survey.RandomTeensSurveyQuestionSet;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import edu.neu.android.wocketslib.dataupload.DataSender;
@@ -206,24 +208,24 @@ public class SetupTeenGameActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-//				AppInfo.SetStartManualTime(getApplicationContext(),
-//						Globals.SURVEY, System.currentTimeMillis());
-//				Intent i = new Intent(SetupActivity.this, SurveyActivity.class);
-//				
-//				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
-//						SetupActivity.this, Globals.SURVEY);
-//				long currentTime = System.currentTimeMillis();
-//				int classType = 0;
-//				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-//					classType = RandomAsthmaSurveyQuestionSet.RANDOM_EMA_DEFAULT;
-//				} else {
-//					classType = RandomAsthmaSurveyQuestionSet.RANDOM_EMA_OPTIONAL;
-//				}
-//				i.putExtra("className",
-//						RandomAsthmaSurveyQuestionSet.class.getCanonicalName());
-//				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
-//						new Object[] { classType }));
-//				startActivity(i);
+				AppInfo.SetStartManualTime(getApplicationContext(),
+						Globals.SURVEY, System.currentTimeMillis());
+				Intent i = new Intent(SetupTeenGameActivity.this, SurveyActivity.class);
+				
+				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
+						SetupTeenGameActivity.this, Globals.SURVEY);
+				long currentTime = System.currentTimeMillis();
+				int classType = 0;
+				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
+					classType = RandomTeensSurveyQuestionSet.RANDOM_EMA_DEFAULT;
+				} else {
+					classType = RandomTeensSurveyQuestionSet.RANDOM_EMA_OPTIONAL;
+				}
+				i.putExtra("className",
+						RandomTeensSurveyQuestionSet.class.getCanonicalName());
+				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
+						new Object[] { classType }));
+				startActivity(i);
 			}
 		});
 		
@@ -232,23 +234,23 @@ public class SetupTeenGameActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-//				AppInfo.SetStartManualTime(getApplicationContext(),
-//						Globals.SURVEY, System.currentTimeMillis());
-//				Intent i = new Intent(SetupActivity.this, SurveyActivity.class);
-//				
-//				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
-//						SetupActivity.this, Globals.SURVEY);
-//				long currentTime = System.currentTimeMillis();
-//				int classType = 0;
-//				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-//					classType = CSAsthmaSurvey.CS_EMA_DEFAULT;
-//				} else {
-//					classType = CSAsthmaSurvey.CS_EMA_OPTIONAL;
-//				}
-//				i.putExtra("className", CSAsthmaSurvey.class.getCanonicalName());
-//				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
-//						new Object[] { classType }));
-//				startActivity(i);
+				AppInfo.SetStartManualTime(getApplicationContext(),
+						Globals.SURVEY, System.currentTimeMillis());
+				Intent i = new Intent(SetupTeenGameActivity.this, SurveyActivity.class);
+				
+				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
+						SetupTeenGameActivity.this, Globals.SURVEY);
+				long currentTime = System.currentTimeMillis();
+				int classType = 0;
+				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
+					classType = CSTeensSurvey.CS_EMA_DEFAULT;
+				} else {
+					classType = CSTeensSurvey.CS_EMA_OPTIONAL;
+				}
+				i.putExtra("className", CSTeensSurvey.class.getCanonicalName());
+				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
+						new Object[] { classType }));
+				startActivity(i);
 			}
 		});
 		

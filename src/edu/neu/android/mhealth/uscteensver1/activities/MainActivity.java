@@ -21,6 +21,7 @@ import edu.neu.android.mhealth.uscteensver1.views.MainView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
+import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 import android.net.Uri;
 import android.os.Bundle;
@@ -200,6 +201,10 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 		super.onResume();	
 		mMainView.onResume();
 		mCurPage.resume();
+		
+		if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
+			// TODO:
+		}
 	}
 
 	@Override
