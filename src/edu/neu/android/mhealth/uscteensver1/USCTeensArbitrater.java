@@ -582,93 +582,93 @@ public class USCTeensArbitrater extends Arbitrater {
 	}
 
 	public void doArbitrate(boolean isNewSoftwareVersion) {
-
-		// Debug: save all Asthmapolis and related messages to SD card
-		// Only for testing purpose
-		saveRecordsInLogcat(false);
-
-		/**
-		 * This is the app that decides what to do in terms of prompting each
-		 * time it is called.
-		 */
-
-		boolean isInhalerUsed = false;
-		inhaler = null;
-		inhalerUseTime = 0;
-		String inhalerAddress = "";
-		for (int x = 0; x < DataStore.mSensors.size(); x++) {
-			if (DataStore.mSensors.get(x).mType == Sensor.ASTHMA) {
-				inhalerAddress = DataStore.mSensors.get(x).mAddress;
-				String nameColon = Util.insertColons(inhalerAddress);
-				String nameUnder = Util.insertUnderscores(inhalerAddress);
-
-				if ((LogcatReader.isInLogcat(nameColon, false))
-						|| (LogcatReader.isInLogcat(nameUnder, false))) {
-
-					// Rule out the case of a reboot of the phone
-					if (LogcatReader.isInLogcat(
-							"updateDeviceServiceChannelCache("
-									+ inhalerAddress.substring(0, 2), false)) {
-						Log.e(TAG,
-								"Detected inhaler BT Address but ruled out due to potential reboot.");
-						isInhalerUsed = false;
-					} else {
-						isInhalerUsed = true;
-						inhaler = inhalerAddress;
-					}
-				}
-			}
-		}
-		isInhalerUsed &= LogcatReader.isElapsedWithinTime(120);
-
-		LogcatReader.clearLogcat();
-
-		if (isInhalerUsed) {
-
-			Log.e(TAG, "Inhaler used elapsed just now: " + inhalerAddress);
-			SetInhalerUsedPromptWithSchedule();
-		}
-
-		// Mark that arbitration taking place
-		long lastArbitrationTime = DataStorage
-				.getLastTimeArbitrate(aContext, 0);
-		DataStorage.setLastTimeArbitrate(aContext, System.currentTimeMillis());
-		int studyDay = DataStorage.getDayNumber(aContext, true);
-
-		// Set which apps are available based on the day of the study
-		SetAppActivityUsingSchedule(lastArbitrationTime, studyDay,
-				isNewSoftwareVersion);
-
-		getAndPrintPromptingSchedule();
-
-		isOkAudioPrompt = isOkAudioPrompt();
-
-		// if (Globals.IS_DEBUG)
-		// Log.e(TAG, "IS OK TO AUDIO PROMPT: " + isOkAudioPrompt);
-		// // Log.h(TAG, aDataStore.GetSummaryString(getApplicationContext()));
-		// if (Globals.IS_DEBUG)
-		// Log.e(TAG, "STUDY DAY: " +
-		// DataStorage.getDayNumber(getApplicationContext(), true));
-		// if (Globals.IS_DEBUG)
-		// Log.e(TAG, AppInfo.AllAppStatus(getApplicationContext()));
-
-		// Determine which apps are in the task list as needing to run
-		// Sets the postponed app info as well
-		GatherPendingTasks(aContext);
-
-		int aKey = 0;
-
-		// Now just check tasks
-		if (someTasks.size() > 0) {
-			aKey = someTasks.get(0);
-			PromptApp(aContext, aKey, isOkAudioPrompt, false);
-		}
-
-		// move the data from internal memory to external memory hourly
-		uploadDataAndLogToServer(aContext);
-
-		if (Globals.IS_DEBUG)
-			Log.d(TAG, "End arbitrate");
+//
+//		// Debug: save all Asthmapolis and related messages to SD card
+//		// Only for testing purpose
+//		saveRecordsInLogcat(false);
+//
+//		/**
+//		 * This is the app that decides what to do in terms of prompting each
+//		 * time it is called.
+//		 */
+//
+//		boolean isInhalerUsed = false;
+//		inhaler = null;
+//		inhalerUseTime = 0;
+//		String inhalerAddress = "";
+//		for (int x = 0; x < DataStore.mSensors.size(); x++) {
+//			if (DataStore.mSensors.get(x).mType == Sensor.ASTHMA) {
+//				inhalerAddress = DataStore.mSensors.get(x).mAddress;
+//				String nameColon = Util.insertColons(inhalerAddress);
+//				String nameUnder = Util.insertUnderscores(inhalerAddress);
+//
+//				if ((LogcatReader.isInLogcat(nameColon, false))
+//						|| (LogcatReader.isInLogcat(nameUnder, false))) {
+//
+//					// Rule out the case of a reboot of the phone
+//					if (LogcatReader.isInLogcat(
+//							"updateDeviceServiceChannelCache("
+//									+ inhalerAddress.substring(0, 2), false)) {
+//						Log.e(TAG,
+//								"Detected inhaler BT Address but ruled out due to potential reboot.");
+//						isInhalerUsed = false;
+//					} else {
+//						isInhalerUsed = true;
+//						inhaler = inhalerAddress;
+//					}
+//				}
+//			}
+//		}
+//		isInhalerUsed &= LogcatReader.isElapsedWithinTime(120);
+//
+//		LogcatReader.clearLogcat();
+//
+//		if (isInhalerUsed) {
+//
+//			Log.e(TAG, "Inhaler used elapsed just now: " + inhalerAddress);
+//			SetInhalerUsedPromptWithSchedule();
+//		}
+//
+//		// Mark that arbitration taking place
+//		long lastArbitrationTime = DataStorage
+//				.getLastTimeArbitrate(aContext, 0);
+//		DataStorage.setLastTimeArbitrate(aContext, System.currentTimeMillis());
+//		int studyDay = DataStorage.getDayNumber(aContext, true);
+//
+//		// Set which apps are available based on the day of the study
+//		SetAppActivityUsingSchedule(lastArbitrationTime, studyDay,
+//				isNewSoftwareVersion);
+//
+//		getAndPrintPromptingSchedule();
+//
+//		isOkAudioPrompt = isOkAudioPrompt();
+//
+//		// if (Globals.IS_DEBUG)
+//		// Log.e(TAG, "IS OK TO AUDIO PROMPT: " + isOkAudioPrompt);
+//		// // Log.h(TAG, aDataStore.GetSummaryString(getApplicationContext()));
+//		// if (Globals.IS_DEBUG)
+//		// Log.e(TAG, "STUDY DAY: " +
+//		// DataStorage.getDayNumber(getApplicationContext(), true));
+//		// if (Globals.IS_DEBUG)
+//		// Log.e(TAG, AppInfo.AllAppStatus(getApplicationContext()));
+//
+//		// Determine which apps are in the task list as needing to run
+//		// Sets the postponed app info as well
+//		GatherPendingTasks(aContext);
+//
+//		int aKey = 0;
+//
+//		// Now just check tasks
+//		if (someTasks.size() > 0) {
+//			aKey = someTasks.get(0);
+//			PromptApp(aContext, aKey, isOkAudioPrompt, false);
+//		}
+//
+//		// move the data from internal memory to external memory hourly
+//		uploadDataAndLogToServer(aContext);
+//
+//		if (Globals.IS_DEBUG)
+//			Log.d(TAG, "End arbitrate");
 	}
 
 	private static final String KEY_MOVE_LOG_TO_EXTERNAL = "_KEY_MOVETOEXTERNAL";
