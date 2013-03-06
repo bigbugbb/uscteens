@@ -11,10 +11,9 @@ public class USCTeensAppManager extends ApplicationManager {
     @Override 
     public void onCreate() {
     	super.onCreate();
-    	LibraryGlobals.initGlobals(getAppContext());
-    	USCTeensGlobals.initGlobals(getAppContext());
+    	USCTeensGlobals.initGlobals(getAppContext());    	
 
-    	ArbitraterNew arbitrater = new ArbitraterNew(getAppContext()); 
+    	USCTeensArbitrater arbitrater = new USCTeensArbitrater(getAppContext()); 
     	Globals.setArbitrater(arbitrater);     	
     }
 }

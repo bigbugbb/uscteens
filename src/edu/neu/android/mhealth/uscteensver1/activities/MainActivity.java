@@ -3,9 +3,7 @@ package edu.neu.android.mhealth.uscteensver1.activities;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.neu.android.mhealth.uscteensver1.LibraryGlobals;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.broadcastreceivers.TeensBroadcastReceiver;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.HomePageDialog;
@@ -23,10 +21,7 @@ import edu.neu.android.mhealth.uscteensver1.views.MainView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
-import edu.neu.android.wocketslib.utils.BaseActivity;
-import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,7 +29,6 @@ import android.os.Message;
 import android.os.Vibrator;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -77,9 +71,7 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 		// get views and set listeners
 		setupViews();
 		// adjust layouts according to the screen resolution
-		adjustLayout();
-		// create accelerometer
-//		createSensor();			
+		adjustLayout();	
 		// create app pages and all the UIs in the pages
 		initPages();	
 	}
@@ -105,11 +97,11 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 	}
 	
 	private void startMonitor() {
-		Intent bintent = new Intent(
-				TeensBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
-		sendBroadcast(bintent);
-//		Toast.makeText(getApplicationContext(),
-//				"Starting the service...", Toast.LENGTH_LONG).show();
+		Intent i = new Intent(
+				MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
+		sendBroadcast(i);
+		Toast.makeText(getApplicationContext(),
+				"Starting the service...", Toast.LENGTH_SHORT).show();
 	}
 	
 	private void setupScale() {
@@ -137,11 +129,6 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 			WindowManager.LayoutParams.FLAG_FULLSCREEN
 		);
 	}
-	
-//	private void createSensor() {
-//		// get system sensor manager to deal with sensor issues  
-//        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-//	}
 
 	private void initPages() {		
 		// only three pages now		

@@ -49,8 +49,8 @@ import edu.neu.android.wocketslib.utils.PhoneVibrator;
 import edu.neu.android.wocketslib.utils.Util;
 import edu.neu.android.wocketslib.wakefulintent.WakefulIntentService;
 
-public class ArbitraterNew extends Arbitrater {
-	private static final String TAG = "USCAsthmaArbitrater";
+public class USCTeensArbitrater extends Arbitrater {
+	private static final String TAG = "USCTeensArbitrater";
 	private static final String KEY_RANDOM_PROMPT = "_KEY_RANDOM_PROMPT";
 	private static final String KEY_CS_PROMPT = "_KEY_CS_PROMPT";
 	private static final String KEY_ALL_PROMPT = "_KEY_ALL_PROMPT";
@@ -83,7 +83,7 @@ public class ArbitraterNew extends Arbitrater {
 		return sb.toString();
 	}
 
-	public ArbitraterNew(Context aContext) {
+	public USCTeensArbitrater(Context aContext) {
 		this.aContext = aContext;
 	}
 

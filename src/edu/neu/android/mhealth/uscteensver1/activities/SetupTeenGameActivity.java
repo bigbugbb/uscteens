@@ -65,23 +65,23 @@ public class SetupTeenGameActivity extends BaseActivity {
 		protected Boolean doInBackground(Void... params) {
 			// send JSON file
 			long currentTime = System.currentTimeMillis();
-			String msg = "Finish study- Starting data and log files upload";
-			//Move JSON to external upload folder
-			RawUploader.moveDataToExternal(SetupTeenGameActivity.this, false, true, true, .85);
-			//Move Log files to external upload folder
-			DataSender.sendLogsToExternalUploadDir(SetupTeenGameActivity.this, true);
-			//Move Survey Log files to upload folder
-			//DataSender.sendSurveyLogsToExternalUploadDir(SetupActivity.this, true);
-			//Transmit Note first
-			ServerLogger.transmitOrQueueNote(SetupTeenGameActivity.this, msg, true);
-			//Upload JSON files and remove
-			int filesRemaining = RawUploader.uploadDataFromExternal(SetupTeenGameActivity.this,
+			String msg = "Finish study - Starting data and log files upload";
+			// Move JSON to external upload folder
+			RawUploader.moveDataToExternal(SetupTeenGameActivity.this, false, true, true, .85); // raw .json data
+			// Move Log files to external upload folder
+			DataSender.sendLogsToExternalUploadDir(SetupTeenGameActivity.this, true); // log data with no postfix name
+			// Move Survey Log files to upload folder
+			// DataSender.sendSurveyLogsToExternalUploadDir(SetupActivity.this, true);
+			// Transmit Note first
+			ServerLogger.transmitOrQueueNote(SetupTeenGameActivity.this, msg, true); // wi data
+			// Upload JSON files and remove
+			int filesRemaining = RawUploader.uploadDataFromExternal(SetupTeenGameActivity.this, // need subject id being set
 					true, true, true, false, .85);
-			//Upload Log and SurveyLog files, backup and remove
+			// Upload Log and SurveyLog files, backup and remove
 			filesRemaining = RawUploader.uploadDataFromExternal(SetupTeenGameActivity.this,
 					false, true, true, true, .85);
-			//Upload possible remaining files in the internal memory
-			filesRemaining = RawUploader.uploadDataFromInternal(SetupTeenGameActivity.this,
+			// Upload possible remaining files in the internal memory
+			filesRemaining = RawUploader.uploadDataFromInternal(SetupTeenGameActivity.this, // ?
 					false, true, true, false, .85);
 
 			msg = "Completed user-initiated file upload after "
@@ -90,7 +90,7 @@ public class SetupTeenGameActivity extends BaseActivity {
 							((System.currentTimeMillis() - currentTime) / 1000.0 / 60.0))
 					+ " minutes. Files remaining to upload: " + filesRemaining;
 			ServerLogger.sendNote(SetupTeenGameActivity.this, msg, true);
-			return true; 
+			return true;
 		}
 
 		protected void onPostExecute(Boolean isNeedUpdate) {
@@ -152,9 +152,9 @@ public class SetupTeenGameActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent bintent = new Intent(
+				Intent i = new Intent(
 						MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
-				sendBroadcast(bintent);
+				sendBroadcast(i);
 				Toast.makeText(getApplicationContext(),
 						"Starting the service...", Toast.LENGTH_LONG).show();
 			}
@@ -224,6 +224,7 @@ public class SetupTeenGameActivity extends BaseActivity {
 //				startActivity(i);
 			}
 		});
+		
 		csEMA.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -248,86 +249,6 @@ public class SetupTeenGameActivity extends BaseActivity {
 //				startActivity(i);
 			}
 		});
-
-	}
-
-	class DetectInhalerAsyncTask extends AsyncTask<Void, String, Void> {
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
-//			if (setupRescueInhaler == null) {
-//				View setrescueView = SetupActivity.this
-//						.getLayoutInflater().inflate(
-//								R.layout.setrescueinhalerdialog, null);
-//				setupRescueInhaler = new AlertDialog.Builder(
-//						SetupActivity.this)
-//						.setView(setrescueView)
-//						.setTitle("Setup Rescue inhaler")
-//						.setPositiveButton("Cancel",
-//								new DialogInterface.OnClickListener() {
-//
-//									@Override
-//									public void onClick(DialogInterface dialog,
-//											int which) {
-//										// TODO Auto-generated method stub
-//										dialog.dismiss();
-//									}
-//								}).create();
-//				textDisplay = (LinearLayout) setrescueView
-//						.findViewById(R.id.dataDisplay);
-//				scrollView = (ScrollView) setrescueView
-//						.findViewById(R.id.scrollview);
-//			}
-//			textDisplay.removeAllViews();
-//			setupRescueInhaler.show();
-		}
-
-		@Override
-		protected void onProgressUpdate(String... values) {
-			// TODO Auto-generated method stub
-			super.onProgressUpdate(values);
-//			if (textDisplay == null)
-//				return;
-//			TextView fileView = new TextView(SetupActivity.this);
-//			fileView.setLayoutParams(new LayoutParams(
-//					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-//			fileView.setPadding(5, 1, 5, 0);
-//			fileView.setText(values[0]);
-//			fileView.setTextSize(14);
-//			fileView.setTextColor(Color.BLACK);
-//			textDisplay.addView(fileView);
-//			scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-//			String inhalerMAC = "";
-//			if ((inhalerMAC = rescueInhalerMAC(SetupActivity.this)) != null) {
-//				publishProgress("Rescue inhaler exists.");
-//			}
-//			publishProgress("Please push the button on the rescue inhaler.");
-//			LogcatReader.clearLogcat();
-//			publishProgress("Waiting for connection...");
-//			while (setupRescueInhaler.isShowing()) {
-//				if ((inhalerMAC = inhalerDetectedMAC()) != null) {
-//					publishProgress("Inhaler detected!!\nRescue inhaler "+inhalerMAC+" setup!!");
-//					setRescueInhalerMAC(inhalerMAC);
-//					break;
-//				} else {
-//					publishProgress("Inhaler not detected, please press again.");
-//				}
-//				try {
-//					Thread.currentThread().sleep(500);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-			return null;
-		}
 
 	}
 
