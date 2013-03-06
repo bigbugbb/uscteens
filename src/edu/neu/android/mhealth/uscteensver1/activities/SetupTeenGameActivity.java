@@ -46,6 +46,7 @@ public class SetupTeenGameActivity extends BaseActivity {
 	private Button randomEMA;
 	private Button csEMA;
 	private Button finishStudy;
+	private Button setupdone;
 	private AlertDialog setupRescueInhaler = null;
 	private LinearLayout textDisplay = null;
 	private ScrollView scrollView = null;
@@ -135,6 +136,7 @@ public class SetupTeenGameActivity extends BaseActivity {
 		csEMA        = (Button) findViewById(R.id.csema);
 		randomEMA    = (Button) findViewById(R.id.randomema);
 		finishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
+		setupdone    = (Button) findViewById(R.id.setupdone);
 //		uploadLogs = (Button) findViewById(R.id.buttonuploadlogs);
 
 		setStartDate.setOnClickListener(new OnClickListener() {
@@ -247,6 +249,14 @@ public class SetupTeenGameActivity extends BaseActivity {
 //				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
 //						new Object[] { classType }));
 //				startActivity(i);
+			}
+		});
+		
+		setupdone.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();				
 			}
 		});
 
