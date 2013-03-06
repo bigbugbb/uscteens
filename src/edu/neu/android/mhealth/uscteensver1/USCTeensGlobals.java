@@ -47,7 +47,7 @@ public class USCTeensGlobals {
 		Globals.UPLOADS_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "uploads";
 		Globals.BACKUP_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "backup";
 
-		Globals.STUDY_NAME = "Teens Study"; 
+		Globals.STUDY_NAME = "USCTeens";//"Teens Study"; 
 		Globals.STUDY_SERVER_NAME = "USCTeens"; 
 
 		FileHelper.testFunction(aContext);
