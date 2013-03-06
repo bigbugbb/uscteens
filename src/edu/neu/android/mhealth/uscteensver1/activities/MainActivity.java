@@ -61,12 +61,10 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, "MainActivity");
-		setContentView(R.layout.activity_main);	
+		setContentView(R.layout.activity_main);					
 		
-		mDataSource = DataSource.getInstance(getApplicationContext());
-		
-		// send a broadcast to start the monitor service
-		startMonitor();
+		mDataSource = DataSource.getInstance(getApplicationContext());				
+
 		// setup scale param according to the screen resolution
 		setupScale();
 		// get views and set listeners
@@ -97,13 +95,13 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 		return true;
 	}
 	
-	private void startMonitor() {
-		Intent i = new Intent(
-				MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
-		sendBroadcast(i);
-		Toast.makeText(getApplicationContext(),
-				"Starting the service...", Toast.LENGTH_SHORT).show();
-	}
+//	private void startMonitor() {
+//		Intent i = new Intent(
+//				MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
+//		sendBroadcast(i);
+//		Toast.makeText(getApplicationContext(),
+//				"Starting the service...", Toast.LENGTH_SHORT).show();
+//	}
 	
 	private void setupScale() {
 		DisplayMetrics dm = new DisplayMetrics();  
@@ -199,12 +197,13 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 	@Override
 	public void onResume() {		
 		super.onResume();	
-		mMainView.onResume();
-		mCurPage.resume();
 		
-		if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
-			// TODO:
-		}
+//		if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
+//			// TODO:
+//		}
+//		
+		mMainView.onResume();
+		mCurPage.resume();		
 	}
 
 	@Override

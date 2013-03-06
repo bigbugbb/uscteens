@@ -58,15 +58,18 @@ public class HomePage extends AppPage implements OnClickListener {
 			mObjects.add(mTextView);
 			mTextView.setID(SETUP);
 			mTextView.setOnClickListener(this);
-			String startDate = DataStorage.GetValueString(mContext, USCTeensGlobals.START_DATE, "");
-			if (startDate.compareTo("") == 0) {
-				mTextView.setVisible(true);
-			}
 		}
 		// order by Z
 		orderByZ(mObjects);
 		
 		return mObjects;
+	}
+	
+	public void resume() {
+		String startDate = DataStorage.GetValueString(mContext, USCTeensGlobals.START_DATE, "");
+		if (startDate.compareTo("") == 0) {
+			mTextView.setVisible(true);
+		}
 	}
 	
 	public void start() {
