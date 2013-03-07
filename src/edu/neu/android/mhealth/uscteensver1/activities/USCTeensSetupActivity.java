@@ -40,7 +40,7 @@ import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.Util;
 
-public class SetupTeenGameActivity extends BaseActivity {
+public class USCTeensSetupActivity extends BaseActivity {
 	private static final String TAG = "SetupTeenGameActivity"; 
 	public static final String KEY_RESCUE_INHALER = "_KEY_RESCUE_INHALER";
 	private Button startService;
@@ -70,21 +70,21 @@ public class SetupTeenGameActivity extends BaseActivity {
 			long currentTime = System.currentTimeMillis();
 			String msg = "Finish study - Starting data and log files upload";
 			// Move JSON to external upload folder
-			RawUploader.moveDataToExternal(SetupTeenGameActivity.this, false, true, true, .85); // raw .json data
+			RawUploader.moveDataToExternal(USCTeensSetupActivity.this, false, true, true, .85); // raw .json data
 			// Move Log files to external upload folder
-			DataSender.sendLogsToExternalUploadDir(SetupTeenGameActivity.this, true); // log data with no postfix name
+			DataSender.sendLogsToExternalUploadDir(USCTeensSetupActivity.this, true); // log data with no postfix name
 			// Move Survey Log files to upload folder
 			// DataSender.sendSurveyLogsToExternalUploadDir(SetupActivity.this, true);
 			// Transmit Note first
-			ServerLogger.transmitOrQueueNote(SetupTeenGameActivity.this, msg, true); // wi data
+			ServerLogger.transmitOrQueueNote(USCTeensSetupActivity.this, msg, true); // wi data
 			// Upload JSON files and remove
-			int filesRemaining = RawUploader.uploadDataFromExternal(SetupTeenGameActivity.this, // need subject id being set
+			int filesRemaining = RawUploader.uploadDataFromExternal(USCTeensSetupActivity.this, // need subject id being set
 					true, true, true, false, .85);
 			// Upload Log and SurveyLog files, backup and remove
-			filesRemaining = RawUploader.uploadDataFromExternal(SetupTeenGameActivity.this,
+			filesRemaining = RawUploader.uploadDataFromExternal(USCTeensSetupActivity.this,
 					false, true, true, true, .85);
 			// Upload possible remaining files in the internal memory
-			filesRemaining = RawUploader.uploadDataFromInternal(SetupTeenGameActivity.this, // ?
+			filesRemaining = RawUploader.uploadDataFromInternal(USCTeensSetupActivity.this, // ?
 					false, true, true, false, .85);
 
 			msg = "Completed user-initiated file upload after "
@@ -92,7 +92,7 @@ public class SetupTeenGameActivity extends BaseActivity {
 							"%.1f",
 							((System.currentTimeMillis() - currentTime) / 1000.0 / 60.0))
 					+ " minutes. Files remaining to upload: " + filesRemaining;
-			ServerLogger.sendNote(SetupTeenGameActivity.this, msg, true);
+			ServerLogger.sendNote(USCTeensSetupActivity.this, msg, true);
 			return true;
 		}
 
@@ -146,7 +146,7 @@ public class SetupTeenGameActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent i = new Intent(getApplicationContext(), SetStartDateActivity.class);
+				Intent i = new Intent(getApplicationContext(), StartDateSetupActivity.class);
 				startActivity(i);				
 			}
 		});
@@ -183,10 +183,10 @@ public class SetupTeenGameActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				AppInfo.SetStartManualTime(getApplicationContext(),
 						Globals.SURVEY, System.currentTimeMillis());
-				Intent i = new Intent(SetupTeenGameActivity.this, SurveyActivity.class);
+				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
 				
 				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
-						SetupTeenGameActivity.this, Globals.SURVEY);
+						USCTeensSetupActivity.this, Globals.SURVEY);
 				long currentTime = System.currentTimeMillis();
 				int classType = 0;
 				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
@@ -209,10 +209,10 @@ public class SetupTeenGameActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				AppInfo.SetStartManualTime(getApplicationContext(),
 						Globals.SURVEY, System.currentTimeMillis());
-				Intent i = new Intent(SetupTeenGameActivity.this, SurveyActivity.class);
+				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
 				
 				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
-						SetupTeenGameActivity.this, Globals.SURVEY);
+						USCTeensSetupActivity.this, Globals.SURVEY);
 				long currentTime = System.currentTimeMillis();
 				int classType = 0;
 				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {

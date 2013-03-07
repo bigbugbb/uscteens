@@ -295,7 +295,7 @@
 		</activity>
 		
 		<activity
-            android:name="edu.neu.android.mhealth.uscteensver1.activities.MainActivity"
+            android:name="edu.neu.android.mhealth.uscteensver1.activities.USCTeensMainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
@@ -321,13 +321,13 @@
             android:theme="@style/DialogTheme">
 		</activity>
 		
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.SetupTeenGameActivity"			
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.USCTeensSetupActivity"			
 		    android:launchMode="singleTop"
             android:excludeFromRecents="true"
 			android:screenOrientation="portrait">
 		</activity>
 		
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.SetStartDateActivity"			
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.StartDateSetupActivity"			
 		    android:launchMode="singleTop"
             android:excludeFromRecents="true"
 			android:screenOrientation="portrait">

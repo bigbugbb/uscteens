@@ -23,7 +23,7 @@ import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.DateHelper;
 
-public class SetStartDateActivity extends BaseActivity implements OnClickListener {
+public class StartDateSetupActivity extends BaseActivity implements OnClickListener {
 	
 	private static final String TAG = "SetStartDateActivity";
 	// buttons
@@ -153,7 +153,7 @@ public class SetStartDateActivity extends BaseActivity implements OnClickListene
 	}
 
 	private void resetSpinnerDays() {
-		mAdapterDays = new ArrayAdapter<String>(SetStartDateActivity.this, android.R.layout.simple_spinner_item, mDays);        		
+		mAdapterDays = new ArrayAdapter<String>(StartDateSetupActivity.this, android.R.layout.simple_spinner_item, mDays);        		
 		mAdapterDays.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
 		mSpinnerDays.setAdapter(mAdapterDays);
 		for (int i = 0; i < mDays.length; ++i) {

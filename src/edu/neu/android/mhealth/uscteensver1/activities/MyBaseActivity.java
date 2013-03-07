@@ -18,35 +18,36 @@ import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.UsageCollector;
 
 public class MyBaseActivity extends FragmentActivity {
+	
 	protected String TAG = "UnknownApp";
 	public static final int KEYGUARD_UNKNOWN = -1; 
 	public static final int KEYGUARD_IS_LOCKED = 1; 
 	public static final int KEYGUARD_NOT_LOCKED = 0; 
 
-	private void beep()
-	{
+	private void beep() {
 		MediaPlayer mp = new MediaPlayer();
-			    try {
-			    	// http://www.soundjay.com/beep-sounds-1.html lots of free beeps here
-			    	mp = MediaPlayer.create(getApplicationContext(), R.raw.beep);
-			    	mp.setLooping(false);
-			    	mp.start();
-			    }
-			    catch (Exception e) {
-			    	Log.e("beep", "error: " + e.getMessage(), e);
-					e.printStackTrace();
-			    }
-		 try {
+	    try {
+	    	// http://www.soundjay.com/beep-sounds-1.html lots of free beeps here
+	    	mp = MediaPlayer.create(getApplicationContext(), R.raw.beep);
+	    	mp.setLooping(false);
+	    	mp.start();
+	    }
+	    catch (Exception e) {
+	    	Log.e("beep", "error: " + e.getMessage(), e);
+			e.printStackTrace();
+	    }
+	    
+		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 	    	Log.e("beep", "error: " + e.getMessage(), e);
 			e.printStackTrace();
 		}
-		 mp.release(); 
+		 
+		mp.release(); 
 	}
 	
-	private void shutdownApp(String msg, boolean isBeep)
-	{	
+	private void shutdownApp(String msg, boolean isBeep) {	
 		if (isBeep)
 			beep(); 
 		Log.i(TAG, "PA entry timeout"); 
@@ -54,15 +55,13 @@ public class MyBaseActivity extends FragmentActivity {
 		finish();
 	}
 
-	private void timeWarning(String msg)
-	{		
-	Toast aToast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
-	aToast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-	aToast.show();								
+	private void timeWarning(String msg) {		
+		Toast aToast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
+		aToast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		aToast.show();								
 	}
 
-	protected void checkTiming(String aKey)
-	{
+	protected void checkTiming(String aKey) {
 		
 		long lastTimeStartedManual = AppInfo.GetStartManualTime(getApplicationContext(), aKey);
 		long lastTimePrompted = AppInfo.GetLastTimePrompted(getApplicationContext(), aKey);
@@ -88,17 +87,17 @@ public class MyBaseActivity extends FragmentActivity {
 		}
 		else 
 		{
-				// App started manually; Check if either running out of time or not completed 
-							
-				if ((System.currentTimeMillis()-lastTimeStartedManual) > Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS)
-				{
-					shutdownApp("Sorry. You must complete the survey within " + Math.floor(Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS/1000.0/60.0) + " minutes of starting it.",false); 
-				}
-				else if ((Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS - (System.currentTimeMillis()-lastTimeStartedManual)) < 30000)
-				{
-					// Show warning if less than 30 seconds to go; otherwise do nothing 
-					timeWarning("Hurry. You only have " + Math.round((Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS - (System.currentTimeMillis()-lastTimeStartedManual))/1000.0) + " seconds to complete the survey!");
-				}			
+			// App started manually; Check if either running out of time or not completed 
+						
+			if ((System.currentTimeMillis()-lastTimeStartedManual) > Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS)
+			{
+				shutdownApp("Sorry. You must complete the survey within " + Math.floor(Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS/1000.0/60.0) + " minutes of starting it.",false); 
+			}
+			else if ((Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS - (System.currentTimeMillis()-lastTimeStartedManual)) < 30000)
+			{
+				// Show warning if less than 30 seconds to go; otherwise do nothing 
+				timeWarning("Hurry. You only have " + Math.round((Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS - (System.currentTimeMillis()-lastTimeStartedManual))/1000.0) + " seconds to complete the survey!");
+			}			
 		}
 	}	
 	
@@ -116,8 +115,7 @@ public class MyBaseActivity extends FragmentActivity {
 		((ApplicationManager) getApplication()).addActivity(this);
 	}
 
-	private int screenLockStatus()
-	{		
+	private int screenLockStatus() {		
 		KeyguardManager km = (KeyguardManager) getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
 		if (km != null)
 			if (km.inKeyguardRestrictedInputMode())

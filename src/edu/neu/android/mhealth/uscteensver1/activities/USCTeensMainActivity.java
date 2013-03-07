@@ -40,7 +40,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-public class MainActivity extends MyBaseActivity implements OnTouchListener {
+public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListener {
 	
 	protected MainView 		mMainView 	   = null;
 //	protected SensorManager mSensorManager = null;	
@@ -297,7 +297,7 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 			Intent i = new Intent(this, StaffSetupActivity.class);
 			startActivity(i);
 		} else if (pwSubject.isMatch(keyCode)) {
-			Intent i = new Intent(this, SetupTeenGameActivity.class);
+			Intent i = new Intent(this, USCTeensSetupActivity.class);
 			startActivity(i);
 		} else if (pwUninstall.isMatch(keyCode)) {
 			Uri packageUri = Uri.parse("package:" + Globals.PACKAGE_NAME);
