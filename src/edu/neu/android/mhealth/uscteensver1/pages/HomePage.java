@@ -69,6 +69,8 @@ public class HomePage extends AppPage implements OnClickListener {
 		String startDate = DataStorage.GetValueString(mContext, USCTeensGlobals.START_DATE, "");
 		if (startDate.compareTo("") == 0) {
 			mTextView.setVisible(true);
+		} else {
+			mTextView.setVisible(false);
 		}
 	}
 	
