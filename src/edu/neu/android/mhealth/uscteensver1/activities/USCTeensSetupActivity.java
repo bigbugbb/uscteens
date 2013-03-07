@@ -239,7 +239,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 	@Override
 	public void onResume() {
-		String startDate = DataStorage.GetValueString(getApplicationContext(), USCTeensGlobals.START_DATE, "");
+		String startDate = DataStorage.getStartDate(getApplicationContext(), "");
 		if (startDate.compareTo("") != 0) {
 			String[] times = startDate.split("-");
 			setStartDate.setText("Change start date (" + times[1] + "/" + times[2] + "/" + times[0] + ")");

@@ -95,11 +95,11 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 	}
 	
 	private void loadPreferences() {			
-		mStartDate = DataStorage.GetValueString(getApplicationContext(), USCTeensGlobals.START_DATE, "");
+		mStartDate = DataStorage.getStartDate(getApplicationContext(), "");
 	}
 	
 	private void savePreferences() {	
-		DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.START_DATE, mStartDate);				
+		DataStorage.SetValue(getApplicationContext(), DataStorage.KEY_START_DATE, mStartDate);				
 	}
 	
 	private void setupViews() {
@@ -208,10 +208,17 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 	public void onClick(View v) {
 		if (v == mBtnSet) {
 			// check whether the start date is nearer than the current date
-        	Date start   = convertDate(mStartDate, "yyyy-MM-dd");
-        	Date current = Calendar.getInstance().getTime();
-        	if (start.before(current)) {
-        		displayToastMessage("The start date is before the current date!");
+        	Date aStartDate = convertDate(mStartDate, "yyyy-MM-dd");
+        	Date aCloneDate = (Date) aStartDate.clone();
+        	Date aCurDate = Calendar.getInstance().getTime();
+        	        	
+        	aCloneDate.setYear(aCurDate.getYear());
+        	aCloneDate.setMonth(aCurDate.getMonth());
+        	aCloneDate.setDate(aCurDate.getDate());
+        	aCurDate = aCloneDate;
+        	
+        	if (aStartDate.compareTo(aCurDate) < 0) {
+        		displayToastMessage("The start date is less than the current date!");
         	}   
         	// save start date
 			savePreferences();
@@ -222,7 +229,4 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 		finish();
 	}
 
-	static public String getStartDate(Context context) {
-		return DataStorage.GetValueString(context, USCTeensGlobals.START_DATE, "");
-	}
 }

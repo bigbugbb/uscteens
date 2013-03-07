@@ -32,8 +32,6 @@ import edu.neu.android.wocketslib.Globals;
 public class USCTeensGlobals {
 	private static final String TAG = "USCTeensGlobals";	
 
-	// the start date
-	public final static String START_DATE = "USCTeensStartDate";
 	public final static int TIME_FOR_WAITING_ACSENSOR = 20 * 1000;
 		
 	public static void initGlobals(Context aContext) {

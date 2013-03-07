@@ -9,6 +9,7 @@ import edu.neu.android.mhealth.uscteensver1.data.RawActivity;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
+import edu.neu.android.wocketslib.utils.DateHelper;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,29 +38,44 @@ public class ListViewWeek extends ListView {
 	}
 	
 	private void initializeItems(int week, String startDate, String curDate) {						
-		String[] split = startDate.split("-");
-		Date date1 = new Date(Integer.parseInt(split[0]) - 1900, 
-				Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));	
-		split = curDate.split("-");
+		String[] dateSplit = null;
 		
-		int intervalDay = 0;		
-		while (intervalDay < 14) {
-			String date = WeekdayCalculator.afterNDayFrom(date1, intervalDay);
+		// get Date objects for start date and current date
+		dateSplit = startDate.split("-");
+		Date aStartDate = DateHelper.getDate(
+				Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]), Integer.parseInt(dateSplit[2]));	
+		dateSplit = curDate.split("-");
+		Date aCurDate = DateHelper.getDate(
+				Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]), Integer.parseInt(dateSplit[2]));
+		
+		// if the start date is in the future
+		if (aStartDate.compareTo(aCurDate) > 0) {
+			for (int i = 0; i < 7; ++i) {
+				addItem(sWeekdays[i], R.drawable.lock);
+			}
+			return;
+		}
+		
+		// start date is less than or equal to the current date
+		int aNumOfDaysAfterStartDate = 0;		
+		while (aNumOfDaysAfterStartDate < 14) {
+			String date = WeekdayCalculator.afterNDayFrom(aStartDate, aNumOfDaysAfterStartDate);
 			if (date.compareToIgnoreCase(curDate) == 0) {
 				break;
 			}
-			intervalDay++;			
+			aNumOfDaysAfterStartDate++;			
 		}
+		// put all date to the list as Strings YYYY-MM-dd
 		ArrayList<String> dates = new ArrayList<String>();
 		for (int i = 0; i < 14; ++i) {
-			String date = WeekdayCalculator.afterNDayFrom(date1, i);
+			String date = WeekdayCalculator.afterNDayFrom(aStartDate, i);
 			dates.add(date);
-		}
+		}	
+		// fill each item
 		int startWeekday = WeekdayCalculator.getWeekdayInNumber(startDate) - 1; // 0 - 6
-		
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
-				if (i <= startWeekday + intervalDay) {
+				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
 					if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(i - startWeekday))) {
 						addItem(sWeekdays[i % 7], R.drawable.check_mark);
 					} else {
@@ -70,9 +86,9 @@ public class ListViewWeek extends ListView {
 				}
 			}
 		} else { // right list view
-			intervalDay -= 7;
+			aNumOfDaysAfterStartDate -= 7;
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
-				if (i <= startWeekday + intervalDay) {
+				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
 					if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
 						addItem(sWeekdays[i % 7], R.drawable.check_mark);
 					} else {

@@ -78,7 +78,7 @@ public class DataSource {
 //			mInitialized = false; 
 //		}
 //		return mInitialized;
-		String startDate = DataStorage.GetValueString(mContext, USCTeensGlobals.START_DATE, "");
+		String startDate = DataStorage.getStartDate(mContext, "");
 		return startDate.compareTo("") != 0;
 	}
 	

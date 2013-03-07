@@ -18,6 +18,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.ListViewWeek;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
+import edu.neu.android.wocketslib.support.DataStorage;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -52,7 +53,7 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 	
 	public List<AppObject> load() {
 		AppScale appScale = AppScale.getInstance();
-		String startDate = StartDateSetupActivity.getStartDate(mContext);
+		String startDate = DataStorage.getStartDate(mContext, "");
 		// create game objects
 		if (mBackground == null) {
 			mBackground = new BackgroundWeekday(mContext.getResources());			
@@ -127,7 +128,7 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 	
 	public void resume() {
 		
-		String startDate = StartDateSetupActivity.getStartDate(mContext);
+		String startDate = DataStorage.getStartDate(mContext, "");
 		// get current date in String
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();                               
@@ -237,7 +238,7 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 		
 		// get the start date
 		DataSource dataSrc = DataSource.getInstance(null);
-		String startDate = StartDateSetupActivity.getStartDate(mContext);		
+		String startDate = DataStorage.getStartDate(mContext, "");
 		if (startDate.compareTo("") == 0) {
 			// possibly fail to read the configuration file
 			Log.e(TAG, "Can not get start date!");
