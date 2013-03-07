@@ -100,6 +100,71 @@ public class ListViewWeek extends ListView {
 			} 
 		}		
 	}
+	
+	public void refresh(int week, String startDate, String curDate) {
+		String[] dateSplit = null;
+		
+		// get Date objects for start date and current date
+		dateSplit = startDate.split("-");
+		Date aStartDate = DateHelper.getDate(
+				Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]), Integer.parseInt(dateSplit[2]));	
+		dateSplit = curDate.split("-");
+		Date aCurDate = DateHelper.getDate(
+				Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]), Integer.parseInt(dateSplit[2]));
+		
+		// if the start date is in the future
+		if (aStartDate.compareTo(aCurDate) > 0) {
+			for (int i = 0; i < 7; ++i) {
+				getItem(i).setItemImage(R.drawable.lock);
+			}
+			return;
+		}
+		
+		// start date is less than or equal to the current date
+		int aNumOfDaysAfterStartDate = 0;		
+		while (aNumOfDaysAfterStartDate < 14) {
+			String date = WeekdayCalculator.afterNDayFrom(aStartDate, aNumOfDaysAfterStartDate);
+			if (date.compareToIgnoreCase(curDate) == 0) {
+				break;
+			}
+			aNumOfDaysAfterStartDate++;			
+		}
+		// put all date to the list as Strings YYYY-MM-dd
+		ArrayList<String> dates = new ArrayList<String>();
+		for (int i = 0; i < 14; ++i) {
+			String date = WeekdayCalculator.afterNDayFrom(aStartDate, i);
+			dates.add(date);
+		}	
+		// fill each item
+		int startWeekday = WeekdayCalculator.getWeekdayInNumber(startDate) - 1; // 0 - 6
+		if (week == 1) { // left list view
+			for (int i = startWeekday; i < startWeekday + 7; ++i) {
+				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
+					if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(i - startWeekday))) {
+						getItem(i - startWeekday).setItemImage(R.drawable.check_mark);						
+					} else {
+						getItem(i - startWeekday).setItemImage(R.drawable.check_square);
+					}
+				} else {
+					getItem(i - startWeekday).setItemImage(R.drawable.lock);
+				}
+			}
+		} else { // right list view
+			aNumOfDaysAfterStartDate -= 7;
+			startWeekday += 7;
+			for (int i = startWeekday; i < startWeekday + 7; ++i) {
+				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
+					if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
+						getItem(i - startWeekday).setItemImage(R.drawable.check_mark);	
+					} else {
+						getItem(i - startWeekday).setItemImage(R.drawable.check_square);
+					}
+				} else {
+					getItem(i - startWeekday).setItemImage(R.drawable.lock);
+				}
+			} 
+		}
+	}
 
 	public void setPosn(float x, float y) {
 		mX = x;
