@@ -44,15 +44,12 @@ public class DataSource {
 	}
 	
 	protected DataSource(Context context) {
-		mContext = context;
-		mConfig  = new Configuration(context);
+		mContext = context;		
 	}
 		
 	public static final int PIXEL_SCALE = 2;	
 	public static final String PATH_PREFIX = "/sdcard/TestData/";
-	
-	// configuration read from xml
-	protected Configuration mConfig = null;
+
 	// raw chunk data
 	protected RawChunkList mRawChkList = new RawChunkList();
 	// raw activity data
@@ -241,10 +238,6 @@ public class DataSource {
 		}
 		
 		return allLabelled;
-	}
-	
-	public Configuration getConfiguration() {
-		return mConfig;
 	}
 
 	public boolean saveChunkData(RawChunkList rawChunks) {

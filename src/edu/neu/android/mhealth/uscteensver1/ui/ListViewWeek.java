@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.data.Configuration;
 import edu.neu.android.mhealth.uscteensver1.data.RawActivity;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
@@ -25,18 +24,14 @@ public class ListViewWeek extends ListView {
 		"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 	};
 	
-	public ListViewWeek(Resources res, int week) {
+	public ListViewWeek(Resources res, int week, String startDate) {
 		super(res);
 		
 		assert(week == 1 || week == 2);
-		// !!! suppose the start date begins at Monday
-		// get start date in String
-		Configuration config = DataSource.getInstance(null).getConfiguration();
-		String startDate = config.getStartDate();
+	
 		// get current date in String
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();                               
-		String curDate = sf.format(date);
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");	                           
+		String curDate = sf.format(new Date());
 							
 		initializeItems(week, startDate, curDate);
 	}

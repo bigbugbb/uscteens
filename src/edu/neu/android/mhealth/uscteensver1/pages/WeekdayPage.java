@@ -6,8 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.R.drawable;
-import edu.neu.android.mhealth.uscteensver1.data.Configuration;
+import edu.neu.android.mhealth.uscteensver1.activities.StartDateSetupActivity;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.ui.BackgroundWeekday;
@@ -53,13 +52,14 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 	
 	public List<AppObject> load() {
 		AppScale appScale = AppScale.getInstance();
+		String startDate = StartDateSetupActivity.getStartDate(mContext);
 		// create game objects
 		if (mBackground == null) {
 			mBackground = new BackgroundWeekday(mContext.getResources());			
 			mObjects.add(mBackground);			
 		}
 		if (mListViewWeek1 == null) {
-			mListViewWeek1 = new ListViewWeek(mContext.getResources(), 1);
+			mListViewWeek1 = new ListViewWeek(mContext.getResources(), 1, startDate);
 			mObjects.add(mListViewWeek1);	
 			mListViewWeek1.setX(0);
 			mListViewWeek1.setY(appScale.doScaleH(178 + mListViewWeek1.getBorderWidth()));
@@ -68,7 +68,7 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 			mListViewWeek1.setOnListViewScrollingListener(this);
 		}
 		if (mListViewWeek2 == null) {
-			mListViewWeek2 = new ListViewWeek(mContext.getResources(), 2);
+			mListViewWeek2 = new ListViewWeek(mContext.getResources(), 2, startDate);
 			mObjects.add(mListViewWeek2);
 			mListViewWeek2.setX(appScale.doScaleW(643));
 			mListViewWeek2.setY(appScale.doScaleH(178 + mListViewWeek2.getBorderWidth()));
@@ -126,8 +126,8 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 	}
 	
 	public void resume() {
-		Configuration config = DataSource.getInstance(mContext).getConfiguration();
-		String startDate = config.getStartDate();
+		
+		String startDate = StartDateSetupActivity.getStartDate(mContext);
 		// get current date in String
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();                               
@@ -237,7 +237,7 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 		
 		// get the start date
 		DataSource dataSrc = DataSource.getInstance(null);
-		String startDate = dataSrc.getConfiguration().getStartDate();		
+		String startDate = StartDateSetupActivity.getStartDate(mContext);		
 		if (startDate.compareTo("") == 0) {
 			// possibly fail to read the configuration file
 			Log.e(TAG, "Can not get start date!");

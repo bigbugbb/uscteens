@@ -222,4 +222,7 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 		finish();
 	}
 
+	static public String getStartDate(Context context) {
+		return DataStorage.GetValueString(context, USCTeensGlobals.START_DATE, "");
+	}
 }
