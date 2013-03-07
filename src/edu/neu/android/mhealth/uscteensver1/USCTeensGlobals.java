@@ -34,6 +34,7 @@ public class USCTeensGlobals {
 
 	// the start date
 	public final static String START_DATE = "USCTeensStartDate";
+	public final static int TIME_FOR_WAITING_ACSENSOR = 20 * 1000;
 		
 	public static void initGlobals(Context aContext) {
 		// By default the logging will go to the apps internal storage, not the external directory
@@ -107,8 +108,7 @@ public class USCTeensGlobals {
 
 		Globals.classFromKey.put(Globals.GETHELP, edu.neu.android.wocketslib.activities.helpcomment.GetHelpActivity.class);
 		Globals.classFromKey.put(Globals.SURVEY, edu.neu.android.wocketslib.emasurvey.SurveyActivity.class);
-				
-		Globals.TIMER_PERIOD_MS = 1000;
+
 		Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 0;
 	}
 	

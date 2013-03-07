@@ -17,7 +17,7 @@ public class USCTeensAppManager extends ApplicationManager {
     	USCTeensGlobals.initGlobals(getAppContext());    	
 
     	USCTeensArbitrater arbitrater = new USCTeensArbitrater(getAppContext()); 
-    	//Globals.setArbitrater(arbitrater);     	
+    	Globals.setArbitrater(arbitrater);     	
     }
 }
 
