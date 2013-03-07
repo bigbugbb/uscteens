@@ -176,33 +176,6 @@ public class SetupTeenGameActivity extends BaseActivity {
 			}
 		});
 		
-//		checkInhalers.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				DataStore.init(getApplicationContext());
-//
-//				String asthmaSensors = "Asthmapolis sensors found: \n";
-//				for (int x = 0; x < DataStore.mSensors.size(); x++) {
-//					if (DataStore.mSensors.get(x).mType == Sensor.ASTHMA) {
-//						asthmaSensors = asthmaSensors
-//								+ DataStore.mSensors.get(x).mAddress + "\n";
-//					}
-//				}
-//				Toast.makeText(getApplicationContext(), asthmaSensors,
-//						Toast.LENGTH_LONG).show();
-//			}
-//		});
-//
-//		rescueInhaler.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				new DetectInhalerAsyncTask().execute(null);
-//			}
-//		});
-
 		randomEMA.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -262,40 +235,6 @@ public class SetupTeenGameActivity extends BaseActivity {
 			}
 		});
 
-	}
-
-	private String inhalerDetectedMAC() {
-		// Here to check if the rescue inhaler goes off
-
-		String nameColon = null;
-		String nameUnder = null;
-		String address = null;
-
-		String asthmaSensors = "Asthapolis sensors found: \n";
-		for (int x = 0; x < DataStore.mSensors.size(); x++) {
-			if (DataStore.mSensors.get(x).mType == Sensor.ASTHMA) {
-				address = DataStore.mSensors.get(x).mAddress;
-				nameColon = Util.insertColons(address);
-				nameUnder = Util.insertUnderscores(address);
-
-				if ((LogcatReader.isInLogcat(nameColon, false))
-						|| (LogcatReader.isInLogcat(nameUnder, false))) {
-					return address;
-				}
-				
-			}
-		}
-		LogcatReader.clearLogcat();
-		return null;
-	}
-
-	public static String rescueInhalerMAC(Context c) {
-		return DataStorage.GetValueString(c, 
-				KEY_RESCUE_INHALER, null);
-	}
-	private void setRescueInhalerMAC(String mac){
-		DataStorage.SetValue(SetupTeenGameActivity.this, 
-				KEY_RESCUE_INHALER, mac);
 	}
 
 	@Override

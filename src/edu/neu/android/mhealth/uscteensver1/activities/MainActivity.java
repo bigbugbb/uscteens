@@ -198,10 +198,10 @@ public class MainActivity extends MyBaseActivity implements OnTouchListener {
 	public void onResume() {		
 		super.onResume();	
 		
-//		if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
-//			// TODO:
-//		}
-//		
+		if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
+			// TODO:
+		}
+		
 		mMainView.onResume();
 		mCurPage.resume();		
 	}

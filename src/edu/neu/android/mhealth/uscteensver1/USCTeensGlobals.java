@@ -65,7 +65,7 @@ public class USCTeensGlobals {
 		Globals.IS_WOCKETS_ENABLED = false;
 		Globals.IS_BLUETOOTH_ENABLED = false; 
 		Globals.IS_LOCATION_ENABLED = false; 
-		Globals.IS_READING_SENSOR_ENABLED = true;
+		Globals.IS_READING_SENSOR_ENABLED = true; // true for debug
 
 		Globals.DEFAULT_MAIL_USERNAME = "wocketssmtp@gmail.com";
 		Globals.DEFAULT_MAIL_PASSWORD = "W0CKET$mtp";
@@ -107,8 +107,9 @@ public class USCTeensGlobals {
 
 		Globals.classFromKey.put(Globals.GETHELP, edu.neu.android.wocketslib.activities.helpcomment.GetHelpActivity.class);
 		Globals.classFromKey.put(Globals.SURVEY, edu.neu.android.wocketslib.emasurvey.SurveyActivity.class);
-		
-		Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 20000;
+				
+		Globals.TIMER_PERIOD_MS = 1000;
+		Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 0;
 	}
 	
 }
