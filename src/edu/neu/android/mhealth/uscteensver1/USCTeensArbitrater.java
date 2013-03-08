@@ -73,7 +73,6 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	private static final String SENSOR_FOLDER = "/SensorFolder/";
 	
-	private static String inhaler = null;
 	private static long inhalerUseTime;
 
 	private static final String NEWLINE = "\n";
@@ -454,32 +453,6 @@ public class USCTeensArbitrater extends Arbitrater {
 				&& dateA.getMinutes() == dateB.getMinutes();
 	}
 
-//	/**
-//	 * Setup prompt due to inhaler use with schedule
-//	 */
-//	protected void SetInhalerUsedPromptWithSchedule() {
-//		boolean isOkPrompt = false;
-//		Date now = new Date();
-//		int hour = now.getHours();
-//		int min = now.getMinutes();
-//		Calendar today = Calendar.getInstance();
-//		if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
-//				&& today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-//			if ((hour >= 6 && hour < 7) || (hour >= 15 && hour < 20)
-//					|| (hour == 20 && min < 30))
-//				isOkPrompt = true;
-//			else
-//				isOkPrompt = false;
-//		} else {
-//			if (hour >= 7 && hour < 21)
-//				isOkPrompt = true;
-//			else
-//				isOkPrompt = false;
-//		}
-//		if (isOkPrompt)
-//			inhalerUseTime = System.currentTimeMillis();
-//	}
-
 	/**
 	 * Set which apps are available based on intervention schedule based on days
 	 * into the study
@@ -564,22 +537,7 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	// TODO Fix to use settings by week
 	public static boolean isOkAudioPrompt() {
-		// Date now = new Date();
-		// int hour = now.getHours();
-		// int min = now.getMinutes();
-		// Calendar today = Calendar.getInstance();
-		// if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
-		// && today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-		// if((hour >= 6 && hour < 20)||(hour == 20 && min < 30))
-		// return true;
-		// else
-		// return false;
-		// } else {
-		// if(hour >= 7 && hour < 21)
-		// return true;
-		// else
-		// return false;
-		// }
+
 		return true;
 	}
 	
@@ -620,6 +578,13 @@ public class USCTeensArbitrater extends Arbitrater {
 		return "InternalAccel." + PhoneInfo.getID(aContext) + "." + lastCreateTime + ".log.csv";
 	}
 	
+	private String getFilePathNameForSavingInternalAccelData(String fileName) {
+		String dateDir = new SimpleDateFormat("yyyy-MM-dd/HH/").format(new Date());
+		
+		return Globals.INTERNAL_DIRECTORY_PATH + File.separator + 
+				Globals.DATA_DIRECTORY + SENSOR_FOLDER + dateDir + fileName;	
+	}
+	
 	private String getInternalAccelDataForSaving() {
 		String data = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, SSS").format(new Date());
 		// Get internal accelerometer data which have been saved in the last minute
@@ -638,11 +603,11 @@ public class USCTeensArbitrater extends Arbitrater {
 		String fileName = getFileNameForSavingInternalAccelData();
 		// Get the content data that should be written
 		String data = getInternalAccelDataForSaving();
-		// Create the dirs if they do not exist
-		String filePathName = Globals.INTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + SENSOR_FOLDER + fileName;
-		File aFile = new File(filePathName);		
+		// Get the whole file path name
+		String filePathName = getFilePathNameForSavingInternalAccelData(fileName);
 		
+		// Write the file. If the file does not exist, create a new one.ll 
+		File aFile = new File(filePathName);				
 		try {
 			FileHelper.createDirsIfDontExist(aFile);
 			// Create the file if it does not exist
@@ -706,18 +671,6 @@ public class USCTeensArbitrater extends Arbitrater {
 		SetAppActivityUsingSchedule(lastArbitrationTime, studyDay, isNewSoftwareVersion);
 
 		isOkAudioPrompt = isOkAudioPrompt();
-
-		// if (Globals.IS_DEBUG)
-		// Log.e(TAG, "IS OK TO AUDIO PROMPT: " + isOkAudioPrompt);
-		// // Log.h(TAG, aDataStore.GetSummaryString(getApplicationContext()));
-		// if (Globals.IS_DEBUG)
-		// Log.e(TAG, "STUDY DAY: " +
-		// DataStorage.getDayNumber(getApplicationContext(), true));
-		// if (Globals.IS_DEBUG)
-		// Log.e(TAG, AppInfo.AllAppStatus(getApplicationContext()));
-		
-		// get the recorded internal AC data for the last one minute
-		
 
 		if (Globals.IS_DEBUG) {
 			Log.d(TAG, "End arbitrate");

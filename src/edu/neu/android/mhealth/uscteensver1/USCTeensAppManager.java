@@ -1,10 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1;
 
-import java.io.File;
-
 import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.Globals;
-import edu.neu.android.wocketslib.utils.FileHelper;
 
 
 public class USCTeensAppManager extends ApplicationManager {

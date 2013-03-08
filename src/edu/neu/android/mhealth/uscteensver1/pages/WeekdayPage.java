@@ -41,8 +41,7 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 	protected ButtonArrow		mArrowLeftUp  = null;
 	protected ButtonArrow		mArrowRightUp = null;
 	protected ButtonArrow		mArrowLeftBottom  = null;
-	protected ButtonArrow		mArrowRightBottom = null;
-	protected ButtonReturn		mBtnReturn  = null;
+	protected ButtonArrow		mArrowRightBottom = null;	
 	
 	protected View mView = null;
 
@@ -138,6 +137,18 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 		mListViewWeek1.refresh(1, startDate, curDate);
 		mListViewWeek2.refresh(2, startDate, curDate);
 							
+	}
+	
+	public void stop() {
+		mBackground = null;		
+		mListViewWeek1 = null;
+		mListViewWeek2 = null;
+		mArrowLeftUp      = null;
+		mArrowRightUp     = null;	
+		mArrowLeftBottom  = null;
+		mArrowRightBottom = null;
+		
+		release();
 	}
 	
 	public void release() {
