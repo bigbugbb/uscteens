@@ -593,14 +593,16 @@ public class USCTeensArbitrater extends Arbitrater {
 		if (aJSONString.compareTo(DataStorage.EMPTY) != 0) {
 			// Get create date
 			Date createTime = gson.fromJson(aJSONString, Date.class);
+			createTime.setMinutes(0);
+			createTime.setSeconds(0);
 			// Compare the last create date and the current date 
 			// to figure out whether a new file should be created	
 			Calendar calendar = Calendar.getInstance();
 			calendar.add(Calendar.HOUR, -1);
-			Date curTimeMinus1Min = calendar.getTime();
-			isNewFileNeeded = curTimeMinus1Min.getTime() >= createTime.getTime();	
+			Date curTimeMinus1Hour = calendar.getTime();
+			isNewFileNeeded = curTimeMinus1Hour.getTime() >= createTime.getTime();	
 		} else {
-			// first time to save the csv file, just create a new one
+			// First time to save the csv file, just create a new one
 			isNewFileNeeded = true;
 		}
 
