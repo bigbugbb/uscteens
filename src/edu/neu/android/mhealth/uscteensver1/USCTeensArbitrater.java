@@ -42,26 +42,31 @@ import edu.neu.android.wocketslib.support.LogcatReader;
 import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.BasicLogger;
 import edu.neu.android.wocketslib.utils.DateHelper;
+import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.PackageChecker;
 import edu.neu.android.wocketslib.utils.PhonePrompter;
 import edu.neu.android.wocketslib.utils.PhoneVibrator;
 import edu.neu.android.wocketslib.utils.Util;
+import edu.neu.android.wocketslib.utils.WOCKETSException;
 import edu.neu.android.wocketslib.wakefulintent.WakefulIntentService;
 
 public class USCTeensArbitrater extends Arbitrater {
-	private static final String TAG = "USCTeensArbitrater";
+	private static final String TAG = "USCTeensArbitrater";	
+	private static final String KEY_INTERNAL_ACCEL_DATA_CSV_FILE_NAME = "_KEY_INTERNAL_ACCEL_DATA_CSV_FILE_NAME";	
 	
 	private static final String KEY_RANDOM_PROMPT = "_KEY_RANDOM_PROMPT";
 	private static final String KEY_CS_PROMPT = "_KEY_CS_PROMPT";
 	private static final String KEY_ALL_PROMPT = "_KEY_ALL_PROMPT";
-	private static final String KEY_SCHEDULE = "_KEY_SCHEDULE";
+	private static final String KEY_SCHEDULE = "_KEY_SCHEDULE";	
 
 	private static final long PROMPT_OFFSET = 5 * 60 * 1000;
 
 	private static final int KEY_RANDOM_EMA = 0;
 	private static final int KEY_CS_EMA = 1;
 
+	private static final String SENSOR_FOLDER = "/SensorFolder/";
+	
 	private static String inhaler = null;
 	private static long inhalerUseTime;
 
@@ -452,31 +457,31 @@ public class USCTeensArbitrater extends Arbitrater {
 				&& dateA.getMinutes() == dateB.getMinutes();
 	}
 
-	/**
-	 * Setup prompt due to inhaler use with schedule
-	 */
-	protected void SetInhalerUsedPromptWithSchedule() {
-		boolean isOkPrompt = false;
-		Date now = new Date();
-		int hour = now.getHours();
-		int min = now.getMinutes();
-		Calendar today = Calendar.getInstance();
-		if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
-				&& today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-			if ((hour >= 6 && hour < 7) || (hour >= 15 && hour < 20)
-					|| (hour == 20 && min < 30))
-				isOkPrompt = true;
-			else
-				isOkPrompt = false;
-		} else {
-			if (hour >= 7 && hour < 21)
-				isOkPrompt = true;
-			else
-				isOkPrompt = false;
-		}
-		if (isOkPrompt)
-			inhalerUseTime = System.currentTimeMillis();
-	}
+//	/**
+//	 * Setup prompt due to inhaler use with schedule
+//	 */
+//	protected void SetInhalerUsedPromptWithSchedule() {
+//		boolean isOkPrompt = false;
+//		Date now = new Date();
+//		int hour = now.getHours();
+//		int min = now.getMinutes();
+//		Calendar today = Calendar.getInstance();
+//		if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
+//				&& today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+//			if ((hour >= 6 && hour < 7) || (hour >= 15 && hour < 20)
+//					|| (hour == 20 && min < 30))
+//				isOkPrompt = true;
+//			else
+//				isOkPrompt = false;
+//		} else {
+//			if (hour >= 7 && hour < 21)
+//				isOkPrompt = true;
+//			else
+//				isOkPrompt = false;
+//		}
+//		if (isOkPrompt)
+//			inhalerUseTime = System.currentTimeMillis();
+//	}
 
 	/**
 	 * Set which apps are available based on intervention schedule based on days
@@ -580,6 +585,75 @@ public class USCTeensArbitrater extends Arbitrater {
 		// }
 		return true;
 	}
+	
+	private String getFileNameForSavingInternalAccelData() {
+		String fileName = DataStorage.GetValueString(aContext, KEY_INTERNAL_ACCEL_DATA_CSV_FILE_NAME, "");
+		if (fileName.compareTo("") == 0) {
+			// No csv file found, so just create a new one			
+			//fileName = createFileNameForInternalAccelData();
+		} else {			
+			// check whether the hour has changed
+			if (isHourChanged()) {
+				// create a new csv file for the current hour
+				//fileName = createFileNameForInternalAccelData();
+			}						
+		}
+		
+		return "";
+	}
+	
+	private boolean isHourChanged() {
+		//String[] splitFileName = csvFileName.split(".");
+		//String[] splitTime = splitFileName[2].split("-");
+		return true;
+	}
+	
+	private String getInternalAccelDataForSaving() {
+		// 1. Get internal accelerometer data which have been saved in the last minute
+		int intAccelAverage = DataStorage.getInternalAccelAverage(aContext, 0);
+		int intAccelSamples = DataStorage.getInternalAccelSamples(aContext, 0);
+		return "";
+	}
+	
+	protected boolean LogInternalAccelData() {
+		
+		boolean result = true;
+				
+		// Get the csv file name
+		String fileName = getFileNameForSavingInternalAccelData();
+		// Get the content data that should be written
+		String data = getInternalAccelDataForSaving();
+		// Create the dirs if they do not exist
+		String filePathName = Globals.INTERNAL_DIRECTORY_PATH + File.separator + 
+				Globals.DATA_DIRECTORY + SENSOR_FOLDER + fileName;
+		File aFile = new File(filePathName);		
+		
+		try {
+			FileHelper.createDirsIfDontExist(aFile);
+			// Create the file if it does not exist
+			if (!aFile.exists()) {
+				try {
+					aFile.createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			// Write the data to the internal sensor folder
+			FileHelper.appendToFile(data, filePathName);
+		} catch (WOCKETSException e) {
+			// TODO: 
+			result = false;
+			e.printStackTrace();
+		} finally {
+			;
+		}
+//		if (!isSaved) {
+//			Log.e(TAG, "Error. Could not save internal acceleromter data to internal storage." + fileName);
+//		}
+		
+		return result;
+	}
 
 	public void doArbitrate(boolean isNewSoftwareVersion) {
 
@@ -591,10 +665,12 @@ public class USCTeensArbitrater extends Arbitrater {
 			Log.d(TAG, "Begin arbitrate");			
 		}
 		
+		LogInternalAccelData();
+		
 		// wait for the internal AC sensor to get enough data for the entire 20s
 		try {
 			if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor for 20s"); }
-			Thread.sleep(USCTeensGlobals.TIME_FOR_WAITING_ACSENSOR);
+			Thread.sleep(USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER);
 			if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor finished"); }
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

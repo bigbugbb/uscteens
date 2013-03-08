@@ -32,7 +32,7 @@ import edu.neu.android.wocketslib.Globals;
 public class USCTeensGlobals {
 	private static final String TAG = "USCTeensGlobals";	
 
-	public final static int TIME_FOR_WAITING_ACSENSOR = 20 * 1000;
+	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
 		
 	public static void initGlobals(Context aContext) {
 		// By default the logging will go to the apps internal storage, not the external directory
