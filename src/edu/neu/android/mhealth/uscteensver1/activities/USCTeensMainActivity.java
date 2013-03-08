@@ -42,8 +42,7 @@ import android.widget.Toast;
 
 public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListener {
 	
-	protected MainView 		mMainView 	   = null;
-//	protected SensorManager mSensorManager = null;	
+	protected MainView mMainView = null;	
 	// all of the pages
 	protected AppPage mCurPage = null;
 	protected List<AppPage> mPages = new ArrayList<AppPage>();
@@ -94,15 +93,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-	
-//	private void startMonitor() {
-//		Intent i = new Intent(
-//				MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
-//		sendBroadcast(i);
-//		Toast.makeText(getApplicationContext(),
-//				"Starting the service...", Toast.LENGTH_SHORT).show();
-//	}
-	
+
 	private void setupScale() {
 		DisplayMetrics dm = new DisplayMetrics();  
         getWindowManager().getDefaultDisplay().getMetrics(dm);	
@@ -196,11 +187,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 
 	@Override
 	public void onResume() {		
-		super.onResume();	
-		
-		if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
-			// TODO:
-		}
+		super.onResume();					
 		
 		mMainView.onResume();
 		mCurPage.resume();		
@@ -219,7 +206,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		mCurPage.stop();
 		super.onStop();
 	}	
-	
+
 	// use main looper as the default
 	protected final Handler mHandler = new Handler() {	
 		public void handleMessage(Message msg) {        					
