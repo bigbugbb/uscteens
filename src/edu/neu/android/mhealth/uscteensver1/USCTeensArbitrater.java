@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import com.google.gson.Gson;
+
 //import org.omg.PortableInterceptor.INACTIVE;
 
 import android.app.NotificationManager;
@@ -45,6 +47,7 @@ import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.PackageChecker;
+import edu.neu.android.wocketslib.utils.PhoneInfo;
 import edu.neu.android.wocketslib.utils.PhonePrompter;
 import edu.neu.android.wocketslib.utils.PhoneVibrator;
 import edu.neu.android.wocketslib.utils.Util;
@@ -53,12 +56,15 @@ import edu.neu.android.wocketslib.wakefulintent.WakefulIntentService;
 
 public class USCTeensArbitrater extends Arbitrater {
 	private static final String TAG = "USCTeensArbitrater";	
-	private static final String KEY_INTERNAL_ACCEL_DATA_CSV_FILE_NAME = "_KEY_INTERNAL_ACCEL_DATA_CSV_FILE_NAME";	
+	private static final String KEY_CSVFILE_CREATE_TIME = "KEY_CSVFILE_CREATE_TIME";	
 	
 	private static final String KEY_RANDOM_PROMPT = "_KEY_RANDOM_PROMPT";
 	private static final String KEY_CS_PROMPT = "_KEY_CS_PROMPT";
 	private static final String KEY_ALL_PROMPT = "_KEY_ALL_PROMPT";
 	private static final String KEY_SCHEDULE = "_KEY_SCHEDULE";	
+	
+	private static final String INTERNAL_ACCEL_DATA_CSVFILEHEADER = 
+			"DateTime, Milliseconds, InternalAccelAverage, InternalAccelSamples";
 
 	private static final long PROMPT_OFFSET = 5 * 60 * 1000;
 
@@ -116,20 +122,11 @@ public class USCTeensArbitrater extends Arbitrater {
 		SurveyPromptEvent promptEvent = new SurveyPromptEvent(
 				lastScheduledPromptTime, System.currentTimeMillis());
 		String msg = "";
-		// Intent appIntentToRun = new Intent(Intent.ACTION_MAIN);
-		// String pkg = AppInfo.GetPackageName(aContext, aKey);
-		// String className = AppInfo.GetClassName(aContext, aKey);
-
-		// Indicate that a prompt took place so another one isn't done too soon
-		// DataStorage.setTime(aContext, DataStorage.KEY_LAST_ALARM_TIME,
-		// System.currentTimeMillis());
+	
 		// Indicate that this particular app was prompted
 		AppInfo.SetLastTimePrompted(aContext, Globals.SURVEY,
 				System.currentTimeMillis());
-		// AppInfo.SetStartEntryTime(aContext, aKey,
-		// System.currentTimeMillis());
-		// appIntentToRun.setClassName(pkg, pkg + className);
-		// appIntentToRun.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	
 		Intent i = new Intent(aContext, SurveyActivity.class);
 		long lastTimeCompleted = AppInfo.GetLastTimeCompleted(aContext,
 				Globals.SURVEY);
@@ -587,32 +584,48 @@ public class USCTeensArbitrater extends Arbitrater {
 	}
 	
 	private String getFileNameForSavingInternalAccelData() {
-		String fileName = DataStorage.GetValueString(aContext, KEY_INTERNAL_ACCEL_DATA_CSV_FILE_NAME, "");
-		if (fileName.compareTo("") == 0) {
-			// No csv file found, so just create a new one			
-			//fileName = createFileNameForInternalAccelData();
-		} else {			
-			// check whether the hour has changed
-			if (isHourChanged()) {
-				// create a new csv file for the current hour
-				//fileName = createFileNameForInternalAccelData();
-			}						
+		boolean isNewFileNeeded = false;		
+		Date curTime = new Date();
+						
+		Gson gson = new Gson();
+		String aJSONString = DataStorage.GetValueString(aContext, KEY_CSVFILE_CREATE_TIME, DataStorage.EMPTY);		
+		
+		if (aJSONString.compareTo(DataStorage.EMPTY) != 0) {
+			// Get create date
+			Date createTime = gson.fromJson(aJSONString, Date.class);
+			// Compare the last create date and the current date 
+			// to figure out whether a new file should be created	
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.HOUR, -1);
+			Date curTimeMinus1Min = calendar.getTime();
+			isNewFileNeeded = curTimeMinus1Min.getTime() >= createTime.getTime();	
+		} else {
+			// first time to save the csv file, just create a new one
+			isNewFileNeeded = true;
+		}
+
+		String lastCreateTime = "";
+		// check whether a new file should be created. If the answer is true, create a new file name
+		if (isNewFileNeeded) {
+			String aCurTimeString = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(curTime);
+			lastCreateTime = aCurTimeString;			
+			DataStorage.SetValue(aContext, KEY_CSVFILE_CREATE_TIME, gson.toJson(curTime));
+		} else {
+			Date createTime = gson.fromJson(aJSONString, Date.class);
+			lastCreateTime = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(createTime);
 		}
 		
-		return "";
-	}
-	
-	private boolean isHourChanged() {
-		//String[] splitFileName = csvFileName.split(".");
-		//String[] splitTime = splitFileName[2].split("-");
-		return true;
+		return "InternalAccel." + PhoneInfo.getID(aContext) + "." + lastCreateTime + ".log.csv";
 	}
 	
 	private String getInternalAccelDataForSaving() {
-		// 1. Get internal accelerometer data which have been saved in the last minute
+		String data = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, SSS").format(new Date());
+		// Get internal accelerometer data which have been saved in the last minute
 		int intAccelAverage = DataStorage.getInternalAccelAverage(aContext, 0);
 		int intAccelSamples = DataStorage.getInternalAccelSamples(aContext, 0);
-		return "";
+		data += ", " + intAccelAverage + ", " + intAccelSamples;
+		
+		return data;
 	}
 	
 	protected boolean LogInternalAccelData() {
@@ -634,6 +647,8 @@ public class USCTeensArbitrater extends Arbitrater {
 			if (!aFile.exists()) {
 				try {
 					aFile.createNewFile();
+					// Write the file header immediately
+					FileHelper.appendToFile(INTERNAL_ACCEL_DATA_CSVFILEHEADER, filePathName);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
