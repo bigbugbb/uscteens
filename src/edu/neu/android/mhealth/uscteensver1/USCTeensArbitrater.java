@@ -64,7 +64,7 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static final String KEY_SCHEDULE = "_KEY_SCHEDULE";	
 	
 	private static final String INTERNAL_ACCEL_DATA_CSVFILEHEADER = 
-			"DateTime, Milliseconds, InternalAccelAverage, InternalAccelSamples";
+			"DateTime, Milliseconds, InternalAccelAverage, InternalAccelSamples\n";
 
 	private static final long PROMPT_OFFSET = 5 * 60 * 1000;
 
@@ -77,6 +77,8 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	private static final String NEWLINE = "\n";
 	private static final String SKIPLINE = "\n\n";
+	
+	private static boolean sIsFirstRun = true;
 
 	protected static Context aContext = null;
 
@@ -412,7 +414,7 @@ public class USCTeensArbitrater extends Arbitrater {
 				&& timeSincePrompted > ((Globals.REPROMPT_TIMES + 1) * Globals.REPROMPT_DELAY_MS)) {
 			NotificationManager notificationManger = (NotificationManager) aContext
 					.getSystemService(Context.NOTIFICATION_SERVICE);
-			notificationManger.cancel(Globals.SURVEY_NOTF_ID);
+			notificationManger.cancel(Globals.SURVEY_NOTIFICATION_ID);
 		}
 	}
 
@@ -585,17 +587,54 @@ public class USCTeensArbitrater extends Arbitrater {
 				Globals.DATA_DIRECTORY + SENSOR_FOLDER + dateDir + fileName;	
 	}
 	
-	private String getInternalAccelDataForSaving() {
-		String data = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, SSS").format(new Date());
+	private String getInternalAccelDataForSaving() {	
+//		Date aDate = null;
+//		Calendar calendar = Calendar.getInstance();
+//		calendar.add(Calendar.MINUTE, -1);				
+		
 		// Get internal accelerometer data which have been saved in the last minute
-		int intAccelAverage = DataStorage.getInternalAccelAverage(aContext, 0);
-		int intAccelSamples = DataStorage.getInternalAccelSamples(aContext, 0);
-		data += ", " + intAccelAverage + ", " + intAccelSamples;
+		String data = "";
+		int maxMinutes = USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER / 1000;
+		for (int i = 1; i <= maxMinutes; ++i) {	
+			String time = DataStorage.GetValueString(aContext, 
+					DataStorage.KEY_INTERNAL_ACCEL_RECORDING_TIME + i, DataStorage.EMPTY);
+			
+//			calendar.add(Calendar.SECOND, 1); // offset to the data recording time
+//			aDate = calendar.getTime();
+//			
+//			if (time.compareTo(DataStorage.EMPTY) == 0) {
+//				time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, SSS").format(aDate);
+//			}
+//			// Adjust the time if it's not correct, mainly due to high CPU load or first run
+//			// yyyy-MM-dd HH:mm:ss, SSS
+//			String[] tmSplit  = time.split(" ");
+//			String[] subSplit = tmSplit[0].split("-");
+//			int year  = Integer.parseInt(subSplit[0]);
+//			int month = Integer.parseInt(subSplit[1]);
+//			int day   = Integer.parseInt(subSplit[2]);
+//						
+//			if (year != aDate.getYear() || month != aDate.getMonth() || day != aDate.getDay()) {
+//				time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, SSS").format(aDate);
+//			} else {
+//				subSplit = tmSplit[1].split(":");
+//				int hour   = Integer.parseInt(subSplit[0]);
+//				int minute = Integer.parseInt(subSplit[1]);
+//				if (hour != aDate.getHours() || minute != aDate.getMinutes()) {
+//					time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, SSS").format(aDate); 
+//				}
+//			}
+			
+			int intAccelAverage = (int) DataStorage.GetValueLong(
+					aContext, DataStorage.KEY_INTERNAL_ACCEL_AVERAGE + i, 0);
+			int intAccelSamples = (int) DataStorage.GetValueLong(
+					aContext, DataStorage.KEY_INTERNAL_ACCEL_SAMPLES + i, 0);
+			data += time + ", " + intAccelAverage + ", " + intAccelSamples + "\n";
+		}
 		
 		return data;
 	}
 	
-	protected boolean LogInternalAccelData() {
+	protected boolean writePhoneAccelDataToInternalDirectory() {
 		
 		boolean result = true;
 				
@@ -647,7 +686,11 @@ public class USCTeensArbitrater extends Arbitrater {
 			Log.d(TAG, "Begin arbitrate");			
 		}
 		
-		LogInternalAccelData();
+		if (sIsFirstRun) {
+			sIsFirstRun = false;			
+		} else {
+			writePhoneAccelDataToInternalDirectory();
+		}
 		
 		// wait for the internal AC sensor to get enough data for the entire 20s
 		try {
