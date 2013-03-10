@@ -55,7 +55,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	private PasswordChecker pwUninstall = new PasswordChecker("uninstall");
 	
 	protected enum PageType {  
-		HOME_PAGE, WEEKDAY_PAGE, MAIN_PAGE, WIN_PAGE 
+		HOME_PAGE, WEEKDAY_PAGE, MAIN_PAGE, WIN_PAGE
 	}
 
 	@Override

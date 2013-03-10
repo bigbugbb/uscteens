@@ -439,15 +439,16 @@ public class USCTeensArbitrater extends Arbitrater {
 	}
 	
 	private String getFileNameForSavingInternalAccelData() {
-		boolean isNewFileNeeded = false;		
-		Date curTime = new Date();
-						
-		Gson gson = new Gson();
-		String aJSONString = DataStorage.GetValueString(aContext, KEY_CSVFILE_CREATE_TIME, DataStorage.EMPTY);		
+		boolean isNewFileNeeded = false;				
+		String lastCSVFileCreateTime = DataStorage.GetValueString(aContext, KEY_CSVFILE_CREATE_TIME, DataStorage.EMPTY);		
 		
-		if (aJSONString.compareTo(DataStorage.EMPTY) != 0) {
+		if (lastCSVFileCreateTime.compareTo(DataStorage.EMPTY) != 0) {
+			String time[] = lastCSVFileCreateTime.split("-");
 			// Get create date
-			Date createTime = gson.fromJson(aJSONString, Date.class);
+			Date createTime = new Date();
+			createTime.setYear(Integer.parseInt(time[0]));
+			createTime.setMonth(Integer.parseInt(time[1]));
+			createTime.setDate(Integer.parseInt(time[2]));
 			createTime.setMinutes(0);
 			createTime.setSeconds(0);
 			// Compare the last create date and the current date 
@@ -464,21 +465,18 @@ public class USCTeensArbitrater extends Arbitrater {
 		String lastCreateTime = "";
 		// check whether a new file should be created. If the answer is true, create a new file name
 		if (isNewFileNeeded) {
-			String aCurTimeString = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(curTime);
-			lastCreateTime = aCurTimeString;			
-			DataStorage.SetValue(aContext, KEY_CSVFILE_CREATE_TIME, gson.toJson(curTime));
-		} else {
-			Date createTime = gson.fromJson(aJSONString, Date.class);
-			lastCreateTime = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(createTime);
+			Date curTime = new Date();
+			lastCSVFileCreateTime = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(curTime);							
+			DataStorage.SetValue(aContext, KEY_CSVFILE_CREATE_TIME, lastCSVFileCreateTime);
 		}
 		
-		return "InternalAccel." + PhoneInfo.getID(aContext) + "." + lastCreateTime + ".log.csv";
+		return "InternalAccel." + PhoneInfo.getID(aContext) + "." + lastCSVFileCreateTime + ".log.csv";
 	}
 	
 	private String getFilePathNameForSavingInternalAccelData(String fileName) {
 		String dateDir = new SimpleDateFormat("yyyy-MM-dd/HH/").format(new Date());
 		
-		return Globals.INTERNAL_DIRECTORY_PATH + File.separator + 
+		return Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + SENSOR_FOLDER + dateDir + fileName;	
 	}
 	
