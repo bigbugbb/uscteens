@@ -16,10 +16,6 @@ public class USCTeensAppManager extends ApplicationManager {
 
     	USCTeensArbitrater arbitrater = new USCTeensArbitrater(getAppContext()); 
     	Globals.setArbitrater(arbitrater);   
-    	
-    	if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
-			// TODO:
-		}
     }
 }
 

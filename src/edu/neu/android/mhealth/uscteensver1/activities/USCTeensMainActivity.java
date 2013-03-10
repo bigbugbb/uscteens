@@ -192,6 +192,10 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		
 		mMainView.onResume();
 		mCurPage.resume();		
+		
+		if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
+			// TODO:
+		}
 	}
 
 	@Override

@@ -293,7 +293,7 @@
             android:name="edu.neu.android.mhealth.uscteensver1.activities.USCTeensMainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
