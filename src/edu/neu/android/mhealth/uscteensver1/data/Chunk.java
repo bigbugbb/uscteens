@@ -35,7 +35,6 @@ public class Chunk extends AppObject {
 	
 	protected float mDispOffsetX;
 	protected float mDispOffsetY;
-	protected Paint mPaint;
 	
 	protected static Paint   sPaint;
 	protected static boolean sPaintCreated = false;

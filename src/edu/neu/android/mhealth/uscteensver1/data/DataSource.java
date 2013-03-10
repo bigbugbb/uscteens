@@ -29,18 +29,18 @@ import android.widget.Toast;
 public class DataSource {
 		
 	protected Context mContext = null;
-	static protected DataSource sManager = null;
+	static protected DataSource aDataSource = null;
 	
 	static {
 		System.loadLibrary("datasrc");
 	}		
 	
 	static public DataSource getInstance(Context context) {
-		if (sManager == null) {
-			sManager = new DataSource(context);
-			sManager.onCreate();
+		if (aDataSource == null) {
+			aDataSource = new DataSource(context);
+			aDataSource.onCreate();
 		}
-		return sManager;
+		return aDataSource;
 	}
 	
 	protected DataSource(Context context) {
@@ -72,15 +72,6 @@ public class DataSource {
 		
 	}
 	
-	public boolean hasStartDate() {
-//		File configFile = new File(PATH_PREFIX + "config.xml");
-//		if (!configFile.exists()) {
-//			mInitialized = false; 
-//		}
-//		return mInitialized;
-		String startDate = DataStorage.getStartDate(mContext, "");
-		return startDate.compareTo("") != 0;
-	}
 	
 //	public boolean initialize() {		
 //		if (!mInitialized) {

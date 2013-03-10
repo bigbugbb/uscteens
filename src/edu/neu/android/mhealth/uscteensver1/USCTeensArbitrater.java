@@ -89,12 +89,6 @@ public class USCTeensArbitrater extends Arbitrater {
 	 * @param anAddress
 	 * @return
 	 */
-	private String obscureAddress(String anAddress) {
-		StringBuffer sb = new StringBuffer(anAddress);
-		sb.insert(2, '=');
-		sb.insert(2, '=');
-		return sb.toString();
-	}
 
 	public USCTeensArbitrater(Context aContext) {
 		this.aContext = aContext;
@@ -107,105 +101,6 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	// Status info
 	private ArrayList<Integer> someTasks = new ArrayList<Integer>();
-
-	// TODO change to private
-	private void PromptApp(Context aContext, int aKey, boolean isAudible, boolean isPostponed) {
-
-		Log.i(TAG, "prompt: " + aKey + ",audible: " + isAudible
-				+ ",postponed: " + isPostponed);
-
-		long[] somePromptTimes = DataStorage.getPromptTimesKey(aContext,
-				KEY_ALL_PROMPT);
-		// Will be 0 if none
-		long lastScheduledPromptTime = getLastScheduledPromptTime(
-				System.currentTimeMillis(), somePromptTimes);
-		boolean isReprompt = (System.currentTimeMillis() - lastScheduledPromptTime) > 60 * 1000;
-		SurveyPromptEvent promptEvent = new SurveyPromptEvent(
-				lastScheduledPromptTime, System.currentTimeMillis());
-		String msg = "";
-	
-		// Indicate that this particular app was prompted
-		AppInfo.SetLastTimePrompted(aContext, Globals.SURVEY,
-				System.currentTimeMillis());
-	
-		Intent i = new Intent(aContext, SurveyActivity.class);
-		long lastTimeCompleted = AppInfo.GetLastTimeCompleted(aContext,
-				Globals.SURVEY);
-		long currentTime = System.currentTimeMillis();
-		int classType = 0;
-		String surveyName = null;
-		switch (aKey) {
-		case KEY_CS_EMA:
-//			if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-//				classType = CSAsthmaSurvey.CS_EMA_DEFAULT;
-//			} else {
-//				classType = CSAsthmaSurvey.CS_EMA_OPTIONAL;
-//			}
-//			surveyName = CSAsthmaSurvey.class.getCanonicalName();
-//			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, true,
-//					PhonePrompter.CHIMES_NAMBOKU1,
-//					PhoneVibrator.VIBRATE_INTENSE);
-//			String rescueInhaler = SetupInhalerActivity
-//					.rescueInhalerMAC(aContext);
-//			if (inhaler != null) {
-//				if (rescueInhaler != null && inhaler.equals(rescueInhaler))
-//					promptEvent.setPromptType("Rescue inhaler");
-//				else
-//					promptEvent.setPromptType("Inhaler");
-//			} else
-//				promptEvent.setPromptType("Inhaler");// TODO
-			break;
-		case KEY_RANDOM_EMA:
-//			if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-//				classType = RandomAsthmaSurveyQuestionSet.RANDOM_EMA_DEFAULT;
-//			} else {
-//				classType = RandomAsthmaSurveyQuestionSet.RANDOM_EMA_OPTIONAL;
-//			}
-//			surveyName = RandomAsthmaSurveyQuestionSet.class.getCanonicalName();
-//			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, isAudible,
-//					PhonePrompter.CHIMES_HIKARI, PhoneVibrator.VIBRATE_INTENSE);
-//			promptEvent.setPromptType("Random");
-//			long[] schedule = DataStorage.getPromptTimesKey(aContext,
-//					KEY_SCHEDULE);
-//			if (schedule != null && schedule.length >= 3)
-//				promptEvent.setPromptSchedule(lastScheduledPromptTime,
-//						(int) schedule[0], (int) schedule[1], schedule[2]);
-			break;
-		}
-		if (msg.toLowerCase().contains("silence"))
-			promptEvent.setPromptAudio(PROMPT_AUDIO.NONE);
-		else if (msg.toLowerCase().contains("normal"))
-			promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-		else if (msg.toLowerCase().contains("vibrate"))
-			promptEvent.setPromptAudio(PROMPT_AUDIO.VIBRATION);
-		promptEvent.setReprompt(isReprompt);
-		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
-				new Object[] { classType }));
-		i.putExtra("className", surveyName);
-		i.putExtra("promptEvent", promptEvent);
-		if (!isReprompt && SurveyActivity.self != null)
-			SurveyActivity.self.finish();
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		aContext.startActivity(i);
-		// aContext.startActivity(appIntentToRun);
-		// appIntentToRun = null;
-		msg += " Is reprompt: " + isReprompt;
-		// Give the audio or vibration time to work
-		// I think a code change in Bluetoothsensorservice makes this not
-		// necessary.
-		// try {
-		// Thread.sleep(4000);
-		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
-	}
 
 	public void getAndPrintPromptingSchedule() {
 		if (Globals.IS_DEBUG) {

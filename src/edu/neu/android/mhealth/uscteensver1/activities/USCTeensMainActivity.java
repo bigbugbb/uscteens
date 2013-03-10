@@ -22,6 +22,7 @@ import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
+import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 import android.net.Uri;
 import android.os.Bundle;
@@ -211,13 +212,14 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	protected final Handler mHandler = new Handler() {	
 		public void handleMessage(Message msg) {        					
 			Intent i = null;		
+			Context context = getApplicationContext();
 			
         	switch (msg.what) {   
         	case AppCmd.BEGIN:        
-        		if (mDataSource.hasStartDate()) {
+        		if (DataStorage.getStartDate(context, "").compareTo("") != 0) {
         			switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
         		} else {
-        			Toast.makeText(getApplicationContext(), "Fail to do the configuration!", Toast.LENGTH_SHORT);
+        			Toast.makeText(context, "Fail to do the configuration!", Toast.LENGTH_SHORT);
         		}
         		break;
         	case AppCmd.WEEKDAY:
@@ -232,13 +234,13 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
         		break;
         	case AppCmd.QUEST:
-        		i = new Intent(getApplicationContext(), ActionsDialog.class);           		
+        		i = new Intent(context, ActionsDialog.class);           		
         		i.putExtra(ActionsDialog.CHUNK_START_TIME, msg.arg1);
         		i.putExtra(ActionsDialog.CHUNK_STOP_TIME, msg.arg2);
         		startActivityForResult(i, AppCmd.QUEST);
         		break;
         	case AppCmd.MERGE:
-        		i = new Intent(getApplicationContext(), WarningDialog.class);
+        		i = new Intent(context, WarningDialog.class);
     			i.putStringArrayListExtra(WarningDialog.KEY, (ArrayList<String>) msg.obj);
     			startActivityForResult(i, AppCmd.MERGE);
         		break;
