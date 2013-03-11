@@ -63,7 +63,7 @@ public class ChunkManager {
 	}
 	
 	public void loadChunks() {
-		RawChunkList rawChunks = mDataSrc.getRawChunkList();
+		RawChunksWrap rawChunks = mDataSrc.getRawChunks();
 		
 		if (mChunks == null) {
 			mChunks = new ArrayList<Chunk>();
@@ -100,7 +100,7 @@ public class ChunkManager {
 	}
 	
 	public void saveChunks() {
-		RawChunkList rawChunks = new RawChunkList();
+		RawChunksWrap rawChunks = new RawChunksWrap();
 		
 		for (int i = 0; i < mChunks.size(); ++i) {
 			Chunk chunk = mChunks.get(i);

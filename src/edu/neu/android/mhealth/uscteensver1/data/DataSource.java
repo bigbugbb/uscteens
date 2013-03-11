@@ -51,7 +51,7 @@ public class DataSource {
 	public static final String PATH_PREFIX = "/sdcard/TestData/";
 
 	// raw chunk data
-	protected RawChunkList mRawChkList = new RawChunkList();
+	protected RawChunksWrap mRawChksWrap = new RawChunksWrap();
 	// raw activity data
 	protected int[]  mRawActivityData  = null;	
 	protected int	 mMaxActivityValue = 0;
@@ -135,12 +135,12 @@ public class DataSource {
 		return mMaxActivityValue;
 	}
 	
-	public RawChunkList getRawChunkList() {
-		return mRawChkList;
+	public RawChunksWrap getRawChunks() {
+		return mRawChksWrap;
 	}
 	
 	private boolean loadRawChunkData(String path) {
-		mRawChkList.clear();
+		mRawChksWrap.clear();
 		
 		File file = new File(path);
 		
@@ -180,7 +180,7 @@ public class DataSource {
 			    	    }
 			    	   
 			    	   RawChunk rawchunk = new RawChunk(start.getText(), stop.getText(), type, create, modify);
-			    	   mRawChkList.add(rawchunk);
+			    	   mRawChksWrap.add(rawchunk);
 			       }
 		        
 		       }
@@ -231,7 +231,7 @@ public class DataSource {
 		return allLabelled;
 	}
 
-	public boolean saveChunkData(RawChunkList rawChunks) {
+	public boolean saveChunkData(RawChunksWrap rawChunks) {
 		boolean result = false;		
 		String path = PATH_PREFIX + mCurSelectedDate + ".xml";
 		

@@ -39,7 +39,7 @@ public class WeekdayCalculator {
         weekday = 1; // starting day: 1979-12-31 is monday     
         total = year - 1980 + (year - 1980 + 3) / 4; // initial value of total         
      
-	    for(i = 1; i <= month - 1; i++) {	         
+	    for (i = 1; i <= month - 1; i++) {	         
 	        switch(i) {	             
             case 1:	             
             case 3:	             
@@ -77,7 +77,7 @@ public class WeekdayCalculator {
      * @return
      */ 
   
-	public static boolean isSameWeekDates(Date date1, Date date2) {   
+	public static boolean areSameWeekdays(Date date1, Date date2) {   
 		Calendar cal1 = Calendar.getInstance();   
 		Calendar cal2 = Calendar.getInstance();   
 		cal1.setTime(date1);   
@@ -96,49 +96,50 @@ public class WeekdayCalculator {
 		} 
 		
 		return false;   
-	 }   
+	}   
     	        	        	 
-    	 public static String  getSeqWeek(){   
-    	  Calendar c = Calendar.getInstance(Locale.US);   
-    	  String week = Integer.toString(c.get(Calendar.WEEK_OF_YEAR));   
-    	  if(week.length()==1)week = "0" + week;   
-    	  String year = Integer.toString(c.get(Calendar.YEAR));     
-    	  return year+week;   
-    	     
-    	 }   
-    	         	   
-    	  public static String getMonday(Date date){   
-    	   Calendar c = Calendar.getInstance();   
-    	   c.setTime(date);   
-    	   c.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);   
-    	   return new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());   
-    	  }   
-    	     
-    	  public static String getFriday(Date date){   
-    	   Calendar c = Calendar.getInstance();   
-    	   c.setTime(date);   
-    	   c.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY);      
-    	   return new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());     
-    	  }   
-
-    	 public static String afterNDay(int n){   
-	        Calendar c=Calendar.getInstance();   
-	        DateFormat df=new SimpleDateFormat("yyyy-MM-dd");   
-	        c.setTime(new Date());   
-	        c.add(Calendar.DATE,n);   
-	        Date d2=c.getTime();   
-	        String s=df.format(d2);   
-	        return s;   
-	    }   
-    	 
-    	 public static String afterNDayFrom(Date date, int n){   
- 	        Calendar c=Calendar.getInstance();   
- 	        DateFormat df=new SimpleDateFormat("yyyy-MM-dd");   
- 	        c.setTime(date);   
- 	        c.add(Calendar.DATE,n);   
- 	        Date d2=c.getTime();   
- 	        String s=df.format(d2);   
- 	        return s;   
- 	    } 
+	public static String  getSeqWeek(){   
+	    Calendar c = Calendar.getInstance(Locale.US);   
+	    String week = Integer.toString(c.get(Calendar.WEEK_OF_YEAR));   
+	    if (week.length() == 1) 
+	    	week = "0" + week;   
+	    String year = Integer.toString(c.get(Calendar.YEAR));     
+	    return year+week;   
+	     
+	}   
+	         	   
+	public static String getMonday(Date date){   
+	    Calendar c = Calendar.getInstance();   
+	    c.setTime(date);   
+	    c.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);   
+	    return new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());   
+	}   
+	     
+	public static String getFriday(Date date){   
+	    Calendar c = Calendar.getInstance();   
+	    c.setTime(date);   
+	    c.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY);      
+	    return new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());     
+	}   
+	
+	public static String afterNDay(int n){   
+	    Calendar c=Calendar.getInstance();   
+	    DateFormat df=new SimpleDateFormat("yyyy-MM-dd");   
+	    c.setTime(new Date());   
+	    c.add(Calendar.DATE,n);   
+	    Date d2 = c.getTime();   
+	    String s = df.format(d2);   
+	    return s;   
+	}   
+	 
+	public static String afterNDayFrom(Date date, int n){   
+	    Calendar c = Calendar.getInstance();   
+	    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");   
+	    c.setTime(date);   
+	    c.add(Calendar.DATE,n);   
+	    Date d2 = c.getTime();   
+	    String s = df.format(d2);   
+	    return s;   
+	} 
 
 }

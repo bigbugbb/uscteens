@@ -462,7 +462,6 @@ public class USCTeensArbitrater extends Arbitrater {
 			isNewFileNeeded = true;
 		}
 
-		String lastCreateTime = "";
 		// check whether a new file should be created. If the answer is true, create a new file name
 		if (isNewFileNeeded) {
 			Date curTime = new Date();
