@@ -44,13 +44,12 @@ public class MotionGraph extends AppObject {
 	protected float  mOffsetSpeedY = 0;
 	protected float  mAspectRatio  = 1;
 	
-	protected DataSource   mDataSrc = null;
-	protected ChunkManager mManager = null;	
+	protected DataSource   mDataSrc = null;	
 		
 
-	public MotionGraph(Resources res, ChunkManager manager) {
+	public MotionGraph(Resources res) {
 		super(res);				
-		mManager = manager;
+		
 		mDataSrc = DataSource.getInstance(null);
 		mActions = mDataSrc.getRawActivityData();
 		mActLenInPix = mDataSrc.getActivityLengthInPixel();	
@@ -109,7 +108,7 @@ public class MotionGraph extends AppObject {
 		
 		mDate = convertDateToDisplayFormat(mDataSrc.getCurSelectedDate());
 			
-		manager.setDisplayOffset(0, 0);	
+		ChunkManager.setDisplayOffset(0, 0);	
 	}		
 	
 	public void release() {
@@ -167,7 +166,7 @@ public class MotionGraph extends AppObject {
 			mStart = (mStart - offset < 0) ? 0 : mStart - offset;				
 			mEnd   = mStart + (int) mWidth;			
 			mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;
-			mManager.setDisplayOffset(-mStart, 0);
+			ChunkManager.setDisplayOffset(-mStart, 0);
 			
 			if (mListener != null) {
 				mListener.OnGraphMoved(this, (float) mStart / mRightBound);
@@ -175,8 +174,8 @@ public class MotionGraph extends AppObject {
 		}				
 		
 		// draw the marked region
-		for (int i = 0; i < mManager.getChunkSize(); ++i) {
-			Chunk chunk = mManager.getChunk(i);
+		for (int i = 0; i < ChunkManager.getChunkSize(); ++i) {
+			Chunk chunk = ChunkManager.getChunk(i);
 			// get the right region to draw, clip the part out of screen
 			if (chunk.mStart - mStart > mWidth || chunk.mStop - mStart < 0)
 				continue;
@@ -202,8 +201,8 @@ public class MotionGraph extends AppObject {
 				c.drawLine(x1, y1, x2, y2, mDataPaint);
 		}		
 		// draw the chunk lines and the corresponding buttons
-		for (int i = 0; i < mManager.getChunkSize(); ++i) {
-			Chunk chunk = mManager.getChunk(i);
+		for (int i = 0; i < ChunkManager.getChunkSize(); ++i) {
+			Chunk chunk = ChunkManager.getChunk(i);
 			chunk.onDraw(c);
 		}
 		// draw the time interval corresponding to the displayed region
@@ -217,7 +216,7 @@ public class MotionGraph extends AppObject {
 		mPaintDate.setTextAlign(Paint.Align.CENTER);
 		c.drawText(mDate, mWidth / 2, mHeight + sAppScale.doScaleH(200), mPaintDate);
 		// draw the rectangle which indicates the chunk selection		
-		c.drawRect(mManager.getSelectedArea(), mSelChunkPaint);		
+		c.drawRect(ChunkManager.getSelectedArea(), mSelChunkPaint);		
 	}
 
 	private String toStringTimeFromPosition(int position) {
@@ -236,7 +235,7 @@ public class MotionGraph extends AppObject {
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
 
-		for (Chunk chunk : mManager.mChunks) {
+		for (Chunk chunk : ChunkManager.getChunks()) {
 			chunk.setHeight(mHeight);
 		}
 		
@@ -246,8 +245,8 @@ public class MotionGraph extends AppObject {
 		mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;	
 		mRightBound = mActLenInPix - (int) mWidth;
 		
-		mManager.setViewSize(mWidth, mHeight);
-		mManager.setCanvasSize(width, height);
+		ChunkManager.setViewSize(mWidth, mHeight);
+		ChunkManager.setCanvasSize(width, height);
 	}
 
 	@Override
@@ -262,7 +261,7 @@ public class MotionGraph extends AppObject {
 		}
 		
 		// try to select chunk
-		if (mManager.selectChunk(e.getX(), e.getY())) {
+		if (ChunkManager.selectChunk(e.getX(), e.getY())) {
 			return true;
 		}
 
@@ -298,7 +297,7 @@ public class MotionGraph extends AppObject {
 		mEnd   = mStart + (int) mWidth;
 		mStart = (mStart < 0) ? 0 : mStart;
 		mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;
-		mManager.setDisplayOffset(-mStart + mOffsetX, 0);
+		ChunkManager.setDisplayOffset(-mStart + mOffsetX, 0);
 		
 		if (mListener != null) {
 			mListener.OnGraphMoved(this, (float) mStart / mRightBound);
@@ -315,7 +314,7 @@ public class MotionGraph extends AppObject {
 		mEnd   = mStart + (int) mWidth;
 		mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;
 		
-		mManager.setDisplayOffset(-mStart, 0);
+		ChunkManager.setDisplayOffset(-mStart, 0);
 	}
 	
 	public void moveGraph(int progress) {
@@ -327,7 +326,7 @@ public class MotionGraph extends AppObject {
 		mEnd   = mStart + (int) mWidth;	
 		mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;
 		
-		mManager.setDisplayOffset(-mStart, 0);
+		ChunkManager.setDisplayOffset(-mStart, 0);
 	}
 
 	@Override

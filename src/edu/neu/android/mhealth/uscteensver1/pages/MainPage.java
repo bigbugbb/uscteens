@@ -35,17 +35,16 @@ public class MainPage extends AppPage implements OnClickListener,
 	protected ButtonNext	 mBtnNext     = null;
 	protected SlideBar	 	 mSlideBar    = null;
 	
-	protected View mView = null;
-	protected ChunkManager mChunkManager = null;
+	protected View mView = null;	
 	
 	protected boolean mScrolling = false; // indicate whether we are scrolling the chunk
 	
 	public MainPage(Context context, View view, Handler handler) {
 		super(context, handler);				
 		mView = view;
-		mChunkManager = new ChunkManager(context, DataSource.getInstance(null));
-		mChunkManager.setUserData(this);
-		mChunkManager.setOnBoundaryScaleListener(this);
+		ChunkManager.initialize(context, DataSource.getInstance(null));
+		ChunkManager.setUserData(this);
+		ChunkManager.setOnBoundaryScaleListener(this);
 	}
 
 	public MotionGraph getMotionGraph() {
@@ -64,7 +63,7 @@ public class MainPage extends AppPage implements OnClickListener,
 			mBackground.setID(UIID.BKGND);			
 		}
 		if (mMotionGraph == null) {
-			mMotionGraph = new MotionGraph(mContext.getResources(), mChunkManager);
+			mMotionGraph = new MotionGraph(mContext.getResources());
 			mObjects.add(mMotionGraph);
 			mMotionGraph.setID(UIID.GRAPH);							
 			mMotionGraph.setOnGraphMovedListener(this);
@@ -82,7 +81,7 @@ public class MainPage extends AppPage implements OnClickListener,
 			mBtnNext.setOnClickListener(this);
 		}
 		if (mSlideBar == null) {
-			mSlideBar = new SlideBar(mContext.getResources(), mChunkManager);
+			mSlideBar = new SlideBar(mContext.getResources());
 			mObjects.add(mSlideBar);
 			mSlideBar.setID(UIID.SLIDE);
 			mSlideBar.setOnSlideBarChangeListener(this);			
@@ -94,7 +93,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	}
 	
 	public void start() {
-		mChunkManager.start();
+		ChunkManager.start();
 		load();		
 		for (AppObject obj : mObjects) {
 			obj.onSizeChanged(mView.getWidth(), mView.getHeight());
@@ -102,7 +101,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	}
 	
 	public void stop() {
-		mChunkManager.stop();
+		ChunkManager.stop();
 		
 		mBackground   = null;
 		mMotionGraph  = null;
@@ -123,10 +122,10 @@ public class MainPage extends AppPage implements OnClickListener,
 		public void run() {			
 
 			synchronized (this) {				
-				mChunkManager.scaleChunkToBoundary(-2);				
+				ChunkManager.scaleChunkToBoundary(-2);				
 			}
 
-			if (mChunkManager.isScaledToLeftBoundary()) {
+			if (ChunkManager.isScaledToLeftBoundary()) {
 				mHandler.postDelayed(this, 15);
 			} else {
 				mHandler.removeCallbacks(this);				
@@ -138,10 +137,10 @@ public class MainPage extends AppPage implements OnClickListener,
 		public void run() {	
 
 			synchronized (this) {				
-				mChunkManager.scaleChunkToBoundary(2);
+				ChunkManager.scaleChunkToBoundary(2);
 			}
 			
-			if (mChunkManager.isScaledToRightBoundary()) {
+			if (ChunkManager.isScaledToRightBoundary()) {
 				mHandler.postDelayed(this, 15);
 			} else {
 				mHandler.removeCallbacks(this);				
@@ -193,7 +192,7 @@ public class MainPage extends AppPage implements OnClickListener,
 			} else if (mSelObject.getID() == UIID.SLIDE) {  
 				ret = mSelObject.onScroll(e1, e2, distanceX, distanceY);
 			} else if (mSelObject.getID() == UIID.CLOCK) {				
-				mChunkManager.scaleChunk((int) -distanceX);
+				ChunkManager.scaleChunk((int) -distanceX);
 				if (distanceX < 0) {
 					mHandler.removeCallbacks(mScaleLeft);
 					
@@ -201,9 +200,9 @@ public class MainPage extends AppPage implements OnClickListener,
 					mHandler.removeCallbacks(mScaleRight);
 				}
 				
-				if (mChunkManager.isScaledToLeftBoundary()) {
+				if (ChunkManager.isScaledToLeftBoundary()) {
 					mHandler.postDelayed(mScaleLeft, 15);
-				} else if (mChunkManager.isScaledToRightBoundary()) {
+				} else if (ChunkManager.isScaledToRightBoundary()) {
 					mHandler.postDelayed(mScaleRight, 15);
 				}
 				ret = true;
@@ -253,14 +252,14 @@ public class MainPage extends AppPage implements OnClickListener,
 	}
 	
 	private void tryToBack(ButtonBack back) {
-		Chunk prevUnmarked = mChunkManager.getPreviousUnmarkedChunk();
+		Chunk prevUnmarked = ChunkManager.getPreviousUnmarkedChunk();
 		if (prevUnmarked != null) {
 			mMotionGraph.moveGraph(prevUnmarked.mStart, 0);				
 			float progress = (float) prevUnmarked.mStart / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
 		}
 		
-		if (mChunkManager.areAllChunksLabelled()) {
+		if (ChunkManager.areAllChunksLabelled()) {
 			Message msg = mHandler.obtainMessage();			
 			msg.what = AppCmd.BACK;
 			mHandler.sendMessage(msg);
@@ -269,14 +268,14 @@ public class MainPage extends AppPage implements OnClickListener,
 	}
 	
 	private void tryToNext(ButtonNext next) {
-		Chunk nextUnmarked = mChunkManager.getNextUnmarkedChunk();
+		Chunk nextUnmarked = ChunkManager.getNextUnmarkedChunk();
 		if (nextUnmarked != null) {
 			mMotionGraph.moveGraph(nextUnmarked.mStart, 0);			
 			float progress = (float) nextUnmarked.mStart / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
 		}
 		
-		if (mChunkManager.areAllChunksLabelled()) {
+		if (ChunkManager.areAllChunksLabelled()) {
 			Message msg = mHandler.obtainMessage();			
 			msg.what = AppCmd.NEXT;
 			mHandler.sendMessage(msg);
@@ -293,7 +292,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	}
 	
 	private void tryToSplit(ButtonSplit split) {		
-		if (mChunkManager.splitChunk(split.getHost())) {
+		if (ChunkManager.splitChunk(split.getHost())) {
 			mSlideBar.updateUnmarkedRange();
 		} else {
 			Toast.makeText(mContext, "Not enough space to split!", Toast.LENGTH_SHORT).show();
@@ -302,7 +301,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	
 	private void tryToMerge(ButtonMerge merge) {		
 		// get the chunks to merge according to the pressed merge button
-		ArrayList<Chunk> mChunksToMerge = mChunkManager.getMergingChunks(merge);
+		ArrayList<Chunk> mChunksToMerge = ChunkManager.getMergingChunks(merge);
 		String actionL = mChunksToMerge.get(0).mQuest.getStringAnswer();
 		String actionR = mChunksToMerge.get(1).mQuest.getStringAnswer();
 		ArrayList<String> actions = new ArrayList<String>();
@@ -314,7 +313,7 @@ public class MainPage extends AppPage implements OnClickListener,
 		}
 		// the left and right chunks are both unanswered, merge them directly
 		if (actions.size() == 0 || actionL.compareTo(actionR) == 0) {
-			mChunkManager.mergeChunk(mChunksToMerge.get(0), mChunksToMerge.get(1), null);	
+			ChunkManager.mergeChunk(mChunksToMerge.get(0), mChunksToMerge.get(1), null);	
 			mSlideBar.updateUnmarkedRange();
 		} else {
 			actions.add("None");			
@@ -339,7 +338,7 @@ public class MainPage extends AppPage implements OnClickListener,
 		ButtonMerge merge = (ButtonMerge) mLastSelObject;
 		String selection = (String) params[0];
 		Chunk maintain = null; 		
-		ArrayList<Chunk> mChunksToMerge = mChunkManager.getMergingChunks(merge);
+		ArrayList<Chunk> mChunksToMerge = ChunkManager.getMergingChunks(merge);
 		String actionL = mChunksToMerge.get(0).mQuest.getStringAnswer();
 		String actionR = mChunksToMerge.get(1).mQuest.getStringAnswer();
 		
@@ -353,7 +352,7 @@ public class MainPage extends AppPage implements OnClickListener,
 		}    		
 		// it's not called from AppPage.onTouch, so explicit synchronized is necessary
     	synchronized (this) {
-    		mChunkManager.mergeChunk(mChunksToMerge.get(0), mChunksToMerge.get(1), maintain);
+    		ChunkManager.mergeChunk(mChunksToMerge.get(0), mChunksToMerge.get(1), maintain);
     		mSlideBar.updateUnmarkedRange();
     	}
     	

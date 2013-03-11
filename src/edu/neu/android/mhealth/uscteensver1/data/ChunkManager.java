@@ -19,54 +19,54 @@ import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph.OnGraphMovedListener;
 
 public class ChunkManager {
 	
-	public Resources mRes   = null;
-	public Object mUserData = null;			
-	public ArrayList<Chunk> mChunks = null;
+	protected static Resources sResources = null;
+	protected static Object sUserData = null;			
+	protected static ArrayList<Chunk> sChunks = null;
 	
 	protected final static int MINIMUM_SPACE_FOR_SPLIT = 240;
 	
-	protected int   mSelected = -1; // -1 indicates no chunk has been selected
-	protected RectF mSelectedArea = new RectF();
-	protected ButtonClock mClockL = null;
-	protected ButtonClock mClockR = null;
-	protected ButtonMerge mMergeL = null;
-	protected ButtonMerge mMergeR = null;
-	protected ButtonSplit mSplit  = null;
+	protected static int   sSelected = -1; // -1 indicates no chunk has been selected
+	protected static RectF sSelectedArea = new RectF();
+	protected static ButtonClock sClockL = null;
+	protected static ButtonClock sClockR = null;
+	protected static ButtonMerge sMergeL = null;
+	protected static ButtonMerge sMergeR = null;
+	protected static ButtonSplit sSplit  = null;
 	
-	protected float mDispOffsetX  = 0;
-	protected float mDispOffsetY  = 0; // not really useful here
-	protected float mViewWidth    = 0; // the area to draw the activity data
-	protected float mViewHeight   = 0;
-	protected float mCanvasWidth  = 0;
-	protected float mCanvasHeight = 0;
+	protected static float sDispOffsetX  = 0;
+	protected static float sDispOffsetY  = 0; // not really useful here
+	protected static float sViewWidth    = 0; // the area to draw the activity data
+	protected static float sViewHeight   = 0;
+	protected static float sCanvasWidth  = 0;
+	protected static float sCanvasHeight = 0;
 		
-	protected Context mContext = null;
-	protected DataSource mDataSrc = null;
+	protected static Context sContext = null;
+	protected static DataSource sDataSrc = null;
 
-	public ChunkManager(Context context, DataSource dataSrc) {
-		mRes = context.getResources();
-		mContext = context;		
-		mDataSrc = dataSrc;
+	public static void initialize(Context context, DataSource dataSrc) {
+		sResources = context.getResources();
+		sContext = context;		
+		sDataSrc = dataSrc;
 	}	
 	
-	protected void load() {
+	protected static void load() {
 		
 	}
 	
-	public void start() {
+	public static void start() {
 		loadChunks();
 	}
 	
-	public void stop() {
+	public static void stop() {
 		saveChunks();
 		release();
 	}
 	
-	public void loadChunks() {
-		RawChunksWrap rawChunks = mDataSrc.getRawChunks();
+	protected static void loadChunks() {
+		RawChunksWrap rawChunks = sDataSrc.getRawChunks();
 		
-		if (mChunks == null) {
-			mChunks = new ArrayList<Chunk>();
+		if (sChunks == null) {
+			sChunks = new ArrayList<Chunk>();
 		}
 		
 		int timeOffset = 0;
@@ -79,95 +79,119 @@ public class ChunkManager {
 			}
 			int start = (rawChunk.getStartTime() - timeOffset) * DataSource.PIXEL_SCALE;
 			int stop  = (rawChunk.getStopTime()  - timeOffset) * DataSource.PIXEL_SCALE;
-			int actionID = rawChunk.getActionID();
+			int activityID = rawChunk.getActivityID();
 			chunk.update(start, stop, timeOffset);			
 			chunk.mQuest.setAnswer(
-				actionID == -1 ? R.drawable.question_btn : Actions.ACTION_IMGS[actionID], 
-				actionID == -1 ? "None" : Actions.ACTION_NAMES[actionID]
+				activityID == -1 ? R.drawable.question_btn : Actions.ACTION_IMGS[activityID], 
+				activityID == -1 ? "None" : Actions.ACTION_NAMES[activityID]
 			);
 		}
 		// select the first chunk
 		selectChunk(0);
 	}
 	
-	public void release() {
-		if (mChunks != null) {
-			for (Chunk c : mChunks) {
+	public static void release() {
+		if (sChunks != null) {
+			for (Chunk c : sChunks) {
 				c.release();
 			}
-			mChunks = null;
+			sChunks = null;
 		}
 	}
 	
-	public void saveChunks() {
+	protected static void saveChunks() {
 		RawChunksWrap rawChunks = new RawChunksWrap();
 		
-		for (int i = 0; i < mChunks.size(); ++i) {
-			Chunk chunk = mChunks.get(i);
+		for (int i = 0; i < sChunks.size(); ++i) {
+			Chunk chunk = sChunks.get(i);
 			RawChunk rawChunk = chunk.toRawChunk();
 			rawChunks.add(rawChunk);
 		}
-		mDataSrc.saveChunkData(rawChunks);
+		sDataSrc.saveChunkData(rawChunks);
 	}
 	
-	public Chunk getChunk(int index) {
-		return mChunks.get(index);
+	public static Object getUserData() {
+		return sUserData;
 	}
 	
-	public int getChunkSize() {
-		return mChunks.size();
+	public static Chunk getChunk(int index) {
+		return sChunks.get(index);
 	}
 	
-	public void setUserData(Object userData) {
-		mUserData = userData;
+	public static ArrayList<Chunk> getChunks() {
+		return sChunks;
 	}
 	
-	public void setViewSize(float width, float height) {
-		mViewWidth  = width;
-		mViewHeight = height;
+	public static int getChunkSize() {
+		return sChunks.size();
 	}
 	
-	public void setCanvasSize(float width, float height) {
-		mCanvasWidth  = width;
-		mCanvasHeight = height;
+	public static void setUserData(Object userData) {
+		sUserData = userData;
 	}
 	
-	public void setDisplayOffset(float offsetX, float offsetY) {
-		mDispOffsetX = offsetX;
-		mDispOffsetY = offsetY;
+	public static void setViewSize(float width, float height) {
+		sViewWidth  = width;
+		sViewHeight = height;
+	}
+	
+	public static float getViewWidth() {
+		return sViewWidth;
+	}
+	
+	public static float getViewHeight() {
+		return sViewHeight;
+	}
+	
+	public static void setCanvasSize(float width, float height) {
+		sCanvasWidth  = width;
+		sCanvasHeight = height;
+	}
+	
+	public static float getCanvasWidth() {
+		return sCanvasWidth;
+	}
+	
+	public static float getCanvasHeight() {
+		return sCanvasHeight;
+	}
+	
+	public static void setDisplayOffset(float offsetX, float offsetY) {
+		sDispOffsetX = offsetX;
+		sDispOffsetY = offsetY;
 		
-		for (int i = 0; i < mChunks.size(); ++i) {
-			Chunk c = mChunks.get(i);
+		for (int i = 0; i < sChunks.size(); ++i) {
+			Chunk c = sChunks.get(i);
 			c.setDisplayOffset(offsetX, offsetY);
 		}
 	}
 
-	public Chunk insertChunk(int index) {		
-		Chunk chunk = new Chunk(mRes, this, mUserData);			
-		mChunks.add(index, chunk);
+	public static Chunk insertChunk(int index) {		
+		Chunk chunk = new Chunk(sResources);			
+		sChunks.add(index, chunk);
 		return chunk;
 	}		
 
-	public void deleteChunk(Chunk chunk) {
-		mChunks.remove(chunk);
+	public static void deleteChunk(Chunk chunk) {
+		sChunks.remove(chunk);
 		chunk.release();
 	}
 	
-	public boolean scaleChunk(int scale) {
+	public static boolean scaleChunk(int scale) {
 		int i = 0;
 		
 		// look for the selected chunk
-		for (i = 0; i < mChunks.size(); ++i) {
-			Chunk c = mChunks.get(i);
+		for (i = 0; i < sChunks.size(); ++i) {
+			Chunk c = sChunks.get(i);
 			if (c.mClock.isSelected()) {			
 				break;
 			}
 		}		
-		assert(i < mChunks.size());
+		assert(i < sChunks.size());
 		
-		Chunk curr = mChunks.get(i);
-		Chunk prev = (i == 0) ? null : mChunks.get(i - 1);
-		Chunk next = (i == mChunks.size() - 1) ? null : mChunks.get(i + 1);
+		Chunk curr = sChunks.get(i);
+		Chunk prev = (i == 0) ? null : sChunks.get(i - 1);
+		Chunk next = (i == sChunks.size() - 1) ? null : sChunks.get(i + 1);
 		
 		// scale the chunk
 		boolean success = false;
@@ -178,28 +202,28 @@ public class ChunkManager {
 			curr.update(curr.mStart + scale, curr.mStop, prev.mOffset);
 		}
 		
-		if (mSelected > -1) {
+		if (sSelected > -1) {
 			updateSelectedArea();
 		}
 		
 		return success;
 	}
 	
-	public boolean scaleChunkToBoundary(int scale) {
+	public static boolean scaleChunkToBoundary(int scale) {
 		int i = 0;
 		
 		// look for the selected chunk
-		for (i = 0; i < mChunks.size(); ++i) {
-			Chunk c = mChunks.get(i);
+		for (i = 0; i < sChunks.size(); ++i) {
+			Chunk c = sChunks.get(i);
 			if (c.mClock.isSelected()) {			
 				break;
 			}
 		}		
-		assert(i < mChunks.size());
+		assert(i < sChunks.size());
 		
-		Chunk curr = mChunks.get(i);
-		Chunk prev = (i == 0) ? null : mChunks.get(i - 1);
-		Chunk next = (i == mChunks.size() - 1) ? null : mChunks.get(i + 1);
+		Chunk curr = sChunks.get(i);
+		Chunk prev = (i == 0) ? null : sChunks.get(i - 1);
+		Chunk next = (i == sChunks.size() - 1) ? null : sChunks.get(i + 1);
 		
 		// scale the chunk
 		boolean success = false;
@@ -210,59 +234,59 @@ public class ChunkManager {
 			curr.update(curr.mStart + scale, curr.mStop, prev.mOffset);
 		}
 		
-		if (mSelected > -1) {
+		if (sSelected > -1) {
 			updateSelectedArea();
 		}			
 		
-		if (mListener != null) {
+		if (sListener != null) {
 			if (scale > 0) {
-				mListener.onBoundaryScale(curr.mClock.getX() - mCanvasWidth * 0.87f, scale);
+				sListener.onBoundaryScale(curr.mClock.getX() - sCanvasWidth * 0.87f, scale);
 			} else {
-				mListener.onBoundaryScale(curr.mClock.getX() - mCanvasWidth * 0.06f, scale);
+				sListener.onBoundaryScale(curr.mClock.getX() - sCanvasWidth * 0.06f, scale);
 			}
 		}
 		
 		return success;
 	}
 	
-	public boolean isScaledToLeftBoundary() {
+	public static boolean isScaledToLeftBoundary() {
 		// look for the selected chunk
 		int i = 0;
-		for (i = 0; i < mChunks.size(); ++i) {
-			Chunk c = mChunks.get(i);
+		for (i = 0; i < sChunks.size(); ++i) {
+			Chunk c = sChunks.get(i);
 			if (c.mClock.isSelected()) {			
 				break;
 			}
 		}			
-		Chunk curr = mChunks.get(i);
+		Chunk curr = sChunks.get(i);
 		ButtonClock clock = curr.mClock;
 		float clockX = clock.getX() + curr.mDispOffsetX;
 		
-		return clockX < mCanvasWidth * 0.1;
+		return clockX < sCanvasWidth * 0.1;
 	}
 	
-	public boolean isScaledToRightBoundary() {
+	public static boolean isScaledToRightBoundary() {
 		// look for the selected chunk
 		int i = 0;		
-		for (i = 0; i < mChunks.size(); ++i) {
-			Chunk c = mChunks.get(i);
+		for (i = 0; i < sChunks.size(); ++i) {
+			Chunk c = sChunks.get(i);
 			if (c.mClock.isSelected()) {			
 				break;
 			}
 		}	
-		Chunk curr = mChunks.get(i);
+		Chunk curr = sChunks.get(i);
 		ButtonClock clock = curr.mClock;
 		float clockX = clock.getX() + curr.mDispOffsetX;
 		
-		return clockX > mCanvasWidth * 0.85;
+		return clockX > sCanvasWidth * 0.85;
 	}
 	
-	public Chunk getPreviousUnmarkedChunk() {
+	public static Chunk getPreviousUnmarkedChunk() {
 		Chunk prev = null;
-		float current = -mDispOffsetX - 1;
+		float current = -sDispOffsetX - 1;
 
-		for (int i = mChunks.size() - 1; i >= 0; --i) {
-			Chunk c = mChunks.get(i);
+		for (int i = sChunks.size() - 1; i >= 0; --i) {
+			Chunk c = sChunks.get(i);
 			if (c.mStart <= current) {
 				if (!c.mQuest.isAnswered()) {
 					prev = c;
@@ -274,12 +298,12 @@ public class ChunkManager {
 		return prev;
 	}
 	
-	public Chunk getNextUnmarkedChunk() {
+	public static Chunk getNextUnmarkedChunk() {
 		Chunk next = null;
-		float current = -mDispOffsetX + 1;		
+		float current = -sDispOffsetX + 1;		
 		
-		for (int i = 0; i < mChunks.size(); ++i) {
-			Chunk c = mChunks.get(i);
+		for (int i = 0; i < sChunks.size(); ++i) {
+			Chunk c = sChunks.get(i);
 			if (c.mStart >= current) {
 				if (!c.mQuest.isAnswered()) {		
 					next = c;
@@ -291,91 +315,91 @@ public class ChunkManager {
 		return next;
 	}
 	
-	public void selectChunk(Chunk chunk) {
-		selectChunk(mChunks.indexOf(chunk));
+	public static void selectChunk(Chunk chunk) {
+		selectChunk(sChunks.indexOf(chunk));
 	}
 	
-	public void selectChunk(int index) { ///////////////
-		assert(index >= 0 && index < mChunks.size());
-		if (mSelected > -1 && mSelected < mChunks.size()) {				
-			mChunks.get(mSelected).setSelected(false);
+	public static void selectChunk(int index) { ///////////////
+		assert(index >= 0 && index < sChunks.size());
+		if (sSelected > -1 && sSelected < sChunks.size()) {				
+			sChunks.get(sSelected).setSelected(false);
 		}
-		mSelected = index;
+		sSelected = index;
 		
 		// set buttons of the last selected chunk invisible
-		if (mClockL != null) {
-			mClockL.setVisible(false);
-			mClockL = null;
+		if (sClockL != null) {
+			sClockL.setVisible(false);
+			sClockL = null;
 		}
-		if (mClockR != null) {
-			mClockR.setVisible(false);
-			mClockR = null;
+		if (sClockR != null) {
+			sClockR.setVisible(false);
+			sClockR = null;
 		}
-		if (mMergeL != null) {
-			mMergeL.setVisible(false);
-			mMergeL = null;
+		if (sMergeL != null) {
+			sMergeL.setVisible(false);
+			sMergeL = null;
 		}
-		if (mMergeR != null) {
-			mMergeR.setVisible(false);
-			mMergeR = null;
+		if (sMergeR != null) {
+			sMergeR.setVisible(false);
+			sMergeR = null;
 		}
-		if (mSplit != null) {
-			mSplit.setVisible(false);
-			mSplit = null;
+		if (sSplit != null) {
+			sSplit.setVisible(false);
+			sSplit = null;
 		}		
 
-		Chunk c = mChunks.get(index); ///////////////////////
+		Chunk c = sChunks.get(index); ///////////////////////
 		c.setSelected(true);
-		mClockL = c.mClock;
-		mMergeL = c.mMerge;
-		mSplit  = c.mSplit;
-		c = (index == mChunks.size() - 1) ? null : mChunks.get(index + 1);
+		sClockL = c.mClock;
+		sMergeL = c.mMerge;
+		sSplit  = c.mSplit;
+		c = (index == sChunks.size() - 1) ? null : sChunks.get(index + 1);
 		if (c != null) {
-			mClockR = c.mClock;
-			mMergeR = c.mMerge;
+			sClockR = c.mClock;
+			sMergeR = c.mMerge;
 		}
 	
 		// set buttons visible
-		if (mClockL != null && index != 0) {
-			mClockL.setVisible(true);
+		if (sClockL != null && index != 0) {
+			sClockL.setVisible(true);
 		}
-		if (mClockR != null) {
-			mClockR.setVisible(true);
+		if (sClockR != null) {
+			sClockR.setVisible(true);
 		}
-		if (mMergeL != null && index != 0) {
-			mMergeL.setVisible(true);
+		if (sMergeL != null && index != 0) {
+			sMergeL.setVisible(true);
 		}
-		if (mMergeR != null) {
-			mMergeR.setVisible(true);
+		if (sMergeR != null) {
+			sMergeR.setVisible(true);
 		}
-		if (mSplit != null) {
-			mSplit.setVisible(true);
+		if (sSplit != null) {
+			sSplit.setVisible(true);
 		}
 		
 		updateSelectedArea();
 	}
 	
-	public boolean selectChunk(float x, float y) {					
+	public static boolean selectChunk(float x, float y) {					
 		int i = 0;
-		for (; i < mChunks.size(); ++i) {
-			Chunk c = mChunks.get(i);
+		for (; i < sChunks.size(); ++i) {
+			Chunk c = sChunks.get(i);
 			if (c.contains(x, y)) {
 				selectChunk(i);						
 				break;
 			}
 		}
 								
-		return i < mChunks.size();
+		return i < sChunks.size();
 	}
 	
-	public ArrayList<Chunk> getMergingChunks(ButtonMerge merge) {
+	public static ArrayList<Chunk> getMergingChunks(ButtonMerge merge) {
 		ArrayList<Chunk> chunks = new ArrayList<Chunk>();		
-		int size = mChunks.size();
+		int size = sChunks.size();
 
 		for (int i = 1; i < size; ++i) {
-			Chunk right = mChunks.get(i);
+			Chunk right = sChunks.get(i);
 			if (right.mMerge == merge) {
-				Chunk left = mChunks.get(i - 1);
+				Chunk left = sChunks.get(i - 1);
 				chunks.add(left);
 				chunks.add(right);
 				break;
@@ -385,19 +409,19 @@ public class ChunkManager {
 		return chunks;
 	}
 	
-	public ArrayList<Float> getUnmarkedRange() {
+	public static ArrayList<Float> getUnmarkedRange() {
 		ArrayList<Float> range = new ArrayList<Float>();		
 
 		boolean found = false;
-		for (Chunk c : mChunks) {
+		for (Chunk c : sChunks) {
 			if (!c.mQuest.isAnswered()) {
 				if (!found) { // header
-					range.add((float) c.mStart / mDataSrc.getActivityLengthInPixel());					
+					range.add((float) c.mStart / sDataSrc.getActivityLengthInPixel());					
 					found = true;
 				}								
 			} else {
 				if (found) {
-					range.add((float) c.mStart / mDataSrc.getActivityLengthInPixel());
+					range.add((float) c.mStart / sDataSrc.getActivityLengthInPixel());
 					found = false;
 				}
 			}
@@ -410,10 +434,10 @@ public class ChunkManager {
 		return range;
 	}
 	
-	public Chunk getChunkToSplit(ButtonSplit split) {
+	public static Chunk getChunkToSplit(ButtonSplit split) {
 		Chunk chunkToSplit = null;
 
-		for (Chunk c : mChunks) {			
+		for (Chunk c : sChunks) {			
 			if (c.mSplit == split) {
 				chunkToSplit = c;
 				break;
@@ -423,7 +447,7 @@ public class ChunkManager {
 		return chunkToSplit;
 	}
 	
-	public boolean splitChunk(Chunk chunkToSplit) {
+	public static boolean splitChunk(Chunk chunkToSplit) {
 		AppScale appScale = AppScale.getInstance();
 
 		int   centerX = (chunkToSplit.mStart + chunkToSplit.mStop) / 2;
@@ -442,17 +466,17 @@ public class ChunkManager {
 		}		
 
 		// split at the splitX
-		int i = mChunks.indexOf(chunkToSplit);				
+		int i = sChunks.indexOf(chunkToSplit);				
 		Chunk newChunk = insertChunk(i + 1); // insert a new chunk, which should be updated later
 		newChunk.setHeight(chunkToSplit.getHeight());		
 		newChunk.update((int) splitX, chunkToSplit.mStop, chunkToSplit.mOffset);
 		chunkToSplit.update(chunkToSplit.mStart, (int) splitX, chunkToSplit.mOffset);
 
-		newChunk.mClock.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
-		newChunk.mMerge.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
-		newChunk.mSplit.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
-		newChunk.mQuest.measureSize((int) mCanvasWidth, (int) mCanvasHeight);
-		setDisplayOffset(mDispOffsetX, 0);	
+		newChunk.mClock.measureSize((int) sCanvasWidth, (int) sCanvasHeight);
+		newChunk.mMerge.measureSize((int) sCanvasWidth, (int) sCanvasHeight);
+		newChunk.mSplit.measureSize((int) sCanvasWidth, (int) sCanvasHeight);
+		newChunk.mQuest.measureSize((int) sCanvasWidth, (int) sCanvasHeight);
+		setDisplayOffset(sDispOffsetX, 0);	
 
 		if (offsetInChunkX > 0) { // split left
 			selectChunk(i + 1);
@@ -463,7 +487,7 @@ public class ChunkManager {
 		return true;
 	}
 	
-	public boolean mergeChunk(Chunk leftChunk, Chunk rightChunk, Chunk maintain) {
+	public static boolean mergeChunk(Chunk leftChunk, Chunk rightChunk, Chunk maintain) {
 		if (maintain == null) {
 			maintain = leftChunk;
 		}
@@ -476,33 +500,32 @@ public class ChunkManager {
 			deleteChunk(leftChunk);			
 		}
 		// update the new chunk button offset, especially the offset in chunk
-		setDisplayOffset(mDispOffsetX, mDispOffsetY);
+		setDisplayOffset(sDispOffsetX, sDispOffsetY);
 	
 		selectChunk(maintain);
 		
 		return true;
 	}	
 	
-	public RectF getSelectedArea() {
+	public static RectF getSelectedArea() {
 		RectF area = new RectF();
-		area.left   = mSelectedArea.left + mDispOffsetX;
-		area.top    = mSelectedArea.top;
-		area.right  = mSelectedArea.right + mDispOffsetX;
-		area.bottom = mSelectedArea.bottom + 5;
+		area.left   = sSelectedArea.left + sDispOffsetX;
+		area.top    = sSelectedArea.top;
+		area.right  = sSelectedArea.right + sDispOffsetX;
+		area.bottom = sSelectedArea.bottom + 5;
 		return area;
 	}
 	
-	protected void updateSelectedArea() {
-
-		mSelectedArea.left   = mChunks.get(mSelected).mStart + 2;
-		mSelectedArea.top    = 2;
-		mSelectedArea.right  = (mSelected == mChunks.size() - 1) ? 
-			mDataSrc.getActivityLengthInPixel() : mChunks.get(mSelected + 1).mStart - 2;
-		mSelectedArea.bottom = mViewHeight - 2;
+	protected static void updateSelectedArea() {
+		sSelectedArea.left   = sChunks.get(sSelected).mStart + 2;
+		sSelectedArea.top    = 2;
+		sSelectedArea.right  = (sSelected == sChunks.size() - 1) ? 
+			sDataSrc.getActivityLengthInPixel() : sChunks.get(sSelected + 1).mStart - 2;
+		sSelectedArea.bottom = sViewHeight - 2;
 	}	
 	
-	public boolean areAllChunksLabelled() {
-		for (Chunk c : mChunks) {
+	public static boolean areAllChunksLabelled() {
+		for (Chunk c : sChunks) {
 			if (!c.mQuest.isAnswered()) {
 				return false;
 			}
@@ -511,10 +534,10 @@ public class ChunkManager {
 		return true;
 	}
 	
-	protected OnBoundaryScaleListener mListener = null;
+	protected static OnBoundaryScaleListener sListener = null;
 	
-	public void setOnBoundaryScaleListener(OnBoundaryScaleListener listener) {
-		mListener = listener;
+	public static void setOnBoundaryScaleListener(OnBoundaryScaleListener listener) {
+		sListener = listener;
 	}
 	
 	public interface OnBoundaryScaleListener {

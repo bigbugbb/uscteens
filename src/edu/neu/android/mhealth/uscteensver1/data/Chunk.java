@@ -24,10 +24,10 @@ public class Chunk extends AppObject {
 	
 	public final static int MINIMUM_SPACE = 240;
 	
-	public int mStart; // in pixel, has been scaled by DataSource.PIXEL_SCALE
-	public int mStop;  // in pixel, has been scaled by DataSource.PIXEL_SCALE
-	public int mOffset;// plus to reconstruct the real world value, the offset has not been scaled
-	public MainPage mPage;
+	public int mStart;  // in pixel, has been scaled by DataSource.PIXEL_SCALE
+	public int mStop;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
+	public int mOffset; // plus to reconstruct the real world value, the offset has not been scaled
+	public MainPage    mPage;
 	public ButtonQuest mQuest;
 	public ButtonClock mClock;
 	public ButtonMerge mMerge;
@@ -38,8 +38,6 @@ public class Chunk extends AppObject {
 	
 	protected static Paint   sPaint;
 	protected static boolean sPaintCreated = false;
-	
-	protected ChunkManager mManager = null;
 	
 	protected static void createPaint() {
 		if (!sPaintCreated) {
@@ -52,13 +50,12 @@ public class Chunk extends AppObject {
 		}
 	}
 	
-	public Chunk(Resources res, ChunkManager manager, Object userData) {
+	public Chunk(Resources res) {
 		super(res);
 		mKind = CHUNK;
 		mZOrder = ZOrders.CHUNK;
 		
-		mManager = manager;
-		mPage = (MainPage) userData;		
+		mPage = (MainPage) ChunkManager.getUserData();		
 		
 		mQuest = new ButtonQuest(res, this, mPage);
 		mClock = new ButtonClock(res, this, mPage);
@@ -79,12 +76,8 @@ public class Chunk extends AppObject {
 		String startDate = toDateTime(mStart / DataSource.PIXEL_SCALE + mOffset);
 		String stopDate  = toDateTime(mStop  / DataSource.PIXEL_SCALE + mOffset);		
 		int actionID = getActionID();
-		String activity = (actionID == -1) ? "UNLABELLED" : Actions.ACTION_NAMES[actionID];
-		
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();                               
-		String modifyTime = sf.format(date);
-		
+		String activity = (actionID == -1) ? "UNLABELLED" : Actions.ACTION_NAMES[actionID];			                  
+		String modifyTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		RawChunk rawChunk = new RawChunk(startDate, stopDate, activity, modifyTime, modifyTime);
 		
 		return rawChunk;
@@ -180,11 +173,11 @@ public class Chunk extends AppObject {
 		float x = mQuest.getX();
 		float w = mQuest.getWidth();
 		float inChunkOffsetX = 0;
+		float viewWidth = ChunkManager.getViewWidth();
 		if (mStop + offsetX > 0 && x + offsetX < 0) { // left case		
 			inChunkOffsetX = Math.min(-(x + offsetX), mStop - w * 1.5f - x);
-		} else if (mStart + offsetX < mManager.mViewWidth && x + offsetX + w > mManager.mViewWidth) { // right case			
-			inChunkOffsetX = Math.max(mManager.mViewWidth - (x + offsetX + w),  
-				- (x - mStart - w * 0.5f));
+		} else if (mStart + offsetX < viewWidth && x + offsetX + w > viewWidth) { // right case			
+			inChunkOffsetX = Math.max(viewWidth - (x + offsetX + w), -(x - mStart - w * 0.5f));
 		}		
 		mQuest.setOffsetInChunk(inChunkOffsetX, 0);	
 		mSplit.setOffsetInChunk(inChunkOffsetX, 0);
@@ -192,7 +185,7 @@ public class Chunk extends AppObject {
 
 	@Override
 	public void onDraw(Canvas c) {
-		if (mStart + mDispOffsetX < 0 && mStart + mDispOffsetX > mManager.mViewWidth) {
+		if (mStart + mDispOffsetX < 0 && mStart + mDispOffsetX > ChunkManager.getViewWidth()) {
 			return;
 		}
 		c.drawLine(mStart + mDispOffsetX, 0, mStart + mDispOffsetX, mHeight, sPaint);		

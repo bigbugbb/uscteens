@@ -10,7 +10,7 @@ public class RawChunk {
 	protected String mModifyTime;
 	protected String mActivity;
 	
-	protected int mActionID;
+	protected int mActivityID;
 	
 	public RawChunk(String startDate, String stopDate, 
 			String activity, String createTime, String modifyTime) {
@@ -21,22 +21,23 @@ public class RawChunk {
 		mModifyTime = modifyTime;
 		
 		if (mActivity.compareToIgnoreCase("UNLABELLED") == 0) {
-			mActionID = -1;
+			mActivityID = -1;
 		} else {
 			for (int i = 0; i < Actions.ACTION_NAMES.length; ++i) {
 				if (mActivity.compareToIgnoreCase(Actions.ACTION_NAMES[i]) == 0) {
-					mActionID = i;
+					mActivityID = i;
 					break;
 				}
 			}
 		}
 	}
 	
-	public int getActionID() {
-		return mActionID;
+	public int getActivityID() {
+		return mActivityID;
 	}
 		
 	public int getStartTime() {
+		// 2013-02-20 03:00:00.000
 		String[] result = mStartDate.split(" ");
 		String[] times  = result[result.length - 1].split(":");
 		
@@ -44,7 +45,8 @@ public class RawChunk {
 			   Integer.parseInt(times[1]) * 60;    // minute
 	}
 	
-	public int getStopTime() {		
+	public int getStopTime() {	
+		// 2013-02-20 03:00:00.000
 		String[] result = mStopDate.split(" ");
 		String[] times  = result[result.length - 1].split(":");
 		

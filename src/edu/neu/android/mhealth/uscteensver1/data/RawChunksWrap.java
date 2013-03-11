@@ -4,9 +4,14 @@ import java.util.ArrayList;
 
 public class RawChunksWrap extends ArrayList<RawChunk> {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1412862931407805188L;
+
 	public boolean areAllChunksLabelled() {
 		for (RawChunk rawChunk : this) {
-			if (rawChunk.mActionID == -1) {
+			if (rawChunk.getActivityID() == -1) {
 				return false;
 			}
 		}	

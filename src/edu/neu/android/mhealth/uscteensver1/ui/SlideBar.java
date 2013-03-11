@@ -35,16 +35,14 @@ public class SlideBar extends AppObject {
 	// slide bar button position
 	protected float mSliderBarBtnX = 0;
 	protected float mSliderBarBtnY = 0;
-	// chunk manager
-	protected ChunkManager mChunkManager = null;
-
+	
 	protected OnSlideBarChangeListener mListener = null;
 	
 	public interface OnSlideBarChangeListener {
 		void onProgressChanged(SlideBar slideBar, int progress);
 	}
 	
-	public SlideBar(Resources res, ChunkManager chunkManager) {
+	public SlideBar(Resources res) {
 		super(res);
 		loadImages(new int[]{ R.drawable.slidebar_btn });
 		
@@ -69,7 +67,6 @@ public class SlideBar extends AppObject {
 		mPaintText.setTextSize(sAppScale.doScaleT(24));
 		mPaintText.setTextAlign(Paint.Align.CENTER);
 		
-		mChunkManager = chunkManager;
 	}
 
 	public void setOnSlideBarChangeListener(OnSlideBarChangeListener listener) {
@@ -77,7 +74,7 @@ public class SlideBar extends AppObject {
 	}
 	
 	public void updateUnmarkedRange() {
-		mRange = mChunkManager.getUnmarkedRange();
+		mRange = ChunkManager.getUnmarkedRange();
 
 		if (mCanvasWidth != 0) {
 			for (int i = 0; i < mRange.size(); ++i) {				
