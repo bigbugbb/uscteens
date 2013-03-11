@@ -238,13 +238,13 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
         		break;
         	case AppCmd.QUEST:
-        		i = new Intent(context, ActionsDialog.class);           		
+        		i = new Intent(USCTeensMainActivity.this, ActionsDialog.class);           		
         		i.putExtra(ActionsDialog.CHUNK_START_TIME, msg.arg1);
         		i.putExtra(ActionsDialog.CHUNK_STOP_TIME, msg.arg2);
         		startActivityForResult(i, AppCmd.QUEST);
         		break;
         	case AppCmd.MERGE:
-        		i = new Intent(context, WarningDialog.class);
+        		i = new Intent(USCTeensMainActivity.this, WarningDialog.class);
     			i.putStringArrayListExtra(WarningDialog.KEY, (ArrayList<String>) msg.obj);
     			startActivityForResult(i, AppCmd.MERGE);
         		break;
