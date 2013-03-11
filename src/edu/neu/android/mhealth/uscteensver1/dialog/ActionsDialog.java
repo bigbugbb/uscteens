@@ -3,8 +3,11 @@ package edu.neu.android.mhealth.uscteensver1.dialog;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.R.id;
 import edu.neu.android.mhealth.uscteensver1.R.layout;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.views.ActionsView;
 import edu.neu.android.mhealth.uscteensver1.views.ActionsView.OnBackClickedListener;
+import edu.neu.android.wocketslib.support.DataStorage;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -68,8 +71,12 @@ public class ActionsDialog extends Activity implements OnBackClickedListener {
 	} 
 	
 	protected void setResultAndExit(int index) {
-		Intent i = new Intent();	
-		setResult(index + 1, i); // plus one to distinguish from the cancel result
+//		Intent i = new Intent();	
+//		setResult(index + 1, i); // plus one to distinguish from the cancel result
+		DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.QUEST_SELECTION, index);
+		Message msg = USCTeensGlobals.sGlobalHandler.obtainMessage();				
+		msg.what = AppCmd.QUEST_FINISHING;
+		USCTeensGlobals.sGlobalHandler.sendMessage(msg);	
 		finish();
 	}
 	

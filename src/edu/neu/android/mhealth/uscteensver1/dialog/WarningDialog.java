@@ -6,14 +6,18 @@ import java.util.List;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.R.id;
 import edu.neu.android.mhealth.uscteensver1.R.layout;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.views.WarningView;
 import edu.neu.android.mhealth.uscteensver1.views.WarningView.OnBackClickedListener;
 import edu.neu.android.mhealth.uscteensver1.views.WarningView.OnItemClickListener;
+import edu.neu.android.wocketslib.support.DataStorage;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
@@ -21,8 +25,7 @@ import android.view.ViewGroup.LayoutParams;
 
 public class WarningDialog extends Activity implements OnItemClickListener, OnBackClickedListener {
 	
-	public static final String KEY = "ACTIONS_TO_MERGE";
-	public static final String SELECTION = "SELECTION_ACTION";
+	public static final String KEY = "ACTIONS_TO_MERGE";	
 	protected WarningView mView = null;
 	protected ArrayList<String> mActions = null;
 	
@@ -59,9 +62,13 @@ public class WarningDialog extends Activity implements OnItemClickListener, OnBa
 
 	@Override
 	public void onItemClick(View v, int pos) {
-		Intent i = new Intent();
-		i.putExtra(SELECTION, mActions.get(pos));
-		setResult(pos + 1, i); 
+//		Intent i = new Intent();
+//		i.putExtra(SELECTION, mActions.get(pos));
+//		setResult(pos + 1, i);
+		DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.MERGE_SELECTION, mActions.get(pos));
+		Message msg = USCTeensGlobals.sGlobalHandler.obtainMessage();				
+		msg.what = AppCmd.MERGE_FINISHING;
+		USCTeensGlobals.sGlobalHandler.sendMessage(msg);
 		finish();
 	}
 

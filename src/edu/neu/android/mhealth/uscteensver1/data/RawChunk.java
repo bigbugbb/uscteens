@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
-import edu.neu.android.mhealth.uscteensver1.dialog.Actions;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+
 
 public class RawChunk {
 	// data read directly from xml
@@ -23,8 +24,8 @@ public class RawChunk {
 		if (mActivity.compareToIgnoreCase("UNLABELLED") == 0) {
 			mActivityID = -1;
 		} else {
-			for (int i = 0; i < Actions.ACTION_NAMES.length; ++i) {
-				if (mActivity.compareToIgnoreCase(Actions.ACTION_NAMES[i]) == 0) {
+			for (int i = 0; i < USCTeensGlobals.ACTION_NAMES.length; ++i) {
+				if (mActivity.compareToIgnoreCase(USCTeensGlobals.ACTION_NAMES[i]) == 0) {
 					mActivityID = i;
 					break;
 				}

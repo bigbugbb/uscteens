@@ -5,11 +5,11 @@ import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.R.drawable;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleListener;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.dialog.Actions;
 import edu.neu.android.mhealth.uscteensver1.ui.*;
 import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph.OnGraphMovedListener;
 import edu.neu.android.mhealth.uscteensver1.ui.SlideBar.OnSlideBarChangeListener;
@@ -327,7 +327,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	public void finishQuest(Object... params) {
 		ButtonQuest quest = (ButtonQuest) mLastSelObject;
 		int index = (Integer) params[0];
-		quest.setAnswer(Actions.ACTION_IMGS[index], Actions.ACTION_NAMES[index]);
+		quest.setAnswer(USCTeensGlobals.ACTION_IMGS[index], USCTeensGlobals.ACTION_NAMES[index]);
 		synchronized (this) {
 			mSlideBar.updateUnmarkedRange();
 		}

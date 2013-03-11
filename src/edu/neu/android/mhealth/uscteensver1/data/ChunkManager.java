@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.RectF;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.dialog.Actions;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonClock;
@@ -82,8 +82,8 @@ public class ChunkManager {
 			int activityID = rawChunk.getActivityID();
 			chunk.update(start, stop, timeOffset);			
 			chunk.mQuest.setAnswer(
-				activityID == -1 ? R.drawable.question_btn : Actions.ACTION_IMGS[activityID], 
-				activityID == -1 ? "None" : Actions.ACTION_NAMES[activityID]
+				activityID == -1 ? R.drawable.question_btn : USCTeensGlobals.ACTION_IMGS[activityID], 
+				activityID == -1 ? "None" : USCTeensGlobals.ACTION_NAMES[activityID]
 			);
 		}
 		// select the first chunk

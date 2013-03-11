@@ -6,8 +6,10 @@ public class AppCmd {
 	public final static int BACK     = 2;
 	public final static int NEXT     = 3;
 	public final static int QUEST    = 4;
-	public final static int SPLIT	 = 5;
-	public final static int MERGE    = 6;
-	public final static int WEEKDAY  = 7;
-	public final static int REWARD   = 8;
+	public final static int QUEST_FINISHING = 5;
+	public final static int SPLIT	 = 6;
+	public final static int MERGE    = 7;
+	public final static int MERGE_FINISHING = 8;
+	public final static int WEEKDAY  = 9;
+	public final static int REWARD   = 10;
 }

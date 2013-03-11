@@ -1,6 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import edu.neu.android.mhealth.uscteensver1.dialog.Actions;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,8 +40,8 @@ public class ListViewActions extends ListView {
 	public ListViewActions(Resources res) {
 		super(res);
 
-		for (int i = 0; i < Actions.ACTION_NAMES.length; ++i) {
-			addItem(Actions.ACTION_NAMES[i], Actions.ACTION_IMGS[i]);
+		for (int i = 0; i < USCTeensGlobals.ACTION_NAMES.length; ++i) {
+			addItem(USCTeensGlobals.ACTION_NAMES[i], USCTeensGlobals.ACTION_IMGS[i]);
 		}
 	}
 	

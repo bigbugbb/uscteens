@@ -10,7 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
-import edu.neu.android.mhealth.uscteensver1.dialog.Actions;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.MainPage;
@@ -76,7 +76,7 @@ public class Chunk extends AppObject {
 		String startDate = toDateTime(mStart / DataSource.PIXEL_SCALE + mOffset);
 		String stopDate  = toDateTime(mStop  / DataSource.PIXEL_SCALE + mOffset);		
 		int actionID = getActionID();
-		String activity = (actionID == -1) ? "UNLABELLED" : Actions.ACTION_NAMES[actionID];			                  
+		String activity = (actionID == -1) ? "UNLABELLED" : USCTeensGlobals.ACTION_NAMES[actionID];			                  
 		String modifyTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		RawChunk rawChunk = new RawChunk(startDate, stopDate, activity, modifyTime, modifyTime);
 		
@@ -94,8 +94,8 @@ public class Chunk extends AppObject {
 
 	public int getActionID() {
 		if (mQuest.isAnswered()) {					
-			for (int i = 0; i < Actions.ACTION_IMGS.length; ++i) {
-				if (mQuest.getAnswer() == Actions.ACTION_IMGS[i]) {
+			for (int i = 0; i < USCTeensGlobals.ACTION_IMGS.length; ++i) {
+				if (mQuest.getAnswer() == USCTeensGlobals.ACTION_IMGS[i]) {
 					return i;
 				}
 			}

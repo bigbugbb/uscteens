@@ -19,6 +19,7 @@ import org.apache.http.util.EntityUtils;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.telephony.TelephonyManager;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.Log;
@@ -32,8 +33,40 @@ import edu.neu.android.wocketslib.Globals;
 public class USCTeensGlobals {
 	private static final String TAG = "USCTeensGlobals";	
 
+	public final static String QUEST_SELECTION = "QUEST_SELECTION";
+	public final static String MERGE_SELECTION = "MERGE_SELECTION";
 	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
-		
+	
+	public static Handler sGlobalHandler = null;
+	
+	public static final String[] ACTION_NAMES = new String[] {  		
+		"Reading/Homework", "Watching TV/Movies", "Using the computer",
+		"Eating", "Sports", "Going somewhere",
+		"Lying down", "Sitting", "Standing",
+		"Walking", "Hanging with friends", "Doing chores", 
+		"Cooking", "Riding in a car", "Playing video games", 
+		"Using the phone", "Showering/Bathing", "Sleeping",
+		"Doing something else", "I don't remember", "Running",
+		"Basketball", "Football", "Soccer", 
+		"Jogging", "Dance class", "Karate class",
+		"Strength training", "Bicycling", "Swimming",
+		"Baseball", "Skateboarding"
+	};
+	
+	public static final int[] ACTION_IMGS = new int[] {	
+		R.drawable.reading, R.drawable.watchingtv, R.drawable.usingcomputer,
+		R.drawable.eating, R.drawable.sports, R.drawable.goingsomewhere,
+		R.drawable.lyingdown, R.drawable.sitting, R.drawable.standing,
+		R.drawable.walking, R.drawable.hangingwfriends, R.drawable.doingchores,
+		R.drawable.cooking, R.drawable.ridinginacar, R.drawable.videogames,
+		R.drawable.usingthephone, R.drawable.showering, R.drawable.sleeping,
+		R.drawable.somethingelse, R.drawable.idontremember, R.drawable.running,
+		R.drawable.basketball, R.drawable.football, R.drawable.soccer,
+		R.drawable.jogging, R.drawable.dance, R.drawable.karate,
+		R.drawable.strength_training, R.drawable.bicycling, R.drawable.swimming,
+		R.drawable.baseball, R.drawable.skateboarding
+	};
+	
 	public static void initGlobals(Context aContext) {
 		// By default the logging will go to the apps internal storage, not the external directory
 		Globals.IS_LOG_EXTERNAL = false;

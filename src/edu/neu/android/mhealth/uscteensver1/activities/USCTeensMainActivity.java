@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.HomePageDialog;
@@ -63,6 +64,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		super.onCreate(savedInstanceState, "MainActivity");
 		setContentView(R.layout.activity_main);					
 		
+		USCTeensGlobals.sGlobalHandler = mHandler;
 		mDataSource = DataSource.getInstance(getApplicationContext());				
 
 		// setup scale param according to the screen resolution
@@ -246,7 +248,17 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         	case AppCmd.MERGE:
         		i = new Intent(USCTeensMainActivity.this, WarningDialog.class);
     			i.putStringArrayListExtra(WarningDialog.KEY, (ArrayList<String>) msg.obj);
-    			startActivityForResult(i, AppCmd.MERGE);
+    			startActivity(i);
+        		break;
+        	case AppCmd.QUEST_FINISHING:        	
+        		((MainPage) mCurPage).finishQuest(
+        			(int) DataStorage.GetValueLong(getApplicationContext(), USCTeensGlobals.QUEST_SELECTION, 0)
+        		); 
+            	break;
+        	case AppCmd.MERGE_FINISHING:        		
+        		((MainPage) mCurPage).finishMerge(
+        			DataStorage.GetValueString(getApplicationContext(), USCTeensGlobals.MERGE_SELECTION, "")
+        		);
         		break;
             default:
             	break;
@@ -301,18 +313,19 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		return super.onKeyDown(keyCode, event);
 	}
     
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == RESULT_CANCELED) {
-    		return;
-    	} else if (requestCode == AppCmd.QUEST) {    
-        	MainPage page = (MainPage) mCurPage;
-        	page.finishQuest(resultCode - 1);       	        	
-        } else if (requestCode == AppCmd.MERGE) {        	
-        	MainPage page = (MainPage) mCurPage;
-        	page.finishMerge(data.getStringExtra(WarningDialog.SELECTION));        	
-        }
-    } 
-	
-	
+//
+//  It seems that onActivityResult can't work if USCTeensMainActivity 
+//  has been set into singleInstance in AndroidManifest.xml.
+//    
+//	@Override
+//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		if (resultCode == RESULT_CANCELED) {
+//    		return;
+//    	} else if (requestCode == AppCmd.QUEST) {    
+//        	      	        	
+//        } else if (requestCode == AppCmd.MERGE) {        	
+//        	        	
+//        }
+//    } 
+
 }
