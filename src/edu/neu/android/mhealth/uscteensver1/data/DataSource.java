@@ -242,34 +242,34 @@ public class DataSource {
         root.addAttribute("xmlns", "urn:mites-schema");
         // ANNOTATIONS
         Element annotations = root.addElement("ANNOTATIONS")
-        .addAttribute("DATASET", "TeenActivity")
-        .addAttribute("ANNOTATOR", "Simple-Algorithm")
-        .addAttribute("EMAIL", "bigbugbb@gmail.com")
-        .addAttribute("DESCRIPTION", "Teen activity labelling")
-        .addAttribute("METHOD", "based on pre-defined theresholds")
-        .addAttribute("NOTES", "")
-        .addAttribute("ALLLABELLED", rawChunks.areAllChunksLabelled() ? "yes" : "no");
+	        .addAttribute("DATASET", "TeenActivity")
+	        .addAttribute("ANNOTATOR", "Simple-Algorithm")
+	        .addAttribute("EMAIL", "bigbugbb@gmail.com")
+	        .addAttribute("DESCRIPTION", "Teen activity labelling")
+	        .addAttribute("METHOD", "based on pre-defined theresholds")
+	        .addAttribute("NOTES", "")
+	        .addAttribute("ALLLABELLED", rawChunks.areAllChunksLabelled() ? "yes" : "no");
         
         for (RawChunk rawChunk : rawChunks) {
 	        // ANNOTATION
 	        Element annotation = annotations.addElement("ANNOTATION")
-	        .addAttribute("GUID", "");
+	        	.addAttribute("GUID", "");
 	        // LABEL
 	        Element label = annotation.addElement("LABEL")
-	        .addAttribute("GUID", "")
-	        .addText("1");
+		        .addAttribute("GUID", "")
+		        .addText("1");
 	        // START_DT
 	        Element start_dt = annotation.addElement("START_DT")
-	        .addText(rawChunk.mStartDate);
+	        	.addText(rawChunk.mStartDate);
 	        // STOP_DT
 	        Element stop_dt = annotation.addElement("STOP_DT")
-	        .addText(rawChunk.mStopDate);
+	        	.addText(rawChunk.mStopDate);
 	        // PROPERTIES
 	        Element properties = annotation.addElement("PROPERTIES")
-	        .addAttribute("ANNOTATION_SET", "Teen_Activity_Study")
-	        .addAttribute("ACTIVITY_TYPE", rawChunk.mActivity)
-	        .addAttribute("LAST_MODIFIED", rawChunk.mModifyTime)
-	        .addAttribute("DATE_CREATED",  rawChunk.mCreateTime);
+		        .addAttribute("ANNOTATION_SET", "Teen_Activity_Study")
+		        .addAttribute("ACTIVITY_TYPE", rawChunk.mActivity)
+		        .addAttribute("LAST_MODIFIED", rawChunk.mModifyTime)
+		        .addAttribute("DATE_CREATED",  rawChunk.mCreateTime);
         }
                 
         XMLWriter writer;
@@ -278,9 +278,10 @@ public class DataSource {
 			writer = new XMLWriter(new FileOutputStream(path));
 			writer.write(document);
 	        writer.close();
+	        result = true;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace();			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -289,7 +290,7 @@ public class DataSource {
 			e.printStackTrace();
 		}                   
 		
-		return true;
+		return result;
 	}
 	
 	private native int create();

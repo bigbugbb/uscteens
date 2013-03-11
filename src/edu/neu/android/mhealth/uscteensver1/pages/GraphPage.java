@@ -24,7 +24,7 @@ import android.view.View;
 import android.widget.Toast;
 
 
-public class MainPage extends AppPage implements OnClickListener,
+public class GraphPage extends AppPage implements OnClickListener,
 												 OnGraphMovedListener,
 												 OnSlideBarChangeListener,
 												 OnBoundaryScaleListener {
@@ -39,7 +39,7 @@ public class MainPage extends AppPage implements OnClickListener,
 	
 	protected boolean mScrolling = false; // indicate whether we are scrolling the chunk
 	
-	public MainPage(Context context, View view, Handler handler) {
+	public GraphPage(Context context, View view, Handler handler) {
 		super(context, handler);				
 		mView = view;
 		ChunkManager.initialize(context, DataSource.getInstance(null));

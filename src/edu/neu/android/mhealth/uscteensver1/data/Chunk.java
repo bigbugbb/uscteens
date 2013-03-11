@@ -13,7 +13,7 @@ import android.graphics.Paint.Style;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
-import edu.neu.android.mhealth.uscteensver1.pages.MainPage;
+import edu.neu.android.mhealth.uscteensver1.pages.GraphPage;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonClock;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonMerge;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonQuest;
@@ -27,7 +27,7 @@ public class Chunk extends AppObject {
 	public int mStart;  // in pixel, has been scaled by DataSource.PIXEL_SCALE
 	public int mStop;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
 	public int mOffset; // plus to reconstruct the real world value, the offset has not been scaled
-	public MainPage    mPage;
+	public GraphPage    mParent;
 	public ButtonQuest mQuest;
 	public ButtonClock mClock;
 	public ButtonMerge mMerge;
@@ -55,14 +55,13 @@ public class Chunk extends AppObject {
 		mKind = CHUNK;
 		mZOrder = ZOrders.CHUNK;
 		
-		mPage = (MainPage) ChunkManager.getUserData();		
-		
-		mQuest = new ButtonQuest(res, this, mPage);
-		mClock = new ButtonClock(res, this, mPage);
-		mMerge = new ButtonMerge(res, this, mPage);
-		mSplit = new ButtonSplit(res, this, mPage);
+		mParent = (GraphPage) ChunkManager.getUserData();		
+		mQuest = new ButtonQuest(res, this, mParent);
+		mClock = new ButtonClock(res, this, mParent);
+		mMerge = new ButtonMerge(res, this, mParent);
+		mSplit = new ButtonSplit(res, this, mParent);
 				
-		List<AppObject> objects = mPage.getObjectList();
+		List<AppObject> objects = mParent.getObjectList();
 		objects.add(mQuest);
 		objects.add(mClock);
 		objects.add(mMerge);
@@ -128,10 +127,10 @@ public class Chunk extends AppObject {
 		mMerge.release();
 		mSplit.release();	
 		
-		mPage.getObjectList().remove(mQuest);
-		mPage.getObjectList().remove(mClock);
-		mPage.getObjectList().remove(mMerge);
-		mPage.getObjectList().remove(mSplit);
+		mParent.getObjectList().remove(mQuest);
+		mParent.getObjectList().remove(mClock);
+		mParent.getObjectList().remove(mMerge);
+		mParent.getObjectList().remove(mSplit);
 	}
 	
 	public boolean update(int start, int stop, int offset) {

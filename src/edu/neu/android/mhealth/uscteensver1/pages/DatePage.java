@@ -29,7 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.uscteensver1.ui.OnClickListener,
+public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteensver1.ui.OnClickListener,
 													OnReachedEndListener,
 													OnItemClickListener,
 													OnListViewScrollingListener {
@@ -45,7 +45,7 @@ public class WeekdayPage extends AppPage implements edu.neu.android.mhealth.usct
 	
 	protected View mView = null;
 
-	public WeekdayPage(Context context, View view, Handler handler) {
+	public DatePage(Context context, View view, Handler handler) {
 		super(context, handler);
 		mView = view;		
 	}

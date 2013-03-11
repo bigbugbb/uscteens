@@ -14,8 +14,8 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
-import edu.neu.android.mhealth.uscteensver1.pages.MainPage;
-import edu.neu.android.mhealth.uscteensver1.pages.WeekdayPage;
+import edu.neu.android.mhealth.uscteensver1.pages.GraphPage;
+import edu.neu.android.mhealth.uscteensver1.pages.DatePage;
 import edu.neu.android.mhealth.uscteensver1.pages.WinPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.views.MainView;
@@ -126,8 +126,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	private void initPages() {		
 		// only three pages now		
 		mPages.add(new HomePage(getApplicationContext(), mMainView, mHandler));
-		mPages.add(new WeekdayPage(getApplicationContext(), mMainView, mHandler));
-		mPages.add(new MainPage(getApplicationContext(), mMainView, mHandler));
+		mPages.add(new DatePage(getApplicationContext(), mMainView, mHandler));
+		mPages.add(new GraphPage(getApplicationContext(), mMainView, mHandler));
 		mPages.add(new WinPage(getApplicationContext(), mMainView, mHandler));
 		mCurPage = mPages.get(indexOfPage(PageType.HOME_PAGE));
 		// set pages to main view
@@ -251,12 +251,12 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
     			startActivity(i);
         		break;
         	case AppCmd.QUEST_FINISHING:        	
-        		((MainPage) mCurPage).finishQuest(
+        		((GraphPage) mCurPage).finishQuest(
         			(int) DataStorage.GetValueLong(getApplicationContext(), USCTeensGlobals.QUEST_SELECTION, 0)
         		); 
             	break;
         	case AppCmd.MERGE_FINISHING:        		
-        		((MainPage) mCurPage).finishMerge(
+        		((GraphPage) mCurPage).finishMerge(
         			DataStorage.GetValueString(getApplicationContext(), USCTeensGlobals.MERGE_SELECTION, "")
         		);
         		break;
