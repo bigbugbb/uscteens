@@ -11,7 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog;
+import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.MainPage;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonClock;

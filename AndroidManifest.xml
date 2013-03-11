@@ -302,14 +302,14 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog"
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog"
 			android:screenOrientation="landscape"
 		    android:launchMode="singleInstance"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/DialogTheme">
 		</activity>
 		
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.dialog.WarningDialog"
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog"
 			android:screenOrientation="landscape"
 		    android:launchMode="singleInstance"
             android:configChanges="orientation|keyboardHidden"

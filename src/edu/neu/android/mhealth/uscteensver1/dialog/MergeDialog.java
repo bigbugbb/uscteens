@@ -23,7 +23,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-public class WarningDialog extends Activity implements OnItemClickListener, OnBackClickedListener {
+public class MergeDialog extends Activity implements OnItemClickListener, OnBackClickedListener {
 	
 	public static final String KEY = "ACTIONS_TO_MERGE";	
 	protected WarningView mView = null;

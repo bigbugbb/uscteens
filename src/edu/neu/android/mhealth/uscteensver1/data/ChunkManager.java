@@ -7,7 +7,7 @@ import android.content.res.Resources;
 import android.graphics.RectF;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog;
+import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonClock;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonMerge;

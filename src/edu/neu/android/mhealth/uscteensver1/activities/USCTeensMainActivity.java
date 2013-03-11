@@ -6,9 +6,9 @@ import java.util.List;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.dialog.ActionsDialog;
-import edu.neu.android.mhealth.uscteensver1.dialog.HomePageDialog;
-import edu.neu.android.mhealth.uscteensver1.dialog.WarningDialog;
+import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
+import edu.neu.android.mhealth.uscteensver1.dialog.QuitDialog;
+import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
@@ -240,14 +240,14 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
         		break;
         	case AppCmd.QUEST:
-        		i = new Intent(USCTeensMainActivity.this, ActionsDialog.class);           		
-        		i.putExtra(ActionsDialog.CHUNK_START_TIME, msg.arg1);
-        		i.putExtra(ActionsDialog.CHUNK_STOP_TIME, msg.arg2);
+        		i = new Intent(USCTeensMainActivity.this, QuestDialog.class);           		
+        		i.putExtra(QuestDialog.CHUNK_START_TIME, msg.arg1);
+        		i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);
         		startActivityForResult(i, AppCmd.QUEST);
         		break;
         	case AppCmd.MERGE:
-        		i = new Intent(USCTeensMainActivity.this, WarningDialog.class);
-    			i.putStringArrayListExtra(WarningDialog.KEY, (ArrayList<String>) msg.obj);
+        		i = new Intent(USCTeensMainActivity.this, MergeDialog.class);
+    			i.putStringArrayListExtra(MergeDialog.KEY, (ArrayList<String>) msg.obj);
     			startActivity(i);
         		break;
         	case AppCmd.QUEST_FINISHING:        	
@@ -282,7 +282,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
     	
 		if (keyCode == KeyEvent.KEYCODE_BACK) {		
 			if (mCurPage == mPages.get(0)) { // home page
-				HomePageDialog dialog = new HomePageDialog();
+				QuitDialog dialog = new QuitDialog();
 				dialog.show(getSupportFragmentManager(), "HomePageDialog");
 			} else if (mCurPage == mPages.get(indexOfPage(PageType.WEEKDAY_PAGE))) {
 				switchPages(indexOfPage(PageType.HOME_PAGE));				

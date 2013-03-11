@@ -19,7 +19,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 
-public class ActionsDialog extends Activity implements OnBackClickedListener {
+public class QuestDialog extends Activity implements OnBackClickedListener {
 	
 	static public String CHUNK_START_TIME = "CHUNK_START_TIME";
 	static public String CHUNK_STOP_TIME  = "CHUNK_STOP_TIME";
