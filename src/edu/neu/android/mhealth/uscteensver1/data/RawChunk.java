@@ -2,7 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.data;
 
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 
-
+// chunk data from XML in direct
 public class RawChunk {
 	// data read directly from xml
 	protected String mStartDate;

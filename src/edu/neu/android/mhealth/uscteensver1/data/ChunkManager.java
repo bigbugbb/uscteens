@@ -99,15 +99,8 @@ public class ChunkManager {
 		}
 	}
 	
-	protected static void saveChunks() {
-		RawChunksWrap rawChunks = new RawChunksWrap();
-		
-		for (int i = 0; i < sChunks.size(); ++i) {
-			Chunk chunk = sChunks.get(i);
-			RawChunk rawChunk = chunk.toRawChunk();
-			rawChunks.add(rawChunk);
-		}
-		sDataSrc.saveChunkData(rawChunks);
+	protected static void saveChunks() {		
+		sDataSrc.saveChunkData(sChunks);
 	}
 	
 	public static Object getUserData() {

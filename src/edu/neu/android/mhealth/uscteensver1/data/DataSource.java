@@ -231,9 +231,16 @@ public class DataSource {
 		return allLabelled;
 	}
 
-	public boolean saveChunkData(RawChunksWrap rawChunks) {
+	public boolean saveChunkData(final ArrayList<Chunk> chunks) {
 		boolean result = false;		
-		String path = PATH_PREFIX + mCurSelectedDate + ".xml";
+		String path = PATH_PREFIX + mCurSelectedDate + ".xml";				
+		
+		mRawChksWrap.clear();
+		for (int i = 0; i < chunks.size(); ++i) {
+			Chunk chunk = chunks.get(i);
+			RawChunk rawChunk = chunk.toRawChunk();
+			mRawChksWrap.add(rawChunk);
+		}
 		
 		Document document = DocumentHelper.createDocument();
         
@@ -248,9 +255,9 @@ public class DataSource {
 	        .addAttribute("DESCRIPTION", "Teen activity labelling")
 	        .addAttribute("METHOD", "based on pre-defined theresholds")
 	        .addAttribute("NOTES", "")
-	        .addAttribute("ALLLABELLED", rawChunks.areAllChunksLabelled() ? "yes" : "no");
+	        .addAttribute("ALLLABELLED", mRawChksWrap.areAllChunksLabelled() ? "yes" : "no");
         
-        for (RawChunk rawChunk : rawChunks) {
+        for (RawChunk rawChunk : mRawChksWrap) {
 	        // ANNOTATION
 	        Element annotation = annotations.addElement("ANNOTATION")
 	        	.addAttribute("GUID", "");

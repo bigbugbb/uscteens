@@ -20,6 +20,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.ButtonQuest;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonSplit;
 import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 
+// chunk data mapping to the graph
 public class Chunk extends AppObject {
 	
 	public final static int MINIMUM_SPACE = 240;
@@ -27,7 +28,7 @@ public class Chunk extends AppObject {
 	public int mStart;  // in pixel, has been scaled by DataSource.PIXEL_SCALE
 	public int mStop;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
 	public int mOffset; // plus to reconstruct the real world value, the offset has not been scaled
-	public GraphPage    mParent;
+	public GraphPage   mParent;
 	public ButtonQuest mQuest;
 	public ButtonClock mClock;
 	public ButtonMerge mMerge;

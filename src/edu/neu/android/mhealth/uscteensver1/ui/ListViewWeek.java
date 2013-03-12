@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.data.RawActivity;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
