@@ -586,9 +586,11 @@ public class USCTeensArbitrater extends Arbitrater {
 		
 		// wait for the internal AC sensor to get enough data for the entire 20s
 		try {
-			if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor for 20s"); }
-			Thread.sleep(USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER);
-			if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor finished"); }
+			synchronized (this) {				
+				if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor for 20s"); }
+				wait(USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER + 1000);
+				if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor finished"); }				
+			}			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
