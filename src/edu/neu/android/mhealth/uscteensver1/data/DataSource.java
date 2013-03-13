@@ -110,6 +110,7 @@ public class DataSource {
 			// clear it because it has been filled after loadHourlyAccelSensorData is called
 			mHourlyAccelData.clear();
 		}
+		mAccelDataWrap.updateDrawableData();
 		// now we have a loaded daily accelerometer sensor data in the data wrap,
 		// we convert it into the data structure that can be drawn easily.
 		
