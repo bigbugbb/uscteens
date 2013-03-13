@@ -409,12 +409,12 @@ public class ChunkManager {
 		for (Chunk c : sChunks) {
 			if (!c.mQuest.isAnswered()) {
 				if (!found) { // header
-					range.add((float) c.mStart / sDataSrc.getActivityLengthInPixel());					
+					range.add((float) c.mStart / sDataSrc.getDrawableDataLengthInPixel());					
 					found = true;
 				}								
 			} else {
 				if (found) {
-					range.add((float) c.mStart / sDataSrc.getActivityLengthInPixel());
+					range.add((float) c.mStart / sDataSrc.getDrawableDataLengthInPixel());
 					found = false;
 				}
 			}
@@ -513,7 +513,7 @@ public class ChunkManager {
 		sSelectedArea.left   = sChunks.get(sSelected).mStart + 2;
 		sSelectedArea.top    = 2;
 		sSelectedArea.right  = (sSelected == sChunks.size() - 1) ? 
-			sDataSrc.getActivityLengthInPixel() : sChunks.get(sSelected + 1).mStart - 2;
+			sDataSrc.getDrawableDataLengthInPixel() : sChunks.get(sSelected + 1).mStart - 2;
 		sSelectedArea.bottom = sViewHeight - 2;
 	}	
 	

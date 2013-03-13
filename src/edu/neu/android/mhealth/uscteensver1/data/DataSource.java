@@ -92,24 +92,30 @@ public class DataSource {
 			Toast.makeText(mContext, "Can't find the activity data!", Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		// first load raw activity data 
+		// first clear the data container
 		mAccelDataWrap.clear();
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+		mHourlyAccelData.clear();
+		// load the daily data from csv files hour by hour
 		String dateDir = new SimpleDateFormat("yyyy-MM-dd/").format(new Date());
 		String[] hourDirs = FileHelper.getFilePathsDir(
 				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir);		
 		for (int i = 0; i < hourDirs.length; ++i) {
-			String[] filePath = FileHelper.getFilePathsDir(hourDirs[i]);
+			// each hour corresponds to one csv file
+			String[] filePath = FileHelper.getFilePathsDir(hourDirs[i]);			
+			// load the hourly data from csv file and save the data to mHourlyAccelData
 			loadHourlyAccelSensorData(filePath[0]);
+			// add the houly data the data wrap
 			mAccelDataWrap.add(mHourlyAccelData);
+			// clear it because it has been filled after loadHourlyAccelSensorData is called
 			mHourlyAccelData.clear();
 		}
+		// now we have a loaded daily accelerometer sensor data in the data wrap,
+		// we convert it into the data structure that can be drawn easily.
 		
 //		mRawActivityData  = 
 //		mMaxActivityValue = getMaxActivityValue(path);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 		
 		// then load the corresponding chunks
 		path = PATH_PREFIX + date + ".xml"; 
@@ -142,16 +148,16 @@ public class DataSource {
 	}
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public int[] getRawActivityData() {
-		return null;
+	public int[] getDrawableData() {
+		return mAccelDataWrap.getDrawableData();
 	}
 	
-	public int getActivityLengthInPixel() {
-		return 0 * PIXEL_SCALE;
+	public int getDrawableDataLengthInPixel() {
+		return mAccelDataWrap.getDrawableDataLength() * PIXEL_SCALE;
 	}
 	
-	public int getMaxActivityValue() {
-		return 0;
+	public int getMaxDrawableDataValue() {
+		return mAccelDataWrap.getMaxDrawableDataValue();
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 

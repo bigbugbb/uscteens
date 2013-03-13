@@ -50,8 +50,8 @@ public class MotionGraph extends AppObject {
 		super(res);				
 		
 		mDataSrc = DataSource.getInstance(null);
-		mActions = mDataSrc.getRawActivityData();
-		mActLenInPix = mDataSrc.getActivityLengthInPixel();	
+		mActions = mDataSrc.getDrawableData();
+		//mActLenInPix = mDataSrc.getDrawableDataLengthInPixel();	
 		
 		loadImages(new int[]{ R.drawable.menubar_background });
 		mAspectRatio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();
@@ -189,7 +189,7 @@ public class MotionGraph extends AppObject {
 		}
 		
 		// draw the graph
-		float scale = (float) mHeight / mDataSrc.getMaxActivityValue();
+		float scale = (float) mHeight / mDataSrc.getMaxDrawableDataValue();
 		for (int i = mStart; i < mEnd - DataSource.PIXEL_SCALE; ++i) {	
 			int index = i / DataSource.PIXEL_SCALE;		
 			float x1 = i - mStart + mOffsetX;

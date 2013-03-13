@@ -84,13 +84,6 @@ jint LoadHourlyAccelSensorData(JNIEnv* env, jobject thiz, jstring path)
 	// fill each AccelData and send it back by onGetAccelData
 	int size = vecData.size();
 	for (int i = 0; i < size; ++i) {
-//		jobject dataObject = env->NewObject(adClass, constructor,
-//				vecData[i].nHour, vecData[i].nMinute, vecData[i].nSecond, vecData[i].nMilliSecond,
-//				vecData[i].nTimeInSec, vecData[i].nIntAccelAverage, vecData[i].nIntAccelSamples);
-		// add to object array
-//		if (!dataObject)
-//			D("dataobject is null");
-
 		if (mid) {
 			env->CallVoidMethod(thiz, mid,
 					vecData[i].nHour, vecData[i].nMinute, vecData[i].nSecond, vecData[i].nMilliSecond,
