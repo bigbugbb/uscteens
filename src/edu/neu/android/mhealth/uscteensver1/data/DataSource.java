@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -21,14 +23,17 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.utils.ParadigmUtility;
+import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.FileHelper;
 
 import android.content.Context;
 import android.widget.Toast;
 
 public class DataSource {
 		
-	protected Context mContext = null;
+	protected Context mContext = null;	
 	static protected DataSource aDataSource = null;
 	
 	static {
@@ -52,11 +57,10 @@ public class DataSource {
 
 	// raw chunk data
 	protected RawChunksWrap mRawChksWrap = new RawChunksWrap();
-	// raw activity data
-	protected int[]  mRawActivityData  = null;	
-	protected int	 mMaxActivityValue = 0;
+	// raw accelerometer sensor data
+	protected AccelDataWrap mAccelDataWrap = new AccelDataWrap();
 	// current selected date
-	protected String mCurSelectedDate = "";
+//	protected String mCurSelectedDate = "";
 	// flag to indicate whether the data source is initialized
 	protected boolean mInitialized = false;
 	
@@ -71,20 +75,6 @@ public class DataSource {
 	public void onDestory() {
 		
 	}
-	
-	
-//	public boolean initialize() {		
-//		if (!mInitialized) {
-//			mInitialized = mConfig.load(PATH_PREFIX + "config.xml");
-//		}
-//		// check whether the config file exists, in case the it is deleted by user
-//		File configFile = new File(PATH_PREFIX + "config.xml");
-//		if (!configFile.exists()) {
-//			mInitialized = false; 
-//		}
-//		
-//		return mInitialized;
-//	}
 		
 	/**
 	 * 	 
@@ -93,7 +83,7 @@ public class DataSource {
 	 */
 	public boolean loadRawData(String date) {
 		String path = PATH_PREFIX + date + ".txt";
-		mCurSelectedDate = date;
+		DataStorage.SetValue(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, date);
 		
 		File file = new File(path);		
 		if (!file.exists()) {
@@ -101,8 +91,21 @@ public class DataSource {
 			return false;
 		}
 		// first load raw activity data 
-		mRawActivityData  = loadActivityData(path);
-		mMaxActivityValue = getMaxActivityValue(path);
+		mAccelDataWrap.clear();
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+		String dateDir = new SimpleDateFormat("yyyy-MM-dd/").format(new Date());
+		String[] hourDirs = FileHelper.getFilePathsDir(
+				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
+				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir);
+		String[] filePaths = FileHelper.getFilePathsDir(hourDirs[0]);
+		for (int i = 1; i < hourDirs.length; ++i) {
+			filePaths = ParadigmUtility.concat(filePaths, FileHelper.getFilePathsDir(hourDirs[i]));
+		}
+		mAccelDataWrap = loadDailyAccelSensorDataFromFiles(filePaths);
+//		mRawActivityData  = 
+//		mMaxActivityValue = getMaxActivityValue(path);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		
 		// then load the corresponding chunks
 		path = PATH_PREFIX + date + ".xml"; 
@@ -119,22 +122,24 @@ public class DataSource {
 		return true;
 	}
 	
-	public String getCurSelectedDate() {
-		return mCurSelectedDate;
+	public String getCurrentSelectedDate() {
+		return DataStorage.GetValueString(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
 	}
 	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public int[] getRawActivityData() {
-		return mRawActivityData;
+		return null;
 	}
 	
 	public int getActivityLengthInPixel() {
-		return mRawActivityData.length * PIXEL_SCALE;
+		return 0 * PIXEL_SCALE;
 	}
 	
 	public int getMaxActivityValue() {
-		return mMaxActivityValue;
+		return 0;
 	}
-	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	public RawChunksWrap getRawChunks() {
 		return mRawChksWrap;
 	}
@@ -233,7 +238,9 @@ public class DataSource {
 
 	public boolean saveChunkData(final ArrayList<Chunk> chunks) {
 		boolean result = false;		
-		String path = PATH_PREFIX + mCurSelectedDate + ".xml";				
+		String date = DataStorage.GetValueString(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+		assert(date.compareTo("") != 0);
+		String path = PATH_PREFIX + date + ".xml";				
 		
 		mRawChksWrap.clear();
 		for (int i = 0; i < chunks.size(); ++i) {
@@ -302,7 +309,7 @@ public class DataSource {
 	
 	private native int create();
 	private native int destroy();
-	private native int[] loadActivityData(String path);
+	private native AccelDataWrap loadDailyAccelSensorDataFromFiles(String[] filePaths);
 	private native int unloadActivityData(String path);
 	private native int getMaxActivityValue(String path);
 }

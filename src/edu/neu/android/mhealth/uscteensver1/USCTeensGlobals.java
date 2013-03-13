@@ -35,6 +35,8 @@ public class USCTeensGlobals {
 
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
 	public final static String MERGE_SELECTION = "MERGE_SELECTION";
+	public final static String CURRENT_SELECTED_DATE = "CURRENT_SELECTED_DATE";
+	public final static String SENSOR_FOLDER = "/SensorFolder/";
 	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
 	
 	public static Handler sGlobalHandler = null;

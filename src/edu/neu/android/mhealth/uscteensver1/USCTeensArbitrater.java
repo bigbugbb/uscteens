@@ -69,9 +69,7 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static final long PROMPT_OFFSET = 5 * 60 * 1000;
 
 	private static final int KEY_RANDOM_EMA = 0;
-	private static final int KEY_CS_EMA = 1;
-
-	private static final String SENSOR_FOLDER = "/SensorFolder/";
+	private static final int KEY_CS_EMA = 1;	
 	
 	private static long inhalerUseTime;
 
@@ -476,7 +474,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		String dateDir = new SimpleDateFormat("yyyy-MM-dd/HH/").format(new Date());
 		
 		return Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + SENSOR_FOLDER + dateDir + fileName;	
+				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir + fileName;	
 	}
 	
 	private String getInternalAccelDataForSaving() {	
@@ -486,8 +484,8 @@ public class USCTeensArbitrater extends Arbitrater {
 		
 		// Get internal accelerometer data which have been saved in the last minute
 		String data = "";
-		int maxMinutes = USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER / 1000;
-		for (int i = 1; i <= maxMinutes; ++i) {	
+		int maxSeconds = USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER / 1000;
+		for (int i = 1; i <= maxSeconds; ++i) {	
 			String time = DataStorage.GetValueString(aContext, 
 					DataStorage.KEY_INTERNAL_ACCEL_RECORDING_TIME + i, DataStorage.EMPTY);
 			

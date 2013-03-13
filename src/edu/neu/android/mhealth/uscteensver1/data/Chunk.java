@@ -20,7 +20,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.ButtonQuest;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonSplit;
 import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 
-// chunk data mapping to the graph
+// chunk data mapping to the motion graph
 public class Chunk extends AppObject {
 	
 	public final static int MINIMUM_SPACE = 240;
@@ -89,7 +89,7 @@ public class Chunk extends AppObject {
 		int hour   = time / 3600;
 		int minute = (time - hour * 3600) / 60;
 
-		return dataSrc.getCurSelectedDate() + " " + hour + ":" + minute + ":" + "00.000";
+		return dataSrc.getCurrentSelectedDate() + " " + hour + ":" + minute + ":" + "00.000";
 	}	
 
 	public int getActionID() {

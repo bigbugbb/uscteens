@@ -6,8 +6,8 @@ import java.util.Date;
 
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
+import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import android.content.res.Resources;
 import android.graphics.Bitmap;

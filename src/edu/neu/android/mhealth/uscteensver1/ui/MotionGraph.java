@@ -13,8 +13,8 @@ import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
+import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 
 
 public class MotionGraph extends AppObject {
@@ -105,7 +105,7 @@ public class MotionGraph extends AppObject {
 		mOffsetSpeedX = 0;
 		mOffsetSpeedY = 0;
 		
-		mDate = convertDateToDisplayFormat(mDataSrc.getCurSelectedDate());
+		mDate = convertDateToDisplayFormat(mDataSrc.getCurrentSelectedDate());
 			
 		ChunkManager.setDisplayOffset(0, 0);	
 	}		

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.R.drawable;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.data.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow;
@@ -15,6 +14,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListViewActions;
+import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -110,7 +110,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		mPaintTime.setFakeBoldText(false);	
 		
 		DataSource dataSrc = DataSource.getInstance(null);
-		mDate = convertDateToDisplayFormat(dataSrc.getCurSelectedDate());
+		mDate = convertDateToDisplayFormat(dataSrc.getCurrentSelectedDate());
 	}
 	
 	private String convertDateToDisplayFormat(String date) {

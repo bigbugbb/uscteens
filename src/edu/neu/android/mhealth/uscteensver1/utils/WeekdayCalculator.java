@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.data;
+package edu.neu.android.mhealth.uscteensver1.utils;
 
 import java.text.DateFormat;
 import java.text.ParseException;

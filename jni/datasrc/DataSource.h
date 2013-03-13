@@ -12,13 +12,24 @@ using std::vector;
 #include <string>
 using std::string;
 
+struct AccelSensorData
+{
+	int nHour;
+	int nMinute;
+	int nSecond;
+	int nMilliSecond;
+	int nTimeInSec;
+	int nIntAccelAverage;
+	int nIntAccelSamples;
+};
+
 class DataSource : public CBaseObject
 {
 public:
 	int  Create();
 	int  Destroy();
 	int  GetMaxActivityValue(const char* pszFile);
-	vector<int>* LoadActivityData(const char* pszFile);
+	vector<AccelSensorData>* LoadActivityData(const char* pszFile);
 	int  UnloadActivityData(const char* pszFile);
 	vector<int>* LoadChunkData(const char* pszFile);
 	int  UnloadChunkData(const char* pszFile);
@@ -29,11 +40,7 @@ protected:
 	DataSource();
 	virtual ~DataSource();
 
-	struct ActivityData {
-		string 		strFile;
-		vector<int> vecData;
-		int			nMaxValue;
-	};
+	int	m_nMaxAccelAverage;
 
 	struct ChunkData {
 		string		strFile;
@@ -41,7 +48,7 @@ protected:
 	};
 
 	vector<ChunkData*>    m_vecChunk;
-	vector<ActivityData*> m_vecActivity;
+	vector<AccelSensorData> m_vecASD;
 };
 
 #endif

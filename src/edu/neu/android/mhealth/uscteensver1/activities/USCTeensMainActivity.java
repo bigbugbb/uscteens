@@ -44,6 +44,7 @@ import android.widget.Toast;
 
 public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListener {
 	
+	// the view for drawing anything
 	protected MainView mMainView = null;	
 	// all of the pages
 	protected AppPage mCurPage = null;
@@ -51,12 +52,12 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	// data manager
 	protected DataSource mDataSource = null;
 	// special password for secret behaviors
-	private PasswordChecker pwStaff = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
-	private PasswordChecker pwSubject = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
-	private PasswordChecker pwUninstall = new PasswordChecker("uninstall");
+	private PasswordChecker mPwdStaff     = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
+	private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
+	private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
 	
 	protected enum PageType {  
-		HOME_PAGE, WEEKDAY_PAGE, MAIN_PAGE, WIN_PAGE
+		HOME_PAGE, DATE_PAGE, GRAPH_PAGE, WIN_PAGE
 	}
 
 	@Override
@@ -125,10 +126,11 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 
 	private void initPages() {		
 		// only three pages now		
-		mPages.add(new HomePage(getApplicationContext(), mMainView, mHandler));
-		mPages.add(new DatePage(getApplicationContext(), mMainView, mHandler));
-		mPages.add(new GraphPage(getApplicationContext(), mMainView, mHandler));
-		mPages.add(new WinPage(getApplicationContext(), mMainView, mHandler));
+		Context context = getApplicationContext();
+		mPages.add(new HomePage(context, mMainView, mHandler));
+		mPages.add(new DatePage(context, mMainView, mHandler));
+		mPages.add(new GraphPage(context, mMainView, mHandler));
+		mPages.add(new WinPage(context, mMainView, mHandler));
 		mCurPage = mPages.get(indexOfPage(PageType.HOME_PAGE));
 		// set pages to main view
 		mMainView.setPages(mPages);		
@@ -141,10 +143,10 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		case HOME_PAGE:
 			index = 0;
 			break;
-		case WEEKDAY_PAGE:
+		case DATE_PAGE:
 			index = 1;
 			break;
-		case MAIN_PAGE:
+		case GRAPH_PAGE:
 			index = 2;
 			break;
 		case WIN_PAGE:
@@ -223,7 +225,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         	switch (msg.what) {   
         	case AppCmd.BEGIN:        
         		if (DataStorage.getStartDate(context, "").compareTo("") != 0) {
-        			switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
+        			switchPages(indexOfPage(PageType.DATE_PAGE));
         		} else {
         			Toast.makeText(context, "Fail to do the configuration!", Toast.LENGTH_SHORT);
         		}
@@ -234,10 +236,10 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		}
             	break;
         	case AppCmd.BACK:
-        		switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
+        		switchPages(indexOfPage(PageType.DATE_PAGE));
         		break;
         	case AppCmd.NEXT:
-        		switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
+        		switchPages(indexOfPage(PageType.DATE_PAGE));
         		break;
         	case AppCmd.QUEST:
         		i = new Intent(USCTeensMainActivity.this, QuestDialog.class);           		
@@ -284,10 +286,10 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 			if (mCurPage == mPages.get(0)) { // home page
 				QuitDialog dialog = new QuitDialog();
 				dialog.show(getSupportFragmentManager(), "HomePageDialog");
-			} else if (mCurPage == mPages.get(indexOfPage(PageType.WEEKDAY_PAGE))) {
+			} else if (mCurPage == mPages.get(indexOfPage(PageType.DATE_PAGE))) {
 				switchPages(indexOfPage(PageType.HOME_PAGE));				
-			} else if (mCurPage == mPages.get(indexOfPage(PageType.MAIN_PAGE))) {
-				switchPages(indexOfPage(PageType.WEEKDAY_PAGE));
+			} else if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {
+				switchPages(indexOfPage(PageType.DATE_PAGE));
 			}
 			return true;
 		} else if (keyCode == KeyEvent.KEYCODE_MENU) {
@@ -298,13 +300,13 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 			}
 		}
 		
-		if (pwStaff.isMatch(keyCode)) {
+		if (mPwdStaff.isMatch(keyCode)) {
 			Intent i = new Intent(this, StaffSetupActivity.class);
 			startActivity(i);
-		} else if (pwSubject.isMatch(keyCode)) {
+		} else if (mPwdSubject.isMatch(keyCode)) {
 			Intent i = new Intent(this, USCTeensSetupActivity.class);
 			startActivity(i);
-		} else if (pwUninstall.isMatch(keyCode)) {
+		} else if (mPwdUninstall.isMatch(keyCode)) {
 			Uri packageUri = Uri.parse("package:" + Globals.PACKAGE_NAME);
 			Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageUri);
 			startActivity(uninstallIntent);

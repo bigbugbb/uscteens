@@ -66,22 +66,29 @@ jint GetMaxActivityValue(JNIEnv* env, jobject thiz, jstring path)
 	return nMaxValue;
 }
 
-jintArray LoadActivityData(JNIEnv* env, jobject thiz, jstring path)
+jobject loadDailyAccelSensorDataFromFiles(JNIEnv* env, jobject thiz, jobjectArray objArray)
 {
 	jboolean bCopy;
-	const char* pszPath = env->GetStringUTFChars(path, &bCopy);
-	vector<jint>* pVecData = gDataSrc->LoadActivityData(pszPath);
-	env->ReleaseStringUTFChars(path, pszPath);
-
-	jsize size = pVecData->size();
-	jintArray result = env->NewIntArray(size);
-	if (result == NULL) {
-		return NULL; /* out of memory error thrown */
-	}
+//	const char* pszPath = env->GetStringUTFChars(path, &bCopy);
+//	vector<AccelSensorData>* pVecData = gDataSrc->LoadActivityData(pszPath);
+//	env->ReleaseStringUTFChars(path, pszPath);
+//
+//	jsize size = pVecData->size();
+//	jintArray result = env->NewIntArray(size);
+//	if (result == NULL) {
+//		return NULL; /* out of memory error thrown */
+//	}
 	// move from the temp structure to the java structure
-	env->SetIntArrayRegion(result, 0, size, static_cast<jint*>(&(*pVecData)[0]));
+	//env->SetIntArrayRegion(result, 0, size, static_cast<jint*>(&(*pVecData)[0]));
+	int length = env->GetArrayLength(objArray);
+	for (int i = 0; i < length; ++i) {
+		jstring filePath = (jstring) env->GetObjectArrayElement(objArray, i);
+		const char* pszPath = env->GetStringUTFChars(filePath, &bCopy);
+		// do something here
+		env->ReleaseStringUTFChars(filePath, pszPath);
+	}
 
-	return result;
+	return 0;
 }
 
 jint UnloadActivityData(JNIEnv * env, jobject thiz, jstring path)
@@ -125,7 +132,7 @@ jint UnloadChunkData(JNIEnv * env, jobject thiz, jstring path)
 static JNINativeMethod methods[] = {
 	{"create", "()I", (void*)Create },
 	{"destroy", "()I", (void*)Destroy },
-	{"loadActivityData", "(Ljava/lang/String;)[I", (void*)LoadActivityData },
+	{"loadDailyAccelSensorDataFromFiles", "([Ljava/lang/String;)Ledu/neu/android/mhealth/uscteensver1/data/AccelDataWrap;", (void*)loadDailyAccelSensorDataFromFiles },
 	{"unloadActivityData", "(Ljava/lang/String;)I", (void*)UnloadActivityData },
 	{"getMaxActivityValue", "(Ljava/lang/String;)I", (void*)GetMaxActivityValue },
 //	{"unloadChunkData", "(Ljava/lang/String;)I", (void*)UnloadChunkData },
