@@ -59,6 +59,8 @@ public class DataSource {
 	protected RawChunksWrap mRawChksWrap = new RawChunksWrap();
 	// raw accelerometer sensor data
 	protected AccelDataWrap mAccelDataWrap = new AccelDataWrap();
+	// hourly accelerometer sensor data
+	protected ArrayList<AccelData> mHourlyAccelData = new ArrayList<AccelData>();
 	// current selected date
 //	protected String mCurSelectedDate = "";
 	// flag to indicate whether the data source is initialized
@@ -96,12 +98,14 @@ public class DataSource {
 		String dateDir = new SimpleDateFormat("yyyy-MM-dd/").format(new Date());
 		String[] hourDirs = FileHelper.getFilePathsDir(
 				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir);
-		String[] filePaths = FileHelper.getFilePathsDir(hourDirs[0]);
-		for (int i = 1; i < hourDirs.length; ++i) {
-			filePaths = ParadigmUtility.concat(filePaths, FileHelper.getFilePathsDir(hourDirs[i]));
+				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir);		
+		for (int i = 0; i < hourDirs.length; ++i) {
+			String[] filePath = FileHelper.getFilePathsDir(hourDirs[i]);
+			loadHourlyAccelSensorData(filePath[0]);
+			mAccelDataWrap.add(mHourlyAccelData);
+			mHourlyAccelData.clear();
 		}
-		mAccelDataWrap = loadDailyAccelSensorDataFromFiles(filePaths);
+		
 //		mRawActivityData  = 
 //		mMaxActivityValue = getMaxActivityValue(path);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,6 +124,17 @@ public class DataSource {
 		}
 			
 		return true;
+	}
+	
+	private void onGetAccelData(AccelData acData) {
+		mHourlyAccelData.add(acData);
+	}
+	
+	private void onGetAccelData(int hour, int minute, int second, int milliSecond, 
+				     			int timeInSec, int accelAverage, int accelSamples) {
+		AccelData acData = new AccelData(hour, minute, second, milliSecond, 
+				timeInSec, accelAverage, accelSamples);
+		mHourlyAccelData.add(acData);
 	}
 	
 	public String getCurrentSelectedDate() {
@@ -309,7 +324,7 @@ public class DataSource {
 	
 	private native int create();
 	private native int destroy();
-	private native AccelDataWrap loadDailyAccelSensorDataFromFiles(String[] filePaths);
+	private native int loadHourlyAccelSensorData(String filePath);
 	private native int unloadActivityData(String path);
 	private native int getMaxActivityValue(String path);
 }

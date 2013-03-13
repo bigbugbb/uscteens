@@ -29,7 +29,7 @@ public:
 	int  Create();
 	int  Destroy();
 	int  GetMaxActivityValue(const char* pszFile);
-	vector<AccelSensorData>* LoadActivityData(const char* pszFile);
+	vector<AccelSensorData>& LoadActivityData(const char* pszFile);
 	int  UnloadActivityData(const char* pszFile);
 	vector<int>* LoadChunkData(const char* pszFile);
 	int  UnloadChunkData(const char* pszFile);

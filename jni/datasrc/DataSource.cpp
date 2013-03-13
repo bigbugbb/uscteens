@@ -6,6 +6,7 @@ using namespace std;
 #include <cstdlib>
 
 #define BUF_SIZE 256
+#define DATA_COUNT_FOR_DAY_CROSSING	30 // 20 is enough, but for safety, set it 30
 
 DataSource* DataSource::GetInstance()
 {
@@ -70,34 +71,35 @@ int DataSource::GetMaxActivityValue(const char* pszFile)
 	return 0;
 }
 
-vector<AccelSensorData>* DataSource::LoadActivityData(const char* pszFile)
+vector<AccelSensorData>& DataSource::LoadActivityData(const char* pszFile)
 {
-	void ParseLine(char* line, AccelSensorData& rASD);
+	bool ParseLine(char* pszLine, AccelSensorData& rASD, int nCount);
 
 	AccelSensorData asd;
-	char line[BUF_SIZE];
+	char szLine[BUF_SIZE];
 	ifstream fin(pszFile);
 
+	m_vecASD.clear();
 	m_nMaxAccelAverage = INT_MIN;
 
-	fin.getline(line, BUF_SIZE); // skip the first line
-	while (fin.getline(line, BUF_SIZE)) {
-		ParseLine(line, asd);
-		m_vecASD.push_back(asd);
+	int count = 0;
+	fin.getline(szLine, BUF_SIZE); // skip the first line
+	while (fin.getline(szLine, BUF_SIZE)) {
+		if (ParseLine(szLine, asd, count++)) {
+			m_vecASD.push_back(asd);
+		}
 
 		if (asd.nIntAccelAverage > m_nMaxAccelAverage) {
 			m_nMaxAccelAverage = asd.nIntAccelAverage;
 		}
 	}
 
-	int i = m_vecASD.size();
-
-	return &m_vecASD;
+	return m_vecASD;
 }
 
-void ParseLine(char* line, AccelSensorData& rASD)
+bool ParseLine(char* pszLine, AccelSensorData& rASD, int nCount)
 {
-	char* pString = strtok(line, " ,.:");
+	char* pString = strtok(pszLine, " ,.:");
 	int label = 0;
 	while (pString) {
 		switch (label++) {
@@ -125,6 +127,14 @@ void ParseLine(char* line, AccelSensorData& rASD)
 		}
 		pString = strtok (NULL, " ,.:");
 	}
+	rASD.nTimeInSec = rASD.nHour * 3600 + rASD.nMinute * 60 + rASD.nSecond;
+	if (nCount < DATA_COUNT_FOR_DAY_CROSSING) { ////////////////////////////////////////////////////
+		if (rASD.nHour == 23 && rASD.nMinute == 59) { // the case for daily crossing
+			return false;
+		}
+	}
+
+	return true;
 }
 
 int DataSource::UnloadActivityData(const char* pszFile)

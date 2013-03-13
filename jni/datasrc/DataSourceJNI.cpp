@@ -17,7 +17,7 @@
 
 #define LOG_TAG "data_src"
 
-#ifdef DEBUG
+#ifdef _DEBUG_MODE
 	#include <android/log.h>
 	#define D(x...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, x)
 #else
@@ -66,26 +66,38 @@ jint GetMaxActivityValue(JNIEnv* env, jobject thiz, jstring path)
 	return nMaxValue;
 }
 
-jobject loadDailyAccelSensorDataFromFiles(JNIEnv* env, jobject thiz, jobjectArray objArray)
+jint LoadHourlyAccelSensorData(JNIEnv* env, jobject thiz, jstring path)
 {
 	jboolean bCopy;
-//	const char* pszPath = env->GetStringUTFChars(path, &bCopy);
-//	vector<AccelSensorData>* pVecData = gDataSrc->LoadActivityData(pszPath);
-//	env->ReleaseStringUTFChars(path, pszPath);
-//
-//	jsize size = pVecData->size();
-//	jintArray result = env->NewIntArray(size);
-//	if (result == NULL) {
-//		return NULL; /* out of memory error thrown */
-//	}
-	// move from the temp structure to the java structure
-	//env->SetIntArrayRegion(result, 0, size, static_cast<jint*>(&(*pVecData)[0]));
-	int length = env->GetArrayLength(objArray);
-	for (int i = 0; i < length; ++i) {
-		jstring filePath = (jstring) env->GetObjectArrayElement(objArray, i);
-		const char* pszPath = env->GetStringUTFChars(filePath, &bCopy);
-		// do something here
-		env->ReleaseStringUTFChars(filePath, pszPath);
+	const char* pszPath = env->GetStringUTFChars(path, &bCopy);
+	vector<AccelSensorData>& vecData = gDataSrc->LoadActivityData(pszPath);
+	env->ReleaseStringUTFChars(path, pszPath);
+
+	// get DataSource class
+	jclass dsClass = env->FindClass("edu/neu/android/mhealth/uscteensver1/data/DataSource");
+	// get onGetAccelData method
+	jmethodID mid = env->GetMethodID(dsClass, "onGetAccelData", "(IIIIIII)V");
+//	// get AccelData class
+//	jclass adClass = env->FindClass("edu/neu/android/mhealth/uscteensver1/data/AccelData");
+//	// get AccelData constructor
+//	jmethodID constructor = env->GetMethodID(adClass, "<init>", "(IIIIIII)V");
+	// fill each AccelData and send it back by onGetAccelData
+	int size = vecData.size();
+	for (int i = 0; i < size; ++i) {
+//		jobject dataObject = env->NewObject(adClass, constructor,
+//				vecData[i].nHour, vecData[i].nMinute, vecData[i].nSecond, vecData[i].nMilliSecond,
+//				vecData[i].nTimeInSec, vecData[i].nIntAccelAverage, vecData[i].nIntAccelSamples);
+		// add to object array
+//		if (!dataObject)
+//			D("dataobject is null");
+
+		if (mid) {
+			env->CallVoidMethod(thiz, mid,
+					vecData[i].nHour, vecData[i].nMinute, vecData[i].nSecond, vecData[i].nMilliSecond,
+					vecData[i].nTimeInSec, vecData[i].nIntAccelAverage, vecData[i].nIntAccelSamples);
+		} else {
+			D("mid is null");
+		}
 	}
 
 	return 0;
@@ -132,7 +144,7 @@ jint UnloadChunkData(JNIEnv * env, jobject thiz, jstring path)
 static JNINativeMethod methods[] = {
 	{"create", "()I", (void*)Create },
 	{"destroy", "()I", (void*)Destroy },
-	{"loadDailyAccelSensorDataFromFiles", "([Ljava/lang/String;)Ledu/neu/android/mhealth/uscteensver1/data/AccelDataWrap;", (void*)loadDailyAccelSensorDataFromFiles },
+	{"loadHourlyAccelSensorData", "(Ljava/lang/String;)I", (void*)LoadHourlyAccelSensorData },
 	{"unloadActivityData", "(Ljava/lang/String;)I", (void*)UnloadActivityData },
 	{"getMaxActivityValue", "(Ljava/lang/String;)I", (void*)GetMaxActivityValue },
 //	{"unloadChunkData", "(Ljava/lang/String;)I", (void*)UnloadChunkData },

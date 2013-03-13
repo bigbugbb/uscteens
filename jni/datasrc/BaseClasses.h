@@ -15,7 +15,7 @@ class CBaseObject
 #ifdef _DEBUG_MODE    
     #ifdef _ANDROID
 		#define LOG_LABEL "datasrc"
-        #define Log(format, args) \
+        #define Log(format,args) \
         { \
             __android_log_print(ANDROID_LOG_INFO, LOG_LABEL, format, ##args);\
         }
