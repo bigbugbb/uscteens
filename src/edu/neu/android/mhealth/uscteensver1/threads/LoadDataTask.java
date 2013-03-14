@@ -11,14 +11,12 @@ import android.os.Message;
 
 public class LoadDataTask extends AsyncTask<String, Void, Void>{
 	private Context mContext;
-	private String  mDate;
 	private int 	mResult;	
 	private Handler mHandler;
 	private ProgressDialog mProgDlg;
 	
-	public LoadDataTask(Context context, Handler handler, String date) {
+	public LoadDataTask(Context context, Handler handler) {
 		mContext = context;
-		mDate    = date;
 		mResult  = DataSource.LOADING_SUCCEEDED;
 		mHandler = handler;
 	}
@@ -55,7 +53,7 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 
 	@Override
 	protected Void doInBackground(String[] params) {
-		mResult = DataSource.loadRawData(mDate);
+		mResult = DataSource.loadRawData(params[0]);
 		return null;
 	}
 

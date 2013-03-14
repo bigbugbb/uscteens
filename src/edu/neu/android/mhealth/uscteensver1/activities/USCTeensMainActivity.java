@@ -233,8 +233,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		}
         		break;
         	case AppCmd.BEGIN_LOADING:        		
-        		LoadDataTask task = new LoadDataTask(USCTeensMainActivity.this, this, (String) msg.obj);
-        		task.execute();    			        		
+        		new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);        					        	
             	break;
         	case AppCmd.END_LOADING:
         		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
