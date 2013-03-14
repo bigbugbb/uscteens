@@ -90,7 +90,7 @@ public class DataSource {
 				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);
 	
-		if (hourDirs.length == 0) {
+		if (hourDirs == null || hourDirs.length == 0) {
 			Toast.makeText(mContext, "Can't find the sensor data!", Toast.LENGTH_SHORT).show();
 			return false;
 		}
