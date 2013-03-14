@@ -1,17 +1,26 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
-	//protected static int[] mRawActivityData  = null;	
-	protected int   mMaxAccelAvgValue   = 0;
-	protected int[] mDrawableData = new int[3600 * 24];
+	//protected static int[] mRawActi vityData  = null;
+	protected int   mMaxAccelAvgValue;
+	protected int[] mDrawableData = new int[SECONDS_IN_DAY];
+	protected final static int DATA_VALUE_FOR_FILLING = 0;
 	protected final static int NO_SENSOR_DATA = -1;
 	protected final static int NO_SENSOR_DATA_TIME_THRESHOLD = 300;
+	protected final static int SECONDS_IN_DAY = 3600 * 24;
 	
 	public AccelDataWrap() {
-		
+		clear();
 	}	
+	
+	public void clear() {		
+		mMaxAccelAvgValue = -100;
+		Arrays.fill(mDrawableData, NO_SENSOR_DATA);
+		super.clear();
+	}
 
 	public int[] getDrawableData() {		
 		return mDrawableData;
@@ -30,36 +39,36 @@ public class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 		if (size() == 0) {
 			return false;
 		}
-		// update daily data
-		int n = 0;
-		for (ArrayList<AccelData> hourlyData : this) {			
-			// update hourly data		
-			for (int i = 0; i < hourlyData.size(); ++i) {
-				AccelData curData  = hourlyData.get(i);
-				AccelData prevData = i > 0 ? hourlyData.get(i - 1) : null;
-				
-				while (n < curData.mTimeInSec) {
-					if (prevData != null) {
-						if (curData.mTimeInSec - prevData.mTimeInSec >= NO_SENSOR_DATA_TIME_THRESHOLD) {
-							while (n < curData.mTimeInSec) {
-								mDrawableData[n++] = NO_SENSOR_DATA;
-							}
-						} else {
-							mDrawableData[n++] = 0;
-						}
-					} else {
-						if (curData.mTimeInSec >= NO_SENSOR_DATA_TIME_THRESHOLD) {
-							while (n < curData.mTimeInSec) {
-								mDrawableData[n++] = NO_SENSOR_DATA;
-							}
-						} else {
-							mDrawableData[n++] = 0;
-						}
-					}
+	
+		// update daily data		
+		for (ArrayList<AccelData> hourlyData : this) {
+			for (AccelData aData : hourlyData) {				
+				mDrawableData[aData.mTimeInSec] = aData.mAccelAverage;
+				if (mMaxAccelAvgValue < aData.mAccelAverage) {
+					mMaxAccelAvgValue = aData.mAccelAverage;
 				}
-				mDrawableData[n++] = curData.mAccelAverage;
 			}
 		}
+		// fill no sensor data part according to the time threshold
+		int nStart = 0;
+		int nEnd   = 0;
+		for (int i = 0; i < mDrawableData.length; ++i) {	
+			if (mDrawableData[i] == NO_SENSOR_DATA) {
+				if (i == 0 || mDrawableData[i - 1] != NO_SENSOR_DATA) {
+					nStart = i;
+				}
+				if (i == SECONDS_IN_DAY - 1 || mDrawableData[i + 1] != NO_SENSOR_DATA) {				
+					nEnd = i + 1;
+					if (nEnd - nStart > NO_SENSOR_DATA_TIME_THRESHOLD) {
+						; // no data during this interval					
+					} else {
+						// fill this interval with zero
+						Arrays.fill(mDrawableData, nStart, nEnd, DATA_VALUE_FOR_FILLING);
+					}
+				}
+			}
+		}
+			
 		return true;
 	}
 }

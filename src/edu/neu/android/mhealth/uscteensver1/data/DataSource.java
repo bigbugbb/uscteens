@@ -60,7 +60,7 @@ public class DataSource {
 	// raw accelerometer sensor data
 	protected AccelDataWrap mAccelDataWrap = new AccelDataWrap();
 	// hourly accelerometer sensor data
-	protected ArrayList<AccelData> mHourlyAccelData = new ArrayList<AccelData>();
+	protected ArrayList<AccelData> mHourlyAccelData = null;
 	// current selected date
 //	protected String mCurSelectedDate = "";
 	// flag to indicate whether the data source is initialized
@@ -94,7 +94,6 @@ public class DataSource {
 		}
 		// first clear the data container
 		mAccelDataWrap.clear();
-		mHourlyAccelData.clear();
 		// load the daily data from csv files hour by hour
 		String dateDir = new SimpleDateFormat("yyyy-MM-dd/").format(new Date());
 		String[] hourDirs = FileHelper.getFilePathsDir(
@@ -104,11 +103,10 @@ public class DataSource {
 			// each hour corresponds to one csv file
 			String[] filePath = FileHelper.getFilePathsDir(hourDirs[i]);			
 			// load the hourly data from csv file and save the data to mHourlyAccelData
+			mHourlyAccelData = new ArrayList<AccelData>();
 			loadHourlyAccelSensorData(filePath[0]);
-			// add the houly data the data wrap
-			mAccelDataWrap.add(mHourlyAccelData);
-			// clear it because it has been filled after loadHourlyAccelSensorData is called
-			mHourlyAccelData.clear();
+			// add the houly data the data wrap		
+			mAccelDataWrap.add(mHourlyAccelData);		
 		}
 		mAccelDataWrap.updateDrawableData();
 		// now we have a loaded daily accelerometer sensor data in the data wrap,
@@ -133,7 +131,7 @@ public class DataSource {
 		return true;
 	}
 	
-	private void onGetAccelData(AccelData acData) {
+	public void onGetAccelData(AccelData acData) {
 		mHourlyAccelData.add(acData);
 	}
 	
