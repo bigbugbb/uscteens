@@ -107,15 +107,10 @@ public class DataSource {
 			loadHourlyAccelSensorData(filePath[0]);
 			// add the houly data the data wrap		
 			mAccelDataWrap.add(mHourlyAccelData);		
-		}
-		mAccelDataWrap.updateDrawableData();
+		}		
 		// now we have a loaded daily accelerometer sensor data in the data wrap,
 		// we convert it into the data structure that can be drawn easily.
-		
-//		mRawActivityData  = 
-//		mMaxActivityValue = getMaxActivityValue(path);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
+		mAccelDataWrap.updateDrawableData();
 		// then load the corresponding chunks
 		path = PATH_PREFIX + date + ".xml"; 
 		file = new File(path);

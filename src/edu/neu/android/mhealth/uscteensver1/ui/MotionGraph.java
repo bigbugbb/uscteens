@@ -51,7 +51,7 @@ public class MotionGraph extends AppObject {
 		
 		mDataSrc = DataSource.getInstance(null);
 		mActions = mDataSrc.getDrawableData();
-		//mActLenInPix = mDataSrc.getDrawableDataLengthInPixel();	
+		mActLenInPix = mDataSrc.getDrawableDataLengthInPixel();	
 		
 		loadImages(new int[]{ R.drawable.menubar_background });
 		mAspectRatio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();

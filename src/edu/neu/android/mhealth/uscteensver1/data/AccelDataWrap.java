@@ -17,7 +17,7 @@ public class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 	}	
 	
 	public void clear() {		
-		mMaxAccelAvgValue = -100;
+		mMaxAccelAvgValue = NO_SENSOR_DATA - 1;
 		Arrays.fill(mDrawableData, NO_SENSOR_DATA);
 		super.clear();
 	}
@@ -30,9 +30,8 @@ public class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 		return mDrawableData.length;
 	}
 	
-	public int getMaxDrawableDataValue() {	
-		
-		return 250;
+	public int getMaxDrawableDataValue() {			
+		return mMaxAccelAvgValue;
 	}
 	
 	public boolean updateDrawableData() {
