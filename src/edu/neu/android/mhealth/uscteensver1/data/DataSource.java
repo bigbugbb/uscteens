@@ -84,21 +84,19 @@ public class DataSource {
 	 * @return
 	 */
 	public boolean loadRawData(String date) {
-		String path = PATH_PREFIX + date + ".txt";
 		DataStorage.SetValue(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, date);
 		
-		File file = new File(path);		
-		if (!file.exists()) {
-			Toast.makeText(mContext, "Can't find the activity data!", Toast.LENGTH_SHORT).show();
+		String[] hourDirs = FileHelper.getFilePathsDir(
+				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
+				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);
+	
+		if (hourDirs.length == 0) {
+			Toast.makeText(mContext, "Can't find the sensor data!", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		// first clear the data container
 		mAccelDataWrap.clear();
-		// load the daily data from csv files hour by hour
-		String dateDir = new SimpleDateFormat("yyyy-MM-dd/").format(new Date());
-		String[] hourDirs = FileHelper.getFilePathsDir(
-				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir);		
+		// load the daily data from csv files hour by hour		
 		for (int i = 0; i < hourDirs.length; ++i) {
 			// each hour corresponds to one csv file
 			String[] filePath = FileHelper.getFilePathsDir(hourDirs[i]);			
@@ -112,13 +110,12 @@ public class DataSource {
 		// we convert it into the data structure that can be drawn easily.
 		mAccelDataWrap.updateDrawableData();
 		// then load the corresponding chunks
-		path = PATH_PREFIX + date + ".xml"; 
-		file = new File(path);
+		File file = new File(PATH_PREFIX + date + ".xml");
 		if (!file.exists()) {
 			Toast.makeText(mContext, "Can't find the chunk data xml!", Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		if (!loadRawChunkData(path)) {
+		if (!loadRawChunkData(file.getPath())) {
 			Toast.makeText(mContext, "Fail to read the chunk data file!", Toast.LENGTH_SHORT).show();
 			return false;
 		}
