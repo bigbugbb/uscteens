@@ -43,10 +43,9 @@ public class ChunkManager {
 	protected static Context sContext = null;
 	protected static DataSource sDataSrc = null;
 
-	public static void initialize(Context context, DataSource dataSrc) {
+	public static void initialize(Context context) {
 		sResources = context.getResources();
 		sContext = context;		
-		sDataSrc = dataSrc;
 	}	
 	
 	protected static void load() {
@@ -77,8 +76,8 @@ public class ChunkManager {
 			if (i == 0) { // save the start time offset
 				timeOffset = rawChunk.getStartTime();
 			}
-			int start = (rawChunk.getStartTime() - timeOffset) * DataSource.PIXEL_SCALE;
-			int stop  = (rawChunk.getStopTime()  - timeOffset) * DataSource.PIXEL_SCALE;
+			int start = (rawChunk.getStartTime() - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;
+			int stop  = (rawChunk.getStopTime()  - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;
 			int activityID = rawChunk.getActivityID();
 			chunk.update(start, stop, timeOffset);			
 			chunk.mQuest.setAnswer(
@@ -100,7 +99,7 @@ public class ChunkManager {
 	}
 	
 	protected static void saveChunks() {		
-		sDataSrc.saveChunkData(sChunks);
+		DataSource.saveChunkData(sChunks);
 	}
 	
 	public static Object getUserData() {

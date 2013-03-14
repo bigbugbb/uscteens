@@ -73,8 +73,8 @@ public class Chunk extends AppObject {
 	
 	public RawChunk toRawChunk() {
 		
-		String startDate = toDateTime(mStart / DataSource.PIXEL_SCALE + mOffset);
-		String stopDate  = toDateTime(mStop  / DataSource.PIXEL_SCALE + mOffset);		
+		String startDate = toDateTime(mStart / USCTeensGlobals.PIXEL_PER_DATA + mOffset);
+		String stopDate  = toDateTime(mStop  / USCTeensGlobals.PIXEL_PER_DATA + mOffset);		
 		int actionID = getActionID();
 		String activity = (actionID == -1) ? "UNLABELLED" : USCTeensGlobals.ACTION_NAMES[actionID];			                  
 		String modifyTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -84,12 +84,10 @@ public class Chunk extends AppObject {
 	}
 	
 	private String toDateTime(int time) {
-		DataSource dataSrc = DataSource.getInstance(null);
-		
 		int hour   = time / 3600;
 		int minute = (time - hour * 3600) / 60;
 
-		return dataSrc.getCurrentSelectedDate() + " " + hour + ":" + minute + ":" + "00.000";
+		return DataSource.getCurrentSelectedDate() + " " + hour + ":" + minute + ":" + "00.000";
 	}	
 
 	public int getActionID() {
@@ -105,15 +103,15 @@ public class Chunk extends AppObject {
 	}
 	
 	public int getChunkRealStartTime() {
-		return mStart / DataSource.PIXEL_SCALE + mOffset;
+		return mStart / USCTeensGlobals.PIXEL_PER_DATA + mOffset;
 	}
 	
 	public int getChunkRealStopTime() {
-		return mStop / DataSource.PIXEL_SCALE + mOffset;
+		return mStop / USCTeensGlobals.PIXEL_PER_DATA + mOffset;
 	}
 	
 	public String getChunkRealStartTimeInString() {
-		int time   = mStart / DataSource.PIXEL_SCALE + mOffset;
+		int time   = mStart / USCTeensGlobals.PIXEL_PER_DATA + mOffset;
 		int hour   = time / 3600;
 		int minute = (time - 3600 * hour) / 60;
 		

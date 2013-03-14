@@ -4,8 +4,8 @@
 	android:layout_height="match_parent"	
 	android:background="@drawable/background_home" >	
 	
-    <edu.neu.android.mhealth.uscteensver1.views.MainView
-	    android:id="@+id/view_main"
+    <edu.neu.android.mhealth.uscteensver1.views.GraphView
+	    android:id="@+id/view_graph"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent" />
 	

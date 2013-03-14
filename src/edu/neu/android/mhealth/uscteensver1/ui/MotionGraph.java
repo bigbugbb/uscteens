@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
@@ -42,16 +43,12 @@ public class MotionGraph extends AppObject {
 	protected float  mOffsetSpeedX = 0;
 	protected float  mOffsetSpeedY = 0;
 	protected float  mAspectRatio  = 1;
-	
-	protected DataSource   mDataSrc = null;	
-		
 
 	public MotionGraph(Resources res) {
 		super(res);				
-		
-		mDataSrc = DataSource.getInstance(null);
-		mActions = mDataSrc.getDrawableData();
-		mActLenInPix = mDataSrc.getDrawableDataLengthInPixel();	
+
+		mActions 	 = DataSource.getDrawableData();
+		mActLenInPix = DataSource.getDrawableDataLengthInPixel();	
 		
 		loadImages(new int[]{ R.drawable.menubar_background });
 		mAspectRatio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();
@@ -73,7 +70,7 @@ public class MotionGraph extends AppObject {
 		
 		mDataPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mDataPaint.setColor(Color.BLACK);
-		mDataPaint.setStrokeWidth(4.0f);
+		mDataPaint.setStrokeWidth(Math.max(1.0f, Math.min(sAppScale.doScaleT(4.0f), 4.0f)));
 		mDataPaint.setFakeBoldText(false);
 		
 		mMarkedPaint = new Paint();
@@ -105,7 +102,7 @@ public class MotionGraph extends AppObject {
 		mOffsetSpeedX = 0;
 		mOffsetSpeedY = 0;
 		
-		mDate = convertDateToDisplayFormat(mDataSrc.getCurrentSelectedDate());
+		mDate = convertDateToDisplayFormat(DataSource.getCurrentSelectedDate());
 			
 		ChunkManager.setDisplayOffset(0, 0);	
 	}		
@@ -189,12 +186,12 @@ public class MotionGraph extends AppObject {
 		}
 		
 		// draw the graph
-		float scale = (float) mHeight / mDataSrc.getMaxDrawableDataValue();
-		for (int i = mStart; i < mEnd - DataSource.PIXEL_SCALE; ++i) {	
-			int index = i / DataSource.PIXEL_SCALE;		
+		float scale = (float) mHeight / DataSource.getMaxDrawableDataValue();
+		for (int i = mStart; i < mEnd - USCTeensGlobals.PIXEL_PER_DATA; ++i) {	
+			int index = i / USCTeensGlobals.PIXEL_PER_DATA;		
 			float x1 = i - mStart + mOffsetX;
 			float y1 = mHeight - mActions[index] * scale;
-			float x2 = i - mStart + DataSource.PIXEL_SCALE + mOffsetX;
+			float x2 = i - mStart + USCTeensGlobals.PIXEL_PER_DATA + mOffsetX;
 			float y2 = mHeight - mActions[index + 1] * scale;
 			if (mActions[index] >= 0 && mActions[index + 1] >= 0)
 				c.drawLine(x1, y1, x2, y2, mDataPaint);
@@ -219,8 +216,8 @@ public class MotionGraph extends AppObject {
 	}
 
 	private String toStringTimeFromPosition(int position) {
-		int hour   = position / 3600 / DataSource.PIXEL_SCALE;
-		int minute = (position - hour * 3600 * DataSource.PIXEL_SCALE) / 60 / DataSource.PIXEL_SCALE; 
+		int hour   = position / 3600 / USCTeensGlobals.PIXEL_PER_DATA;
+		int minute = (position - hour * 3600 * USCTeensGlobals.PIXEL_PER_DATA) / 60 / USCTeensGlobals.PIXEL_PER_DATA; 
 		String time = "" + hour + ":" + (minute > 9 ? minute : "0" + minute);
 		
 		return time; 

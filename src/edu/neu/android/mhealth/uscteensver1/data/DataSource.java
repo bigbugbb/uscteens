@@ -27,148 +27,126 @@ import edu.neu.android.mhealth.uscteensver1.utils.ParadigmUtility;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
+import edu.neu.android.wocketslib.utils.PhoneInfo;
 
 import android.content.Context;
 import android.widget.Toast;
 
 public class DataSource {
-		
-	protected Context mContext = null;	
-	static protected DataSource aDataSource = null;
+	// result code
+	public final static int LOADING_SUCCEEDED  = 0;
+	public final static int ERR_NO_SENSOR_DATA = 1;
+	public final static int ERR_NO_CHUNK_DATA  = 2;
+	
+	protected static Context sContext = null;
+	// raw chunk data
+	protected static RawChunksWrap sRawChksWrap = new RawChunksWrap();
+	// raw accelerometer sensor data
+	protected static AccelDataWrap sAccelDataWrap = new AccelDataWrap();
+	// hourly accelerometer data
+	protected static ArrayList<AccelData> sHourlyAccelData = null;
+	
 	
 	static {
 		System.loadLibrary("datasrc");
 	}		
 	
-	static public DataSource getInstance(Context context) {
-		if (aDataSource == null) {
-			aDataSource = new DataSource(context);
-			aDataSource.onCreate();
-		}
-		return aDataSource;
-	}
+	public static void initialize(Context context) {
+		sContext = context;		
+	}	
 	
-	protected DataSource(Context context) {
-		mContext = context;		
-	}
-		
-	public static final int PIXEL_SCALE = 2;	
-	public static final String PATH_PREFIX = "/sdcard/TestData/";
-
-	// raw chunk data
-	protected RawChunksWrap mRawChksWrap = new RawChunksWrap();
-	// raw accelerometer sensor data
-	protected AccelDataWrap mAccelDataWrap = new AccelDataWrap();
-	// hourly accelerometer sensor data
-	protected ArrayList<AccelData> mHourlyAccelData = null;
-	// current selected date
-//	protected String mCurSelectedDate = "";
-	// flag to indicate whether the data source is initialized
-	protected boolean mInitialized = false;
-	
-	public void onCreate() {		
-			
-	}
-	
-	public void onStop() {
-		
-	}
-	
-	public void onDestory() {
-		
-	}
-		
 	/**
 	 * 	 
 	 * @param date	YYYY-MM-DD
 	 * @return
 	 */
-	public boolean loadRawData(String date) {
-		DataStorage.SetValue(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, date);
+	public static int loadRawData(String date) {
+		DataStorage.SetValue(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, date);
 		
+		/* 
+		 * first load the accelerometer sensor data
+		 */
+		if (!loadRawAccelData(date)) {
+			return ERR_NO_SENSOR_DATA;
+		}
+		
+		/* 
+		 * then load the corresponding chunk data
+		 */
+		if (!loadRawChunkData(date)) {
+			return ERR_NO_CHUNK_DATA;
+		}
+			
+		return LOADING_SUCCEEDED;
+	}
+
+	private static void onGetAccelData(int hour, int minute, int second, int milliSecond, 
+				     			int timeInSec, int accelAverage, int accelSamples) {
+		AccelData acData = new AccelData(hour, minute, second, milliSecond, 
+				timeInSec, accelAverage, accelSamples);
+		sHourlyAccelData.add(acData);
+	}
+	
+	public static String getCurrentSelectedDate() {
+		return DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+	}
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public static int[] getDrawableData() {
+		return sAccelDataWrap.getDrawableData();
+	}
+	
+	public static int getDrawableDataLengthInPixel() {
+		return sAccelDataWrap.getDrawableDataLength() * USCTeensGlobals.PIXEL_PER_DATA;
+	}
+	
+	public static int getMaxDrawableDataValue() {
+		return sAccelDataWrap.getMaxDrawableDataValue();
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public static RawChunksWrap getRawChunks() {
+		return sRawChksWrap;
+	}
+	
+	private static boolean loadRawAccelData(String date) {
 		String[] hourDirs = FileHelper.getFilePathsDir(
 				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);
-	
-		if (hourDirs == null || hourDirs.length == 0) {
-			Toast.makeText(mContext, "Can't find the sensor data!", Toast.LENGTH_SHORT).show();
+		if (hourDirs == null || hourDirs.length == 0) {			
 			return false;
 		}
 		// first clear the data container
-		mAccelDataWrap.clear();
+		sAccelDataWrap.clear();
 		// load the daily data from csv files hour by hour		
 		for (int i = 0; i < hourDirs.length; ++i) {
 			// each hour corresponds to one csv file
 			String[] filePath = FileHelper.getFilePathsDir(hourDirs[i]);			
 			// load the hourly data from csv file and save the data to mHourlyAccelData
-			mHourlyAccelData = new ArrayList<AccelData>();
+			sHourlyAccelData = new ArrayList<AccelData>();
 			loadHourlyAccelSensorData(filePath[0]);
 			// add the houly data the data wrap		
-			mAccelDataWrap.add(mHourlyAccelData);		
+			sAccelDataWrap.add(sHourlyAccelData);		
 		}		
 		// now we have a loaded daily accelerometer sensor data in the data wrap,
 		// we convert it into the data structure that can be drawn easily.
-		mAccelDataWrap.updateDrawableData();
-		// then load the corresponding chunks
-		File file = new File(PATH_PREFIX + date + ".xml");
-		if (!file.exists()) {
-			Toast.makeText(mContext, "Can't find the chunk data xml!", Toast.LENGTH_SHORT).show();
-			return false;
-		}
-		if (!loadRawChunkData(file.getPath())) {
-			Toast.makeText(mContext, "Fail to read the chunk data file!", Toast.LENGTH_SHORT).show();
-			return false;
-		}
-			
+		sAccelDataWrap.updateDrawableData();
+		
 		return true;
 	}
 	
-	public void onGetAccelData(AccelData acData) {
-		mHourlyAccelData.add(acData);
-	}
-	
-	private void onGetAccelData(int hour, int minute, int second, int milliSecond, 
-				     			int timeInSec, int accelAverage, int accelSamples) {
-		AccelData acData = new AccelData(hour, minute, second, milliSecond, 
-				timeInSec, accelAverage, accelSamples);
-		mHourlyAccelData.add(acData);
-	}
-	
-	public String getCurrentSelectedDate() {
-		return DataStorage.GetValueString(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
-	}
-	
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public int[] getDrawableData() {
-		return mAccelDataWrap.getDrawableData();
-	}
-	
-	public int getDrawableDataLengthInPixel() {
-		return mAccelDataWrap.getDrawableDataLength() * PIXEL_SCALE;
-	}
-	
-	public int getMaxDrawableDataValue() {
-		return mAccelDataWrap.getMaxDrawableDataValue();
-	}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	public RawChunksWrap getRawChunks() {
-		return mRawChksWrap;
-	}
-	
-	private boolean loadRawChunkData(String path) {
-		mRawChksWrap.clear();
-		
-		File file = new File(path);
-		
-		if (!file.exists()) {
-			Toast.makeText(mContext, "Can't find the chunk data xml!", Toast.LENGTH_SHORT).show();
+	private static boolean loadRawChunkData(String date) {
+		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
+				USCTeensGlobals.ANNOTATION_FOLDER + date;
+		String[] chunkFilePaths = FileHelper.getFilePathsDir(path);
+		if (chunkFilePaths == null || chunkFilePaths.length == 0) {			
 			return false;
-		}
-		
+		}	
+		// first clear the data container
+		sRawChksWrap.clear();		
 		SAXReader saxReader = new SAXReader();		
 		try {
-			Document document = saxReader.read(new File(path));								
+			Document document = saxReader.read(new File(chunkFilePaths[0]));								
 			Element root = document.getRootElement();
 
 		    for (Iterator i = root.elementIterator(); i.hasNext();) {
@@ -197,7 +175,7 @@ public class DataSource {
 			    	    }
 			    	   
 			    	   RawChunk rawchunk = new RawChunk(start.getText(), stop.getText(), type, create, modify);
-			    	   mRawChksWrap.add(rawchunk);
+			    	   sRawChksWrap.add(rawchunk);
 			       }
 		        
 		       }
@@ -211,8 +189,10 @@ public class DataSource {
 		return true;
 	}
 	
-	public boolean areAllChunksLabelled(String date) {
-		String path = PATH_PREFIX + date + ".xml";
+	public static boolean areAllChunksLabelled(String date) {
+		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
+				USCTeensGlobals.ANNOTATION_FOLDER + date + File.separator + USCTeensGlobals.ANNOTATION_SET + "." + 
+				/*PhoneInfo.getID(mContext) + "." + */date + ".annotation.xml";
 		
 		File file = new File(path);		
 		if (!file.exists()) {			
@@ -248,17 +228,19 @@ public class DataSource {
 		return allLabelled;
 	}
 
-	public boolean saveChunkData(final ArrayList<Chunk> chunks) {
+	public static boolean saveChunkData(final ArrayList<Chunk> chunks) {
 		boolean result = false;		
-		String date = DataStorage.GetValueString(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
 		assert(date.compareTo("") != 0);
-		String path = PATH_PREFIX + date + ".xml";				
+		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
+				USCTeensGlobals.ANNOTATION_FOLDER + date + File.separator + USCTeensGlobals.ANNOTATION_SET + "." + 
+				/*PhoneInfo.getID(mContext) + "." + */date + ".annotation.xml";			
 		
-		mRawChksWrap.clear();
+		sRawChksWrap.clear();
 		for (int i = 0; i < chunks.size(); ++i) {
 			Chunk chunk = chunks.get(i);
 			RawChunk rawChunk = chunk.toRawChunk();
-			mRawChksWrap.add(rawChunk);
+			sRawChksWrap.add(rawChunk);
 		}
 		
 		Document document = DocumentHelper.createDocument();
@@ -274,9 +256,9 @@ public class DataSource {
 	        .addAttribute("DESCRIPTION", "Teen activity labelling")
 	        .addAttribute("METHOD", "based on pre-defined theresholds")
 	        .addAttribute("NOTES", "")
-	        .addAttribute("ALLLABELLED", mRawChksWrap.areAllChunksLabelled() ? "yes" : "no");
+	        .addAttribute("ALLLABELLED", sRawChksWrap.areAllChunksLabelled() ? "yes" : "no");
         
-        for (RawChunk rawChunk : mRawChksWrap) {
+        for (RawChunk rawChunk : sRawChksWrap) {
 	        // ANNOTATION
 	        Element annotation = annotations.addElement("ANNOTATION")
 	        	.addAttribute("GUID", "");
@@ -319,9 +301,9 @@ public class DataSource {
 		return result;
 	}
 	
-	private native int create();
-	private native int destroy();
-	private native int loadHourlyAccelSensorData(String filePath);
-	private native int unloadActivityData(String path);
-	private native int getMaxActivityValue(String path);
+	private static native int create();
+	private static native int destroy();
+	private static native int loadHourlyAccelSensorData(String filePath);
+	private static native int unloadActivityData(String path);
+	private static native int getMaxActivityValue(String path);
 }

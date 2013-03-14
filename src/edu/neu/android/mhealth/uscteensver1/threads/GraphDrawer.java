@@ -1,7 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.threads;
 
 import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
-import edu.neu.android.mhealth.uscteensver1.views.MainView;
+import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.util.Log;
@@ -11,13 +11,13 @@ public class GraphDrawer extends BaseThread {
 	// the holder of the SurfaceView
 	protected SurfaceHolder mHolder = null;
 	// the app surface view
-	protected MainView mView = null;
+	protected GraphView mView = null;
 	// the app page to draw
 	protected AppPage  mPage = null;	
 	// flag to indicate whether the drawer should be paused
 	protected boolean mPause = false;
 	
-	public GraphDrawer(MainView view, AppPage page, Handler handler) {
+	public GraphDrawer(GraphView view, AppPage page, Handler handler) {
 		mView   = view;
 		mPage   = page;		
 		mHolder = view.getHolder(); 

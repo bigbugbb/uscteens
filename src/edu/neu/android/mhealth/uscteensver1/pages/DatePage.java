@@ -204,7 +204,6 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 		}				
 		
 		// get the start date
-		DataSource dataSrc = DataSource.getInstance(null);
 		String startDate = DataStorage.getStartDate(mContext, "");
 		if (startDate.compareTo("") == 0) {
 			// possibly fail to read the configuration file
@@ -220,7 +219,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 		
 		Message msg = mHandler.obtainMessage();
 		msg.obj  = strDate;
-		msg.what = AppCmd.WEEKDAY;
+		msg.what = AppCmd.BEGIN_LOADING;
 		mHandler.sendMessage(msg);
 	}
 	

@@ -42,21 +42,21 @@ JNIEnv* JNI_GetEnv()
     return env;
 }
 
-jint Create(JNIEnv * env, jobject thiz)
+jint Create(JNIEnv * env, jclass clazz)
 {
 	jint nResult = gDataSrc->Create();
 
 	return nResult;
 }
 
-jint Destroy(JNIEnv * env, jobject thiz)
+jint Destroy(JNIEnv * env, jclass clazz)
 {
 	jint nResult = gDataSrc->Destroy();
 
 	return nResult;
 }
 
-jint GetMaxActivityValue(JNIEnv* env, jobject thiz, jstring path)
+jint GetMaxActivityValue(JNIEnv* env, jclass clazz, jstring path)
 {
 	jboolean bCopy;
 	const char* pszPath = env->GetStringUTFChars(path, &bCopy);
@@ -66,7 +66,7 @@ jint GetMaxActivityValue(JNIEnv* env, jobject thiz, jstring path)
 	return nMaxValue;
 }
 
-jint LoadHourlyAccelSensorData(JNIEnv* env, jobject thiz, jstring path)
+jint LoadHourlyAccelSensorData(JNIEnv* env, jclass clazz, jstring path)
 {
 	jboolean bCopy;
 	const char* pszPath = env->GetStringUTFChars(path, &bCopy);
@@ -76,7 +76,7 @@ jint LoadHourlyAccelSensorData(JNIEnv* env, jobject thiz, jstring path)
 	// get DataSource class
 	jclass dsClass = env->FindClass("edu/neu/android/mhealth/uscteensver1/data/DataSource");
 	// get onGetAccelData method
-	jmethodID mid = env->GetMethodID(dsClass, "onGetAccelData", "(IIIIIII)V");
+	jmethodID mid = env->GetStaticMethodID(dsClass, "onGetAccelData", "(IIIIIII)V");
 //	// get AccelData class
 //	jclass adClass = env->FindClass("edu/neu/android/mhealth/uscteensver1/data/AccelData");
 //	// get AccelData constructor
@@ -85,7 +85,7 @@ jint LoadHourlyAccelSensorData(JNIEnv* env, jobject thiz, jstring path)
 	int size = vecData.size();
 	for (int i = 0; i < size; ++i) {
 		if (mid) {
-			env->CallVoidMethod(thiz, mid,
+			env->CallStaticVoidMethod(clazz, mid,
 					vecData[i].nHour, vecData[i].nMinute, vecData[i].nSecond, vecData[i].nMilliSecond,
 					vecData[i].nTimeInSec, vecData[i].nIntAccelAverage, vecData[i].nIntAccelSamples);
 		} else {
@@ -96,7 +96,7 @@ jint LoadHourlyAccelSensorData(JNIEnv* env, jobject thiz, jstring path)
 	return 0;
 }
 
-jint UnloadActivityData(JNIEnv * env, jobject thiz, jstring path)
+jint UnloadActivityData(JNIEnv * env, jclass clazz, jstring path)
 {
 	jboolean bCopy;
 //	JNIEnv* env = JNI_GetEnv();
@@ -106,7 +106,7 @@ jint UnloadActivityData(JNIEnv * env, jobject thiz, jstring path)
 	return result;
 }
 
-jintArray LoadChunkData(JNIEnv* env, jobject thiz, jstring path)
+jintArray LoadChunkData(JNIEnv* env, jclass clazz, jstring path)
 {
 	jboolean bCopy;
 //	JNIEnv* env = JNI_GetEnv();
@@ -125,7 +125,7 @@ jintArray LoadChunkData(JNIEnv* env, jobject thiz, jstring path)
 	return result;
 }
 
-jint UnloadChunkData(JNIEnv * env, jobject thiz, jstring path)
+jint UnloadChunkData(JNIEnv * env, jclass clazz, jstring path)
 {
 	jboolean bCopy;
 	const char* pszPath = env->GetStringUTFChars(path, &bCopy);

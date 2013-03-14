@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.R;
@@ -18,12 +19,15 @@ import edu.neu.android.mhealth.uscteensver1.pages.GraphPage;
 import edu.neu.android.mhealth.uscteensver1.pages.DatePage;
 import edu.neu.android.mhealth.uscteensver1.pages.WinPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
-import edu.neu.android.mhealth.uscteensver1.views.MainView;
+import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
+import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
+import edu.neu.android.wocketslib.sensormonitor.Arbitrater;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,12 +49,10 @@ import android.widget.Toast;
 public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListener {
 	
 	// the view for drawing anything
-	protected MainView mMainView = null;	
+	protected GraphView mMainView = null;	
 	// all of the pages
 	protected AppPage mCurPage = null;
 	protected List<AppPage> mPages = new ArrayList<AppPage>();
-	// data manager
-	protected DataSource mDataSource = null;
 	// special password for secret behaviors
 	private PasswordChecker mPwdStaff     = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
 	private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
@@ -66,7 +68,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		setContentView(R.layout.activity_main);					
 		
 		USCTeensGlobals.sGlobalHandler = mHandler;
-		mDataSource = DataSource.getInstance(getApplicationContext());				
+		DataSource.initialize(getApplicationContext());				
 
 		// setup scale param according to the screen resolution
 		setupScale();
@@ -108,7 +110,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	}
 
 	private void setupViews() {
-		mMainView = (MainView) findViewById(R.id.view_main);		
+		mMainView = (GraphView) findViewById(R.id.view_graph);		
 		mMainView.setOnTouchListener(this);
 		mMainView.setLongClickable(true);
 	}
@@ -230,11 +232,19 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         			Toast.makeText(context, "Fail to do the configuration!", Toast.LENGTH_SHORT);
         		}
         		break;
-        	case AppCmd.WEEKDAY:
-         		if (mDataSource.loadRawData((String) msg.obj)) {        			
-            		switchPages(2);
-        		}
+        	case AppCmd.BEGIN_LOADING:        		
+        		LoadDataTask task = new LoadDataTask(USCTeensMainActivity.this, this, (String) msg.obj);
+        		task.execute();    			        		
             	break;
+        	case AppCmd.END_LOADING:
+        		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
+        			switchPages(indexOfPage(PageType.GRAPH_PAGE));
+        		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
+        			Toast.makeText(context, "Can't find the sensor data!", Toast.LENGTH_SHORT).show();
+        		} else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
+        			Toast.makeText(context, "Can't find the chunk data!", Toast.LENGTH_SHORT).show();
+        		}
+        		break;
         	case AppCmd.BACK:
         		switchPages(indexOfPage(PageType.DATE_PAGE));
         		break;

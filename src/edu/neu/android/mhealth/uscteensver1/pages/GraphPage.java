@@ -42,7 +42,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	public GraphPage(Context context, View view, Handler handler) {
 		super(context, handler);				
 		mView = view;
-		ChunkManager.initialize(context, DataSource.getInstance(null));
+		ChunkManager.initialize(context);
 		ChunkManager.setUserData(this);
 		ChunkManager.setOnBoundaryScaleListener(this);
 	}

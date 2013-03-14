@@ -467,53 +467,24 @@ public class USCTeensArbitrater extends Arbitrater {
 			DataStorage.SetValue(aContext, KEY_CSVFILE_CREATE_TIME, lastCSVFileCreateTime);
 		}
 		
-		return "InternalAccel." + PhoneInfo.getID(aContext) + "." + lastCSVFileCreateTime + ".log.csv";
+		return USCTeensGlobals.SENSOR_TYPE + "." + PhoneInfo.getID(aContext)
+				+ "." + lastCSVFileCreateTime + ".log.csv";
 	}
 	
 	private String getFilePathNameForSavingInternalAccelData(String fileName) {
 		String dateDir = new SimpleDateFormat("yyyy-MM-dd/HH/").format(new Date());
 		
 		return Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir + fileName;	
+			   Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir + fileName;	
 	}
 	
 	private String getInternalAccelDataForSaving() {	
-//		Date aDate = null;
-//		Calendar calendar = Calendar.getInstance();
-//		calendar.add(Calendar.MINUTE, -1);				
-		
 		// Get internal accelerometer data which have been saved in the last minute
 		String data = "";
 		int maxSeconds = USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER / 1000;
 		for (int i = 1; i <= maxSeconds; ++i) {	
 			String time = DataStorage.GetValueString(aContext, 
 					DataStorage.KEY_INTERNAL_ACCEL_RECORDING_TIME + i, DataStorage.EMPTY);
-			
-//			calendar.add(Calendar.SECOND, 1); // offset to the data recording time
-//			aDate = calendar.getTime();
-//			
-//			if (time.compareTo(DataStorage.EMPTY) == 0) {
-//				time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, SSS").format(aDate);
-//			}
-//			// Adjust the time if it's not correct, mainly due to high CPU load or first run
-//			// yyyy-MM-dd HH:mm:ss, SSS
-//			String[] tmSplit  = time.split(" ");
-//			String[] subSplit = tmSplit[0].split("-");
-//			int year  = Integer.parseInt(subSplit[0]);
-//			int month = Integer.parseInt(subSplit[1]);
-//			int day   = Integer.parseInt(subSplit[2]);
-//						
-//			if (year != aDate.getYear() || month != aDate.getMonth() || day != aDate.getDay()) {
-//				time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, SSS").format(aDate);
-//			} else {
-//				subSplit = tmSplit[1].split(":");
-//				int hour   = Integer.parseInt(subSplit[0]);
-//				int minute = Integer.parseInt(subSplit[1]);
-//				if (hour != aDate.getHours() || minute != aDate.getMinutes()) {
-//					time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss, SSS").format(aDate); 
-//				}
-//			}
-			
 			int intAccelAverage = (int) DataStorage.GetValueLong(
 					aContext, DataStorage.KEY_INTERNAL_ACCEL_AVERAGE + i, 0);
 			int intAccelSamples = (int) DataStorage.GetValueLong(
@@ -525,7 +496,6 @@ public class USCTeensArbitrater extends Arbitrater {
 	}
 	
 	protected boolean writePhoneAccelDataToInternalDirectory() {
-		
 		boolean result = true;
 				
 		// Get the csv file name

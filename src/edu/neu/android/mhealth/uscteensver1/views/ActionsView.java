@@ -108,9 +108,8 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		mPaintTime.setTypeface(Typeface.SERIF);
 		mPaintTime.setTextAlign(Align.CENTER);		
 		mPaintTime.setFakeBoldText(false);	
-		
-		DataSource dataSrc = DataSource.getInstance(null);
-		mDate = convertDateToDisplayFormat(dataSrc.getCurrentSelectedDate());
+
+		mDate = convertDateToDisplayFormat(DataSource.getCurrentSelectedDate());
 	}
 	
 	private String convertDateToDisplayFormat(String date) {

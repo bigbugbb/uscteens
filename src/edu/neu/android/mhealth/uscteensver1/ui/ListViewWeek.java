@@ -75,7 +75,7 @@ public class ListViewWeek extends ListView {
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
-					if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(i - startWeekday))) {
+					if (DataSource.areAllChunksLabelled(dates.get(i - startWeekday))) {
 						addItem(sWeekdays[i % 7], R.drawable.check_mark);
 					} else {
 						addItem(sWeekdays[i % 7], R.drawable.check_square);
@@ -88,7 +88,7 @@ public class ListViewWeek extends ListView {
 			aNumOfDaysAfterStartDate -= 7;
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
-					if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
+					if (DataSource.areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
 						addItem(sWeekdays[i % 7], R.drawable.check_mark);
 					} else {
 						addItem(sWeekdays[i % 7], R.drawable.check_square);
@@ -139,7 +139,7 @@ public class ListViewWeek extends ListView {
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
-					if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(i - startWeekday))) {
+					if (DataSource.areAllChunksLabelled(dates.get(i - startWeekday))) {
 						getItem(i - startWeekday).setItemImage(R.drawable.check_mark);						
 					} else {
 						getItem(i - startWeekday).setItemImage(R.drawable.check_square);
@@ -153,7 +153,7 @@ public class ListViewWeek extends ListView {
 			startWeekday += 7;
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
-					if (DataSource.getInstance(null).areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
+					if (DataSource.areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
 						getItem(i - startWeekday).setItemImage(R.drawable.check_mark);	
 					} else {
 						getItem(i - startWeekday).setItemImage(R.drawable.check_square);

@@ -52,20 +52,35 @@ public class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 		int nStart = 0;
 		int nEnd   = 0;
 		for (int i = 0; i < mDrawableData.length; ++i) {	
-			if (mDrawableData[i] == NO_SENSOR_DATA) {
-				if (i == 0 || mDrawableData[i - 1] != NO_SENSOR_DATA) {
-					nStart = i;
-				}
-				if (i == SECONDS_IN_DAY - 1 || mDrawableData[i + 1] != NO_SENSOR_DATA) {				
-					nEnd = i + 1;
-					if (nEnd - nStart > NO_SENSOR_DATA_TIME_THRESHOLD) {
-						; // no data during this interval					
-					} else {
-						// fill this interval with zero
+			if (mDrawableData[i] != NO_SENSOR_DATA) {
+				continue;
+			}
+			if (i == 0 || mDrawableData[i - 1] != NO_SENSOR_DATA) {
+				nStart = i;
+			}
+			if (i == SECONDS_IN_DAY - 1 || mDrawableData[i + 1] != NO_SENSOR_DATA) {				
+				nEnd = i + 1;
+				if (nEnd - nStart > NO_SENSOR_DATA_TIME_THRESHOLD) {
+					; // no data during this interval					
+				} else {
+					// fill this interval with zero
+					if (nStart == 0) {
 						Arrays.fill(mDrawableData, nStart, nEnd, DATA_VALUE_FOR_FILLING);
+					} else {
+						int k = 1;
+						for (int j = nStart; j < nEnd; j += 2, ++k) {
+							try {
+								mDrawableData[j]     = mDrawableData[nStart - k];
+								mDrawableData[j + 1] = mDrawableData[nStart - k];
+							} catch (ArrayIndexOutOfBoundsException e) {
+								// the number of the sensor data at the beginning is not enough 
+								Arrays.fill(mDrawableData, j, nEnd, DATA_VALUE_FOR_FILLING);
+								j = nEnd;
+							}
+						}	
 					}
 				}
-			}
+			}			
 		}
 			
 		return true;

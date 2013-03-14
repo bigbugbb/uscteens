@@ -71,6 +71,10 @@ public class AppPage implements OnGestureListener {
 		System.gc();
 	}
 	
+	public Context getContext() {
+		return mContext;
+	}
+	
 	public void setEnable(boolean enable) {
 		mEnable = enable;
 	}

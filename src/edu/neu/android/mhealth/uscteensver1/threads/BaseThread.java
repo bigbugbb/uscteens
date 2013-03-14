@@ -9,7 +9,7 @@ import android.os.Handler;
 public class BaseThread extends Thread {
 	
 	protected boolean mRun = false;	
-	protected Handler mHandler = null;	
+	protected Handler mHandler = null;		
 	protected ConcurrentLinkedQueue<AppEvent> mEventQueue;
 	
 	protected BaseThread() {
@@ -19,6 +19,10 @@ public class BaseThread extends Thread {
 	protected BaseThread(Handler handler) {
 		mEventQueue = new ConcurrentLinkedQueue<AppEvent>();
 		setHandler(handler);
+	}
+	
+	protected BaseThread(Runnable runnable, String threadName) {
+		super(null, runnable, threadName);
 	}
 	
 	public void setHandler(Handler handler) {

@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class MainView extends SurfaceView implements SurfaceHolder.Callback {
+public class GraphView extends SurfaceView implements SurfaceHolder.Callback {
 
 	protected SurfaceHolder mHolder  = null;
 	protected Handler       mHandler = null;
@@ -19,7 +19,7 @@ public class MainView extends SurfaceView implements SurfaceHolder.Callback {
 	protected List<AppPage> mPages   = null;
 	
 	// constructor must have AttributeSet to create from XML
-	public MainView(Context context, AttributeSet attrs) {
+	public GraphView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mHolder = getHolder();
 		mHolder.addCallback(this);

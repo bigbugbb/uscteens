@@ -10,6 +10,7 @@ public class AppCmd {
 	public final static int SPLIT	 		= 6;
 	public final static int MERGE    		= 7;
 	public final static int MERGE_FINISHING = 8;
-	public final static int WEEKDAY  		= 9;
-	public final static int REWARD   		= 10;
+	public final static int BEGIN_LOADING	= 9;
+	public final static int END_LOADING		= 10;
+	public final static int REWARD   		= 11;
 }
