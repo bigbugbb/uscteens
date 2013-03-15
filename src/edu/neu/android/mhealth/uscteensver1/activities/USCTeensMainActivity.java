@@ -49,7 +49,7 @@ import android.widget.Toast;
 public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListener {
 	
 	// the view for drawing anything
-	protected GraphView mMainView = null;	
+	protected GraphView mGraphView = null;	
 	// all of the pages
 	protected AppPage mCurPage = null;
 	protected List<AppPage> mPages = new ArrayList<AppPage>();
@@ -110,9 +110,9 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	}
 
 	private void setupViews() {
-		mMainView = (GraphView) findViewById(R.id.view_graph);		
-		mMainView.setOnTouchListener(this);
-		mMainView.setLongClickable(true);
+		mGraphView = (GraphView) findViewById(R.id.view_graph);		
+		mGraphView.setOnTouchListener(this);
+		mGraphView.setLongClickable(true);
 	}
 	
 	private void adjustLayout() {
@@ -129,13 +129,13 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	private void initPages() {		
 		// only three pages now		
 		Context context = getApplicationContext();
-		mPages.add(new HomePage(context, mMainView, mHandler));
-		mPages.add(new DatePage(context, mMainView, mHandler));
-		mPages.add(new GraphPage(context, mMainView, mHandler));
-		mPages.add(new WinPage(context, mMainView, mHandler));
+		mPages.add(new HomePage(context, mGraphView, mHandler));
+		mPages.add(new DatePage(context, mGraphView, mHandler));
+		mPages.add(new GraphPage(context, mGraphView, mHandler));
+		mPages.add(new WinPage(context, mGraphView, mHandler));
 		mCurPage = mPages.get(indexOfPage(PageType.HOME_PAGE));
 		// set pages to main view
-		mMainView.setPages(mPages);		
+		mGraphView.setPages(mPages);		
 	}
 	
 	private int indexOfPage(PageType pageType) {
@@ -164,7 +164,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 			return;
 		}		
 		
-		GraphDrawer drawer = mMainView.getDrawer();
+		GraphDrawer drawer = mGraphView.getDrawer();
 		if (drawer != null) {
 			drawer.pause(true);
 		}
@@ -188,7 +188,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	@Override
 	public void onPause() {
 		mCurPage.pause();
-		mMainView.onPause();
+		mGraphView.onPause();
 		super.onPause();		
 	}
 
@@ -196,7 +196,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	public void onResume() {		
 		super.onResume();					
 		
-		mMainView.onResume();
+		mGraphView.onResume();
 		mCurPage.resume();		
 		
 		if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
@@ -207,13 +207,13 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	@Override
 	public void onStart() {
 		mCurPage.start();
-		mMainView.onStart(mCurPage);
+		mGraphView.onStart(mCurPage);
 		super.onStart();
 	}
 
 	@Override
 	public void onStop() {		
-		mMainView.onStop();
+		mGraphView.onStop();
 		mCurPage.stop();
 		super.onStop();
 	}	

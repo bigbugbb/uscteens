@@ -38,13 +38,17 @@ public class DataSource {
 	public final static int ERR_NO_SENSOR_DATA = 1;
 	public final static int ERR_NO_CHUNK_DATA  = 2;
 	
+	// threshold for chunking generation
+	private final static int CHUNKING_SENSITIVITY  = 750;
+	private final static int CHUNKING_MIN_DISTANCE = 120;
+	
 	protected static Context sContext = null;
 	// raw chunk data
 	protected static RawChunksWrap sRawChksWrap = new RawChunksWrap();
 	// raw accelerometer sensor data
 	protected static AccelDataWrap sAccelDataWrap = new AccelDataWrap();
 	// hourly accelerometer data
-	protected static ArrayList<AccelData> sHourlyAccelData = null;
+	protected static ArrayList<AccelData> sHourlyAccelData = null;	
 	
 	
 	static {
@@ -71,10 +75,11 @@ public class DataSource {
 		}
 		
 		/* 
-		 * then load the corresponding chunk data
+		 * then load the corresponding chunk data.
+		 * if no chunk data, create the chunk data from sensor data
 		 */
-		if (!loadRawChunkData(date)) {
-			return ERR_NO_CHUNK_DATA;
+		if (!loadRawChunkData(date) && !createRawChunkData()) {
+			return ERR_NO_CHUNK_DATA;			
 		}
 			
 		return LOADING_SUCCEEDED;
@@ -125,8 +130,8 @@ public class DataSource {
 			// load the hourly data from csv file and save the data to mHourlyAccelData
 			sHourlyAccelData = new ArrayList<AccelData>();
 			loadHourlyAccelSensorData(filePath[0]);
-			// add the houly data the data wrap		
-			sAccelDataWrap.add(sHourlyAccelData);		
+			// add the houly data the data wrap
+			sAccelDataWrap.add(sHourlyAccelData);
 		}		
 		// now we have a loaded daily accelerometer sensor data in the data wrap,
 		// we convert it into the data structure that can be drawn easily.
@@ -186,6 +191,40 @@ public class DataSource {
 			return false;
 		}
 
+		return true;
+	}
+	
+	/*
+	 * create raw chunk data from raw accelerometer data	 
+	 */
+	protected static boolean createRawChunkData() {
+		// current selected date
+		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+		assert(sAccelDataWrap.size() > 0);		
+		// convolution to the accelerometer data and figure out the possible chunking position
+		int[] sensorData = sAccelDataWrap.getDrawableData();
+		int[] processedData = Arrays.copyOf(sensorData, sensorData.length);
+		for (int i = 1; i < processedData.length - 1; ++i) { // [-1 0 1]
+			processedData[i] = sensorData[i + 1] - sensorData[i - 1];
+		}
+		ArrayList<Integer> chunkPos = new ArrayList<Integer>();
+		int last = 0;
+		chunkPos.add(0);
+		for (int i = 1; i < processedData.length; ++i) {
+			if (Math.abs(processedData[i]) > CHUNKING_SENSITIVITY || i == processedData.length - 1) {
+				if (i - last >= CHUNKING_MIN_DISTANCE) {
+					chunkPos.add(i);
+					last = i;
+				}
+			}	
+		}
+		// create raw chunk data for each chunking position	
+		sRawChksWrap.clear();
+		for (int i = 0; i < chunkPos.size() - 1; ++i) {						
+			RawChunk rawChunk = new RawChunk(date, chunkPos.get(i), chunkPos.get(i + 1));
+			sRawChksWrap.add(rawChunk);
+		}
+		
 		return true;
 	}
 	

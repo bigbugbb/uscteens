@@ -2,7 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.util.ArrayList;
 
-public class RawChunksWrap extends ArrayList<RawChunk> {
+class RawChunksWrap extends ArrayList<RawChunk> {
 	
 	/**
 	 * 

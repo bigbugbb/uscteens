@@ -3,7 +3,7 @@ package edu.neu.android.mhealth.uscteensver1.data;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
+class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 	/**
 	 * 
 	 */
@@ -42,7 +42,7 @@ public class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 		if (size() == 0) {
 			return false;
 		}
-	
+
 		// update daily data		
 		for (ArrayList<AccelData> hourlyData : this) {
 			for (AccelData aData : hourlyData) {				
