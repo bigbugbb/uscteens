@@ -1,6 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
-public class AccelData {
+class AccelData {
 	public int mHour;
 	public int mMinute;
 	public int mSecond;

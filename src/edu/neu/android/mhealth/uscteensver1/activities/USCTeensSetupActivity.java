@@ -56,7 +56,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 	private void displayToastMessage(String aMsg) {
 		Toast aToast = Toast.makeText(getApplicationContext(),aMsg, Toast.LENGTH_LONG);
 		aToast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		aToast.show();		
+		aToast.show();	
 	}
 	
 	/**
