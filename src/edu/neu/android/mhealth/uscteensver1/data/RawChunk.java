@@ -82,7 +82,8 @@ class RawChunk {
 		String[] times  = result[result.length - 1].split(":");
 		
 		return Integer.parseInt(times[0]) * 3600 + // hour 
-			   Integer.parseInt(times[1]) * 60;    // minute
+			   Integer.parseInt(times[1]) * 60 +   // minute
+			   (int) Float.parseFloat(times[2]);   // second
 	}
 	
 	public String getActivityName() {
