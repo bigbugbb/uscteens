@@ -86,8 +86,9 @@ public class Chunk extends AppObject {
 	private String toDateTime(int time) {
 		int hour   = time / 3600;
 		int minute = (time - hour * 3600) / 60;
+		int second = time - hour * 3600 - minute * 60;
 
-		return DataSource.getCurrentSelectedDate() + " " + hour + ":" + minute + ":" + "00.000";
+		return DataSource.getCurrentSelectedDate() + " " + hour + ":" + minute + ":" + second + ".000";
 	}	
 
 	public int getActionID() {
