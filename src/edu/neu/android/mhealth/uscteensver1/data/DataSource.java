@@ -201,26 +201,28 @@ public class DataSource {
 		// current selected date
 		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
 		assert(sAccelDataWrap.size() > 0);		
-		// convolution to the accelerometer data and figure out the possible chunking position
+		// convolution to the accelerometer data
 		int[] sensorData = sAccelDataWrap.getDrawableData();
 		int[] processedData = Arrays.copyOf(sensorData, sensorData.length);
 		for (int i = 1; i < processedData.length - 1; ++i) { // [-1 0 1]
 			processedData[i] = sensorData[i + 1] - sensorData[i - 1];
 		}
+		// figure out the possible chunking positions
+		int last = 0, end = 3600 * 24;
 		ArrayList<Integer> chunkPos = new ArrayList<Integer>();
-		int last = 0;
-		chunkPos.add(0);
-		for (int i = 1; i < processedData.length; ++i) {
-			if (Math.abs(processedData[i]) > CHUNKING_SENSITIVITY || i == processedData.length - 1) {
+		chunkPos.add(0);		
+		for (int i = 1; i < processedData.length - CHUNKING_MIN_DISTANCE; ++i) {
+			if (Math.abs(processedData[i]) > CHUNKING_SENSITIVITY) {
 				if (i - last >= CHUNKING_MIN_DISTANCE) {
 					chunkPos.add(i);
 					last = i;
 				}
 			}	
 		}
+		chunkPos.add(end); 
 		// create raw chunk data for each chunking position	
 		sRawChksWrap.clear();
-		for (int i = 0; i < chunkPos.size() - 1; ++i) {						
+		for (int i = 0; i < chunkPos.size() - 1; ++i) {					
 			RawChunk rawChunk = new RawChunk(date, chunkPos.get(i), chunkPos.get(i + 1));
 			sRawChksWrap.add(rawChunk);
 		}
