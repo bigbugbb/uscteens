@@ -1,13 +1,17 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import java.util.HashMap;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
+import android.util.Pair;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
@@ -29,6 +33,7 @@ public class MotionGraph extends AppObject {
 	protected Paint  mBackgroundWhite = null;
 	protected Paint  mPaint = null;
 	protected Paint	 mDataPaint = null;
+	protected Paint  mSlashPaint = null;
 	protected Paint  mMarkedPaint = null;
 	protected Paint  mSelChunkPaint = null;
 	protected Paint  mSelChunkBackPaint = null;
@@ -72,6 +77,10 @@ public class MotionGraph extends AppObject {
 		mDataPaint.setColor(Color.BLACK);
 		mDataPaint.setStrokeWidth(Math.max(1.0f, Math.min(sAppScale.doScaleT(4.0f), 4.0f)));
 		mDataPaint.setFakeBoldText(false);
+		
+		mSlashPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mSlashPaint.setColor(Color.GRAY);
+		mSlashPaint.setStrokeWidth(1.0f);
 		
 		mMarkedPaint = new Paint();
 		mMarkedPaint.setColor(Color.argb(255, 198, 235, 245));
@@ -188,19 +197,50 @@ public class MotionGraph extends AppObject {
 		// draw the graph
 		float scale = (float) mHeight / DataSource.getMaxDrawableDataValue();
 		for (int i = mStart; i < mEnd - USCTeensGlobals.PIXEL_PER_DATA; ++i) {	
-			int index = i / USCTeensGlobals.PIXEL_PER_DATA;		
+			int sec = i / USCTeensGlobals.PIXEL_PER_DATA;		
 			float x1 = i - mStart + mOffsetX;
-			float y1 = mHeight - mActions[index] * scale;
+			float y1 = mHeight - mActions[sec] * scale;
 			float x2 = i - mStart + USCTeensGlobals.PIXEL_PER_DATA + mOffsetX;
-			float y2 = mHeight - mActions[index + 1] * scale;
-			if (mActions[index] >= 0 && mActions[index + 1] >= 0)
+			float y2 = mHeight - mActions[sec + 1] * scale;
+			if (mActions[sec] >= 0 && mActions[sec + 1] >= 0) {
 				c.drawLine(x1, y1, x2, y2, mDataPaint);
+			} else if (mActions[sec] < 0) {
+				int start = 0, stop = 0, delta = 0;
+				// find the period that should be drawn
+				for (Pair pair : DataSource.getNoDataTimePeriods()) {
+					if ((Integer) pair.first <= sec && sec < (Integer) pair.second) {						
+						start = (Integer) pair.first  * USCTeensGlobals.PIXEL_PER_DATA;
+						stop  = (Integer) pair.second * USCTeensGlobals.PIXEL_PER_DATA;		
+						delta = stop - start;
+					}
+				}
+				// draw slashes with 45 degree
+				float slashX1 = start - mStart + mOffsetX;
+				float slashX2 = stop - mStart + mOffsetX;
+				int step = (int) sAppScale.doScaleH(8.0f);
+				// draw slashes from top to bottom
+				for (int m = (int) mHeight; m > 0; m -= step) {
+					c.drawLine(slashX1, m, slashX2, m - (slashX2 - slashX1), mSlashPaint);
+				}
+				// draw slashes from left to right
+				for (int m = 0; m < delta; m += step) {
+					if (slashX1 + m < -mHeight || slashX1 + m > mWidth) {
+						continue;
+					}
+					c.drawLine(slashX1 + m, mHeight, slashX2, mHeight - (slashX2 - (slashX1 + m)), mSlashPaint);					
+				}
+				// skip the space that has been drawn
+				i += delta - (start >= mStart ? 0 : i - start) - 1; 
+			}
 		}		
+		
 		// draw the chunk lines and the corresponding buttons
 		for (int i = 0; i < ChunkManager.getChunkSize(); ++i) {
 			Chunk chunk = ChunkManager.getChunk(i);
 			chunk.onDraw(c);
 		}
+		// draw the rectangle which indicates the chunk selection		
+		c.drawRect(ChunkManager.getSelectedArea(), mSelChunkPaint);	
 		// draw the time interval corresponding to the displayed region
 		String timeStart = toStringTimeFromPosition(mStart);
 		String timeEnd   = toStringTimeFromPosition(mEnd);
@@ -210,9 +250,7 @@ public class MotionGraph extends AppObject {
 		c.drawText(timeEnd, mWidth + sAppScale.doScaleW(-20), mHeight + sAppScale.doScaleH(36), mPaintTxt);
 		// draw date on the bottom
 		mPaintDate.setTextAlign(Paint.Align.CENTER);
-		c.drawText(mDate, mWidth / 2, mHeight + sAppScale.doScaleH(200), mPaintDate);
-		// draw the rectangle which indicates the chunk selection		
-		c.drawRect(ChunkManager.getSelectedArea(), mSelChunkPaint);		
+		c.drawText(mDate, mWidth / 2, mHeight + sAppScale.doScaleH(200), mPaintDate);			
 	}
 
 	private String toStringTimeFromPosition(int position) {

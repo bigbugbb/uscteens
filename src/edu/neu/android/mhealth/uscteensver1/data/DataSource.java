@@ -30,6 +30,7 @@ import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.PhoneInfo;
 
 import android.content.Context;
+import android.util.Pair;
 import android.widget.Toast;
 
 public class DataSource {
@@ -134,6 +135,10 @@ public class DataSource {
 	public static int getMaxDrawableDataValue() {
 		return sAccelDataWrap.getMaxDrawableDataValue();
 	}
+	
+	public static ArrayList<Pair<Integer, Integer>> getNoDataTimePeriods() {
+		return sAccelDataWrap.getNoDataTimePeriods();
+	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static RawChunksWrap getRawChunks() {
@@ -231,8 +236,11 @@ public class DataSource {
 	 * @return true if successful, otherwise false
 	 */
 	private static ArrayList<RawChunk> createRawChunkData(int startSecond) {
+		ArrayList<RawChunk> rawChunks = new ArrayList<RawChunk>();
 		
-		return null;
+		
+		
+		return rawChunks;
 	}
 	
 	/*
@@ -246,18 +254,19 @@ public class DataSource {
 		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");		
 		// convolution to the accelerometer data
 		int[] sensorData = sAccelDataWrap.getDrawableData();
-		int[] convolution = Arrays.copyOf(sensorData, sensorData.length);
-		for (int i = 1; i < convolution.length - 1; ++i) { // [-1 0 1]
+		int size = sensorData.length;
+		int[] convolution = Arrays.copyOf(sensorData, size);
+		for (int i = 1; i < size - 1; ++i) { // [-1 0 1]
 			convolution[i] = sensorData[i + 1] - sensorData[i - 1];
 		}
 		// calculate mean average of CHUNKING_MIN_DISTANCE points' of data to the left of current position 
 		int sum = 0;
-		int[] meanAverageL = Arrays.copyOf(sensorData, sensorData.length);
+		int[] meanAverageL = Arrays.copyOf(sensorData, size);
 		Arrays.fill(meanAverageL, 0, CHUNKING_MEAN_AVG_DISTANCE, 0);
 		for (int i = 0; i < CHUNKING_MEAN_AVG_DISTANCE; ++i) {
 			sum += sensorData[i];
 		}
-		for (int i = CHUNKING_MEAN_AVG_DISTANCE; i < meanAverageL.length; ++i) {
+		for (int i = CHUNKING_MEAN_AVG_DISTANCE; i < size; ++i) {
 			meanAverageL[i] = sum / CHUNKING_MEAN_AVG_DISTANCE;
 			sum += sensorData[i];
 			sum -= sensorData[i - CHUNKING_MEAN_AVG_DISTANCE];
@@ -266,10 +275,10 @@ public class DataSource {
 		sum = 0;
 		int[] meanAverageR = Arrays.copyOf(sensorData, sensorData.length);
 		Arrays.fill(meanAverageR, sensorData.length - CHUNKING_MEAN_AVG_DISTANCE, sensorData.length, 0);
-		for (int i = sensorData.length - 1; i >= sensorData.length - CHUNKING_MEAN_AVG_DISTANCE; --i) {
+		for (int i = sensorData.length - 1; i >= size - CHUNKING_MEAN_AVG_DISTANCE; --i) {
 			sum += sensorData[i];
 		}
-		for (int i = sensorData.length - CHUNKING_MEAN_AVG_DISTANCE - 1; i >= 0; --i) {
+		for (int i = size - CHUNKING_MEAN_AVG_DISTANCE - 1; i >= 0; --i) {
 			meanAverageR[i] = sum / CHUNKING_MEAN_AVG_DISTANCE;
 			sum += sensorData[i];
 			sum -= sensorData[i + CHUNKING_MEAN_AVG_DISTANCE];
@@ -278,7 +287,16 @@ public class DataSource {
 		int prev = 0, end = 3600 * 24;
 		ArrayList<Integer> chunkPos = new ArrayList<Integer>();
 		chunkPos.add(0);		
-		for (int i = 1; i < convolution.length - CHUNKING_MIN_DISTANCE; ++i) {
+		for (int i = 1; i < size - CHUNKING_MIN_DISTANCE; ++i) {
+			if (sensorData[i] == AccelDataWrap.NO_SENSOR_DATA) {
+				if (sensorData[i - 1] != AccelDataWrap.NO_SENSOR_DATA || 
+					sensorData[i + 1] != AccelDataWrap.NO_SENSOR_DATA) {
+					if (i - prev >= CHUNKING_MIN_DISTANCE) {
+						chunkPos.add(i);			
+						prev = i;
+					}
+				}
+			}
 			if (Math.abs(convolution[i]) > CHUNKING_MIN_SENSITIVITY && i - prev >= CHUNKING_MIN_DISTANCE) {
 				if (Math.abs(meanAverageL[i] - meanAverageR[i]) > CHUNKING_MEAN_AVG_DIFF) {
 					chunkPos.add(i);
