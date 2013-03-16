@@ -81,8 +81,44 @@ public class DataSource {
 		 * then load the corresponding chunk data.
 		 * if no chunk data, create the chunk data from sensor data
 		 */
-		if (!loadRawChunkData(date) && !createRawChunkData()) {
-			return ERR_NO_CHUNK_DATA;			
+		String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		if (date.compareTo(curDate) != 0) {
+			// the previous day's data are all available, just read it.
+			// if the chunking file has not been generated, create it.
+			if (!loadRawChunkData(date) && !createRawChunkData()) {
+				return ERR_NO_CHUNK_DATA;			
+			}
+		} else {
+			// load the current day's data, because the data is not completed until
+			// the end of the day, and I also have to generate the chunk data if the 
+			// user try to see the graph. So I need two steps:
+			// 1. load the raw chunk data from file, if the file does not exist, create
+			//    it from the current incompleted sensor data. So there is an end point
+			//    for the last chunk position which is not movable in the graph.
+			// 
+			if (loadPartialRawChunkData(date)) {
+				// create the new chunking from sensor data that hasn't been chunked.
+				// The last chunk should be the ending second of the day, or
+				// it should be the position just before the part having no sensor data.
+				RawChunk lastRawChunk = sRawChksWrap.get(sRawChksWrap.size() - 1);
+				int stopTime = 0;
+				if (lastRawChunk.isLabelled()) {
+					stopTime = lastRawChunk.getStopTime(); 
+				} else {
+					// the last chunking is used only for seperating the no data part,
+					// delete it and get the start time of the last chunk.
+					sRawChksWrap.remove(sRawChksWrap.size() - 1);
+					stopTime = lastRawChunk.getStartTime();
+				}
+				if (!createPartialRawChunkData(stopTime)) {
+					return ERR_NO_CHUNK_DATA;
+				}
+			} else {
+				// no chunk data file is found, so create the chunking from the beginning
+				if (!createPartialRawChunkData(0)) {
+					return ERR_NO_CHUNK_DATA;
+				}
+			}
 		}
 			
 		return LOADING_SUCCEEDED;
@@ -143,6 +179,11 @@ public class DataSource {
 		return true;
 	}
 	
+	/**
+	 * 
+	 * @param date
+	 * @return
+	 */
 	private static boolean loadRawChunkData(String date) {
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.ANNOTATION_FOLDER + date;
@@ -194,6 +235,20 @@ public class DataSource {
 			return false;
 		}
 
+		return true;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private static boolean loadPartialRawChunkData(String date) {
+		boolean result = loadRawChunkData(date);
+		return result;
+	}
+	
+	private static boolean createPartialRawChunkData(int startSecond) {
+		
 		return true;
 	}
 	

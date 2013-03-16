@@ -8,7 +8,6 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 	 * 
 	 */
 	private static final long serialVersionUID = 2059915471290360389L;
-	//protected static int[] mRawActi vityData  = null;
 	protected int   mMaxAccelAvgValue;
 	protected int[] mDrawableData = new int[SECONDS_IN_DAY];
 	protected final static int DATA_VALUE_FOR_FILLING = 0;

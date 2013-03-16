@@ -4,6 +4,7 @@ import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 
 // chunk data from XML in direct
 class RawChunk {
+	private static final int UNLABELLED = -1;
 	// data read directly from xml
 	protected String mStartDate;
 	protected String mStopDate;
@@ -20,7 +21,7 @@ class RawChunk {
 		mStartDate  = date + " " + getStringTimeFromSecond(startSecond);
 		mStopDate   = date + " " + getStringTimeFromSecond(stopSecond);
 		mActivity   = "UNLABELLED";
-		mActivityID = -1;
+		mActivityID = UNLABELLED;
 		mCreateTime = date;
 		mModifyTime = date;
 	}
@@ -43,6 +44,10 @@ class RawChunk {
 				}
 			}
 		}
+	}
+	
+	public boolean isLabelled() {
+		return mActivityID != UNLABELLED;
 	}
 	
 	public int getActivityID() {
