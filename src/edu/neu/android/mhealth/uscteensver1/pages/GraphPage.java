@@ -191,11 +191,14 @@ public class GraphPage extends AppPage implements OnClickListener,
 				ret = mSelObject.onScroll(e1, e2, distanceX, distanceY);
 			} else if (mSelObject.getID() == UIID.SLIDE) {  
 				ret = mSelObject.onScroll(e1, e2, distanceX, distanceY);
-			} else if (mSelObject.getID() == UIID.CLOCK) {				
+			} else if (mSelObject.getID() == UIID.CLOCK) {
+				ChunkButton cb = (ChunkButton) mSelObject;				
+				if (cb.getHost().isLastChunkOfCurrentDay()) {
+					return ret;
+				}
 				ChunkManager.scaleChunk((int) -distanceX);
 				if (distanceX < 0) {
 					mHandler.removeCallbacks(mScaleLeft);
-					
 				} else {
 					mHandler.removeCallbacks(mScaleRight);
 				}

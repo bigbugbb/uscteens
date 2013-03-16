@@ -18,5 +18,3 @@ public class USCTeensAppManager extends ApplicationManager {
     	Globals.setArbitrater(arbitrater);   
     }
 }
-
-// boolean isSaved = FileHelper.saveStringToFile(aJSONString, Globals.INTERNAL_DIRECTORY_PATH + File.separator + Globals.UPLOADS_DIRECTORY, fileName);

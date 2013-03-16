@@ -84,12 +84,40 @@ public class Chunk extends AppObject {
 	}
 	
 	private String toDateTime(int time) {
-		int hour   = time / 3600;
-		int minute = (time - hour * 3600) / 60;
-		int second = time - hour * 3600 - minute * 60;
+		StringBuilder sb = new StringBuilder();
+		sb.append(DataSource.getCurrentSelectedDate());
+		sb.append(" ");
+		
+		int hour = time / 3600;
+		sb.append(hour > 9 ? "" : "0");
+		sb.append(hour);
+		time -= hour * 3600;
+		int minute = time / 60;
+		sb.append(minute > 9 ? ":" : ":0");
+		sb.append(minute);
+		int second = time - minute * 60;
+		sb.append(second > 9 ? ":" : ":0");
+		sb.append(second);
+		// ignore the millisecond
+		sb.append(".000");
 
-		return DataSource.getCurrentSelectedDate() + " " + hour + ":" + minute + ":" + second + ".000";
+		return sb.toString();
 	}	
+	
+	public boolean isLastChunkOfCurrentDay() {
+		String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String startDate = toDateTime(mStart / USCTeensGlobals.PIXEL_PER_DATA).substring(0, 10);
+		
+		// is today
+		if (curDate.compareTo(startDate) == 0) {
+			// is the last chunk
+			if (Math.abs(mStop - 3600 * 24 * USCTeensGlobals.PIXEL_PER_DATA) < USCTeensGlobals.PIXEL_PER_DATA) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 	public int getActionID() {
 		if (mQuest.isAnswered()) {					

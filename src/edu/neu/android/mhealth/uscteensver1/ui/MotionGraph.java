@@ -1,13 +1,10 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import java.util.HashMap;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
