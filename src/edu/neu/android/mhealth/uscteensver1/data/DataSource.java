@@ -88,35 +88,22 @@ public class DataSource {
 			if (!loadRawChunkData(date) && !createRawChunkData()) {
 				return ERR_NO_CHUNK_DATA;			
 			}
-		} else {
-			// load the current day's data, because the data is not completed until
-			// the end of the day, and I also have to generate the chunk data if the 
-			// user try to see the graph. So I need two steps:
-			// 1. load the raw chunk data from file, if the file does not exist, create
-			//    it from the current incompleted sensor data. So there is an end point
-			//    for the last chunk position which is not movable in the graph.
-			// 
-			if (loadPartialRawChunkData(date)) {
-				// create the new chunking from sensor data that hasn't been chunked.
-				// The last chunk should be the ending second of the day, or
-				// it should be the position just before the part having no sensor data.
+		} else {	 
+			if (loadRawChunkData(date)) {
+				assert(sRawChksWrap.size() > 0);
 				RawChunk lastRawChunk = sRawChksWrap.get(sRawChksWrap.size() - 1);
-				int stopTime = 0;
-				if (lastRawChunk.isLabelled()) {
-					stopTime = lastRawChunk.getStopTime(); 
-				} else {
-					// the last chunking is used only for seperating the no data part,
-					// delete it and get the start time of the last chunk.
-					sRawChksWrap.remove(sRawChksWrap.size() - 1);
-					stopTime = lastRawChunk.getStartTime();
-				}
-				if (!createPartialRawChunkData(stopTime)) {
-					return ERR_NO_CHUNK_DATA;
+				int startTime = lastRawChunk.getStartTime();						
+				ArrayList<RawChunk> rawChunks = createRawChunkData(startTime);	
+				if (rawChunks != null && rawChunks.size() > 0) {
+					assert(rawChunks.get(0).getStartTime() == startTime);
+					lastRawChunk.setStopTime(rawChunks.get(0).getStopTimeInString());
+					// remove the first because it duplicates with the last element of chunks wrap 
+					rawChunks.remove(0);
+					sRawChksWrap.addAll(rawChunks);
 				}
 			} else {
-				// no chunk data file is found, so create the chunking from the beginning
-				if (!createPartialRawChunkData(0)) {
-					return ERR_NO_CHUNK_DATA;
+				if (!createRawChunkData()) {
+					return ERR_NO_CHUNK_DATA;			
 				}
 			}
 		}
@@ -237,19 +224,15 @@ public class DataSource {
 
 		return true;
 	}
-	
+
 	/**
-	 * 
-	 * @return
+	 * Create new raw chunks and add it to the raw chunk wrap
+	 * @param startSecond	The start position to analyze the sensor data.
+	 * @return true if successful, otherwise false
 	 */
-	private static boolean loadPartialRawChunkData(String date) {
-		boolean result = loadRawChunkData(date);
-		return result;
-	}
-	
-	private static boolean createPartialRawChunkData(int startSecond) {
+	private static ArrayList<RawChunk> createRawChunkData(int startSecond) {
 		
-		return true;
+		return null;
 	}
 	
 	/*

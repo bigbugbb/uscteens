@@ -17,9 +17,9 @@ class RawChunk {
 	/*
 	 * seconds from the beginning of a day
 	 */	
-	public RawChunk(String date, int startSecond, int stopSecond) {
-		mStartDate  = date + " " + getStringTimeFromSecond(startSecond);
-		mStopDate   = date + " " + getStringTimeFromSecond(stopSecond);
+	public RawChunk(String date, int startTime, int stopTime) {
+		mStartDate  = date + " " + getStringTimeFromSecond(startTime);
+		mStopDate   = date + " " + getStringTimeFromSecond(stopTime);
 		mActivity   = "UNLABELLED";
 		mActivityID = UNLABELLED;
 		mCreateTime = date;
@@ -29,11 +29,26 @@ class RawChunk {
 	public RawChunk(String startDate, String stopDate, 
 			String activity, String createTime, String modifyTime) {
 		mStartDate  = startDate;
-		mStopDate   = stopDate;
-		mActivity   = activity;
+		mStopDate   = stopDate;		
 		mCreateTime = createTime;
 		mModifyTime = modifyTime;
-		
+		setActivity(activity);
+	}
+	
+	public boolean isLabelled() {
+		return mActivityID != UNLABELLED;
+	}
+	
+	public int getActivityID() {
+		return mActivityID;
+	}
+	
+	public String getActivity() {
+		return mActivity;
+	}
+	
+	public void setActivity(String activity) {
+		mActivity = activity;
 		if (mActivity.compareToIgnoreCase("UNLABELLED") == 0) {
 			mActivityID = -1;
 		} else {
@@ -45,16 +60,8 @@ class RawChunk {
 			}
 		}
 	}
-	
-	public boolean isLabelled() {
-		return mActivityID != UNLABELLED;
-	}
-	
-	public int getActivityID() {
-		return mActivityID;
-	}
 
-	public String getStringTimeFromSecond(int secInDay) {
+	protected String getStringTimeFromSecond(int secInDay) {
 		StringBuilder sb = new StringBuilder();
 		
 		int hour = secInDay / 3600;
@@ -77,8 +84,32 @@ class RawChunk {
 		return getTimeInSecond(mStartDate);
 	}
 	
+	public String getStartTimeInString() {
+		return mStartDate;
+	}
+	
 	public int getStopTime() {
 		return getTimeInSecond(mStopDate);
+	}
+
+	public String getStopTimeInString() {
+		return mStopDate;
+	}
+	
+	public void setStartTime(int startTime) {
+		mStartDate = getStringTimeFromSecond(startTime);
+	}
+	
+	public void setStartTime(String startTime) {
+		mStartDate = startTime;
+	}
+
+	public void setStopTime(int stopTime) {
+		mStopDate = getStringTimeFromSecond(stopTime);		
+	}
+	
+	public void setStopTime(String stopTime) {
+		mStopDate = stopTime;
 	}
 	
 	protected int getTimeInSecond(String time) {	

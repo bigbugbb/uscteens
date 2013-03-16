@@ -37,8 +37,8 @@ public class USCTeensGlobals {
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
 	public final static String MERGE_SELECTION = "MERGE_SELECTION";
 	public final static String CURRENT_SELECTED_DATE = "CURRENT_SELECTED_DATE";
-	public final static String SENSOR_FOLDER     = "/SensorFolder/";
-	public final static String ANNOTATION_FOLDER = "/AnnotationFolder/"; 
+	public final static String SENSOR_FOLDER     = "/Sensor/";
+	public final static String ANNOTATION_FOLDER = "/Annotation/"; 
 	public final static String SENSOR_TYPE = "InternalAccel";
 	public final static String ANNOTATION_SET = "Activities";
 	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
