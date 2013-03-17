@@ -175,6 +175,10 @@ public class Chunk extends AppObject {
 		mClock.setX(start - mClock.getWidth() / 2);
 		mMerge.setX(start - mMerge.getWidth() / 2);
 		mSplit.setX(centerX);	
+		
+		if (isLastChunkOfToday()) {
+			mQuest.setVisible(false);
+		}
 
 		return true;
 	}
