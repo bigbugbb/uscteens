@@ -25,7 +25,7 @@ import edu.neu.android.wocketslib.utils.DateHelper;
 
 public class StartDateSetupActivity extends BaseActivity implements OnClickListener {
 	
-	private static final String TAG = "SetStartDateActivity";
+	private static final String TAG = "StartDateSetupActivity";
 	// buttons
 	private Button   mBtnSet;
 	private Button   mBtnCancel;
@@ -47,7 +47,7 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, TAG);
-		setContentView(R.layout.activity_setstartdate);								
+		setContentView(R.layout.activity_startdate);								
 
 		loadPreferences();
 		// get today
