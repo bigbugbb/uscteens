@@ -383,7 +383,7 @@ public class DataSource {
 	        .addAttribute("ALL_LABELLED", sRawChksWrap.areAllChunksLabelled() ? "yes" : "no");
         
         for (RawChunk rawChunk : sRawChksWrap) {
-        	int index = 32; // unlabelled
+        	int index = USCTeensGlobals.ACTIONS_GUID.length - 1; // unlabelled
         	for (int i = 0; i < USCTeensGlobals.ACTION_NAMES.length; ++i) {
         		String action = USCTeensGlobals.ACTION_NAMES[i];
         		if (rawChunk.mActivity.compareToIgnoreCase(action) == 0) {
