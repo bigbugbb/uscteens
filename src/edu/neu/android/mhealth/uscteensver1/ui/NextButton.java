@@ -9,14 +9,14 @@ import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 
-public class ButtonNext extends CustomButton {
+public class NextButton extends CustomButton {
 
 	protected int   mColor = 0xff0066ff;
 	protected float mTextX = 0;
 	protected float mTextY = 0;	
 	protected Paint mPaintText = null;
 	
-	public ButtonNext(Resources res) {
+	public NextButton(Resources res) {
 		super(res);
 		
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);

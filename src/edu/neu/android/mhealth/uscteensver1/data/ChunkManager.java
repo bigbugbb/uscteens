@@ -9,9 +9,9 @@ import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonClock;
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonMerge;
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonSplit;
+import edu.neu.android.mhealth.uscteensver1.ui.ClockButton;
+import edu.neu.android.mhealth.uscteensver1.ui.MergeButton;
+import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
 import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph;
 import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph.OnGraphMovedListener;
@@ -25,11 +25,11 @@ public class ChunkManager {
 	
 	protected static int   sSelected = -1; // -1 indicates no chunk has been selected
 	protected static RectF sSelectedArea = new RectF();
-	protected static ButtonClock sClockL = null;
-	protected static ButtonClock sClockR = null;
-	protected static ButtonMerge sMergeL = null;
-	protected static ButtonMerge sMergeR = null;
-	protected static ButtonSplit sSplit  = null;
+	protected static ClockButton sClockL = null;
+	protected static ClockButton sClockR = null;
+	protected static MergeButton sMergeL = null;
+	protected static MergeButton sMergeR = null;
+	protected static SplitButton sSplit  = null;
 	
 	protected static float sDispOffsetX  = 0;
 	protected static float sDispOffsetY  = 0; // not really useful here
@@ -248,7 +248,7 @@ public class ChunkManager {
 			}
 		}			
 		Chunk curr = sChunks.get(i);
-		ButtonClock clock = curr.mClock;
+		ClockButton clock = curr.mClock;
 		float clockX = clock.getX() + curr.mDispOffsetX;
 		
 		return clockX < sCanvasWidth * 0.1;
@@ -264,7 +264,7 @@ public class ChunkManager {
 			}
 		}	
 		Chunk curr = sChunks.get(i);
-		ButtonClock clock = curr.mClock;
+		ClockButton clock = curr.mClock;
 		float clockX = clock.getX() + curr.mDispOffsetX;
 		
 		return clockX > sCanvasWidth * 0.85;
@@ -381,7 +381,7 @@ public class ChunkManager {
 		return i < sChunks.size();
 	}
 	
-	public static ArrayList<Chunk> getMergingChunks(ButtonMerge merge) {
+	public static ArrayList<Chunk> getMergingChunks(MergeButton merge) {
 		ArrayList<Chunk> chunks = new ArrayList<Chunk>();		
 		int size = sChunks.size();
 
@@ -423,7 +423,7 @@ public class ChunkManager {
 		return range;
 	}
 	
-	public static Chunk getChunkToSplit(ButtonSplit split) {
+	public static Chunk getChunkToSplit(SplitButton split) {
 		Chunk chunkToSplit = null;
 
 		for (Chunk c : sChunks) {			

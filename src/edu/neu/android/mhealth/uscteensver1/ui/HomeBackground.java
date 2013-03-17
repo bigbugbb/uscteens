@@ -6,9 +6,9 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
-public class BackgroundHome extends Background {
+public class HomeBackground extends Background {
 
-	public BackgroundHome(Resources res) {
+	public HomeBackground(Resources res) {
 		super(res);		
 		loadImages(new int[]{ R.drawable.background_home });
 	}	

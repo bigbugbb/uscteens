@@ -14,10 +14,10 @@ import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.GraphPage;
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonClock;
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonMerge;
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonQuest;
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonSplit;
+import edu.neu.android.mhealth.uscteensver1.ui.ClockButton;
+import edu.neu.android.mhealth.uscteensver1.ui.MergeButton;
+import edu.neu.android.mhealth.uscteensver1.ui.QuestButton;
+import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
 import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 
 // chunk data mapping to the motion graph
@@ -29,10 +29,10 @@ public class Chunk extends AppObject {
 	public int mStop;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
 	public int mOffset; // plus to reconstruct the real world value, the offset has not been scaled
 	public GraphPage   mParent;
-	public ButtonQuest mQuest;
-	public ButtonClock mClock;
-	public ButtonMerge mMerge;
-	public ButtonSplit mSplit;
+	public QuestButton mQuest;
+	public ClockButton mClock;
+	public MergeButton mMerge;
+	public SplitButton mSplit;
 	
 	protected float mDispOffsetX;
 	protected float mDispOffsetY;
@@ -57,10 +57,10 @@ public class Chunk extends AppObject {
 		mZOrder = ZOrders.CHUNK;
 		
 		mParent = (GraphPage) ChunkManager.getUserData();		
-		mQuest = new ButtonQuest(res, this, mParent);
-		mClock = new ButtonClock(res, this, mParent);
-		mMerge = new ButtonMerge(res, this, mParent);
-		mSplit = new ButtonSplit(res, this, mParent);
+		mQuest = new QuestButton(res, this, mParent);
+		mClock = new ClockButton(res, this, mParent);
+		mMerge = new MergeButton(res, this, mParent);
+		mSplit = new SplitButton(res, this, mParent);
 				
 		List<AppObject> objects = mParent.getObjectList();
 		objects.add(mQuest);

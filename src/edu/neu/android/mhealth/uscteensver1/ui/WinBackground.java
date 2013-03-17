@@ -9,7 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 
-public class BackgroundWin extends Background {
+public class WinBackground extends Background {
 	
 	protected float	mText1X = 0;
 	protected float	mText1Y = 0;
@@ -21,7 +21,7 @@ public class BackgroundWin extends Background {
 	protected Paint mPaintText1 = null;
 	protected Paint mPaintText2 = null;
 
-	public BackgroundWin(Resources res) {
+	public WinBackground(Resources res) {
 		super(res);
 		loadImages(new int[]{ 
 			R.drawable.congratulations_bar, R.drawable.win_background

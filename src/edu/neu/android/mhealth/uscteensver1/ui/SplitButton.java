@@ -11,7 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Bitmap.Config;
 import android.view.MotionEvent;
 
-public class ButtonMerge extends ChunkButton {
+public class SplitButton extends ChunkButton {
 
 	protected static boolean sImageLoaded = false;
 	protected static ArrayList<Bitmap> sImages = new ArrayList<Bitmap>();
@@ -48,36 +48,35 @@ public class ButtonMerge extends ChunkButton {
         }
 	}
 	
-	public ButtonMerge(Resources res, Chunk host, OnClickListener listener) {
+	public SplitButton(Resources res, Chunk host, OnClickListener listener) {
 		super(res, host);
-		loadImages(res, new int[]{ R.drawable.merge_btn });
+		loadImages(res, new int[]{ R.drawable.split_btn });
 		mWidth  = sImages.get(0).getWidth();
 		mHeight = sImages.get(0).getHeight();
-		mID = UIID.MERGE;
+		mID = UIID.SPLIT;
 		mListener = listener;
 		mVisible = false;
 	}
-
+	
 	@Override
 	public void measureSize(int width, int height) {
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
-		mY = height * 0.25f;
+		mY = height * 0.22f;		
 	}
 	
 	@Override
 	public void onSizeChanged(int width, int height) {
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
-
-		mY = height * 0.25f;		
+		mY = height * 0.22f;		
 	}
 	
 	@Override
 	public void onDraw(Canvas c) {
 		if (mVisible) {
-			c.drawBitmap(sImages.get(0), mX + mOffsetX, 
-				mY + mOffsetY, null);
+			c.drawBitmap(sImages.get(0), mX + mOffsetX + mOffsetInChunkX, 
+					mY + mOffsetY + mOffsetInChunkY, null);
 		}
 	}
 	
@@ -103,5 +102,4 @@ public class ButtonMerge extends ChunkButton {
 		mX -= 3;
 		mY -= 3;
 	}
-	
 }

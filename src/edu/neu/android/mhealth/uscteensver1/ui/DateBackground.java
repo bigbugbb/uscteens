@@ -9,11 +9,11 @@ import android.graphics.Typeface;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 
-public class BackgroundWeekday extends Background {
+public class DateBackground extends Background {
 	
 	protected Paint mPaint = null;
 
-	public BackgroundWeekday(Resources res) {
+	public DateBackground(Resources res) {
 		super(res);		
 		loadImages(new int[]{ R.drawable.weeksbar1, R.drawable.weeksbar2 });
 		

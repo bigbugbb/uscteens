@@ -7,7 +7,7 @@ import edu.neu.android.mhealth.uscteensver1.R.drawable;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow;
+import edu.neu.android.mhealth.uscteensver1.ui.ArrowButton;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
@@ -41,8 +41,8 @@ public class QuestView extends ImageView implements OnGestureListener,
 													  OnReachedEndListener,
 													  OnListViewScrollingListener {
 	
-	protected ButtonArrow mArrowUp   = null;
-	protected ButtonArrow mArrowDown = null;
+	protected ArrowButton mArrowUp   = null;
+	protected ArrowButton mArrowDown = null;
 	protected ActionListView mActionList = null;
 	protected AppScale  mAppScale  = AppScale.getInstance();
 	protected AppObject mSelObject = null;	
@@ -70,11 +70,11 @@ public class QuestView extends ImageView implements OnGestureListener,
 	public QuestView(Context context, AttributeSet attrs) {
 		super(context, attrs);	
 		
-		mArrowUp   = new ButtonArrow(context.getResources());
+		mArrowUp   = new ArrowButton(context.getResources());
 		mArrowUp.setVisible(false);
 		mArrowUp.changeArrowDir(false);
 		//mArrowUp.setVisible(false);
-		mArrowDown = new ButtonArrow(context.getResources());		
+		mArrowDown = new ArrowButton(context.getResources());		
 		mActionList = new ActionListView(context.getResources());
 		mActionList.setOnItemClickListener(this);
 		mActionList.setOnReachedEndListener(this);

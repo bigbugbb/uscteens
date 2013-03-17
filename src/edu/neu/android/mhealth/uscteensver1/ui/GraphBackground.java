@@ -7,12 +7,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
-public class BackgroundMain extends Background {
+public class GraphBackground extends Background {
 	
 	protected int mCanvasWidth  = 0;
 	protected int mCanvasHeight = 0;
 
-	public BackgroundMain(Resources res) {
+	public GraphBackground(Resources res) {
 		super(res);		
 		loadImages(new int[]{ R.drawable.menubar_background });
 	}	

@@ -29,10 +29,10 @@ public class GraphPage extends AppPage implements OnClickListener,
 												 OnSlideBarChangeListener,
 												 OnBoundaryScaleListener {
 
-	protected BackgroundMain mBackground  = null;
+	protected GraphBackground mBackground  = null;
 	protected MotionGraph	 mMotionGraph = null;
-	protected ButtonBack	 mBtnBack     = null;
-	protected ButtonNext	 mBtnNext     = null;
+	protected BackButton	 mBtnBack     = null;
+	protected NextButton	 mBtnNext     = null;
 	protected SlideBar	 	 mSlideBar    = null;
 	
 	protected View mView = null;	
@@ -58,7 +58,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	public List<AppObject> load() {
 		// create game objects
 		if (mBackground == null) {
-			mBackground = new BackgroundMain(mContext.getResources());			
+			mBackground = new GraphBackground(mContext.getResources());			
 			mObjects.add(mBackground);
 			mBackground.setID(UIID.BKGND);			
 		}
@@ -69,13 +69,13 @@ public class GraphPage extends AppPage implements OnClickListener,
 			mMotionGraph.setOnGraphMovedListener(this);
 		}
 		if (mBtnBack == null) {
-			mBtnBack = new ButtonBack(mContext.getResources());
+			mBtnBack = new BackButton(mContext.getResources());
 			mObjects.add(mBtnBack);
 			mBtnBack.setID(UIID.BACK);
 			mBtnBack.setOnClickListener(this);
 		}
 		if (mBtnNext == null) {
-			mBtnNext = new ButtonNext(mContext.getResources());
+			mBtnNext = new NextButton(mContext.getResources());
 			mObjects.add(mBtnNext);
 			mBtnNext.setID(UIID.NEXT);
 			mBtnNext.setOnClickListener(this);
@@ -235,26 +235,26 @@ public class GraphPage extends AppPage implements OnClickListener,
 				
 		switch (obj.getID()) {		
 		case UIID.BACK:			     
-			tryToBack((ButtonBack) obj);
+			tryToBack((BackButton) obj);
 			break;
 		case UIID.NEXT:    	
-			tryToNext((ButtonNext) obj);
+			tryToNext((NextButton) obj);
 			break;
 		case UIID.QUEST:						
-	        tryToQuest((ButtonQuest) obj);
+	        tryToQuest((QuestButton) obj);
 			break;
 		case UIID.SPLIT:
-			tryToSplit((ButtonSplit) obj);
+			tryToSplit((SplitButton) obj);
 			break;
 		case UIID.MERGE:
-			tryToMerge((ButtonMerge) obj);
+			tryToMerge((MergeButton) obj);
 			break;
 		default:
 			break;
 		}
 	}
 	
-	private void tryToBack(ButtonBack back) {
+	private void tryToBack(BackButton back) {
 		Chunk prevUnmarked = ChunkManager.getPreviousUnmarkedChunk();
 		if (prevUnmarked != null) {
 			mMotionGraph.moveGraph(prevUnmarked.mStart, 0);				
@@ -270,7 +270,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 
 	}
 	
-	private void tryToNext(ButtonNext next) {
+	private void tryToNext(NextButton next) {
 		Chunk nextUnmarked = ChunkManager.getNextUnmarkedChunk();
 		if (nextUnmarked != null) {
 			mMotionGraph.moveGraph(nextUnmarked.mStart, 0);			
@@ -286,7 +286,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 		
 	}
 	
-	private void tryToQuest(ButtonQuest quest) {
+	private void tryToQuest(QuestButton quest) {
 		Message msg = mHandler.obtainMessage();
 		msg.arg1 = quest.getHost().getChunkRealStartTime();
 		msg.arg2 = quest.getHost().getChunkRealStopTime();		
@@ -294,7 +294,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 		mHandler.sendMessage(msg);				
 	}
 	
-	private void tryToSplit(ButtonSplit split) {		
+	private void tryToSplit(SplitButton split) {		
 		if (ChunkManager.splitChunk(split.getHost())) {
 			mSlideBar.updateUnmarkedRange();
 		} else {
@@ -302,7 +302,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 		}
 	}
 	
-	private void tryToMerge(ButtonMerge merge) {		
+	private void tryToMerge(MergeButton merge) {		
 		// get the chunks to merge according to the pressed merge button
 		ArrayList<Chunk> mChunksToMerge = ChunkManager.getMergingChunks(merge);
 		String actionL = mChunksToMerge.get(0).mQuest.getStringAnswer();
@@ -328,7 +328,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	}
 	
 	public void finishQuest(Object... params) {
-		ButtonQuest quest = (ButtonQuest) mLastSelObject;
+		QuestButton quest = (QuestButton) mLastSelObject;
 		int index = (Integer) params[0];
 		quest.setAnswer(USCTeensGlobals.ACTION_IMGS[index], USCTeensGlobals.ACTION_NAMES[index]);
 		synchronized (this) {
@@ -338,7 +338,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	}		
 	
 	public void finishMerge(Object... params) {
-		ButtonMerge merge = (ButtonMerge) mLastSelObject;
+		MergeButton merge = (MergeButton) mLastSelObject;
 		String selection = (String) params[0];
 		Chunk maintain = null; 		
 		ArrayList<Chunk> mChunksToMerge = ChunkManager.getMergingChunks(merge);

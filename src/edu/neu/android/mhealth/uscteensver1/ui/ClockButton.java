@@ -17,7 +17,7 @@ import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 
 
 
-public class ButtonClock extends ChunkButton {
+public class ClockButton extends ChunkButton {
 
 	protected static Paint sPaint = new Paint();
 	protected static Paint sTimePaint = new Paint();
@@ -77,7 +77,7 @@ public class ButtonClock extends ChunkButton {
         }
 	}
 	
-	public ButtonClock(Resources res, Chunk host, OnClickListener listener) {
+	public ClockButton(Resources res, Chunk host, OnClickListener listener) {
 		super(res, host);
 		loadImages(res, new int[]{ R.drawable.clock });
 		mWidth  = sImages.get(0).getWidth();

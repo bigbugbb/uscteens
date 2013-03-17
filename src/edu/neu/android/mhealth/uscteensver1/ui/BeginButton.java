@@ -1,5 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import edu.neu.android.mhealth.uscteensver1.R;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -7,25 +8,24 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.view.MotionEvent;
-import edu.neu.android.mhealth.uscteensver1.R;
 
-public class ButtonReward extends CustomButton {
+public class BeginButton extends CustomButton {
 
 	protected int   mColor = 0xff0066ff;
 	protected float mTextX = 0;
-	protected float mTextY = 0;	
+	protected float mTextY = 0;
 	protected Paint mPaintText = null;	
 
-	public ButtonReward(Resources res) {
+	public BeginButton(Resources res) {
 		super(res);
-		loadImages(new int[]{ R.drawable.reward_btn });
+		loadImages(new int[]{ R.drawable.begin_btn });
 		
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText.setColor(Color.WHITE);
 		mPaintText.setStyle(Style.FILL);
 		mPaintText.setTypeface(Typeface.SERIF);
 		mPaintText.setFakeBoldText(true);
-		mPaintText.setTextSize(sAppScale.doScaleT(46));
+		mPaintText.setTextSize(sAppScale.doScaleW(46));
 		mPaintText.setTextAlign(Paint.Align.CENTER);
 	}
 
@@ -42,7 +42,7 @@ public class ButtonReward extends CustomButton {
 	@Override
 	public void onDraw(Canvas c) {
 		c.drawBitmap(mImages.get(0), mX, mY, null);
-		c.drawText("REWARD", mTextX, mTextY, mPaintText);
+		c.drawText("BEGIN", mTextX, mTextY, mPaintText);
 	}
 
 	@Override

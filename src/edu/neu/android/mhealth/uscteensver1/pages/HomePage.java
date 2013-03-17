@@ -4,8 +4,8 @@ import java.util.List;
 
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.ui.BackgroundHome;
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonBegin;
+import edu.neu.android.mhealth.uscteensver1.ui.HomeBackground;
+import edu.neu.android.mhealth.uscteensver1.ui.BeginButton;
 import edu.neu.android.mhealth.uscteensver1.ui.HomeTitle;
 import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.SetupTextView;
@@ -20,8 +20,8 @@ import android.view.View;
 public class HomePage extends AppPage implements OnClickListener {
 	
 	protected HomeTitle		 mTitle      = null;
-	protected BackgroundHome mBackground = null;
-	protected ButtonBegin	 mBtnBegin   = null;
+	protected HomeBackground mBackground = null;
+	protected BeginButton	 mBtnBegin   = null;
 	protected SetupTextView  mTextView   = null;
 	protected final static int TITLE = 0;
 	protected final static int BKGND = 1;
@@ -38,7 +38,7 @@ public class HomePage extends AppPage implements OnClickListener {
 	public List<AppObject> load() {
 		// create game objects
 		if (mBackground == null) {
-			mBackground = new BackgroundHome(mContext.getResources());			
+			mBackground = new HomeBackground(mContext.getResources());			
 			mObjects.add(mBackground);
 			mBackground.setID(BKGND);
 		}
@@ -48,7 +48,7 @@ public class HomePage extends AppPage implements OnClickListener {
 			mTitle.setID(TITLE);
 		}
 		if (mBtnBegin == null) {
-			mBtnBegin = new ButtonBegin(mContext.getResources());
+			mBtnBegin = new BeginButton(mContext.getResources());
 			mObjects.add(mBtnBegin);
 			mBtnBegin.setID(BEGIN);
 			mBtnBegin.setOnClickListener(this);

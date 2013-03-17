@@ -7,11 +7,11 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 
-public class ButtonReturn extends CustomButton {
+public class ReturnButton extends CustomButton {
 	
 	protected Paint mPaintText = null;
 
-	public ButtonReturn(Resources res) {
+	public ReturnButton(Resources res) {
 		super(res);
 		
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);

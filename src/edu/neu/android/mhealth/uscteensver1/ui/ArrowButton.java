@@ -9,13 +9,13 @@ import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 
 
-public class ButtonArrow extends CustomButton { 
+public class ArrowButton extends CustomButton { 
 	
 	protected Paint mPaint = null;
 	protected boolean mDown = true;
 	protected boolean mAlignCenter = true;
 
-	public ButtonArrow(Resources res) {
+	public ArrowButton(Resources res) {
 		super(res);
 		loadImages(new int[]{ R.drawable.popup_wind_arrow, R.drawable.popup_wind_arrow_ops });
 		setKind(BUTTON);

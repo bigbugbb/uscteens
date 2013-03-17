@@ -8,9 +8,9 @@ import java.util.List;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.activities.StartDateSetupActivity;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.ui.BackgroundWeekday;
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow;
-import edu.neu.android.mhealth.uscteensver1.ui.ButtonReturn;
+import edu.neu.android.mhealth.uscteensver1.ui.DateBackground;
+import edu.neu.android.mhealth.uscteensver1.ui.ArrowButton;
+import edu.neu.android.mhealth.uscteensver1.ui.ReturnButton;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
 import edu.neu.android.mhealth.uscteensver1.ui.DateListView;
@@ -35,13 +35,13 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 													OnListViewScrollingListener {
 	
 	private final static String TAG = "WeekdayPage";
-	protected BackgroundWeekday mBackground = null;
+	protected DateBackground mBackground = null;
 	protected DateListView      mListViewWeek1 = null;
 	protected DateListView      mListViewWeek2 = null;
-	protected ButtonArrow		mArrowLeftUp  = null;
-	protected ButtonArrow		mArrowRightUp = null;
-	protected ButtonArrow		mArrowLeftBottom  = null;
-	protected ButtonArrow		mArrowRightBottom = null;	
+	protected ArrowButton		mArrowLeftUp  = null;
+	protected ArrowButton		mArrowRightUp = null;
+	protected ArrowButton		mArrowLeftBottom  = null;
+	protected ArrowButton		mArrowRightBottom = null;	
 	
 	protected View mView = null;
 
@@ -55,7 +55,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 		String startDate = DataStorage.getStartDate(mContext, "");
 		// create game objects
 		if (mBackground == null) {
-			mBackground = new BackgroundWeekday(mContext.getResources());			
+			mBackground = new DateBackground(mContext.getResources());			
 			mObjects.add(mBackground);			
 		}
 		if (mListViewWeek1 == null) {
@@ -77,7 +77,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mListViewWeek2.setOnListViewScrollingListener(this);
 		}
 		if (mArrowLeftUp == null) {
-			mArrowLeftUp = new ButtonArrow(mContext.getResources());
+			mArrowLeftUp = new ArrowButton(mContext.getResources());
 			mObjects.add(mArrowLeftUp);
 			mArrowLeftUp.setOnClickListener(this);
 			mArrowLeftUp.setX(0);
@@ -87,7 +87,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mArrowLeftUp.changeArrowDir(false);
 		}
 		if (mArrowRightUp == null) {
-			mArrowRightUp = new ButtonArrow(mContext.getResources());
+			mArrowRightUp = new ArrowButton(mContext.getResources());
 			mObjects.add(mArrowRightUp);
 			mArrowRightUp.setOnClickListener(this);
 			mArrowRightUp.setX(appScale.doScaleW(640));
@@ -97,7 +97,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mArrowRightUp.changeArrowDir(false);
 		}
 		if (mArrowLeftBottom == null) {
-			mArrowLeftBottom = new ButtonArrow(mContext.getResources());
+			mArrowLeftBottom = new ArrowButton(mContext.getResources());
 			mObjects.add(mArrowLeftBottom);
 			mArrowLeftBottom.setOnClickListener(this);
 			mArrowLeftBottom.setX(0);
@@ -105,7 +105,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mArrowLeftBottom.alignCenter(false);
 		}
 		if (mArrowRightBottom == null) {
-			mArrowRightBottom = new ButtonArrow(mContext.getResources());
+			mArrowRightBottom = new ArrowButton(mContext.getResources());
 			mObjects.add(mArrowRightBottom);
 			mArrowRightBottom.setOnClickListener(this);
 			mArrowRightBottom.setX(appScale.doScaleW(640));
