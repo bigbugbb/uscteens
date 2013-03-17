@@ -12,7 +12,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Paint.Style;
 
 
-public class ListViewActions extends ListView {
+public class ActionListView extends ListView {
 	
 	public class ActionItem extends ListItem {
 		
@@ -37,7 +37,7 @@ public class ListViewActions extends ListView {
 
 	}
 	
-	public ListViewActions(Resources res) {
+	public ActionListView(Resources res) {
 		super(res);
 
 		for (int i = 0; i < USCTeensGlobals.ACTION_NAMES.length; ++i) {

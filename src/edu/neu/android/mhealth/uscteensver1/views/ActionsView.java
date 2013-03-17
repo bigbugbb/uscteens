@@ -13,7 +13,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
-import edu.neu.android.mhealth.uscteensver1.ui.ListViewActions;
+import edu.neu.android.mhealth.uscteensver1.ui.ActionListView;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 
 import android.content.Context;
@@ -43,7 +43,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	
 	protected ButtonArrow mArrowUp   = null;
 	protected ButtonArrow mArrowDown = null;
-	protected ListViewActions mActionList = null;
+	protected ActionListView mActionList = null;
 	protected AppScale  mAppScale  = AppScale.getInstance();
 	protected AppObject mSelObject = null;	
 	protected ArrayList<AppObject> mObjects = new ArrayList<AppObject>();
@@ -75,7 +75,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 		mArrowUp.changeArrowDir(false);
 		//mArrowUp.setVisible(false);
 		mArrowDown = new ButtonArrow(context.getResources());		
-		mActionList = new ListViewActions(context.getResources());
+		mActionList = new ActionListView(context.getResources());
 		mActionList.setOnItemClickListener(this);
 		mActionList.setOnReachedEndListener(this);
 		mActionList.setOnListViewScrollingListener(this);

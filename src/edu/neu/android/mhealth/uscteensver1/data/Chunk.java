@@ -104,7 +104,7 @@ public class Chunk extends AppObject {
 		return sb.toString();
 	}	
 	
-	public boolean isLastChunkOfCurrentDay() {
+	public boolean isLastChunkOfToday() {
 		String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		String startDate = toDateTime(mStart / USCTeensGlobals.PIXEL_PER_DATA).substring(0, 10);
 		

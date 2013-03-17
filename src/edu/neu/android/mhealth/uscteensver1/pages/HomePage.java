@@ -8,7 +8,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.BackgroundHome;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonBegin;
 import edu.neu.android.mhealth.uscteensver1.ui.HomeTitle;
 import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
-import edu.neu.android.mhealth.uscteensver1.ui.TextViewSetup;
+import edu.neu.android.mhealth.uscteensver1.ui.SetupTextView;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
 
@@ -22,7 +22,7 @@ public class HomePage extends AppPage implements OnClickListener {
 	protected HomeTitle		 mTitle      = null;
 	protected BackgroundHome mBackground = null;
 	protected ButtonBegin	 mBtnBegin   = null;
-	protected TextViewSetup  mTextView   = null;
+	protected SetupTextView  mTextView   = null;
 	protected final static int TITLE = 0;
 	protected final static int BKGND = 1;
 	protected final static int BEGIN = 2;
@@ -54,7 +54,7 @@ public class HomePage extends AppPage implements OnClickListener {
 			mBtnBegin.setOnClickListener(this);
 		}
 		if (mTextView == null) {
-			mTextView = new TextViewSetup(mContext.getResources());
+			mTextView = new SetupTextView(mContext.getResources());
 			mObjects.add(mTextView);
 			mTextView.setID(SETUP);
 			mTextView.setOnClickListener(this);

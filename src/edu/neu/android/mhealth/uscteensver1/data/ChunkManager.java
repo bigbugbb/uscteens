@@ -311,8 +311,8 @@ public class ChunkManager {
 	}
 	
 	public static void selectChunk(int index) { ///////////////
-		assert(index >= 0 && index < sChunks.size());
-		if (sSelected > -1 && sSelected < sChunks.size()) {				
+		assert(index >= 0 && index < sChunks.size());		
+		if (sSelected > -1 && sSelected < sChunks.size()) {		
 			sChunks.get(sSelected).setSelected(false);
 		}
 		sSelected = index;
@@ -339,7 +339,7 @@ public class ChunkManager {
 			sSplit = null;
 		}		
 
-		Chunk c = sChunks.get(index); ///////////////////////
+		Chunk c = sChunks.get(index); ///////////////////////		
 		c.setSelected(true);
 		sClockL = c.mClock;
 		sMergeL = c.mMerge;
@@ -357,13 +357,13 @@ public class ChunkManager {
 		if (sClockR != null) {
 			sClockR.setVisible(true);
 		}
-		if (sMergeL != null && index != 0) {
+		if (sMergeL != null && index != 0 && !sMergeL.getHost().isLastChunkOfToday()) {
 			sMergeL.setVisible(true);
 		}
-		if (sMergeR != null) {
+		if (sMergeR != null && !sMergeR.getHost().isLastChunkOfToday()) {
 			sMergeR.setVisible(true);
 		}
-		if (sSplit != null) {
+		if (sSplit != null && !sSplit.getHost().isLastChunkOfToday()) {
 			sSplit.setVisible(true);
 		}
 		

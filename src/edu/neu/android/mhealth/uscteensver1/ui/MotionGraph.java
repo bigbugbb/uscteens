@@ -1,5 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import java.util.Arrays;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -21,36 +23,35 @@ import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 
 public class MotionGraph extends AppObject {
 			
-	protected int    mStart = 0;  // the virtual pixel offset on the left side of the screen
-	protected int    mEnd   = 0;  // the virtual pixel offset on the right side of the screen
-	protected int    mCanvasWidth  = 0;
-	protected int    mCanvasHeight = 0;
-	protected int    mRightBound = 0;
-	protected Paint  mBackgroundGray  = null;
-	protected Paint  mBackgroundWhite = null;
-	protected Paint  mPaint = null;
-	protected Paint	 mDataPaint = null;
-	protected Paint  mSlashPaint = null;
-	protected Paint  mMarkedPaint = null;
-	protected Paint  mSelChunkPaint = null;
-	protected Paint  mSelChunkBackPaint = null;
-	protected Paint  mPaintTxt  = null;
-	protected Paint  mPaintDate = null;
-	protected int[]  mActions = null;
-	protected int    mActLenInPix = 0; // total activity data length in pixel(already scaled)
-	protected String mDate = "";
+	protected int     mStart = 0;  // the virtual pixel offset on the left side of the screen
+	protected int     mEnd   = 0;  // the virtual pixel offset on the right side of the screen
+	protected int     mCanvasWidth  = 0;
+	protected int     mCanvasHeight = 0;
+	protected int     mRightBound = 0;
+	protected Paint   mBackgroundGray  = null;
+	protected Paint   mBackgroundWhite = null;
+	protected Paint   mPaint = null;
+	protected Paint	  mDataPaint = null;
+	protected Paint   mSlashPaint = null;
+	protected Paint   mMarkedPaint = null;
+	protected Paint   mSelChunkPaint = null;
+	protected Paint   mSelChunkBackPaint = null;
+	protected Paint   mPaintTxt  = null;
+	protected Paint   mPaintDate = null;
+	protected float[] mPTS = null;
+	protected int[]   mScaledData = null;
+	protected int     mDataLengthInPixel = 0; // total activity data length in pixel(already scaled)
+	protected String  mDate = "";
 	
-	protected float  mOffsetX = 0;
-	protected float  mOffsetY = 0;
-	protected float  mOffsetSpeedX = 0;
-	protected float  mOffsetSpeedY = 0;
-	protected float  mAspectRatio  = 1;
+	protected float   mOffsetSpeedX = 0;
+	protected float   mOffsetSpeedY = 0;
+	protected float   mAspectRatio  = 1;
 
 	public MotionGraph(Resources res) {
 		super(res);				
-
-		mActions 	 = DataSource.getDrawableData();
-		mActLenInPix = DataSource.getDrawableDataLengthInPixel();	
+		
+		mDataLengthInPixel = DataSource.getDrawableDataLengthInPixel();
+		mScaledData = Arrays.copyOf(DataSource.getDrawableData(), mDataLengthInPixel);
 		
 		loadImages(new int[]{ R.drawable.menubar_background });
 		mAspectRatio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();
@@ -145,7 +146,7 @@ public class MotionGraph extends AppObject {
 	@Override
 	public void onDraw(Canvas c) {
 		//c.drawRect(0, 0, mWidth, mHeight, mBackgroundGray);
-		c.drawRect(mOffsetX, 0, mWidth + mOffsetX, mHeight, mBackgroundWhite);
+		c.drawRect(0, 0, mWidth, mHeight, mBackgroundWhite);
 		// draw the border
 		c.drawLine(0, 0, mWidth, 0, mPaint);
 		c.drawLine(0, 0, 0, mHeight, mPaint);
@@ -167,7 +168,7 @@ public class MotionGraph extends AppObject {
 			}
 			mStart = (mStart - offset < 0) ? 0 : mStart - offset;				
 			mEnd   = mStart + (int) mWidth;			
-			mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;
+			mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
 			ChunkManager.setDisplayOffset(-mStart, 0);
 			
 			if (mListener != null) {
@@ -181,8 +182,8 @@ public class MotionGraph extends AppObject {
 			// get the right region to draw, clip the part out of screen
 			if (chunk.mStart - mStart > mWidth || chunk.mStop - mStart < 0)
 				continue;
-			RectF r = new RectF(chunk.mStart - mStart + mOffsetX, 0,
-					chunk.mStop - mStart + mOffsetX, mHeight);
+			RectF r = new RectF(chunk.mStart - mStart, 0,
+					chunk.mStop - mStart, mHeight);
 			// check the selection
 			if (chunk.isSelected()) {
 				c.drawRect(r, mSelChunkBackPaint);
@@ -191,17 +192,19 @@ public class MotionGraph extends AppObject {
 			}
 		}
 		
-		// draw the graph
-		float scale = (float) mHeight / DataSource.getMaxDrawableDataValue();
-		for (int i = mStart; i < mEnd - USCTeensGlobals.PIXEL_PER_DATA; ++i) {	
-			int sec = i / USCTeensGlobals.PIXEL_PER_DATA;		
-			float x1 = i - mStart + mOffsetX;
-			float y1 = mHeight - mActions[sec] * scale;
-			float x2 = i - mStart + USCTeensGlobals.PIXEL_PER_DATA + mOffsetX;
-			float y2 = mHeight - mActions[sec + 1] * scale;
-			if (mActions[sec] >= 0 && mActions[sec + 1] >= 0) {
-				c.drawLine(x1, y1, x2, y2, mDataPaint);
-			} else if (mActions[sec] < 0) {
+		/*
+		 *  draw the data
+		 */
+		int count = 0;			
+		for (int i = mStart; i < mEnd - USCTeensGlobals.PIXEL_PER_DATA; ++i) {
+			int sec = i / USCTeensGlobals.PIXEL_PER_DATA;
+			if (mScaledData[sec] >= 0 && mScaledData[sec + 1] >= 0) {					
+				mPTS[(count << 2) + 0] = i - mStart;
+				mPTS[(count << 2) + 1] = mHeight - mScaledData[sec];
+				mPTS[(count << 2) + 2] = i - mStart + USCTeensGlobals.PIXEL_PER_DATA;
+				mPTS[(count << 2) + 3] = mHeight - mScaledData[sec + 1];															
+				++count;
+			} else if (mScaledData[sec] < 0) {
 				int start = 0, stop = 0, delta = 0;
 				// find the period that should be drawn
 				for (Pair pair : DataSource.getNoDataTimePeriods()) {
@@ -211,9 +214,9 @@ public class MotionGraph extends AppObject {
 						delta = stop - start;
 					}
 				}
-				// draw slashes with 45 degree
-				float slashX1 = start - mStart + mOffsetX;
-				float slashX2 = stop - mStart + mOffsetX;
+				// draw slashes with 45 degree for periods without data
+				float slashX1 = start - mStart;
+				float slashX2 = stop - mStart;
 				int step = (int) sAppScale.doScaleH(8.0f);
 				// draw slashes from top to bottom
 				for (int m = (int) mHeight; m > 0; m -= step) {
@@ -229,7 +232,8 @@ public class MotionGraph extends AppObject {
 				// skip the space that has been drawn
 				i += delta - (start >= mStart ? 0 : i - start) - 1; 
 			}
-		}		
+		}	
+		c.drawLines(mPTS, 0, count << 2, mDataPaint);
 		
 		// draw the chunk lines and the corresponding buttons
 		for (int i = 0; i < ChunkManager.getChunkSize(); ++i) {
@@ -265,16 +269,28 @@ public class MotionGraph extends AppObject {
 		mHeight = height - (int)(width * mAspectRatio);
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
+		
+		// for draw lines
+		mPTS = new float[width * 4];
+		
+		// scale the data for drawing in the specified area
+		float scale = (float) mHeight / DataSource.getMaxDrawableDataValue();
+		for (int i = 0; i < mScaledData.length; ++i) {
+			if (mScaledData[i] >= 0) {
+				mScaledData[i] *= scale;
+				mScaledData[i] += Math.max(1.0f, Math.min(sAppScale.doScaleT(4.0f), 4.0f)) / 2;
+			}			
+		}
 
 		for (Chunk chunk : ChunkManager.getChunks()) {
 			chunk.setHeight(mHeight);
 		}
-		
+
 		// ....
 		mStart = 0;
 		mEnd   = mStart + (int)mWidth;
-		mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;	
-		mRightBound = mActLenInPix - (int) mWidth;
+		mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;	
+		mRightBound = mDataLengthInPixel - (int) mWidth;
 		
 		ChunkManager.setViewSize(mWidth, mHeight);
 		ChunkManager.setCanvasSize(width, height);
@@ -327,8 +343,8 @@ public class MotionGraph extends AppObject {
 		mStart = mStart + offset;				
 		mEnd   = mStart + (int) mWidth;
 		mStart = (mStart < 0) ? 0 : mStart;
-		mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;
-		ChunkManager.setDisplayOffset(-mStart + mOffsetX, 0);
+		mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
+		ChunkManager.setDisplayOffset(-mStart, 0);
 		
 		if (mListener != null) {
 			mListener.OnGraphMoved(this, (float) mStart / mRightBound);
@@ -341,9 +357,9 @@ public class MotionGraph extends AppObject {
 		if (Math.abs((int) mSpeedX) > 0) {
 			mSpeedX = 0;
 		}
-		mStart = (int) ((x > mActLenInPix - mWidth) ? mActLenInPix - mWidth : x);
+		mStart = (int) ((x > mDataLengthInPixel - mWidth) ? mDataLengthInPixel - mWidth : x);
 		mEnd   = mStart + (int) mWidth;
-		mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;
+		mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
 		
 		ChunkManager.setDisplayOffset(-mStart, 0);
 	}
@@ -352,10 +368,10 @@ public class MotionGraph extends AppObject {
 		if (Math.abs((int) mSpeedX) > 0) {
 			mSpeedX = 0;
 		}
-		int x = (int) ((mActLenInPix - (int) mWidth) * (progress / 100f));
+		int x = (int) ((mDataLengthInPixel - (int) mWidth) * (progress / 100f));
 		mStart = (x < 0) ? 0 : x;
 		mEnd   = mStart + (int) mWidth;	
-		mEnd   = (mEnd > mActLenInPix) ? mActLenInPix : mEnd;
+		mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
 		
 		ChunkManager.setDisplayOffset(-mStart, 0);
 	}

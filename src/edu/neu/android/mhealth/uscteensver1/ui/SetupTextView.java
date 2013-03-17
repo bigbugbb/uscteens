@@ -10,11 +10,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 
-public class TextViewSetup extends TextView {
+public class SetupTextView extends TextView {
 	
 	//private String mText;
 
-	public TextViewSetup(Resources res) {
+	public SetupTextView(Resources res) {
 		super(res);
 		mPaintTxt.setColor(Color.RED);
 		mPaintTxt.setTextAlign(Align.CENTER);

@@ -13,7 +13,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.ButtonArrow;
 import edu.neu.android.mhealth.uscteensver1.ui.ButtonReturn;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
-import edu.neu.android.mhealth.uscteensver1.ui.ListViewWeek;
+import edu.neu.android.mhealth.uscteensver1.ui.DateListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
@@ -36,8 +36,8 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 	
 	private final static String TAG = "WeekdayPage";
 	protected BackgroundWeekday mBackground = null;
-	protected ListViewWeek      mListViewWeek1 = null;
-	protected ListViewWeek      mListViewWeek2 = null;
+	protected DateListView      mListViewWeek1 = null;
+	protected DateListView      mListViewWeek2 = null;
 	protected ButtonArrow		mArrowLeftUp  = null;
 	protected ButtonArrow		mArrowRightUp = null;
 	protected ButtonArrow		mArrowLeftBottom  = null;
@@ -59,7 +59,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mObjects.add(mBackground);			
 		}
 		if (mListViewWeek1 == null) {
-			mListViewWeek1 = new ListViewWeek(mContext.getResources(), 1, startDate);
+			mListViewWeek1 = new DateListView(mContext.getResources(), 1, startDate);
 			mObjects.add(mListViewWeek1);	
 			mListViewWeek1.setX(0);
 			mListViewWeek1.setY(appScale.doScaleH(178 + mListViewWeek1.getBorderWidth()));
@@ -68,7 +68,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mListViewWeek1.setOnListViewScrollingListener(this);
 		}
 		if (mListViewWeek2 == null) {
-			mListViewWeek2 = new ListViewWeek(mContext.getResources(), 2, startDate);
+			mListViewWeek2 = new DateListView(mContext.getResources(), 2, startDate);
 			mObjects.add(mListViewWeek2);
 			mListViewWeek2.setX(appScale.doScaleW(643));
 			mListViewWeek2.setY(appScale.doScaleH(178 + mListViewWeek2.getBorderWidth()));

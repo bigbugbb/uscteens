@@ -18,20 +18,18 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
-public class ListViewWeek extends ListView {
+public class DateListView extends ListView {
 
 	static String[] sWeekdays = {
 		"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 	};
 	
-	public ListViewWeek(Resources res, int week, String startDate) {
+	public DateListView(Resources res, int week, String startDate) {
 		super(res);
 		
 		assert(week == 1 || week == 2);
-	
-		// get current date in String
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");	                           
-		String curDate = sf.format(new Date());
+                     
+		String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 							
 		initializeItems(week, startDate, curDate);
 	}
