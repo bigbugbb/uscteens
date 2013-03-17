@@ -23,8 +23,6 @@ public class ChunkManager {
 	protected static Object sUserData = null;			
 	protected static ArrayList<Chunk> sChunks = null;
 	
-	protected final static int MINIMUM_SPACE_FOR_SPLIT = 240;
-	
 	protected static int   sSelected = -1; // -1 indicates no chunk has been selected
 	protected static RectF sSelectedArea = new RectF();
 	protected static ButtonClock sClockL = null;
@@ -447,11 +445,11 @@ public class ChunkManager {
 
 		// check if there is enough space for the split
 		if (offsetInChunkX > 0) {
-			if (chunkToSplit.mStop - splitX < appScale.doScaleW(MINIMUM_SPACE_FOR_SPLIT)) {
+			if (chunkToSplit.mStop - splitX < appScale.doScaleW(Chunk.MINIMUM_CHUNK_SPACE)) {
 				return false;
 			}
 		} else {
-			if (splitX - chunkToSplit.mStart < appScale.doScaleW(MINIMUM_SPACE_FOR_SPLIT)) {
+			if (splitX - chunkToSplit.mStart < appScale.doScaleW(Chunk.MINIMUM_CHUNK_SPACE)) {
 				return false;
 			}
 		}		

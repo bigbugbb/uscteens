@@ -23,7 +23,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 // chunk data mapping to the motion graph
 public class Chunk extends AppObject {
 	
-	public final static int MINIMUM_SPACE = 240;
+	public final static int MINIMUM_CHUNK_SPACE = 240;
 	
 	public int mStart;  // in pixel, has been scaled by DataSource.PIXEL_SCALE
 	public int mStop;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
@@ -163,7 +163,7 @@ public class Chunk extends AppObject {
 	
 	public boolean update(int start, int stop, int offset) {
 		// next must be bigger than the current
-		if (stop - start < sAppScale.doScaleW(MINIMUM_SPACE)) {
+		if (stop - start < sAppScale.doScaleW(MINIMUM_CHUNK_SPACE)) {
 			return false; // just ignore, because the space for one chunk will be too small
 		}		
 		mStart  = start;

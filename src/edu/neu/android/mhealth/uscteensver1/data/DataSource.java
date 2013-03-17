@@ -28,6 +28,7 @@ import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.PhoneInfo;
+import edu.neu.android.wocketslib.utils.WOCKETSException;
 
 import android.content.Context;
 import android.util.Pair;
@@ -185,9 +186,9 @@ public class DataSource {
 		}	
 		// first clear the data container
 		sRawChksWrap.clear();		
-		SAXReader saxReader = new SAXReader();		
+		SAXReader saxReader = new SAXReader();				
 		try {
-			Document document = saxReader.read(new File(chunkFilePaths[0]));								
+			Document document = saxReader.read(new File(chunkFilePaths[0]));				
 			Element root = document.getRootElement();
 
 		    for (Iterator i = root.elementIterator(); i.hasNext();) {
@@ -201,21 +202,18 @@ public class DataSource {
 			    	   Element prop  = (Element) k.next();			    	
 			    	   
 			    	   String modify = "";
-			    	   String create = "";
-			    	   String type   = "";
+			    	   String create = "";			    	   
 			    	   for (Iterator n = prop.attributeIterator(); n.hasNext();) {
-			    	       Attribute attribute = (Attribute) n.next();
-			    	       
-			    	       if (attribute.getName().compareTo("ACTIVITY_TYPE") == 0) {
-			    	    	   type   = attribute.getText();
-			    	       } else if (attribute.getName().compareTo("LAST_MODIFIED") == 0) {
+			    	       Attribute attribute = (Attribute) n.next();			    	       
+			    	       if (attribute.getName().compareTo("LAST_MODIFIED") == 0) {
 			    	    	   modify = attribute.getText();
 			    	       } else if (attribute.getName().compareTo("DATE_CREATED") == 0) {
 			    	    	   create = attribute.getText(); 	    	   
 			    	       }
-			    	    }
+			    	   }
 			    	   
-			    	   RawChunk rawchunk = new RawChunk(start.getText(), stop.getText(), type, create, modify);
+			    	   RawChunk rawchunk = new RawChunk(
+			    			   start.getText(), stop.getText(), label.getText(), create, modify);
 			    	   sRawChksWrap.add(rawchunk);
 			       }
 		        
@@ -361,7 +359,7 @@ public class DataSource {
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.ANNOTATION_FOLDER + date + File.separator + USCTeensGlobals.ANNOTATION_SET + "." + 
 				/*PhoneInfo.getID(mContext) + "." + */date + ".annotation.xml";			
-		
+
 		sRawChksWrap.clear();
 		for (int i = 0; i < chunks.size(); ++i) {
 			Chunk chunk = chunks.get(i);
@@ -376,22 +374,29 @@ public class DataSource {
         root.addAttribute("xmlns", "urn:mites-schema");
         // ANNOTATIONS
         Element annotations = root.addElement("ANNOTATIONS")
-	        .addAttribute("DATASET", "TeenActivity")
-	        .addAttribute("ANNOTATOR", "Simple-Algorithm")
+	        .addAttribute("DATASET", "USCTeens")
+	        .addAttribute("ANNOTATOR", "bigbug")
 	        .addAttribute("EMAIL", "bigbugbb@gmail.com")
-	        .addAttribute("DESCRIPTION", "Teen activity labelling")
-	        .addAttribute("METHOD", "based on pre-defined theresholds")
+	        .addAttribute("DESCRIPTION", "teen activities")
+	        .addAttribute("METHOD", "based on convolution & pre-defined thresholds")
 	        .addAttribute("NOTES", "")
-	        .addAttribute("ALLLABELLED", sRawChksWrap.areAllChunksLabelled() ? "yes" : "no");
+	        .addAttribute("ALL_LABELLED", sRawChksWrap.areAllChunksLabelled() ? "yes" : "no");
         
         for (RawChunk rawChunk : sRawChksWrap) {
+        	int index = 32; // unlabelled
+        	for (int i = 0; i < USCTeensGlobals.ACTION_NAMES.length; ++i) {
+        		String action = USCTeensGlobals.ACTION_NAMES[i];
+        		if (rawChunk.mActivity.compareToIgnoreCase(action) == 0) {
+        			index = i;
+        		}
+        	}
 	        // ANNOTATION
 	        Element annotation = annotations.addElement("ANNOTATION")
-	        	.addAttribute("GUID", "");
+	        	.addAttribute("GUID", USCTeensGlobals.ANNOTATION_GUID);
 	        // LABEL
 	        Element label = annotation.addElement("LABEL")
-		        .addAttribute("GUID", "")
-		        .addText("1");
+		        .addAttribute("GUID", USCTeensGlobals.ACTIONS_GUID[index])
+		        .addText(rawChunk.mActivity);
 	        // START_DT
 	        Element start_dt = annotation.addElement("START_DT")
 	        	.addText(rawChunk.mStartDate);
@@ -400,16 +405,21 @@ public class DataSource {
 	        	.addText(rawChunk.mStopDate);
 	        // PROPERTIES
 	        Element properties = annotation.addElement("PROPERTIES")
-		        .addAttribute("ANNOTATION_SET", "Teen_Activity_Study")
-		        .addAttribute("ACTIVITY_TYPE", rawChunk.mActivity)
+		        .addAttribute("ANNOTATION_SET", "Teen activity study")		       
 		        .addAttribute("LAST_MODIFIED", rawChunk.mModifyTime)
 		        .addAttribute("DATE_CREATED",  rawChunk.mCreateTime);
         }
                 
         XMLWriter writer;
 		try {
+			File aFile = new File(path);							
+			FileHelper.createDirsIfDontExist(aFile);
+			// Create the file if it does not exist
+			if (!aFile.exists()) {					
+				aFile.createNewFile();
+			}
 			// The file will be truncated if it exists, and created if it doesn't exist.
-			writer = new XMLWriter(new FileOutputStream(path));
+			writer = new XMLWriter(new FileOutputStream(path));			
 			writer.write(document);
 	        writer.close();
 	        result = true;
@@ -420,6 +430,9 @@ public class DataSource {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (WOCKETSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}                   
