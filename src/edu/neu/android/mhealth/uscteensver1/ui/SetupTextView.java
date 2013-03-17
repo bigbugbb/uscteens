@@ -12,18 +12,12 @@ import android.graphics.Paint.Align;
 
 public class SetupTextView extends TextView {
 	
-	//private String mText;
-
 	public SetupTextView(Resources res) {
 		super(res);
 		mPaintTxt.setColor(Color.RED);
 		mPaintTxt.setTextAlign(Align.CENTER);
 		mPaintBoard.setStrokeWidth(3);
 		setVisible(false);
-		//mText = res.getString(R.string.need_setup);		
-//		if (FileHelper.isFileExists(DataSource.PATH_PREFIX + "config.xml")) {
-//			setVisible(false);
-//		}
 	}
 
 	@Override
