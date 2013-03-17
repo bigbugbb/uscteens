@@ -43,7 +43,7 @@ public class DataSource {
 	// threshold for chunking generation
 	private final static int CHUNKING_MEAN_AVG_DIFF     = 400;
 	private final static int CHUNKING_MEAN_AVG_DISTANCE = 60;
-	private final static int CHUNKING_MIN_SENSITIVITY   = 350;
+	private final static int CHUNKING_MIN_SENSITIVITY   = 250;
 	private final static int CHUNKING_MAX_SENSITIVITY   = 900;
 	private final static int CHUNKING_MIN_DISTANCE 		= 120;
 	
@@ -334,7 +334,7 @@ public class DataSource {
 	    	   for (Iterator n = annotations.attributeIterator(); n.hasNext();) {
 	    	       Attribute attribute = (Attribute) n.next();
 	    	       
-	    	       if (attribute.getName().compareTo("ALLLABELLED") == 0) {
+	    	       if (attribute.getName().compareTo("ALL_LABELLED") == 0) {
 	    	    	   String text = attribute.getText();
 	    	    	   if (text.compareToIgnoreCase("yes") == 0) {
 	    	    		   allLabelled = true;
