@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
    
-	<edu.neu.android.mhealth.uscteensver1.views.WarningView
-	    android:id="@+id/view_warning"
+	<edu.neu.android.mhealth.uscteensver1.views.MergeView
+	    android:id="@+id/view_merge"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent" />
 

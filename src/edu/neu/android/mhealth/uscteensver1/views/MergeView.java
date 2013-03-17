@@ -24,7 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-public class WarningView extends View {
+public class MergeView extends View {
 	
 	protected Resources mRes = null;
 	protected boolean mImageLoaded = false;	
@@ -42,7 +42,7 @@ public class WarningView extends View {
 	protected PointF mBackTxtPt = new PointF();
 	
 	
-	public WarningView(Context context, AttributeSet attrs) {
+	public MergeView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
 		mRes = context.getResources();

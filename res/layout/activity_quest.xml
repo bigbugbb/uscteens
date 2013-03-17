@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
        	   
-	<edu.neu.android.mhealth.uscteensver1.views.ActionsView
-	    android:id="@+id/view_action_title"	    
+	<edu.neu.android.mhealth.uscteensver1.views.QuestView
+	    android:id="@+id/view_quest"	    
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/bk_gray" />

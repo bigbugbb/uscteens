@@ -36,7 +36,7 @@ import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
 import android.widget.ImageView;
 
-public class ActionsView extends ImageView implements OnGestureListener, 
+public class QuestView extends ImageView implements OnGestureListener, 
 													  OnItemClickListener, 
 													  OnReachedEndListener,
 													  OnListViewScrollingListener {
@@ -67,7 +67,7 @@ public class ActionsView extends ImageView implements OnGestureListener,
 	// gesture detector
 	protected GestureDetector mGestureDetector = new GestureDetector(this);
 
-	public ActionsView(Context context, AttributeSet attrs) {
+	public QuestView(Context context, AttributeSet attrs) {
 		super(context, attrs);	
 		
 		mArrowUp   = new ButtonArrow(context.getResources());

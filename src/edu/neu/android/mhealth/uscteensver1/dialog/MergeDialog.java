@@ -9,9 +9,9 @@ import edu.neu.android.mhealth.uscteensver1.R.layout;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
-import edu.neu.android.mhealth.uscteensver1.views.WarningView;
-import edu.neu.android.mhealth.uscteensver1.views.WarningView.OnBackClickedListener;
-import edu.neu.android.mhealth.uscteensver1.views.WarningView.OnItemClickListener;
+import edu.neu.android.mhealth.uscteensver1.views.MergeView;
+import edu.neu.android.mhealth.uscteensver1.views.MergeView.OnBackClickedListener;
+import edu.neu.android.mhealth.uscteensver1.views.MergeView.OnItemClickListener;
 import edu.neu.android.wocketslib.support.DataStorage;
 
 import android.app.Activity;
@@ -26,14 +26,14 @@ import android.view.ViewGroup.LayoutParams;
 public class MergeDialog extends Activity implements OnItemClickListener, OnBackClickedListener {
 	
 	public static final String KEY = "ACTIONS_TO_MERGE";	
-	protected WarningView mView = null;
+	protected MergeView mView = null;
 	protected ArrayList<String> mActions = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_warning);
+		setContentView(R.layout.activity_merge);
 		
 		mActions = getIntent().getStringArrayListExtra(KEY);
 
@@ -42,7 +42,7 @@ public class MergeDialog extends Activity implements OnItemClickListener, OnBack
 	}
 	
 	private void setupViews() {
-		mView = (WarningView) findViewById(R.id.view_warning);
+		mView = (MergeView) findViewById(R.id.view_merge);
 		mView.setActions(mActions);
 		mView.setOnBackClickedListener(this);
 		mView.setOnItemClickListener(this);

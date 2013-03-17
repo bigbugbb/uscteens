@@ -5,8 +5,8 @@ import edu.neu.android.mhealth.uscteensver1.R.id;
 import edu.neu.android.mhealth.uscteensver1.R.layout;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
-import edu.neu.android.mhealth.uscteensver1.views.ActionsView;
-import edu.neu.android.mhealth.uscteensver1.views.ActionsView.OnBackClickedListener;
+import edu.neu.android.mhealth.uscteensver1.views.QuestView;
+import edu.neu.android.mhealth.uscteensver1.views.QuestView.OnBackClickedListener;
 import edu.neu.android.wocketslib.support.DataStorage;
 
 import android.app.Activity;
@@ -23,20 +23,20 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 	
 	static public String CHUNK_START_TIME = "CHUNK_START_TIME";
 	static public String CHUNK_STOP_TIME  = "CHUNK_STOP_TIME";
-	protected ActionsView mActionsView = null;	
+	protected QuestView mActionsView = null;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_actions);				
+		setContentView(R.layout.activity_quest);				
 		
 		setupViews();
 		adjustLayout();
 	}
 	
 	private void setupViews() {
-		mActionsView = (ActionsView) findViewById(R.id.view_action_title);	
+		mActionsView = (QuestView) findViewById(R.id.view_quest);	
 		mActionsView.setOnBackClickedListener(this);
 		mActionsView.setHandler(mHandler);
 		
