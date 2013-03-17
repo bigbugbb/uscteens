@@ -57,7 +57,7 @@
                     android:shadowRadius="1.5"
                     android:text="Set start date"
                     android:textColor="@color/black"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </TableRow>
             
             <TableRow
@@ -79,7 +79,7 @@
                     android:shadowRadius="1.5"
                     android:text="Start collecting data"
                     android:textColor="@color/black"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
@@ -101,7 +101,7 @@
                     android:shadowRadius="1.5"
                     android:text="Test Random EMA Survey"
                     android:textColor="@color/black"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
@@ -123,7 +123,7 @@
                     android:shadowRadius="1.5"
                     android:text="Test CS EMA Survey"
                     android:textColor="@color/black"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
@@ -145,26 +145,32 @@
                     android:shadowRadius="1.5"
                     android:text="Finish Study"
                     android:textColor="@color/black"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </TableRow>
             
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
-                android:gravity="center_horizontal" >      
+                android:gravity="center_horizontal"
+                android:layout_marginTop="18dp" >
+
 				<View
-			        style="?listDivider"
-			        android:layout_width="fill_parent"
-			        android:background="@color/black"
-			        android:layout_height="2sp" />
+				    style="?listDivider"
+				    android:layout_width="1200dp"
+				    android:layout_height="2sp"
+				    android:background="@color/black"
+				    android:clickable="false"
+				    android:longClickable="false" />
+
 	    	</TableRow>
 	    
          	<TableRow
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
-                android:gravity="center_horizontal" > 
+                android:gravity="center_horizontal"
+                android:layout_marginTop="10dp" > 
 				<Button 
 			        android:id="@+id/setupdone"
 			        style="@style/test"
@@ -176,12 +182,12 @@
 			        android:shadowRadius="1.5"
 			        android:text="Done"
 			        android:textColor="@color/black"
-			        android:textSize="18dp" />
+			        android:textSize="18sp" />
 			</TableRow>
 			
         </TableLayout>
-        <!-- The buttons at the bottom of the screen. -->  
-
+        <!-- The buttons at the bottom of the screen. -->          
+         	
     </ScrollView>   
 
 </LinearLayout>
