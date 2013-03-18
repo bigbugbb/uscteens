@@ -17,7 +17,7 @@ public class GraphDrawer extends BaseThread {
 	// flag to indicate whether the drawer should be paused
 	protected boolean mPause = false;
 	// for pause synchronization
-//	private Object mLock = new Object();
+	protected boolean mPaused = false;
 	
 	public GraphDrawer(GraphView view, AppPage page, Handler handler) {
 		mView   = view;
@@ -32,6 +32,17 @@ public class GraphDrawer extends BaseThread {
 
 	public void pause(boolean pause) {
 		mPause = pause;
+		if (mPause) {
+			// wait until the thread is paused
+			while (!mPaused) {
+				try {
+					sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -72,13 +83,15 @@ public class GraphDrawer extends BaseThread {
 				}
 			}
 			
-			while (mPause && mRun) {						
+			while (mPause && mRun) {
+				mPaused = true;
 				try {
-					sleep(50);					
+					sleep(50);						
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
+			mPaused = false;
 		}
 		
 		super.run();
