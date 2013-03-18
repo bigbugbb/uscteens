@@ -2,60 +2,52 @@ package edu.neu.android.mhealth.uscteensver1.pages;
 
 public class AppScale {
 	
-	protected float mScaleW = 1;
-	protected float mScaleH = 1;
-	protected float mScaleT = 1;
+	protected static float sScaleW = 1;
+	protected static float sScaleH = 1;
+	protected static float sScaleT = 1;
 	
-	protected float mExpectW = 1280;
-	protected float mExpectH = 720;
+	protected static float sExpectW = 1280;
+	protected static float sExpectH = 720;
 	
 	protected static boolean sCreated = false;
 	protected static AppScale sUiScale = null;
 	
-	static public AppScale getInstance() {
-		if (!sCreated) {
-			sUiScale = new AppScale();
-			sCreated = true;
-		}
-		return sUiScale;
+	public static float doScaleW(float srcWidth) {
+		return srcWidth * sScaleW;
 	}
 	
-	public float doScaleW(float srcWidth) {
-		return srcWidth * mScaleW;
+	public static float doScaleH(float srcHeight) {
+		return srcHeight * sScaleH;
 	}
 	
-	public float doScaleH(float srcHeight) {
-		return srcHeight * mScaleH;
+	public static float doScaleT(float textSize) {
+		return textSize * sScaleT;
 	}
 	
-	public float doScaleT(float textSize) {
-		return textSize * mScaleT;
+	public static float getScaleW() {
+		return sScaleW;
 	}
 	
-	public float getScaleW() {
-		return mScaleW;
+	public static float getScaleH() {
+		return sScaleH;
 	}
 	
-	public float getScaleH() {
-		return mScaleH;
+	public static void setScale(float sw, float sh) {
+		sScaleW = sw;
+		sScaleH = sh;
 	}
 	
-	public void setScale(float sw, float sh) {
-		mScaleW = sw;
-		mScaleH = sh;
-	}
-	
-	public void calcScale(float baseW, float baseH, float expectW, float expectH) {				
-		mExpectW = expectW;
-		mExpectH = expectH;
+	public static void calcScale(float baseW, float baseH, float expectW, float expectH) {				
+		sExpectW = expectW;
+		sExpectH = expectH;
 		calcScale(baseW, baseH);
 	}
 	
-	public void calcScale(float baseW, float baseH) {
+	public static void calcScale(float baseW, float baseH) {
 		baseW = Math.max(baseW, baseH);
 		baseH = Math.min(baseW, baseH);
-		mScaleW = baseW / mExpectW;
-		mScaleH = baseH / mExpectH;
-		mScaleT = mScaleH;
+		sScaleW = baseW / sExpectW;
+		sScaleH = baseH / sExpectH;
+		sScaleT = sScaleH;
 	}
 }

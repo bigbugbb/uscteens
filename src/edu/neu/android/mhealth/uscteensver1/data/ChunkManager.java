@@ -437,7 +437,6 @@ public class ChunkManager {
 	}
 	
 	public static boolean splitChunk(Chunk chunkToSplit) {
-		AppScale appScale = AppScale.getInstance();
 
 		int   centerX = (chunkToSplit.mStart + chunkToSplit.mStop) / 2;
 		float offsetInChunkX = chunkToSplit.mSplit.getOffsetInChunkX();
@@ -445,11 +444,11 @@ public class ChunkManager {
 
 		// check if there is enough space for the split
 		if (offsetInChunkX > 0) {
-			if (chunkToSplit.mStop - splitX < appScale.doScaleW(Chunk.MINIMUM_CHUNK_SPACE)) {
+			if (chunkToSplit.mStop - splitX < AppScale.doScaleW(Chunk.MINIMUM_CHUNK_SPACE)) {
 				return false;
 			}
 		} else {
-			if (splitX - chunkToSplit.mStart < appScale.doScaleW(Chunk.MINIMUM_CHUNK_SPACE)) {
+			if (splitX - chunkToSplit.mStart < AppScale.doScaleW(Chunk.MINIMUM_CHUNK_SPACE)) {
 				return false;
 			}
 		}		

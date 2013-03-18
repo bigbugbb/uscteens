@@ -1,5 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -24,7 +25,7 @@ public class NextButton extends CustomButton {
 		mPaintText.setStyle(Style.FILL);
 		mPaintText.setTypeface(Typeface.SERIF);
 		mPaintText.setFakeBoldText(false);
-		mPaintText.setTextSize(sAppScale.doScaleT(34));
+		mPaintText.setTextSize(AppScale.doScaleT(34));
 		mPaintText.setTextAlign(Paint.Align.CENTER);
 	}
 

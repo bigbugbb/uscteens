@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -25,7 +26,7 @@ public class BeginButton extends CustomButton {
 		mPaintText.setStyle(Style.FILL);
 		mPaintText.setTypeface(Typeface.SERIF);
 		mPaintText.setFakeBoldText(true);
-		mPaintText.setTextSize(sAppScale.doScaleW(46));
+		mPaintText.setTextSize(AppScale.doScaleW(46));
 		mPaintText.setTextAlign(Paint.Align.CENTER);
 	}
 

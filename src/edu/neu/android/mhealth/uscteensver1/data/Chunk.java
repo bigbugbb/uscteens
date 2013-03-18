@@ -13,6 +13,7 @@ import android.graphics.Paint.Style;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.pages.GraphPage;
 import edu.neu.android.mhealth.uscteensver1.ui.ClockButton;
 import edu.neu.android.mhealth.uscteensver1.ui.MergeButton;
@@ -163,7 +164,7 @@ public class Chunk extends AppObject {
 	
 	public boolean update(int start, int stop, int offset) {
 		// next must be bigger than the current
-		if (stop - start < sAppScale.doScaleW(MINIMUM_CHUNK_SPACE)) {
+		if (stop - start < AppScale.doScaleW(MINIMUM_CHUNK_SPACE)) {
 			return false; // just ignore, because the space for one chunk will be too small
 		}		
 		mStart  = start;
@@ -185,8 +186,8 @@ public class Chunk extends AppObject {
 
 	@Override
 	public boolean contains(float x, float y) {			
-		if (x >= mStart + mDispOffsetX + sAppScale.doScaleW(60) && 
-			x <= mStop + mDispOffsetX - sAppScale.doScaleW(60)) { 
+		if (x >= mStart + mDispOffsetX + AppScale.doScaleW(60) && 
+			x <= mStop + mDispOffsetX - AppScale.doScaleW(60)) { 
 			return true;
 		}
 		return false;

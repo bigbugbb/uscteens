@@ -3,6 +3,7 @@ package edu.neu.android.mhealth.uscteensver1.ui;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import android.content.res.Resources;
@@ -45,8 +46,8 @@ public class SetupTextView extends TextView {
 		c.drawRoundRect(mRect, 16, 16, mPaintBoard);
 		 
 		c.drawText("This phone needs to be setup for", mCanvasWidth / 2, 
-				mRect.top + sAppScale.doScaleT(72), mPaintTxt);
+				mRect.top + AppScale.doScaleT(72), mPaintTxt);
 		c.drawText("the Teen Activity Game to start!", mCanvasWidth / 2, 
-				mRect.top + sAppScale.doScaleT(143), mPaintTxt);
+				mRect.top + AppScale.doScaleT(143), mPaintTxt);
 	}
 }

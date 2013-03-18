@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -41,7 +42,7 @@ public class ArrowButton extends CustomButton {
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
 		mWidth  = mCanvasWidth;
-		mHeight = sAppScale.doScaleH(50);
+		mHeight = AppScale.doScaleH(50);
 	}
 
 	@Override

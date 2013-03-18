@@ -14,6 +14,7 @@ import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
 
@@ -31,14 +32,14 @@ public class ClockButton extends ChunkButton {
 		
 		sPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		sPaint.setColor(Color.argb(255, 156, 156, 156));
-		sPaint.setStrokeWidth(sAppScale.doScaleW(8.0f));
+		sPaint.setStrokeWidth(AppScale.doScaleW(8.0f));
 		sPaint.setStyle(Style.STROKE);
 		sPaint.setFakeBoldText(true);
 		
 		sTimePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		sTimePaint.setColor(Color.BLACK);
 		sTimePaint.setStyle(Style.STROKE);
-		sTimePaint.setTextSize(sAppScale.doScaleT(38));
+		sTimePaint.setTextSize(AppScale.doScaleT(38));
 		sTimePaint.setFakeBoldText(false);
 	}
 	
@@ -59,14 +60,12 @@ public class ClockButton extends ChunkButton {
         	Bitmap scaled = null;
         	// scale the image according to the current screen resolution
         	float dstWidth  = origin.getWidth(),
-        	      dstHeight = origin.getHeight();        	
-        	if (sAppScale != null) {
-        		dstWidth  = sAppScale.doScaleW(dstWidth);
-        		dstHeight = sAppScale.doScaleH(dstHeight);
-        		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-        			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-        		}
-            }        	
+        	      dstHeight = origin.getHeight();        	      
+    		dstWidth  = AppScale.doScaleW(dstWidth);
+    		dstHeight = AppScale.doScaleH(dstHeight);
+    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+    		}            
     		// add to the image list
         	if (scaled != null) {
 	    		origin.recycle(); // explicit call to avoid out of memory
@@ -109,24 +108,24 @@ public class ClockButton extends ChunkButton {
 			c.drawBitmap(sImages.get(0), mX + mOffsetX, mY + mOffsetY, null);
 			// choose to draw left or right based on the clock button position			
 			if (mX + mOffsetX < mCanvasWidth * 0.88f) { // draw on the right
-				if (mX + mWidth / 2 + mOffsetX > sAppScale.doScaleW(-120)) {
+				if (mX + mWidth / 2 + mOffsetX > AppScale.doScaleW(-120)) {
 					sTimePaint.setTextAlign(Align.LEFT);
 					c.drawText(mHost.getChunkRealStartTimeInString(), 
-						mX + mWidth / 2 + mOffsetX + sAppScale.doScaleW(50),
-						mY + mHeight / 2 + sAppScale.doScaleH(10), sTimePaint);
+						mX + mWidth / 2 + mOffsetX + AppScale.doScaleW(50),
+						mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
 				}
 			} else { // draw on the left
-				if (mX + mWidth / 2 + mOffsetX < mCanvasWidth + sAppScale.doScaleW(120)) {
+				if (mX + mWidth / 2 + mOffsetX < mCanvasWidth + AppScale.doScaleW(120)) {
 					sTimePaint.setTextAlign(Align.RIGHT);
 					c.drawText(mHost.getChunkRealStartTimeInString(), 
-						mX - mWidth / 2 + mOffsetX + sAppScale.doScaleW(30),
-						mY + mHeight / 2 + sAppScale.doScaleH(10), sTimePaint);
+						mX - mWidth / 2 + mOffsetX + AppScale.doScaleW(30),
+						mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
 				}
 			}
 			//Log.d("clock button", mX + " " + mY + " " + mOffsetX);
 			if (isSelected()) {
 				c.drawCircle(mX + mWidth / 2 + mOffsetX, 
-					mY + mHeight / 2 + mOffsetY, sAppScale.doScaleH(47), sPaint);								
+					mY + mHeight / 2 + mOffsetY, AppScale.doScaleH(47), sPaint);								
 			}			 									
 		}
 	}	

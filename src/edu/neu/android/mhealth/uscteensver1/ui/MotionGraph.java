@@ -18,6 +18,7 @@ import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 
 
@@ -73,7 +74,7 @@ public class MotionGraph extends AppObject {
 		
 		mDataPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mDataPaint.setColor(Color.BLACK);
-		mDataPaint.setStrokeWidth(Math.max(1.0f, Math.min(sAppScale.doScaleT(4.0f), 4.0f)));
+		mDataPaint.setStrokeWidth(Math.max(1.0f, Math.min(AppScale.doScaleT(4.0f), 4.0f)));
 		mDataPaint.setFakeBoldText(false);
 		
 		mSlashPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -96,14 +97,14 @@ public class MotionGraph extends AppObject {
 		mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintTxt.setColor(Color.BLACK);
 		mPaintTxt.setStyle(Style.STROKE);
-		mPaintTxt.setTextSize(sAppScale.doScaleT(38));
+		mPaintTxt.setTextSize(AppScale.doScaleT(38));
 		mPaintTxt.setFakeBoldText(false);
 		
 		mPaintDate = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintDate.setColor(Color.BLACK);
 		mPaintDate.setStyle(Style.STROKE);
 		mPaintDate.setTypeface(Typeface.SERIF);
-		mPaintDate.setTextSize(sAppScale.doScaleT(43));
+		mPaintDate.setTextSize(AppScale.doScaleT(43));
 		mPaintDate.setFakeBoldText(false);
 		
 		mOffsetSpeedX = 0;
@@ -217,7 +218,7 @@ public class MotionGraph extends AppObject {
 				// draw slashes with 45 degree for periods without data
 				float slashX1 = start - mStart;
 				float slashX2 = stop - mStart - USCTeensGlobals.PIXEL_PER_DATA;
-				int step = (int) sAppScale.doScaleH(8.0f);
+				int step = (int) AppScale.doScaleH(8.0f);
 				// draw slashes from top to bottom
 				for (int m = (int) mHeight; m > 0; m -= step) {
 					c.drawLine(slashX1, m, slashX2, m - (slashX2 - slashX1), mSlashPaint);
@@ -246,12 +247,12 @@ public class MotionGraph extends AppObject {
 		String timeStart = toStringTimeFromPosition(mStart);
 		String timeEnd   = toStringTimeFromPosition(mEnd);
 		mPaintTxt.setTextAlign(Paint.Align.LEFT);
-		c.drawText(timeStart, sAppScale.doScaleW(20), mHeight + sAppScale.doScaleH(36), mPaintTxt);
+		c.drawText(timeStart, AppScale.doScaleW(20), mHeight + AppScale.doScaleH(36), mPaintTxt);
 		mPaintTxt.setTextAlign(Paint.Align.RIGHT);
-		c.drawText(timeEnd, mWidth + sAppScale.doScaleW(-20), mHeight + sAppScale.doScaleH(36), mPaintTxt);
+		c.drawText(timeEnd, mWidth + AppScale.doScaleW(-20), mHeight + AppScale.doScaleH(36), mPaintTxt);
 		// draw date on the bottom
 		mPaintDate.setTextAlign(Paint.Align.CENTER);
-		c.drawText(mDate, mWidth / 2, mHeight + sAppScale.doScaleH(200), mPaintDate);			
+		c.drawText(mDate, mWidth / 2, mHeight + AppScale.doScaleH(200), mPaintDate);			
 	}
 
 	private String toStringTimeFromPosition(int position) {
@@ -278,7 +279,7 @@ public class MotionGraph extends AppObject {
 		for (int i = 0; i < mScaledData.length; ++i) {
 			if (mScaledData[i] >= 0) {
 				mScaledData[i] *= scale;
-				mScaledData[i] += Math.max(1.0f, Math.min(sAppScale.doScaleT(4.0f), 4.0f)) / 2;
+				mScaledData[i] += Math.max(1.0f, Math.min(AppScale.doScaleT(4.0f), 4.0f)) / 2;
 			}			
 		}
 
@@ -324,8 +325,8 @@ public class MotionGraph extends AppObject {
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
-		mSpeedX = velocityX / sAppScale.doScaleW(50);
-		mAccSpeedX = sAppScale.doScaleW(mSpeedX > 0 ? -3 : 3);
+		mSpeedX = velocityX / AppScale.doScaleW(50);
+		mAccSpeedX = AppScale.doScaleW(mSpeedX > 0 ? -3 : 3);
 		return true;
 	}
 

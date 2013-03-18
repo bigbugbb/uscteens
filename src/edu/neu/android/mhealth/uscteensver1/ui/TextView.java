@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
 public class TextView extends AppObject {
@@ -36,7 +37,7 @@ public class TextView extends AppObject {
 		mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintTxt.setColor(Color.BLACK);
 		mPaintTxt.setStyle(Style.FILL);
-		mPaintTxt.setTextSize(sAppScale.doScaleT(45));
+		mPaintTxt.setTextSize(AppScale.doScaleT(45));
 		mPaintTxt.setTypeface(Typeface.SERIF);
 		mPaintTxt.setFakeBoldText(true);
 	}

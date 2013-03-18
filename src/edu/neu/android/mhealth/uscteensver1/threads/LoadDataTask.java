@@ -32,7 +32,7 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 	protected void onPostExecute(Void result) {
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
-		mProgDlg.dismiss();
+		
 		if (mResult == DataSource.LOADING_SUCCEEDED){
 			Message msg = mHandler.obtainMessage();	
 			msg.arg1 = mResult;
@@ -49,6 +49,8 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 			msg.what = AppCmd.END_LOADING;
 			mHandler.sendMessage(msg); 
 		}
+		
+		mProgDlg.dismiss();
 	}
 
 	@Override

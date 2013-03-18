@@ -51,7 +51,6 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 	}
 	
 	public List<AppObject> load() {
-		AppScale appScale = AppScale.getInstance();
 		String startDate = DataStorage.getStartDate(mContext, "");
 		// create game objects
 		if (mBackground == null) {
@@ -62,7 +61,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mListViewWeek1 = new DateListView(mContext.getResources(), 1, startDate);
 			mObjects.add(mListViewWeek1);	
 			mListViewWeek1.setX(0);
-			mListViewWeek1.setY(appScale.doScaleH(178 + mListViewWeek1.getBorderWidth()));
+			mListViewWeek1.setY(AppScale.doScaleH(178 + mListViewWeek1.getBorderWidth()));
 			mListViewWeek1.setOnReachedEndListener(this);
 			mListViewWeek1.setOnItemClickListener(this);
 			mListViewWeek1.setOnListViewScrollingListener(this);
@@ -70,8 +69,8 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 		if (mListViewWeek2 == null) {
 			mListViewWeek2 = new DateListView(mContext.getResources(), 2, startDate);
 			mObjects.add(mListViewWeek2);
-			mListViewWeek2.setX(appScale.doScaleW(643));
-			mListViewWeek2.setY(appScale.doScaleH(178 + mListViewWeek2.getBorderWidth()));
+			mListViewWeek2.setX(AppScale.doScaleW(643));
+			mListViewWeek2.setY(AppScale.doScaleH(178 + mListViewWeek2.getBorderWidth()));
 			mListViewWeek2.setOnReachedEndListener(this);
 			mListViewWeek2.setOnItemClickListener(this);
 			mListViewWeek2.setOnListViewScrollingListener(this);
@@ -81,7 +80,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mObjects.add(mArrowLeftUp);
 			mArrowLeftUp.setOnClickListener(this);
 			mArrowLeftUp.setX(0);
-			mArrowLeftUp.setY(appScale.doScaleH(128));
+			mArrowLeftUp.setY(AppScale.doScaleH(128));
 			mArrowLeftUp.setVisible(false);
 			mArrowLeftUp.alignCenter(false);
 			mArrowLeftUp.changeArrowDir(false);
@@ -90,8 +89,8 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mArrowRightUp = new ArrowButton(mContext.getResources());
 			mObjects.add(mArrowRightUp);
 			mArrowRightUp.setOnClickListener(this);
-			mArrowRightUp.setX(appScale.doScaleW(640));
-			mArrowRightUp.setY(appScale.doScaleH(128));	
+			mArrowRightUp.setX(AppScale.doScaleW(640));
+			mArrowRightUp.setY(AppScale.doScaleH(128));	
 			mArrowRightUp.setVisible(false);
 			mArrowRightUp.alignCenter(false);
 			mArrowRightUp.changeArrowDir(false);
@@ -101,15 +100,15 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mObjects.add(mArrowLeftBottom);
 			mArrowLeftBottom.setOnClickListener(this);
 			mArrowLeftBottom.setX(0);
-			mArrowLeftBottom.setY(appScale.doScaleH(670));
+			mArrowLeftBottom.setY(AppScale.doScaleH(670));
 			mArrowLeftBottom.alignCenter(false);
 		}
 		if (mArrowRightBottom == null) {
 			mArrowRightBottom = new ArrowButton(mContext.getResources());
 			mObjects.add(mArrowRightBottom);
 			mArrowRightBottom.setOnClickListener(this);
-			mArrowRightBottom.setX(appScale.doScaleW(640));
-			mArrowRightBottom.setY(appScale.doScaleH(670));	
+			mArrowRightBottom.setX(AppScale.doScaleW(640));
+			mArrowRightBottom.setY(AppScale.doScaleH(670));	
 			mArrowRightBottom.alignCenter(false);
 		}
 		// order by Z

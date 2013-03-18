@@ -43,15 +43,10 @@ public class AppObject {
 	protected Resources mRes = null;		
 	protected boolean mImageLoaded = false;
 	protected List<Bitmap> mImages = new ArrayList<Bitmap>();
-	protected static AppScale sAppScale = null;
 
 	protected AppObject(Resources res) {	
 		//setResources(res);
 		mRes = res;
-	}
-	
-	public static void setAppScale(AppScale appScale) {
-		sAppScale = appScale;
 	}
 
 	public void loadImages(int[] resIDs) {
@@ -69,13 +64,12 @@ public class AppObject {
         	// scale the image according to the current screen resolution
         	float dstWidth  = origin.getWidth(),
         	      dstHeight = origin.getHeight();        	
-        	if (sAppScale != null) {
-        		dstWidth  = sAppScale.doScaleW(dstWidth);
-        		dstHeight = sAppScale.doScaleH(dstHeight);
-        		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-        			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-        		}
-            }        	
+        	
+    		dstWidth  = AppScale.doScaleW(dstWidth);
+    		dstHeight = AppScale.doScaleH(dstHeight);
+    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+    		}                 	
     		// add to the image list
         	if (scaled != null) {
 	    		origin.recycle(); // explicit call to avoid out of memory

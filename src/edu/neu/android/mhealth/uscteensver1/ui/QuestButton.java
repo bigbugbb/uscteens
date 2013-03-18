@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,14 +35,12 @@ public class QuestButton extends ChunkButton {
         	Bitmap scaled = null;
         	// scale the image according to the current screen resolution
         	float dstWidth  = origin.getWidth(),
-        	      dstHeight = origin.getHeight();        	
-        	if (sAppScale != null) {
-        		dstWidth  = sAppScale.doScaleW(dstWidth);
-        		dstHeight = sAppScale.doScaleH(dstHeight);
-        		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-        			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-        		}
-            }        	
+        	      dstHeight = origin.getHeight();        	        
+    		dstWidth  = AppScale.doScaleW(dstWidth);
+    		dstHeight = AppScale.doScaleH(dstHeight);
+    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+    		}                   
     		// add to the image list
         	if (scaled != null) {
 	    		origin.recycle(); // explicit call to avoid out of memory
@@ -76,14 +75,12 @@ public class QuestButton extends ChunkButton {
         	Bitmap scaled = null;
         	// scale the image according to the current screen resolution
         	float dstWidth  = origin.getWidth(),
-        	      dstHeight = origin.getHeight();        	
-        	if (sAppScale != null) {
-        		dstWidth  = sAppScale.doScaleW(dstWidth);
-        		dstHeight = sAppScale.doScaleH(dstHeight);
-        		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-        			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-        		}
-            }        	
+        	      dstHeight = origin.getHeight();        	        	
+    		dstWidth  = AppScale.doScaleW(dstWidth);
+    		dstHeight = AppScale.doScaleH(dstHeight);
+    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+    		}            
     		// add to the image list
         	if (scaled != null) {
 	    		origin.recycle(); // explicit call to avoid out of memory

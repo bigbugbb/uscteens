@@ -13,6 +13,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
 public class ListView extends AppObject {
@@ -63,7 +64,7 @@ public class ListView extends AppObject {
 			mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
 			mPaintTxt.setColor(Color.BLACK);
 			mPaintTxt.setStyle(Style.STROKE);
-			mPaintTxt.setTextSize(sAppScale.doScaleT(45));
+			mPaintTxt.setTextSize(AppScale.doScaleT(45));
 			mPaintTxt.setTypeface(Typeface.SERIF);
 			mPaintTxt.setFakeBoldText(false);
 			
@@ -90,10 +91,10 @@ public class ListView extends AppObject {
 		protected void onDraw(Canvas c) {						
 			c.drawRect(0, mOffsetY + (mHeight + mBorderWidth) * mPosn, mWidth - mBorderWidth, 
 				mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight, mPaintBkg);		
-			c.drawText(mText, mWidth / 2 - sAppScale.doScaleW(250), 
+			c.drawText(mText, mWidth / 2 - AppScale.doScaleW(250), 
 				mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight * 0.6f, mPaintTxt);
 			c.drawBitmap(mImage, mWidth * 0.86f - mImage.getWidth() * 0.5f, 
-				mOffsetY + (mHeight + mBorderWidth) * mPosn + sAppScale.doScaleH(26), null);
+				mOffsetY + (mHeight + mBorderWidth) * mPosn + AppScale.doScaleH(26), null);
 		}
 		
 		public void setPaintBackground(Paint background) {
@@ -132,14 +133,12 @@ public class ListView extends AppObject {
         	Bitmap scaled = null;
         	// scale the image according to the current screen resolution
         	float dstWidth  = origin.getWidth(),
-        	      dstHeight = origin.getHeight();        	
-        	if (sAppScale != null) {
-        		dstWidth  = sAppScale.doScaleW(dstWidth);
-        		dstHeight = sAppScale.doScaleH(dstHeight);
-        		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-        			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-        		}
-            }        	    		
+        	      dstHeight = origin.getHeight();        	        	
+    		dstWidth  = AppScale.doScaleW(dstWidth);
+    		dstHeight = AppScale.doScaleH(dstHeight);
+    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+    		}        
         	if (scaled != null) {
 	    		origin.recycle(); // explicit call to avoid out of memory
 	    		mImage = scaled;
@@ -156,7 +155,7 @@ public class ListView extends AppObject {
 	public ListView(Resources res) {
 		super(res);	
 		
-		mOffsetSpeedY = sAppScale.doScaleH(16f);
+		mOffsetSpeedY = AppScale.doScaleH(16f);
 		//mOffestAccSpeedY = sAppScale.doScaleH(3f);
 	}
 	
@@ -169,14 +168,12 @@ public class ListView extends AppObject {
     	Bitmap scaled = null;    	
     	// scale the image according to the current screen resolution
     	float dstWidth  = origin.getWidth(),
-    	      dstHeight = origin.getHeight();        	
-    	if (sAppScale != null) {
-    		dstWidth  = sAppScale.doScaleW(dstWidth);
-    		dstHeight = sAppScale.doScaleH(dstHeight);
-    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-    		}
-        }        	
+    	      dstHeight = origin.getHeight();        	    	
+		dstWidth  = AppScale.doScaleW(dstWidth);
+		dstHeight = AppScale.doScaleH(dstHeight);
+		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+		}            
     	Bitmap image = null;
     	if (scaled != null) {
     		origin.recycle(); // explicit call to avoid out of memory
@@ -296,9 +293,9 @@ public class ListView extends AppObject {
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) { // up: -				
-		mSpeedY = Math.min(Math.abs(velocityY / sAppScale.doScaleH(60)), 80);
+		mSpeedY = Math.min(Math.abs(velocityY / AppScale.doScaleH(60)), 80);
 		mSpeedY = velocityY > 0 ? mSpeedY : -mSpeedY;
-		mAccSpeedY = sAppScale.doScaleH(mSpeedY > 0 ? -2.5f : 2.5f);
+		mAccSpeedY = AppScale.doScaleH(mSpeedY > 0 ? -2.5f : 2.5f);
 		mLastAction = e2.getAction();
 		return true;
 	}

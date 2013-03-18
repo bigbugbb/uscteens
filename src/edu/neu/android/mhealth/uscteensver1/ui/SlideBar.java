@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
 public class SlideBar extends AppObject {
@@ -64,7 +65,7 @@ public class SlideBar extends AppObject {
 		mPaintText.setStyle(Style.FILL);
 		mPaintText.setTypeface(Typeface.SERIF);
 		mPaintText.setFakeBoldText(false);
-		mPaintText.setTextSize(sAppScale.doScaleT(24));
+		mPaintText.setTextSize(AppScale.doScaleT(24));
 		mPaintText.setTextAlign(Paint.Align.CENTER);
 		
 	}

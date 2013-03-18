@@ -6,6 +6,7 @@ import java.util.Date;
 
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.utils.DateHelper;
@@ -179,7 +180,7 @@ public class DateListView extends ListView {
 	@Override
 	public void onSizeChanged(int width, int height) {
 		mWidth  = width / 2;
-		mHeight = height - sAppScale.doScaleH(128 + 100) - (2 * mBorderWidth + 1);
+		mHeight = height - AppScale.doScaleH(128 + 100) - (2 * mBorderWidth + 1);
 		mItemWidth  = (int) mWidth;
 		mItemHeight = (int) (mHeight - 3 * mBorderWidth) / 4;
 		

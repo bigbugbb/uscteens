@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -32,7 +33,7 @@ public class WinBackground extends Background {
 		mPaintText1.setStyle(Style.FILL);
 		mPaintText1.setTypeface(Typeface.SERIF);
 		mPaintText1.setFakeBoldText(true);
-		mPaintText1.setTextSize(sAppScale.doScaleT(50));
+		mPaintText1.setTextSize(AppScale.doScaleT(50));
 		mPaintText1.setTextAlign(Paint.Align.CENTER);
 		
 		mPaintText2 = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -40,7 +41,7 @@ public class WinBackground extends Background {
 		mPaintText2.setStyle(Style.FILL);
 		mPaintText2.setTypeface(Typeface.SERIF);
 		mPaintText2.setFakeBoldText(true);
-		mPaintText2.setTextSize(sAppScale.doScaleT(46));
+		mPaintText2.setTextSize(AppScale.doScaleT(46));
 		mPaintText2.setTextAlign(Paint.Align.CENTER);
 	}
 
@@ -81,7 +82,7 @@ public class WinBackground extends Background {
 		c.drawText("CONGRATULATIONS", mText1X, mText1Y, mPaintText1);
 		c.drawBitmap(mImages.get(1), (mCanvasWidth - mWidth) / 2, mBarHeight, null);
 		c.drawText("You have completed", mText2X, mText2Y, mPaintText2);
-		c.drawText("the Teen Activity Game", mText2X, mText2Y + sAppScale.doScaleH(90), mPaintText2);
+		c.drawText("the Teen Activity Game", mText2X, mText2Y + AppScale.doScaleH(90), mPaintText2);
 	}
 	
 }

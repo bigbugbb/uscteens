@@ -21,6 +21,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.WinPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
+import edu.neu.android.mhealth.uscteensver1.views.ProgressView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
@@ -50,6 +51,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	
 	// the view for drawing anything
 	protected GraphView mGraphView = null;	
+	// the view for display loading progress
+	protected ProgressView mProgressView = null;
 	// all of the pages
 	protected AppPage mCurPage = null;
 	protected List<AppPage> mPages = new ArrayList<AppPage>();
@@ -104,15 +107,15 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		DisplayMetrics dm = new DisplayMetrics();  
         getWindowManager().getDefaultDisplay().getMetrics(dm);	
         
-		AppScale appScale = AppScale.getInstance();
-		appScale.calcScale(dm.widthPixels, dm.heightPixels);
-		AppObject.setAppScale(appScale);
+        AppScale.calcScale(dm.widthPixels, dm.heightPixels);
 	}
 
 	private void setupViews() {
 		mGraphView = (GraphView) findViewById(R.id.view_graph);		
 		mGraphView.setOnTouchListener(this);
 		mGraphView.setLongClickable(true);
+		
+		mProgressView = (ProgressView) findViewById(R.id.view_progress);		
 	}
 	
 	private void adjustLayout() {
@@ -232,7 +235,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         			Toast.makeText(context, "Fail to do the configuration!", Toast.LENGTH_SHORT);
         		}
         		break;
-        	case AppCmd.BEGIN_LOADING:        		
+        	case AppCmd.BEGIN_LOADING:   
+        		//mProgressView.show("Loading...");
         		new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);        					        	
             	break;
         	case AppCmd.END_LOADING:
@@ -242,7 +246,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         			Toast.makeText(context, "Can't find the sensor data!", Toast.LENGTH_SHORT).show();
         		} else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
         			Toast.makeText(context, "Can't find the chunk data!", Toast.LENGTH_SHORT).show();
-        		}
+        		}        		
+        		//mProgressView.dismiss();
         		break;
         	case AppCmd.BACK:
         		switchPages(indexOfPage(PageType.DATE_PAGE));
@@ -290,6 +295,9 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
     
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+    	if (mProgressView.getVisibility() == View.VISIBLE) {
+    		return mProgressView.onKeyDown(keyCode, event);
+    	}
     	
 		if (keyCode == KeyEvent.KEYCODE_BACK) {		
 			if (mCurPage == mPages.get(0)) { // home page

@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,7 +22,7 @@ public class ActionListView extends ListView {
 			
 			mPaintTxt.setColor(Color.BLACK);
 			mPaintTxt.setStyle(Style.STROKE);
-			mPaintTxt.setTextSize(sAppScale.doScaleT(45));
+			mPaintTxt.setTextSize(AppScale.doScaleT(45));
 			mPaintTxt.setTypeface(Typeface.SERIF);
 			mPaintTxt.setTextAlign(Align.CENTER);
 			mPaintTxt.setFakeBoldText(false);
@@ -56,13 +57,12 @@ public class ActionListView extends ListView {
     	// scale the image according to the current screen resolution
     	float dstWidth  = origin.getWidth(),
     	      dstHeight = origin.getHeight();        	
-    	if (sAppScale != null) {
-    		dstWidth  = sAppScale.doScaleW(dstWidth);
-    		dstHeight = sAppScale.doScaleH(dstHeight);
-    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-    		}
-        }        	
+    	
+		dstWidth  = AppScale.doScaleW(dstWidth);
+		dstHeight = AppScale.doScaleH(dstHeight);
+		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+		}                
 		// add to the image list
     	if (scaled != null) {
     		origin.recycle(); // explicit call to avoid out of memory
@@ -91,7 +91,7 @@ public class ActionListView extends ListView {
 	@Override
 	public void onSizeChanged(int width, int height) {
 		mWidth  = width;
-		mHeight = height - sAppScale.doScaleH(130 + 100) - (2 * mBorderWidth + 1);
+		mHeight = height - AppScale.doScaleH(130 + 100) - (2 * mBorderWidth + 1);
 		mItemWidth  = (int) mWidth;
 		mItemHeight = (int) (mHeight - 3 * mBorderWidth) / 4;
 		

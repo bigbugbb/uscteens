@@ -44,7 +44,6 @@ public class QuestView extends ImageView implements OnGestureListener,
 	protected ArrowButton mArrowUp   = null;
 	protected ArrowButton mArrowDown = null;
 	protected ActionListView mActionList = null;
-	protected AppScale  mAppScale  = AppScale.getInstance();
 	protected AppObject mSelObject = null;	
 	protected ArrayList<AppObject> mObjects = new ArrayList<AppObject>();
 	
@@ -90,14 +89,14 @@ public class QuestView extends ImageView implements OnGestureListener,
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText.setColor(Color.WHITE);
 		mPaintText.setStyle(Style.STROKE);
-		mPaintText.setTextSize(mAppScale.doScaleT(34));
+		mPaintText.setTextSize(AppScale.doScaleT(34));
 		mPaintText.setTypeface(Typeface.SERIF);
 		mPaintText.setFakeBoldText(false);		
 		
 		mPaintDate = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintDate.setColor(Color.WHITE);
 		mPaintDate.setStyle(Style.FILL);
-		mPaintDate.setTextSize(mAppScale.doScaleW(45));
+		mPaintDate.setTextSize(AppScale.doScaleW(45));
 		mPaintDate.setTypeface(Typeface.SERIF);
 		mPaintDate.setTextAlign(Align.CENTER);
 		mPaintDate.setFakeBoldText(true);		
@@ -173,14 +172,12 @@ public class QuestView extends ImageView implements OnGestureListener,
         	Bitmap scaled = null;
         	// scale the image according to the current screen resolution
         	float dstWidth  = origin.getWidth(),
-        	      dstHeight = origin.getHeight();        	
-        	if (mAppScale != null) {
-        		dstWidth  = mAppScale.doScaleW(dstWidth);
-        		dstHeight = mAppScale.doScaleH(dstHeight);
-        		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-        			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-        		}
-            }        	
+        	      dstHeight = origin.getHeight();        	        	
+    		dstWidth  = AppScale.doScaleW(dstWidth);
+    		dstHeight = AppScale.doScaleH(dstHeight);
+    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+    		}            
     		// add to the image list
         	if (scaled != null) {
 	    		origin.recycle(); // explicit call to avoid out of memory
@@ -193,13 +190,13 @@ public class QuestView extends ImageView implements OnGestureListener,
         mExpectedWidth = (int) (mImages.get(0).getWidth());        
         
         // the area for the back button
-		mBackArea.left   = mAppScale.doScaleW(10);
+		mBackArea.left   = AppScale.doScaleW(10);
 		mBackArea.right  = mBackArea.left + mImages.get(1).getWidth();
-		mBackArea.top    = mAppScale.doScaleH(5);
+		mBackArea.top    = AppScale.doScaleH(5);
 		mBackArea.bottom = mBackArea.top + mImages.get(1).getHeight();
 				
-		mBackTxtPt.x = mBackArea.left + mAppScale.doScaleW(33);
-		mBackTxtPt.y = mBackArea.bottom - mAppScale.doScaleH(52);
+		mBackTxtPt.x = mBackArea.left + AppScale.doScaleW(33);
+		mBackTxtPt.y = mBackArea.bottom - AppScale.doScaleH(52);
 	}
 	
 	public int getExpectedWidth() {
@@ -211,9 +208,9 @@ public class QuestView extends ImageView implements OnGestureListener,
 		canvas.drawBitmap(mImages.get(0), 0, 0, null);
 		canvas.drawBitmap(mImages.get(1), mBackArea.left, mBackArea.top, null);
 		canvas.drawText("BACK", mBackTxtPt.x, mBackTxtPt.y, mPaintText);
-		canvas.drawText(mDate, getWidth() / 2, mAppScale.doScaleH(65), mPaintDate);
-		mPaintTime.setTextSize(mAppScale.doScaleT(35));
-		canvas.drawText(mTime, getWidth() / 2, mAppScale.doScaleH(115), mPaintTime);
+		canvas.drawText(mDate, getWidth() / 2, AppScale.doScaleH(65), mPaintDate);
+		mPaintTime.setTextSize(AppScale.doScaleT(35));
+		canvas.drawText(mTime, getWidth() / 2, AppScale.doScaleH(115), mPaintTime);
 		//mPaintTime.setTextSize(mAppScale.doScaleW(36));
 		//canvas.drawText(mTimePostfix, getWidth() - mAppScale.doScaleW(40), mAppScale.doScaleH(100), mPaintTime);
 		mArrowUp.onDraw(canvas);
@@ -253,13 +250,13 @@ public class QuestView extends ImageView implements OnGestureListener,
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		mActionList.setPosn(0, mAppScale.doScaleH(180) + mActionList.getBorderWidth());
+		mActionList.setPosn(0, AppScale.doScaleH(180) + mActionList.getBorderWidth());
 		mActionList.onSizeChanged(w, h);		
 		mArrowUp.setX(0);
-		mArrowUp.setY(mAppScale.doScaleH(130));
+		mArrowUp.setY(AppScale.doScaleH(130));
 		mArrowUp.onSizeChanged(w, h);
 		mArrowDown.setX(0);
-		mArrowDown.setY(h - mAppScale.doScaleH(50));
+		mArrowDown.setY(h - AppScale.doScaleH(50));
 		mArrowDown.onSizeChanged(w, h);
 		super.onSizeChanged(w, h, oldw, oldh);
 	}

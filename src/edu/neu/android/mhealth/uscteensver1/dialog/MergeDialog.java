@@ -55,7 +55,7 @@ public class MergeDialog extends Activity implements OnItemClickListener, OnBack
         
         LayoutParams laParams = null;
 		laParams = mView.getLayoutParams();
-		laParams.width = (int) AppScale.getInstance().doScaleW(755);
+		laParams.width = (int) AppScale.doScaleW(755);
 		//laParams.height = (int) (720 * 0.9f); 
 		mView.setLayoutParams(laParams);
 	}
