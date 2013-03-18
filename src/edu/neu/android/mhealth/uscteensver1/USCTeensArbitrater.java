@@ -612,10 +612,10 @@ public class USCTeensArbitrater extends Arbitrater {
 			Log.i(TAG, msg);
 			ServerLogger.transmitOrQueueNote(aContext, msg, true);
 			//Upload JSON files and remove (dont backup)
-			int filesRemaining = RawUploader.uploadDataFromExternal(aContext,
+			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(aContext,
 					true, true, true, false, .85);
 			//Upload Log and SurveyLog files, backup and remove
-			filesRemaining = RawUploader.uploadDataFromExternal(aContext,
+			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(aContext,
 					false, true, true, true, .85);
 
 			msg = "Completed file upload after "

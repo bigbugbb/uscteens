@@ -78,13 +78,13 @@ public class USCTeensSetupActivity extends BaseActivity {
 			// Transmit Note first
 			ServerLogger.transmitOrQueueNote(USCTeensSetupActivity.this, msg, true); // wi data
 			// Upload JSON files and remove
-			int filesRemaining = RawUploader.uploadDataFromExternal(USCTeensSetupActivity.this, // need subject id being set
+			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this, // need subject id being set
 					true, true, true, false, .85);
 			// Upload Log and SurveyLog files, backup and remove
-			filesRemaining = RawUploader.uploadDataFromExternal(USCTeensSetupActivity.this,
+			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
 					false, true, true, true, .85);
 			// Upload possible remaining files in the internal memory
-			filesRemaining = RawUploader.uploadDataFromInternal(USCTeensSetupActivity.this, // ?
+			filesRemaining = RawUploader.uploadDataFromInternalDir(USCTeensSetupActivity.this, // ?
 					false, true, true, false, .85);
 
 			msg = "Completed user-initiated file upload after "
