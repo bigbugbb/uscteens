@@ -235,8 +235,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         			Toast.makeText(context, "Fail to do the configuration!", Toast.LENGTH_SHORT);
         		}
         		break;
-        	case AppCmd.BEGIN_LOADING:   
-        		//mProgressView.show("Loading...");
+        	case AppCmd.BEGIN_LOADING:         		
+        		mProgressView.show("Loading...");
         		new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);        					        	
             	break;
         	case AppCmd.END_LOADING:
@@ -247,7 +247,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		} else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
         			Toast.makeText(context, "Can't find the chunk data!", Toast.LENGTH_SHORT).show();
         		}        		
-        		//mProgressView.dismiss();
+        		mProgressView.dismiss();
         		break;
         	case AppCmd.BACK:
         		switchPages(indexOfPage(PageType.DATE_PAGE));

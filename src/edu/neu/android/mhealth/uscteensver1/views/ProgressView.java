@@ -28,13 +28,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-public class ProgressView extends SurfaceView implements SurfaceHolder.Callback {
+public class ProgressView extends View {
 
 	private final static int PROGRESS_SPEED = 10;
-	
-	private SurfaceHolder mHolder;
-	private Drawer  mDrawer  = null;
-	private Handler mHandler = null;
 	
 	private Paint  mPaint;
 	private String mText = "Loading...";
@@ -48,9 +44,6 @@ public class ProgressView extends SurfaceView implements SurfaceHolder.Callback 
 		super(context, attrs);
 		setVisibility(View.GONE);
 		
-		mHolder = getHolder();
-		mHolder.addCallback(this);
-		
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.WHITE);
 		mPaint.setStyle(Style.STROKE);		
@@ -62,18 +55,12 @@ public class ProgressView extends SurfaceView implements SurfaceHolder.Callback 
 	}
 
 	public void show(String text) {
-		mText = text;		
-		mOffset = 0;
-		mDrawer = new Drawer(this, mHandler);
+		mText = text;				
 		this.setVisibility(View.VISIBLE);			
 	}
 	
 	public void dismiss() {
 		this.setVisibility(View.GONE);
-	}
-	
-	public void setHandler(Handler handler) {
-		mHandler = handler;
 	}
 	
 	@Override
@@ -92,15 +79,26 @@ public class ProgressView extends SurfaceView implements SurfaceHolder.Callback 
 		int imgW = mImage.getWidth();
 		int imgH = mImage.getHeight();
 		Rect  src = new Rect(imgW - mOffset, 0, imgW, imgH);
-		RectF dst = new RectF(mRect.left, mRect.top, mRect.left + mOffset, mRect.bottom);
+		RectF dst = new RectF(mRect.left + 2, mRect.top, mRect.left + mOffset - 2, mRect.bottom);
 		canvas.drawBitmap(mImage, src, dst, null);		
 		src = new Rect(0, 0, imgW - mOffset, imgH);
-		dst = new RectF(mRect.left + mOffset, mRect.top, mRect.right, mRect.bottom);
+		dst = new RectF(mRect.left + mOffset - 2, mRect.top, mRect.right - 2, mRect.bottom);
 		canvas.drawBitmap(mImage, src, dst, null);
 		mOffset = (mOffset >= mRect.right) ? 0 : mOffset + PROGRESS_SPEED;
 		// draw round rectangle
-		mPaint.setStrokeWidth(AppScale.doScaleT(6.0f));
-		canvas.drawRoundRect(mRect, AppScale.doScaleT(24), AppScale.doScaleT(24), mPaint);
+		mPaint.setStrokeWidth(AppScale.doScaleT(7.0f));
+		canvas.drawRoundRect(mRect, AppScale.doScaleT(26), AppScale.doScaleT(26), mPaint);
+		
+		synchronized (this) {
+			try {
+				wait(20);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			invalidate();
+		}
+		
 	}
 
 	@Override
@@ -112,20 +110,9 @@ public class ProgressView extends SurfaceView implements SurfaceHolder.Callback 
 	}	
 
 	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		if (mDrawer != null) {
-			mDrawer.start();
-		}
-				
-		int w = getWidth();
-		int h = getHeight();
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {		
+		super.onSizeChanged(w, h, oldw, oldh);
+			
 		mRect = new RectF();
 		mRect.left   = w * 0.2f;
 		mRect.right  = w * 0.8f;
@@ -140,7 +127,7 @@ public class ProgressView extends SurfaceView implements SurfaceHolder.Callback 
         mImageCanvas = new Canvas(mImage);
         
         mPaint.setStrokeWidth(AppScale.doScaleT(1.0f));
-		float count = AppScale.doScaleW(12);
+		float count = AppScale.doScaleW(15);
 		for (float x = w * 0.01f; x < w * 0.585f; x += w * 0.04f) {
 			float x1 = x;
 			float y1 = h * 0.045f;
@@ -150,78 +137,5 @@ public class ProgressView extends SurfaceView implements SurfaceHolder.Callback 
 				mImageCanvas.drawLine(x1 + m, y1, x2 + m, y2, mPaint);
 			}
 		}
-	}
-
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		if (mDrawer != null) {
-			mDrawer.end();
-			mDrawer = null;
-		}
-	}
-	
-	public class Drawer extends BaseThread {
-		// the holder of the SurfaceView
-		protected SurfaceHolder mHolder = null;
-		// the surface view
-		protected ProgressView mView = null;	
-		// flag to indicate whether the drawer should be paused
-		protected boolean mPause = false;
-		
-		public Drawer(ProgressView view, Handler handler) {
-			mView   = view;			
-			mHolder = view.getHolder(); 
-			setHandler(handler);				
-		}	
-
-		public void pause(boolean pause) {
-			mPause = pause;
-		}
-		
-		@Override
-		public void run() {			
-			Canvas c = null;
-			
-			while (mRun) {
-				
-				handleEvent(mEventQueue.poll());	
-				
-				try {
-	                c = mHolder.lockCanvas(null);
-	                synchronized (mHolder) {	                			                	
-	                	mView.onDraw(c);	                			                	
-	                }
-	            } catch (Exception e) {
-	            	e.printStackTrace();
-				} finally {
-	                // do this in a finally so that if an exception is thrown
-	                // during the above, we don't leave the Surface in an
-	                // inconsistent state
-	                if (c != null) {
-	                	mHolder.unlockCanvasAndPost(c);
-	                }
-	            } // end finally block
-				
-				synchronized (this) {
-					try {
-						wait(30);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				
-				while (mPause && mRun) {						
-					try {
-						sleep(50);					
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			
-			super.run();
-		} // end of run
-
 	}
 }

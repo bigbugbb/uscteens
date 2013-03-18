@@ -13,7 +13,7 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 	private Context mContext;
 	private int 	mResult;	
 	private Handler mHandler;
-	private ProgressDialog mProgDlg;
+	// private ProgressDialog mProgDlg;
 	
 	public LoadDataTask(Context context, Handler handler) {
 		mContext = context;
@@ -25,7 +25,7 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 	protected void onPreExecute() {
 		// TODO Auto-generated method stub
 		super.onPreExecute();
-		mProgDlg = ProgressDialog.show(mContext, "", "loading data... ", true, false);
+		// mProgDlg = ProgressDialog.show(mContext, "", "loading data... ", true, false);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 			mHandler.sendMessage(msg); 
 		}
 		
-		mProgDlg.dismiss();
+		// mProgDlg.dismiss();
 	}
 
 	@Override
