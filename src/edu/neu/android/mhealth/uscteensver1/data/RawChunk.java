@@ -39,6 +39,10 @@ class RawChunk {
 		return mActivityID != UNLABELLED;
 	}
 	
+	public boolean isModified() {
+		return mCreateTime.compareTo(mModifyTime) != 0;
+	}
+	
 	public int getActivityID() {
 		return mActivityID;
 	}
@@ -124,5 +128,13 @@ class RawChunk {
 	
 	public String getActivityName() {
 		return mActivity;
+	}
+	
+	public String getCreateTime() {
+		return mCreateTime;
+	}
+	
+	public String getModifyTime() {
+		return mModifyTime;
 	}
 }

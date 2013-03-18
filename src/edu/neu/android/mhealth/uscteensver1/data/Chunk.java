@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
+import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
@@ -34,6 +35,9 @@ public class Chunk extends AppObject {
 	public ClockButton mClock;
 	public MergeButton mMerge;
 	public SplitButton mSplit;
+	
+	private String  mCreateTime;
+	private String  mModifyTime;
 	
 	protected float mDispOffsetX;
 	protected float mDispOffsetY;
@@ -77,9 +81,8 @@ public class Chunk extends AppObject {
 		String startDate = toDateTime(mStart / USCTeensGlobals.PIXEL_PER_DATA + mOffset);
 		String stopDate  = toDateTime(mStop  / USCTeensGlobals.PIXEL_PER_DATA + mOffset);		
 		int actionID = getActionID();
-		String activity = (actionID == -1) ? "UNLABELLED" : USCTeensGlobals.ACTION_NAMES[actionID];			                  
-		String modifyTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		RawChunk rawChunk = new RawChunk(startDate, stopDate, activity, modifyTime, modifyTime);
+		String activity = (actionID == -1) ? "UNLABELLED" : USCTeensGlobals.ACTION_NAMES[actionID];			                  		
+		RawChunk rawChunk = new RawChunk(startDate, stopDate, activity, mCreateTime, mModifyTime);
 		
 		return rawChunk;
 	}
@@ -162,11 +165,29 @@ public class Chunk extends AppObject {
 		mParent.getObjectList().remove(mSplit);
 	}
 	
+	public boolean load(int start, int stop, int offset, int activityID, 
+			String createTime, String modifyTime) {		
+		boolean result = update(start, stop, offset);
+		mQuest.setAnswer(
+			activityID == -1 ? R.drawable.question_btn : USCTeensGlobals.ACTION_IMGS[activityID], 
+			activityID == -1 ? "None" : USCTeensGlobals.ACTION_NAMES[activityID]
+		);					
+		// put it here because the methods above may update the modify time
+		mCreateTime = createTime; 
+		mModifyTime = modifyTime;
+		return result;
+	}
+	
 	public boolean update(int start, int stop, int offset) {
 		// next must be bigger than the current
 		if (stop - start < AppScale.doScaleW(MINIMUM_CHUNK_SPACE)) {
 			return false; // just ignore, because the space for one chunk will be too small
 		}		
+		
+		if (start != mStart || stop != mStop) {
+			updateModifyTime();
+		}
+		
 		mStart  = start;
 		mStop   = stop;
 		mOffset = offset;
@@ -179,9 +200,13 @@ public class Chunk extends AppObject {
 		
 		if (isLastChunkOfToday()) {
 			mQuest.setVisible(false);
-		}
+		}				
 
 		return true;
+	}
+	
+	public void updateModifyTime() {
+		mModifyTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
 	}
 
 	@Override

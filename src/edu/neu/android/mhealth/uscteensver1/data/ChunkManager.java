@@ -73,14 +73,13 @@ public class ChunkManager {
 			if (i == 0) { // save the start time offset
 				timeOffset = rawChunk.getStartTime();
 			}
+			// load each chunk
 			int start = (rawChunk.getStartTime() - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;
 			int stop  = (rawChunk.getStopTime()  - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;
 			int activityID = rawChunk.getActivityID();
-			chunk.update(start, stop, timeOffset);			
-			chunk.mQuest.setAnswer(
-				activityID == -1 ? R.drawable.question_btn : USCTeensGlobals.ACTION_IMGS[activityID], 
-				activityID == -1 ? "None" : USCTeensGlobals.ACTION_NAMES[activityID]
-			);
+			String createTime = rawChunk.getCreateTime();
+			String modifyTime = rawChunk.getModifyTime();
+			chunk.load(start, stop, timeOffset, activityID, createTime, modifyTime);						
 		}
 		// select the first chunk
 		selectChunk(0);

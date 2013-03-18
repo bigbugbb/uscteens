@@ -94,13 +94,22 @@ public class DataSource {
 			if (loadRawChunkData(date)) {
 				assert(sRawChksWrap.size() > 0);
 				RawChunk lastRawChunk = sRawChksWrap.get(sRawChksWrap.size() - 1);
-				int startTime = lastRawChunk.getStartTime();						
-				ArrayList<RawChunk> rawChunks = createRawChunkData(startTime);	
+				RawChunk lastPrevRawChunk = sRawChksWrap.size() > 1 ?
+						sRawChksWrap.get(sRawChksWrap.size() - 2) : null;		
+				boolean updateFromLastPrev = lastPrevRawChunk != null && !lastPrevRawChunk.isModified();
+				
+				int startTime = updateFromLastPrev ? 
+						lastPrevRawChunk.getStartTime() : lastRawChunk.getStartTime();						
+				ArrayList<RawChunk> rawChunks = new ArrayList<RawChunk>(); 
+				createRawChunkData(startTime, rawChunks);	
 				if (rawChunks != null && rawChunks.size() > 0) {
-					assert(rawChunks.get(0).getStartTime() == startTime);
-					lastRawChunk.setStopTime(rawChunks.get(0).getStopTimeInString());
-					// remove the first because it duplicates with the last element of chunks wrap 
-					rawChunks.remove(0);
+					assert(rawChunks.get(0).getStartTime() == startTime);					
+					// remove the last 
+					sRawChksWrap.remove(sRawChksWrap.size() - 1);
+					if (updateFromLastPrev) {
+						sRawChksWrap.remove(sRawChksWrap.size() - 1);
+					}
+					// add new raw chunks
 					sRawChksWrap.addAll(rawChunks);
 				}
 			} else {
@@ -233,23 +242,12 @@ public class DataSource {
 	 * @param startSecond	The start position to analyze the sensor data.
 	 * @return true if successful, otherwise false
 	 */
-	private static ArrayList<RawChunk> createRawChunkData(int startSecond) {
-		ArrayList<RawChunk> rawChunks = new ArrayList<RawChunk>();
-		
-		
-		
-		return rawChunks;
-	}
-	
-	/*
-	 * create raw chunk data from raw accelerometer data	 
-	 */
-	protected static boolean createRawChunkData() {
-		if (sAccelDataWrap.size() == 0) {
+	protected static boolean createRawChunkData(int startSecond, ArrayList<RawChunk> rawChunks) {
+		if (sAccelDataWrap.size() == 0 || rawChunks == null) {
 			return false;
 		}
 		// current selected date
-		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");		
+		String today = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());		
 		// convolution to the accelerometer data
 		int[] sensorData = sAccelDataWrap.getDrawableData();
 		int size = sensorData.length;
@@ -284,8 +282,8 @@ public class DataSource {
 		// figure out the possible chunking positions
 		int prev = 0, end = 3600 * 24;
 		ArrayList<Integer> chunkPos = new ArrayList<Integer>();
-		chunkPos.add(0);		
-		for (int i = 1; i < size - CHUNKING_MIN_DISTANCE; ++i) {
+		chunkPos.add(startSecond);		
+		for (int i = startSecond + 1; i < size - CHUNKING_MIN_DISTANCE; ++i) {
 			if (sensorData[i] == AccelDataWrap.NO_SENSOR_DATA) {
 				if (sensorData[i - 1] != AccelDataWrap.NO_SENSOR_DATA || 
 					sensorData[i + 1] != AccelDataWrap.NO_SENSOR_DATA) {
@@ -304,13 +302,21 @@ public class DataSource {
 		}
 		chunkPos.add(end); 
 		// create raw chunk data for each chunking position	
-		sRawChksWrap.clear();
+		rawChunks.clear();
 		for (int i = 0; i < chunkPos.size() - 1; ++i) {					
-			RawChunk rawChunk = new RawChunk(date, chunkPos.get(i), chunkPos.get(i + 1));
-			sRawChksWrap.add(rawChunk);
+			RawChunk rawChunk = new RawChunk(today, chunkPos.get(i), chunkPos.get(i + 1));
+			rawChunks.add(rawChunk);
 		}
-		
+				
 		return true;
+	}
+	
+	/*
+	 * create raw chunk data from raw accelerometer data	 
+	 */
+	protected static boolean createRawChunkData() {
+		boolean result = createRawChunkData(0, sRawChksWrap);		
+		return result;
 	}
 	
 	public static boolean areAllChunksLabelled(String date) {

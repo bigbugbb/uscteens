@@ -4,6 +4,7 @@ package edu.neu.android.mhealth.uscteensver1.ui;
 import java.util.ArrayList;
 
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import android.content.res.Resources;
@@ -97,6 +98,8 @@ public class QuestButton extends ChunkButton {
 			}
 			mAnswer = answer;	
 			mActionName = actionName;
+			// notify the change to its parent chunk to update to modify time
+			getHost().updateModifyTime();
 		}
     
 	}
