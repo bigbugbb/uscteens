@@ -55,7 +55,8 @@ public class ProgressView extends View {
 	}
 
 	public void show(String text) {
-		mText = text;				
+		mText = text;	
+		mOffset = 0;
 		this.setVisibility(View.VISIBLE);			
 	}
 	

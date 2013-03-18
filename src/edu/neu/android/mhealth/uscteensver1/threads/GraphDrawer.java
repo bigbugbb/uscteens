@@ -16,6 +16,8 @@ public class GraphDrawer extends BaseThread {
 	protected AppPage  mPage = null;	
 	// flag to indicate whether the drawer should be paused
 	protected boolean mPause = false;
+	// for pause synchronization
+//	private Object mLock = new Object();
 	
 	public GraphDrawer(GraphView view, AppPage page, Handler handler) {
 		mView   = view;
