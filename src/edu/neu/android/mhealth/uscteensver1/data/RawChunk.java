@@ -1,5 +1,8 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 
 // chunk data from XML in direct
@@ -17,13 +20,15 @@ class RawChunk {
 	/*
 	 * seconds from the beginning of a day
 	 */	
-	public RawChunk(String date, int startTime, int stopTime) {
+	public RawChunk(String date, int startTime, int stopTime) {				
 		mStartDate  = date + " " + getStringTimeFromSecond(startTime);
 		mStopDate   = date + " " + getStringTimeFromSecond(stopTime);
 		mActivity   = "UNLABELLED";
 		mActivityID = UNLABELLED;
-		mCreateTime = date;
-		mModifyTime = date;
+		
+		String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+		mCreateTime = now;
+		mModifyTime = now;
 	}
 	
 	public RawChunk(String startDate, String stopDate, 

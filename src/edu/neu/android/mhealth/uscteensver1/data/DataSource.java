@@ -246,8 +246,8 @@ public class DataSource {
 		if (sAccelDataWrap.size() == 0 || rawChunks == null) {
 			return false;
 		}
-		// current selected date
-		String today = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());		
+		// current selected date		
+		String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());		
 		// convolution to the accelerometer data
 		int[] sensorData = sAccelDataWrap.getDrawableData();
 		int size = sensorData.length;
