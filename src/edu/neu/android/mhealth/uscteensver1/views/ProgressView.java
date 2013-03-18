@@ -56,7 +56,6 @@ public class ProgressView extends View {
 
 	public void show(String text) {
 		mText = text;	
-		mOffset = 0;
 		this.setVisibility(View.VISIBLE);			
 	}
 	
@@ -85,7 +84,7 @@ public class ProgressView extends View {
 		src = new Rect(0, 0, imgW - mOffset, imgH);
 		dst = new RectF(mRect.left + mOffset - 2, mRect.top, mRect.right - 2, mRect.bottom);
 		canvas.drawBitmap(mImage, src, dst, null);
-		mOffset = (mOffset >= mRect.right) ? 0 : mOffset + PROGRESS_SPEED;
+		mOffset = (mOffset >= mRect.width()) ? 0 : mOffset + PROGRESS_SPEED;
 		// draw round rectangle
 		mPaint.setStrokeWidth(AppScale.doScaleT(7.0f));
 		canvas.drawRoundRect(mRect, AppScale.doScaleT(26), AppScale.doScaleT(26), mPaint);
