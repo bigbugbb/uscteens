@@ -103,7 +103,7 @@ public class DataSource {
 				ArrayList<RawChunk> rawChunks = new ArrayList<RawChunk>(); 
 				createRawChunkData(startTime, rawChunks);	
 				if (rawChunks != null && rawChunks.size() > 0) {
-					assert(rawChunks.get(0).getStartTime() == startTime);					
+					assert(rawChunks.get(0).getStartTime() == startTime);
 					// remove the last 
 					sRawChksWrap.remove(sRawChksWrap.size() - 1);
 					if (updateFromLastPrev) {
@@ -280,8 +280,8 @@ public class DataSource {
 			sum -= sensorData[i + CHUNKING_MEAN_AVG_DISTANCE];
 		}
 		// figure out the possible chunking positions
-		int prev = 0, end = 3600 * 24;
-		ArrayList<Integer> chunkPos = new ArrayList<Integer>();
+		int prev = startSecond, end = 3600 * 24;
+		ArrayList<Integer> chunkPos = new ArrayList<Integer>();		
 		chunkPos.add(startSecond);		
 		for (int i = startSecond + 1; i < size - CHUNKING_MIN_DISTANCE; ++i) {
 			if (sensorData[i] == AccelDataWrap.NO_SENSOR_DATA) {
@@ -303,7 +303,7 @@ public class DataSource {
 		chunkPos.add(end); 
 		// create raw chunk data for each chunking position	
 		rawChunks.clear();
-		for (int i = 0; i < chunkPos.size() - 1; ++i) {					
+		for (int i = 0; i < chunkPos.size() - 1; ++i) {			
 			RawChunk rawChunk = new RawChunk(today, chunkPos.get(i), chunkPos.get(i + 1));
 			rawChunks.add(rawChunk);
 		}
