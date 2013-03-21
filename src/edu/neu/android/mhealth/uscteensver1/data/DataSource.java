@@ -301,14 +301,16 @@ public class DataSource {
 					chunkPos.add(i);
 					prev = i;				
 				}
-			}				
+			}			
+			// VERY large but seperated sensor data
 			if (Math.abs(sensorData[i]) > CHUNKING_MAX_SENSITIVITY) {
-				if (meanAverageL[i] < CHUNKING_MEAN_AVG_SENSITIVITY && 
-						meanAverageR[i] < CHUNKING_MEAN_AVG_SENSITIVITY) {
+				if (meanAverageL[i] < CHUNKING_MEAN_AVG_SENSITIVITY && meanAverageR[i] < CHUNKING_MEAN_AVG_SENSITIVITY) {
 					chunkPos.add(i);
-					if (i < size - (CHUNKING_MIN_DISTANCE << 1)) {
-						chunkPos.add(i + CHUNKING_MIN_DISTANCE);
-						prev = i + CHUNKING_MIN_DISTANCE;
+					int next = i + CHUNKING_MIN_DISTANCE;
+					if (i < size - (CHUNKING_MIN_DISTANCE << 1) && 
+							Math.abs(meanAverageL[next] - meanAverageR[next]) > CHUNKING_MEAN_AVG_DIFF) {
+						chunkPos.add(next);
+						prev = next;
 					} else {
 						prev = i;
 					}
