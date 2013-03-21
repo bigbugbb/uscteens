@@ -96,7 +96,7 @@ public class DataSource {
 				RawChunk lastRawChunk = sRawChksWrap.get(sRawChksWrap.size() - 1);
 				RawChunk lastPrevRawChunk = sRawChksWrap.size() > 1 ?
 						sRawChksWrap.get(sRawChksWrap.size() - 2) : null;		
-				boolean updateFromLastPrev = lastPrevRawChunk != null && !lastPrevRawChunk.isModified();
+				boolean updateFromLastPrev = lastPrevRawChunk != null && !lastPrevRawChunk.isLabelled();
 				
 				int startTime = updateFromLastPrev ? 
 						lastPrevRawChunk.getStartTime() : lastRawChunk.getStartTime();						
