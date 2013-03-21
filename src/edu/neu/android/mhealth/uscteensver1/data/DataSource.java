@@ -41,11 +41,12 @@ public class DataSource {
 	public final static int ERR_NO_CHUNK_DATA  = 2;
 	
 	// threshold for chunking generation
-	private final static int CHUNKING_MEAN_AVG_DIFF     = 400;
-	private final static int CHUNKING_MEAN_AVG_DISTANCE = 60;
-	private final static int CHUNKING_MIN_SENSITIVITY   = 250;
-	private final static int CHUNKING_MAX_SENSITIVITY   = 1600;
-	private final static int CHUNKING_MIN_DISTANCE 		= 120;
+	private final static int CHUNKING_MEAN_AVG_DIFF        = 500;
+	private final static int CHUNKING_MEAN_AVG_SENSITIVITY = 600;
+	private final static int CHUNKING_MEAN_AVG_DISTANCE    = 60;
+	private final static int CHUNKING_MIN_SENSITIVITY      = 300;
+	private final static int CHUNKING_MAX_SENSITIVITY      = 1500;
+	private final static int CHUNKING_MIN_DISTANCE 		   = 120;
 	
 	protected static Context sContext = null;
 	// raw chunk data
@@ -302,7 +303,8 @@ public class DataSource {
 				}
 			}				
 			if (Math.abs(sensorData[i]) > CHUNKING_MAX_SENSITIVITY) {
-				if (meanAverageL[i] < CHUNKING_MIN_SENSITIVITY && meanAverageR[i] < CHUNKING_MIN_SENSITIVITY) {
+				if (meanAverageL[i] < CHUNKING_MEAN_AVG_SENSITIVITY && 
+						meanAverageR[i] < CHUNKING_MEAN_AVG_SENSITIVITY) {
 					chunkPos.add(i);
 					if (i < size - (CHUNKING_MIN_DISTANCE << 1)) {
 						chunkPos.add(i + CHUNKING_MIN_DISTANCE);
