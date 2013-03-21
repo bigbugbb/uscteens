@@ -302,10 +302,14 @@ public class DataSource {
 				}
 			}				
 			if (Math.abs(sensorData[i]) > CHUNKING_MAX_SENSITIVITY) {
-				if (meanAverageL[i] < CHUNKING_MEAN_AVG_DIFF && meanAverageR[i] < CHUNKING_MEAN_AVG_DIFF) {
+				if (meanAverageL[i] < CHUNKING_MIN_SENSITIVITY && meanAverageR[i] < CHUNKING_MIN_SENSITIVITY) {
 					chunkPos.add(i);
-					chunkPos.add(i + CHUNKING_MIN_DISTANCE);
-					prev = i + CHUNKING_MIN_DISTANCE;
+					if (i < size - (CHUNKING_MIN_DISTANCE << 1)) {
+						chunkPos.add(i + CHUNKING_MIN_DISTANCE);
+						prev = i + CHUNKING_MIN_DISTANCE;
+					} else {
+						prev = i;
+					}
 				}
 			}
 		}
