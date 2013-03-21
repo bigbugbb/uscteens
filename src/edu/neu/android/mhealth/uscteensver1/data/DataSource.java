@@ -45,7 +45,7 @@ public class DataSource {
 	private final static int CHUNKING_MEAN_AVG_SENSITIVITY = 600;
 	private final static int CHUNKING_MEAN_AVG_DISTANCE    = 60;
 	private final static int CHUNKING_MIN_SENSITIVITY      = 300;
-	private final static int CHUNKING_MAX_SENSITIVITY      = 1500;
+	private final static int CHUNKING_MAX_SENSITIVITY      = 1600;
 	private final static int CHUNKING_MIN_DISTANCE 		   = 120;
 	
 	protected static Context sContext = null;
