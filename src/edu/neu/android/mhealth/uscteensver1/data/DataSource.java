@@ -99,9 +99,10 @@ public class DataSource {
 				boolean updateFromLastPrev = lastPrevRawChunk != null && !lastPrevRawChunk.isLabelled();
 				
 				int startTime = updateFromLastPrev ? 
-						lastPrevRawChunk.getStartTime() : lastRawChunk.getStartTime();						
-				ArrayList<RawChunk> rawChunks = new ArrayList<RawChunk>(); 
-				createRawChunkData(startTime, rawChunks);	
+						lastPrevRawChunk.getStartTime() : lastRawChunk.getStartTime();
+				int endTime = 3600 * 24;
+				ArrayList<RawChunk> rawChunks = new ArrayList<RawChunk>();				
+				createRawChunkData(startTime, endTime, rawChunks);	
 				if (rawChunks != null && rawChunks.size() > 0) {
 					assert(rawChunks.get(0).getStartTime() == startTime);
 					// remove the last 
@@ -242,7 +243,7 @@ public class DataSource {
 	 * @param startSecond	The start position to analyze the sensor data.
 	 * @return true if successful, otherwise false
 	 */
-	protected static boolean createRawChunkData(int startSecond, ArrayList<RawChunk> rawChunks) {
+	protected static boolean createRawChunkData(int startSecond, int endSecond, ArrayList<RawChunk> rawChunks) {
 		if (sAccelDataWrap.size() == 0 || rawChunks == null) {
 			return false;
 		}
@@ -280,25 +281,33 @@ public class DataSource {
 			sum -= sensorData[i + CHUNKING_MEAN_AVG_DISTANCE];
 		}
 		// figure out the possible chunking positions
-		int prev = startSecond, end = 3600 * 24;
+		int prev = startSecond, end = endSecond;
 		ArrayList<Integer> chunkPos = new ArrayList<Integer>();		
 		chunkPos.add(startSecond);		
 		for (int i = startSecond + 1; i < size - CHUNKING_MIN_DISTANCE; ++i) {
+			if (i - prev < CHUNKING_MIN_DISTANCE) {
+				continue;
+			}
 			if (sensorData[i] == AccelDataWrap.NO_SENSOR_DATA) {
 				if (sensorData[i - 1] != AccelDataWrap.NO_SENSOR_DATA || 
-					sensorData[i + 1] != AccelDataWrap.NO_SENSOR_DATA) {
-					if (i - prev >= CHUNKING_MIN_DISTANCE) {
-						chunkPos.add(i);			
-						prev = i;
-					}
+					sensorData[i + 1] != AccelDataWrap.NO_SENSOR_DATA) {					
+					chunkPos.add(i);			
+					prev = i;					
 				}
-			}
-			if (Math.abs(convolution[i]) > CHUNKING_MIN_SENSITIVITY && i - prev >= CHUNKING_MIN_DISTANCE) {
+			}			
+			if (Math.abs(convolution[i]) > CHUNKING_MIN_SENSITIVITY) {
 				if (Math.abs(meanAverageL[i] - meanAverageR[i]) > CHUNKING_MEAN_AVG_DIFF) {
 					chunkPos.add(i);
 					prev = i;				
 				}
-			}	
+			}				
+			if (Math.abs(sensorData[i]) > CHUNKING_MAX_SENSITIVITY) {
+				if (meanAverageL[i] < CHUNKING_MEAN_AVG_DIFF && meanAverageR[i] < CHUNKING_MEAN_AVG_DIFF) {
+					chunkPos.add(i);
+					chunkPos.add(i + CHUNKING_MIN_DISTANCE);
+					prev = i + CHUNKING_MIN_DISTANCE;
+				}
+			}
 		}
 		chunkPos.add(end); 
 		// create raw chunk data for each chunking position	
@@ -315,7 +324,7 @@ public class DataSource {
 	 * create raw chunk data from raw accelerometer data	 
 	 */
 	protected static boolean createRawChunkData() {
-		boolean result = createRawChunkData(0, sRawChksWrap);		
+		boolean result = createRawChunkData(0, 3600 * 24, sRawChksWrap);		
 		return result;
 	}
 	
