@@ -97,7 +97,7 @@ public class MotionGraph extends AppObject {
 		mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintTxt.setColor(Color.BLACK);
 		mPaintTxt.setStyle(Style.STROKE);
-		mPaintTxt.setTextSize(AppScale.doScaleT(38));
+		mPaintTxt.setTextSize(AppScale.doScaleT(36));
 		mPaintTxt.setFakeBoldText(false);
 		
 		mPaintDate = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -257,10 +257,15 @@ public class MotionGraph extends AppObject {
 
 	private String toStringTimeFromPosition(int position) {
 		int hour   = position / 3600 / USCTeensGlobals.PIXEL_PER_DATA;
-		int minute = (position - hour * 3600 * USCTeensGlobals.PIXEL_PER_DATA) / 60 / USCTeensGlobals.PIXEL_PER_DATA; 
-		String time = "" + hour + ":" + (minute > 9 ? minute : "0" + minute);
+		int minute = (position - hour * 3600 * USCTeensGlobals.PIXEL_PER_DATA) / 60 / USCTeensGlobals.PIXEL_PER_DATA;
 		
-		return time; 
+		StringBuilder sb = new StringBuilder();
+		sb.append(hour > 12 ? hour - 12 : hour);
+		sb.append(":");
+		sb.append(minute > 9 ? minute : "0" + minute);
+		sb.append(hour > 12 ? " PM" : " AM");
+		
+		return sb.toString(); 
 	}
 	
 	@Override

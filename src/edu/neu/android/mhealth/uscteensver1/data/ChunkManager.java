@@ -5,16 +5,11 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.RectF;
-import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ClockButton;
 import edu.neu.android.mhealth.uscteensver1.ui.MergeButton;
 import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
-import edu.neu.android.mhealth.uscteensver1.ui.ListView;
-import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph;
-import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph.OnGraphMovedListener;
 
 
 public class ChunkManager {
