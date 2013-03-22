@@ -66,26 +66,48 @@ public class USCTeensSetupActivity extends BaseActivity {
 	private class SendAllFilesToServerTask extends AsyncTask<Void, Void, Boolean> { 
 		@Override
 		protected Boolean doInBackground(Void... params) {
+
 			// send JSON file
 			long currentTime = System.currentTimeMillis();
-			String msg = "Finish study - Starting data and log files upload";
-			// Move JSON to external upload folder
-			RawUploader.moveDataToExternal(USCTeensSetupActivity.this, false, true, true, .85); // raw .json data
-			// Move Log files to external upload folder
-			DataSender.sendLogsToExternalUploadDir(USCTeensSetupActivity.this, true); // log data with no postfix name
-			// Move Survey Log files to upload folder
-			// DataSender.sendSurveyLogsToExternalUploadDir(SetupActivity.this, true);
-			// Transmit Note first
-			ServerLogger.transmitOrQueueNote(USCTeensSetupActivity.this, msg, true); // wi data
-			// Upload JSON files and remove
-			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this, // need subject id being set
-					true, true, true, false, .85);
-			// Upload Log and SurveyLog files, backup and remove
+			String msg = "Finish study- Starting data and log files upload";
+			//Transmit Note first
+			ServerLogger.transmitOrQueueNote(USCTeensSetupActivity.this, msg, true);
+
+			//Move standard log files to internal upload folder
+			DataSender.sendLogsToInternalUploadDir(USCTeensSetupActivity.this, true, false); 
+
+//			//Move survey log files to internal upload folder
+//			DataSender.sendInternalSurveyLogsToInternalUploadDir(SetupInhalerActivity.this, true, false); 
+
+			//Move survey log files to internal upload folder
+			DataSender.sendExternalSurveyLogsToExternalUploadDir(USCTeensSetupActivity.this, true, false); 
+
+			//Move survey log files to internal upload folder
+			DataSender.sendInternalDataLogsToInternalUploadDir(USCTeensSetupActivity.this, true, false); 
+			
+//			//Move Survey Log files to upload folder
+//			DataSender.sendSurveyLogsToExternalUploadDir(SetupInhalerActivity.this, true);
+			
+			//Move all data in the internal upload queue to the external upload queue and zip if needed 
+			if (Globals.IS_DEBUG)
+				Log.i(TAG, "Move and zip internal upload dir data to external upload directory");
+			DataSender.sendInternalUploadDataToExternalUploadDir(USCTeensSetupActivity.this, false, true);
+
+//			Log.d(TAG, "WHATS LEFT ----------------------------------------------------------");
+//			DataManager.listFilesInternalStorage();
+//			DataManager.listFilesExternalStorage();
+
+			//Upload JSON files and remove
+			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
+					true, true, true, false, .85, true);
+
+			//Upload Log and SurveyLog files, backup and remove
 			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
-					false, true, true, true, .85);
-			// Upload possible remaining files in the internal memory
-			filesRemaining = RawUploader.uploadDataFromInternalDir(USCTeensSetupActivity.this, // ?
-					false, true, true, false, .85);
+					false, true, true, true, .85, true);
+
+			//Upload possible remaining files in the internal memory
+			filesRemaining = RawUploader.uploadDataFromInternalDir(USCTeensSetupActivity.this,
+					false, true, true, false, .85, true);
 
 			msg = "Completed user-initiated file upload after "
 					+ String.format(
@@ -93,7 +115,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 							((System.currentTimeMillis() - currentTime) / 1000.0 / 60.0))
 					+ " minutes. Files remaining to upload: " + filesRemaining;
 			ServerLogger.sendNote(USCTeensSetupActivity.this, msg, true);
-			return true;
+			return true; 
 		}
 
 		protected void onPostExecute(Boolean isNeedUpdate) {
@@ -110,21 +132,13 @@ public class USCTeensSetupActivity extends BaseActivity {
 //	{ 
 //		@Override
 //		protected Boolean doInBackground(Void... params) {
-//			long startTime = System.currentTimeMillis(); 
-//			String msg = "Starting user-initiated log file upload";
-//			ServerLogger.sendNote(getApplicationContext(), msg, true);
 //
-//			DataSender.sendLogsToExternalUploadDir(getApplicationContext(), true);
-//			int filesRemaining = -1; //RawUploader.uploadData(getApplicationContext(), false, true, true, .85);
-//
-//			msg = "Completed user-initiated log file upload after " + String.format("%.1f",((System.currentTimeMillis()-startTime)/1000.0/60.0)) + " minutes. Files remaining to upload: " + filesRemaining; 		
-//			ServerLogger.sendNote(getApplicationContext(), msg, true);
 //			return true; 
 //		}
 //
 //		protected void onPostExecute(Boolean isNeedUpdate) {
-//			displayToastMessage("Finished sending asthma log files.");
-//			uploadLogs.setEnabled(true);
+//			displayToastMessage("Transmission complete.");
+//			finishStudy.setEnabled(true);
 //		}
 //	}
 
