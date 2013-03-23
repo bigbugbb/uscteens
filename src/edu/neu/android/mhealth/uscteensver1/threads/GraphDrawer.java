@@ -17,6 +17,9 @@ public class GraphDrawer extends BaseThread {
 	protected boolean mPause = false;
 	// for pause synchronization
 	protected boolean mPaused = false;
+	private Object mLock = new Object();
+	// idle time after each drawing
+	protected int mIdleTime = 10;
 	
 	public GraphDrawer(GraphView view, AppPage page, Handler handler) {
 		mView   = view;
@@ -28,18 +31,25 @@ public class GraphDrawer extends BaseThread {
 	public void setPage(AppPage page) {
 		mPage = page;
 	}
+	
+	public void setIdleTime(int idleTime) {
+		mIdleTime = idleTime;
+	}
 
 	public void pause(boolean pause) {
 		mPause = pause;
-		if (mPause) {
-			// wait until the thread is paused
-			while (!mPaused) {
-				try {
-					sleep(10);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		// wait until the thread is paused
+		while (mPause && !mPaused) {
+			if (!mRun) {
+				mPause = false;
+				break;
+			}
+
+			try {
+				sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
@@ -75,19 +85,24 @@ public class GraphDrawer extends BaseThread {
 			
 			synchronized (this) {
 				try {
-					wait(10);
+					wait(mIdleTime);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			
-			while (mPause && mRun) {
+			// handle pause logic
+			while (mPause) {
 				mPaused = true;
 				try {
 					sleep(50);						
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+				}
+				if (!mRun) {
+					mPause = false;
+					break;
 				}
 			}
 			mPaused = false;
