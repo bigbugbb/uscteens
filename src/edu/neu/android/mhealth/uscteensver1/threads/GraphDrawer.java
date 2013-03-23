@@ -7,17 +7,18 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 
 public class GraphDrawer extends BaseThread {
+	// default idle time
+	protected final static int DEFAULT_IDLE_TIME = 10;
 	// the holder of the SurfaceView
 	protected SurfaceHolder mHolder = null;
 	// the app surface view
 	protected GraphView mView = null;
 	// the app page to draw
-	protected AppPage  mPage = null;	
+	protected AppPage mPage = null;	
 	// flag to indicate whether the drawer should be paused
 	protected boolean mPause = false;
 	// for pause synchronization
-	protected boolean mPaused = false;
-	private Object mLock = new Object();
+	protected boolean mPaused = false;	
 	// idle time after each drawing
 	protected int mIdleTime = 10;
 	
@@ -29,10 +30,15 @@ public class GraphDrawer extends BaseThread {
 	}	
 	
 	public void setPage(AppPage page) {
-		mPage = page;
+		synchronized (mHolder) {
+			mPage = page;
+		}
 	}
 	
 	public void setIdleTime(int idleTime) {
+		if (idleTime < 1 || idleTime > 1000) {
+			idleTime = DEFAULT_IDLE_TIME;
+		}
 		mIdleTime = idleTime;
 	}
 
