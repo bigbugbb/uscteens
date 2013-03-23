@@ -50,7 +50,12 @@ public class USCTeensSetupActivity extends BaseActivity {
 	 * Set the update button on/off depending on if the code detects that the software
 	 * is or is not at the latest version on the Android Market. 
 	 */
-	private class SendAllFilesToServerTask extends AsyncTask<Void, Void, Boolean> { 
+	/**
+	 * Set the update button on/off depending on if the code detects that the software
+	 * is or is not at the latest version on the Android Market. 
+	 */
+	private class SendAllFilesToServerTask extends AsyncTask<Void, Void, Boolean> 
+	{ 
 		@Override
 		protected Boolean doInBackground(Void... params) {
 
@@ -86,15 +91,15 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 			//Upload JSON files and remove
 			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
-					true, true, true, false, .85, true);
+					true, true, true, false, .85);
 
 			//Upload Log and SurveyLog files, backup and remove
 			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
-					false, true, true, true, .85, true);
+					false, true, true, true, .85);
 
 			//Upload possible remaining files in the internal memory
 			filesRemaining = RawUploader.uploadDataFromInternalDir(USCTeensSetupActivity.this,
-					false, true, true, false, .85, true);
+					false, true, true, false, .85);
 
 			msg = "Completed user-initiated file upload after "
 					+ String.format(
