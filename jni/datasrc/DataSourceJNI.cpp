@@ -76,12 +76,12 @@ jint LoadHourlyAccelSensorData(JNIEnv* env, jclass clazz, jstring path)
 	// get DataSource class
 	jclass dsClass = env->FindClass("edu/neu/android/mhealth/uscteensver1/data/DataSource");
 	// get onGetAccelData method
-	jmethodID mid = env->GetStaticMethodID(dsClass, "onGetAccelData", "(IIIIIII)V");
+	jmethodID mid = env->GetStaticMethodID(dsClass, "onAddAccelData", "(IIIIIII)V");
 //	// get AccelData class
 //	jclass adClass = env->FindClass("edu/neu/android/mhealth/uscteensver1/data/AccelData");
 //	// get AccelData constructor
 //	jmethodID constructor = env->GetMethodID(adClass, "<init>", "(IIIIIII)V");
-	// fill each AccelData and send it back by onGetAccelData
+	// fill each AccelData and send it back by onAddAccelData
 	int size = vecData.size();
 	for (int i = 0; i < size; ++i) {
 		if (mid) {
@@ -94,6 +94,25 @@ jint LoadHourlyAccelSensorData(JNIEnv* env, jclass clazz, jstring path)
 	}
 
 	return 0;
+}
+
+jintArray JNICALL CreateDailyRawChunkData(JNIEnv* env, jclass clazz, jint start, jint stop, jintArray sensorData)
+{
+	jboolean bCopy;
+	jint* pSensorData = env->GetIntArrayElements(sensorData, &bCopy);
+	jint size = env->GetArrayLength(sensorData);
+	vector<int>& vecChunkPos = gDataSrc->CreateDailyRawChunkData(start, stop, pSensorData, size);
+	env->ReleaseIntArrayElements(sensorData, pSensorData, 0);
+
+	size = vecChunkPos.size();
+	jintArray result = env->NewIntArray(size);
+	if (result == NULL) {
+		return NULL; /* out of memory error thrown */
+	}
+	// move from the temp structure to the java structure
+	env->SetIntArrayRegion(result, 0, size, static_cast<jint*>(&vecChunkPos[0]));
+
+	return result;
 }
 
 jint UnloadActivityData(JNIEnv * env, jclass clazz, jstring path)
@@ -138,6 +157,7 @@ static JNINativeMethod methods[] = {
 	{"create", "()I", (void*)Create },
 	{"destroy", "()I", (void*)Destroy },
 	{"loadHourlyAccelSensorData", "(Ljava/lang/String;)I", (void*)LoadHourlyAccelSensorData },
+	{"createDailyRawChunkData", "(II[I)[I", (void*)CreateDailyRawChunkData },
 	{"unloadActivityData", "(Ljava/lang/String;)I", (void*)UnloadActivityData },
 	{"getMaxActivityValue", "(Ljava/lang/String;)I", (void*)GetMaxActivityValue },
 //	{"unloadChunkData", "(Ljava/lang/String;)I", (void*)UnloadChunkData },

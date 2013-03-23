@@ -2,6 +2,7 @@ package edu.neu.android.mhealth.uscteensver1;
 
 import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.utils.WOCKETSException;
 
 
 public class USCTeensAppManager extends ApplicationManager {
@@ -11,7 +12,8 @@ public class USCTeensAppManager extends ApplicationManager {
     @Override 
     public void onCreate() {
     	super.onCreate();
-    	USCTeensGlobals.initGlobals(getAppContext());    	
+    	
+    	USCTeensGlobals.initGlobals(getAppContext());
 
     	USCTeensArbitrater arbitrater = new USCTeensArbitrater(getAppContext()); 
     	Globals.setArbitrater(arbitrater);   

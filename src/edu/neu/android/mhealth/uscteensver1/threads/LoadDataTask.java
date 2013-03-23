@@ -12,7 +12,7 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 	private Context mContext;
 	private int 	mResult;	
 	private Handler mHandler;
-	// private ProgressDialog mProgDlg;
+
 	
 	public LoadDataTask(Context context, Handler handler) {
 		mContext = context;

@@ -31,15 +31,10 @@ public class DataSource {
 	// result code
 	public final static int LOADING_SUCCEEDED  = 0;
 	public final static int ERR_NO_SENSOR_DATA = 1;
-	public final static int ERR_NO_CHUNK_DATA  = 2;
+	public final static int ERR_NO_CHUNK_DATA  = 2;	
 	
-	// threshold for chunking generation
-	private final static int CHUNKING_MEAN_AVG_DIFF        = 500;
-	private final static int CHUNKING_MEAN_AVG_SENSITIVITY = 600;
-	private final static int CHUNKING_MEAN_AVG_DISTANCE    = 60;
-	private final static int CHUNKING_MIN_SENSITIVITY      = 300;
-	private final static int CHUNKING_MAX_SENSITIVITY      = 1600;
-	private final static int CHUNKING_MIN_DISTANCE 		   = 120;
+	// value for minimum sensor data
+	protected final static int MINIMUM_SENSOR_DATA_VALUE = 1600;
 	
 	protected static Context sContext = null;
 	// raw chunk data
@@ -97,7 +92,7 @@ public class DataSource {
 				int endTime = 3600 * 24;
 				ArrayList<RawChunk> rawChunks = new ArrayList<RawChunk>();				
 				createRawChunkData(startTime, endTime, rawChunks);	
-				if (rawChunks != null && rawChunks.size() > 0) {
+				if (rawChunks.size() > 0) {
 					assert(rawChunks.get(0).getStartTime() == startTime);
 					// remove the last 
 					sRawChksWrap.remove(sRawChksWrap.size() - 1);
@@ -117,7 +112,7 @@ public class DataSource {
 		return LOADING_SUCCEEDED;
 	}
 
-	private static void onGetAccelData(int hour, int minute, int second, int milliSecond, 
+	private static void onAddAccelData(int hour, int minute, int second, int milliSecond, 
 				     			int timeInSec, int accelAverage, int accelSamples) {
 		AccelData acData = new AccelData(hour, minute, second, milliSecond, 
 				timeInSec, accelAverage, accelSamples);
@@ -138,7 +133,8 @@ public class DataSource {
 	}
 	
 	public static int getMaxDrawableDataValue() {
-		return sAccelDataWrap.getMaxDrawableDataValue();
+		int max = sAccelDataWrap.getMaxDrawableDataValue();
+		return max < MINIMUM_SENSOR_DATA_VALUE ? MINIMUM_SENSOR_DATA_VALUE : max;
 	}
 	
 	public static ArrayList<Pair<Integer, Integer>> getNoDataTimePeriods() {
@@ -237,13 +233,16 @@ public class DataSource {
 	 * @param startSecond	The start position to analyze the sensor data.
 	 * @return true if successful, otherwise false
 	 */
-	protected static boolean createRawChunkData(int startSecond, int endSecond, ArrayList<RawChunk> rawChunks) {
+	protected static int createRawChunkData(int startSecond, int stopSecond, ArrayList<RawChunk> rawChunks) {
 		if (sAccelDataWrap.size() == 0 || rawChunks == null) {
-			return false;
+			return 0;
 		}
+		
+		int[] chunkPos = createDailyRawChunkData(startSecond, stopSecond, sAccelDataWrap.getDrawableData());
+		
 		// current selected date		
 		String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());		
-		// convolution to the accelerometer data
+/*		// convolution to the accelerometer data
 		int[] sensorData = sAccelDataWrap.getDrawableData();
 		int size = sensorData.length;
 		int[] convolution = Arrays.copyOf(sensorData, size);
@@ -295,7 +294,7 @@ public class DataSource {
 					prev = i;				
 				}
 			}			
-			// VERY large but seperated sensor data
+			// VERY large but separated sensor data
 			if (Math.abs(sensorData[i]) > CHUNKING_MAX_SENSITIVITY) {
 				if (meanAverageL[i] < CHUNKING_MEAN_AVG_SENSITIVITY && meanAverageR[i] < CHUNKING_MEAN_AVG_SENSITIVITY) {
 					chunkPos.add(i);
@@ -310,23 +309,22 @@ public class DataSource {
 				}
 			}
 		}
-		chunkPos.add(end); 
+		chunkPos.add(end); */
 		// create raw chunk data for each chunking position	
 		rawChunks.clear();
-		for (int i = 0; i < chunkPos.size() - 1; ++i) {			
-			RawChunk rawChunk = new RawChunk(today, chunkPos.get(i), chunkPos.get(i + 1));
-			rawChunks.add(rawChunk);
+		for (int i = 0; i < chunkPos.length - 1; ++i) {						
+			rawChunks.add(new RawChunk(today, chunkPos[i], chunkPos[i + 1]));
 		}
-				
-		return true;
+						
+		return rawChunks.size();
 	}
 	
 	/*
 	 * create raw chunk data from raw accelerometer data	 
 	 */
 	protected static boolean createRawChunkData() {
-		boolean result = createRawChunkData(0, 3600 * 24, sRawChksWrap);		
-		return result;
+		int size = createRawChunkData(0, 3600 * 24, sRawChksWrap);		
+		return size > 0;
 	}
 	
 	public static boolean areAllChunksLabelled(String date) {
@@ -460,5 +458,6 @@ public class DataSource {
 	private static native int destroy();
 	private static native int loadHourlyAccelSensorData(String filePath);
 	private static native int unloadActivityData(String path);
+	private static native int[] createDailyRawChunkData(int startTime, int stopTime, int[] sensorData);
 	private static native int getMaxActivityValue(String path);
 }

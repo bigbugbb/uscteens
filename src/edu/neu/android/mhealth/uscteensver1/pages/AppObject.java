@@ -13,7 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
-public class AppObject {
+public abstract class AppObject {
 	public final static int UNKNOWN	   = 0;
 	public final static int BACKGROUND = 1;
 	public final static int TITLE	   = 2;

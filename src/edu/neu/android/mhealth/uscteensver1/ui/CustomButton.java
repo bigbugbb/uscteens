@@ -13,7 +13,7 @@ public class CustomButton extends AppObject {
 	protected OnClickListener mListener = null;
 
 	public CustomButton(Resources res) {
-		super(res);	
+		super(res);
 		mKind = BUTTON;
 		mZOrder = ZOrders.BUTTON;
 	}

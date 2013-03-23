@@ -47,11 +47,8 @@ public class QuestView extends ImageView implements OnGestureListener,
 	
 	protected boolean mImageLoaded = false;
 	protected ArrayList<Bitmap> mImages = new ArrayList<Bitmap>();	
-	protected String  mDate = "";
-//	protected String  mStartTime = "";
+	protected String  mDate		 = "";
 	protected String  mTime      = "";
-//	protected String  mStopTime  = "";
-//	protected String  mTimePostfix = "";
 	protected RectF   mBackArea  = new RectF();
 	protected PointF  mBackTxtPt = new PointF();
 	protected Paint   mPaintText = null;	
