@@ -9,7 +9,7 @@
 #include <assert.h>
 #include "DataSource.h"
 
-//#define DEBUG
+//#define _DEBUG_MODE
 
 #ifndef NULL
 #define NULL	0
@@ -106,9 +106,6 @@ jintArray JNICALL CreateDailyRawChunkData(JNIEnv* env, jclass clazz, jint start,
 
 	size = vecChunkPos.size();
 	jintArray result = env->NewIntArray(size);
-	if (result == NULL) {
-		return NULL; /* out of memory error thrown */
-	}
 	// move from the temp structure to the java structure
 	env->SetIntArrayRegion(result, 0, size, static_cast<jint*>(&vecChunkPos[0]));
 
