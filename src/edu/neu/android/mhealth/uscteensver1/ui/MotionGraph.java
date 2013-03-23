@@ -384,7 +384,7 @@ public class MotionGraph extends AppObject {
 	@Override
 	public boolean contains(float x, float y) {
 		return (mX < x && x <= mX + mWidth) && 
-			(mY < y && y <= mY + mHeight + mCanvasHeight * 0.25);
+			(mY < y && y <= mY + mHeight + mCanvasHeight * 0.25f);
 	}			
 	
 	protected OnGraphMovedListener mListener = null;
