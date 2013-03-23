@@ -9,8 +9,6 @@
 #include <assert.h>
 #include "DataSource.h"
 
-//#define _DEBUG_MODE
-
 #ifndef NULL
 #define NULL	0
 #endif
