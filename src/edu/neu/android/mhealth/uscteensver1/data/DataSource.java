@@ -16,6 +16,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
@@ -432,8 +433,8 @@ public class DataSource {
 			if (!aFile.exists()) {					
 				aFile.createNewFile();
 			}
-			// The file will be truncated if it exists, and created if it doesn't exist.
-			writer = new XMLWriter(new FileOutputStream(path));			
+			// The file will be truncated if it exists, and created if it doesn't exist.			
+			writer = new XMLWriter(new FileOutputStream(path), new OutputFormat("    ", true));			
 			writer.write(document);
 	        writer.close();
 	        result = true;

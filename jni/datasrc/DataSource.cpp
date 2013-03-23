@@ -11,11 +11,12 @@ using namespace std;
 const static int NO_SENSOR_DATA = -1;
 
 // threshold for chunking generation
-const static int CHUNKING_MEAN_AVG_DIFF        = 250;
-const static int CHUNKING_MEAN_AVG_SENSITIVITY = 500;
+const static int CHUNKING_MIN_MEAN_AVG         = 350;
+const static int CHUNKING_MIN_MEAN_AVG_DIFF    = 350;
+const static int CHUNKING_MAX_MEAN_AVG_DIFF    = 800;
 const static int CHUNKING_MEAN_AVG_DISTANCE    = 60;
-const static int CHUNKING_MIN_SENSITIVITY      = 300;
-const static int CHUNKING_MAX_SENSITIVITY      = 1000;
+const static int CHUNKING_MIN_SENSITIVITY      = 400;
+const static int CHUNKING_MAX_SENSITIVITY      = 999;
 const static int CHUNKING_MIN_DISTANCE 		   = 120;
 
 DataSource* DataSource::GetInstance()
@@ -109,13 +110,17 @@ vector<AccelSensorData>& DataSource::LoadActivityData(const char* pszFile)
 
 vector<int>& DataSource::CreateDailyRawChunkData(int nStart, int nStop, int* pSensorData, int nSize)
 {
+	m_vecChunkPos.clear();
+	if (nSize < CHUNKING_MIN_DISTANCE) {
+		return m_vecChunkPos;
+	}
 	// convolution to the accelerometer data
 	int* pConvolution = new int[nSize];
 	memcpy(pConvolution, pSensorData, sizeof(int) * nSize);
-
 	for (int i = 1; i < nSize - 1; ++i) { // [-1 0 1]
 		pConvolution[i] = pSensorData[i + 1] - pSensorData[i - 1];
 	}
+
 	// calculate mean average of CHUNKING_MIN_DISTANCE points' of data to the left of current position
 	int sum = 0;
 	int* pMeanAverageL = new int[nSize];
@@ -128,6 +133,7 @@ vector<int>& DataSource::CreateDailyRawChunkData(int nStart, int nStop, int* pSe
 		sum += pSensorData[i];
 		sum -= pSensorData[i - CHUNKING_MEAN_AVG_DISTANCE];
 	}
+
 	// calculate mean average of CHUNKING_MIN_DISTANCE points' of data to the right of current position
 	sum = 0;
 	int* pMeanAverageR = new int[nSize];
@@ -140,42 +146,49 @@ vector<int>& DataSource::CreateDailyRawChunkData(int nStart, int nStop, int* pSe
 		sum += pSensorData[i];
 		sum -= pSensorData[i + CHUNKING_MEAN_AVG_DISTANCE];
 	}
+
 	// figure out the possible chunking positions
-	int nPrev = nStart, nEnd = nStop;
-	m_vecChunkPos.clear();
+	int nPrev = nStart;
 	m_vecChunkPos.push_back(nStart);
 	for (int i = nStart + 1; i < nSize - CHUNKING_MIN_DISTANCE; ++i) {
 		if (i - nPrev < CHUNKING_MIN_DISTANCE) {
 			continue;
 		}
+		// chunking for no data area
 		if (pSensorData[i] == NO_SENSOR_DATA) {
 			if (pSensorData[i - 1] != NO_SENSOR_DATA || pSensorData[i + 1] != NO_SENSOR_DATA) {
 				m_vecChunkPos.push_back(i);
 				nPrev = i;
+				continue;
 			}
 		}
-		if (abs(pConvolution[i]) > CHUNKING_MIN_SENSITIVITY) {
-			if (abs(pMeanAverageL[i] - pMeanAverageR[i]) > CHUNKING_MEAN_AVG_DIFF) {
+		// chunking for data change area
+		if (pConvolution[i] > CHUNKING_MIN_SENSITIVITY &&
+				pSensorData[i] > CHUNKING_MIN_SENSITIVITY &&
+				pSensorData[i] < CHUNKING_MAX_SENSITIVITY) {
+			if (abs(pMeanAverageL[i] - pMeanAverageR[i]) > CHUNKING_MIN_MEAN_AVG_DIFF) {
 				m_vecChunkPos.push_back(i);
+				nPrev = i;
+				continue;
+			}
+		}
+		// chunking for separated sensor data with huge value
+		if (pSensorData[i] > CHUNKING_MAX_SENSITIVITY) {
+			int nNext = i + CHUNKING_MIN_DISTANCE;
+			if (pMeanAverageL[i] < CHUNKING_MIN_MEAN_AVG && pMeanAverageR[nNext] < CHUNKING_MIN_MEAN_AVG) {
+				m_vecChunkPos.push_back(i);
+			} else {
+				continue;
+			}
+			if (nNext < nSize - CHUNKING_MIN_DISTANCE) {
+				m_vecChunkPos.push_back(nNext);
+				nPrev = nNext;
+			} else {
 				nPrev = i;
 			}
 		}
-		// VERY large but separated sensor data
-		if (abs(pSensorData[i]) > CHUNKING_MAX_SENSITIVITY) {
-			if (pMeanAverageL[i] < CHUNKING_MEAN_AVG_SENSITIVITY && pMeanAverageR[i] < CHUNKING_MEAN_AVG_SENSITIVITY) {
-				m_vecChunkPos.push_back(i);
-				int nNext = i + CHUNKING_MIN_DISTANCE;
-				if (i < nSize - (CHUNKING_MIN_DISTANCE << 1) &&
-						abs(pMeanAverageL[nNext] - pMeanAverageR[nNext]) > CHUNKING_MEAN_AVG_DIFF) {
-					m_vecChunkPos.push_back(i);
-					nPrev = nNext;
-				} else {
-					nPrev = i;
-				}
-			}
-		}
 	}
-	m_vecChunkPos.push_back(nEnd);
+	m_vecChunkPos.push_back(nStop);
 
 	delete[] pConvolution;
 	delete[] pMeanAverageL;
