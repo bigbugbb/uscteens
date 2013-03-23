@@ -8,11 +8,10 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.graphics.Paint.Style;
+import android.graphics.Typeface;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.pages.GraphPage;
@@ -20,7 +19,6 @@ import edu.neu.android.mhealth.uscteensver1.ui.ClockButton;
 import edu.neu.android.mhealth.uscteensver1.ui.MergeButton;
 import edu.neu.android.mhealth.uscteensver1.ui.QuestButton;
 import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
-import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 
 // chunk data mapping to the motion graph
 public class Chunk extends AppObject {

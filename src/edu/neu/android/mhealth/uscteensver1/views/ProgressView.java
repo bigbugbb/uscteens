@@ -1,32 +1,22 @@
 package edu.neu.android.mhealth.uscteensver1.views;
 
-import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
-import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
-import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
-import edu.neu.android.mhealth.uscteensver1.threads.BaseThread;
-import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.graphics.Bitmap.Config;
-import android.graphics.Paint.Align;
-import android.graphics.Paint.Style;
-import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
+import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class ProgressView extends View {
 

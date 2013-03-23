@@ -2,20 +2,16 @@ package edu.neu.android.mhealth.uscteensver1.pages;
 
 import java.util.List;
 
-import edu.neu.android.mhealth.uscteensver1.ui.HomeBackground;
-import edu.neu.android.mhealth.uscteensver1.ui.WinBackground;
-import edu.neu.android.mhealth.uscteensver1.ui.BeginButton;
-import edu.neu.android.mhealth.uscteensver1.ui.RewardButton;
-import edu.neu.android.mhealth.uscteensver1.ui.HomeTitle;
-import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
+import edu.neu.android.mhealth.uscteensver1.ui.RewardButton;
+import edu.neu.android.mhealth.uscteensver1.ui.WinBackground;
 
 public class WinPage extends AppPage implements OnClickListener {
 	

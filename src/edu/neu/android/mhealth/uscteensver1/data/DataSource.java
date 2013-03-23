@@ -5,12 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -22,17 +19,13 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import android.content.Context;
+import android.util.Pair;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.utils.ParadigmUtility;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
-import edu.neu.android.wocketslib.utils.PhoneInfo;
 import edu.neu.android.wocketslib.utils.WOCKETSException;
-
-import android.content.Context;
-import android.util.Pair;
-import android.widget.Toast;
 
 public class DataSource {
 	// result code

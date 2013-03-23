@@ -1,16 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.dialog;
 
-import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.R.id;
-import edu.neu.android.mhealth.uscteensver1.R.layout;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
-import edu.neu.android.mhealth.uscteensver1.views.QuestView;
-import edu.neu.android.mhealth.uscteensver1.views.QuestView.OnBackClickedListener;
-import edu.neu.android.wocketslib.support.DataStorage;
-
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +8,12 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
+import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
+import edu.neu.android.mhealth.uscteensver1.views.QuestView;
+import edu.neu.android.mhealth.uscteensver1.views.QuestView.OnBackClickedListener;
+import edu.neu.android.wocketslib.support.DataStorage;
 
 public class QuestDialog extends Activity implements OnBackClickedListener {
 	

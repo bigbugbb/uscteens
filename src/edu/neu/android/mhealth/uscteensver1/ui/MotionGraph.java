@@ -7,9 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.graphics.Paint.Style;
 import android.util.Pair;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
@@ -183,8 +183,7 @@ public class MotionGraph extends AppObject {
 			// get the right region to draw, clip the part out of screen
 			if (chunk.mStart - mStart > mWidth || chunk.mStop - mStart < 0)
 				continue;
-			RectF r = new RectF(chunk.mStart - mStart, 0,
-					chunk.mStop - mStart, mHeight);
+			RectF r = new RectF(chunk.mStart - mStart, 0, chunk.mStop - mStart, mHeight);
 			// check the selection
 			if (chunk.isSelected()) {
 				c.drawRect(r, mSelChunkBackPaint);
@@ -208,7 +207,7 @@ public class MotionGraph extends AppObject {
 			} else if (mScaledData[sec] < 0) {
 				int start = 0, stop = 0, delta = 0;
 				// find the period that should be drawn
-				for (Pair pair : DataSource.getNoDataTimePeriods()) {
+				for (Pair<Integer, Integer> pair : DataSource.getNoDataTimePeriods()) {
 					if ((Integer) pair.first <= sec && sec < (Integer) pair.second) {						
 						start = (Integer) pair.first  * USCTeensGlobals.PIXEL_PER_DATA;
 						stop  = (Integer) pair.second * USCTeensGlobals.PIXEL_PER_DATA;		

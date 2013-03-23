@@ -6,17 +6,15 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 
 
-public class AppPage implements OnGestureListener {		
+public abstract class AppPage implements OnGestureListener {		
 	// app context
 	protected Context mContext = null;
 	// message handler

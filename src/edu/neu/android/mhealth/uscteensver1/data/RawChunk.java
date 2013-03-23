@@ -1,12 +1,15 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 
 // chunk data from XML in direct
-class RawChunk {
+class RawChunk implements Serializable {
+	private static final long serialVersionUID = -3769827996533096658L;
+	
 	private static final int UNLABELLED = -1;
 	// data read directly from xml
 	protected String mStartDate;

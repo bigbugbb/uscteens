@@ -1,6 +1,10 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
-class AccelData {
+import java.io.Serializable;
+
+class AccelData implements Serializable {
+	private static final long serialVersionUID = 2981052987309112192L;
+	
 	public int mHour;
 	public int mMinute;
 	public int mSecond;

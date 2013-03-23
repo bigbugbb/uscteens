@@ -1,26 +1,17 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
-import java.util.Date;
-
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.survey.CSTeensSurvey;
 import edu.neu.android.mhealth.uscteensver1.survey.RandomTeensSurveyQuestionSet;
 import edu.neu.android.wocketslib.Globals;
@@ -30,15 +21,11 @@ import edu.neu.android.wocketslib.dataupload.RawUploader;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
-import edu.neu.android.wocketslib.sensormonitor.DataStore;
-import edu.neu.android.wocketslib.sensormonitor.Sensor;
 import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
-import edu.neu.android.wocketslib.support.LogcatReader;
 import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
-import edu.neu.android.wocketslib.utils.Util;
 
 public class USCTeensSetupActivity extends BaseActivity {
 	private static final String TAG = "SetupTeenGameActivity"; 

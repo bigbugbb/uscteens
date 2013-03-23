@@ -4,20 +4,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
-import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.utils.DateHelper;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Bitmap.Config;
-import android.graphics.Canvas;
-import android.view.MotionEvent;
 
 public class DateListView extends ListView {
 

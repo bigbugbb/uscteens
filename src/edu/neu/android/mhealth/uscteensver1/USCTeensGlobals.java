@@ -1,29 +1,14 @@
  package edu.neu.android.mhealth.uscteensver1;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
-import android.telephony.TelephonyManager;
-import edu.neu.android.wocketslib.utils.FileHelper;
-import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.utils.FileHelper;
 
 /**
  * Globals that are in the Wockets library that are redefined by the calling application

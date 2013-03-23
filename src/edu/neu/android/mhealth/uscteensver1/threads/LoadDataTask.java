@@ -1,12 +1,11 @@
 package edu.neu.android.mhealth.uscteensver1.threads;
 
-import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 
 
 public class LoadDataTask extends AsyncTask<String, Void, Void>{

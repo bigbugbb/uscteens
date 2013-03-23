@@ -1,16 +1,16 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
-import android.graphics.Typeface;
-import android.graphics.Bitmap.Config;
 import android.graphics.Paint.Style;
+import android.graphics.Typeface;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
 public class ActionListView extends ListView {

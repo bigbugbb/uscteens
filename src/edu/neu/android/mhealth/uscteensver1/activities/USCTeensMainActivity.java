@@ -1,42 +1,15 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
-import edu.neu.android.mhealth.uscteensver1.dialog.QuitDialog;
-import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;
-import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
-import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
-import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
-import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
-import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
-import edu.neu.android.mhealth.uscteensver1.pages.GraphPage;
-import edu.neu.android.mhealth.uscteensver1.pages.DatePage;
-import edu.neu.android.mhealth.uscteensver1.pages.WinPage;
-import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
-import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
-import edu.neu.android.mhealth.uscteensver1.views.GraphView;
-import edu.neu.android.mhealth.uscteensver1.views.ProgressView;
-import edu.neu.android.wocketslib.Globals;
-import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
-import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
-import edu.neu.android.wocketslib.sensormonitor.Arbitrater;
-import edu.neu.android.wocketslib.support.AuthorizationChecker;
-import edu.neu.android.wocketslib.support.DataStorage;
-import edu.neu.android.wocketslib.utils.Log;
-import edu.neu.android.wocketslib.utils.PasswordChecker;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import android.content.Context;
-import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -46,6 +19,28 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;
+import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
+import edu.neu.android.mhealth.uscteensver1.dialog.QuitDialog;
+import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
+import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
+import edu.neu.android.mhealth.uscteensver1.pages.DatePage;
+import edu.neu.android.mhealth.uscteensver1.pages.GraphPage;
+import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
+import edu.neu.android.mhealth.uscteensver1.pages.WinPage;
+import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
+import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
+import edu.neu.android.mhealth.uscteensver1.views.GraphView;
+import edu.neu.android.mhealth.uscteensver1.views.ProgressView;
+import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
+import edu.neu.android.wocketslib.support.AuthorizationChecker;
+import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.PasswordChecker;
 
 public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListener {
 	
@@ -243,9 +238,9 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
         			switchPages(indexOfPage(PageType.GRAPH_PAGE));
         		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
-        			Toast.makeText(context, "Can't find the sensor data!", Toast.LENGTH_SHORT).show();
+        			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
         		} else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
-        			Toast.makeText(context, "Can't find the chunk data!", Toast.LENGTH_SHORT).show();
+        			Toast.makeText(context, R.string.chunk_error, Toast.LENGTH_LONG).show();
         		}        		
         		mProgressView.dismiss();
         		break;

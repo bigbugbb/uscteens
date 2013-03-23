@@ -1,15 +1,10 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
-import edu.neu.android.wocketslib.support.DataStorage;
-import edu.neu.android.wocketslib.utils.FileHelper;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class SetupTextView extends TextView {
 	

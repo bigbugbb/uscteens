@@ -13,7 +13,6 @@ import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.R;
 import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.utils.AppUsageLogger;
-import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.UsageCollector;
 

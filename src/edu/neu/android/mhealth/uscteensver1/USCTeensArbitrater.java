@@ -10,37 +10,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-import com.google.gson.Gson;
-
-//import org.omg.PortableInterceptor.INACTIVE;
-
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Environment;
-import android.widget.Toast;
-import au.com.bytecode.opencsv.CSVWriter;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.dataupload.DataSender;
-import edu.neu.android.wocketslib.dataupload.DataUploaderService;
 import edu.neu.android.wocketslib.dataupload.RawUploader;
-import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.emasurvey.model.PromptRecorder;
-import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
-import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
-import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
-import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent.PROMPT_AUDIO;
 import edu.neu.android.wocketslib.sensormonitor.Arbitrater;
-import edu.neu.android.wocketslib.sensormonitor.ArbitraterInterface;
-import edu.neu.android.wocketslib.sensormonitor.DataStore;
-import edu.neu.android.wocketslib.sensormonitor.Sensor;
 import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
-import edu.neu.android.wocketslib.support.LogcatReader;
 import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.BasicLogger;
 import edu.neu.android.wocketslib.utils.DateHelper;
@@ -48,11 +30,8 @@ import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.PackageChecker;
 import edu.neu.android.wocketslib.utils.PhoneInfo;
-import edu.neu.android.wocketslib.utils.PhonePrompter;
-import edu.neu.android.wocketslib.utils.PhoneVibrator;
-import edu.neu.android.wocketslib.utils.Util;
 import edu.neu.android.wocketslib.utils.WOCKETSException;
-import edu.neu.android.wocketslib.wakefulintent.WakefulIntentService;
+//import org.omg.PortableInterceptor.INACTIVE;
 
 public class USCTeensArbitrater extends Arbitrater {
 	private static final String TAG = "USCTeensArbitrater";	

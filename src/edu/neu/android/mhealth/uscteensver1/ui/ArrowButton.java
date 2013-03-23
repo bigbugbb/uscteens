@@ -1,13 +1,12 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.graphics.Paint.Style;
+import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
 public class ArrowButton extends CustomButton { 

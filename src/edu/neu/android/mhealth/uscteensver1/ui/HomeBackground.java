@@ -1,10 +1,9 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import edu.neu.android.mhealth.uscteensver1.R;
-
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import edu.neu.android.mhealth.uscteensver1.R;
 
 public class HomeBackground extends Background {
 

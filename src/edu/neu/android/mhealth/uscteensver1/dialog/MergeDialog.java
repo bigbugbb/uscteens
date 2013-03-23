@@ -1,11 +1,15 @@
 package edu.neu.android.mhealth.uscteensver1.dialog;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Message;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.R.id;
-import edu.neu.android.mhealth.uscteensver1.R.layout;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -13,15 +17,6 @@ import edu.neu.android.mhealth.uscteensver1.views.MergeView;
 import edu.neu.android.mhealth.uscteensver1.views.MergeView.OnBackClickedListener;
 import edu.neu.android.mhealth.uscteensver1.views.MergeView.OnItemClickListener;
 import edu.neu.android.wocketslib.support.DataStorage;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Message;
-import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 
 public class MergeDialog extends Activity implements OnItemClickListener, OnBackClickedListener {
 	

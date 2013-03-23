@@ -2,9 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.survey;
 
 
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 
-import edu.neu.android.wocketslib.emasurvey.model.QuestionComparator;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyAnswer;

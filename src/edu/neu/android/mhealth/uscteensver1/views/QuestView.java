@@ -2,39 +2,37 @@ package edu.neu.android.mhealth.uscteensver1.views;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.Paint.Style;
+import android.graphics.PointF;
+import android.graphics.RectF;
+import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Message;
+import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.MotionEvent;
+import android.widget.ImageView;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.R.drawable;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
+import edu.neu.android.mhealth.uscteensver1.ui.ActionListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ArrowButton;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
-import edu.neu.android.mhealth.uscteensver1.ui.ActionListView;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Align;
-import android.graphics.PointF;
-import android.graphics.RectF;
-import android.graphics.Typeface;
-import android.graphics.Bitmap.Config;
-import android.graphics.Paint.Style;
-import android.os.Handler;
-import android.os.Message;
-import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.GestureDetector.OnGestureListener;
-import android.widget.ImageView;
 
 public class QuestView extends ImageView implements OnGestureListener, 
 													  OnItemClickListener, 

@@ -3,25 +3,32 @@ package edu.neu.android.mhealth.uscteensver1.pages;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.R.drawable;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.data.Chunk;
-import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
-import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleListener;
-import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.ui.*;
-import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph.OnGraphMovedListener;
-import edu.neu.android.mhealth.uscteensver1.ui.SlideBar.OnSlideBarChangeListener;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.data.Chunk;
+import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
+import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleListener;
+import edu.neu.android.mhealth.uscteensver1.ui.BackButton;
+import edu.neu.android.mhealth.uscteensver1.ui.ChunkButton;
+import edu.neu.android.mhealth.uscteensver1.ui.GraphBackground;
+import edu.neu.android.mhealth.uscteensver1.ui.MergeButton;
+import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph;
+import edu.neu.android.mhealth.uscteensver1.ui.MotionGraph.OnGraphMovedListener;
+import edu.neu.android.mhealth.uscteensver1.ui.NextButton;
+import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
+import edu.neu.android.mhealth.uscteensver1.ui.QuestButton;
+import edu.neu.android.mhealth.uscteensver1.ui.SlideBar;
+import edu.neu.android.mhealth.uscteensver1.ui.SlideBar.OnSlideBarChangeListener;
+import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
+import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 
 
 public class GraphPage extends AppPage implements OnClickListener,

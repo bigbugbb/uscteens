@@ -2,20 +2,16 @@ package edu.neu.android.mhealth.uscteensver1.pages;
 
 import java.util.List;
 
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.ui.HomeBackground;
-import edu.neu.android.mhealth.uscteensver1.ui.BeginButton;
-import edu.neu.android.mhealth.uscteensver1.ui.HomeTitle;
-import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
-import edu.neu.android.mhealth.uscteensver1.ui.SetupTextView;
-import edu.neu.android.wocketslib.support.DataStorage;
-import edu.neu.android.wocketslib.utils.FileHelper;
-
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import edu.neu.android.mhealth.uscteensver1.ui.BeginButton;
+import edu.neu.android.mhealth.uscteensver1.ui.HomeBackground;
+import edu.neu.android.mhealth.uscteensver1.ui.HomeTitle;
+import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
+import edu.neu.android.mhealth.uscteensver1.ui.SetupTextView;
+import edu.neu.android.wocketslib.support.DataStorage;
 
 public class HomePage extends AppPage implements OnClickListener {
 	

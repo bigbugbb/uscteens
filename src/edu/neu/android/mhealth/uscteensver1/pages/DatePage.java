@@ -1,24 +1,8 @@
 package edu.neu.android.mhealth.uscteensver1.pages;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.activities.StartDateSetupActivity;
-import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.ui.DateBackground;
-import edu.neu.android.mhealth.uscteensver1.ui.ArrowButton;
-import edu.neu.android.mhealth.uscteensver1.ui.ReturnButton;
-import edu.neu.android.mhealth.uscteensver1.ui.ListView;
-import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
-import edu.neu.android.mhealth.uscteensver1.ui.DateListView;
-import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
-import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
-import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
-import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
-import edu.neu.android.wocketslib.support.DataStorage;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -27,6 +11,17 @@ import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.ui.ArrowButton;
+import edu.neu.android.mhealth.uscteensver1.ui.DateBackground;
+import edu.neu.android.mhealth.uscteensver1.ui.DateListView;
+import edu.neu.android.mhealth.uscteensver1.ui.ListView;
+import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
+import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
+import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
+import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
+import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
+import edu.neu.android.wocketslib.support.DataStorage;
 
 
 public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteensver1.ui.OnClickListener,

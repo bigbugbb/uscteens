@@ -1,7 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import android.content.res.Resources;
+import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 
 
 public class ChunkButton extends CustomButton {
