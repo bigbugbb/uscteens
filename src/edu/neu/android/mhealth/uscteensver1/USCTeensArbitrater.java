@@ -565,45 +565,45 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static final String KEY_UPLOAD_JSON = "_KEY_UPLOAD_JSON";
 
 	private void uploadDataAndLogToServer(Context aContext) {
-		long lastUploadJSONToServer = DataStorage.GetValueLong(aContext, KEY_UPLOAD_JSON, -1);
-		long lastMoveLogExternalTime = DataStorage.GetValueLong(aContext, KEY_MOVE_LOG_TO_EXTERNAL, -1);
-
-		long currentTime = System.currentTimeMillis();
-		if ((currentTime - lastUploadJSONToServer) > 60 * 60 * 1000) {
-			// send JSON file
-			String msg = "Starting 1-hour file upload";
-			// Move JSON to external upload folder
-			DataSender.sendInternalUploadDataToExternalUploadDir(aContext, false, true);
-
-			if ((currentTime - lastMoveLogExternalTime) > 24 * 60 * 60 * 1000) {
-				// send logs
-				msg += " and 24-hour log and survey files upload";
-				// Move Standard Log files to external upload folder (compress and do not include today)
-				DataSender.sendLogsToExternalUploadDir(aContext, true, false);
-				
-				// TODO check where these files are saved 
-				// Move Survey Log files to upload folder
-				DataSender.sendExternalSurveyLogsToExternalUploadDir(aContext, true, false);
-
-				// Move Data Log files to upload folder 
-				DataSender.sendExternalDataLogsToExternalUploadDir(aContext, true, false);
-
-				DataStorage.SetValue(aContext, KEY_MOVE_LOG_TO_EXTERNAL, currentTime);
-			}
-			Log.i(TAG, msg);
-			ServerLogger.transmitOrQueueNote(aContext, msg, true);
-			// Upload JSON files and remove (dont backup)
-			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(aContext, true, true, true, false, .85, true);
-			// Upload Log and SurveyLog files, backup and remove
-			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(aContext, false, true, true, true, .85, true);
-
-			msg = "Completed file upload after " + String.format("%.1f", ((System.currentTimeMillis() - currentTime) / 1000.0 / 60.0))
-					+ " minutes. Files remaining to upload: " + filesRemaining;
-			ServerLogger.sendNote(aContext, msg, true);
-			Log.i(TAG, msg);
-
-			DataStorage.SetValue(aContext, KEY_UPLOAD_JSON, currentTime);
-		}
+//		long lastUploadJSONToServer = DataStorage.GetValueLong(aContext, KEY_UPLOAD_JSON, -1);
+//		long lastMoveLogExternalTime = DataStorage.GetValueLong(aContext, KEY_MOVE_LOG_TO_EXTERNAL, -1);
+//
+//		long currentTime = System.currentTimeMillis();
+//		if ((currentTime - lastUploadJSONToServer) > 60 * 60 * 1000) {
+//			// send JSON file
+//			String msg = "Starting 1-hour file upload";
+//			// Move JSON to external upload folder
+//			DataSender.sendInternalUploadDataToExternalUploadDir(aContext, false, true);
+//
+//			if ((currentTime - lastMoveLogExternalTime) > 24 * 60 * 60 * 1000) {
+//				// send logs
+//				msg += " and 24-hour log and survey files upload";
+//				// Move Standard Log files to external upload folder (compress and do not include today)
+//				DataSender.sendLogsToExternalUploadDir(aContext, true, false);
+//				
+//				// TODO check where these files are saved 
+//				// Move Survey Log files to upload folder
+//				DataSender.sendExternalSurveyLogsToExternalUploadDir(aContext, true, false);
+//
+//				// Move Data Log files to upload folder 
+//				DataSender.sendExternalDataLogsToExternalUploadDir(aContext, true, false);
+//
+//				DataStorage.SetValue(aContext, KEY_MOVE_LOG_TO_EXTERNAL, currentTime);
+//			}
+//			Log.i(TAG, msg);
+//			ServerLogger.transmitOrQueueNote(aContext, msg, true);
+//			// Upload JSON files and remove (dont backup)
+//			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(aContext, true, true, true, false, .85, true);
+//			// Upload Log and SurveyLog files, backup and remove
+//			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(aContext, false, true, true, true, .85, true);
+//
+//			msg = "Completed file upload after " + String.format("%.1f", ((System.currentTimeMillis() - currentTime) / 1000.0 / 60.0))
+//					+ " minutes. Files remaining to upload: " + filesRemaining;
+//			ServerLogger.sendNote(aContext, msg, true);
+//			Log.i(TAG, msg);
+//
+//			DataStorage.SetValue(aContext, KEY_UPLOAD_JSON, currentTime);
+//		}
 	}
 
 	public static void saveRecordsInLogcat(boolean isClear) {
