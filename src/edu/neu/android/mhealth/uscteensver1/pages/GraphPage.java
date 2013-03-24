@@ -168,7 +168,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	}
 
 	@Override
-	public void onDraw(Canvas c) {		
+	public void onDraw(Canvas c) {				
 		for (AppObject obj : mObjects) {
 			obj.onDraw(c);
 		}

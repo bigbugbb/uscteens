@@ -2,7 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.io.Serializable;
 
-public class LabelData implements Serializable, Comparable<LabelData> {
+class RawLabel implements Serializable, Comparable<RawLabel> {
 	private static final long serialVersionUID = 900403168675225124L;
 	
 	private int mHour;
@@ -13,7 +13,7 @@ public class LabelData implements Serializable, Comparable<LabelData> {
 	private String mText; // such as Sleeping
 	
 
-	public LabelData(int hour, int minute, int second, int timeInSec, String text) {
+	public RawLabel(int hour, int minute, int second, int timeInSec, String text) {
 		mHour   = hour;
 		mMinute = minute;
 		mSecond = second;
@@ -35,7 +35,7 @@ public class LabelData implements Serializable, Comparable<LabelData> {
 	}
 	
 	@Override
-	public int compareTo(LabelData another) {
+	public int compareTo(RawLabel another) {
 		return mX - another.getX();
 	}
 }

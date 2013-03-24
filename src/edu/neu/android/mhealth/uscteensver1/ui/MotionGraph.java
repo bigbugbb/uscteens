@@ -39,6 +39,7 @@ public class MotionGraph extends AppObject {
 	protected Paint   mSelChunkBackPaint = null;
 	protected Paint   mPaintTxt  = null;
 	protected Paint   mPaintDate = null;
+	protected RectF   mSelectedRegion = new RectF();
 	protected float[] mPTS = null;
 	protected int[]   mScaledData = null;
 	protected int     mDataLengthInPixel = 0; // total activity data length in pixel(already scaled)
@@ -146,13 +147,14 @@ public class MotionGraph extends AppObject {
 
 	@Override
 	public void onDraw(Canvas c) {
-		//c.drawRect(0, 0, mWidth, mHeight, mBackgroundGray);
+		// draw the background with white color
 		c.drawRect(0, 0, mWidth, mHeight, mBackgroundWhite);
+		
 		// draw the border
 		c.drawLine(0, 0, mWidth, 0, mPaint);
 		c.drawLine(0, 0, 0, mHeight, mPaint);
 		c.drawLine(mWidth, 0, mWidth, mHeight, mPaint);
-		c.drawLine(0, mHeight, mWidth, mHeight, mPaint);
+		c.drawLine(0, mHeight, mWidth, mHeight, mPaint);		
 		
 		if (Math.abs((int) mSpeedX) > 0) {
 			int offset = (int) mSpeedX;
@@ -183,14 +185,20 @@ public class MotionGraph extends AppObject {
 			// get the right region to draw, clip the part out of screen
 			if (chunk.mStart - mStart > mWidth || chunk.mStop - mStart < 0)
 				continue;
-			RectF r = new RectF(chunk.mStart - mStart, 0, chunk.mStop - mStart, mHeight);
+			mSelectedRegion.left   = chunk.mStart - mStart;
+			mSelectedRegion.top    = 0;
+			mSelectedRegion.right  = chunk.mStop - mStart;
+			mSelectedRegion.bottom = mHeight;
 			// check the selection
 			if (chunk.isSelected()) {
-				c.drawRect(r, mSelChunkBackPaint);
+				c.drawRect(mSelectedRegion, mSelChunkBackPaint);
 			} else if (chunk.mQuest.isAnswered()) {								
-				c.drawRect(r, mMarkedPaint);
+				c.drawRect(mSelectedRegion, mMarkedPaint);
 			}
 		}
+		
+		// draw the floating labels if they exist 
+		
 		
 		/*
 		 *  draw the data
@@ -240,8 +248,10 @@ public class MotionGraph extends AppObject {
 			Chunk chunk = ChunkManager.getChunk(i);
 			chunk.onDraw(c);
 		}
+		
 		// draw the rectangle which indicates the chunk selection		
 		c.drawRect(ChunkManager.getSelectedArea(), mSelChunkPaint);	
+		
 		// draw the time interval corresponding to the displayed region
 		String timeStart = toStringTimeFromPosition(mStart);
 		String timeEnd   = toStringTimeFromPosition(mEnd);
@@ -249,6 +259,7 @@ public class MotionGraph extends AppObject {
 		c.drawText(timeStart, AppScale.doScaleW(20), mHeight + AppScale.doScaleH(36), mPaintTxt);
 		mPaintTxt.setTextAlign(Paint.Align.RIGHT);
 		c.drawText(timeEnd, mWidth + AppScale.doScaleW(-20), mHeight + AppScale.doScaleH(36), mPaintTxt);
+		
 		// draw date on the bottom
 		mPaintDate.setTextAlign(Paint.Align.CENTER);
 		c.drawText(mDate, mWidth / 2, mHeight + AppScale.doScaleH(200), mPaintDate);			

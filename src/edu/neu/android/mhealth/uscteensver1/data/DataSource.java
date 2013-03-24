@@ -44,7 +44,7 @@ public class DataSource {
 	// hourly accelerometer data
 	protected static ArrayList<AccelData> sHourlyAccelData = null;	
 	// floating labels data
-	protected static LabelDataWrap sLabelWrap = new LabelDataWrap();
+	protected static RawLabelWrap sRawLabelsWrap = new RawLabelWrap();
 	
 	
 	static {
@@ -128,8 +128,8 @@ public class DataSource {
 	}
 	
 	private static void onAddLabelData(int hour, int minute, int second, int timeInSec, String text) {
-		LabelData data = new LabelData(hour, minute, second, timeInSec, text);
-		sLabelWrap.add(data);
+		RawLabel data = new RawLabel(hour, minute, second, timeInSec, text);
+		sRawLabelsWrap.add(data);
 	}
 	
 	public static String getCurrentSelectedDate() {
@@ -154,7 +154,11 @@ public class DataSource {
 		return sAccelDataWrap.getNoDataTimePeriods();
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	
+	public static RawLabelWrap getRawLabels() {
+		return sRawLabelsWrap;
+	}
+	
 	public static RawChunksWrap getRawChunks() {
 		return sRawChksWrap;
 	}
@@ -250,11 +254,11 @@ public class DataSource {
 		}
 		
 		// first clear the data container
-		sLabelWrap.clear();
+		sRawLabelsWrap.clear();
 		// load the daily data from the csv file	
 		loadDailyLabelData(labelFilePaths[0]);		
 		
-		return sLabelWrap.size() > 0;
+		return sRawLabelsWrap.size() > 0;
 	}
 
 	/**

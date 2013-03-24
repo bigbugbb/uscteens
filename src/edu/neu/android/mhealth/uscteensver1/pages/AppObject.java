@@ -19,8 +19,9 @@ public abstract class AppObject {
 	public final static int TITLE	   = 2;
 	public final static int CHUNK	   = 3;
 	public final static int BUTTON	   = 4;
-	public final static int TEXTVIEW   = 5;
-	public final static int SLIDERBAR  = 6;
+	public final static int LABEL	   = 5;
+	public final static int TEXTVIEW   = 6;
+	public final static int SLIDERBAR  = 7;
 	
 	protected float mX = 0;
 	protected float mY = 0;
@@ -255,6 +256,7 @@ public abstract class AppObject {
 	public class ZOrders {
 		public static final int BACKGROUND = 0;
 		public static final int TITLE	   = 1;
+		public static final int LABEL      = 1;
 		public static final int CHUNK	   = 2;
 		public static final int BUTTON	   = 4;
 		public static final int TEXTVIEW   = 4;
