@@ -14,13 +14,22 @@ using std::string;
 
 struct AccelSensorData
 {
-	int nHour;
-	int nMinute;
-	int nSecond;
-	int nMilliSecond;
-	int nTimeInSec;
-	int nIntAccelAverage;
-	int nIntAccelSamples;
+	int    nHour;
+	int    nMinute;
+	int    nSecond;
+	int    nMilliSecond;
+	int    nTimeInSec;
+	int    nIntAccelAverage;
+	int    nIntAccelSamples;
+};
+
+struct LabelData
+{
+	int    nHour;
+	int    nMinute;
+	int    nSecond;
+	int    nTimeInSec;
+	string strText;
 };
 
 class DataSource : public CBaseObject
@@ -31,6 +40,7 @@ public:
 	int  GetMaxActivityValue(const char* pszFile);
 	vector<AccelSensorData>& LoadActivityData(const char* pszFile);
 	vector<int>& CreateDailyRawChunkData(int nStart, int nStop, int* pSensorData, int nSize);
+	vector<LabelData>& LoadDailyLabelData(const char* pszFile);
 	int  UnloadActivityData(const char* pszFile);
 	vector<int>* LoadChunkData(const char* pszFile);
 	int  UnloadChunkData(const char* pszFile);
@@ -49,8 +59,9 @@ protected:
 	};
 
 	vector<int>				m_vecChunkPos;
-	vector<ChunkData*>    m_vecChunk;
+	vector<ChunkData*>      m_vecChunk;
 	vector<AccelSensorData> m_vecASD;
+	vector<LabelData>		m_vecLabel;
 };
 
 #endif

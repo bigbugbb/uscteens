@@ -84,7 +84,7 @@ int DataSource::GetMaxActivityValue(const char* pszFile)
 
 vector<AccelSensorData>& DataSource::LoadActivityData(const char* pszFile)
 {
-	bool ParseLine(char* pszLine, AccelSensorData& rASD, int nCount);
+	bool ParseLineForSensorData(char* pszLine, AccelSensorData& rASD, int nCount);
 
 	AccelSensorData asd;
 	char szLine[BUF_SIZE];
@@ -96,7 +96,7 @@ vector<AccelSensorData>& DataSource::LoadActivityData(const char* pszFile)
 	int count = 0;
 	fin.getline(szLine, BUF_SIZE); // skip the first line
 	while (fin.getline(szLine, BUF_SIZE)) {
-		if (ParseLine(szLine, asd, count++)) {
+		if (ParseLineForSensorData(szLine, asd, count++)) {
 			m_vecASD.push_back(asd);
 		}
 
@@ -106,6 +106,25 @@ vector<AccelSensorData>& DataSource::LoadActivityData(const char* pszFile)
 	}
 
 	return m_vecASD;
+}
+
+vector<LabelData>& DataSource::LoadDailyLabelData(const char* pszFile)
+{
+	bool ParseLineForLabelData(char* pszLine, LabelData& data);
+
+	LabelData data;
+	char szLine[BUF_SIZE];
+	ifstream fin(pszFile);
+
+	m_vecLabel.clear();
+	fin.getline(szLine, BUF_SIZE); // skip the first line
+	while (fin.getline(szLine, BUF_SIZE)) {
+		if (ParseLineForLabelData(szLine, data)) {
+			m_vecLabel.push_back(data);
+		}
+	}
+
+	return m_vecLabel;
 }
 
 vector<int>& DataSource::CreateDailyRawChunkData(int nStart, int nStop, int* pSensorData, int nSize)
@@ -197,7 +216,38 @@ vector<int>& DataSource::CreateDailyRawChunkData(int nStart, int nStop, int* pSe
 	return m_vecChunkPos;
 }
 
-bool ParseLine(char* pszLine, AccelSensorData& rASD, int nCount)
+bool ParseLineForLabelData(char* pszLine, LabelData& data)
+{
+	char* pString = strtok(pszLine, " ,.:");
+
+	int label = 0;
+	while (pString) {
+		switch (label++) {
+		case 0: // date
+			// skip
+			break;
+		case 1: // hour
+			data.nHour = atoi(pString);
+			break;
+		case 2: // minute
+			data.nMinute = atoi(pString);
+			break;
+		case 3: // second
+			data.nSecond = atoi(pString);
+			break;
+		case 4:
+			data.strText = pString;
+			break;
+		}
+		pString = strtok (NULL, " ,.:");
+	}
+	data.strText[data.strText.size() - 1] = '\0';
+	data.nTimeInSec = data.nHour * 3600 + data.nMinute * 60 + data.nSecond;
+
+	return true;
+}
+
+bool ParseLineForSensorData(char* pszLine, AccelSensorData& rASD, int nCount)
 {
 	char* pString = strtok(pszLine, " ,.:");
 	int label = 0;

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -44,6 +43,8 @@ public class DataSource {
 	protected static AccelDataWrap sAccelDataWrap = new AccelDataWrap();
 	// hourly accelerometer data
 	protected static ArrayList<AccelData> sHourlyAccelData = null;	
+	// floating labels data
+	protected static LabelDataWrap sLabelWrap = new LabelDataWrap();
 	
 	
 	static {
@@ -109,15 +110,26 @@ public class DataSource {
 				}
 			}
 		}
+		
+		/*
+		 * finally load the label data if it exists, we use it to draw text 
+		 * hints on the graph for helping user remember what he/she did before
+		 */
+		loadLabelData(date);
 			
 		return LOADING_SUCCEEDED;
 	}
 
 	private static void onAddAccelData(int hour, int minute, int second, int milliSecond, 
 				     			int timeInSec, int accelAverage, int accelSamples) {
-		AccelData acData = new AccelData(hour, minute, second, milliSecond, 
+		AccelData data = new AccelData(hour, minute, second, milliSecond, 
 				timeInSec, accelAverage, accelSamples);
-		sHourlyAccelData.add(acData);
+		sHourlyAccelData.add(data);
+	}
+	
+	private static void onAddLabelData(int hour, int minute, int second, int timeInSec, String text) {
+		LabelData data = new LabelData(hour, minute, second, timeInSec, text);
+		sLabelWrap.add(data);
 	}
 	
 	public static String getCurrentSelectedDate() {
@@ -228,13 +240,29 @@ public class DataSource {
 
 		return true;
 	}
+	
+	private static boolean loadLabelData(String date) {
+		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
+				USCTeensGlobals.LABELS_FOLDER + date;
+		String[] labelFilePaths = FileHelper.getFilePathsDir(path);
+		if (labelFilePaths == null || labelFilePaths.length == 0) {			
+			return false;
+		}
+		
+		// first clear the data container
+		sLabelWrap.clear();
+		// load the daily data from the csv file	
+		loadDailyLabelData(labelFilePaths[0]);		
+		
+		return sLabelWrap.size() > 0;
+	}
 
 	/**
 	 * Create new raw chunks and add it to the raw chunk wrap
 	 * @param startSecond	The start position to analyze the sensor data.
 	 * @return true if successful, otherwise false
 	 */
-	protected static int createRawChunkData(int startSecond, int stopSecond, ArrayList<RawChunk> rawChunks) {
+	private static int createRawChunkData(int startSecond, int stopSecond, ArrayList<RawChunk> rawChunks) {
 		if (sAccelDataWrap.size() == 0 || rawChunks == null) {
 			return 0;
 		}
@@ -243,74 +271,7 @@ public class DataSource {
 		
 		// current selected date		
 		String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());		
-/*		// convolution to the accelerometer data
-		int[] sensorData = sAccelDataWrap.getDrawableData();
-		int size = sensorData.length;
-		int[] convolution = Arrays.copyOf(sensorData, size);
-		for (int i = 1; i < size - 1; ++i) { // [-1 0 1]
-			convolution[i] = sensorData[i + 1] - sensorData[i - 1];
-		}
-		// calculate mean average of CHUNKING_MIN_DISTANCE points' of data to the left of current position 
-		int sum = 0;
-		int[] meanAverageL = Arrays.copyOf(sensorData, size);
-		Arrays.fill(meanAverageL, 0, CHUNKING_MEAN_AVG_DISTANCE, 0);
-		for (int i = 0; i < CHUNKING_MEAN_AVG_DISTANCE; ++i) {
-			sum += sensorData[i];
-		}
-		for (int i = CHUNKING_MEAN_AVG_DISTANCE; i < size; ++i) {
-			meanAverageL[i] = sum / CHUNKING_MEAN_AVG_DISTANCE;
-			sum += sensorData[i];
-			sum -= sensorData[i - CHUNKING_MEAN_AVG_DISTANCE];
-		}
-		// calculate mean average of CHUNKING_MIN_DISTANCE points' of data to the right of current position
-		sum = 0;
-		int[] meanAverageR = Arrays.copyOf(sensorData, sensorData.length);
-		Arrays.fill(meanAverageR, sensorData.length - CHUNKING_MEAN_AVG_DISTANCE, sensorData.length, 0);
-		for (int i = sensorData.length - 1; i >= size - CHUNKING_MEAN_AVG_DISTANCE; --i) {
-			sum += sensorData[i];
-		}
-		for (int i = size - CHUNKING_MEAN_AVG_DISTANCE - 1; i >= 0; --i) {
-			meanAverageR[i] = sum / CHUNKING_MEAN_AVG_DISTANCE;
-			sum += sensorData[i];
-			sum -= sensorData[i + CHUNKING_MEAN_AVG_DISTANCE];
-		}
-		// figure out the possible chunking positions
-		int prev = startSecond, end = endSecond;
-		ArrayList<Integer> chunkPos = new ArrayList<Integer>();		
-		chunkPos.add(startSecond);		
-		for (int i = startSecond + 1; i < size - CHUNKING_MIN_DISTANCE; ++i) {
-			if (i - prev < CHUNKING_MIN_DISTANCE) {
-				continue;
-			}
-			if (sensorData[i] == AccelDataWrap.NO_SENSOR_DATA) {
-				if (sensorData[i - 1] != AccelDataWrap.NO_SENSOR_DATA || 
-					sensorData[i + 1] != AccelDataWrap.NO_SENSOR_DATA) {					
-					chunkPos.add(i);			
-					prev = i;					
-				}
-			}			
-			if (Math.abs(convolution[i]) > CHUNKING_MIN_SENSITIVITY) {
-				if (Math.abs(meanAverageL[i] - meanAverageR[i]) > CHUNKING_MEAN_AVG_DIFF) {
-					chunkPos.add(i);
-					prev = i;				
-				}
-			}			
-			// VERY large but separated sensor data
-			if (Math.abs(sensorData[i]) > CHUNKING_MAX_SENSITIVITY) {
-				if (meanAverageL[i] < CHUNKING_MEAN_AVG_SENSITIVITY && meanAverageR[i] < CHUNKING_MEAN_AVG_SENSITIVITY) {
-					chunkPos.add(i);
-					int next = i + CHUNKING_MIN_DISTANCE;
-					if (i < size - (CHUNKING_MIN_DISTANCE << 1) && 
-							Math.abs(meanAverageL[next] - meanAverageR[next]) > CHUNKING_MEAN_AVG_DIFF) {
-						chunkPos.add(next);
-						prev = next;
-					} else {
-						prev = i;
-					}
-				}
-			}
-		}
-		chunkPos.add(end); */
+
 		// create raw chunk data for each chunking position	
 		rawChunks.clear();
 		for (int i = 0; i < chunkPos.length - 1; ++i) {						
@@ -338,7 +299,7 @@ public class DataSource {
 			return false;
 		}
 		
-		boolean allLabelled = false;
+		boolean isAllLabelled = false;
 		SAXReader saxReader = new SAXReader();		
 		try {
 			Document document = saxReader.read(new File(path));								
@@ -351,11 +312,7 @@ public class DataSource {
 	    	       
 	    	       if (attribute.getName().compareTo("ALL_LABELLED") == 0) {
 	    	    	   String text = attribute.getText();
-	    	    	   if (text.compareToIgnoreCase("yes") == 0) {
-	    	    		   allLabelled = true;
-	    	    	   } else {
-	    	    		   allLabelled = false;
-	    	    	   }
+	    	    	   isAllLabelled = text.compareToIgnoreCase("yes") == 0;
 	    	       } 
 	    	    }	    	
 		    }
@@ -364,7 +321,7 @@ public class DataSource {
 			e.printStackTrace();			
 		}
 		
-		return allLabelled;
+		return isAllLabelled;
 	}
 
 	public static boolean saveChunkData(final ArrayList<Chunk> chunks) {
@@ -460,5 +417,6 @@ public class DataSource {
 	private static native int loadHourlyAccelSensorData(String filePath);
 	private static native int unloadActivityData(String path);
 	private static native int[] createDailyRawChunkData(int startTime, int stopTime, int[] sensorData);
+	private static native int loadDailyLabelData(String filePath);
 	private static native int getMaxActivityValue(String path);
 }

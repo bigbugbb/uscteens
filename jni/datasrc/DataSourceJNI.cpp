@@ -22,7 +22,7 @@
 	#define D(...)  do {} while (0)
 #endif
 
-const char* CLASS_NAME = "edu/neu/android/mhealth/uscteensver1/data/DataSource";
+static const char* CLASS_NAME = "edu/neu/android/mhealth/uscteensver1/data/DataSource";
 
 static JavaVM *gJavaVM;
 static DataSource* gDataSrc = DataSource::GetInstance();
@@ -72,14 +72,14 @@ jint LoadHourlyAccelSensorData(JNIEnv* env, jclass clazz, jstring path)
 	env->ReleaseStringUTFChars(path, pszPath);
 
 	// get DataSource class
-	jclass dsClass = env->FindClass("edu/neu/android/mhealth/uscteensver1/data/DataSource");
-	// get onGetAccelData method
+	jclass dsClass = env->FindClass(CLASS_NAME);
+	// get onAddAccelData method
 	jmethodID mid = env->GetStaticMethodID(dsClass, "onAddAccelData", "(IIIIIII)V");
 //	// get AccelData class
 //	jclass adClass = env->FindClass("edu/neu/android/mhealth/uscteensver1/data/AccelData");
 //	// get AccelData constructor
 //	jmethodID constructor = env->GetMethodID(adClass, "<init>", "(IIIIIII)V");
-	// fill each AccelData and send it back by onAddAccelData
+	// create each AccellData object by calling onAddAccelData
 	int size = vecData.size();
 	for (int i = 0; i < size; ++i) {
 		if (mid) {
@@ -87,7 +87,7 @@ jint LoadHourlyAccelSensorData(JNIEnv* env, jclass clazz, jstring path)
 					vecData[i].nHour, vecData[i].nMinute, vecData[i].nSecond, vecData[i].nMilliSecond,
 					vecData[i].nTimeInSec, vecData[i].nIntAccelAverage, vecData[i].nIntAccelSamples);
 		} else {
-			D("mid is null");
+			D("mid of onAddAccelData is null");
 		}
 	}
 
@@ -148,9 +148,36 @@ jint UnloadChunkData(JNIEnv * env, jclass clazz, jstring path)
 	return result;
 }
 
+jint LoadDailyLabelData(JNIEnv* env, jclass clazz, jstring path)
+{
+	jboolean bCopy;
+	const char* pszPath = env->GetStringUTFChars(path, &bCopy);
+	vector<LabelData>& vecData = gDataSrc->LoadDailyLabelData(pszPath);
+	env->ReleaseStringUTFChars(path, pszPath);
+
+	// get DataSource class
+	jclass dsClass = env->FindClass(CLASS_NAME);
+	// get onAddLabelData method
+	jmethodID mid = env->GetStaticMethodID(dsClass, "onAddLabelData", "(IIIILjava/lang/String;)V");
+	// create each LabelData object by calling onAddLabelData
+	int size = vecData.size();
+	for (int i = 0; i < size; ++i) {
+		if (mid) {
+			env->CallStaticVoidMethod(clazz, mid,
+					vecData[i].nHour, vecData[i].nMinute, vecData[i].nSecond,
+					vecData[i].nTimeInSec, env->NewStringUTF(vecData[i].strText.c_str()));
+		} else {
+			D("mid of onAddLabelData is null");
+		}
+	}
+
+	return 0;
+}
+
 static JNINativeMethod methods[] = {
 	{"create", "()I", (void*)Create },
 	{"destroy", "()I", (void*)Destroy },
+	{"loadDailyLabelData", "(Ljava/lang/String;)I", (void*)LoadDailyLabelData },
 	{"loadHourlyAccelSensorData", "(Ljava/lang/String;)I", (void*)LoadHourlyAccelSensorData },
 	{"createDailyRawChunkData", "(II[I)[I", (void*)CreateDailyRawChunkData },
 	{"unloadActivityData", "(Ljava/lang/String;)I", (void*)UnloadActivityData },
