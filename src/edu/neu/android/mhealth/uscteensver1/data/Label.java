@@ -62,7 +62,7 @@ public class Label extends AppObject {
 
 	@Override
 	public void onDraw(Canvas c) {
-		if (mStart + mDispOffsetX < 0 && mStart + mDispOffsetX > ChunkManager.getViewWidth()) {
+		if (mStart + mDispOffsetX < 0 && mStart + mDispOffsetX > LabelManager.getViewWidth()) {
 			return;
 		}
 		c.drawLine(mStart + mDispOffsetX, 0, mStart + mDispOffsetX, mHeight, sPaint);		

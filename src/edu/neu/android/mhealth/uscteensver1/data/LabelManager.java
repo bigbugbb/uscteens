@@ -22,11 +22,7 @@ public class LabelManager {
 	public static void initialize(Context context) {
 		sContext   = context;	
 		sResources = context.getResources();		
-	}	
-	
-	protected static void load() {
-		
-	}
+	}		
 	
 	public static void start() {
 		loadLabels();
@@ -55,14 +51,50 @@ public class LabelManager {
 //			String modifyTime = rawChunk.getModifyTime();
 //			chunk.load(start, stop, timeOffset, activityID, createTime, modifyTime);						
 		}
-	}
+	}	
 	
 	public static void release() {
-		if (sChunks != null) {
-			for (Chunk c : sChunks) {
-				c.release();
+		if (sLabels != null) {
+			for (Label l : sLabels) {
+				l.release();
 			}
-			sChunks = null;
+			sLabels = null;
+		}
+	}
+	
+	public static void setViewSize(float width, float height) {
+		sViewWidth  = width;
+		sViewHeight = height;
+	}
+	
+	public static float getViewWidth() {
+		return sViewWidth;
+	}
+	
+	public static float getViewHeight() {
+		return sViewHeight;
+	}
+	
+	public static void setCanvasSize(float width, float height) {
+		sCanvasWidth  = width;
+		sCanvasHeight = height;
+	}
+	
+	public static float getCanvasWidth() {
+		return sCanvasWidth;
+	}
+	
+	public static float getCanvasHeight() {
+		return sCanvasHeight;
+	}
+	
+	public static void setDisplayOffset(float offsetX, float offsetY) {
+		sDispOffsetX = offsetX;
+		sDispOffsetY = offsetY;
+		
+		for (int i = 0; i < sLabels.size(); ++i) {
+			Label l = sLabels.get(i);
+			l.setDisplayOffset(offsetX, offsetY);
 		}
 	}
 }

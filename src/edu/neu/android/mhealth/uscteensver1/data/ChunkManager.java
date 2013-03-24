@@ -40,10 +40,6 @@ public class ChunkManager {
 		sContext = context;		
 	}	
 	
-	protected static void load() {
-		
-	}
-	
 	public static void start() {
 		loadChunks();
 	}
