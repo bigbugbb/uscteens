@@ -97,6 +97,12 @@ public class ChunkManager {
 		return sChunks.get(index);
 	}
 	
+	public static Chunk getPrevChunk(Chunk curChunk) {
+		int i = sChunks.indexOf(curChunk);
+		
+		return i <= 0 ? null : sChunks.get(i - 1);
+	}
+	
 	public static ArrayList<Chunk> getChunks() {
 		return sChunks;
 	}

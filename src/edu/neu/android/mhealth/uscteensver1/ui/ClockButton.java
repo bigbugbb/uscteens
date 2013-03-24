@@ -14,6 +14,7 @@ import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
+import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
@@ -39,7 +40,7 @@ public class ClockButton extends ChunkButton {
 		sTimePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		sTimePaint.setColor(Color.BLACK);
 		sTimePaint.setStyle(Style.STROKE);
-		sTimePaint.setTextSize(AppScale.doScaleT(38));
+		sTimePaint.setTextSize(AppScale.doScaleT(36));
 		sTimePaint.setFakeBoldText(false);
 	}
 	
@@ -106,20 +107,33 @@ public class ClockButton extends ChunkButton {
 	public void onDraw(Canvas c) {
 		if (mVisible) {
 			c.drawBitmap(sImages.get(0), mX + mOffsetX, mY + mOffsetY, null);
-			// choose to draw left or right based on the clock button position			
-			if (mX + mOffsetX < mCanvasWidth * 0.88f) { // draw on the right
+			// choose to draw left or right based on the clock button position				
+			if (mX + mOffsetX < mCanvasWidth * 0.83f) { 
+				// draw on the right side
 				if (mX + mWidth / 2 + mOffsetX > AppScale.doScaleW(-120)) {
 					sTimePaint.setTextAlign(Align.LEFT);
 					c.drawText(mHost.getChunkRealStartTimeInString(), 
 						mX + mWidth / 2 + mOffsetX + AppScale.doScaleW(50),
 						mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
 				}
-			} else { // draw on the left
-				if (mX + mWidth / 2 + mOffsetX < mCanvasWidth + AppScale.doScaleW(120)) {
-					sTimePaint.setTextAlign(Align.RIGHT);
-					c.drawText(mHost.getChunkRealStartTimeInString(), 
-						mX - mWidth / 2 + mOffsetX + AppScale.doScaleW(30),
-						mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
+			} else { 
+				Chunk chunk = ChunkManager.getPrevChunk(mHost);
+				if (chunk.isSelected() && chunk.getChunkWidth() > Chunk.MINIMUM_CHUNK_SPACE * 1.75f) {
+					// draw on the left side
+					if (mX + mWidth / 2 + mOffsetX < mCanvasWidth + AppScale.doScaleW(120)) {
+						sTimePaint.setTextAlign(Align.RIGHT);
+						c.drawText(mHost.getChunkRealStartTimeInString(), 
+							mX - mWidth / 2 + mOffsetX + AppScale.doScaleW(30),
+							mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
+					}
+				} else {
+					// draw on the right side
+					if (mX + mWidth / 2 + mOffsetX > AppScale.doScaleW(-120)) {
+						sTimePaint.setTextAlign(Align.LEFT);
+						c.drawText(mHost.getChunkRealStartTimeInString(), 
+							mX + mWidth / 2 + mOffsetX + AppScale.doScaleW(50),
+							mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
+					}
 				}
 			}
 			//Log.d("clock button", mX + " " + mY + " " + mOffsetX);

@@ -37,11 +37,13 @@ public class Chunk extends AppObject {
 	private String  mCreateTime;
 	private String  mModifyTime;
 	
-	protected float mDispOffsetX;
-	protected float mDispOffsetY;
+	public float mDispOffsetX;
+	public float mDispOffsetY;
+		
+	private static Paint   sPaint;
+	private static boolean sPaintCreated = false;
 	
-	protected static Paint   sPaint;
-	protected static boolean sPaintCreated = false;
+	private static StringBuilder sStringBuilder = new StringBuilder();	
 	
 	protected static void createPaint() {
 		if (!sPaintCreated) {
@@ -120,6 +122,11 @@ public class Chunk extends AppObject {
 		
 		return false;
 	}
+	
+	public int getChunkWidth() {
+		assert(mStop - mStart >= MINIMUM_CHUNK_SPACE);
+		return mStop - mStart;
+	}
 
 	public int getActionID() {
 		if (mQuest.isAnswered()) {					
@@ -146,7 +153,13 @@ public class Chunk extends AppObject {
 		int hour   = time / 3600;
 		int minute = (time - 3600 * hour) / 60;
 		
-		return hour + ":" + (minute > 9 ? minute : "0" + minute); 
+		sStringBuilder.delete(0, sStringBuilder.length());
+		sStringBuilder.append(hour > 12 ? hour - 12 : hour);
+		sStringBuilder.append(":");
+		sStringBuilder.append(minute > 9 ? minute : "0" + minute);
+		sStringBuilder.append(hour > 12 ? " PM" : " AM");
+		
+		return sStringBuilder.toString(); 
 	}
 	
 	public void release() {
