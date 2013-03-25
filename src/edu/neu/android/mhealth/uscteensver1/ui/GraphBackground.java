@@ -17,6 +17,9 @@ public class GraphBackground extends Background {
 	
 	@Override
 	public void onSizeChanged(int width, int height) {	
+		if (mCanvasWidth == width && mCanvasHeight == height) {
+			return;
+		}
 		float radio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();	
 		float dstWidth  = width;
 		float dstHeight = width * radio;
@@ -24,8 +27,7 @@ public class GraphBackground extends Background {
 		Bitmap newImage = 
 			Bitmap.createScaledBitmap(mImages.get(0), (int) dstWidth, (int) dstHeight, true);	
 		mImages.get(0).recycle(); // explicit call to avoid out of memory
-		mImages.set(0, newImage);
-		System.gc();
+		mImages.set(0, newImage);	
 		
 		mWidth  = mImages.get(0).getWidth();
 		mHeight = mImages.get(0).getHeight();

@@ -90,8 +90,15 @@ public class ActionListView extends ListView {
 	
 	@Override
 	public void onSizeChanged(int width, int height) {
+		if (mCanvasWidth == width && mCanvasHeight == height) {
+			return;
+		}
+		mCanvasWidth  = width;
+		mCanvasHeight = height;
+		
 		mWidth  = width;
 		mHeight = height - AppScale.doScaleH(130 + 100) - (2 * mBorderWidth + 1);
+		
 		mItemWidth  = (int) mWidth;
 		mItemHeight = (int) (mHeight - 3 * mBorderWidth) / 4;
 		

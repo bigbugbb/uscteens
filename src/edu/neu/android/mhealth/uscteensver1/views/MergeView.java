@@ -37,7 +37,8 @@ public class MergeView extends View {
 	protected OnBackClickedListener mBackListener = null;
 	protected RectF  mBackArea  = new RectF();
 	protected PointF mBackTxtPt = new PointF();
-	
+	protected int mWidth  = 0;
+	protected int mHeight = 0;
 	
 	public MergeView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -139,6 +140,12 @@ public class MergeView extends View {
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		if (mWidth == w && mHeight == h) {
+			return;
+		}
+		mWidth  = w;
+		mHeight = h;
+		
 		for (int i = 0; i < mActions.size(); ++i) {
 			int top = h / 2;
 			mAreas.add(new RectF(0, top + i * AppScale.doScaleH(100), 

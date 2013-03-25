@@ -106,8 +106,11 @@ public class SlideBar extends AppObject {
 
 	@Override
 	public void onSizeChanged(int width, int height) {
+		if (mCanvasWidth == width && mCanvasHeight == height) {
+			return;
+		}
 		mCanvasWidth  = width;
-		mCanvasHeight = height;				
+		mCanvasHeight = height;			
 		
 		mRect1.left   = width * 0.15f;
 		mRect1.top    = mCanvasHeight * 0.92f;
@@ -140,9 +143,8 @@ public class SlideBar extends AppObject {
 
 		Bitmap newImage = 
 			Bitmap.createScaledBitmap(mImages.get(0), (int) dstWidth, (int) dstHeight, true);	
-		mImages.get(0).recycle(); // explicit call to avoid out of memory
-		mImages.set(0, newImage);
-		System.gc();
+		mImages.get(0).recycle();
+		mImages.set(0, newImage);		
 		
 		mSliderBarBtnX = width * 0.15f + 2;
 		mSliderBarBtnY = height * 0.92f + 2 - (dstHeight - (height * 0.04f - 4)) / 2;

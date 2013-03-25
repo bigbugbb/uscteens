@@ -55,6 +55,8 @@ public class QuestView extends ImageView implements OnGestureListener,
 	protected Paint   mPaintDate = null;
 	protected Paint   mPaintTime = null;
 	protected Handler mHandler = null;
+	protected int mWidth  = 0;
+	protected int mHeight = 0;
 	
 	protected int mExpectedWidth = 0;	
 	
@@ -245,6 +247,12 @@ public class QuestView extends ImageView implements OnGestureListener,
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		if (mWidth == w && mHeight == h) {
+			return;
+		}
+		mWidth  = w;
+		mHeight = h;
+		
 		mActionList.setPosn(0, AppScale.doScaleH(180) + mActionList.getBorderWidth());
 		mActionList.onSizeChanged(w, h);		
 		mArrowUp.setX(0);

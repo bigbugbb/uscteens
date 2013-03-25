@@ -11,11 +11,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.RewardButton;
-import edu.neu.android.mhealth.uscteensver1.ui.WinBackground;
+import edu.neu.android.mhealth.uscteensver1.ui.RewardBackground;
 
 public class RewardPage extends AppPage implements OnClickListener {
 	
-	protected WinBackground mBackground = null;	
+	protected RewardBackground mBackground = null;	
 	protected RewardButton 	mBtnReward  = null;
 	protected final static int BAR    = 0;
 	protected final static int BKGND  = 1;
@@ -31,7 +31,7 @@ public class RewardPage extends AppPage implements OnClickListener {
 	public List<AppObject> load() {
 		// create game objects
 		if (mBackground == null) {
-			mBackground = new WinBackground(mContext.getResources());			
+			mBackground = new RewardBackground(mContext.getResources());			
 			mObjects.add(mBackground);
 			mBackground.setID(BKGND);
 		}

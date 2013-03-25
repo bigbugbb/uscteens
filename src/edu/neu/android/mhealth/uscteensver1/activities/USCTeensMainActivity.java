@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;
@@ -198,24 +199,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	@Override
 	public void onResume() {		
 		super.onResume();
-		
-		// the initial page is not graph page, so it's ok here
-		if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {
-			GraphDrawer drawer = mGraphView.getDrawer();
-			if (drawer != null) {
-				drawer.pause(true);
-			}
-					
-			mCurPage.stop();
-			updateData();
-			mCurPage.start();			
-			
-			// set the new page to graph drawer
-			if (drawer != null) {
-				drawer.setPage(mCurPage);
-				drawer.pause(false);
-			}
-		}
+				
 		mGraphView.onResume();
 		mCurPage.resume();
 		
@@ -226,6 +210,11 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 
 	@Override
 	public void onStart() {
+		// the initial page is not graph page, so it's ok here
+		if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {	
+			updateData();		
+		}
+		
 		mCurPage.start();
 		mGraphView.onStart(mCurPage);
 		super.onStart();
@@ -234,7 +223,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	@Override
 	public void onStop() {		
 		mGraphView.onStop();
-		mCurPage.stop();
+		mCurPage.stop();	
+		
 		super.onStop();
 	}	
 	
@@ -254,10 +244,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 				if (WeekdayCalculator.areSameWeekdays(selDate, curDate) || 
 						!WeekdayCalculator.areSameWeekdays(loadDate, curDate)) {
 					// the selected date is the same day as the current date, 
-					// OR date crossing case
-					// mProgressView.show("Loading...");
-		    		// new LoadDataTask(USCTeensMainActivity.this, mHandler).execute(select);
-		    		// mProgressView.dismiss();	
+					// OR date crossing case					
 					if (DataSource.loadRawData(select) == DataSource.LOADING_SUCCEEDED) {
 						result = true;
 					}					
@@ -359,6 +346,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 			}
 			return true;
 		} else if (keyCode == KeyEvent.KEYCODE_MENU) {
+		
 			// pop up the keyboard only in the home page
 			if (mCurPage == mPages.get(indexOfPage(PageType.HOME_PAGE))) {				
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -1,5 +1,8 @@
 package edu.neu.android.mhealth.uscteensver1;
 
+import java.util.ArrayList;
+
+import android.app.Activity;
 import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.Globals;
 
@@ -17,4 +20,25 @@ public class USCTeensAppManager extends ApplicationManager {
     	USCTeensArbitrater arbitrater = new USCTeensArbitrater(getAppContext()); 
     	Globals.setArbitrater(arbitrater);   
     }
+    
+    private ArrayList<Activity> activityList = new ArrayList<Activity>();
+
+	public void addActivity(Activity activity) {		
+		activityList.add(activity);
+	}
+
+	public void killActivity(Activity activity) {
+		activity.finish();
+		activityList.remove(activity);
+	}
+
+	public void removeActivity(Activity activity) {
+		activityList.remove(activity);
+	}
+
+	public void killAllActivities() {
+		for (int i = 0; i < activityList.size(); i++)
+			activityList.get(i).finish();
+		activityList.clear();
+	}
 }

@@ -31,6 +31,12 @@ public class NextButton extends CustomButton {
 
 	@Override
 	public void onSizeChanged(int width, int height) {
+		if (mCanvasWidth == width && mCanvasHeight == height) {
+			return;
+		}
+		mCanvasWidth  = width;
+		mCanvasHeight = height;
+		
 		Rect bounds = new Rect();
 		mPaintText.getTextBounds("NEXT", 0, 4, bounds);
 		mWidth  = bounds.width();

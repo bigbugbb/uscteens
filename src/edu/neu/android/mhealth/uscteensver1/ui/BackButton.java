@@ -31,6 +31,12 @@ public class BackButton extends CustomButton {
 
 	@Override
 	public void onSizeChanged(int width, int height) {
+		if (mCanvasWidth == width && mCanvasHeight == height) {
+			return;
+		}
+		mCanvasWidth  = width;
+		mCanvasHeight = height;
+		
 		Rect bounds = new Rect();
 		mPaintText.getTextBounds("BACK", 0, 4, bounds);
 		mWidth  = bounds.width();

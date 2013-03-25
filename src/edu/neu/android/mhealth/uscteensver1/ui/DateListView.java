@@ -175,6 +175,12 @@ public class DateListView extends ListView {
 	
 	@Override
 	public void onSizeChanged(int width, int height) {
+		if (mCanvasWidth == width && mCanvasHeight == height) {
+			return;
+		}
+		mCanvasWidth  = width;
+		mCanvasHeight = height;
+		
 		mWidth  = width / 2;
 		mHeight = height - AppScale.doScaleH(128 + 100) - (2 * mBorderWidth + 1);
 		mItemWidth  = (int) mWidth;

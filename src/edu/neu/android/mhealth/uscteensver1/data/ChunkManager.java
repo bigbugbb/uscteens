@@ -10,6 +10,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ClockButton;
 import edu.neu.android.mhealth.uscteensver1.ui.MergeButton;
 import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
+import edu.neu.android.wocketslib.support.DataStorage;
 
 
 public class ChunkManager {
@@ -18,7 +19,7 @@ public class ChunkManager {
 	protected static Object sUserData = null;			
 	protected static ArrayList<Chunk> sChunks = null;
 	
-	protected static int   sSelected = -1; // -1 indicates no chunk has been selected
+	protected static int sSelected = -1; // -1 indicates no chunk has been selected
 	protected static RectF sSelectedArea = new RectF();
 	protected static ClockButton sClockL = null;
 	protected static ClockButton sClockR = null;
@@ -72,8 +73,7 @@ public class ChunkManager {
 			String modifyTime = rawChunk.getModifyTime();
 			chunk.load(start, stop, timeOffset, activityID, createTime, modifyTime);						
 		}
-		// select the first chunk
-		selectChunk(0);
+		
 	}
 	
 	public static void release() {
@@ -85,7 +85,8 @@ public class ChunkManager {
 		}
 	}
 	
-	protected static void saveChunks() {		
+	protected static void saveChunks() {	
+		DataStorage.SetValue(sContext, USCTeensGlobals.LAST_SELECTED_CHUNK, sSelected);
 		DataSource.saveChunkData(sChunks);
 	}
 	
@@ -300,15 +301,23 @@ public class ChunkManager {
 		return next;
 	}
 	
-	public static void selectChunk(Chunk chunk) {
-		selectChunk(sChunks.indexOf(chunk));
+	public static Chunk selectChunk(Chunk chunk) {
+		return selectChunk(sChunks.indexOf(chunk));
 	}
 	
-	public static void selectChunk(int index) {
+	public static Chunk selectChunk(int index) {
 		assert(index >= 0 && index < sChunks.size());			
-		Chunk c = sChunks.get(index);
+		Chunk c = null;
+		
+		try {
+			c = sChunks.get(index);
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 		if (c.isLastChunkOfToday()) {
-			return;
+			return null;
 		}
 		
 		if (sSelected > -1 && sSelected < sChunks.size()) {		
@@ -366,6 +375,8 @@ public class ChunkManager {
 		}
 		
 		updateSelectedArea();
+		
+		return sChunks.get(index);
 	}
 	
 	public static boolean selectChunk(float x, float y) {					
@@ -493,7 +504,20 @@ public class ChunkManager {
 		selectChunk(maintain);
 		
 		return true;
-	}	
+	}
+	
+	public static Chunk getSelectedChunk() {
+		Chunk c;
+		
+		try {
+			c = sChunks.get(sSelected);
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+			c = null;
+		}
+		
+		return null;
+	}
 	
 	public static RectF getSelectedArea() {
 		RectF area = new RectF();

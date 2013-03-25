@@ -22,6 +22,8 @@ public class ListView extends AppObject {
 	protected int    mEnd   = 0;	
 	protected int    mItemWidth  = 0;
 	protected int    mItemHeight = 0;	
+	protected int	 mCanvasWidth  = 0;
+	protected int 	 mCanvasHeight = 0;
 	protected int    mOffsetY = 0;
 	protected int    mLastAction = 0;
 	protected int    mBorderWidth = 3;

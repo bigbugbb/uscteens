@@ -10,7 +10,7 @@ import android.graphics.Typeface;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
-public class WinBackground extends Background {
+public class RewardBackground extends Background {
 	
 	protected float	mText1X = 0;
 	protected float	mText1Y = 0;
@@ -22,7 +22,7 @@ public class WinBackground extends Background {
 	protected Paint mPaintText1 = null;
 	protected Paint mPaintText2 = null;
 
-	public WinBackground(Resources res) {
+	public RewardBackground(Resources res) {
 		super(res);
 		loadImages(new int[]{ 
 			R.drawable.congratulations_bar, R.drawable.win_background

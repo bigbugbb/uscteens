@@ -279,14 +279,17 @@ public class MotionGraph extends AppObject {
 	}
 	
 	@Override
-	public void onSizeChanged(int width, int height) {				
-		// get the region size
-		mWidth  = width;
-		mHeight = height - (int)(width * mAspectRatio);
+	public void onSizeChanged(int width, int height) {			
+		if (mCanvasWidth == width && mCanvasHeight == height) {
+			return;
+		}
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
+		// get the region size
+		mWidth  = width;
+		mHeight = height - (int)(width * mAspectRatio);		
 		
-		// for draw lines
+		// for drawing lines
 		mPTS = new float[width * 4];
 		
 		// scale the data for drawing in the specified area
@@ -304,8 +307,8 @@ public class MotionGraph extends AppObject {
 
 		// ....
 		mStart = 0;
-		mEnd   = mStart + (int)mWidth;
-		mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;	
+		mEnd   = mStart + (int) mWidth;
+		mEnd   = mEnd > mDataLengthInPixel ? mDataLengthInPixel : mEnd;
 		mRightBound = mDataLengthInPixel - (int) mWidth;
 		
 		ChunkManager.setViewSize(mWidth, mHeight);

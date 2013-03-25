@@ -10,6 +10,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -34,6 +35,35 @@ public class MergeDialog extends Activity implements OnItemClickListener, OnBack
 
 		setupViews();
 		adjustLayout();
+	}
+	
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {		
+		super.onDestroy();
 	}
 	
 	private void setupViews() {
@@ -70,5 +100,7 @@ public class MergeDialog extends Activity implements OnItemClickListener, OnBack
 	@Override
 	public void onBackClicked() {
 		finish();
-	}	
+	}
+
+		
 }

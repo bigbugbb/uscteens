@@ -120,8 +120,11 @@ public class QuestButton extends ChunkButton {
 
 	@Override
 	public void onSizeChanged(int width, int height) {
+		if (mCanvasWidth == width && mCanvasHeight == height) {
+			return;
+		}
 		mCanvasWidth  = width;
-		mCanvasHeight = height;		
+		mCanvasHeight = height;	
 		
 		mY = height * 0.64f;		
 	}

@@ -66,6 +66,9 @@ public class MergeButton extends ChunkButton {
 	
 	@Override
 	public void onSizeChanged(int width, int height) {
+		if (mCanvasWidth == width && mCanvasHeight == height) {
+			return;
+		}
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
 
