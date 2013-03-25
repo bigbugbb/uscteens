@@ -223,7 +223,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	@Override
 	public void onStop() {		
 		mGraphView.onStop();
-		mCurPage.stop();	
+		mCurPage.stop();
 		
 		super.onStop();
 	}	
@@ -295,6 +295,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		i = new Intent(USCTeensMainActivity.this, QuestDialog.class);           		
         		i.putExtra(QuestDialog.CHUNK_START_TIME, msg.arg1);
         		i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);
+        		i.putExtra("TEST", 1);
         		startActivityForResult(i, AppCmd.QUEST);
         		break;
         	case AppCmd.MERGE:

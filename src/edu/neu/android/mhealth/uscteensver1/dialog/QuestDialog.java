@@ -26,7 +26,7 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_quest);	
+		setContentView(R.layout.activity_quest);
 		
 		setupViews();
 		adjustLayout();
