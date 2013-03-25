@@ -1,6 +1,10 @@
 package edu.neu.android.mhealth.uscteensver1.pages;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -16,6 +20,8 @@ import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleListener;
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.data.LabelManager;
 import edu.neu.android.mhealth.uscteensver1.ui.BackButton;
 import edu.neu.android.mhealth.uscteensver1.ui.ChunkButton;
 import edu.neu.android.mhealth.uscteensver1.ui.GraphBackground;
@@ -29,18 +35,21 @@ import edu.neu.android.mhealth.uscteensver1.ui.SlideBar;
 import edu.neu.android.mhealth.uscteensver1.ui.SlideBar.OnSlideBarChangeListener;
 import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
 import edu.neu.android.mhealth.uscteensver1.ui.UIID;
+import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
+import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.DateHelper;
 
 
 public class GraphPage extends AppPage implements OnClickListener,
 												 OnGraphMovedListener,
 												 OnSlideBarChangeListener,
-												 OnBoundaryScaleListener {
-
+												 OnBoundaryScaleListener { 
+	
 	protected GraphBackground mBackground  = null;
-	protected MotionGraph	 mMotionGraph = null;
-	protected BackButton	 mBtnBack     = null;
-	protected NextButton	 mBtnNext     = null;
-	protected SlideBar	 	 mSlideBar    = null;
+	protected MotionGraph	  mMotionGraph = null;
+	protected BackButton	  mBtnBack     = null;
+	protected NextButton	  mBtnNext     = null;
+	protected SlideBar	 	  mSlideBar    = null;
 	
 	protected View mView = null;	
 	
@@ -52,6 +61,8 @@ public class GraphPage extends AppPage implements OnClickListener,
 		ChunkManager.initialize(context);
 		ChunkManager.setUserData(this);
 		ChunkManager.setOnBoundaryScaleListener(this);
+		
+		LabelManager.initialize(context);
 	}
 
 	public MotionGraph getMotionGraph() {
@@ -99,8 +110,9 @@ public class GraphPage extends AppPage implements OnClickListener,
 		return mObjects;
 	}
 	
-	public void start() {
+	public void start() {				
 		ChunkManager.start();
+		LabelManager.start();
 		load();		
 		for (AppObject obj : mObjects) {
 			obj.onSizeChanged(mView.getWidth(), mView.getHeight());
@@ -109,6 +121,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	
 	public void stop() {
 		ChunkManager.stop();
+		LabelManager.stop();
 		
 		mBackground   = null;
 		mMotionGraph  = null;
@@ -124,7 +137,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	}
 
 	// used to update the scale chunk operation if a user try to 
-	// scroll the button clock to the boundary of the screen
+	// scroll the clock button to the boundary of the screen
 	Runnable mScaleLeft = new Runnable() {				
 		public void run() {			
 

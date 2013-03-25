@@ -29,7 +29,7 @@ public class Label extends AppObject {
 			sPaint.setColor(Color.argb(255, 0, 0x99, 0x99));
 			sPaint.setStyle(Style.STROKE);
 			sPaint.setTypeface(Typeface.SERIF);
-			sPaint.setTextSize(AppScale.doScaleT(20));
+			sPaint.setTextSize(AppScale.doScaleT(24));
 			sPaintCreated = true;
 		}
 	}

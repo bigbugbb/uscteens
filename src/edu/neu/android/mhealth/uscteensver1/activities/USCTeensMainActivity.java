@@ -1,6 +1,9 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -11,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -31,9 +35,10 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.pages.DatePage;
 import edu.neu.android.mhealth.uscteensver1.pages.GraphPage;
 import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
-import edu.neu.android.mhealth.uscteensver1.pages.WinPage;
+import edu.neu.android.mhealth.uscteensver1.pages.RewardPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
+import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import edu.neu.android.mhealth.uscteensver1.views.ProgressView;
 import edu.neu.android.wocketslib.Globals;
@@ -130,7 +135,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		mPages.add(new HomePage(context, mGraphView, mHandler));
 		mPages.add(new DatePage(context, mGraphView, mHandler));
 		mPages.add(new GraphPage(context, mGraphView, mHandler));
-		mPages.add(new WinPage(context, mGraphView, mHandler));
+		mPages.add(new RewardPage(context, mGraphView, mHandler));
 		mCurPage = mPages.get(indexOfPage(PageType.HOME_PAGE));
 		// set pages to main view
 		mGraphView.setPages(mPages);		
@@ -172,9 +177,9 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		// reset the current page
 		mCurPage.reset();
 		// get the new app page
-		mCurPage = mPages.get(pageTo);				
+		mCurPage = mPages.get(pageTo);		
 		// finally start the new game mode
-		mCurPage.start();	
+		mCurPage.start();
 		mCurPage.resume();
 		// set the new page to graph drawer
 		if (drawer != null) {
@@ -192,10 +197,27 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 
 	@Override
 	public void onResume() {		
-		super.onResume();					
+		super.onResume();
 		
+		// the initial page is not graph page, so it's ok here
+		if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {
+			GraphDrawer drawer = mGraphView.getDrawer();
+			if (drawer != null) {
+				drawer.pause(true);
+			}
+					
+			mCurPage.stop();
+			updateData();
+			mCurPage.start();			
+			
+			// set the new page to graph drawer
+			if (drawer != null) {
+				drawer.setPage(mCurPage);
+				drawer.pause(false);
+			}
+		}
 		mGraphView.onResume();
-		mCurPage.resume();		
+		mCurPage.resume();
 		
 		if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
 			// TODO:
@@ -215,6 +237,38 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		mCurPage.stop();
 		super.onStop();
 	}	
+	
+	private boolean updateData() {	
+		boolean result = false;
+		long currentTime = System.currentTimeMillis();
+		long lastLoadingTime = DataSource.getLastLoadingTime();		
+		
+		if (currentTime - lastLoadingTime > USCTeensGlobals.UPDATING_TIME_THRESHOLD) {			
+			try {				
+				String select = DataStorage.GetValueString(
+						getApplicationContext(), USCTeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01");
+				Date curDate  = new Date(currentTime);
+				Date loadDate = new Date(lastLoadingTime);		
+				Date selDate  = new SimpleDateFormat("yyyy-MM-dd").parse(select);		
+
+				if (WeekdayCalculator.areSameWeekdays(selDate, curDate) || 
+						!WeekdayCalculator.areSameWeekdays(loadDate, curDate)) {
+					// the selected date is the same day as the current date, 
+					// OR date crossing case
+					// mProgressView.show("Loading...");
+		    		// new LoadDataTask(USCTeensMainActivity.this, mHandler).execute(select);
+		    		// mProgressView.dismiss();	
+					if (DataSource.loadRawData(select) == DataSource.LOADING_SUCCEEDED) {
+						result = true;
+					}					
+				}
+			} catch (ParseException e) {				
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 
 	// use main looper as the default
 	protected final Handler mHandler = new Handler() {	
@@ -232,7 +286,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		break;
         	case AppCmd.BEGIN_LOADING:         		
         		mProgressView.show("Loading...");
-        		new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);        					        	
+        		new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);	        	
             	break;
         	case AppCmd.END_LOADING:
         		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
@@ -243,7 +297,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         			Toast.makeText(context, R.string.chunk_error, Toast.LENGTH_LONG).show();
         		}        		
         		mProgressView.dismiss();
-        		break;
+        		break;      
         	case AppCmd.BACK:
         		switchPages(indexOfPage(PageType.DATE_PAGE));
         		break;

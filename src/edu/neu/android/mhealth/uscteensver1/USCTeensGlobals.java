@@ -19,14 +19,16 @@ public class USCTeensGlobals {
 	private static final String TAG = "USCTeensGlobals";	
 
 	public final static int    PIXEL_PER_DATA  = 2;
+	public final static int    UPDATING_TIME_THRESHOLD = 60 * 1000; // in ms
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
 	public final static String MERGE_SELECTION = "MERGE_SELECTION";
+	public final static String LAST_DATA_LOADING_TIME = "LAST_DATA_LOADING_TIME";
 	public final static String CURRENT_SELECTED_DATE = "CURRENT_SELECTED_DATE";
 	public final static String SENSOR_FOLDER     = "/Sensor/";
 	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String LABELS_FOLDER = "/Labels/";
 	public final static String SENSOR_TYPE = "InternalAccel";
-	public final static String ANNOTATION_SET = "Activities";
+	public final static String ANNOTATION_SET = "Activities";	
 	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
 	
 	public static Handler sGlobalHandler = null;

@@ -13,7 +13,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.RewardButton;
 import edu.neu.android.mhealth.uscteensver1.ui.WinBackground;
 
-public class WinPage extends AppPage implements OnClickListener {
+public class RewardPage extends AppPage implements OnClickListener {
 	
 	protected WinBackground mBackground = null;	
 	protected RewardButton 	mBtnReward  = null;
@@ -23,7 +23,7 @@ public class WinPage extends AppPage implements OnClickListener {
 	
 	protected View mView = null;
 
-	public WinPage(Context context, View view, Handler handler) {
+	public RewardPage(Context context, View view, Handler handler) {
 		super(context, handler);
 		mView = view;		
 	}

@@ -53,7 +53,13 @@ public class DataSource {
 	
 	public static void initialize(Context context) {
 		sContext = context;		
-	}	
+	}
+	
+	public static long getLastLoadingTime() {
+		long lastLoadingTime = 
+				DataStorage.GetValueLong(sContext, USCTeensGlobals.LAST_DATA_LOADING_TIME, 0);	
+		return lastLoadingTime;
+	}
 	
 	/**
 	 * 	 
@@ -116,6 +122,10 @@ public class DataSource {
 		 * hints on the graph for helping user remember what he/she did before
 		 */
 		loadLabelData(date);
+		
+		// note the last time for loading data
+		DataStorage.SetValue(sContext, 
+				USCTeensGlobals.LAST_DATA_LOADING_TIME, System.currentTimeMillis());
 			
 		return LOADING_SUCCEEDED;
 	}

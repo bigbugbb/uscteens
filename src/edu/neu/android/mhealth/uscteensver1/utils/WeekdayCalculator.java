@@ -97,7 +97,7 @@ public class WeekdayCalculator {
 		return false;   
 	}   
     	        	        	 
-	public static String  getSeqWeek(){   
+	public static String getSeqWeek(){   
 	    Calendar c = Calendar.getInstance(Locale.US);   
 	    String week = Integer.toString(c.get(Calendar.WEEK_OF_YEAR));   
 	    if (week.length() == 1) 
@@ -122,8 +122,8 @@ public class WeekdayCalculator {
 	}   
 	
 	public static String afterNDay(int n){   
-	    Calendar c=Calendar.getInstance();   
-	    DateFormat df=new SimpleDateFormat("yyyy-MM-dd");   
+	    Calendar c = Calendar.getInstance();   
+	    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");   
 	    c.setTime(new Date());   
 	    c.add(Calendar.DATE,n);   
 	    Date d2 = c.getTime();   
