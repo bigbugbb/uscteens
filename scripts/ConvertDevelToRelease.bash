@@ -51,7 +51,7 @@ find . -name "*.java" -type f
 
 find . -name "*.java" -type f -exec sed -i "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
 
-find . -name "*.cpp" -type f -exec sed -i "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
+find . -name "*.cpp" -type f -exec sed -i "s/neu\/android\/mhealth\/${DEVEL}/neu\/android\/mhealth\/${RELEASE}/g" '{}' \;
 
 # Change the src directory names
 
