@@ -43,17 +43,19 @@ echo "Converting XMLs..."
 
 find . -name "*.xml" -type f 
 
-find . -name "*.xml" -type f -exec sed -i "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
+find . -name "*.xml" -type f -exec sed -i .bk "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
 
 echo "Converting java..."
 
 find . -name "*.java" -type f 
 
-find . -name "*.java" -type f -exec sed -i "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
+find . -name "*.java" -type f -exec sed -i .bk "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
 
-find . -name "*.cpp" -type f -exec sed -i "s/neu\/android\/mhealth\/${DEVEL}/neu\/android\/mhealth\/${RELEASE}/g" '{}' \;
+find . -name "*.cpp" -type f -exec sed -i .bk "s/neu\/android\/mhealth\/${DEVEL}/neu\/android\/mhealth\/${RELEASE}/g" '{}' \;
 
 # Change the src directory names
+
+find . -name "*.bk" -type f -exec rm -r '{}' \;
 
 echo "Moving directories that have to be renamed ..."
 
