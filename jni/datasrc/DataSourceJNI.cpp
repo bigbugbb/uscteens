@@ -22,7 +22,7 @@
 	#define D(...)  do {} while (0)
 #endif
 
-static const char* CLASS_NAME = "edu/neu/android/mhealth/uscteensrel1/data/DataSource";
+static const char* CLASS_NAME = "edu/neu/android/mhealth/uscteensver1/data/DataSource";
 
 static JavaVM *gJavaVM;
 static DataSource* gDataSrc = DataSource::GetInstance();
