@@ -74,6 +74,7 @@ public class ChunkManager {
 			chunk.load(start, stop, timeOffset, activityID, createTime, modifyTime);						
 		}
 		
+		ChunkManager.selectChunk(0);
 	}
 	
 	public static void release() {
@@ -86,7 +87,7 @@ public class ChunkManager {
 	}
 	
 	protected static void saveChunks() {	
-		DataStorage.SetValue(sContext, USCTeensGlobals.LAST_SELECTED_CHUNK, sSelected);
+	//	DataStorage.SetValue(sContext, USCTeensGlobals.LAST_SELECTED_CHUNK, sSelected);
 		DataSource.saveChunkData(sChunks);
 	}
 	

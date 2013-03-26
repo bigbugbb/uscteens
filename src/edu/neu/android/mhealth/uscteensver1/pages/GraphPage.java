@@ -119,16 +119,16 @@ public class GraphPage extends AppPage implements OnClickListener,
 		}
 		
 		// select the first chunk		
-		int index = (int) DataStorage.GetValueLong(mContext, USCTeensGlobals.LAST_SELECTED_CHUNK, 0);		
-		Chunk c = ChunkManager.selectChunk(index);
-		if (c != null) {
-			mMotionGraph.moveGraph(c.mStart, 0);			
-			float progress = (float) c.mStart / mMotionGraph.getRightBound();
-			mSlideBar.moveSliderBarToProgress(progress);
-		} else {
+//		int index = (int) DataStorage.GetValueLong(mContext, USCTeensGlobals.LAST_SELECTED_CHUNK, 0);		
+//		Chunk c = ChunkManager.selectChunk(index);
+//		if (c != null) {
+//			mMotionGraph.moveGraph(c.mStart, 0);			
+//			float progress = (float) c.mStart / mMotionGraph.getRightBound();
+//			mSlideBar.moveSliderBarToProgress(progress);
+//		} else {
 			mMotionGraph.moveGraph(0, 0);						
 			mSlideBar.moveSliderBarToProgress(0);
-		}
+//		}
 	}
 	
 	public void stop() {

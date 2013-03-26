@@ -76,7 +76,7 @@ jint LoadHourlyAccelSensorData(JNIEnv* env, jclass clazz, jstring path)
 	// get onAddAccelData method
 	jmethodID mid = env->GetStaticMethodID(dsClass, "onAddAccelData", "(IIIIIII)V");
 //	// get AccelData class
-//	jclass adClass = env->FindClass("edu/neu/android/mhealth/uscteensver1/data/AccelData");
+//	jclass adClass = env->FindClass("edu/neu/android/mhealth/uscteensrel1/data/AccelData");
 //	// get AccelData constructor
 //	jmethodID constructor = env->GetMethodID(adClass, "<init>", "(IIIIIII)V");
 	// create each AccellData object by calling onAddAccelData
