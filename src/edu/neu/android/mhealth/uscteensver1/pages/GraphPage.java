@@ -113,6 +113,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	public void start() {				
 		ChunkManager.start();
 		LabelManager.start();
+		
 		load();		
 		for (AppObject obj : mObjects) {
 			obj.onSizeChanged(mView.getWidth(), mView.getHeight());
