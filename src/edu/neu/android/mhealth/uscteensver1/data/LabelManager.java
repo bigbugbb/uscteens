@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.res.Resources;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class LabelManager {
 	protected static Context   sContext   = null;
@@ -40,16 +41,15 @@ public class LabelManager {
 		}
 				
 		for (int i = 0; i < rawLabels.size(); ++i) {
-//			Chunk chunk = insertChunk(i);	
-//			RawChunk rawChunk = rawChunks.get(i);
+			Label label = insertLabel(i);
+			RawLabel rawLabel = rawLabels.get(i);
 			
-			// load each chunk
-//			int start = (rawChunk.getStartTime() - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;
-//			int stop  = (rawChunk.getStopTime()  - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;
-//			int activityID = rawChunk.getActivityID();
-//			String createTime = rawChunk.getCreateTime();
-//			String modifyTime = rawChunk.getModifyTime();
-//			chunk.load(start, stop, timeOffset, activityID, createTime, modifyTime);						
+			int x = rawLabel.getTimeInSec() * USCTeensGlobals.PIXEL_PER_DATA;
+			// int y = xxx;
+			String text = rawLabel.getText();
+			
+			// load each label
+			label.load(x, (int) AppScale.doScaleH(60), text);
 		}
 	}	
 	
@@ -60,6 +60,29 @@ public class LabelManager {
 			}
 			sLabels = null;
 		}
+	}
+	
+	public static ArrayList<Label> getLabels() {
+		return sLabels;
+	}
+	
+	public static Label getLabel(int index) {
+		return sLabels.get(index);
+	}
+	
+	public static int getLabelSize() {
+		return sLabels.size();
+	}
+	
+	public static Label insertLabel(int index) {		
+		Label label = new Label(sResources);			
+		sLabels.add(index, label);
+		return label;
+	}		
+
+	public static void deleteChunk(Label label) {
+		sLabels.remove(label);
+		label.release();
 	}
 	
 	public static void setViewSize(float width, float height) {

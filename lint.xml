@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="WrongCall">
+        <ignore path="src/edu/neu/android/mhealth/uscteensver1/ui/MotionGraph.java" />
+    </issue>
 </lint>

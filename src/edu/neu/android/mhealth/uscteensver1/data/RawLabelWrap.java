@@ -10,8 +10,7 @@ class RawLabelWrap extends ArrayList<RawLabel> {
 		clear();
 	}
 	
-	
-//	public void sort() {
-//		Collections.sort(mResults, Collections.reverseOrder());
-//	}
+	public void sort() {
+		Collections.sort(this, Collections.reverseOrder());
+	}
 }
