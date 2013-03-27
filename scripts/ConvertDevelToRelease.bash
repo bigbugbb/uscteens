@@ -14,6 +14,8 @@ RELEASE='uscteensrel1'
 
 NAME='USCTeens'
 
+OS=$(uname -s)
+
 cd ../../
 
 echo "Converting from USCTeens development version to release version."
@@ -43,19 +45,30 @@ echo "Converting XMLs..."
 
 find . -name "*.xml" -type f 
 
-find . -name "*.xml" -type f -exec sed -i .bk "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
+if [ "$OS" != 'Darwin' ]; then
+	find . -name "*.xml" -type f -exec sed -i "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
+
+else
+	find . -name "*.xml" -type f -exec sed -i "" "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
+fi
 
 echo "Converting java..."
 
 find . -name "*.java" -type f 
 
-find . -name "*.java" -type f -exec sed -i .bk "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
+if [ "$OS" != 'Darwin' ]; then
+	find . -name "*.java" -type f -exec sed -i "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
 
-find . -name "*.cpp" -type f -exec sed -i .bk "s/neu\/android\/mhealth\/${DEVEL}/neu\/android\/mhealth\/${RELEASE}/g" '{}' \;
+	find . -name "*.cpp" -type f -exec sed -i "s/neu\/android\/mhealth\/${DEVEL}/neu\/android\/mhealth\/${RELEASE}/g" '{}' \;
+
+else
+	find . -name "*.java" -type f -exec sed -i "" "s/\.neu\.android\.mhealth\.${DEVEL}/\.neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
+
+	find . -name "*.cpp" -type f -exec sed -i "" "s/neu\/android\/mhealth\/${DEVEL}/neu\/android\/mhealth\/${RELEASE}/g" '{}' \;
+
+fi
 
 # Change the src directory names
-
-find . -name "*.bk" -type f -exec rm -r '{}' \;
 
 echo "Moving directories that have to be renamed ..."
 
