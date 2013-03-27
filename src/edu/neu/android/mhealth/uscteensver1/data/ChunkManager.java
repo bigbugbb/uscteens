@@ -1,5 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -10,6 +11,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ClockButton;
 import edu.neu.android.mhealth.uscteensver1.ui.MergeButton;
 import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
+import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.support.DataStorage;
 
 
@@ -73,8 +75,8 @@ public class ChunkManager {
 			String modifyTime = rawChunk.getModifyTime();
 			chunk.load(start, stop, timeOffset, activityID, createTime, modifyTime);						
 		}
-		
-		ChunkManager.selectChunk(0);
+	
+//		ChunkManager.selectChunk(0);
 	}
 	
 	public static void release() {
@@ -86,8 +88,18 @@ public class ChunkManager {
 		}
 	}
 	
-	protected static void saveChunks() {	
-	//	DataStorage.SetValue(sContext, USCTeensGlobals.LAST_SELECTED_CHUNK, sSelected);
+	protected static void saveChunks() {
+		String selDate = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+		String startDate = DataStorage.getStartDate(sContext, "");
+		// start date is less than or equal to the current date			
+		try {
+			int diff = WeekdayCalculator.daysBetween(startDate, selDate);
+			DataStorage.SetValue(sContext, USCTeensGlobals.LAST_SELECTED_CHUNK + diff, sSelected);
+			DataStorage.SetValue(sContext, USCTeensGlobals.LAST_DISPLAY_OFFSET_X + diff, Math.abs((long) sDispOffsetX));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}						
 		DataSource.saveChunkData(sChunks);
 	}
 	

@@ -241,8 +241,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 				Date loadDate = new Date(lastLoadingTime);		
 				Date selDate  = new SimpleDateFormat("yyyy-MM-dd").parse(select);		
 
-				if (WeekdayCalculator.areSameWeekdays(selDate, curDate) || 
-						!WeekdayCalculator.areSameWeekdays(loadDate, curDate)) {
+				if (WeekdayCalculator.isSameDay(selDate, curDate) || 
+						!WeekdayCalculator.isSameDay(loadDate, curDate)) {
 					// the selected date is the same day as the current date, 
 					// OR date crossing case					
 					if (DataSource.loadRawData(select) == DataSource.LOADING_SUCCEEDED) {

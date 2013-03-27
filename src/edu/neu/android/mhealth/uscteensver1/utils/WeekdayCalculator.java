@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.utils;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -76,7 +77,7 @@ public class WeekdayCalculator {
      * @return
      */ 
   
-	public static boolean areSameWeekdays(Date date1, Date date2) {   
+	public static boolean isSameWeekday(Date date1, Date date2) {   
 		Calendar cal1 = Calendar.getInstance();   
 		Calendar cal2 = Calendar.getInstance();   
 		cal1.setTime(date1);   
@@ -96,6 +97,15 @@ public class WeekdayCalculator {
 		
 		return false;   
 	}   
+	
+	public static boolean isSameDay(Date date1, Date date2) {
+		SimpleDateFormat fmt = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		
+		String strDate1 = fmt.format(date1);
+		String strDate2 = fmt.format(date2);
+		
+		return strDate1.equals(strDate2);
+	}
     	        	        	 
 	public static String getSeqWeek(){   
 	    Calendar c = Calendar.getInstance(Locale.US);   
@@ -141,4 +151,24 @@ public class WeekdayCalculator {
 	    return s;   
 	} 
 
+	public static int daysBetween(String dateStart, String dateEnd) throws ParseException {
+		int daysAfterStart = 0;		
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+	
+	    Date start = fmt.parse(dateStart);
+	    Date end   = fmt.parse(dateEnd);
+	    daysAfterStart = daysBetween(start, end);
+		
+		return daysAfterStart;
+	}
+	
+	public static int daysBetween(Date dateStart, Date dateEnd) {
+		int daysAfterStart = 0;		
+
+	    float diff = dateEnd.getTime() - dateStart.getTime();
+	    diff = diff / 24 / 3600 / 1000;
+	    daysAfterStart = (int) diff;
+	    
+	    return daysAfterStart;
+	}
 }
