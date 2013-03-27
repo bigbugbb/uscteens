@@ -177,21 +177,23 @@ public class DataSource {
 		String[] hourDirs = FileHelper.getFilePathsDir(
 				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);
-		if (hourDirs == null || hourDirs.length == 0) {			
-			return false;
-		}
+		
 		// first clear the data container
 		sAccelDataWrap.clear();
-		// load the daily data from csv files hour by hour		
-		for (int i = 0; i < hourDirs.length; ++i) {
-			// each hour corresponds to one csv file
-			String[] filePath = FileHelper.getFilePathsDir(hourDirs[i]);			
-			// load the hourly data from csv file and save the data to mHourlyAccelData
-			sHourlyAccelData = new ArrayList<AccelData>();
-			loadHourlyAccelSensorData(filePath[0]);
-			// add the houly data the data wrap
-			sAccelDataWrap.add(sHourlyAccelData);
-		}		
+		try {
+			// load the daily data from csv files hour by hour		
+			for (int i = 0; i < hourDirs.length; ++i) {
+				// each hour corresponds to one csv file
+				String[] filePath = FileHelper.getFilePathsDir(hourDirs[i]);			
+				// load the hourly data from csv file and save the data to mHourlyAccelData
+				sHourlyAccelData = new ArrayList<AccelData>();
+				loadHourlyAccelSensorData(filePath[0]);
+				// add the houly data the data wrap
+				sAccelDataWrap.add(sHourlyAccelData);
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		// now we have a loaded daily accelerometer sensor data in the data wrap,
 		// we convert it into the data structure that can be drawn easily.
 		sAccelDataWrap.updateDrawableData();

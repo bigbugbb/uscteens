@@ -43,8 +43,13 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 	}
 	
 	public boolean updateDrawableData() {
-		if (size() == 0) {
-			return false;
+		// if no data is found for the selected date
+		if (size() == 0) { 
+			Arrays.fill(mDrawableData, NO_SENSOR_DATA);
+			assert(mNoDataTime.size() == 0);
+			mNoDataTime.add(Pair.create(0, mDrawableData.length));
+			mMaxAccelAvgValue = NO_SENSOR_DATA;
+			return true;
 		}
 
 		// update daily data		
