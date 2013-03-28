@@ -144,7 +144,7 @@ public class QuestView extends ImageView implements OnGestureListener,
 		for (int i = 0; i < 2; ++i) {
 			hour   = times[i] / 3600;
 			minute = (times[i] - hour * 3600) / 60;		
-			s[i] = (hour > 12 ? hour - 12 : hour) + ":" + 
+			s[i] = (hour > 12 ? hour - 12 : hour == 0 ? 12 : hour) + ":" + 
 				(minute > 9 ? minute : "0" + minute);
 			s[i] += (hour <= 12) ? " AM" : " PM";
 		}

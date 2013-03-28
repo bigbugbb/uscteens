@@ -277,7 +277,7 @@ public class MotionGraph extends AppObject {
 		int minute = (position - hour * 3600 * USCTeensGlobals.PIXEL_PER_DATA) / 60 / USCTeensGlobals.PIXEL_PER_DATA;
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append(hour > 12 ? hour - 12 : hour);
+		sb.append(hour > 12 ? hour - 12 : hour == 0 ? 12 : hour);
 		sb.append(":");
 		sb.append(minute > 9 ? minute : "0" + minute);
 		sb.append(hour > 12 ? " PM" : " AM");

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-    <issue id="WrongCall">
+    <issue id="WrongCall" severity="ignore">
         <ignore path="src/edu/neu/android/mhealth/uscteensver1/pages/GraphPage.java" />
         <ignore path="src/edu/neu/android/mhealth/uscteensver1/ui/MotionGraph.java" />
     </issue>

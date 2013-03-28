@@ -154,7 +154,7 @@ public class Chunk extends AppObject {
 		int minute = (time - 3600 * hour) / 60;
 		
 		sStringBuilder.delete(0, sStringBuilder.length());
-		sStringBuilder.append(hour > 12 ? hour - 12 : hour);
+		sStringBuilder.append(hour > 12 ? hour - 12 : hour == 0 ? 12 : hour);
 		sStringBuilder.append(":");
 		sStringBuilder.append(minute > 9 ? minute : "0" + minute);
 		sStringBuilder.append(hour > 12 ? " PM" : " AM");
