@@ -35,8 +35,6 @@ struct LabelData
 class DataSource : public CBaseObject
 {
 public:
-	int  Create();
-	int  Destroy();
 	int  GetMaxActivityValue(const char* pszFile);
 	vector<AccelSensorData>& LoadActivityData(const char* pszFile);
 	vector<int>& CreateDailyRawChunkData(int nStart, int nStop, int* pSensorData, int nSize);

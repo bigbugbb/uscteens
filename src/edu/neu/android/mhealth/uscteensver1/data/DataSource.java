@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -34,8 +35,20 @@ public class DataSource {
 	public final static int ERR_NO_CHUNK_DATA  		= 2;	
 	public final static int ERR_WAITING_SENSOR_DATA = 3;
 	
+	// thresholds for chunking generation
+	public final static int CHUNKING_MIN_MEAN_AVG         = 350;
+	public final static int CHUNKING_MIN_MEAN_AVG_DIFF    = 350;
+	public final static int CHUNKING_MAX_MEAN_AVG_DIFF    = 800;
+	public final static int CHUNKING_MEAN_AVG_DISTANCE    = 60;
+	public final static int CHUNKING_MIN_SENSITIVITY      = 400;
+	public final static int CHUNKING_MAX_SENSITIVITY      = 999;
+	public final static int CHUNKING_MIN_DISTANCE 		  = 120;
+		
 	// value for minimum sensor data
 	protected final static int MINIMUM_SENSOR_DATA_VALUE = 1600;
+	
+	// value for no data period
+	protected final static int NO_SENSOR_DATA = -1;
 	
 	protected static Context sContext = null;
 	// raw chunk data
@@ -289,15 +302,97 @@ public class DataSource {
 			return 0;
 		}
 		
-		int[] chunkPos = createDailyRawChunkData(startSecond, stopSecond, sAccelDataWrap.getDrawableData());
+		//int[] chunkPos = createDailyRawChunkData(startSecond, stopSecond, sAccelDataWrap.getDrawableData());
+		ArrayList<Integer> chunkPos = new ArrayList<Integer>();
+		int[] sensorData = sAccelDataWrap.getDrawableData();
+		int size = sensorData.length;
+		
+		// data should be enough for filling in at least one chunk space
+		if (size < CHUNKING_MIN_DISTANCE) {
+			return 0;
+		}
+		// convolution to the accelerometer data
+		int[] convolution = Arrays.copyOf(sensorData, size);
+		for (int i = 1; i < size - 1; ++i) { // [-1 0 1]
+			convolution[i] = sensorData[i + 1] - sensorData[i - 1];
+		}
+
+		// calculate mean average of CHUNKING_MIN_DISTANCE points' of data to the left of current position
+		int sum = 0;
+		int[] meanAverageL = new int[size];
+		Arrays.fill(meanAverageL, 0, CHUNKING_MEAN_AVG_DISTANCE, 0);		
+		for (int i = 0; i < CHUNKING_MEAN_AVG_DISTANCE; ++i) {
+			sum += sensorData[i];
+		}
+		for (int i = CHUNKING_MEAN_AVG_DISTANCE; i < size; ++i) {
+			meanAverageL[i] = sum / CHUNKING_MEAN_AVG_DISTANCE;
+			sum += sensorData[i];
+			sum -= sensorData[i - CHUNKING_MEAN_AVG_DISTANCE];
+		}
+
+		// calculate mean average of CHUNKING_MIN_DISTANCE points' of data to the right of current position
+		sum = 0;
+		int[] meanAverageR = new int[size];
+		Arrays.fill(meanAverageR, size - CHUNKING_MEAN_AVG_DISTANCE, size, 0);		
+		for (int i = size - 1; i >= size - CHUNKING_MEAN_AVG_DISTANCE; --i) {
+			sum += sensorData[i];
+		}
+		for (int i = size - CHUNKING_MEAN_AVG_DISTANCE - 1; i >= 0; --i) {
+			meanAverageR[i] = sum / CHUNKING_MEAN_AVG_DISTANCE;
+			sum += sensorData[i];
+			sum -= sensorData[i + CHUNKING_MEAN_AVG_DISTANCE];
+		}
+
+		// figure out the possible chunking positions
+		int prev = startSecond;
+		chunkPos.add(startSecond);
+		for (int i = startSecond + 1; i < size - CHUNKING_MIN_DISTANCE; ++i) {
+			if (i - prev < CHUNKING_MIN_DISTANCE) {
+				continue;
+			}
+			// chunking for no data area
+			if (sensorData[i] == NO_SENSOR_DATA) {
+				if (sensorData[i - 1] != NO_SENSOR_DATA || sensorData[i + 1] != NO_SENSOR_DATA) {
+					chunkPos.add(i);
+					prev = i;
+					continue;
+				}
+			}
+			// chunking for data change area
+			if (convolution[i] > CHUNKING_MIN_SENSITIVITY &&
+					sensorData[i] > CHUNKING_MIN_SENSITIVITY &&
+					sensorData[i] < CHUNKING_MAX_SENSITIVITY) {
+				if (Math.abs(meanAverageL[i] - meanAverageR[i]) > CHUNKING_MIN_MEAN_AVG_DIFF) {
+					chunkPos.add(i);
+					prev = i;
+					continue;
+				}
+			}
+			// chunking for separated sensor data with huge value
+			if (sensorData[i] > CHUNKING_MAX_SENSITIVITY) {
+				int next = i + CHUNKING_MIN_DISTANCE;
+				if (meanAverageL[i] < CHUNKING_MIN_MEAN_AVG && meanAverageR[next] < CHUNKING_MIN_MEAN_AVG) {
+					chunkPos.add(i);
+				} else {
+					continue;
+				}
+				if (next < size - CHUNKING_MIN_DISTANCE) {
+					chunkPos.add(next);
+					prev = next;
+				} else {
+					prev = i;
+				}
+			}
+		}
+		chunkPos.add(stopSecond);		
 		
 		// current selected date		
 		String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());		
 
 		// create raw chunk data for each chunking position	
 		rawChunks.clear();
-		for (int i = 0; i < chunkPos.length - 1; ++i) {						
-			rawChunks.add(new RawChunk(today, chunkPos[i], chunkPos[i + 1]));
+		for (int i = 0; i < chunkPos.size() - 1; ++i) {						
+			rawChunks.add(new RawChunk(today, chunkPos.get(i), chunkPos.get(i + 1)));
 		}
 						
 		return rawChunks.size();
@@ -434,11 +529,7 @@ public class DataSource {
 		return result;
 	}
 	
-	private static native int create();
-	private static native int destroy();
 	private static native int loadHourlyAccelSensorData(String filePath);
-	private static native int unloadActivityData(String path);
-	private static native int[] createDailyRawChunkData(int startTime, int stopTime, int[] sensorData);
+//	private static native int[] createDailyRawChunkData(int startTime, int stopTime, int[] sensorData);
 	private static native int loadDailyLabelData(String filePath);
-	private static native int getMaxActivityValue(String path);
 }

@@ -35,35 +35,6 @@ DataSource::~DataSource()
 
 }
 
-int DataSource::Create()
-{
-	return 0;
-}
-
-int DataSource::Destroy()
-{
-	for (vector<ChunkData*>::iterator iter = m_vecChunk.begin();
-					iter != m_vecChunk.end(); ++iter) {
-		ChunkData* pData = *iter;
-		if (pData) {
-			delete pData;
-		}
-	}
-
-//	for (vector<ActivityData*>::iterator iter = m_vecActivity.begin();
-//				iter != m_vecActivity.end(); ++iter) {
-//		ActivityData* pData = *iter;
-//		if (pData) {
-//			delete pData;
-//		}
-//	}
-
-	m_vecChunk.clear();
-//	m_vecActivity.clear();
-
-	return 0;
-}
-
 int DataSource::GetMaxActivityValue(const char* pszFile)
 {
 //	ActivityData* pData = NULL;

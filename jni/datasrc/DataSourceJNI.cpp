@@ -40,20 +40,6 @@ JNIEnv* JNI_GetEnv()
     return env;
 }
 
-jint Create(JNIEnv * env, jclass clazz)
-{
-	jint nResult = gDataSrc->Create();
-
-	return nResult;
-}
-
-jint Destroy(JNIEnv * env, jclass clazz)
-{
-	jint nResult = gDataSrc->Destroy();
-
-	return nResult;
-}
-
 jint GetMaxActivityValue(JNIEnv* env, jclass clazz, jstring path)
 {
 	jboolean bCopy;
@@ -175,14 +161,9 @@ jint LoadDailyLabelData(JNIEnv* env, jclass clazz, jstring path)
 }
 
 static JNINativeMethod methods[] = {
-	{"create", "()I", (void*)Create },
-	{"destroy", "()I", (void*)Destroy },
 	{"loadDailyLabelData", "(Ljava/lang/String;)I", (void*)LoadDailyLabelData },
 	{"loadHourlyAccelSensorData", "(Ljava/lang/String;)I", (void*)LoadHourlyAccelSensorData },
-	{"createDailyRawChunkData", "(II[I)[I", (void*)CreateDailyRawChunkData },
-	{"unloadActivityData", "(Ljava/lang/String;)I", (void*)UnloadActivityData },
-	{"getMaxActivityValue", "(Ljava/lang/String;)I", (void*)GetMaxActivityValue },
-//	{"unloadChunkData", "(Ljava/lang/String;)I", (void*)UnloadChunkData },
+//	{"createDailyRawChunkData", "(II[I)[I", (void*)CreateDailyRawChunkData },
 };
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
