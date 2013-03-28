@@ -24,6 +24,7 @@ import edu.neu.android.wocketslib.utils.DateHelper;
 public class StartDateSetupActivity extends BaseActivity implements OnClickListener {
 	
 	private static final String TAG = "StartDateSetupActivity";
+	private static final int TOTAL_DAYS = 14;
 	// buttons
 	private Button   mBtnSet;
 	private Button   mBtnCancel;
@@ -97,7 +98,7 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 	}
 	
 	private void savePreferences() {	
-		for (int i = 0; i < 14; ++i) {
+		for (int i = 0; i < TOTAL_DAYS; ++i) {
 			DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.LAST_SELECTED_CHUNK + i, 0);
 			DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.LAST_DISPLAY_OFFSET_X + i, 0);
 		}

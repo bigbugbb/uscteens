@@ -277,10 +277,13 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
         			switchPages(indexOfPage(PageType.GRAPH_PAGE));
         		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
-        			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
+        			Toast.makeText(context, R.string.no_data, Toast.LENGTH_LONG).show();
+        			switchPages(indexOfPage(PageType.GRAPH_PAGE)); // still can be labelled
         		} else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
         			Toast.makeText(context, R.string.chunk_error, Toast.LENGTH_LONG).show();
-        		}        		
+        		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
+        			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
+        		}
         		mProgressView.dismiss();
         		break;      
         	case AppCmd.BACK:
@@ -292,8 +295,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         	case AppCmd.QUEST:
         		i = new Intent(USCTeensMainActivity.this, QuestDialog.class);           		
         		i.putExtra(QuestDialog.CHUNK_START_TIME, msg.arg1);
-        		i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);
-        		i.putExtra("TEST", 1);
+        		i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);        		
         		startActivityForResult(i, AppCmd.QUEST);
         		break;
         	case AppCmd.MERGE:

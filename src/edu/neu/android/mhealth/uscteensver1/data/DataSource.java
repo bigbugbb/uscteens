@@ -29,9 +29,10 @@ import edu.neu.android.wocketslib.utils.WOCKETSException;
 
 public class DataSource {
 	// result code
-	public final static int LOADING_SUCCEEDED  = 0;
-	public final static int ERR_NO_SENSOR_DATA = 1;
-	public final static int ERR_NO_CHUNK_DATA  = 2;	
+	public final static int LOADING_SUCCEEDED  		= 0;
+	public final static int ERR_NO_SENSOR_DATA 		= 1;
+	public final static int ERR_NO_CHUNK_DATA  		= 2;	
+	public final static int ERR_WAITING_SENSOR_DATA = 3;
 	
 	// value for minimum sensor data
 	protected final static int MINIMUM_SENSOR_DATA_VALUE = 1600;
@@ -72,9 +73,7 @@ public class DataSource {
 		/* 
 		 * first load the accelerometer sensor data
 		 */
-		if (!loadRawAccelData(date)) {
-			return ERR_NO_SENSOR_DATA;
-		}
+		int result = loadRawAccelData(date);
 		
 		/* 
 		 * then load the corresponding chunk data.
@@ -127,7 +126,7 @@ public class DataSource {
 		DataStorage.SetValue(sContext, 
 				USCTeensGlobals.LAST_DATA_LOADING_TIME, System.currentTimeMillis());
 			
-		return LOADING_SUCCEEDED;
+		return result;
 	}
 
 	private static void onAddAccelData(int hour, int minute, int second, int milliSecond, 
@@ -173,7 +172,8 @@ public class DataSource {
 		return sRawChksWrap;
 	}
 	
-	private static boolean loadRawAccelData(String date) {
+	private static int loadRawAccelData(String date) {
+		int result = LOADING_SUCCEEDED;
 		String[] hourDirs = FileHelper.getFilePathsDir(
 				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);
@@ -193,12 +193,18 @@ public class DataSource {
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();
+			String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+			if (date.compareTo(today) == 0) {
+				result = ERR_WAITING_SENSOR_DATA;
+			} else {
+				result = ERR_NO_SENSOR_DATA;
+			}
 		}
 		// now we have a loaded daily accelerometer sensor data in the data wrap,
 		// we convert it into the data structure that can be drawn easily.
 		sAccelDataWrap.updateDrawableData();
 		
-		return true;
+		return result;
 	}
 	
 	/**

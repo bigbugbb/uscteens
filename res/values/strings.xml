@@ -4,6 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="need_setup">This phone needs to be setup for the Teen Activity Game to start!</string>
+    <string name="no_data">There is no data for this day!</string>
     <string name="wait_data">You need to wait a little before you can start to label your day!</string>
     <string name="chunk_error">Fail to generate the chunks!</string>
 </resources>
