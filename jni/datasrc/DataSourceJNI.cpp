@@ -161,8 +161,8 @@ jint LoadDailyLabelData(JNIEnv* env, jclass clazz, jstring path)
 }
 
 static JNINativeMethod methods[] = {
-	{"loadDailyLabelData", "(Ljava/lang/String;)I", (void*)LoadDailyLabelData },
-	{"loadHourlyAccelSensorData", "(Ljava/lang/String;)I", (void*)LoadHourlyAccelSensorData },
+//	{"loadDailyLabelData", "(Ljava/lang/String;)I", (void*)LoadDailyLabelData },
+//	{"loadHourlyAccelSensorData", "(Ljava/lang/String;)I", (void*)LoadHourlyAccelSensorData },
 //	{"createDailyRawChunkData", "(II[I)[I", (void*)CreateDailyRawChunkData },
 };
 

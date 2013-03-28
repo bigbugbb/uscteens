@@ -1,9 +1,12 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,9 +29,11 @@ import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
+import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.WOCKETSException;
 
 public class DataSource {
+	private final static String TAG = "DataSource";
 	// result code
 	public final static int LOADING_SUCCEEDED  		= 0;
 	public final static int ERR_NO_SENSOR_DATA 		= 1;
@@ -61,9 +66,9 @@ public class DataSource {
 	protected static RawLabelWrap sRawLabelsWrap = new RawLabelWrap();
 	
 	
-	static {
-		System.loadLibrary("datasrc");
-	}		
+//	static {
+//		System.loadLibrary("datasrc");
+//	}		
 	
 	public static void initialize(Context context) {
 		sContext = context;		
@@ -142,17 +147,17 @@ public class DataSource {
 		return result;
 	}
 
-	private static void onAddAccelData(int hour, int minute, int second, int milliSecond, 
-				     			int timeInSec, int accelAverage, int accelSamples) {
-		AccelData data = new AccelData(hour, minute, second, milliSecond, 
-				timeInSec, accelAverage, accelSamples);
-		sHourlyAccelData.add(data);
-	}
+//	private static void onAddAccelData(int hour, int minute, int second, int milliSecond, 
+//				     			int timeInSec, int accelAverage, int accelSamples) {
+//		AccelData data = new AccelData(hour, minute, second, milliSecond, 
+//				timeInSec, accelAverage, accelSamples);
+//		sHourlyAccelData.add(data);
+//	}
 	
-	private static void onAddLabelData(int hour, int minute, int second, int timeInSec, String text) {
-		RawLabel data = new RawLabel(hour, minute, second, timeInSec, text);
-		sRawLabelsWrap.add(data);
-	}
+//	private static void onAddLabelData(int hour, int minute, int second, int timeInSec, String text) {
+//		RawLabel data = new RawLabel(hour, minute, second, timeInSec, text);
+//		sRawLabelsWrap.add(data);
+//	}
 	
 	public static String getCurrentSelectedDate() {
 		return DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
@@ -185,6 +190,56 @@ public class DataSource {
 		return sRawChksWrap;
 	}
 	
+	private static int loadHourlyRawAccelData(String filePath, ArrayList<AccelData> hourlyAccelData) {		
+		// first clear the data container
+		hourlyAccelData.clear();
+		
+		// load the daily data from the csv file	
+//		loadDailyLabelData(labelFilePaths[0]);
+		String result = null;
+		File dataFile = new File(filePath);
+		FileInputStream fis = null;
+		BufferedReader br = null;
+		try {
+			fis = new FileInputStream(dataFile);
+			InputStreamReader in = new InputStreamReader(fis);
+			br = new BufferedReader(in);			
+			try {
+				// skip the first line
+				result = br.readLine();
+				while ((result = br.readLine()) != null) {
+					// parse the line
+					String[] split = result.split("[ :.,]");
+					AccelData data = new AccelData(split[1], split[2], split[3], split[5], split[7], split[9]);
+					hourlyAccelData.add(data);
+				}
+			} catch (IOException e) {
+				Log.e(TAG, "readStringInternal: problem reading: " + dataFile.getAbsolutePath());
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "readStringInternal: cannot find: " + dataFile.getAbsolutePath());
+			e.printStackTrace();
+		} finally {
+			if (br != null)
+				try {
+					br.close();
+				} catch (IOException e) {
+					Log.e(TAG, "readStringInternal: cannot close: " + dataFile.getAbsolutePath());
+					e.printStackTrace();
+				}
+			if (fis != null)
+				try {
+					fis.close();
+				} catch (IOException e) {
+					Log.e(TAG, "readStringInternal: cannot close: " + dataFile.getAbsolutePath());
+					e.printStackTrace();
+				}
+		}
+		
+		return hourlyAccelData.size();
+	}
+	
 	private static int loadRawAccelData(String date) {
 		int result = LOADING_SUCCEEDED;
 		String[] hourDirs = FileHelper.getFilePathsDir(
@@ -200,7 +255,7 @@ public class DataSource {
 				String[] filePath = FileHelper.getFilePathsDir(hourDirs[i]);			
 				// load the hourly data from csv file and save the data to mHourlyAccelData
 				sHourlyAccelData = new ArrayList<AccelData>();
-				loadHourlyAccelSensorData(filePath[0]);
+				loadHourlyRawAccelData(filePath[0], sHourlyAccelData);
 				// add the houly data the data wrap
 				sAccelDataWrap.add(sHourlyAccelData);
 			}		
@@ -286,8 +341,49 @@ public class DataSource {
 		
 		// first clear the data container
 		sRawLabelsWrap.clear();
+		
 		// load the daily data from the csv file	
-		loadDailyLabelData(labelFilePaths[0]);		
+//		loadDailyLabelData(labelFilePaths[0]);
+		String result = null;
+		File labelFile = new File(labelFilePaths[0]);
+		FileInputStream fis = null;
+		BufferedReader br = null;
+		try {
+			fis = new FileInputStream(labelFile);
+			InputStreamReader in = new InputStreamReader(fis);
+			br = new BufferedReader(in);			
+			try {
+				// skip the first line
+				result = br.readLine();
+				while ((result = br.readLine()) != null) {
+					// parse the line
+					String[] split = result.split("[ :,]");
+					RawLabel rawLabel = new RawLabel(split[1], split[2], split[3], split[5]);
+					sRawLabelsWrap.add(rawLabel);
+				}
+			} catch (IOException e) {
+				Log.e(TAG, "readStringInternal: problem reading: " + labelFile.getAbsolutePath());
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "readStringInternal: cannot find: " + labelFile.getAbsolutePath());
+			e.printStackTrace();
+		} finally {
+			if (br != null)
+				try {
+					br.close();
+				} catch (IOException e) {
+					Log.e(TAG, "readStringInternal: cannot close: " + labelFile.getAbsolutePath());
+					e.printStackTrace();
+				}
+			if (fis != null)
+				try {
+					fis.close();
+				} catch (IOException e) {
+					Log.e(TAG, "readStringInternal: cannot close: " + labelFile.getAbsolutePath());
+					e.printStackTrace();
+				}
+		}
 		
 		return sRawLabelsWrap.size() > 0;
 	}
@@ -528,7 +624,7 @@ public class DataSource {
 		return result;
 	}
 	
-	private static native int loadHourlyAccelSensorData(String filePath);
+//	private static native int loadHourlyAccelSensorData(String filePath);
 //	private static native int[] createDailyRawChunkData(int startTime, int stopTime, int[] sensorData);
-	private static native int loadDailyLabelData(String filePath);
+//	private static native int loadDailyLabelData(String filePath);
 }

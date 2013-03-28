@@ -19,6 +19,14 @@ class RawLabel implements Serializable, Comparable<RawLabel> {
 		mTimeInSec = timeInSec;
 		mText      = text;
 	}
+	
+	public RawLabel(String hour, String minute, String second, String text) {
+		mHour      = Integer.parseInt(hour);
+		mMinute    = Integer.parseInt(minute);
+		mSecond    = Integer.parseInt(second);
+		mTimeInSec = mHour * 3600 + mMinute * 60 + mSecond;
+		mText      = text;
+	}
 
 	public String getText() {
 		return mText;
