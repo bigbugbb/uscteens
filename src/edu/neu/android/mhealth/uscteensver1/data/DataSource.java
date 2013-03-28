@@ -279,7 +279,7 @@ public class DataSource {
 	 * @return true if successful, otherwise false
 	 */
 	private static int createRawChunkData(int startSecond, int stopSecond, ArrayList<RawChunk> rawChunks) {
-		if (sAccelDataWrap.size() == 0 || rawChunks == null) {
+		if (rawChunks == null) {
 			return 0;
 		}
 		
