@@ -25,6 +25,7 @@ public class USCTeensGlobals {
 	public final static String LAST_DATA_LOADING_TIME = "LAST_DATA_LOADING_TIME";
 	public final static String CURRENT_SELECTED_DATE = "CURRENT_SELECTED_DATE";
 	public final static String LAST_SELECTED_CHUNK = "LAST_SELECTED_CHUNK";
+	public final static String LAST_DISPLAY_OFFSET_X = "LAST_DISPLAY_OFFSET_X";
 	public final static String SENSOR_FOLDER     = "/Sensor/";
 	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String LABELS_FOLDER = "/Labels/";

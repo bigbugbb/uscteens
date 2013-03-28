@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -24,7 +23,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;
@@ -241,8 +239,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 				Date loadDate = new Date(lastLoadingTime);		
 				Date selDate  = new SimpleDateFormat("yyyy-MM-dd").parse(select);		
 
-				if (WeekdayCalculator.areSameWeekdays(selDate, curDate) || 
-						!WeekdayCalculator.areSameWeekdays(loadDate, curDate)) {
+				if (WeekdayCalculator.isSameDay(selDate, curDate) || 
+						!WeekdayCalculator.isSameDay(loadDate, curDate)) {
 					// the selected date is the same day as the current date, 
 					// OR date crossing case					
 					if (DataSource.loadRawData(select) == DataSource.LOADING_SUCCEEDED) {
@@ -279,10 +277,13 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
         			switchPages(indexOfPage(PageType.GRAPH_PAGE));
         		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
-        			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
+        			Toast.makeText(context, R.string.no_data, Toast.LENGTH_LONG).show();
+        			switchPages(indexOfPage(PageType.GRAPH_PAGE)); // still can be labelled
         		} else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
         			Toast.makeText(context, R.string.chunk_error, Toast.LENGTH_LONG).show();
-        		}        		
+        		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
+        			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
+        		}
         		mProgressView.dismiss();
         		break;      
         	case AppCmd.BACK:
@@ -294,8 +295,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         	case AppCmd.QUEST:
         		i = new Intent(USCTeensMainActivity.this, QuestDialog.class);           		
         		i.putExtra(QuestDialog.CHUNK_START_TIME, msg.arg1);
-        		i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);
-        		i.putExtra("TEST", 1);
+        		i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);        		
         		startActivityForResult(i, AppCmd.QUEST);
         		break;
         	case AppCmd.MERGE:

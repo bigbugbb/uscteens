@@ -20,7 +20,7 @@ CPP_DEPS += \
 jni/datasrc/%.o: ../jni/datasrc/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I/Develop/Android/android-ndk-r8d/platforms/android-9/arch-arm/usr/include -I/Develop/Android/android-ndk-r8d/sources/cxx-stl/gnu-libstdc++/4.6/include -O2 -g -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	g++ -I/Develop/Android/android-ndk-r8e/platforms/android-9/arch-arm/usr/include -I/Develop/Android/android-ndk-r8e/sources/cxx-stl/gnu-libstdc++/4.7/include -O2 -g -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

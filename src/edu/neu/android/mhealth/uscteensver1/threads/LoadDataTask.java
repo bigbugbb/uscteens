@@ -42,6 +42,11 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 			msg.arg1 = mResult;
 			msg.what = AppCmd.END_LOADING;
 			mHandler.sendMessage(msg); 
+		} else if (mResult == DataSource.ERR_WAITING_SENSOR_DATA) {
+			Message msg = mHandler.obtainMessage();	
+			msg.arg1 = mResult;
+			msg.what = AppCmd.END_LOADING;
+			mHandler.sendMessage(msg);
 		} else if (mResult == DataSource.ERR_NO_CHUNK_DATA) {
 			Message msg = mHandler.obtainMessage();	
 			msg.arg1 = mResult;

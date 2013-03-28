@@ -17,6 +17,8 @@ import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.data.Label;
+import edu.neu.android.mhealth.uscteensver1.data.LabelManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
@@ -114,6 +116,7 @@ public class MotionGraph extends AppObject {
 		mDate = convertDateToDisplayFormat(DataSource.getCurrentSelectedDate());
 			
 		ChunkManager.setDisplayOffset(0, 0);	
+		LabelManager.setDisplayOffset(0, 0);
 	}		
 	
 	public void release() {
@@ -173,6 +176,7 @@ public class MotionGraph extends AppObject {
 			mEnd   = mStart + (int) mWidth;			
 			mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
 			ChunkManager.setDisplayOffset(-mStart, 0);
+			LabelManager.setDisplayOffset(-mStart, 0);
 			
 			if (mListener != null) {
 				mListener.OnGraphMoved(this, (float) mStart / mRightBound);
@@ -197,8 +201,11 @@ public class MotionGraph extends AppObject {
 			}
 		}
 		
-		// draw the floating labels if they exist 
-		
+		// draw the floating labels if they exist 			
+		for (int i = 0; i < LabelManager.getLabelSize(); ++i) {
+			Label label = LabelManager.getLabel(i);
+			label.onDraw(c);
+		}
 		
 		/*
 		 *  draw the data
@@ -313,6 +320,9 @@ public class MotionGraph extends AppObject {
 		
 		ChunkManager.setViewSize(mWidth, mHeight);
 		ChunkManager.setCanvasSize(width, height);
+		
+		LabelManager.setViewSize(mWidth, mHeight);
+		LabelManager.setCanvasSize(width, height);
 	}
 
 	@Override
@@ -364,6 +374,7 @@ public class MotionGraph extends AppObject {
 		mStart = (mStart < 0) ? 0 : mStart;
 		mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
 		ChunkManager.setDisplayOffset(-mStart, 0);
+		LabelManager.setDisplayOffset(-mStart, 0);
 		
 		if (mListener != null) {
 			mListener.OnGraphMoved(this, (float) mStart / mRightBound);
@@ -381,6 +392,7 @@ public class MotionGraph extends AppObject {
 		mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
 		
 		ChunkManager.setDisplayOffset(-mStart, 0);
+		LabelManager.setDisplayOffset(-mStart, 0);
 	}
 	
 	public void moveGraph(int progress) {
@@ -393,6 +405,7 @@ public class MotionGraph extends AppObject {
 		mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
 		
 		ChunkManager.setDisplayOffset(-mStart, 0);
+		LabelManager.setDisplayOffset(-mStart, 0);
 	}
 
 	@Override

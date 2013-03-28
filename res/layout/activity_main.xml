@@ -9,6 +9,11 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent" />
     
+    <edu.neu.android.mhealth.uscteensver1.views.RewardView
+        android:id="@+id/view_reward"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
+    
     <edu.neu.android.mhealth.uscteensver1.views.ProgressView
 	    android:id="@+id/view_progress"	    
 		android:layout_width="match_parent"

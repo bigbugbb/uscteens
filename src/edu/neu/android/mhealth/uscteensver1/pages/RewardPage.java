@@ -10,8 +10,8 @@ import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
-import edu.neu.android.mhealth.uscteensver1.ui.RewardButton;
 import edu.neu.android.mhealth.uscteensver1.ui.RewardBackground;
+import edu.neu.android.mhealth.uscteensver1.ui.RewardButton;
 
 public class RewardPage extends AppPage implements OnClickListener {
 	

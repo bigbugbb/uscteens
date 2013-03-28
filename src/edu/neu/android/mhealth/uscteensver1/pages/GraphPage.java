@@ -1,10 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.pages;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -20,7 +17,6 @@ import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleListener;
-import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.LabelManager;
 import edu.neu.android.mhealth.uscteensver1.ui.BackButton;
 import edu.neu.android.mhealth.uscteensver1.ui.ChunkButton;
@@ -37,7 +33,6 @@ import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
 import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.support.DataStorage;
-import edu.neu.android.wocketslib.utils.DateHelper;
 
 
 public class GraphPage extends AppPage implements OnClickListener,
@@ -113,22 +108,41 @@ public class GraphPage extends AppPage implements OnClickListener,
 	public void start() {				
 		ChunkManager.start();
 		LabelManager.start();
+		
 		load();		
 		for (AppObject obj : mObjects) {
 			obj.onSizeChanged(mView.getWidth(), mView.getHeight());
 		}
 		
-		// select the first chunk		
-//		int index = (int) DataStorage.GetValueLong(mContext, USCTeensGlobals.LAST_SELECTED_CHUNK, 0);		
-//		Chunk c = ChunkManager.selectChunk(index);
-//		if (c != null) {
-//			mMotionGraph.moveGraph(c.mStart, 0);			
-//			float progress = (float) c.mStart / mMotionGraph.getRightBound();
-//			mSlideBar.moveSliderBarToProgress(progress);
-//		} else {
-			mMotionGraph.moveGraph(0, 0);						
-			mSlideBar.moveSliderBarToProgress(0);
-//		}
+		// recover the chunk selection state when user quit the screen last time
+		String selDate = DataStorage.GetValueString(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+		String startDate = DataStorage.getStartDate(mContext, "");
+		// initialize
+		ChunkManager.selectChunk(0);
+		mMotionGraph.moveGraph(0, 0);						
+		mSlideBar.moveSliderBarToProgress(0);
+		// try to recover from the record data		
+		try {
+			int diff = WeekdayCalculator.daysBetween(startDate, selDate);
+			int index   = (int) DataStorage.GetValueLong(mContext, USCTeensGlobals.LAST_SELECTED_CHUNK + diff, 0);
+			int offsetX = (int) DataStorage.GetValueLong(mContext, USCTeensGlobals.LAST_DISPLAY_OFFSET_X + diff, 0);
+			// recover last position when user quit
+			Chunk c = ChunkManager.selectChunk(index);
+			if (c != null) {
+				mMotionGraph.moveGraph(offsetX, 0);			
+				float progress = (float) offsetX / mMotionGraph.getRightBound();
+				mSlideBar.moveSliderBarToProgress(progress);
+				ChunkManager.setDisplayOffset(-offsetX, 0);
+				LabelManager.setDisplayOffset(-offsetX, 0);
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+		} finally {
+			;
+		}
 	}
 	
 	public void stop() {

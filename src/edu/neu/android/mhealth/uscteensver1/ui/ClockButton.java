@@ -14,7 +14,6 @@ import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
-import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
@@ -120,8 +119,8 @@ public class ClockButton extends ChunkButton {
 						mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
 				}
 			} else { 
-				Chunk chunk = ChunkManager.getPrevChunk(mHost);
-				if (chunk.isSelected() && chunk.getChunkWidth() > Chunk.MINIMUM_CHUNK_SPACE * 1.75f) {
+//				Chunk chunk = ChunkManager.getPrevChunk(mHost);
+//				if (chunk.isSelected() && chunk.getChunkWidth() > Chunk.MINIMUM_CHUNK_SPACE * 1.75f) {
 					// draw on the left side
 					if (mX + mWidth / 2 + mOffsetX < mCanvasWidth + AppScale.doScaleW(120)) {
 						sTimePaint.setTextAlign(Align.RIGHT);
@@ -129,15 +128,16 @@ public class ClockButton extends ChunkButton {
 							mX - mWidth / 2 + mOffsetX + AppScale.doScaleW(30),
 							mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
 					}
-				} else {
-					// draw on the right side
-					if (mX + mWidth / 2 + mOffsetX > AppScale.doScaleW(-120)) {
-						sTimePaint.setTextAlign(Align.LEFT);
-						c.drawText(mHost.getChunkRealStartTimeInString(), 
-							mX + mWidth / 2 + mOffsetX + AppScale.doScaleW(50),
-							mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
-					}
-				}
+//				} 
+//				else {
+//					// draw on the right side
+//					if (mX + mWidth / 2 + mOffsetX > AppScale.doScaleW(-120)) {
+//						sTimePaint.setTextAlign(Align.LEFT);
+//						c.drawText(mHost.getChunkRealStartTimeInString(), 
+//							mX + mWidth / 2 + mOffsetX + AppScale.doScaleW(50),
+//							mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
+//					}
+//				}
 			}
 			//Log.d("clock button", mX + " " + mY + " " + mOffsetX);
 			if (isSelected()) {
