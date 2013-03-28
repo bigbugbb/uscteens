@@ -360,8 +360,7 @@ public class DataSource {
 			}
 			// chunking for data change area
 			if (convolution[i] > CHUNKING_MIN_SENSITIVITY &&
-					sensorData[i] > CHUNKING_MIN_SENSITIVITY &&
-					sensorData[i] < CHUNKING_MAX_SENSITIVITY) {
+				sensorData[i] > CHUNKING_MIN_SENSITIVITY && sensorData[i] < CHUNKING_MAX_SENSITIVITY) {
 				if (Math.abs(meanAverageL[i] - meanAverageR[i]) > CHUNKING_MIN_MEAN_AVG_DIFF) {
 					chunkPos.add(i);
 					prev = i;
