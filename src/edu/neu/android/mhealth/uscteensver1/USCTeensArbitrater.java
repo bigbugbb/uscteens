@@ -3,6 +3,7 @@ package edu.neu.android.mhealth.uscteensver1;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,6 +17,8 @@ import java.util.Random;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Environment;
+import edu.neu.android.mhealth.uscteensver1.data.AccelData;
+import edu.neu.android.mhealth.uscteensver1.data.AccelDataOutputStream;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.dataupload.DataSender;
 import edu.neu.android.wocketslib.dataupload.RawUploader;
@@ -415,7 +418,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		return true;
 	}
 	
-	private String getFileNameForSavingInternalAccelData() {
+	private String[] getFileNamesForSavingInternalAccelData() {
 		boolean isNewFileNeeded = false;				
 		String lastCSVFileCreateTime = DataStorage.GetValueString(aContext, KEY_CSVFILE_CREATE_TIME, DataStorage.EMPTY);		
 		
@@ -446,20 +449,34 @@ public class USCTeensArbitrater extends Arbitrater {
 			DataStorage.SetValue(aContext, KEY_CSVFILE_CREATE_TIME, lastCSVFileCreateTime);
 		}
 		
-		return USCTeensGlobals.SENSOR_TYPE + "." + PhoneInfo.getID(aContext)
+		// compose the file names
+		String[] names = new String[2];
+		names[0] = USCTeensGlobals.SENSOR_TYPE + "." + PhoneInfo.getID(aContext)
 				+ "." + lastCSVFileCreateTime + ".log.csv";
+		names[1] = USCTeensGlobals.SENSOR_TYPE + "." + PhoneInfo.getID(aContext)
+				+ "." + lastCSVFileCreateTime + ".log.bin";
+		
+		return names;
 	}
 	
-	private String getFilePathNameForSavingInternalAccelData(String fileName) {
+	private String[] getFilePathNamesForSavingInternalAccelData(String[] fileNames) {
+		String[] filePathNames = new String[2];
 		String dateDir = new SimpleDateFormat("yyyy-MM-dd/HH/").format(new Date());
 		
-		return Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-			   Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir + fileName;	
+		filePathNames[0] = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
+				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir + fileNames[0];
+		filePathNames[1] = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
+				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir + fileNames[1];
+		
+		return filePathNames;
 	}
 	
-	private String getInternalAccelDataForSaving() {	
+	private Object[] getInternalAccelDataForSaving() {	
 		// Get internal accelerometer data which have been saved in the last minute
-		String data = "";
+		String readable = "";
+		ArrayList<Object> data = new ArrayList<Object>();	
+		data.add(readable); // dummy		
+		
 		int maxSeconds = USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER / 1000;
 		for (int i = 1; i <= maxSeconds; ++i) {	
 			String time = DataStorage.GetValueString(aContext, 
@@ -468,39 +485,47 @@ public class USCTeensArbitrater extends Arbitrater {
 					aContext, DataStorage.KEY_INTERNAL_ACCEL_AVERAGE + i, 0);
 			int intAccelSamples = (int) DataStorage.GetValueLong(
 					aContext, DataStorage.KEY_INTERNAL_ACCEL_SAMPLES + i, 0);
-			data += time + ", " + intAccelAverage + ", " + intAccelSamples + "\n";
-		}
+			readable += time + ", " + intAccelAverage + ", " + intAccelSamples + "\n";
+			
+			String[] split = time.split("[ :,.]");
+			AccelData binary = new AccelData(split[1], split[2], split[3], split[5], intAccelAverage, intAccelSamples);
+			data.add(binary);
+		}		
+		data.set(0, readable);
 		
-		return data;
+		return data.toArray();
 	}
 	
 	protected boolean writePhoneAccelDataToInternalDirectory() {
 		boolean result = true;
 				
-		// Get the csv file name
-		String fileName = getFileNameForSavingInternalAccelData();
-		// Get the content data that should be written
-		String data = getInternalAccelDataForSaving();
+		// Get the csv and bin file name
+		String[] fileNames = getFileNamesForSavingInternalAccelData();
+		// Get the data that should be written, for both .csv and .bin
+		Object[] data = getInternalAccelDataForSaving();
 		// Get the whole file path name
-		String filePathName = getFilePathNameForSavingInternalAccelData(fileName);
+		String[] filePathNames = getFilePathNamesForSavingInternalAccelData(fileNames);
 		
 		// Write the file. If the file does not exist, create a new one.ll 
-		File aFile = new File(filePathName);				
+		File csvFile = new File(filePathNames[0]);
+		File binFile = new File(filePathNames[1]);
+		
+		// First write the .csv file
 		try {
-			FileHelper.createDirsIfDontExist(aFile);
+			FileHelper.createDirsIfDontExist(csvFile);
 			// Create the file if it does not exist
-			if (!aFile.exists()) {
+			if (!csvFile.exists()) {				
 				try {
-					aFile.createNewFile();
-					// Write the file header immediately
-					FileHelper.appendToFile(INTERNAL_ACCEL_DATA_CSVFILEHEADER, filePathName);
+					csvFile.createNewFile();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				// Write the file header immediately
+				FileHelper.appendToFile(INTERNAL_ACCEL_DATA_CSVFILEHEADER, filePathNames[0]);				
 			}
 			// Write the data to the internal sensor folder
-			FileHelper.appendToFile(data, filePathName);
+			FileHelper.appendToFile((String) data[0], filePathNames[0]);
 		} catch (WOCKETSException e) {
 			// TODO: 
 			result = false;
@@ -508,6 +533,34 @@ public class USCTeensArbitrater extends Arbitrater {
 		} finally {
 			;
 		}
+		
+		// Then write the .bin file, we use this file for loading 
+		// because parsing all the strings in .csv file is very slow
+		AccelDataOutputStream oos = null;
+		try { 
+			FileHelper.createDirsIfDontExist(binFile);
+			// Create the file if it does not exist
+			if (!binFile.exists()) {			
+				binFile.createNewFile();							
+			}
+			oos = AccelDataOutputStream.getInstance(binFile, new FileOutputStream(binFile, true));			
+			for (int i = 1; i < data.length; ++i) {
+				oos.writeObject(data[i]); 
+			}			
+		} catch (Exception e) { 
+			result = false;
+			e.printStackTrace();
+		} finally {
+			try {
+				if (oos != null) {
+					oos.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 //		if (!isSaved) {
 //			Log.e(TAG, "Error. Could not save internal acceleromter data to internal storage." + fileName);
 //		}

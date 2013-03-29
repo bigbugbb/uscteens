@@ -274,6 +274,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);	        	
             	break;
         	case AppCmd.END_LOADING:
+        		mProgressView.dismiss();
         		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
         			switchPages(indexOfPage(PageType.GRAPH_PAGE));
         		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
@@ -283,8 +284,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         			Toast.makeText(context, R.string.chunk_error, Toast.LENGTH_LONG).show();
         		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
         			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
-        		}
-        		mProgressView.dismiss();
+        		}        		
         		break;      
         	case AppCmd.BACK:
         		switchPages(indexOfPage(PageType.DATE_PAGE));

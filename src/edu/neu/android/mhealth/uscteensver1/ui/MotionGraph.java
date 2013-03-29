@@ -213,7 +213,8 @@ public class MotionGraph extends AppObject {
 		int count = 0;			
 		for (int i = mStart; i < mEnd - USCTeensGlobals.PIXEL_PER_DATA; ++i) {
 			int sec = i / USCTeensGlobals.PIXEL_PER_DATA;
-			if (mScaledData[sec] >= 0 && mScaledData[sec + 1] >= 0) {					
+			if (mScaledData[sec] >= 0 && mScaledData[sec + 1] >= 0) {	
+				// get all points' positions for drawing the data with lines
 				mPTS[(count << 2) + 0] = i - mStart;
 				mPTS[(count << 2) + 1] = mHeight - mScaledData[sec];
 				mPTS[(count << 2) + 2] = i - mStart + USCTeensGlobals.PIXEL_PER_DATA;

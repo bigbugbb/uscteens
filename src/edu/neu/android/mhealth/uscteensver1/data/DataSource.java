@@ -1,12 +1,14 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,8 +62,8 @@ public class DataSource {
 	protected static RawChunksWrap sRawChksWrap = new RawChunksWrap();
 	// raw accelerometer sensor data
 	protected static AccelDataWrap sAccelDataWrap = new AccelDataWrap();
-	// hourly accelerometer data
-	protected static ArrayList<AccelData> sHourlyAccelData = null;	
+//	// hourly accelerometer data
+//	protected static ArrayList<AccelData> sHourlyAccelData = null;	
 	// floating labels data
 	protected static RawLabelWrap sRawLabelsWrap = new RawLabelWrap();
 	
@@ -104,7 +106,7 @@ public class DataSource {
 			if (!loadRawChunkData(date) && !createRawChunkData()) {
 				return ERR_NO_CHUNK_DATA;			
 			}
-		} else {	 
+		} else {
 			if (loadRawChunkData(date)) {
 				assert(sRawChksWrap.size() > 0);
 				RawChunk lastRawChunk = sRawChksWrap.get(sRawChksWrap.size() - 1);
@@ -140,7 +142,9 @@ public class DataSource {
 		 */
 		loadLabelData(date);
 		
-		// note the last time for loading data
+		// note the last time for loading data, used to indicate whether
+		// the data should be reloaded after the user has switched to another program
+		// and go back here after a while.
 		DataStorage.SetValue(sContext, 
 				USCTeensGlobals.LAST_DATA_LOADING_TIME, System.currentTimeMillis());
 			
@@ -190,51 +194,80 @@ public class DataSource {
 		return sRawChksWrap;
 	}
 	
-	private static int loadHourlyRawAccelData(String filePath, ArrayList<AccelData> hourlyAccelData) {		
+	private static int loadHourlyRawAccelData(String filePath, ArrayList<AccelData> hourlyAccelData) {
+		// get extension name indicating which type of file we should read from
+		String extName = filePath.substring(filePath.lastIndexOf("."), filePath.length());
+		
 		// first clear the data container
-		hourlyAccelData.clear();
+//		hourlyAccelData.clear();
 		
 		// load the daily data from the csv file	
 //		loadDailyLabelData(labelFilePaths[0]);
-		String result = null;
-		File dataFile = new File(filePath);
-		FileInputStream fis = null;
-		BufferedReader br = null;
-		try {
-			fis = new FileInputStream(dataFile);
-			InputStreamReader in = new InputStreamReader(fis);
-			br = new BufferedReader(in);			
-			try {
-				// skip the first line
-				result = br.readLine();
-				while ((result = br.readLine()) != null) {
-					// parse the line
-					String[] split = result.split("[ :.,]");
-					AccelData data = new AccelData(split[1], split[2], split[3], split[5], split[7], split[9]);
-					hourlyAccelData.add(data);
+		if (extName.equals(".bin")) {
+			File binFile = new File(filePath);	
+			ObjectInputStream ois = null;
+			try { 
+				ois = new ObjectInputStream(new FileInputStream(binFile));
+				Object obj = ois.readObject();
+				while (obj != null) {					
+					if (obj instanceof AccelData) {
+						AccelData data = (AccelData) obj;
+						hourlyAccelData.add(data); 
+					}	
+					obj = ois.readObject();
 				}
-			} catch (IOException e) {
-				Log.e(TAG, "readStringInternal: problem reading: " + dataFile.getAbsolutePath());
+			} catch (EOFException e) {
 				e.printStackTrace();
+			} catch (Exception e) { 
+				e.printStackTrace();
+			} finally {
+				try {
+					ois.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-		} catch (FileNotFoundException e) {
-			Log.e(TAG, "readStringInternal: cannot find: " + dataFile.getAbsolutePath());
-			e.printStackTrace();
-		} finally {
-			if (br != null)
+		} else if (extName.equals(".csv")) { // .csv file if .bin does not exist		
+			FileInputStream fis = null;
+			BufferedReader br = null;
+			File csvFile = new File(filePath);
+			try {
+				fis = new FileInputStream(csvFile);
+				InputStreamReader in = new InputStreamReader(fis);
+				br = new BufferedReader(in);			
 				try {
-					br.close();
+					// skip the first line
+					String result = br.readLine();
+					while ((result = br.readLine()) != null) {
+						// parse the line
+						String[] split = result.split("[ :.,]");
+						AccelData data = new AccelData(split[1], split[2], split[3], split[5], split[7], split[9]);
+						hourlyAccelData.add(data);
+					}
 				} catch (IOException e) {
-					Log.e(TAG, "readStringInternal: cannot close: " + dataFile.getAbsolutePath());
+					Log.e(TAG, "readStringInternal: problem reading: " + csvFile.getAbsolutePath());
 					e.printStackTrace();
 				}
-			if (fis != null)
-				try {
-					fis.close();
-				} catch (IOException e) {
-					Log.e(TAG, "readStringInternal: cannot close: " + dataFile.getAbsolutePath());
-					e.printStackTrace();
-				}
+			} catch (FileNotFoundException e) {
+				Log.e(TAG, "readStringInternal: cannot find: " + csvFile.getAbsolutePath());
+				e.printStackTrace();
+			} finally {
+				if (br != null)
+					try {
+						br.close();
+					} catch (IOException e) {
+						Log.e(TAG, "readStringInternal: cannot close: " + csvFile.getAbsolutePath());
+						e.printStackTrace();
+					}
+				if (fis != null)
+					try {
+						fis.close();
+					} catch (IOException e) {
+						Log.e(TAG, "readStringInternal: cannot close: " + csvFile.getAbsolutePath());
+						e.printStackTrace();
+					}
+			}
 		}
 		
 		return hourlyAccelData.size();
@@ -249,18 +282,32 @@ public class DataSource {
 		// first clear the data container
 		sAccelDataWrap.clear();
 		try {
-			// load the daily data from csv files hour by hour		
+			// load the daily data from .bin files hour by hour		
 			for (int i = 0; i < hourDirs.length; ++i) {
-				// each hour corresponds to one csv file
-				String[] filePath = FileHelper.getFilePathsDir(hourDirs[i]);			
-				// load the hourly data from csv file and save the data to mHourlyAccelData
-				sHourlyAccelData = new ArrayList<AccelData>();
-				loadHourlyRawAccelData(filePath[0], sHourlyAccelData);
+				// each hour corresponds to one .bin file
+				String[] filePaths = FileHelper.getFilePathsDir(hourDirs[i]);
+				String filePath = filePaths[0]; // set a default value
+				for (String path : filePaths) {
+					String extName = path.substring(path.lastIndexOf("."), path.length());
+					if (extName.equals(".bin")) {
+						filePath = path;
+					}
+				}
+				// load the hourly data from .bin file
+				ArrayList<AccelData> hourlyAccelData = new ArrayList<AccelData>();						
+				loadHourlyRawAccelData(filePath, hourlyAccelData);				
 				// add the houly data the data wrap
-				sAccelDataWrap.add(sHourlyAccelData);
+				sAccelDataWrap.add(hourlyAccelData);
 			}		
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.printStackTrace();			
+		}
+		
+		// now we have a loaded daily accelerometer sensor data in the data wrap,
+		// we convert it into the data structure that can be drawn easily.
+		sAccelDataWrap.updateDrawableData();
+		
+		if (sAccelDataWrap.size() == 0) {
 			String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 			if (date.compareTo(today) == 0) {
 				result = ERR_WAITING_SENSOR_DATA;
@@ -268,9 +315,6 @@ public class DataSource {
 				result = ERR_NO_SENSOR_DATA;
 			}
 		}
-		// now we have a loaded daily accelerometer sensor data in the data wrap,
-		// we convert it into the data structure that can be drawn easily.
-		sAccelDataWrap.updateDrawableData();
 		
 		return result;
 	}
