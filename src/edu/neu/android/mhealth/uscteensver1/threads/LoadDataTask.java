@@ -60,11 +60,4 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 		mResult = DataSource.loadRawData(params[0]);
 		return null;
 	}
-
-	@Override
-	protected void onCancelled() {
-		DataSource.cancelLoading();
-		super.onCancelled();
-	}
-
 }
