@@ -59,6 +59,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	private PasswordChecker mPwdStaff     = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
 	private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
 	private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
+	// the handler of data loading task
+	private LoadDataTask mLoader = null;
 	
 	protected enum PageType {  
 		HOME_PAGE, DATE_PAGE, GRAPH_PAGE, WIN_PAGE
@@ -189,6 +191,11 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	
 	@Override
 	public void onPause() {
+		if (mLoader != null) {
+			mLoader.cancel(true);
+			mLoader = null;
+		}
+		
 		mCurPage.pause();
 		mGraphView.onPause();
 		super.onPause();		
@@ -271,10 +278,10 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		break;
         	case AppCmd.BEGIN_LOADING:         		
         		mProgressView.show("Loading...");
-        		new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);	        	
+        		mLoader = (LoadDataTask) new LoadDataTask(USCTeensMainActivity.this, this);	
+        		mLoader.execute((String) msg.obj);
             	break;
-        	case AppCmd.END_LOADING:
-        		mProgressView.dismiss();
+        	case AppCmd.END_LOADING:        		
         		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
         			switchPages(indexOfPage(PageType.GRAPH_PAGE));
         		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
@@ -284,7 +291,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         			Toast.makeText(context, R.string.chunk_error, Toast.LENGTH_LONG).show();
         		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
         			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
-        		}        		
+        		} 
+        		mProgressView.dismiss();
         		break;      
         	case AppCmd.BACK:
         		switchPages(indexOfPage(PageType.DATE_PAGE));
@@ -333,6 +341,13 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
     	if (mProgressView.getVisibility() == View.VISIBLE) {
+    		if (keyCode == KeyEvent.KEYCODE_BACK) {
+    			if (mLoader != null) {
+    				mLoader.cancel(true);
+    				mLoader = null;
+    			}
+    			return true;
+    		}
     		return mProgressView.onKeyDown(keyCode, event);
     	}
     	

@@ -63,4 +63,10 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 		return null;
 	}
 
+	@Override
+	protected void onCancelled() {
+		DataSource.cancelLoading();
+		super.onCancelled();
+	}
+
 }

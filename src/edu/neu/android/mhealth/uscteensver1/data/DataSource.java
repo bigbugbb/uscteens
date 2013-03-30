@@ -38,9 +38,10 @@ public class DataSource {
 	private final static String TAG = "DataSource";
 	// result code
 	public final static int LOADING_SUCCEEDED  		= 0;
-	public final static int ERR_NO_SENSOR_DATA 		= 1;
-	public final static int ERR_NO_CHUNK_DATA  		= 2;	
-	public final static int ERR_WAITING_SENSOR_DATA = 3;
+	public final static int ERR_CANCELLED           = 1;
+	public final static int ERR_NO_SENSOR_DATA 		= 2;
+	public final static int ERR_NO_CHUNK_DATA  		= 3;	
+	public final static int ERR_WAITING_SENSOR_DATA = 4;
 	
 	// thresholds for chunking generation
 	public final static int CHUNKING_MIN_MEAN_AVG         = 350;
@@ -58,6 +59,8 @@ public class DataSource {
 	protected final static int NO_SENSOR_DATA = -1;
 	
 	protected static Context sContext = null;
+	// boolean to indicate whether the loading should be cancelled
+	protected static boolean sCancelled = false;
 	// raw chunk data
 	protected static RawChunksWrap sRawChksWrap = new RawChunksWrap();
 	// raw accelerometer sensor data
@@ -82,6 +85,10 @@ public class DataSource {
 		return lastLoadingTime;
 	}
 	
+	public static void cancelLoading() {
+		sCancelled = true;
+	}
+	
 	/**
 	 * 	 
 	 * @param date	YYYY-MM-DD
@@ -89,6 +96,8 @@ public class DataSource {
 	 */
 	public static int loadRawData(String date) {
 		DataStorage.SetValue(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, date);
+		
+		sCancelled = false;
 		
 		/* 
 		 * first load the accelerometer sensor data
@@ -209,10 +218,13 @@ public class DataSource {
 			try { 
 				ois = new ObjectInputStream(new FileInputStream(binFile));
 				Object obj = ois.readObject();
-				while (obj != null) {					
+				while (obj != null) {		
+					if (sCancelled) {
+						return ERR_CANCELLED;
+					}
 					if (obj instanceof AccelData) {
 						AccelData data = (AccelData) obj;
-						hourlyAccelData.add(data); 
+						hourlyAccelData.add(data); 						
 					}	
 					obj = ois.readObject();
 				}
@@ -240,6 +252,9 @@ public class DataSource {
 					// skip the first line
 					String result = br.readLine();
 					while ((result = br.readLine()) != null) {
+						if (sCancelled) {
+							return ERR_CANCELLED;
+						}
 						// parse the line
 						String[] split = result.split("[ :.,]");
 						AccelData data = new AccelData(split[1], split[2], split[3], split[5], split[7], split[9]);
@@ -274,7 +289,6 @@ public class DataSource {
 	}
 	
 	private static int loadRawAccelData(String date) {
-		int result = LOADING_SUCCEEDED;
 		String[] hourDirs = FileHelper.getFilePathsDir(
 				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);
@@ -295,28 +309,30 @@ public class DataSource {
 				}
 				// load the hourly data from .bin file
 				ArrayList<AccelData> hourlyAccelData = new ArrayList<AccelData>();						
-				loadHourlyRawAccelData(filePath, hourlyAccelData);				
+				int result = loadHourlyRawAccelData(filePath, hourlyAccelData);	
+				if (result == ERR_CANCELLED) {
+					return ERR_CANCELLED;
+				}
 				// add the houly data the data wrap
 				sAccelDataWrap.add(hourlyAccelData);
 			}		
+			// now we have a loaded daily accelerometer sensor data in the data wrap,
+			// we convert it into the data structure that can be drawn easily.
+			sAccelDataWrap.updateDrawableData();
 		} catch (Exception e) {
 			e.printStackTrace();			
-		}
-		
-		// now we have a loaded daily accelerometer sensor data in the data wrap,
-		// we convert it into the data structure that can be drawn easily.
-		sAccelDataWrap.updateDrawableData();
+		}		
 		
 		if (sAccelDataWrap.size() == 0) {
 			String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 			if (date.compareTo(today) == 0) {
-				result = ERR_WAITING_SENSOR_DATA;
+				return ERR_WAITING_SENSOR_DATA;
 			} else {
-				result = ERR_NO_SENSOR_DATA;
+				return ERR_NO_SENSOR_DATA;
 			}
 		}
 		
-		return result;
+		return LOADING_SUCCEEDED;
 	}
 	
 	/**
