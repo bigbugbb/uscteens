@@ -53,7 +53,7 @@ public class DataSource {
 	public final static int CHUNKING_MIN_DISTANCE 		  = 120;
 		
 	// value for minimum sensor data
-	protected final static int MINIMUM_SENSOR_DATA_VALUE = 1600;
+	protected final static int MINIMUM_SENSOR_DATA_VALUE = 1800;
 	
 	// value for no data period
 	protected final static int NO_SENSOR_DATA = -1;
