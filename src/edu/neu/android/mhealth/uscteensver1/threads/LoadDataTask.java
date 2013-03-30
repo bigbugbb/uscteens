@@ -32,28 +32,26 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
 		
-		if (mResult == DataSource.LOADING_SUCCEEDED){
-			Message msg = mHandler.obtainMessage();	
+		Message msg = mHandler.obtainMessage();	
+		
+		if (mResult == DataSource.LOADING_SUCCEEDED){			
+			msg.arg1 = mResult;
+			msg.what = AppCmd.END_LOADING;			
+		} else if (mResult == DataSource.ERR_CANCELLED) { 
 			msg.arg1 = mResult;
 			msg.what = AppCmd.END_LOADING;
-			mHandler.sendMessage(msg);
 		} else if (mResult == DataSource.ERR_NO_SENSOR_DATA) {
-			Message msg = mHandler.obtainMessage();	
 			msg.arg1 = mResult;
 			msg.what = AppCmd.END_LOADING;
-			mHandler.sendMessage(msg); 
 		} else if (mResult == DataSource.ERR_WAITING_SENSOR_DATA) {
-			Message msg = mHandler.obtainMessage();	
 			msg.arg1 = mResult;
 			msg.what = AppCmd.END_LOADING;
-			mHandler.sendMessage(msg);
-		} else if (mResult == DataSource.ERR_NO_CHUNK_DATA) {
-			Message msg = mHandler.obtainMessage();	
+		} else if (mResult == DataSource.ERR_NO_CHUNK_DATA) {	
 			msg.arg1 = mResult;
 			msg.what = AppCmd.END_LOADING;
-			mHandler.sendMessage(msg); 
 		}
 		
+		mHandler.sendMessage(msg);
 		// mProgDlg.dismiss();
 	}
 

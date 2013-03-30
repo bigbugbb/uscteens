@@ -284,6 +284,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         	case AppCmd.END_LOADING:        		
         		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
         			switchPages(indexOfPage(PageType.GRAPH_PAGE));
+        		} else if (msg.arg1 == DataSource.ERR_CANCELLED) {
+        			;
         		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
         			Toast.makeText(context, R.string.no_data, Toast.LENGTH_LONG).show();
         			switchPages(indexOfPage(PageType.GRAPH_PAGE)); // still can be labelled
