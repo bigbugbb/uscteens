@@ -233,7 +233,7 @@ public class MotionGraph extends AppObject {
 				// draw slashes with 45 degree for periods without data
 				float slashX1 = start - mStart;
 				float slashX2 = stop - mStart - USCTeensGlobals.PIXEL_PER_DATA;
-				int step = (int) AppScale.doScaleH(8.0f);
+				int step = (int) AppScale.doScaleH(12.0f);
 				// draw slashes from top to bottom
 				for (int m = (int) mHeight; m > 0; m -= step) {
 					c.drawLine(slashX1, m, slashX2, m - (slashX2 - slashX1), mSlashPaint);
