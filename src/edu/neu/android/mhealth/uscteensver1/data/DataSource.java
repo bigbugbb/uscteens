@@ -315,13 +315,14 @@ public class DataSource {
 				}
 				// add the houly data the data wrap
 				sAccelDataWrap.add(hourlyAccelData);
-			}		
-			// now we have a loaded daily accelerometer sensor data in the data wrap,
-			// we convert it into the data structure that can be drawn easily.
-			sAccelDataWrap.updateDrawableData();
+			}					
 		} catch (Exception e) {
 			e.printStackTrace();			
 		}		
+		
+		// now we have a loaded daily accelerometer sensor data in the data wrap,
+		// we convert it into the data structure that can be drawn easily.
+		sAccelDataWrap.updateDrawableData();
 		
 		if (sAccelDataWrap.size() == 0) {
 			String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
