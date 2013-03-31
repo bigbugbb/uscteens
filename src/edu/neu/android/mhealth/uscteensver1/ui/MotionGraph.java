@@ -281,7 +281,7 @@ public class MotionGraph extends AppObject {
 		sb.append(hour > 12 ? hour - 12 : hour == 0 ? 12 : hour);
 		sb.append(":");
 		sb.append(minute > 9 ? minute : "0" + minute);
-		sb.append(hour > 12 ? " PM" : " AM");
+		sb.append(hour > 11 ? " PM" : " AM");
 		
 		return sb.toString(); 
 	}

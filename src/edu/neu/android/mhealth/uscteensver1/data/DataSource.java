@@ -14,7 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -57,6 +59,12 @@ public class DataSource {
 	
 	// value for no data period
 	protected final static int NO_SENSOR_DATA = -1;
+	
+	public final static String INTERNAL_ACCEL_DATA_CSVFILEHEADER = 
+			"DateTime, Milliseconds, InternalAccelAverage, InternalAccelSamples\n";
+	
+	public final static String INTERNAL_LABEL_DATA_CSVFILEHEADER = 
+			"DateTime, Text\n";
 	
 	protected static Context sContext = null;
 	// boolean to indicate whether the loading should be cancelled
@@ -418,9 +426,8 @@ public class DataSource {
 				result = br.readLine();
 				while ((result = br.readLine()) != null) {
 					// parse the line
-					String[] split = result.split("[ :,]");
-					RawLabel rawLabel = new RawLabel(split[1], split[2], split[3], split[5]);
-					sRawLabelsWrap.add(rawLabel);
+					String[] split = result.split("[,]");
+					sRawLabelsWrap.add(split[0].trim(), split[1].trim());
 				}
 			} catch (IOException e) {
 				Log.e(TAG, "readStringInternal: problem reading: " + labelFile.getAbsolutePath());
@@ -447,6 +454,46 @@ public class DataSource {
 		}
 		
 		return sRawLabelsWrap.size() > 0;
+	}
+	
+	public static boolean saveLabelData() {			
+		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");		
+		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
+				USCTeensGlobals.LABELS_FOLDER + date;
+		String filePathName = ""; 
+		String[] labelFilePaths = FileHelper.getFilePathsDir(path);		
+		if (labelFilePaths == null || labelFilePaths.length == 0) {	
+			StringBuilder sb = new StringBuilder();
+			sb.append(path);
+			sb.append(File.separator);
+			sb.append("Activities.");
+			sb.append(new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(new Date()));
+			sb.append(".labels.csv");
+			filePathName = sb.toString();
+		} else {
+			filePathName = labelFilePaths[0];
+		}
+		
+		// build the content to write
+		StringBuilder sb = new StringBuilder();
+		sb.append(INTERNAL_LABEL_DATA_CSVFILEHEADER);
+		Iterator iter = sRawLabelsWrap.entrySet().iterator(); 
+		while (iter.hasNext()) { 
+		    Map.Entry entry = (Map.Entry) iter.next(); 		    
+		    RawLabel rawLabel = (RawLabel) entry.getValue(); 
+		    sb.append(rawLabel.toString());
+		} 
+		String content = sb.toString();
+		
+		// load the daily data from the csv file	
+//		loadDailyLabelData(labelFilePaths[0]);
+		
+		// First write the .csv file
+		File labelFile = new File(filePathName);		
+		boolean result = FileHelper.saveStringToFile(content, labelFile, false);
+				
+		return result;
+	
 	}
 
 	/**
@@ -553,6 +600,8 @@ public class DataSource {
 						
 		return rawChunks.size();
 	}
+	
+	
 	
 	/*
 	 * create raw chunk data from raw accelerometer data	 

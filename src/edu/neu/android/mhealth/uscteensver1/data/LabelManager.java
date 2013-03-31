@@ -84,7 +84,7 @@ public class LabelManager {
 		sLabels.remove(label);
 		label.release();
 	}
-	
+
 	public static void setViewSize(float width, float height) {
 		sViewWidth  = width;
 		sViewHeight = height;

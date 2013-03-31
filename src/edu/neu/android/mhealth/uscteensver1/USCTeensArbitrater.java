@@ -19,6 +19,7 @@ import android.content.Context;
 import android.os.Environment;
 import edu.neu.android.mhealth.uscteensver1.data.AccelData;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataOutputStream;
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.dataupload.DataSender;
 import edu.neu.android.wocketslib.dataupload.RawUploader;
@@ -43,10 +44,7 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static final String KEY_RANDOM_PROMPT = "_KEY_RANDOM_PROMPT";
 	private static final String KEY_CS_PROMPT = "_KEY_CS_PROMPT";
 	private static final String KEY_ALL_PROMPT = "_KEY_ALL_PROMPT";
-	private static final String KEY_SCHEDULE = "_KEY_SCHEDULE";	
-	
-	private static final String INTERNAL_ACCEL_DATA_CSVFILEHEADER = 
-			"DateTime, Milliseconds, InternalAccelAverage, InternalAccelSamples\n";
+	private static final String KEY_SCHEDULE = "_KEY_SCHEDULE";		
 
 	private static final long PROMPT_OFFSET = 5 * 60 * 1000;
 
@@ -522,7 +520,7 @@ public class USCTeensArbitrater extends Arbitrater {
 					e.printStackTrace();
 				}
 				// Write the file header immediately
-				FileHelper.appendToFile(INTERNAL_ACCEL_DATA_CSVFILEHEADER, filePathNames[0]);				
+				FileHelper.appendToFile(DataSource.INTERNAL_ACCEL_DATA_CSVFILEHEADER, filePathNames[0]);				
 			}
 			// Write the data to the internal sensor folder
 			FileHelper.appendToFile((String) data[0], filePathNames[0]);

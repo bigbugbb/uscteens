@@ -21,7 +21,7 @@ public class GraphView extends SurfaceView implements SurfaceHolder.Callback {
 	public GraphView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mHolder = getHolder();
-		mHolder.addCallback(this);			
+		mHolder.addCallback(this);				
 	}
 	
 	public void onStop() {
