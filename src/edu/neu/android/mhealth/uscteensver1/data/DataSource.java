@@ -400,7 +400,13 @@ public class DataSource {
 		return true;
 	}
 	
-	private static boolean loadLabelData(String date) {
+	/**
+	 * load all labels from a label file of a specified date to the raw label wrap
+	 * @param date
+	 * @param rawLabelWrap
+	 * @return true if the raw label wrap has label data, otherwise false
+	 */
+	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap, boolean alwaysLoad) {
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.LABELS_FOLDER + date;
 		String[] labelFilePaths = FileHelper.getFilePathsDir(path);
@@ -408,8 +414,14 @@ public class DataSource {
 			return false;
 		}
 		
-		// first clear the data container
-		sRawLabelsWrap.clear();
+		// check if the date is loaded
+		if (rawLabelWrap.isDateLoaded(date) && !alwaysLoad) {
+			return true;
+		}
+		
+		// first clear the data container		
+		rawLabelWrap.clear();
+		rawLabelWrap.setDate(date);
 		
 		// load the daily data from the csv file	
 //		loadDailyLabelData(labelFilePaths[0]);
@@ -427,7 +439,7 @@ public class DataSource {
 				while ((result = br.readLine()) != null) {
 					// parse the line
 					String[] split = result.split("[,]");
-					sRawLabelsWrap.add(split[0].trim(), split[1].trim());
+					rawLabelWrap.add(split[0].trim(), split[1].trim());
 				}
 			} catch (IOException e) {
 				Log.e(TAG, "readStringInternal: problem reading: " + labelFile.getAbsolutePath());
@@ -453,7 +465,11 @@ public class DataSource {
 				}
 		}
 		
-		return sRawLabelsWrap.size() > 0;
+		return rawLabelWrap.size() > 0;
+	}
+	
+	private static boolean loadLabelData(String date) {
+		return loadLabelData(date, sRawLabelsWrap, true);
 	}
 	
 	public static boolean saveLabelData() {			

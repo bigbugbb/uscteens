@@ -6,15 +6,18 @@ package edu.neu.android.mhealth.uscteensver1.data;
 
 public class Labeler {
 	
+	private static RawLabelWrap sRawLabels = new RawLabelWrap();
+	
 	/**
 	 * add a new label
 	 * @param dateTime yyyy-MM-dd hh:mm:ss
 	 * @param text	the label text
+	 * @param commit true if the change should be committed to the file immediately
 	 * @return true if the label is added, otherwise false
 	 */
 	public static boolean addLabel(String dateTime, String text, boolean commit) {
-		RawLabelWrap rawLabels = DataSource.getRawLabels();		
-		boolean result = rawLabels.add(dateTime, text);
+		DataSource.loadLabelData(dateTime.split(" ")[0], sRawLabels, false);
+		boolean result = sRawLabels.add(dateTime, text);
 		
 		if (commit) {
 			result = commitChanges();
@@ -27,11 +30,12 @@ public class Labeler {
 	 * delete a new label 
 	 * @param dateTime  yyyy-MM-dd hh:mm:ss
 	 * @param text	the label text
+	 * @param commit true if the change should be committed to the file immediately
 	 * @return true if the label is removed, otherwise false
 	 */
 	public static boolean removeLabel(String dateTime, String text, boolean commit) {
-		RawLabelWrap rawLabels = DataSource.getRawLabels();
-		boolean result = rawLabels.remove(dateTime, text);
+		DataSource.loadLabelData(dateTime.split(" ")[0], sRawLabels, false);
+		boolean result = sRawLabels.remove(dateTime, text);
 		
 		if (commit) {
 			result = commitChanges();
@@ -43,11 +47,11 @@ public class Labeler {
 	/**
 	 * clear all labels in the file
 	 * @param date 	the date to be clear
+	 * @param commit true if the change should be committed to the file immediately
 	 * @return true if all labels are cleared, otherwise false
 	 */
-	public static boolean clearAllLabels(String date, boolean commit) {
-		RawLabelWrap rawLabels = DataSource.getRawLabels();
-		rawLabels.clear();
+	public static boolean clearAllLabels(String date, boolean commit) {		
+		sRawLabels.clear();
 		boolean result = true;
 		
 		if (commit) {
