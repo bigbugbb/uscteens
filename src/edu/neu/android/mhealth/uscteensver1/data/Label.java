@@ -14,12 +14,13 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class Label extends AppObject {
 
-	public final static int MAXIMUM_LABEL_SPACE = 240;
+	public final static int MAXIMUM_LABEL_WIDTH = 225;
 	public final static int MAXIMUM_TEXT_WIDTH = 175;
 	
 	public int mX;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
@@ -34,6 +35,7 @@ public class Label extends AppObject {
 	protected static boolean sPaintCreated = false;
 	protected static float   sImgWidth;
 	protected static float   sImgHeight;
+	protected static float   sMaxLabelWidth;
 	protected static float	 sMaxTxtWidth;
 	
 	protected static void createPaint() {
@@ -81,6 +83,7 @@ public class Label extends AppObject {
         sImgWidth  = sImages.get(0).getWidth();
         sImgHeight = sImages.get(0).getHeight();
         sMaxTxtWidth = AppScale.doScaleT(MAXIMUM_TEXT_WIDTH);
+        sMaxLabelWidth = AppScale.doScaleW(MAXIMUM_LABEL_WIDTH);
 	}
 	
 	public Label(Resources res) {
@@ -124,13 +127,16 @@ public class Label extends AppObject {
 
 	@Override
 	public void onDraw(Canvas c) {
-		if (mX + mDispOffsetX < -MAXIMUM_LABEL_SPACE || 
-			mX + mDispOffsetX > LabelManager.getViewWidth() + MAXIMUM_LABEL_SPACE) {
-			return;
-		}
-		
 		float x = mX + mDispOffsetX;
 		float y = mY + mDispOffsetY;
+		
+		if (x < -sMaxLabelWidth || x - sMaxLabelWidth > LabelManager.getViewWidth()) {
+			return;
+		}				
+		
+		float delta = mX + sImgWidth - USCTeensGlobals.MAX_WIDTH_IN_PIXEL;
+		delta = delta > 0 ? -delta : 0;	
+		x += delta;
 		
 		c.drawBitmap(sImages.get(0), x, y, null);		
 		if (x + sImgWidth + mRect.width() > LabelManager.getViewWidth()) {

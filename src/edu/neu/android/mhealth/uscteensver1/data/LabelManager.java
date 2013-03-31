@@ -19,7 +19,7 @@ public class LabelManager {
 	protected static float sViewWidth    = 0; // the area to draw the activity data
 	protected static float sViewHeight   = 0;
 	protected static float sCanvasWidth  = 0;
-	protected static float sCanvasHeight = 0;
+	protected static float sCanvasHeight = 0;	
 			
 
 	public static void initialize(Context context) {
