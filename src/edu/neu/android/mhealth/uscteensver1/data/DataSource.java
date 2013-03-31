@@ -472,7 +472,7 @@ public class DataSource {
 		return loadLabelData(date, sRawLabelsWrap, true);
 	}
 	
-	public static boolean saveLabelData() {			
+	public static boolean saveLabelData(RawLabelWrap rawLabelWrap) {			
 		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");		
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.LABELS_FOLDER + date;
@@ -493,7 +493,7 @@ public class DataSource {
 		// build the content to write
 		StringBuilder sb = new StringBuilder();
 		sb.append(INTERNAL_LABEL_DATA_CSVFILEHEADER);
-		Iterator iter = sRawLabelsWrap.entrySet().iterator(); 
+		Iterator iter = rawLabelWrap.entrySet().iterator(); 
 		while (iter.hasNext()) { 
 		    Map.Entry entry = (Map.Entry) iter.next(); 		    
 		    RawLabel rawLabel = (RawLabel) entry.getValue(); 

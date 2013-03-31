@@ -22,7 +22,7 @@ public class Labeler {
 		if (commit) {
 			result = commitChanges();
 		}
-		
+
 		return result;
 	}
 	
@@ -66,6 +66,6 @@ public class Labeler {
 	 * @return true if the commit is successful, otherwise false
 	 */
 	public static boolean commitChanges() {
-		return DataSource.saveLabelData();
+		return DataSource.saveLabelData(sRawLabels);
 	}
 }
