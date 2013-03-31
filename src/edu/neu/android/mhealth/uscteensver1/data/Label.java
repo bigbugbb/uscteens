@@ -20,6 +20,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 public class Label extends AppObject {
 
 	public final static int MAXIMUM_LABEL_SPACE = 240;
+	public final static int MAXIMUM_TEXT_WIDTH = 175;
 	
 	public int mX;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
 	public int mY;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
@@ -31,6 +32,9 @@ public class Label extends AppObject {
 	
 	protected static Paint   sPaint;
 	protected static boolean sPaintCreated = false;
+	protected static float   sImgWidth;
+	protected static float   sImgHeight;
+	protected static float	 sMaxTxtWidth;
 	
 	protected static void createPaint() {
 		if (!sPaintCreated) {
@@ -74,6 +78,9 @@ public class Label extends AppObject {
 	        	sImages.add(origin);
 	        }
         }
+        sImgWidth  = sImages.get(0).getWidth();
+        sImgHeight = sImages.get(0).getHeight();
+        sMaxTxtWidth = AppScale.doScaleT(MAXIMUM_TEXT_WIDTH);
 	}
 	
 	public Label(Resources res) {
@@ -89,9 +96,14 @@ public class Label extends AppObject {
 		boolean result = true;
 		mX = x;
 		mY = y;
-		mText = text;
+		mText = "Watching TV";
 		
-		sPaint.getTextBounds(text, 0, 1, mRect);
+		int count = sPaint.breakText(mText, true, sMaxTxtWidth, null);
+		if (count < mText.length()) {			
+			mText = mText.subSequence(0, count) + "...";
+		}
+		
+		sPaint.getTextBounds(mText, 0, mText.length(), mRect);
 				
 		return result;
 	}
@@ -112,12 +124,20 @@ public class Label extends AppObject {
 
 	@Override
 	public void onDraw(Canvas c) {
-		if (mX + mDispOffsetX < -MAXIMUM_LABEL_SPACE || mX + mDispOffsetX > LabelManager.getViewWidth()) {
+		if (mX + mDispOffsetX < -MAXIMUM_LABEL_SPACE || 
+			mX + mDispOffsetX > LabelManager.getViewWidth() + MAXIMUM_LABEL_SPACE) {
 			return;
 		}
-		//c.drawLine(mX + mDispOffsetX, 0, mX + mDispOffsetX, mHeight, sPaint);
-		c.drawBitmap(sImages.get(0), mX + mDispOffsetX, mY, null);
-		c.drawText(mText, mX + sImages.get(0).getWidth() + mDispOffsetX, mY, sPaint);		
+		
+		float x = mX + mDispOffsetX;
+		float y = mY + mDispOffsetY;
+		
+		c.drawBitmap(sImages.get(0), x, y, null);		
+		if (x + sImgWidth + mRect.width() > LabelManager.getViewWidth()) {
+			c.drawText(mText, x - mRect.width(), y, sPaint);
+		} else {
+			c.drawText(mText, x + sImages.get(0).getWidth(), y, sPaint);
+		}
 		
 //		if (mVisible) {
 //			c.drawBitmap(sImages.get(0), mX + mOffsetX, mY + mOffsetY, null);
