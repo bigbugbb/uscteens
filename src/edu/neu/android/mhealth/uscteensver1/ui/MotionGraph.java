@@ -1,5 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.content.res.Resources;
@@ -201,9 +202,9 @@ public class MotionGraph extends AppObject {
 			}
 		}
 		
-		// draw the floating labels if they exist 			
-		for (int i = 0; i < LabelManager.getLabelSize(); ++i) {
-			Label label = LabelManager.getLabel(i);
+		// draw the hint labels if they do exist 
+		ArrayList<Label> labels = LabelManager.getLabels();
+		for (Label label : labels) {			
 			label.onDraw(c);
 		}
 		

@@ -1,6 +1,8 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -40,17 +42,19 @@ public class LabelManager {
 			sLabels = new ArrayList<Label>();
 		}
 				
-		for (int i = 0; i < rawLabels.size(); ++i) {
-			Label label = insertLabel(i);
-			RawLabel rawLabel = rawLabels.get(i);
-			
-			int x = rawLabel.getTimeInSec() * USCTeensGlobals.PIXEL_PER_DATA;
+		Iterator iter = rawLabels.entrySet().iterator(); 
+		while (iter.hasNext()) { 
+		    Map.Entry entry = (Map.Entry) iter.next(); 		    
+		    RawLabel rawLabel = (RawLabel) entry.getValue(); 
+		    
+		    Label label = insertLabel();
+		    int x = rawLabel.getTimeInSec() * USCTeensGlobals.PIXEL_PER_DATA;
 			// int y = xxx;
 			String text = rawLabel.getText();
 			
 			// load each label
-			label.load(x, (int) AppScale.doScaleH(60), text);
-		}
+			label.load(x, (int) AppScale.doScaleH(50), text);
+		} 
 	}	
 	
 	public static void release() {
@@ -79,6 +83,12 @@ public class LabelManager {
 		sLabels.add(index, label);
 		return label;
 	}		
+	
+	public static Label insertLabel() {
+		Label label = new Label(sResources);
+		sLabels.add(label);
+		return label;
+	}
 
 	public static void deleteChunk(Label label) {
 		sLabels.remove(label);
