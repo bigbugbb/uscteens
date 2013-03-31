@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,7 +41,6 @@ import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
-import edu.neu.android.mhealth.uscteensver1.views.ProgressView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
@@ -51,7 +52,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	// the view for drawing anything
 	protected GraphView mGraphView = null;	
 	// the view for display loading progress
-	protected ProgressView mProgressView = null;
+	//protected ProgressView mProgressView = null;
+	protected ProgressDialog mLoadingDialog = null;
 	// all of the pages
 	protected AppPage mCurPage = null;
 	protected List<AppPage> mPages = new ArrayList<AppPage>();
@@ -114,7 +116,23 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		mGraphView.setOnTouchListener(this);
 		mGraphView.setLongClickable(true);
 		
-		mProgressView = (ProgressView) findViewById(R.id.view_progress);		
+		mLoadingDialog = new ProgressDialog(this);  
+		mLoadingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);  
+		mLoadingDialog.setTitle("Loading");  
+//		mLoadingDialog.setIcon(R.drawable.icon);  
+		mLoadingDialog.setMessage("It may take seconds to load data, please wait.");  
+		mLoadingDialog.setIndeterminate(false);
+		mLoadingDialog.setCancelable(true);  
+		mLoadingDialog.setButton("Cancel", new DialogInterface.OnClickListener(){  
+
+            @Override  
+            public void onClick(DialogInterface dialog, int which) {
+            	DataSource.cancelLoading();
+                dialog.cancel();                    
+            }  
+              
+        });          
+		//mProgressView = (ProgressView) findViewById(R.id.view_progress);		
 	}
 	
 	private void adjustLayout() {
@@ -212,7 +230,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	public void onStart() {
 		// the initial page is not graph page, so it's ok here
 		if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {	
-			updateData();		
+			DataSource.updateRawData();		
 		}
 		
 		mCurPage.start();
@@ -228,35 +246,6 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		super.onStop();
 	}	
 	
-	private boolean updateData() {	
-		boolean result = false;
-		long currentTime = System.currentTimeMillis();
-		long lastLoadingTime = DataSource.getLastLoadingTime();		
-		
-		if (currentTime - lastLoadingTime > USCTeensGlobals.UPDATING_TIME_THRESHOLD) {			
-			try {				
-				String select = DataStorage.GetValueString(
-						getApplicationContext(), USCTeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01");
-				Date curDate  = new Date(currentTime);
-				Date loadDate = new Date(lastLoadingTime);		
-				Date selDate  = new SimpleDateFormat("yyyy-MM-dd").parse(select);		
-
-				if (WeekdayCalculator.isSameDay(selDate, curDate) || 
-						!WeekdayCalculator.isSameDay(loadDate, curDate)) {
-					// the selected date is the same day as the current date, 
-					// OR date crossing case					
-					if (DataSource.loadRawData(select) == DataSource.LOADING_SUCCEEDED) {
-						result = true;
-					}					
-				}
-			} catch (ParseException e) {				
-				e.printStackTrace();
-			}
-		}
-		
-		return result;
-	}
-
 	// use main looper as the default
 	protected final Handler mHandler = new Handler() {	
 		public void handleMessage(Message msg) {        					
@@ -272,7 +261,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		}
         		break;
         	case AppCmd.BEGIN_LOADING:         		
-        		mProgressView.show("Loading...");
+        		//mProgressView.show("Loading...");
+        		mLoadingDialog.show();
         		new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);
             	break;
         	case AppCmd.END_LOADING:        		
@@ -288,7 +278,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
         			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
         		} 
-        		mProgressView.dismiss();
+        		//mProgressView.dismiss();
+        		mLoadingDialog.dismiss();
         		break;      
         	case AppCmd.BACK:
         		switchPages(indexOfPage(PageType.DATE_PAGE));
@@ -336,13 +327,13 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
     
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-    	if (mProgressView.getVisibility() == View.VISIBLE) {
-    		if (keyCode == KeyEvent.KEYCODE_BACK) {
-    			DataSource.cancelLoading();
-    			return true;
-    		}
-    		return mProgressView.onKeyDown(keyCode, event);
-    	}
+//    	if (mProgressView.getVisibility() == View.VISIBLE) {
+//    		if (keyCode == KeyEvent.KEYCODE_BACK) {
+//    			DataSource.cancelLoading();
+//    			return true;
+//    		}
+//    		return mProgressView.onKeyDown(keyCode, event);
+//    	}    	
     	
 		if (keyCode == KeyEvent.KEYCODE_BACK) {		
 			if (mCurPage == mPages.get(0)) { // home page

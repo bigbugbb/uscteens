@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -30,6 +30,7 @@ import org.dom4j.io.XMLWriter;
 import android.content.Context;
 import android.util.Pair;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
@@ -95,6 +96,36 @@ public class DataSource {
 	
 	public static void cancelLoading() {
 		sCancelled = true;
+	}
+	
+	public static boolean updateRawData() {	
+		boolean result = false;
+		long currentTime = System.currentTimeMillis();
+		long lastLoadingTime = DataSource.getLastLoadingTime();		
+		
+		if (currentTime - lastLoadingTime > USCTeensGlobals.UPDATING_TIME_THRESHOLD) {			
+			try {				
+				String select = DataStorage.GetValueString(
+					sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
+				);
+				Date curDate  = new Date(currentTime);
+				Date loadDate = new Date(lastLoadingTime);		
+				Date selDate  = new SimpleDateFormat("yyyy-MM-dd").parse(select);		
+
+				if (WeekdayCalculator.isSameDay(selDate, curDate) || 
+						!WeekdayCalculator.isSameDay(loadDate, curDate)) {
+					// the selected date is the same day as the current date, 
+					// OR date crossing case					
+					if (DataSource.loadRawData(select) == DataSource.LOADING_SUCCEEDED) {
+						result = true;
+					}					
+				}
+			} catch (ParseException e) {				
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
 	}
 	
 	/**
