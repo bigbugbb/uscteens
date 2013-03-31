@@ -402,7 +402,7 @@ public class DataSource {
 	
 	/**
 	 * load all labels from a label file of a specified date to the raw label wrap
-	 * @param date
+	 * @param date	yyyy-MM-dd
 	 * @param rawLabelWrap
 	 * @return true if the raw label wrap has label data, otherwise false
 	 */
@@ -472,8 +472,13 @@ public class DataSource {
 		return loadLabelData(date, sRawLabelsWrap, true);
 	}
 	
-	public static boolean saveLabelData(RawLabelWrap rawLabelWrap) {			
-		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");		
+	/**
+	 * save all the labels to the label file specified by the date
+	 * @param date	yyyy-MM-dd
+	 * @param rawLabelWrap	labels to be saved
+	 * @return true if succeed, otherwise false
+	 */
+	public static boolean saveLabelData(String date, RawLabelWrap rawLabelWrap) {						
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.LABELS_FOLDER + date;
 		String filePathName = ""; 

@@ -16,11 +16,12 @@ public class Labeler {
 	 * @return true if the label is added, otherwise false
 	 */
 	public static boolean addLabel(String dateTime, String text, boolean commit) {
-		DataSource.loadLabelData(dateTime.split(" ")[0], sRawLabels, false);
+		String date = dateTime.split(" ")[0];
+		DataSource.loadLabelData(date, sRawLabels, false);
 		boolean result = sRawLabels.add(dateTime, text);
 		
 		if (commit) {
-			result = commitChanges();
+			result = commitChanges(date);
 		}
 
 		return result;
@@ -34,11 +35,12 @@ public class Labeler {
 	 * @return true if the label is removed, otherwise false
 	 */
 	public static boolean removeLabel(String dateTime, String text, boolean commit) {
-		DataSource.loadLabelData(dateTime.split(" ")[0], sRawLabels, false);
+		String date = dateTime.split(" ")[0];
+		DataSource.loadLabelData(date, sRawLabels, false);
 		boolean result = sRawLabels.remove(dateTime, text);
 		
 		if (commit) {
-			result = commitChanges();
+			result = commitChanges(date);
 		}
 		
 		return result;
@@ -55,7 +57,7 @@ public class Labeler {
 		boolean result = true;
 		
 		if (commit) {
-			result = commitChanges();
+			result = commitChanges(date);
 		}
 		
 		return result;
@@ -63,9 +65,10 @@ public class Labeler {
 	
 	/**
 	 * commit the changes to the file
+	 * @param date	the date for committing the changes
 	 * @return true if the commit is successful, otherwise false
 	 */
-	public static boolean commitChanges() {
-		return DataSource.saveLabelData(sRawLabels);
+	public static boolean commitChanges(String date) {
+		return DataSource.saveLabelData(date, sRawLabels);
 	}
 }
