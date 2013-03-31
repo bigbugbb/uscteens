@@ -68,6 +68,18 @@ else
 
 fi
 
+echo "Converting .project...."
+
+find . -name ".project" -type f 
+
+if [ "$OS" != 'Darwin' ]; then
+	find . -name ".project" -type f -exec sed -i "s/neu\.android\.mhealth\.${DEVEL}/neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
+
+else
+	find . -name ".project" -type f -exec sed -i "" "s/neu\.android\.mhealth\.${DEVEL}/neu\.android\.mhealth\.${RELEASE}/g" '{}' \;
+
+fi
+
 # Change the src directory names
 
 echo "Moving directories that have to be renamed ..."
