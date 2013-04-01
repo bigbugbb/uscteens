@@ -320,6 +320,9 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 				QuitDialog dialog = new QuitDialog();
 				dialog.show(getSupportFragmentManager(), "HomePageDialog");
 			} else if (mCurPage == mPages.get(indexOfPage(PageType.DATE_PAGE))) {
+				if (mDataLoader != null) {
+					DataSource.cancelLoading();
+				}
 				switchPages(indexOfPage(PageType.HOME_PAGE));				
 			} else if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {
 				switchPages(indexOfPage(PageType.DATE_PAGE));
