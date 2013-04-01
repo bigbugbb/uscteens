@@ -1,6 +1,8 @@
 package edu.neu.android.mhealth.uscteensver1.threads;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
@@ -12,19 +14,36 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 	private Context mContext;
 	private int 	mResult;	
 	private Handler mHandler;
-
+	private ProgressDialog mLoadingDialog = null;
 	
 	public LoadDataTask(Context context, Handler handler) {
 		mContext = context;
 		mResult  = DataSource.LOADING_SUCCEEDED;
 		mHandler = handler;
+		
+		mLoadingDialog = new ProgressDialog(mContext);
+		mLoadingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		mLoadingDialog.setTitle("Loading");
+//		mLoadingDialog.setIcon(R.drawable.icon);
+		mLoadingDialog.setMessage("It may take seconds to load data, please wait.");
+		mLoadingDialog.setIndeterminate(false);
+		mLoadingDialog.setCancelable(true);
+		mLoadingDialog.setButton("Cancel", new DialogInterface.OnClickListener(){  
+
+            @Override  
+            public void onClick(DialogInterface dialog, int which) {
+            	DataSource.cancelLoading();
+                dialog.cancel();                    
+            }  
+              
+        });  
 	}
 
 	@Override
 	protected void onPreExecute() {
 		// TODO Auto-generated method stub
 		super.onPreExecute();
-		// mProgDlg = ProgressDialog.show(mContext, "", "loading data... ", true, false);
+		mLoadingDialog.show();
 	}
 
 	@Override
@@ -52,7 +71,7 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 		}
 		
 		mHandler.sendMessage(msg);
-		// mProgDlg.dismiss();
+		mLoadingDialog.dismiss();
 	}
 
 	@Override

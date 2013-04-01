@@ -49,7 +49,6 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	protected GraphView mGraphView = null;	
 	// the view for display loading progress
 	//protected ProgressView mProgressView = null;
-	protected ProgressDialog mLoadingDialog = null;
 	// all of the pages
 	protected AppPage mCurPage = null;
 	protected List<AppPage> mPages = new ArrayList<AppPage>();
@@ -57,6 +56,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	private PasswordChecker mPwdStaff     = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
 	private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
 	private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
+	// loading data task
+	private LoadDataTask mDataLoader = null;
 	
 	protected enum PageType {  
 		HOME_PAGE, DATE_PAGE, GRAPH_PAGE, REWARD_PAGE
@@ -111,23 +112,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		mGraphView = (GraphView) findViewById(R.id.view_graph);		
 		mGraphView.setOnTouchListener(this);
 		mGraphView.setLongClickable(true);
-		
-		mLoadingDialog = new ProgressDialog(this);  
-		mLoadingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);  
-		mLoadingDialog.setTitle("Loading");  
-//		mLoadingDialog.setIcon(R.drawable.icon);  
-		mLoadingDialog.setMessage("It may take seconds to load data, please wait.");  
-		mLoadingDialog.setIndeterminate(false);
-		mLoadingDialog.setCancelable(true);  
-		mLoadingDialog.setButton("Cancel", new DialogInterface.OnClickListener(){  
-
-            @Override  
-            public void onClick(DialogInterface dialog, int which) {
-            	DataSource.cancelLoading();
-                dialog.cancel();                    
-            }  
-              
-        });          
+        
 		//mProgressView = (ProgressView) findViewById(R.id.view_progress);		
 	}
 	
@@ -258,10 +243,10 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		break;
         	case AppCmd.BEGIN_LOADING:         		
         		//mProgressView.show("Loading...");
-        		mLoadingDialog.show();
-        		new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);
+        		mDataLoader = (LoadDataTask) new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);        		
             	break;
-        	case AppCmd.END_LOADING:        		
+        	case AppCmd.END_LOADING: 
+        		mDataLoader = null;
         		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
         			switchPages(indexOfPage(PageType.GRAPH_PAGE));
         		} else if (msg.arg1 == DataSource.ERR_CANCELLED) {
@@ -273,9 +258,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         			Toast.makeText(context, R.string.chunk_error, Toast.LENGTH_LONG).show();
         		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
         			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
-        		} 
+        		}         		
         		//mProgressView.dismiss();
-        		mLoadingDialog.dismiss();
         		break;      
         	case AppCmd.BACK:
         		switchPages(indexOfPage(PageType.DATE_PAGE));
@@ -336,7 +320,9 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 				QuitDialog dialog = new QuitDialog();
 				dialog.show(getSupportFragmentManager(), "HomePageDialog");
 			} else if (mCurPage == mPages.get(indexOfPage(PageType.DATE_PAGE))) {
-				switchPages(indexOfPage(PageType.HOME_PAGE));				
+				if (mDataLoader == null) {
+					switchPages(indexOfPage(PageType.HOME_PAGE));
+				}
 			} else if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {
 				switchPages(indexOfPage(PageType.DATE_PAGE));
 			}

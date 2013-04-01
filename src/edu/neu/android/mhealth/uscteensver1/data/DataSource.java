@@ -268,7 +268,7 @@ public class DataSource {
 					obj = ois.readObject();
 				}
 			} catch (EOFException e) {
-				e.printStackTrace();
+				;//e.printStackTrace();
 			} catch (Exception e) { 
 				e.printStackTrace();
 			} finally {
