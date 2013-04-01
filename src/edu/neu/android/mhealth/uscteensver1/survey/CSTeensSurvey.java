@@ -7,8 +7,6 @@ import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyAnswer;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion.TYPE;
-import edu.neu.android.wocketslib.emasurvey.rule.ChanceBeChosen;
-import edu.neu.android.wocketslib.emasurvey.rule.QuesFromAns;
 
 public class CSTeensSurvey extends QuestionSet {
 	/**

@@ -3,9 +3,7 @@ package edu.neu.android.mhealth.uscteensver1.activities;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,7 +54,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	private PasswordChecker mPwdStaff     = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
 	private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
 	private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
-	// loading data task
+	// data loader
 	private LoadDataTask mDataLoader = null;
 	
 	protected enum PageType {  
@@ -243,10 +241,11 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         		break;
         	case AppCmd.BEGIN_LOADING:         		
         		//mProgressView.show("Loading...");
-        		mDataLoader = (LoadDataTask) new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);        		
+        		if (mDataLoader == null) {
+        			mDataLoader = (LoadDataTask) new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);
+        		}
             	break;
-        	case AppCmd.END_LOADING: 
-        		mDataLoader = null;
+        	case AppCmd.END_LOADING:          		
         		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
         			switchPages(indexOfPage(PageType.GRAPH_PAGE));
         		} else if (msg.arg1 == DataSource.ERR_CANCELLED) {
@@ -258,7 +257,8 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
         			Toast.makeText(context, R.string.chunk_error, Toast.LENGTH_LONG).show();
         		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
         			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
-        		}         		
+        		}  
+        		mDataLoader = null;
         		//mProgressView.dismiss();
         		break;      
         	case AppCmd.BACK:
@@ -320,9 +320,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 				QuitDialog dialog = new QuitDialog();
 				dialog.show(getSupportFragmentManager(), "HomePageDialog");
 			} else if (mCurPage == mPages.get(indexOfPage(PageType.DATE_PAGE))) {
-				if (mDataLoader == null) {
-					switchPages(indexOfPage(PageType.HOME_PAGE));
-				}
+				switchPages(indexOfPage(PageType.HOME_PAGE));				
 			} else if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {
 				switchPages(indexOfPage(PageType.DATE_PAGE));
 			}

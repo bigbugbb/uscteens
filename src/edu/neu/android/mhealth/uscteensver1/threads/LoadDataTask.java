@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.dialog.LoadingDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 
 
@@ -14,14 +15,15 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 	private Context mContext;
 	private int 	mResult;	
 	private Handler mHandler;
-	private ProgressDialog mLoadingDialog = null;
+	private LoadingDialog mLoadingDialog = null;
+	private static Object sLock = new Object();
 	
 	public LoadDataTask(Context context, Handler handler) {
 		mContext = context;
 		mResult  = DataSource.LOADING_SUCCEEDED;
 		mHandler = handler;
 		
-		mLoadingDialog = new ProgressDialog(mContext);
+		mLoadingDialog = new LoadingDialog(mContext);
 		mLoadingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		mLoadingDialog.setTitle("Loading");
 //		mLoadingDialog.setIcon(R.drawable.icon);
@@ -76,7 +78,9 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 
 	@Override
 	protected Void doInBackground(String[] params) {
-		mResult = DataSource.loadRawData(params[0]);
+		synchronized (sLock) {
+			mResult = DataSource.loadRawData(params[0]);
+		}
 		return null;
 	}
 }
