@@ -595,17 +595,17 @@ public class USCTeensArbitrater extends Arbitrater {
 		}
 
 		// Temporary
-		getAndPrintPromptingSchedule();
+//		getAndPrintPromptingSchedule();
 
 		// Mark that arbitration taking place
-		long lastArbitrationTime = DataStorage.getLastTimeArbitrate(aContext, 0);
-		DataStorage.setLastTimeArbitrate(aContext, System.currentTimeMillis());
-		int studyDay = DataStorage.getDayNumber(aContext, true);
+//		long lastArbitrationTime = DataStorage.getLastTimeArbitrate(aContext, 0);
+//		DataStorage.setLastTimeArbitrate(aContext, System.currentTimeMillis());
+//		int studyDay = DataStorage.getDayNumber(aContext, true);
 
 		// Set which apps are available based on the day of the study
-		SetAppActivityUsingSchedule(lastArbitrationTime, studyDay, isNewSoftwareVersion);
+//		SetAppActivityUsingSchedule(lastArbitrationTime, studyDay, isNewSoftwareVersion);
 
-		isOkAudioPrompt = isOkAudioPrompt();
+//		isOkAudioPrompt = isOkAudioPrompt();
 
 		if (Globals.IS_DEBUG) {
 			Log.d(TAG, "End arbitrate");
