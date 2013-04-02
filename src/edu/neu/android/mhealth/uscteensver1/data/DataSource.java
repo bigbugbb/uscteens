@@ -261,10 +261,9 @@ public class DataSource {
 					if (sCancelled) {
 						return ERR_CANCELLED;
 					}
-					if (obj instanceof AccelData) {
-						AccelData data = (AccelData) obj;
-						hourlyAccelData.add(data); 						
-					}	
+					//if (obj instanceof AccelData) {						
+					hourlyAccelData.add((AccelData) obj); 						
+					//}	
 					obj = ois.readObject();
 				}
 			} catch (EOFException e) {
