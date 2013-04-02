@@ -14,6 +14,7 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 	protected final static int NO_SENSOR_DATA = -1;
 	protected final static int NO_SENSOR_DATA_TIME_THRESHOLD = 300;
 	protected final static int SECONDS_IN_DAY = 3600 * 24;
+	protected final static int DATA_COUNT_FOR_DAY_CROSSING = 30;
 	
 	public AccelDataWrap() {
 		clear();
@@ -51,6 +52,17 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 			mMaxAccelAvgValue = NO_SENSOR_DATA;
 			return true;
 		}
+		
+		// correct the error case for day crossing
+		ArrayList<AccelData> firstHourData = get(0);
+		ArrayList<AccelData> uselessData = new ArrayList<AccelData>();
+		for (int i = 0; i < DATA_COUNT_FOR_DAY_CROSSING; ++i) {			
+			AccelData aData = firstHourData.get(i);
+			if (aData.mHour == 23 && aData.mMinute == 59) {
+				uselessData.add(aData);
+			}
+		}
+		firstHourData.removeAll(uselessData);
 
 		// update daily data		
 		for (ArrayList<AccelData> hourlyData : this) {
