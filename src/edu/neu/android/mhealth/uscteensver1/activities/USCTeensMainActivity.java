@@ -201,12 +201,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	@Override
 	public void onResume() {						
 		super.onResume();
-		
-		if (isAuthorized()) {
-			mDummyView.setVisibility(View.GONE);
-		} else {
-			mDummyView.setVisibility(View.VISIBLE);
-		}
+				
+		mDummyView.setVisibility(isAuthorized() ? View.GONE : View.VISIBLE);
 				
 		mGraphView.onResume();
 		mCurPage.resume();				
