@@ -61,7 +61,7 @@ public class SplitButton extends ChunkButton {
 	public void measureSize(int width, int height) {
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
-		mY = height * 0.22f;		
+		mY = height * 0.25f;		
 	}
 	
 	@Override
@@ -71,7 +71,7 @@ public class SplitButton extends ChunkButton {
 		}
 		mCanvasWidth  = width;
 		mCanvasHeight = height;
-		mY = height * 0.22f;		
+		mY = height * 0.25f;		
 	}
 	
 	@Override
