@@ -258,26 +258,10 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		}
         		break;
         	case AppCmd.BEGIN_LOADING:         		
-        		//mProgressView.show("Loading...");
-        		if (mDataLoader == null) {
-        			mDataLoader = (LoadDataTask) new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);
-        		}
+        		onBeginLoading(msg);
             	break;
         	case AppCmd.END_LOADING:          		
-        		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
-        			switchPages(indexOfPage(PageType.GRAPH_PAGE));
-        		} else if (msg.arg1 == DataSource.ERR_CANCELLED) {
-        			;
-        		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
-        			Toast.makeText(context, R.string.no_data, Toast.LENGTH_LONG).show();
-        			switchPages(indexOfPage(PageType.GRAPH_PAGE)); // still can be labelled
-        		} else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
-        			Toast.makeText(context, R.string.chunk_error, Toast.LENGTH_LONG).show();
-        		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
-        			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
-        		}  
-        		mDataLoader = null;
-        		//mProgressView.dismiss();
+        		onEndLoading(msg);
         		break;      
         	case AppCmd.BACK:
         		switchPages(indexOfPage(PageType.DATE_PAGE));
@@ -314,6 +298,33 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 			vibrator.vibrate(20);
         }			
     };
+    
+    private void onBeginLoading(Message msg) {
+    	// avoid multiple loading operations
+    	if (mDataLoader != null) {
+    		return;
+    	}
+
+		// start the loading thread
+		mDataLoader = (LoadDataTask) new LoadDataTask(this, mHandler).execute((String) msg.obj);		
+    }
+    
+    private void onEndLoading(Message msg) {
+    	// results from loading thread
+    	if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
+			switchPages(indexOfPage(PageType.GRAPH_PAGE));
+		} else if (msg.arg1 == DataSource.ERR_CANCELLED) {
+			;
+		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
+			Toast.makeText(this, R.string.no_data, Toast.LENGTH_LONG).show();
+			switchPages(indexOfPage(PageType.GRAPH_PAGE)); // still can be labelled
+		} else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
+			Toast.makeText(this, R.string.chunk_error, Toast.LENGTH_LONG).show();
+		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
+			Toast.makeText(this, R.string.wait_data, Toast.LENGTH_LONG).show();
+		}  
+		mDataLoader = null;
+    }
     
     @Override
 	public boolean onTouch(View v, MotionEvent event) {
