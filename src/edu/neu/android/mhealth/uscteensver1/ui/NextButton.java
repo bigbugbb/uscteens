@@ -8,6 +8,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class NextButton extends CustomButton {
@@ -21,9 +22,9 @@ public class NextButton extends CustomButton {
 		super(res);
 		
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mPaintText.setColor(Color.WHITE);
+		mPaintText.setColor(Color.YELLOW);
 		mPaintText.setStyle(Style.FILL);
-		mPaintText.setTypeface(Typeface.SERIF);
+		mPaintText.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial_bold.ttf"));
 		mPaintText.setFakeBoldText(false);
 		mPaintText.setTextSize(AppScale.doScaleT(34));
 		mPaintText.setTextAlign(Paint.Align.CENTER);
@@ -41,7 +42,7 @@ public class NextButton extends CustomButton {
 		mPaintText.getTextBounds("NEXT", 0, 4, bounds);
 		mWidth  = bounds.width();
 		mHeight = bounds.height();
-		mX = width * (1 - 0.075f);
+		mX = width * (1 - 0.07f);
 		mY = height * 0.96f;
 	}
 	
@@ -71,13 +72,13 @@ public class NextButton extends CustomButton {
 		if (mListener != null) {
 			mListener.onClick(this);
 		}
-		mPaintText.setColor(Color.WHITE);
+		mPaintText.setColor(Color.YELLOW);
 		return true;
 	}
 
 	@Override
 	public void onCancelSelection(MotionEvent e) {
-		mPaintText.setColor(Color.WHITE);
+		mPaintText.setColor(Color.YELLOW);
 	}
 
 }

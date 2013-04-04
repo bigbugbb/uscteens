@@ -19,6 +19,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
@@ -46,18 +47,19 @@ public class MergeView extends View {
 		mRes = context.getResources();
 		loadImages(new int[]{ R.drawable.warning_back, R.drawable.arrow_warning, 
 				R.drawable.selection, R.drawable.selection_circle });	
-			
+		
+		Typeface tf = Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf");
 		mPaintText0 = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText0.setColor(Color.WHITE);
 		mPaintText0.setStyle(Style.STROKE);
 		mPaintText0.setTextSize(AppScale.doScaleT(34));
-		mPaintText0.setTypeface(Typeface.SERIF);
+		mPaintText0.setTypeface(tf);
 		mPaintText0.setFakeBoldText(false);
 		
 		mPaintText1 = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText1.setColor(Color.BLACK);
 		mPaintText1.setStyle(Style.STROKE);
-		mPaintText1.setTypeface(Typeface.SERIF);
+		mPaintText1.setTypeface(tf);
 		mPaintText1.setFakeBoldText(false);
 		mPaintText1.setTextSize(AppScale.doScaleT(46));
 		mPaintText1.setTextAlign(Paint.Align.CENTER);
@@ -65,7 +67,7 @@ public class MergeView extends View {
 		mPaintText2 = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText2.setColor(Color.BLACK);
 		mPaintText2.setStyle(Style.STROKE);
-		mPaintText2.setTypeface(Typeface.SERIF);
+		mPaintText2.setTypeface(tf);
 		mPaintText2.setFakeBoldText(false);
 		mPaintText2.setTextSize(AppScale.doScaleT(40));
 		mPaintText2.setTextAlign(Paint.Align.LEFT);
@@ -127,7 +129,7 @@ public class MergeView extends View {
 		canvas.drawBitmap(mImages.get(1), mBackArea.left, mBackArea.top, null);
 		canvas.drawText("BACK", mBackTxtPt.x, mBackTxtPt.y, mPaintText0);
 		canvas.drawText("Do you want to merge", getWidth() / 2, AppScale.doScaleH(220), mPaintText1);
-		canvas.drawText("this activities to:", getWidth() / 2, AppScale.doScaleH(310), mPaintText1);
+		canvas.drawText("these activities to:", getWidth() / 2, AppScale.doScaleH(310), mPaintText1);
 		
 		float left = getWidth() * 0.18f;
 		for (int i = 0; i < mAreas.size(); ++i) {

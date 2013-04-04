@@ -50,8 +50,6 @@ public class Chunk extends AppObject {
 			sPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 			sPaint.setColor(Color.BLACK);
 			sPaint.setStyle(Style.FILL);
-			sPaint.setTypeface(Typeface.SERIF);
-			sPaint.setFakeBoldText(false);
 			sPaintCreated = true;
 		}
 	}

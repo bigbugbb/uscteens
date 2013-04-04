@@ -40,9 +40,9 @@ public class Label extends AppObject {
 	protected static void createPaint() {
 		if (!sPaintCreated) {
 			sPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-			sPaint.setColor(Color.argb(255, 0, 0x99, 0x99));
+			sPaint.setColor(Color.argb(255, 255, 102, 0));
 			sPaint.setStyle(Style.STROKE);
-			sPaint.setTypeface(Typeface.SERIF);
+			sPaint.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
 			sPaint.setTextSize(AppScale.doScaleT(28));
 			sPaintCreated = true;
 		}
@@ -91,7 +91,7 @@ public class Label extends AppObject {
 		mZOrder = ZOrders.LABEL;
  
 		createPaint();
-		loadImages(res, new int[]{ R.drawable.dummy });
+		loadImages(res, new int[]{ R.drawable.label_marker });
 	}
 	
 	public boolean load(int x, int y, String text) {		
@@ -137,9 +137,9 @@ public class Label extends AppObject {
 		delta = delta > 0 ? -delta : 0;	
 		x += delta;
 		
-		c.drawBitmap(sImages.get(0), x, y, null);		
+		c.drawBitmap(sImages.get(0), x - AppScale.doScaleW(8), y - AppScale.doScaleH(35), null);		
 		if (x + sImgWidth + mRect.width() > LabelManager.getViewWidth()) {
-			c.drawText(mText, x - mRect.width(), y, sPaint);
+			c.drawText(mText, x - mRect.width() - AppScale.doScaleW(8), y, sPaint);
 		} else {
 			c.drawText(mText, x + sImages.get(0).getWidth(), y, sPaint);
 		}

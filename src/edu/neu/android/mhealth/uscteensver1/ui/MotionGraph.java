@@ -73,7 +73,6 @@ public class MotionGraph extends AppObject {
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.BLACK);
 		mPaint.setStyle(Style.FILL);
-		mPaint.setTypeface(Typeface.SERIF);
 		mPaint.setFakeBoldText(false);	
 		
 		mDataPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -101,14 +100,14 @@ public class MotionGraph extends AppObject {
 		mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintTxt.setColor(Color.BLACK);
 		mPaintTxt.setStyle(Style.STROKE);
+		mPaintTxt.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial_bold.ttf"));
 		mPaintTxt.setTextSize(AppScale.doScaleT(36));
-		mPaintTxt.setFakeBoldText(false);
 		
 		mPaintDate = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintDate.setColor(Color.BLACK);
 		mPaintDate.setStyle(Style.STROKE);
-		mPaintDate.setTypeface(Typeface.SERIF);
-		mPaintDate.setTextSize(AppScale.doScaleT(43));
+		mPaintDate.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
+		mPaintDate.setTextSize(AppScale.doScaleT(40));
 		mPaintDate.setFakeBoldText(false);
 		
 		mOffsetSpeedX = 0;

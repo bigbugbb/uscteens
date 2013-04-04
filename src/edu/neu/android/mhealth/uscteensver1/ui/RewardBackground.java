@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class RewardBackground extends Background {
@@ -31,7 +32,7 @@ public class RewardBackground extends Background {
 		mPaintText1 = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText1.setColor(Color.WHITE);
 		mPaintText1.setStyle(Style.FILL);
-		mPaintText1.setTypeface(Typeface.SERIF);
+		mPaintText1.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
 		mPaintText1.setFakeBoldText(true);
 		mPaintText1.setTextSize(AppScale.doScaleT(50));
 		mPaintText1.setTextAlign(Paint.Align.CENTER);
@@ -39,7 +40,7 @@ public class RewardBackground extends Background {
 		mPaintText2 = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText2.setColor(Color.BLACK);
 		mPaintText2.setStyle(Style.FILL);
-		mPaintText2.setTypeface(Typeface.SERIF);
+		mPaintText2.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
 		mPaintText2.setFakeBoldText(true);
 		mPaintText2.setTextSize(AppScale.doScaleT(46));
 		mPaintText2.setTextAlign(Paint.Align.CENTER);

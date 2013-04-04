@@ -53,7 +53,7 @@ public class LabelManager {
 			String text = rawLabel.getText();
 			
 			// load each label
-			label.load(x, (int) AppScale.doScaleH(50), text);
+			label.load(x, (int) AppScale.doScaleH(65), text);
 		} 
 	}	
 	

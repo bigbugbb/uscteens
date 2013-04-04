@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
@@ -31,6 +32,7 @@ public class ListView extends AppObject {
 	protected float  mOffsetSpeedY = 0;
 	protected float  mOffsetAccSpeedX = 0;
 	protected float  mOffestAccSpeedY = 0;
+	protected Typeface mTypeface = null;
 	protected Canvas mInnerCanvas = null;
 	protected ArrayList<ListItem> mItems = new ArrayList<ListItem>();
 	protected OnReachedEndListener mOnReachedEndListener = null;
@@ -59,15 +61,13 @@ public class ListView extends AppObject {
 			
 			mPaintBkg = new Paint(Paint.ANTI_ALIAS_FLAG);
 			mPaintBkg.setColor(Color.WHITE);
-			mPaintBkg.setStyle(Style.FILL);
-			mPaintBkg.setTypeface(Typeface.SERIF);
+			mPaintBkg.setStyle(Style.FILL);		
 			mPaintBkg.setFakeBoldText(false);
 			
 			mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
-			mPaintTxt.setColor(Color.BLACK);
-			mPaintTxt.setStyle(Style.STROKE);
+			mPaintTxt.setColor(Color.BLACK);		
 			mPaintTxt.setTextSize(AppScale.doScaleT(45));
-			mPaintTxt.setTypeface(Typeface.SERIF);
+			mPaintTxt.setTypeface(mTypeface);
 			mPaintTxt.setFakeBoldText(false);
 			
 			mPaintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -90,13 +90,17 @@ public class ListView extends AppObject {
 			
 		}
 		
-		protected void onDraw(Canvas c) {						
-			c.drawRect(0, mOffsetY + (mHeight + mBorderWidth) * mPosn, mWidth - mBorderWidth, 
-				mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight, mPaintBkg);		
-			c.drawText(mText, mWidth / 2 - AppScale.doScaleW(250), 
-				mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight * 0.6f, mPaintTxt);
-			c.drawBitmap(mImage, mWidth * 0.86f - mImage.getWidth() * 0.5f, 
-				mOffsetY + (mHeight + mBorderWidth) * mPosn + AppScale.doScaleH(26), null);
+		protected void onDraw(Canvas c) {	
+			float y1 = mOffsetY + (mHeight + mBorderWidth) * mPosn;
+			float y2 = mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight;
+			
+			if (y1 > mCanvasHeight || y2 < 0) {
+				return;
+			}
+			
+			c.drawRect(0, y1, mWidth - mBorderWidth, y2, mPaintBkg);		
+			c.drawText(mText, mWidth / 2 - AppScale.doScaleW(250), y1 + mHeight * 0.6f, mPaintTxt);
+			c.drawBitmap(mImage, mWidth * 0.86f - mImage.getWidth() * 0.5f, y1 + AppScale.doScaleH(26), null);
 		}
 		
 		public void setPaintBackground(Paint background) {
@@ -157,6 +161,7 @@ public class ListView extends AppObject {
 	public ListView(Resources res) {
 		super(res);	
 		
+		mTypeface = Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf");
 		mOffsetSpeedY = AppScale.doScaleH(16f);
 		//mOffestAccSpeedY = sAppScale.doScaleH(3f);
 	}
@@ -235,7 +240,7 @@ public class ListView extends AppObject {
 		
 		if (mInnerCanvas != null) {
 			mInnerCanvas.drawColor(Color.rgb(179, 181, 181));
-			for (ListItem lvi : mItems) {
+			for (ListItem lvi : mItems) {				
 				lvi.onDraw(mInnerCanvas);
 			}
 		}

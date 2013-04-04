@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class ProgressView extends View {
@@ -36,9 +37,8 @@ public class ProgressView extends View {
 		
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.WHITE);
-		mPaint.setStyle(Style.STROKE);		
-		Typeface font = Typeface.create("serif", Typeface.BOLD_ITALIC);
-		mPaint.setTypeface(font);		
+		mPaint.setStyle(Style.STROKE);				
+		mPaint.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));		
 		mPaint.setFakeBoldText(false);
 		
 		setBackgroundColor(mBkColor);

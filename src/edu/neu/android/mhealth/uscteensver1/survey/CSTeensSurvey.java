@@ -321,7 +321,7 @@ public class CSTeensSurvey extends QuestionSet {
 		answerSet3h[4] = new SurveyAnswer(4, "Extremely");	
 		Q3_h_Enjoyable.setDefault("Q1_TeenActivity", answerSet3h);
 		defaultQuestionSet.add(Q3_h_Enjoyable);
-//		
+//
 //		SurveyQuestion Q5_a_PhysicalContext = new SurveyQuestion("Q5_a_PhysicalContext", 
 //				"WHERE were you just before you used your inhaler?",
 //				TYPE.SINGLE_CHOICE);

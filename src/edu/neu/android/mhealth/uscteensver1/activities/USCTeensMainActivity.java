@@ -66,6 +66,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		super.onCreate(savedInstanceState, "MainActivity");
 		setContentView(R.layout.activity_main);					
 		
+		USCTeensGlobals.sContext = getApplicationContext();
 		USCTeensGlobals.sGlobalHandler = mHandler;
 		DataSource.initialize(getApplicationContext());				
 

@@ -8,6 +8,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class DateBackground extends Background {
@@ -22,9 +23,8 @@ public class DateBackground extends Background {
 		mPaint.setColor(Color.WHITE);
 		mPaint.setStyle(Style.FILL);
 		mPaint.setTextSize(AppScale.doScaleW(45));
-		mPaint.setTypeface(Typeface.SERIF);
+		mPaint.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial_bold.ttf"));
 		mPaint.setTextAlign(Align.CENTER);
-		mPaint.setFakeBoldText(true);	
 	}	
 	
 	@Override

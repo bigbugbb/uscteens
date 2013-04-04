@@ -21,26 +21,29 @@ public class ActionListView extends ListView {
 			super(parent, text, drawable, image);
 			
 			mPaintTxt.setColor(Color.BLACK);
-			mPaintTxt.setStyle(Style.STROKE);
 			mPaintTxt.setTextSize(AppScale.doScaleT(45));
-			mPaintTxt.setTypeface(Typeface.SERIF);
+			mPaintTxt.setTypeface(mTypeface);
 			mPaintTxt.setTextAlign(Align.CENTER);
-			mPaintTxt.setFakeBoldText(false);
 		}		
 
 		protected void onDraw(Canvas c) {
-			c.drawBitmap(mImage, 8, mOffsetY + (mHeight + mBorderWidth) * mPosn, null);
-			c.drawRect(mImage.getWidth() + 16, mOffsetY + (mHeight + mBorderWidth) * mPosn,
-				mWidth - 3, mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight, mPaintBkg);
-			c.drawText(mText, (mWidth + mImage.getWidth()) / 2, 
-				mOffsetY + (mHeight + mBorderWidth) * mPosn + mHeight * 0.6f, mPaintTxt);
+			float y1 = mOffsetY + (mHeight + mBorderWidth) * mPosn;
+			float y2 = y1 + mHeight;
+			
+			if (y1 > mCanvasHeight || y2 < 0) {
+				return;
+			}
+			
+			c.drawBitmap(mImage, 8, y1, null);
+			c.drawRect(mImage.getWidth() + 16, y1, mWidth - 3, y2, mPaintBkg);
+			c.drawText(mText, (mWidth + mImage.getWidth()) / 2, y1 + mHeight * 0.6f, mPaintTxt);
 		}
 
 	}
 	
 	public ActionListView(Resources res) {
 		super(res);
-
+				
 		for (int i = 0; i < USCTeensGlobals.ACTION_NAMES.length; ++i) {
 			addItem(USCTeensGlobals.ACTION_NAMES[i], USCTeensGlobals.ACTION_IMGS[i]);
 		}
