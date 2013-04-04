@@ -34,6 +34,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
 import edu.neu.android.mhealth.uscteensver1.pages.RewardPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
+import edu.neu.android.mhealth.uscteensver1.views.DummyView;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
@@ -41,10 +42,12 @@ import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 
-public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListener {
+public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouchListener {
 	
 	// the view for drawing anything
-	protected GraphView mGraphView = null;	
+	protected GraphView mGraphView = null;
+	// the view covering the screen if not authorized 
+	protected DummyView mDummyView = null;
 	// the view for display loading progress
 	//protected ProgressView mProgressView = null;
 	// all of the pages
@@ -112,6 +115,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		mGraphView.setOnTouchListener(this);
 		mGraphView.setLongClickable(true);
         
+		mDummyView = (DummyView) findViewById(R.id.view_dummy);
 		//mProgressView = (ProgressView) findViewById(R.id.view_progress);		
 	}
 	
@@ -195,15 +199,20 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	}
 
 	@Override
-	public void onResume() {		
+	public void onResume() {
+		AuthorizationChecker.isAuthorized24hrs(getApplicationContext());
+		String subjectID = DataStorage.GetValueString(getApplicationContext(), 
+				DataStorage.KEY_SUBJECT_ID, AuthorizationChecker.SUBJECT_ID_UNDEFINED);
+		if (subjectID == AuthorizationChecker.SUBJECT_ID_UNDEFINED) {
+			mDummyView.setVisibility(View.VISIBLE);
+		} else {
+			mDummyView.setVisibility(View.GONE);
+		}
+		
 		super.onResume();
 				
 		mGraphView.onResume();
-		mCurPage.resume();
-		
-		if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
-			// TODO:
-		}
+		mCurPage.resume();				
 	}
 
 	@Override

@@ -16,7 +16,7 @@ import edu.neu.android.wocketslib.utils.AppUsageLogger;
 import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.UsageCollector;
 
-public class MyBaseActivity extends FragmentActivity {
+public class USCTeensBaseActivity extends FragmentActivity {
 	
 	protected String TAG = "UnknownApp";
 	public static final int KEYGUARD_UNKNOWN = -1; 
