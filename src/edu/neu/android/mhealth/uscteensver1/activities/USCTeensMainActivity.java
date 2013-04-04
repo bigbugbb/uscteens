@@ -199,17 +199,14 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	}
 
 	@Override
-	public void onResume() {
-		AuthorizationChecker.isAuthorized24hrs(getApplicationContext());
-		String subjectID = DataStorage.GetValueString(getApplicationContext(), 
-				DataStorage.KEY_SUBJECT_ID, AuthorizationChecker.SUBJECT_ID_UNDEFINED);
-		if (subjectID == AuthorizationChecker.SUBJECT_ID_UNDEFINED) {
-			mDummyView.setVisibility(View.VISIBLE);
-		} else {
-			mDummyView.setVisibility(View.GONE);
-		}
-		
+	public void onResume() {						
 		super.onResume();
+		
+		if (isAuthorized()) {
+			mDummyView.setVisibility(View.GONE);
+		} else {
+			mDummyView.setVisibility(View.VISIBLE);
+		}
 				
 		mGraphView.onResume();
 		mCurPage.resume();				
@@ -234,6 +231,21 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		
 		super.onStop();
 	}	
+	
+	private boolean isAuthorized() {
+		AuthorizationChecker.isAuthorized24hrs(getApplicationContext());
+		
+		String subjectID = DataStorage.GetValueString(getApplicationContext(), 
+				DataStorage.KEY_SUBJECT_ID, AuthorizationChecker.SUBJECT_ID_UNDEFINED);
+		String subjectLastName = DataStorage.GetValueString(getApplicationContext(), 
+				DataStorage.KEY_LAST_NAME, AuthorizationChecker.SUBJECT_LAST_NAME_UNDEFINED);
+		long dob = DataStorage.GetValueLong(getApplicationContext(), 
+				DataStorage.KEY_DATE_OF_BIRTH, AuthorizationChecker.SUBJECT_DATE_OF_BIRTH_UNDEFINED);
+		
+		return subjectID != AuthorizationChecker.SUBJECT_ID_UNDEFINED &&
+			subjectLastName != AuthorizationChecker.SUBJECT_LAST_NAME_UNDEFINED &&
+			dob != AuthorizationChecker.SUBJECT_DATE_OF_BIRTH_UNDEFINED;
+	}
 	
 	// use main looper as the default
 	protected final Handler mHandler = new Handler() {	
