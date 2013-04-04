@@ -25,12 +25,12 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 		
 		mLoadingDialog = new LoadingDialog(mContext);
 		mLoadingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		mLoadingDialog.setTitle("Loading");
+		mLoadingDialog.setTitle("Loading your motion data");
 //		mLoadingDialog.setIcon(R.drawable.icon);
-		mLoadingDialog.setMessage("It may take seconds to load data, please wait.");
+		mLoadingDialog.setMessage("It may take a few seconds to load your data. Just a moment...");
 		mLoadingDialog.setIndeterminate(false);
 		mLoadingDialog.setCancelable(true);
-		mLoadingDialog.setButton("Cancel", new DialogInterface.OnClickListener(){  
+		mLoadingDialog.setButton("Never mind", new DialogInterface.OnClickListener(){  
 
             @Override  
             public void onClick(DialogInterface dialog, int which) {

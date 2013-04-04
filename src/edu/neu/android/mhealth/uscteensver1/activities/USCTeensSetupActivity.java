@@ -16,10 +16,6 @@ import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import edu.neu.android.wocketslib.dataupload.DataSender;
 import edu.neu.android.wocketslib.dataupload.RawUploader;
-import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
-import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
-import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
-import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.BaseActivity;
@@ -145,7 +141,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent i = new Intent(getApplicationContext(), StartDateSetupActivity.class);
+				Intent i = new Intent(getApplicationContext(), StartdateSetupActivity.class);
 				startActivity(i);				
 			}
 		});

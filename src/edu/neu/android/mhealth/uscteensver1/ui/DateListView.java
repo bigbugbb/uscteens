@@ -1,5 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,15 +33,16 @@ public class DateListView extends ListView {
 	}
 	
 	private void initializeItems(int week, String startDate, String curDate) {						
-		String[] dateSplit = null;
-		
 		// get Date objects for start date and current date
-		dateSplit = startDate.split("-");
-		Date aStartDate = DateHelper.getDate(
-				Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]), Integer.parseInt(dateSplit[2]));	
-		dateSplit = curDate.split("-");
-		Date aCurDate = DateHelper.getDate(
-				Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]), Integer.parseInt(dateSplit[2]));
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");	
+		Date aStartDate = null, aCurDate = null;
+		try {
+			aStartDate = fmt.parse(startDate);
+			aCurDate   = fmt.parse(curDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}			
 		
 		// if the start date is in the future
 		if (aStartDate.compareTo(aCurDate) > 0) {

@@ -49,7 +49,8 @@ public class EMAQuestionSet extends QuestionSet{
 	@Override
 	protected void setQuestions(){
 		defaultQuestionSet = new ArrayList<SurveyQuestion>();
-/************ Initialize questions and answers *********/
+		
+		/************ Initialize questions and answers *********/
 		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity","What have you been DOING "+context+"?\n(Choose all that apply)",TYPE.MULTI_CHOICE);
 		SurveyAnswer[] answerSet1 = new SurveyAnswer[6];
 		answerSet1[0] = new SurveyAnswer(0, "Reading or doing homework");
@@ -589,12 +590,13 @@ public class EMAQuestionSet extends QuestionSet{
 		answerSet5m[4] = new SurveyAnswer(4, "People You Don\'t Know");
 		Q5_m_Accompanies.setDefault("Q5_l_Alone", answerSet5m);
 		defaultQuestionSet.add(Q5_m_Accompanies);
-/*************** Set up rules *******************/
+		
+		/*************** Set up rules *******************/
 		//set up main activity which can not be skipped
 		Q1_MainActivity.setMainActivity(true);
 		Q4_a_WhatOther.setMainActivity(true);
 		
-		//set up probabilities for questions be chosen
+		// set up probabilities for questions be chosen
 		Q1_MainActivity.addRules(new ChanceBeChosen(1));
 		Q2_a_HowLong.addRules(new ChanceBeChosen(1));
 		Q2_b_a_WereYou.addRules(new ChanceBeChosen(1));
@@ -654,7 +656,7 @@ public class EMAQuestionSet extends QuestionSet{
 		Q5_l_Alone.addRules(new ChanceBeChosen(0.3));
 		Q5_m_Accompanies.addRules(new ChanceBeChosen(1));
 
-		//set up branching questions and rules		
+		// set up branching questions and rules		
 		ArrayList<SurveyQuestion> questionSection_1 = new ArrayList<SurveyQuestion>(2);
 		questionSection_1.add(Q2_a_HowLong);
 		questionSection_1.add(Q2_c_WherePhone);
@@ -797,6 +799,7 @@ public class EMAQuestionSet extends QuestionSet{
 		questionSection_18.add(Q5_m_Accompanies);
 		Q5_l_Alone.addRules(new QuesFromAns(new int[]{1}, questionSection_18));
 	}
+	
 	@Override
 	public String getReadableQuestionSetName() {
 		// TODO Auto-generated method stub
@@ -805,11 +808,11 @@ public class EMAQuestionSet extends QuestionSet{
 	@Override
 	public String[] getAllQuesIDs() {
 		// TODO Auto-generated method stub
-		String[] ids = new String[defaultQuestionSet.size()];
-		for (int i = 0; i < ids.length; i++) {
-			ids[i] = defaultQuestionSet.get(i).getAliasID();
+		String[] IDs = new String[defaultQuestionSet.size()];
+		for (int i = 0; i < IDs.length; i++) {
+			IDs[i] = defaultQuestionSet.get(i).getAliasID();
 		}
-		return ids;
+		return IDs;
 	}			
 	
 }

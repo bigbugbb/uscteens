@@ -321,7 +321,7 @@
 			android:screenOrientation="portrait">
 		</activity>
 		
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.StartDateSetupActivity"			
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.StartdateSetupActivity"			
 		    android:launchMode="singleInstance"
             android:excludeFromRecents="true"
 			android:screenOrientation="portrait">
