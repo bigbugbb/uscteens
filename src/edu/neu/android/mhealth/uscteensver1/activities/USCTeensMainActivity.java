@@ -250,12 +250,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 			Context context = getApplicationContext();
 			
         	switch (msg.what) {   
-        	case AppCmd.BEGIN:        
-        		if (DataStorage.getStartDate(context, "").compareTo("") != 0) {
-        			switchPages(indexOfPage(PageType.DATE_PAGE));
-        		} else {
-        			Toast.makeText(context, "Fail to do the configuration!", Toast.LENGTH_SHORT);
-        		}
+        	case AppCmd.BEGIN:                		
+        		switchPages(indexOfPage(PageType.DATE_PAGE));
         		break;
         	case AppCmd.BEGIN_LOADING:         		
         		onBeginLoading(msg);
@@ -304,6 +300,12 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
     	if (mDataLoader != null) {
     		return;
     	}
+    	
+    	// give the loading task more cpu time
+    	GraphDrawer drawer = mGraphView.getDrawer();
+		if (drawer != null) {
+			drawer.pause(true);
+		}
 
 		// start the loading thread
 		mDataLoader = (LoadDataTask) new LoadDataTask(this, mHandler).execute((String) msg.obj);		
@@ -324,6 +326,13 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 			Toast.makeText(this, R.string.wait_data, Toast.LENGTH_LONG).show();
 		}  
 		mDataLoader = null;
+		
+		// make sure the drawer is working again
+		GraphDrawer drawer = mGraphView.getDrawer();
+		if (drawer != null) {
+			drawer.setPage(mCurPage);
+			drawer.pause(false);
+		}
     }
     
     @Override

@@ -256,15 +256,13 @@ public class DataSource {
 			ObjectInputStream ois = null;
 			try { 
 				ois = new ObjectInputStream(new FileInputStream(binFile));
-				Object obj = ois.readObject();
-				while (obj != null) {		
+				AccelData data = (AccelData) ois.readObject();
+				while (data != null) {		
 					if (sCancelled) {
 						return ERR_CANCELLED;
-					}
-					//if (obj instanceof AccelData) {						
-					hourlyAccelData.add((AccelData) obj); 						
-					//}	
-					obj = ois.readObject();
+					}													
+					hourlyAccelData.add(data); 								
+					data = (AccelData) ois.readObject();
 				}
 			} catch (EOFException e) {
 				;//e.printStackTrace();

@@ -74,16 +74,17 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 			}
 		}
 		// fill no sensor data part according to the time threshold
-		int start = 0;
-		int end   = 0;
+		int start = 0, end = 0;
 		for (int i = 0; i < mDrawableData.length; ++i) {	
-			if (mDrawableData[i] != NO_SENSOR_DATA) {
+			// skip the real data part
+			if (mDrawableData[i] != NO_SENSOR_DATA) {		
 				continue;
 			}
+			// mDrawableData[i] == NO_SENSOR_DATA
 			if (i == 0 || mDrawableData[i - 1] != NO_SENSOR_DATA) {
 				start = i;
 			}
-			if (i == SECONDS_IN_DAY - 1 || mDrawableData[i + 1] != NO_SENSOR_DATA) {				
+			if (i == SECONDS_IN_DAY - 1 || mDrawableData[i + 1] != NO_SENSOR_DATA) {			
 				end = i + 1;
 				if (end - start > NO_SENSOR_DATA_TIME_THRESHOLD) {
 					// period of time with no sensor data
@@ -97,9 +98,9 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 						for (int j = start; j < end; j += 2, ++k) {
 							try {
 								int value = mDrawableData[start - k] == NO_SENSOR_DATA ? 
-										DATA_VALUE_FOR_FILLING :  mDrawableData[start - k];
+										DATA_VALUE_FOR_FILLING : mDrawableData[start - k];
 								mDrawableData[j]     = value;
-								mDrawableData[j + 1] = value;
+								mDrawableData[j + 1] = (j + 1 == end) ? mDrawableData[j + 1] : value;
 							} catch (ArrayIndexOutOfBoundsException e) {
 								// the number of the sensor data at the beginning is not enough 
 								Arrays.fill(mDrawableData, j, end, DATA_VALUE_FOR_FILLING);
