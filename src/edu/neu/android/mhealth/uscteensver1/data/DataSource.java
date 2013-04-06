@@ -54,9 +54,6 @@ public class DataSource {
 	public final static int CHUNKING_MIN_SENSITIVITY      = 400;
 	public final static int CHUNKING_MAX_SENSITIVITY      = 999;
 	public final static int CHUNKING_MIN_DISTANCE 		  = 120;
-		
-	// value for minimum sensor data
-	protected final static int MINIMUM_SENSOR_DATA_VALUE = 1800;
 	
 	// value for no data period
 	protected final static int NO_SENSOR_DATA = -1;
@@ -226,7 +223,7 @@ public class DataSource {
 	
 	public static int getMaxDrawableDataValue() {
 		int max = sAccelDataWrap.getMaxDrawableDataValue();
-		return max < MINIMUM_SENSOR_DATA_VALUE ? MINIMUM_SENSOR_DATA_VALUE : max;
+		return max < USCTeensGlobals.sAccelDataScalingFactor ? USCTeensGlobals.sAccelDataScalingFactor : max;
 	}
 	
 	public static ArrayList<Pair<Integer, Integer>> getNoDataTimePeriods() {

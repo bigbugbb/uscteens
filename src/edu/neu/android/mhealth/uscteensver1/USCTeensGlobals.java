@@ -18,7 +18,7 @@ import edu.neu.android.wocketslib.utils.FileHelper;
 public class USCTeensGlobals {
 	private static final String TAG = "USCTeensGlobals";	
 
-	public final static int    PIXEL_PER_DATA = 2;
+	public final static int    PIXEL_PER_DATA = 2;	
 	public final static int    MAX_WIDTH_IN_PIXEL = 3600 * 24 * PIXEL_PER_DATA;
 	public final static int    UPDATING_TIME_THRESHOLD = 60 * 1000; // in ms
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
@@ -33,6 +33,8 @@ public class USCTeensGlobals {
 	public final static String SENSOR_TYPE = "InternalAccel";
 	public final static String ANNOTATION_SET = "Activities";	
 	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
+	
+	public static int sAccelDataScalingFactor = 1800;
 	
 	public static Context sContext = null;
 	public static Handler sGlobalHandler = null;
