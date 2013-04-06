@@ -98,7 +98,7 @@ public class Label extends AppObject {
 		boolean result = true;
 		mX = x;
 		mY = y;
-		mText = "Watching TV";
+		mText = text; // "Watching TV";
 		
 		int count = sPaint.breakText(mText, true, sMaxTxtWidth, null);
 		if (count < mText.length()) {			

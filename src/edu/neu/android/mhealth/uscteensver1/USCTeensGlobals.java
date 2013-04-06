@@ -114,7 +114,7 @@ public class USCTeensGlobals {
 	
 	public static void initGlobals(Context aContext) {
 		// By default the logging will go to the apps internal storage, not the external directory
-		Globals.IS_DEBUG = false;
+		Globals.IS_DEBUG = true;
 		Globals.IS_LOG_EXTERNAL = false;
 		Globals.APP_DIRECTORY = "uscteens";
 		Globals.LOG_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "logs";
@@ -126,7 +126,8 @@ public class USCTeensGlobals {
 		Globals.BACKUP_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "backup";
 
 		Globals.STUDY_NAME = "USCTeens"; // "Teens Study"; 
-		Globals.STUDY_SERVER_NAME = "USCTeens"; 
+		Globals.STUDY_SERVER_NAME = "USCTeens";
+		Globals.UNIQUE_LOG_STRING = "TESTTeens";
 
 		FileHelper.testFunction(aContext);
 		

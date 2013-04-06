@@ -19,6 +19,9 @@ public class USCTeensAppManager extends ApplicationManager {
 
     	USCTeensArbitrater arbitrater = new USCTeensArbitrater(getAppContext()); 
     	Globals.setArbitrater(arbitrater);   
+    	
+		USCTeensBroadcastReceiverProcessor aBRP = new USCTeensBroadcastReceiverProcessor();
+		edu.neu.android.wocketslib.Globals.myBroadcastReceiverProcessor = aBRP;
     }
     
     private ArrayList<Activity> activityList = new ArrayList<Activity>();
