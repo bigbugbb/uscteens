@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuitDialog;
@@ -72,7 +74,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		USCTeensGlobals.sContext = getApplicationContext();
 		USCTeensGlobals.sGlobalHandler = mHandler;
 		DataSource.initialize(getApplicationContext());				
-
+		
 		// setup scale param according to the screen resolution
 		setupScale();
 		// get views and set listeners

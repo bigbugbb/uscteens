@@ -435,16 +435,16 @@ public class DataSource {
 	 * @return true if the raw label wrap has label data, otherwise false
 	 */
 	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap, boolean alwaysLoad) {
+		// check if the date is loaded
+		if (rawLabelWrap.isDateLoaded(date) && !alwaysLoad) {
+			return true;
+		}
+				
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.LABELS_FOLDER + date;
 		String[] labelFilePaths = FileHelper.getFilePathsDir(path);
 		if (labelFilePaths == null || labelFilePaths.length == 0) {			
 			return false;
-		}
-		
-		// check if the date is loaded
-		if (rawLabelWrap.isDateLoaded(date) && !alwaysLoad) {
-			return true;
 		}
 		
 		// first clear the data container		
@@ -502,8 +502,8 @@ public class DataSource {
 	
 	/**
 	 * save all the labels to the label file specified by the date
-	 * @param date	yyyy-MM-dd
-	 * @param rawLabelWrap	labels to be saved
+	 * @param date	          yyyy-MM-dd
+	 * @param rawLabelWrap    labels to be saved
 	 * @return true if succeed, otherwise false
 	 */
 	public static boolean saveLabelData(String date, RawLabelWrap rawLabelWrap) {						
@@ -528,15 +528,14 @@ public class DataSource {
 		sb.append(INTERNAL_LABEL_DATA_CSVFILEHEADER);
 		Iterator iter = rawLabelWrap.entrySet().iterator(); 
 		while (iter.hasNext()) { 
-		    Map.Entry entry = (Map.Entry) iter.next(); 		    
-		    RawLabel rawLabel = (RawLabel) entry.getValue(); 
-		    sb.append(rawLabel.toString());
+		    Map.Entry entry = (Map.Entry) iter.next();
+		    ArrayList<RawLabel> rawLabels = (ArrayList<RawLabel>) entry.getValue();
+		    for (RawLabel rawLabel : rawLabels) {  
+		    	sb.append(rawLabel.toString());
+		    }
 		} 
 		String content = sb.toString();
-		
-		// load the daily data from the csv file	
-//		loadDailyLabelData(labelFilePaths[0]);
-		
+
 		// First write the .csv file
 		File labelFile = new File(filePathName);		
 		boolean result = FileHelper.saveStringToFile(content, labelFile, false);

@@ -15,10 +15,10 @@ class RawLabel implements Serializable, Comparable<RawLabel> {
 	private int    mSecond;
 	private int    mTimeInSec;
 	private String mDate;
-	private String mText; // such as Sleeping	
+	private String mName; // such as Sleeping	
 	
 	
-	public RawLabel(String dateTime, String text) {
+	public RawLabel(String dateTime, String name) {
 		Date date = null;
 	    DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
 	    try {
@@ -33,11 +33,11 @@ class RawLabel implements Serializable, Comparable<RawLabel> {
 	    mSecond = date.getSeconds();
 	    mTimeInSec = mHour * 3600 + mMinute * 60 + mSecond;
 	    mDate   = dateTime.split(" ")[0];
-	    mText   = text;
+	    mName   = name;
 	}
 
-	public String getText() {
-		return mText;
+	public String getName() {
+		return mName;
 	}
 	
 	public int getTimeInSec() {
@@ -63,7 +63,7 @@ class RawLabel implements Serializable, Comparable<RawLabel> {
 		sb.append(mSecond < 10 ? "0" : "");
 		sb.append(mSecond);
 		sb.append(", ");
-		sb.append(mText);
+		sb.append(mName);
 		sb.append("\n");
 		return sb.toString();
 	}
