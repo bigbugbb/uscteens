@@ -28,31 +28,31 @@ public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcess
 	@Override
 	public void respondScreenOn() {		
 		Log.d(TAG, "Respond Screen ON in " + TAG); 
-		Labeler.addLabel(getDateString(), "Screen turned on", true); 		
+		Labeler.addLabel(getDateString(), "Screen on", true); 		
 	}
 	
 	@Override
 	public void respondPhoneBooted() {
 		Log.d(TAG, "Respond Phone Booted in " + TAG); 
-		Labeler.addLabel(getDateString(), "Restarted phone", true); 		
+		Labeler.addLabel(getDateString(), "Restart phone", true); 		
 	}
 	
 	@Override
 	public void respondEndCall() {
 		Log.d(TAG, "Respond End Call in " + TAG); 
-		Labeler.addLabel(getDateString(), "Ended call", true); 		
+		Labeler.addLabel(getDateString(), "End call", true); 		
 	}
 		
 	@Override
 	public void respondStartCall() {
 		Log.d(TAG, "Respond Start Call in " + TAG); 
-		Labeler.addLabel(getDateString(), "Started call", true); 		
+		Labeler.addLabel(getDateString(), "Start call", true); 		
 	}
 
 	@Override
 	public void respondCallOut() {
 		Log.d(TAG, "Respond Call Out in " + TAG); 
-		Labeler.addLabel(getDateString(), "Called out", true); 		
+		Labeler.addLabel(getDateString(), "Call out", true); 		
 	}
 
 	@Override
@@ -64,19 +64,19 @@ public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcess
 	@Override
 	public void respondCallIn() {
 		Log.d(TAG, "Respond Call In in " + TAG); 
-		Labeler.addLabel(getDateString(), "Received call", true); 		
+		Labeler.addLabel(getDateString(), "Receive call", true); 		
 	}
 
 	@Override
 	public void respondPowerConnected() {
 		Log.d(TAG, "Respond Power Connected in " + TAG); 
-		Labeler.addLabel(getDateString(), "Charged phone", true); 		
+		Labeler.addLabel(getDateString(), "Charge phone", true); 		
 	}
 
 	@Override
 	public void respondPowerDisconnected() {
 		Log.d(TAG, "Respond Power Disconnected in " + TAG); 
-		Labeler.addLabel(getDateString(), "Stopped charging", true); 		
+		Labeler.addLabel(getDateString(), "Stop charging", true); 		
 	}
 
 	@Override
@@ -94,6 +94,6 @@ public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcess
 	@Override
 	public void respondHeadsetPluggedIn() {
 		Log.d(TAG, "Respond Headset Plugged In in " + TAG); 
-		Labeler.addLabel(getDateString(), "Plugged in headphones", true); 		
+		Labeler.addLabel(getDateString(), "Plug earphones", true); 		
 	}	
 }

@@ -141,7 +141,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent i = new Intent(getApplicationContext(), StartdateSetupActivity.class);
+				Intent i = new Intent(getApplicationContext(), StartDateSetupActivity.class);
 				startActivity(i);				
 			}
 		});
