@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuitDialog;
@@ -34,6 +36,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
 import edu.neu.android.mhealth.uscteensver1.pages.RewardPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
+import edu.neu.android.mhealth.uscteensver1.views.DummyView;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
@@ -41,10 +44,12 @@ import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 
-public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListener {
+public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouchListener {
 	
 	// the view for drawing anything
-	protected GraphView mGraphView = null;	
+	protected GraphView mGraphView = null;
+	// the view covering the screen if not authorized 
+	protected DummyView mDummyView = null;
 	// the view for display loading progress
 	//protected ProgressView mProgressView = null;
 	// all of the pages
@@ -68,7 +73,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		
 		USCTeensGlobals.sContext = getApplicationContext();
 		USCTeensGlobals.sGlobalHandler = mHandler;
-		DataSource.initialize(getApplicationContext());				
+		DataSource.initialize(getApplicationContext());	
 
 		// setup scale param according to the screen resolution
 		setupScale();
@@ -112,6 +117,7 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		mGraphView.setOnTouchListener(this);
 		mGraphView.setLongClickable(true);
         
+		mDummyView = (DummyView) findViewById(R.id.view_dummy);
 		//mProgressView = (ProgressView) findViewById(R.id.view_progress);		
 	}
 	
@@ -195,15 +201,13 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 	}
 
 	@Override
-	public void onResume() {		
+	public void onResume() {						
 		super.onResume();
 				
+		mDummyView.setVisibility(isAuthorized() ? View.GONE : View.VISIBLE);
+				
 		mGraphView.onResume();
-		mCurPage.resume();
-		
-		if (AuthorizationChecker.isAuthorized24hrs(getApplicationContext())) {
-			// TODO:
-		}
+		mCurPage.resume();				
 	}
 
 	@Override
@@ -226,6 +230,21 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 		super.onStop();
 	}	
 	
+	private boolean isAuthorized() {
+		AuthorizationChecker.isAuthorized24hrs(getApplicationContext());
+		
+		String subjectID = DataStorage.GetValueString(getApplicationContext(), 
+				DataStorage.KEY_SUBJECT_ID, AuthorizationChecker.SUBJECT_ID_UNDEFINED);
+		String subjectLastName = DataStorage.GetValueString(getApplicationContext(), 
+				DataStorage.KEY_LAST_NAME, AuthorizationChecker.SUBJECT_LAST_NAME_UNDEFINED);
+		long dob = DataStorage.GetValueLong(getApplicationContext(), 
+				DataStorage.KEY_DATE_OF_BIRTH, AuthorizationChecker.SUBJECT_DATE_OF_BIRTH_UNDEFINED);
+		
+		return subjectID != AuthorizationChecker.SUBJECT_ID_UNDEFINED &&
+			subjectLastName != AuthorizationChecker.SUBJECT_LAST_NAME_UNDEFINED &&
+			dob != AuthorizationChecker.SUBJECT_DATE_OF_BIRTH_UNDEFINED;
+	}
+	
 	// use main looper as the default
 	protected final Handler mHandler = new Handler() {	
 		public void handleMessage(Message msg) {        					
@@ -233,34 +252,14 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 			Context context = getApplicationContext();
 			
         	switch (msg.what) {   
-        	case AppCmd.BEGIN:        
-        		if (DataStorage.getStartDate(context, "").compareTo("") != 0) {
-        			switchPages(indexOfPage(PageType.DATE_PAGE));
-        		} else {
-        			Toast.makeText(context, "Fail to do the configuration!", Toast.LENGTH_SHORT);
-        		}
+        	case AppCmd.BEGIN:                		
+        		switchPages(indexOfPage(PageType.DATE_PAGE));
         		break;
         	case AppCmd.BEGIN_LOADING:         		
-        		//mProgressView.show("Loading...");
-        		if (mDataLoader == null) {
-        			mDataLoader = (LoadDataTask) new LoadDataTask(USCTeensMainActivity.this, this).execute((String) msg.obj);
-        		}
+        		onBeginLoading(msg);
             	break;
         	case AppCmd.END_LOADING:          		
-        		if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
-        			switchPages(indexOfPage(PageType.GRAPH_PAGE));
-        		} else if (msg.arg1 == DataSource.ERR_CANCELLED) {
-        			;
-        		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
-        			Toast.makeText(context, R.string.no_data, Toast.LENGTH_LONG).show();
-        			switchPages(indexOfPage(PageType.GRAPH_PAGE)); // still can be labelled
-        		} else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
-        			Toast.makeText(context, R.string.chunk_error, Toast.LENGTH_LONG).show();
-        		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
-        			Toast.makeText(context, R.string.wait_data, Toast.LENGTH_LONG).show();
-        		}  
-        		mDataLoader = null;
-        		//mProgressView.dismiss();
+        		onEndLoading(msg);
         		break;      
         	case AppCmd.BACK:
         		switchPages(indexOfPage(PageType.DATE_PAGE));
@@ -297,6 +296,46 @@ public class USCTeensMainActivity extends MyBaseActivity implements OnTouchListe
 			vibrator.vibrate(20);
         }			
     };
+    
+    private void onBeginLoading(Message msg) {
+    	// avoid multiple loading operations
+    	if (mDataLoader != null) {
+    		return;
+    	}
+    	
+    	// give the loading task more cpu time
+    	GraphDrawer drawer = mGraphView.getDrawer();
+		if (drawer != null) {
+			drawer.pause(true);
+		}
+
+		// start the loading thread
+		mDataLoader = (LoadDataTask) new LoadDataTask(this, mHandler).execute((String) msg.obj);		
+    }
+    
+    private void onEndLoading(Message msg) {
+    	// results from loading thread
+    	if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
+			switchPages(indexOfPage(PageType.GRAPH_PAGE));
+		} else if (msg.arg1 == DataSource.ERR_CANCELLED) {
+			;
+		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
+			Toast.makeText(this, R.string.no_data, Toast.LENGTH_LONG).show();
+			switchPages(indexOfPage(PageType.GRAPH_PAGE)); // still can be labelled
+		} else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
+			Toast.makeText(this, R.string.chunk_error, Toast.LENGTH_LONG).show();
+		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
+			Toast.makeText(this, R.string.wait_data, Toast.LENGTH_LONG).show();
+		}  
+		mDataLoader = null;
+		
+		// make sure the drawer is working again
+		GraphDrawer drawer = mGraphView.getDrawer();
+		if (drawer != null) {
+			drawer.setPage(mCurPage);
+			drawer.pause(false);
+		}
+    }
     
     @Override
 	public boolean onTouch(View v, MotionEvent event) {

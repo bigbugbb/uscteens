@@ -90,11 +90,11 @@ public class MotionGraph extends AppObject {
 		
 		mSelChunkPaint = new Paint();
 		mSelChunkPaint.setColor(Color.argb(255, 255, 128, 0));
-		mSelChunkPaint.setStrokeWidth(5.0f);
+		mSelChunkPaint.setStrokeWidth(AppScale.doScaleW(4.0f));
 		mSelChunkPaint.setStyle(Style.STROKE);
 		
 		mSelChunkBackPaint = new Paint();
-		mSelChunkBackPaint.setColor(Color.argb(255, 255, 255, 77));
+		mSelChunkBackPaint.setColor(Color.argb(255, 255, 255, 102));
 		mSelChunkBackPaint.setStyle(Style.FILL);
 		
 		mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -107,7 +107,7 @@ public class MotionGraph extends AppObject {
 		mPaintDate.setColor(Color.BLACK);
 		mPaintDate.setStyle(Style.STROKE);
 		mPaintDate.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
-		mPaintDate.setTextSize(AppScale.doScaleT(40));
+		mPaintDate.setTextSize(AppScale.doScaleT(38));
 		mPaintDate.setFakeBoldText(false);
 		
 		mOffsetSpeedX = 0;

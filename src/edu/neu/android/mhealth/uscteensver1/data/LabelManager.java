@@ -36,24 +36,25 @@ public class LabelManager {
 	}
 	
 	protected static void loadLabels() {
-		RawLabelWrap rawLabels = DataSource.getRawLabels();
+		RawLabelWrap rawLabelWrap = DataSource.getRawLabels();
 		
 		if (sLabels == null) {
 			sLabels = new ArrayList<Label>();
 		}
 				
-		Iterator iter = rawLabels.entrySet().iterator(); 
+		Iterator iter = rawLabelWrap.entrySet().iterator(); 
 		while (iter.hasNext()) { 
-		    Map.Entry entry = (Map.Entry) iter.next(); 		    
-		    RawLabel rawLabel = (RawLabel) entry.getValue(); 
+		    Map.Entry entry = (Map.Entry) iter.next(); 	
+		    ArrayList<RawLabel> rawLabels = (ArrayList<RawLabel>) entry.getValue();
 		    
-		    Label label = insertLabel();
-		    int x = rawLabel.getTimeInSec() * USCTeensGlobals.PIXEL_PER_DATA;
-			// int y = xxx;
-			String text = rawLabel.getText();
-			
-			// load each label
-			label.load(x, (int) AppScale.doScaleH(65), text);
+		    for (RawLabel rawLabel : rawLabels) {
+			    Label label = insertLabel();
+			    int x = rawLabel.getTimeInSec() * USCTeensGlobals.PIXEL_PER_DATA;
+				// int y = xxx;
+				String name = rawLabel.getName();				
+				// load each label
+				label.load(x, (int) AppScale.doScaleH(65), name);
+		    }
 		} 
 	}	
 	

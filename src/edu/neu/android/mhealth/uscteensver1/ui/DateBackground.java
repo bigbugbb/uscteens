@@ -22,7 +22,7 @@ public class DateBackground extends Background {
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.WHITE);
 		mPaint.setStyle(Style.FILL);
-		mPaint.setTextSize(AppScale.doScaleW(45));
+		mPaint.setTextSize(AppScale.doScaleW(48));
 		mPaint.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial_bold.ttf"));
 		mPaint.setTextAlign(Align.CENTER);
 	}	

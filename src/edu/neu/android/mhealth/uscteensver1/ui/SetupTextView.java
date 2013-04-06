@@ -3,8 +3,8 @@ package edu.neu.android.mhealth.uscteensver1.ui;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.Paint.Align;
+import android.graphics.Typeface;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 

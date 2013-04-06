@@ -18,7 +18,7 @@ import edu.neu.android.wocketslib.utils.FileHelper;
 public class USCTeensGlobals {
 	private static final String TAG = "USCTeensGlobals";	
 
-	public final static int    PIXEL_PER_DATA = 2;
+	public final static int    PIXEL_PER_DATA = 2;	
 	public final static int    MAX_WIDTH_IN_PIXEL = 3600 * 24 * PIXEL_PER_DATA;
 	public final static int    UPDATING_TIME_THRESHOLD = 60 * 1000; // in ms
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
@@ -34,6 +34,8 @@ public class USCTeensGlobals {
 	public final static String ANNOTATION_SET = "Activities";	
 	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
 	
+	public static int sAccelDataScalingFactor = 1800;
+	
 	public static Context sContext = null;
 	public static Handler sGlobalHandler = null;
 	
@@ -48,7 +50,12 @@ public class USCTeensGlobals {
 		"Basketball", "Football", "Soccer", 
 		"Jogging", "Dance class", "Karate class",
 		"Strength training", "Bicycling", "Swimming",
-		"Baseball", "Skateboarding"
+		"Baseball", "Skateboarding", /*"Walking pet",
+		"Playing pet", "Playing kid", "In meeting",
+		"Teaching", "Labeling my day", "Putting around",
+		"Cleaning up", "Doing dishes", "Charging phone",
+		"Driving a car", "Taking the train", "Taking the bus",
+		"Doing a mix of things", "Waiting around"*/
 	};
 	
 	public static final int[] ACTION_IMGS = new int[] {	
@@ -108,6 +115,26 @@ public class USCTeensGlobals {
 		"10832F21-B1BE-4A25-B6B7-0F3CFC780E62",
 		"06D2F88D-0F25-445A-912A-819E90C1F162",
 		"850C114A-27C9-40E5-A9CA-873EC0C1A4FC",
+		/*
+		"30AF0C80-38D4-4DCC-8328-E5E9CB26244F",
+		"EA3C891A-DA60-4403-83EF-A02B135E5961",
+		"78B71146-47CF-4696-A7D5-0D8ADC63FAB5",
+		"DD98FB69-2131-45E2-9BF4-2BEE86AD21C6",
+		
+		"642EF652-DEC7-47A4-A3D2-A9BAE1E76461",
+		"36D12350-6B0E-4708-B9D5-42CF73F4434D",
+		"A536E5C6-4752-47C3-9277-2A9AAAE3D853",
+		"B3801125-0731-4C5A-B26C-323B5AABC141",
+		
+		"7BF7BD61-2992-42AA-A426-7DC6CC3D9154",
+		"CD4AE2EC-2F2D-48DC-9332-D766FD06A937",
+		"C5A54D27-742B-4192-92DC-56E97929ACF6",
+		"3AA860D1-E271-4D98-8BE9-6CF021CA8E51",
+
+		"7AA73808-7732-4F89-A835-0A6B9C5B2912",
+		"7C3B03D3-A738-4B40-9CA1-4B54232FA90B",
+		"02FF0313-8E27-4C13-AC20-F27784AA58DB",*/
+
 
 		"03F9A375-C162-4B24-AB74-BF23CD07B358",  // UNLABELLED
 	};

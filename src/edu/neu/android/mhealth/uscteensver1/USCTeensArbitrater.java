@@ -475,8 +475,11 @@ public class USCTeensArbitrater extends Arbitrater {
 		ArrayList<Object> data = new ArrayList<Object>();	
 		data.add(readable); // dummy		
 		
-		int maxSeconds = USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER / 1000;
-		for (int i = 1; i <= maxSeconds; ++i) {	
+//		int maxSeconds = USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER / 1000;
+		int count = (int) DataStorage.GetValueLong(aContext, 
+				DataStorage.KEY_INTERNAL_ACCEL_RECORDING_COUNT, 0);
+		DataStorage.SetValue(aContext, DataStorage.KEY_INTERNAL_ACCEL_RECORDING_COUNT, 0); 
+		for (int i = 1; i <= count; ++i) {	
 			String time = DataStorage.GetValueString(aContext, 
 					DataStorage.KEY_INTERNAL_ACCEL_RECORDING_TIME + i, DataStorage.EMPTY);
 			int intAccelAverage = (int) DataStorage.GetValueLong(

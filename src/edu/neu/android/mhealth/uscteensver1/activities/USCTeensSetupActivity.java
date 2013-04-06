@@ -12,16 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.survey.CSTeensSurvey;
-import edu.neu.android.mhealth.uscteensver1.survey.RandomTeensSurveyQuestionSet;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import edu.neu.android.wocketslib.dataupload.DataSender;
 import edu.neu.android.wocketslib.dataupload.RawUploader;
-import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
-import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
-import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
-import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.BaseActivity;
@@ -147,7 +141,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent i = new Intent(getApplicationContext(), StartDateSetupActivity.class);
+				Intent i = new Intent(getApplicationContext(), StartdateSetupActivity.class);
 				startActivity(i);				
 			}
 		});
@@ -182,24 +176,24 @@ public class USCTeensSetupActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				AppInfo.SetStartManualTime(getApplicationContext(),
-						Globals.SURVEY, System.currentTimeMillis());
-				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
-				
-				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
-						USCTeensSetupActivity.this, Globals.SURVEY);
-				long currentTime = System.currentTimeMillis();
-				int classType = 0;
-				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-					classType = RandomTeensSurveyQuestionSet.RANDOM_EMA_DEFAULT;
-				} else {
-					classType = RandomTeensSurveyQuestionSet.RANDOM_EMA_OPTIONAL;
-				}
-				i.putExtra("className",
-						RandomTeensSurveyQuestionSet.class.getCanonicalName());
-				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
-						new Object[] { classType }));
-				startActivity(i);
+//				AppInfo.SetStartManualTime(getApplicationContext(),
+//						Globals.SURVEY, System.currentTimeMillis());
+//				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
+//				
+//				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
+//						USCTeensSetupActivity.this, Globals.SURVEY);
+//				long currentTime = System.currentTimeMillis();
+//				int classType = 0;
+//				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
+//					classType = RandomTeensSurveyQuestionSet.RANDOM_EMA_DEFAULT;
+//				} else {
+//					classType = RandomTeensSurveyQuestionSet.RANDOM_EMA_OPTIONAL;
+//				}
+//				i.putExtra("className",
+//						RandomTeensSurveyQuestionSet.class.getCanonicalName());
+//				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
+//						new Object[] { classType }));
+//				startActivity(i);
 			}
 		});
 		
@@ -208,23 +202,23 @@ public class USCTeensSetupActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				AppInfo.SetStartManualTime(getApplicationContext(),
-						Globals.SURVEY, System.currentTimeMillis());
-				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
-				
-				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
-						USCTeensSetupActivity.this, Globals.SURVEY);
-				long currentTime = System.currentTimeMillis();
-				int classType = 0;
-				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-					classType = CSTeensSurvey.CS_EMA_DEFAULT;
-				} else {
-					classType = CSTeensSurvey.CS_EMA_OPTIONAL;
-				}
-				i.putExtra("className", CSTeensSurvey.class.getCanonicalName());
-				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
-						new Object[] { classType }));
-				startActivity(i);
+//				AppInfo.SetStartManualTime(getApplicationContext(),
+//						Globals.SURVEY, System.currentTimeMillis());
+//				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
+//				
+//				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
+//						USCTeensSetupActivity.this, Globals.SURVEY);
+//				long currentTime = System.currentTimeMillis();
+//				int classType = 0;
+//				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
+//					classType = CSTeensSurvey.CS_EMA_DEFAULT;
+//				} else {
+//					classType = CSTeensSurvey.CS_EMA_OPTIONAL;
+//				}
+//				i.putExtra("className", CSTeensSurvey.class.getCanonicalName());
+//				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
+//						new Object[] { classType }));
+//				startActivity(i);
 			}
 		});
 		

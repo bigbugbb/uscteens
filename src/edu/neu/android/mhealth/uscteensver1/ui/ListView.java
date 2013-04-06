@@ -33,7 +33,7 @@ public class ListView extends AppObject {
 	protected float  mOffsetAccSpeedX = 0;
 	protected float  mOffestAccSpeedY = 0;
 	protected Typeface mTypeface = null;
-	protected Canvas mInnerCanvas = null;
+	protected Canvas   mInnerCanvas = null;
 	protected ArrayList<ListItem> mItems = new ArrayList<ListItem>();
 	protected OnReachedEndListener mOnReachedEndListener = null;
 	protected OnItemClickListener  mOnItemClickListener  = null;

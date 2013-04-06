@@ -54,9 +54,6 @@ public class DataSource {
 	public final static int CHUNKING_MIN_SENSITIVITY      = 400;
 	public final static int CHUNKING_MAX_SENSITIVITY      = 999;
 	public final static int CHUNKING_MIN_DISTANCE 		  = 120;
-		
-	// value for minimum sensor data
-	protected final static int MINIMUM_SENSOR_DATA_VALUE = 1800;
 	
 	// value for no data period
 	protected final static int NO_SENSOR_DATA = -1;
@@ -226,7 +223,7 @@ public class DataSource {
 	
 	public static int getMaxDrawableDataValue() {
 		int max = sAccelDataWrap.getMaxDrawableDataValue();
-		return max < MINIMUM_SENSOR_DATA_VALUE ? MINIMUM_SENSOR_DATA_VALUE : max;
+		return max < USCTeensGlobals.sAccelDataScalingFactor ? USCTeensGlobals.sAccelDataScalingFactor : max;
 	}
 	
 	public static ArrayList<Pair<Integer, Integer>> getNoDataTimePeriods() {
@@ -256,15 +253,13 @@ public class DataSource {
 			ObjectInputStream ois = null;
 			try { 
 				ois = new ObjectInputStream(new FileInputStream(binFile));
-				Object obj = ois.readObject();
-				while (obj != null) {		
+				AccelData data = (AccelData) ois.readObject();
+				while (data != null) {		
 					if (sCancelled) {
 						return ERR_CANCELLED;
-					}
-					//if (obj instanceof AccelData) {						
-					hourlyAccelData.add((AccelData) obj); 						
-					//}	
-					obj = ois.readObject();
+					}													
+					hourlyAccelData.add(data); 								
+					data = (AccelData) ois.readObject();
 				}
 			} catch (EOFException e) {
 				;//e.printStackTrace();
@@ -437,16 +432,19 @@ public class DataSource {
 	 * @return true if the raw label wrap has label data, otherwise false
 	 */
 	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap, boolean alwaysLoad) {
-		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				USCTeensGlobals.LABELS_FOLDER + date;
-		String[] labelFilePaths = FileHelper.getFilePathsDir(path);
-		if (labelFilePaths == null || labelFilePaths.length == 0) {			
-			return false;
-		}
-		
 		// check if the date is loaded
 		if (rawLabelWrap.isDateLoaded(date) && !alwaysLoad) {
 			return true;
+		}
+				
+		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
+				USCTeensGlobals.LABELS_FOLDER + date;
+		if (!FileHelper.isFileExists(path)) {
+			return false;
+		}
+		String[] labelFilePaths = FileHelper.getFilePathsDir(path);
+		if (labelFilePaths == null || labelFilePaths.length == 0) {			
+			return false;
 		}
 		
 		// first clear the data container		
@@ -504,8 +502,8 @@ public class DataSource {
 	
 	/**
 	 * save all the labels to the label file specified by the date
-	 * @param date	yyyy-MM-dd
-	 * @param rawLabelWrap	labels to be saved
+	 * @param date	          yyyy-MM-dd
+	 * @param rawLabelWrap    labels to be saved
 	 * @return true if succeed, otherwise false
 	 */
 	public static boolean saveLabelData(String date, RawLabelWrap rawLabelWrap) {						
@@ -530,15 +528,14 @@ public class DataSource {
 		sb.append(INTERNAL_LABEL_DATA_CSVFILEHEADER);
 		Iterator iter = rawLabelWrap.entrySet().iterator(); 
 		while (iter.hasNext()) { 
-		    Map.Entry entry = (Map.Entry) iter.next(); 		    
-		    RawLabel rawLabel = (RawLabel) entry.getValue(); 
-		    sb.append(rawLabel.toString());
+		    Map.Entry entry = (Map.Entry) iter.next();
+		    ArrayList<RawLabel> rawLabels = (ArrayList<RawLabel>) entry.getValue();
+		    for (RawLabel rawLabel : rawLabels) {  
+		    	sb.append(rawLabel.toString());
+		    }
 		} 
 		String content = sb.toString();
-		
-		// load the daily data from the csv file	
-//		loadDailyLabelData(labelFilePaths[0]);
-		
+
 		// First write the .csv file
 		File labelFile = new File(filePathName);		
 		boolean result = FileHelper.saveStringToFile(content, labelFile, false);
