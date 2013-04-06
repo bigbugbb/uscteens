@@ -73,8 +73,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		
 		USCTeensGlobals.sContext = getApplicationContext();
 		USCTeensGlobals.sGlobalHandler = mHandler;
-		DataSource.initialize(getApplicationContext());				
-		
+		DataSource.initialize(getApplicationContext());	
+
 		// setup scale param according to the screen resolution
 		setupScale();
 		// get views and set listeners

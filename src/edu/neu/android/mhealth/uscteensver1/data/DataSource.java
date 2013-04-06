@@ -442,6 +442,9 @@ public class DataSource {
 				
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.LABELS_FOLDER + date;
+		if (!FileHelper.isFileExists(path)) {
+			return false;
+		}
 		String[] labelFilePaths = FileHelper.getFilePathsDir(path);
 		if (labelFilePaths == null || labelFilePaths.length == 0) {			
 			return false;
