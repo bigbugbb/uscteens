@@ -25,7 +25,7 @@ public class HomeBackground extends Background {
 		mPaint.setColor(Color.BLACK);
 		mPaint.setStyle(Style.STROKE);
 		mPaint.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial_italic.ttf"));
-		mPaint.setTextSize(AppScale.doScaleT(32));
+		mPaint.setTextSize(AppScale.doScaleT(34));
 		
 		mVersion = USCTeensGlobals.VERSION;
 		mPaint.getTextBounds(mVersion, 0, mVersion.length(), mRect);				
@@ -38,7 +38,7 @@ public class HomeBackground extends Background {
 		mX = (width  - mWidth)  / 2;
 		mY = (height - mHeight) / 2;
 		
-		mRect.offsetTo(width - mRect.width() - (int) AppScale.doScaleW(24), 
+		mRect.offsetTo(width - mRect.width() - mRect.height(), 
 				height - mRect.height());
 	}
 
