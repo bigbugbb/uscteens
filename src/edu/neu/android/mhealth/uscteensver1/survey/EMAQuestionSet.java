@@ -11,7 +11,7 @@ import edu.neu.android.wocketslib.emasurvey.rule.ChanceBeChosen;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesAsSequence;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesFromAns;
 
-public class EMAQuestionSet extends QuestionSet{
+public class EMAQuestionSet extends QuestionSet {
 
 	public static final double VERSION = 1;
 	private ArrayList<SurveyQuestion> defaultQuestionSet;

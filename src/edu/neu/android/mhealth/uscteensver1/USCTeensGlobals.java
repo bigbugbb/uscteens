@@ -18,6 +18,7 @@ import edu.neu.android.wocketslib.utils.FileHelper;
 public class USCTeensGlobals {
 	private static final String TAG = "USCTeensGlobals";	
 
+	public final static String VERSION = "v. 1.14";
 	public final static int    PIXEL_PER_DATA = 2;	
 	public final static int    MAX_WIDTH_IN_PIXEL = 3600 * 24 * PIXEL_PER_DATA;
 	public final static int    UPDATING_TIME_THRESHOLD = 60 * 1000; // in ms
