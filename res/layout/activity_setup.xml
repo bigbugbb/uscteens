@@ -3,191 +3,183 @@
     style="?pageBackground"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-   <TextView
-       style="?textTitle"
-       android:layout_width="fill_parent"
-       android:layout_height="wrap_content"
-       android:gravity="center_horizontal"
-       android:text="Teen Activity Setup"
-       android:textSize="@dimen/text_size_large"
-       android:textStyle="bold"
-       android:typeface="serif"
-       android:paddingTop="12sp"
-       android:paddingBottom="12sp" />
-	
-	<View
-	    style="?listDivider"
-	    android:layout_width="fill_parent"
-	    android:layout_height="2sp"
-	    android:background="@color/black"
-	    android:paddingBottom="@dimen/text_size_medium"
-	    android:paddingTop="@dimen/text_size_medium" />
+    android:orientation="vertical" >   
 	
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
         
-        <TableLayout
-            android:id="@+id/tableLayout1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center" >            
-            
-            <TableRow
-                android:id="@+id/tableRow1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:gravity="center_horizontal" 
-            	android:layout_marginTop="20dp">
-
-                <Button
-                    android:id="@+id/setstartdate"
-                    style="@style/test"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:layout_margin="3pt"
-                    android:layout_weight="1"
-                    android:shadowDx="1"
-                    android:shadowDy="-1"
-                    android:shadowRadius="1.5"
-                    android:text="Set start date"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-            </TableRow>
-            
-            <TableRow
-                android:id="@+id/tableRow2"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:gravity="center_horizontal" >
-
-                <Button
-                    android:id="@+id/startservice"
-                    style="@style/test"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:layout_margin="3pt"
-                    android:layout_weight="1"
-                    android:shadowDx="1"
-                    android:shadowDy="-1"
-                    android:shadowRadius="1.5"
-                    android:text="Start collecting data"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow3"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:gravity="center_horizontal" >
-
-                <Button
-                    android:id="@+id/randomema"
-                    style="@style/test"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:layout_margin="3pt"
-                    android:layout_weight="1"
-                    android:shadowDx="1"
-                    android:shadowDy="-1"
-                    android:shadowRadius="1.5"
-                    android:text="Test Random EMA Survey"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow4"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:gravity="center_horizontal" >
-
-                <Button
-                    android:id="@+id/csema"
-                    style="@style/test"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:layout_margin="3pt"
-                    android:layout_weight="1"
-                    android:shadowDx="1"
-                    android:shadowDy="-1"
-                    android:shadowRadius="1.5"
-                    android:text="Test CS EMA Survey"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow5"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:gravity="center_horizontal" >
-
-                <Button
-                    android:id="@+id/buttonfinishstudy"
-                    style="@style/test"
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:layout_margin="3pt"
-                    android:layout_weight="1"
-                    android:shadowDx="1"
-                    android:shadowDy="-1"
-                    android:shadowRadius="1.5"
-                    android:text="Finish Study"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-            </TableRow>
-            
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="18dp" >
-
-				<View
-				    style="?listDivider"
-				    android:layout_width="1200dp"
-				    android:layout_height="2sp"
-				    android:background="@color/black"
-				    android:clickable="false"
-				    android:longClickable="false" />
-
-	    	</TableRow>
-	    
-         	<TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="10dp" > 
-				<Button 
-			        android:id="@+id/setupdone"
-			        style="@style/test"
-			        android:layout_width="120dp"
-			        android:layout_height="60dp"        
-			        android:layout_margin="3pt"
-			        android:shadowDx="1"
-			        android:shadowDy="-1"
-			        android:shadowRadius="1.5"
-			        android:text="Done"
-			        android:textColor="@color/black"
-			        android:textSize="18sp" />
-			</TableRow>
+        <LinearLayout 
+		    style="?pageBackground"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:layout_marginTop="20dp"			  
+		    android:orientation="vertical" >
+		    
+            <TextView
+		       style="?textTitle"
+		       android:layout_width="fill_parent"
+		       android:layout_height="wrap_content"
+		       android:gravity="center_horizontal"
+		       android:text="Teen Activity Setup"
+		       android:textSize="@dimen/text_size_large"
+		       android:textStyle="bold"
+		       android:typeface="serif"
+		       android:paddingTop="12sp"
+		       android:paddingBottom="12sp" />
 			
-        </TableLayout>
-        <!-- The buttons at the bottom of the screen. -->          
-         	
+			<View
+			    style="?listDivider"
+			    android:layout_width="fill_parent"
+			    android:layout_height="2sp"
+			    android:background="@color/black"
+			    android:paddingBottom="@dimen/text_size_medium"
+			    android:paddingTop="@dimen/text_size_medium" />
+		    
+	        <TableLayout
+	            android:id="@+id/tableLayout1"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_vertical"
+	            android:gravity="center" >            
+	            
+	            <TableRow
+	                android:id="@+id/tableRow1"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:baselineAligned="false"
+	                android:gravity="center_horizontal" 
+	            	android:layout_marginTop="20dp">
+	
+	                <Button
+	                    android:id="@+id/setstartdate"
+	                    style="@style/test"
+	                    android:layout_width="120dp"
+	                    android:layout_height="60dp"
+	                    android:layout_margin="3pt"
+	                    android:layout_weight="1"
+	                    android:shadowDx="1"
+	                    android:shadowDy="-1"
+	                    android:shadowRadius="1.5"
+	                    android:text="Set start date"
+	                    android:textColor="@color/black"
+	                    android:textSize="18sp" />
+	            </TableRow>
+	            
+	            <TableRow
+	                android:id="@+id/tableRow2"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:baselineAligned="false"
+	                android:gravity="center_horizontal" >
+	
+	                <Button
+	                    android:id="@+id/startservice"
+	                    style="@style/test"
+	                    android:layout_width="120dp"
+	                    android:layout_height="60dp"
+	                    android:layout_margin="3pt"
+	                    android:layout_weight="1"
+	                    android:shadowDx="1"
+	                    android:shadowDy="-1"
+	                    android:shadowRadius="1.5"
+	                    android:text="Start collecting data"
+	                    android:textColor="@color/black"
+	                    android:textSize="18sp" />
+	            </TableRow>
+	
+	            <TableRow
+	                android:id="@+id/tableRow3"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:baselineAligned="false"
+	                android:gravity="center_horizontal" >
+	
+	                <Button
+	                    android:id="@+id/randomema"
+	                    style="@style/test"
+	                    android:layout_width="120dp"
+	                    android:layout_height="60dp"
+	                    android:layout_margin="3pt"
+	                    android:layout_weight="1"
+	                    android:shadowDx="1"
+	                    android:shadowDy="-1"
+	                    android:shadowRadius="1.5"
+	                    android:text="Test Random EMA Survey"
+	                    android:textColor="@color/black"
+	                    android:textSize="18sp" />
+	            </TableRow>
+	
+	            <TableRow
+	                android:id="@+id/tableRow4"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:baselineAligned="false"
+	                android:gravity="center_horizontal" >
+	
+	                <Button
+	                    android:id="@+id/csema"
+	                    style="@style/test"
+	                    android:layout_width="120dp"
+	                    android:layout_height="60dp"
+	                    android:layout_margin="3pt"
+	                    android:layout_weight="1"
+	                    android:shadowDx="1"
+	                    android:shadowDy="-1"
+	                    android:shadowRadius="1.5"
+	                    android:text="Test CS EMA Survey"
+	                    android:textColor="@color/black"
+	                    android:textSize="18sp" />
+	            </TableRow>
+	
+	            <TableRow
+	                android:id="@+id/tableRow5"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:baselineAligned="false"
+	                android:gravity="center_horizontal" >
+	
+	                <Button
+	                    android:id="@+id/buttonfinishstudy"
+	                    style="@style/test"
+	                    android:layout_width="120dp"
+	                    android:layout_height="60dp"
+	                    android:layout_margin="3pt"
+	                    android:layout_weight="1"
+	                    android:shadowDx="1"
+	                    android:shadowDy="-1"
+	                    android:shadowRadius="1.5"
+	                    android:text="Finish Study"
+	                    android:textColor="@color/black"
+	                    android:textSize="18sp" />
+	            </TableRow>
+	            
+	       	</TableLayout>	            	            
+	
+			<View
+			    style="?listDivider"
+			    android:layout_width="fill_parent"
+			    android:layout_height="2sp"
+			    android:background="@color/black"
+			    android:paddingBottom="@dimen/text_size_medium"
+			    android:paddingTop="@dimen/text_size_medium" />			    
+	         	
+			<Button 
+		        android:id="@+id/setupdone"
+		        style="@style/test"
+		        android:layout_width="150dp"
+		        android:layout_height="60dp"  
+		        android:layout_gravity="center"	      
+		        android:layout_margin="3pt"
+		        android:text="Done"
+		        android:shadowDx="1"
+		        android:shadowDy="-1"
+		        android:shadowRadius="1.5"
+		        android:textColor="@color/black"
+		        android:textSize="18sp" />
+			
+		</LinearLayout>
+		 
     </ScrollView>   
 
 </LinearLayout>
