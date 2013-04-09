@@ -22,12 +22,12 @@ public class HomeBackground extends Background {
 		loadImages(new int[]{ R.drawable.background_home });
 		
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mPaint.setColor(Color.BLACK);
+		mPaint.setColor(Color.LTGRAY);
 		mPaint.setStyle(Style.STROKE);
-		mPaint.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial_italic.ttf"));
+		mPaint.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
 		mPaint.setTextSize(AppScale.doScaleT(34));
 		
-		mVersion = USCTeensGlobals.VERSION;
+		mVersion = USCTeensGlobals.VERSION_NAME;
 		mPaint.getTextBounds(mVersion, 0, mVersion.length(), mRect);				
 	}	
 	
