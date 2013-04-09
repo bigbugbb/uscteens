@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="edu.neu.android.mhealth.uscteensver1"
     android:sharedUserId="edu.neu.android.mhealth.uscteensver1"
-    android:versionCode="112"
-    android:versionName="1.12" xmlns:android="http://schemas.android.com/apk/res/android">
+    android:versionCode="116"
+    android:versionName="1.16" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk
         android:minSdkVersion="9" />
