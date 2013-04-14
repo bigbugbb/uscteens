@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -191,25 +192,30 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	
 	@Override
 	public void onPause() {
+		Log.d("USCTeensMainActivity", "onPause in");
 		DataSource.cancelLoading();
 		
 		mCurPage.pause();
 		mGraphView.onPause();
-		super.onPause();		
+		super.onPause();	
+		Log.d("USCTeensMainActivity", "onPause out");
 	}
 
 	@Override
-	public void onResume() {						
+	public void onResume() {
+		Log.d("USCTeensMainActivity", "onResume in");
 		super.onResume();
 				
 		mDummyView.setVisibility(isAuthorized() ? View.GONE : View.VISIBLE);
 				
 		mGraphView.onResume();
-		mCurPage.resume();				
+		mCurPage.resume();		
+		Log.d("USCTeensMainActivity", "onResume out");
 	}
 
 	@Override
 	public void onStart() {
+		Log.d("USCTeensMainActivity", "onStart in");
 		// the initial page is not graph page, so it's ok here
 		if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {	
 			DataSource.updateRawData();		
@@ -218,14 +224,17 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		mCurPage.start();
 		mGraphView.onStart(mCurPage);
 		super.onStart();
+		Log.d("USCTeensMainActivity", "onStart out");
 	}
 
 	@Override
-	public void onStop() {		
+	public void onStop() {	
+		Log.d("USCTeensMainActivity", "onStop in");		
 		mGraphView.onStop();
 		mCurPage.stop();
 		
 		super.onStop();
+		Log.d("USCTeensMainActivity", "onStop out");
 	}	
 	
 	private boolean isAuthorized() {
@@ -352,6 +361,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 //    		}
 //    		return mProgressView.onKeyDown(keyCode, event);
 //    	}    	
+    	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     	
 		if (keyCode == KeyEvent.KEYCODE_BACK) {		
 			if (mCurPage == mPages.get(0)) { // home page
@@ -369,19 +379,21 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		} else if (keyCode == KeyEvent.KEYCODE_MENU) {
 		
 			// pop up the keyboard only in the home page
-			if (mCurPage == mPages.get(indexOfPage(PageType.HOME_PAGE))) {				
-				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			if (mCurPage == mPages.get(indexOfPage(PageType.HOME_PAGE))) {								
 				imm.toggleSoftInput(0, 0);				
 			}
 		}
 		
-		if (mPwdStaff.isMatch(keyCode)) {
+		if (mPwdStaff.isMatch(keyCode)) {			
+			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 			Intent i = new Intent(this, StaffSetupActivity.class);
 			startActivity(i);
-		} else if (mPwdSubject.isMatch(keyCode)) {
+		} else if (mPwdSubject.isMatch(keyCode)) {			
+			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 			Intent i = new Intent(this, USCTeensSetupActivity.class);
 			startActivity(i);
 		} else if (mPwdUninstall.isMatch(keyCode)) {
+			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 			Uri packageUri = Uri.parse("package:" + Globals.PACKAGE_NAME);
 			Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageUri);
 			startActivity(uninstallIntent);

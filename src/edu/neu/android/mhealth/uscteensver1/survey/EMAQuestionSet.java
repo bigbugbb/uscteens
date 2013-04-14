@@ -517,7 +517,7 @@ public class EMAQuestionSet extends QuestionSet {
 		SurveyAnswer[] answerSet5e = new SurveyAnswer[7];
 		answerSet5e[0] = new SurveyAnswer(0, "Forgot it");
 		answerSet5e[1] = new SurveyAnswer(1, "Battery died");
-		answerSet5e[2] = new SurveyAnswer(2, "Could not get it wet");
+		answerSet5e[2] = new SurveyAnswer(2, "Did not want to damage it");
 		answerSet5e[3] = new SurveyAnswer(3, "Too bulky");
 		answerSet5e[4] = new SurveyAnswer(4, "Too Uncomfortable");
 		answerSet5e[5] = new SurveyAnswer(5, "Embarrassed to carry it");
@@ -805,6 +805,7 @@ public class EMAQuestionSet extends QuestionSet {
 		// TODO Auto-generated method stub
 		return "USC-EMA";
 	}
+	
 	@Override
 	public String[] getAllQuesIDs() {
 		// TODO Auto-generated method stub

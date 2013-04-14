@@ -1,38 +1,33 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.survey.EMAQuestionSet;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
-import edu.neu.android.wocketslib.dataupload.DataSender;
-import edu.neu.android.wocketslib.dataupload.RawUploader;
+import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
+import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
+import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
+import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
-import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.BaseActivity;
-import edu.neu.android.wocketslib.utils.Log;
+
 
 public class USCTeensSetupActivity extends BaseActivity {
 	private static final String TAG = "SetupTeenGameActivity"; 
 	public static final String KEY_RESCUE_INHALER = "_KEY_RESCUE_INHALER";
 	private Button startService;
 	private Button setStartDate;
-	private Button randomEMA;
+//	private Button randomEMA;
 	private Button csEMA;
 	private Button finishStudy;
 	private Button setupdone;
-	private AlertDialog setupRescueInhaler = null;
-	private LinearLayout textDisplay = null;
-	private ScrollView scrollView = null;
 
 	private void displayToastMessage(String aMsg) {
 		Toast aToast = Toast.makeText(getApplicationContext(),aMsg, Toast.LENGTH_LONG);
@@ -44,6 +39,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 	 * Set the update button on/off depending on if the code detects that the software
 	 * is or is not at the latest version on the Android Market. 
 	 */
+	/*
 	private class SendAllFilesToServerTask extends AsyncTask<Void, Void, Boolean> { 
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -103,7 +99,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 			displayToastMessage("Transmission complete.");
 			finishStudy.setEnabled(true);
 		}
-	}
+	}*/
 
 	/**
 	 * Set the update button on/off depending on if the code detects that the software
@@ -126,18 +122,16 @@ public class USCTeensSetupActivity extends BaseActivity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState, TAG);
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setup);
 		setStartDate = (Button) findViewById(R.id.setstartdate);
 		startService = (Button) findViewById(R.id.startservice);		
 		csEMA        = (Button) findViewById(R.id.csema);
-		randomEMA    = (Button) findViewById(R.id.randomema);
+//		randomEMA    = (Button) findViewById(R.id.randomema);
 		finishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
 		setupdone    = (Button) findViewById(R.id.setupdone);
-//		uploadLogs = (Button) findViewById(R.id.buttonuploadlogs);
 
 		setStartDate.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -147,7 +141,6 @@ public class USCTeensSetupActivity extends BaseActivity {
 		});
 		
 		startService.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -160,22 +153,20 @@ public class USCTeensSetupActivity extends BaseActivity {
 		});
 		
 		finishStudy.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				
-				Log.i(TAG, "Send all data and log files");
-				displayToastMessage("Request to finish this study, sending all data to the server now.");
-				finishStudy.setEnabled(false);
-				new SendAllFilesToServerTask().execute();
+			//	Log.i(TAG, "Send all data and log files");
+			//	displayToastMessage("Request to finish this study, sending all data to the server now.");
+			//	finishStudy.setEnabled(false);
+			//	new SendAllFilesToServerTask().execute();
 			}
 		});
 		
-		randomEMA.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+//		randomEMA.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
 //				AppInfo.SetStartManualTime(getApplicationContext(),
 //						Globals.SURVEY, System.currentTimeMillis());
 //				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
@@ -194,42 +185,34 @@ public class USCTeensSetupActivity extends BaseActivity {
 //				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
 //						new Object[] { classType }));
 //				startActivity(i);
-			}
-		});
+//			}
+//		});
 		
 		csEMA.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-//				AppInfo.SetStartManualTime(getApplicationContext(),
-//						Globals.SURVEY, System.currentTimeMillis());
-//				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
-//				
-//				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
-//						USCTeensSetupActivity.this, Globals.SURVEY);
-//				long currentTime = System.currentTimeMillis();
-//				int classType = 0;
-//				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-//					classType = CSTeensSurvey.CS_EMA_DEFAULT;
-//				} else {
-//					classType = CSTeensSurvey.CS_EMA_OPTIONAL;
-//				}
-//				i.putExtra("className", CSTeensSurvey.class.getCanonicalName());
-//				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
-//						new Object[] { classType }));
-//				startActivity(i);
+				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
+				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(USCTeensSetupActivity.this, Globals.SURVEY);
+				long currentTime = System.currentTimeMillis();
+				int classType = 0;
+				if((currentTime - lastTimeCompleted) < 4*60*60*1000){
+					classType = EMAQuestionSet.EMA_DEFAULT;
+				}
+				else{
+					classType = EMAQuestionSet.EMA_OPTIONAL;
+				}
+				i.putExtra("className", EMAQuestionSet.class.getCanonicalName());
+				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,new Object[]{classType}));
+				startActivity(i);
 			}
 		});
 		
 		setupdone.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				finish();				
 			}
 		});
-
 	}
 
 	@Override

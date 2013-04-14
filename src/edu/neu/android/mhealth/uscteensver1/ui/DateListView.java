@@ -16,6 +16,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.utils.DateHelper;
 
+
 public class DateListView extends ListView {
 
 	static String[] sWeekdays = {
