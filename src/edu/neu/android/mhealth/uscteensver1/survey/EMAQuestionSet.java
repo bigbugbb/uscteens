@@ -105,7 +105,7 @@ public class EMAQuestionSet extends QuestionSet {
 		answerSet2c[1] = new SurveyAnswer(1, "In my pocket");
 		answerSet2c[2] = new SurveyAnswer(2, "In my handbag/purse/backpack");
 		answerSet2c[3] = new SurveyAnswer(3, "Holding in my hand");
-		answerSet2c[4] = new SurveyAnswer(4, "Not with me");
+		answerSet2c[4] = new SurveyAnswer(4, "Not with me");/**/
 		Q2_c_WherePhone.setDefault("Q1_MainActivity", answerSet2c);
 		defaultQuestionSet.add(Q2_c_WherePhone);
 
@@ -602,7 +602,7 @@ public class EMAQuestionSet extends QuestionSet {
 		Q2_b_a_WereYou.addRules(new ChanceBeChosen(1));
 		Q2_c_WherePhone.addRules(new ChanceBeChosen(1));
 		Q2_d_YNotCarrying.addRules(new ChanceBeChosen(1));
-		Q2_e_a_MainPurpose.addRules(new ChanceBeChosen(0.3));
+		Q2_e_a_MainPurpose.addRules(new ChanceBeChosen(0.3));/**/
 		Q2_f_HowEnjoyable.addRules(new ChanceBeChosen(0.3));
 		Q2_g_SelfMotivated.addRules(new ChanceBeChosen(0.3));
 		Q2_h_ParentsMotivated.addRules(new ChanceBeChosen(1));
