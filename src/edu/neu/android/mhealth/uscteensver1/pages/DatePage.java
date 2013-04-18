@@ -31,12 +31,12 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 	
 	private final static String TAG = "WeekdayPage";
 	protected DateBackground mBackground = null;
-	protected DateListView      mListViewWeek1 = null;
-	protected DateListView      mListViewWeek2 = null;
-	protected ArrowButton		mArrowLeftUp  = null;
-	protected ArrowButton		mArrowRightUp = null;
-	protected ArrowButton		mArrowLeftBottom  = null;
-	protected ArrowButton		mArrowRightBottom = null;	
+	protected DateListView   mListViewWeek1 = null;
+	protected DateListView   mListViewWeek2 = null;
+	protected ArrowButton	 mArrowLeftUp  = null;
+	protected ArrowButton	 mArrowRightUp = null;
+	protected ArrowButton	 mArrowLeftBottom  = null;
+	protected ArrowButton	 mArrowRightBottom = null;	
 	
 	protected View mView = null;
 
@@ -124,9 +124,8 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 		
 		String startDate = DataStorage.getStartDate(mContext, "");
 		// get current date in String
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();                               
-		String curDate = dateFormat.format(date);  
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");                              
+		String curDate = fmt.format(new Date());  
 		
 		mListViewWeek1.refresh(1, startDate, curDate);
 		mListViewWeek2.refresh(2, startDate, curDate);

@@ -7,8 +7,12 @@ import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 
 public class LoadingDialog extends ProgressDialog {  
 	
-	public LoadingDialog(Context context){  
+	public LoadingDialog(Context context) {  
 		super(context);  
+	}
+	
+	public LoadingDialog(Context context, int theme) {  
+		super(context, theme);  
 	}  
 	
 	@Override  

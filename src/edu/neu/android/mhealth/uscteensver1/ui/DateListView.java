@@ -18,7 +18,7 @@ import edu.neu.android.wocketslib.utils.DateHelper;
 
 
 public class DateListView extends ListView {
-
+	
 	static String[] sWeekdays = {
 		"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
 	};
@@ -54,13 +54,13 @@ public class DateListView extends ListView {
 		}
 		
 		// start date is less than or equal to the current date
-		int aNumOfDaysAfterStartDate = 0;		
-		while (aNumOfDaysAfterStartDate < 14) {
-			String date = WeekdayCalculator.afterNDayFrom(aStartDate, aNumOfDaysAfterStartDate);
+		int daysAfterStarting = 0;		
+		while (daysAfterStarting < 14) {
+			String date = WeekdayCalculator.afterNDayFrom(aStartDate, daysAfterStarting);
 			if (date.compareToIgnoreCase(curDate) == 0) {
 				break;
 			}
-			aNumOfDaysAfterStartDate++;			
+			daysAfterStarting++;			
 		}
 		// put all date to the list as Strings YYYY-MM-dd
 		ArrayList<String> dates = new ArrayList<String>();
@@ -72,7 +72,7 @@ public class DateListView extends ListView {
 		int startWeekday = WeekdayCalculator.getWeekdayInNumber(startDate) - 1; // 0 - 6
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
-				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
+				if (i <= startWeekday + daysAfterStarting) {
 					if (DataSource.areAllChunksLabelled(dates.get(i - startWeekday))) {
 						addItem(sWeekdays[i % 7], R.drawable.check_mark);
 					} else {
@@ -83,9 +83,9 @@ public class DateListView extends ListView {
 				}
 			}
 		} else { // right list view
-			aNumOfDaysAfterStartDate -= 7;
+			daysAfterStarting -= 7;
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
-				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
+				if (i <= startWeekday + daysAfterStarting) {
 					if (DataSource.areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
 						addItem(sWeekdays[i % 7], R.drawable.check_mark);
 					} else {
@@ -118,13 +118,13 @@ public class DateListView extends ListView {
 		}
 		
 		// start date is less than or equal to the current date
-		int aNumOfDaysAfterStartDate = 0;		
-		while (aNumOfDaysAfterStartDate < 14) {
-			String date = WeekdayCalculator.afterNDayFrom(aStartDate, aNumOfDaysAfterStartDate);
+		int daysAfterStarting = 0;		
+		while (daysAfterStarting < 14) {
+			String date = WeekdayCalculator.afterNDayFrom(aStartDate, daysAfterStarting);
 			if (date.compareToIgnoreCase(curDate) == 0) {
 				break;
 			}
-			aNumOfDaysAfterStartDate++;			
+			daysAfterStarting++;			
 		}
 		// put all date to the list as Strings YYYY-MM-dd
 		ArrayList<String> dates = new ArrayList<String>();
@@ -136,7 +136,7 @@ public class DateListView extends ListView {
 		int startWeekday = WeekdayCalculator.getWeekdayInNumber(startDate) - 1; // 0 - 6
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
-				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
+				if (i <= startWeekday + daysAfterStarting) {
 					if (DataSource.areAllChunksLabelled(dates.get(i - startWeekday))) {
 						getItem(i - startWeekday).setItemImage(R.drawable.check_mark);						
 					} else {
@@ -147,10 +147,10 @@ public class DateListView extends ListView {
 				}
 			}
 		} else { // right list view
-			aNumOfDaysAfterStartDate -= 7;
+			daysAfterStarting -= 7;
 			startWeekday += 7;
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
-				if (i <= startWeekday + aNumOfDaysAfterStartDate) {
+				if (i <= startWeekday + daysAfterStarting) {
 					if (DataSource.areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
 						getItem(i - startWeekday).setItemImage(R.drawable.check_mark);	
 					} else {
@@ -160,6 +160,24 @@ public class DateListView extends ListView {
 					getItem(i - startWeekday).setItemImage(R.drawable.lock);
 				}
 			} 
+		}
+		
+		// scroll to the current day if possible		
+		daysAfterStarting = daysAfterStarting > 3 ? 3 : daysAfterStarting;
+		if (daysAfterStarting != 0) {
+			mOffsetY += -(mItemHeight + mBorderWidth) * daysAfterStarting;		
+			if (mOffsetY > 0) {
+				mOffsetY = (int) Math.min(mOffsetY, mItemHeight * 1.3f);			
+				if (mOnReachedEndListener != null) {
+					mOnReachedEndListener.onReachedEnd(this, true, false);
+				}
+			} else if (mOffsetY + (mItemHeight + mBorderWidth) * mItems.size() - mBorderWidth <= mHeight) {			
+				mOffsetY = (int) Math.max(mOffsetY, 
+					- (mItemHeight + mBorderWidth) * (mItems.size() - 4) - mItemHeight * 1.3f);
+				if (mOnReachedEndListener != null) {
+					mOnReachedEndListener.onReachedEnd(this, false, false);
+				}
+			}
 		}
 	}
 
