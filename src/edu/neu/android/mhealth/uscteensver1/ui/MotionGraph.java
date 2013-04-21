@@ -159,6 +159,7 @@ public class MotionGraph extends AppObject {
 		c.drawLine(mWidth, 0, mWidth, mHeight, mPaint);
 		c.drawLine(0, mHeight, mWidth, mHeight, mPaint);		
 		
+		// respond to the scroll
 		if (Math.abs((int) mSpeedX) > 0) {
 			int offset = (int) mSpeedX;
 			if (mAccSpeedX < 0) {
@@ -208,7 +209,7 @@ public class MotionGraph extends AppObject {
 		}
 		
 		/*
-		 *  draw the data
+		 *  draw the motion data
 		 */
 		int count = 0;			
 		for (int i = mStart; i < mEnd - USCTeensGlobals.PIXEL_PER_DATA; ++i) {

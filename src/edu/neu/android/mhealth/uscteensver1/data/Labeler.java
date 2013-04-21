@@ -26,6 +26,10 @@ public class Labeler {
 		boolean result = true;
 		
 		String date = dateTime.split(" ")[0];
+		if (date.compareTo(sRawLabels.getDate()) != 0) {
+			sRawLabels.clear();
+		}
+		
 		DataSource.loadLabelData(date, sRawLabels, false);
 		result = sRawLabels.add(dateTime, name);
 		

@@ -10,8 +10,7 @@ import edu.neu.android.wocketslib.utils.Log;
 public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcessor {
 	private static final String TAG = "USCTeensBroadcastReceiverProcessor";
 
-	private String getDateString()
-	{
+	private String getDateString() {
 		Date aDate = new Date(); 
 		String aSDate = DateHelper.serverDateFormatFull.format(aDate); 
 		return aSDate; 

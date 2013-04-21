@@ -15,6 +15,10 @@ class RawLabelWrap extends HashMap<String, ArrayList<RawLabel>> {
 		mDate = date;
 	}
 	
+	public String getDate() {
+		return mDate;
+	}
+	
 	public boolean isDateLoaded(String date) {
 		return mDate.equals(date);
 	}

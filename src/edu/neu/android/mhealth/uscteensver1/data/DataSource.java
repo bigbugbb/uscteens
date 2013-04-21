@@ -139,6 +139,9 @@ public class DataSource {
 		 * first load the accelerometer sensor data
 		 */
 		int result = loadRawAccelData(date);
+		if (result != LOADING_SUCCEEDED) {
+			return result;
+		}
 		
 		/* 
 		 * then load the corresponding chunk data.
@@ -448,8 +451,7 @@ public class DataSource {
 		}
 		
 		// first clear the data container		
-		rawLabelWrap.clear();
-		rawLabelWrap.setDate(date);
+		rawLabelWrap.clear();		
 		
 		// load the daily data from the csv file	
 //		loadDailyLabelData(labelFilePaths[0]);
@@ -469,6 +471,7 @@ public class DataSource {
 					String[] split = result.split("[,]");
 					rawLabelWrap.add(split[0].trim(), split[1].trim());
 				}
+				rawLabelWrap.setDate(date);
 			} catch (IOException e) {
 				Log.e(TAG, "readStringInternal: problem reading: " + labelFile.getAbsolutePath());
 				e.printStackTrace();

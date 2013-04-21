@@ -46,7 +46,6 @@ public class LabelManager {
 		while (iter.hasNext()) { 
 		    Map.Entry entry = (Map.Entry) iter.next(); 	
 		    ArrayList<RawLabel> rawLabels = (ArrayList<RawLabel>) entry.getValue();
-		    
 		    for (RawLabel rawLabel : rawLabels) {
 			    Label label = insertLabel();
 			    int x = rawLabel.getTimeInSec() * USCTeensGlobals.PIXEL_PER_DATA;

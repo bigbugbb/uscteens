@@ -81,7 +81,7 @@ public class Label extends AppObject {
         }
         sImgWidth  = sImages.get(0).getWidth();
         sImgHeight = sImages.get(0).getHeight();
-        sMaxTxtWidth = AppScale.doScaleT(MAXIMUM_TEXT_WIDTH);
+        sMaxTxtWidth   = AppScale.doScaleT(MAXIMUM_TEXT_WIDTH);
         sMaxLabelWidth = AppScale.doScaleW(MAXIMUM_LABEL_WIDTH);
 	}
 	
@@ -94,7 +94,7 @@ public class Label extends AppObject {
 		loadImages(res, new int[]{ R.drawable.label_marker });
 	}
 	
-	public boolean load(int x, int y, String text) {		
+	public boolean load(int x, int y, String text) {
 		boolean result = true;
 		mX = x;
 		mY = y;
