@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
@@ -269,10 +270,10 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		onEndLoading(msg);
         		break;      
         	case AppCmd.BACK:
-        		switchPages(indexOfPage(PageType.DATE_PAGE));
+        		switchPages(indexOfPage(PageType.REWARD_PAGE));
         		break;
         	case AppCmd.NEXT:
-        		switchPages(indexOfPage(PageType.DATE_PAGE));
+        		switchPages(indexOfPage(PageType.REWARD_PAGE));
         		break;
         	case AppCmd.QUEST:
         		i = new Intent(USCTeensMainActivity.this, QuestDialog.class);           		
@@ -364,7 +365,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
     	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     	
 		if (keyCode == KeyEvent.KEYCODE_BACK) {		
-			if (mCurPage == mPages.get(0)) { // home page
+			if (mCurPage == mPages.get(indexOfPage(PageType.HOME_PAGE))) { // home page
 				QuitDialog dialog = new QuitDialog();
 				dialog.show(getSupportFragmentManager(), "HomePageDialog");
 			} else if (mCurPage == mPages.get(indexOfPage(PageType.DATE_PAGE))) {
@@ -373,6 +374,12 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 				}
 				switchPages(indexOfPage(PageType.HOME_PAGE));				
 			} else if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {
+				if (ChunkManager.areAllChunksLabelled()) {
+					switchPages(indexOfPage(PageType.REWARD_PAGE));
+				} else {
+					switchPages(indexOfPage(PageType.DATE_PAGE));
+				}
+			} else if (mCurPage == mPages.get(indexOfPage(PageType.REWARD_PAGE))) {
 				switchPages(indexOfPage(PageType.DATE_PAGE));
 			}
 			return true;
