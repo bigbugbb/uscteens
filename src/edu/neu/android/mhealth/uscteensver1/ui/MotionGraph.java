@@ -203,9 +203,9 @@ public class MotionGraph extends AppObject {
 		}
 		
 		// draw the hint labels if they do exist 
-		ArrayList<Label> labels = LabelManager.getLabels();
+		ArrayList<Label> labels = LabelManager.getLabels();		
 		for (Label label : labels) {			
-			label.onDraw(c);
+			label.onDraw(c);			
 		}
 		
 		/*

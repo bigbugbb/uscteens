@@ -1,9 +1,12 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 
 class RawLabelWrap extends HashMap<String, ArrayList<RawLabel>> {
 	private static final long serialVersionUID = 6951199087406965582L;	
@@ -17,6 +20,22 @@ class RawLabelWrap extends HashMap<String, ArrayList<RawLabel>> {
 	
 	public String getDate() {
 		return mDate;
+	}
+	
+	public ArrayList<RawLabel> toSortedArray() {
+		ArrayList<RawLabel> array = new ArrayList<RawLabel>();
+		
+		Iterator iter = entrySet().iterator(); 
+		while (iter.hasNext()) { 
+		    Map.Entry entry = (Map.Entry) iter.next(); 	
+		    ArrayList<RawLabel> rawLabels = (ArrayList<RawLabel>) entry.getValue();
+		    for (RawLabel rawLabel : rawLabels) {
+		    	array.add(rawLabel);
+		    }
+		} 
+		Collections.sort(array);
+		
+		return array;
 	}
 	
 	public boolean isDateLoaded(String date) {

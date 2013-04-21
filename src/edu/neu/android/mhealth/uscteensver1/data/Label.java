@@ -36,6 +36,7 @@ public class Label extends AppObject {
 	protected static float   sImgHeight;
 	protected static float   sMaxLabelWidth;
 	protected static float	 sMaxTxtWidth;
+		
 	
 	protected static void createPaint() {
 		if (!sPaintCreated) {
@@ -85,6 +86,11 @@ public class Label extends AppObject {
         sMaxLabelWidth = AppScale.doScaleW(MAXIMUM_LABEL_WIDTH);
 	}
 	
+	static public ArrayList<Bitmap> getLabelImages(Resources res) {
+		loadImages(res, new int[]{ R.drawable.label_marker });
+		return sImages;
+	}
+	
 	public Label(Resources res) {
 		super(res);
 		mKind   = LABEL;
@@ -96,20 +102,24 @@ public class Label extends AppObject {
 	
 	public boolean load(int x, int y, String text) {
 		boolean result = true;
-		mX = x;
-		mY = y;
-		mText = text; // "Watching TV";
 		
+		mText = text; // "Watching TV";		
 		int count = sPaint.breakText(mText, true, sMaxTxtWidth, null);
 		if (count < mText.length()) {			
 			mText = mText.subSequence(0, count) + "...";
 		}
-		
 		sPaint.getTextBounds(mText, 0, mText.length(), mRect);
+		
+		int pos[] = { x, y };
+		LabelManager.adjustLabelCoordinate(
+			pos, mRect.width(), mRect.height(), (int) sImgWidth, (int) sImgHeight
+		);		
+		mX = pos[0];
+		mY = pos[1];
 				
 		return result;
 	}
-	
+		
 	public void release() {
 		super.release();
 	}
@@ -128,59 +138,23 @@ public class Label extends AppObject {
 	public void onDraw(Canvas c) {
 		float x = mX + mDispOffsetX;
 		float y = mY + mDispOffsetY;
-		
+
 		if (x < -sMaxLabelWidth || x - sMaxLabelWidth > LabelManager.getViewWidth()) {
 			return;
 		}				
+		if (y > LabelManager.getCanvasHeight() * 0.48f) {
+			return;
+		}
 		
 		float delta = mX + sImgWidth - USCTeensGlobals.MAX_WIDTH_IN_PIXEL;
 		delta = delta > 0 ? -delta : 0;	
 		x += delta;
 		
-		c.drawBitmap(sImages.get(0), x - AppScale.doScaleW(8), y - AppScale.doScaleH(35), null);		
+		c.drawBitmap(sImages.get(0), x - AppScale.doScaleW(8), y - AppScale.doScaleH(42), null);		
 		if (x + sImgWidth + mRect.width() > LabelManager.getViewWidth()) {
-			c.drawText(mText, x - mRect.width() - AppScale.doScaleW(8), y, sPaint);
+			c.drawText(mText, x - mRect.width() - AppScale.doScaleW(14), y, sPaint);
 		} else {
 			c.drawText(mText, x + sImages.get(0).getWidth(), y, sPaint);
 		}
-		
-//		if (mVisible) {
-//			c.drawBitmap(sImages.get(0), mX + mOffsetX, mY + mOffsetY, null);
-//			// choose to draw left or right based on the clock button position				
-//			if (mX + mOffsetX < mCanvasWidth * 0.83f) { 
-//				// draw on the right side
-//				if (mX + mWidth / 2 + mOffsetX > AppScale.doScaleW(-120)) {
-//					sTimePaint.setTextAlign(Align.LEFT);
-//					c.drawText(mHost.getChunkRealStartTimeInString(), 
-//						mX + mWidth / 2 + mOffsetX + AppScale.doScaleW(50),
-//						mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
-//				}
-//			} else { 
-////				Chunk chunk = ChunkManager.getPrevChunk(mHost);
-////				if (chunk.isSelected() && chunk.getChunkWidth() > Chunk.MINIMUM_CHUNK_SPACE * 1.75f) {
-//					// draw on the left side
-//					if (mX + mWidth / 2 + mOffsetX < mCanvasWidth + AppScale.doScaleW(120)) {
-//						sTimePaint.setTextAlign(Align.RIGHT);
-//						c.drawText(mHost.getChunkRealStartTimeInString(), 
-//							mX - mWidth / 2 + mOffsetX + AppScale.doScaleW(30),
-//							mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
-//					}
-////				} 
-////				else {
-////					// draw on the right side
-////					if (mX + mWidth / 2 + mOffsetX > AppScale.doScaleW(-120)) {
-////						sTimePaint.setTextAlign(Align.LEFT);
-////						c.drawText(mHost.getChunkRealStartTimeInString(), 
-////							mX + mWidth / 2 + mOffsetX + AppScale.doScaleW(50),
-////							mY + mHeight / 2 + AppScale.doScaleH(10), sTimePaint);
-////					}
-////				}
-//			}
-//			//Log.d("clock button", mX + " " + mY + " " + mOffsetX);
-//			if (isSelected()) {
-//				c.drawCircle(mX + mWidth / 2 + mOffsetX, 
-//					mY + mHeight / 2 + mOffsetY, AppScale.doScaleH(47), sPaint);								
-//			}			 									
-//		}
 	}
 }

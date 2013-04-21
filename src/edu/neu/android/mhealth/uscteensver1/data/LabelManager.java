@@ -6,6 +6,7 @@ import java.util.Map;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
@@ -19,8 +20,10 @@ public class LabelManager {
 	protected static float sViewWidth    = 0; // the area to draw the activity data
 	protected static float sViewHeight   = 0;
 	protected static float sCanvasWidth  = 0;
-	protected static float sCanvasHeight = 0;	
+	protected static float sCanvasHeight = 0;			
 			
+	// used for adjusting the label's y coordinate
+	protected static ArrayList<Integer> sPrevXs = new ArrayList<Integer>();
 
 	public static void initialize(Context context) {
 		sContext   = context;	
@@ -38,24 +41,42 @@ public class LabelManager {
 	protected static void loadLabels() {
 		RawLabelWrap rawLabelWrap = DataSource.getRawLabels();
 		
+		sPrevXs.clear();
 		if (sLabels == null) {
 			sLabels = new ArrayList<Label>();
 		}
-				
-		Iterator iter = rawLabelWrap.entrySet().iterator(); 
-		while (iter.hasNext()) { 
-		    Map.Entry entry = (Map.Entry) iter.next(); 	
-		    ArrayList<RawLabel> rawLabels = (ArrayList<RawLabel>) entry.getValue();
-		    for (RawLabel rawLabel : rawLabels) {
-			    Label label = insertLabel();
-			    int x = rawLabel.getTimeInSec() * USCTeensGlobals.PIXEL_PER_DATA;
-				// int y = xxx;
-				String name = rawLabel.getName();				
-				// load each label
-				label.load(x, (int) AppScale.doScaleH(65), name);
-		    }
-		} 
+						
+		ArrayList<RawLabel> rawLabels = rawLabelWrap.toSortedArray();
+		for (RawLabel rawLabel : rawLabels) {
+			Label label = insertLabel();			    				
+			String name = rawLabel.getName();			
+			int x = rawLabel.getTimeInSec() * USCTeensGlobals.PIXEL_PER_DATA;
+			int y = (int) AppScale.doScaleH(65);
+			// load each label				
+			label.load(x, y, name);			
+		}
 	}	
+	
+	public static void adjustLabelCoordinate(int[] pos, int textWidth, int textHeight, 
+			int imgWidth, int imgHeight) {
+		int i = 0;
+		int width = (imgWidth << 1) + textWidth;
+		
+		while (i < sPrevXs.size()) {
+			if (sPrevXs.get(i) + width <= pos[0]) {
+				sPrevXs.set(i, pos[0]);
+				break;
+			}
+			++i;
+		}
+		
+		if (i >= sPrevXs.size()) {
+			sPrevXs.add(pos[0]);
+		}
+		
+		pos[1] += Math.max(textHeight, imgHeight) * i;
+	}
+	
 	
 	public static void release() {
 		if (sLabels != null) {
