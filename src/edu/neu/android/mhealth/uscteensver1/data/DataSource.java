@@ -47,13 +47,13 @@ public class DataSource {
 	public final static int ERR_WAITING_SENSOR_DATA = 4;
 	
 	// thresholds for chunking generation
-	public final static int CHUNKING_MIN_MEAN_AVG         = 350;
-	public final static int CHUNKING_MIN_MEAN_AVG_DIFF    = 350;
-	public final static int CHUNKING_MAX_MEAN_AVG_DIFF    = 800;
-	public final static int CHUNKING_MEAN_AVG_DISTANCE    = 60;
-	public final static int CHUNKING_MIN_SENSITIVITY      = 400;
-	public final static int CHUNKING_MAX_SENSITIVITY      = 999;
-	public final static int CHUNKING_MIN_DISTANCE 		  = 120;
+	public final static int CHUNKING_MIN_MEAN_AVG      = 350;
+	public final static int CHUNKING_MIN_MEAN_AVG_DIFF = 350;
+	public final static int CHUNKING_MAX_MEAN_AVG_DIFF = 800;
+	public final static int CHUNKING_MEAN_AVG_DISTANCE = 60;
+	public final static int CHUNKING_MIN_SENSITIVITY   = 400;
+	public final static int CHUNKING_MAX_SENSITIVITY   = 999;
+	public final static int CHUNKING_MIN_DISTANCE 	   = 120;
 	
 	// value for no data period
 	protected final static int NO_SENSOR_DATA = -1;
@@ -75,7 +75,6 @@ public class DataSource {
 //	protected static ArrayList<AccelData> sHourlyAccelData = null;	
 	// floating labels data
 	protected static RawLabelWrap sRawLabelsWrap = new RawLabelWrap();
-	
 	
 //	static {
 //		System.loadLibrary("datasrc");

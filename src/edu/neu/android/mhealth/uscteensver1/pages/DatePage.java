@@ -11,7 +11,9 @@ import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.ui.ArrowButton;
 import edu.neu.android.mhealth.uscteensver1.ui.DateBackground;
 import edu.neu.android.mhealth.uscteensver1.ui.DateListView;
@@ -121,7 +123,6 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 	}
 	
 	public void resume() {
-		
 		String startDate = DataStorage.getStartDate(mContext, "");
 		// get current date in String
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");                              
@@ -129,7 +130,6 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 		
 		mListViewWeek1.refresh(1, startDate, curDate);
 		mListViewWeek2.refresh(2, startDate, curDate);
-							
 	}
 	
 	public void stop() {
@@ -194,7 +194,13 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 		}
 		if (li.getItemImage() == R.drawable.lock) {
 			return;
-		}				
+		}
+		if (li.getItemImage() == R.drawable.not_available) {
+			String text = "You can no longer label this day. Try to label within " +
+					USCTeensGlobals.MAX_AVAILABLE_LABELING_DAYS + " days of the actual day.";
+			Toast.makeText(mContext, text, Toast.LENGTH_LONG).show();
+			return;
+		}
 		
 		// get the start date
 		String startDate = DataStorage.getStartDate(mContext, "");

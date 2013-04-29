@@ -38,6 +38,7 @@ import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
 import edu.neu.android.mhealth.uscteensver1.views.DummyView;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
+import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
@@ -48,6 +49,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	
 	// the view for drawing anything
 	protected GraphView mGraphView = null;
+	// the view for displaying reward information
+	protected RewardView mRewardView = null;
 	// the view covering the screen if not authorized 
 	protected DummyView mDummyView = null;
 	// the view for display loading progress
@@ -70,7 +73,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, "MainActivity");
 		setContentView(R.layout.activity_main);					
-		
+
 		USCTeensGlobals.sContext = getApplicationContext();
 		USCTeensGlobals.sGlobalHandler = mHandler;
 		DataSource.initialize(getApplicationContext());	
@@ -116,6 +119,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		mGraphView = (GraphView) findViewById(R.id.view_graph);		
 		mGraphView.setOnTouchListener(this);
 		mGraphView.setLongClickable(true);
+		
+		mRewardView = (RewardView) findViewById(R.id.view_reward);		
         
 		mDummyView = (DummyView) findViewById(R.id.view_dummy);
 		//mProgressView = (ProgressView) findViewById(R.id.view_progress);		
@@ -140,6 +145,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		mPages.add(new GraphPage(context, mGraphView, mHandler));
 		mPages.add(new RewardPage(context, mGraphView, mHandler));
 		mCurPage = mPages.get(indexOfPage(PageType.HOME_PAGE));
+		// bind reward view to reward page
+		((RewardPage) mPages.get(indexOfPage(PageType.REWARD_PAGE))).bindRewardView(mRewardView);
 		// set pages to main view
 		mGraphView.setPages(mPages);		
 	}
@@ -256,8 +263,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	// use main looper as the default
 	protected final Handler mHandler = new Handler() {	
 		public void handleMessage(Message msg) {        					
-			Intent i = null;		
-			Context context = getApplicationContext();
+			Intent i = null;				
 			
         	switch (msg.what) {   
         	case AppCmd.BEGIN:                		
@@ -270,10 +276,10 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		onEndLoading(msg);
         		break;      
         	case AppCmd.BACK:
-        		switchPages(indexOfPage(PageType.REWARD_PAGE));
+        		switchPages(indexOfPage(PageType.REWARD_PAGE));        		
         		break;
         	case AppCmd.NEXT:
-        		switchPages(indexOfPage(PageType.REWARD_PAGE));
+        		switchPages(indexOfPage(PageType.REWARD_PAGE));        		
         		break;
         	case AppCmd.QUEST:
         		i = new Intent(USCTeensMainActivity.this, QuestDialog.class);           		
@@ -295,6 +301,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		((GraphPage) mCurPage).finishMerge(
         			DataStorage.GetValueString(getApplicationContext(), USCTeensGlobals.MERGE_SELECTION, "")
         		);
+        		break;
+        	case AppCmd.REWARD:
         		break;
             default:
             	break;

@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-
 class RawLabelWrap extends HashMap<String, ArrayList<RawLabel>> {
 	private static final long serialVersionUID = 6951199087406965582L;	
 	private String mDate = "";

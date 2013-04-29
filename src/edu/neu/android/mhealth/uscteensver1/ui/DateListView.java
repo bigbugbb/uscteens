@@ -11,6 +11,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
@@ -73,10 +74,14 @@ public class DateListView extends ListView {
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + daysAfterStarting) {
-					if (DataSource.areAllChunksLabelled(dates.get(i - startWeekday))) {
-						addItem(sWeekdays[i % 7], R.drawable.check_mark);
+					if (i <= startWeekday + daysAfterStarting - USCTeensGlobals.MAX_AVAILABLE_LABELING_DAYS) {
+						addItem(sWeekdays[i % 7], R.drawable.not_available);
 					} else {
-						addItem(sWeekdays[i % 7], R.drawable.check_square);
+						if (DataSource.areAllChunksLabelled(dates.get(i - startWeekday))) {
+							addItem(sWeekdays[i % 7], R.drawable.check_mark);
+						} else {
+							addItem(sWeekdays[i % 7], R.drawable.check_square);
+						}
 					}
 				} else {
 					addItem(sWeekdays[i % 7], R.drawable.lock);
@@ -86,10 +91,14 @@ public class DateListView extends ListView {
 			daysAfterStarting -= 7;
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + daysAfterStarting) {
-					if (DataSource.areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
-						addItem(sWeekdays[i % 7], R.drawable.check_mark);
+					if (i <= startWeekday + daysAfterStarting - USCTeensGlobals.MAX_AVAILABLE_LABELING_DAYS) {
+						addItem(sWeekdays[i % 7], R.drawable.not_available);
 					} else {
-						addItem(sWeekdays[i % 7], R.drawable.check_square);
+						if (DataSource.areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
+							addItem(sWeekdays[i % 7], R.drawable.check_mark);
+						} else {
+							addItem(sWeekdays[i % 7], R.drawable.check_square);
+						}
 					}
 				} else {
 					addItem(sWeekdays[i % 7], R.drawable.lock);
@@ -137,10 +146,14 @@ public class DateListView extends ListView {
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + daysAfterStarting) {
-					if (DataSource.areAllChunksLabelled(dates.get(i - startWeekday))) {
-						getItem(i - startWeekday).setItemImage(R.drawable.check_mark);						
+					if (i <= startWeekday + daysAfterStarting - USCTeensGlobals.MAX_AVAILABLE_LABELING_DAYS) {
+						getItem(i - startWeekday).setItemImage(R.drawable.not_available);
 					} else {
-						getItem(i - startWeekday).setItemImage(R.drawable.check_square);
+						if (DataSource.areAllChunksLabelled(dates.get(i - startWeekday))) {
+							getItem(i - startWeekday).setItemImage(R.drawable.check_mark);						
+						} else {
+							getItem(i - startWeekday).setItemImage(R.drawable.check_square);
+						}
 					}
 				} else {
 					getItem(i - startWeekday).setItemImage(R.drawable.lock);
@@ -151,10 +164,14 @@ public class DateListView extends ListView {
 			startWeekday += 7;
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + daysAfterStarting) {
-					if (DataSource.areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
-						getItem(i - startWeekday).setItemImage(R.drawable.check_mark);	
+					if (i <= startWeekday + daysAfterStarting - USCTeensGlobals.MAX_AVAILABLE_LABELING_DAYS) {
+						getItem(i - startWeekday).setItemImage(R.drawable.not_available);
 					} else {
-						getItem(i - startWeekday).setItemImage(R.drawable.check_square);
+						if (DataSource.areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
+							getItem(i - startWeekday).setItemImage(R.drawable.check_mark);	
+						} else {
+							getItem(i - startWeekday).setItemImage(R.drawable.check_square);
+						}
 					}
 				} else {
 					getItem(i - startWeekday).setItemImage(R.drawable.lock);
@@ -221,6 +238,5 @@ public class DateListView extends ListView {
         mImages.add(Bitmap.createBitmap((int) mWidth, (int) mHeight, Bitmap.Config.RGB_565));
         mInnerCanvas = new Canvas(mImages.get(0));
 	}
-
 	
 }

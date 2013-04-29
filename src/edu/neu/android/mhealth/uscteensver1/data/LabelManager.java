@@ -1,12 +1,9 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 

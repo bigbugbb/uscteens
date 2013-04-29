@@ -12,11 +12,13 @@ import android.view.View;
 import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.RewardBackground;
 import edu.neu.android.mhealth.uscteensver1.ui.RewardButton;
+import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 
 public class RewardPage extends AppPage implements OnClickListener {
 	
 	protected RewardBackground mBackground = null;	
 	protected RewardButton 	mBtnReward  = null;
+	protected RewardView mRewardView = null;
 	protected final static int BAR    = 0;
 	protected final static int BKGND  = 1;
 	protected final static int REWARD = 2;
@@ -26,6 +28,10 @@ public class RewardPage extends AppPage implements OnClickListener {
 	public RewardPage(Context context, View view, Handler handler) {
 		super(context, handler);
 		mView = view;		
+	}
+	
+	public void bindRewardView(RewardView view) {
+		mRewardView = view;
 	}
 	
 	public List<AppObject> load() {
@@ -51,6 +57,16 @@ public class RewardPage extends AppPage implements OnClickListener {
 		load();
 		for (AppObject obj : mObjects) {
 			obj.onSizeChanged(mView.getWidth(), mView.getHeight());
+		}
+		
+		if (mRewardView != null) {
+			mRewardView.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	public void stop() {
+		if (mRewardView != null) {
+			mRewardView.setVisibility(View.GONE);
 		}
 	}
 	

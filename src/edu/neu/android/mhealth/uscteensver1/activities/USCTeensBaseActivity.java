@@ -19,8 +19,8 @@ import edu.neu.android.wocketslib.utils.UsageCollector;
 public class USCTeensBaseActivity extends FragmentActivity {
 	
 	private String TAG = "UnknownApp";
-	public static final int KEYGUARD_UNKNOWN = -1;
-	public static final int KEYGUARD_IS_LOCKED = 1;
+	public static final int KEYGUARD_UNKNOWN    = -1;
+	public static final int KEYGUARD_IS_LOCKED  = 1;
 	public static final int KEYGUARD_NOT_LOCKED = 0;
 
 	private void shutdownApp(String msg, boolean isBeep) {
