@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Test</title>
+<link href="reward.css" rel="stylesheet" type="text/css" media="screen"/>
+
+<script>
+	function getstyle(sname) { 
+		for (var i = 0; i < document.styleSheets.length; ++i) { 
+			var rules; 
+			if (document.styleSheets[i].cssRules) { 
+				rules = document.styleSheets[i].cssRules; 
+			} else { 
+				rules = document.styleSheets[i].rules; 
+			} 
+			for (var j = 0; j < rules.length; ++j) { 
+				if (rules[j].selectorText == sname) { 				
+					return rules[j].style; 
+				}
+			}
+		}
+	}
+	
+	window.onresize = window.onload = function() {
+		var w, h;
+		if (!!(window.attachEvent && !window.opera)) {
+			h = document.documentElement.clientHeight;
+			w = document.documentElement.clientWidth;
+		} else {
+			h =	window.innerHeight;
+			w = window.innerWidth;
+		}
+		document.getElementById('msg').value ='window size:' + 'width:' + w + '; height:' + h;
+		var bgImg = document.getElementById('bkg').getElementsByTagName('img')[0];
+		//getstyle(".bkg").left = w * 0.1;
+		bgImg.width  = (w - 5);
+		bgImg.height = (h - 5);											
+	}
+</script>
+
+</head>
+
+<body>
+
+<p id="msg"></p>
+<div id="bkg"><img src="win_background.png" alt="HIGH"></div>
+
+</body>
+
+</html>

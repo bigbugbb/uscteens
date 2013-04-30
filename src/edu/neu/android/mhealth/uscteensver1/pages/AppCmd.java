@@ -12,5 +12,6 @@ public class AppCmd {
 	public final static int MERGE_FINISHING = 8;
 	public final static int BEGIN_LOADING	= 9;
 	public final static int END_LOADING		= 10;
-	public final static int REWARD   		= 11;
+	public final static int DONE			= 11;
+	public final static int REWARD   		= 12;
 }

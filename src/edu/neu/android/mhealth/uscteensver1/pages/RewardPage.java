@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
+import edu.neu.android.mhealth.uscteensver1.ui.DoneButton;
 import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.RewardBackground;
 import edu.neu.android.mhealth.uscteensver1.ui.RewardButton;
@@ -16,12 +17,14 @@ import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 
 public class RewardPage extends AppPage implements OnClickListener {
 	
-	protected RewardBackground mBackground = null;	
-	protected RewardButton 	mBtnReward  = null;
-	protected RewardView mRewardView = null;
+	protected RewardBackground mBackground = null;
+	protected DoneButton   nBtnDone   = null;
+	protected RewardButton mBtnReward = null;
+	protected RewardView  mRewardView = null;
 	protected final static int BAR    = 0;
 	protected final static int BKGND  = 1;
-	protected final static int REWARD = 2;
+	protected final static int DONE   = 2;
+	protected final static int REWARD = 3;
 	
 	protected View mView = null;
 
@@ -40,6 +43,12 @@ public class RewardPage extends AppPage implements OnClickListener {
 			mBackground = new RewardBackground(mContext.getResources());			
 			mObjects.add(mBackground);
 			mBackground.setID(BKGND);
+		}
+		if (nBtnDone == null) {
+			nBtnDone = new DoneButton(mContext.getResources());
+			mObjects.add(nBtnDone);
+			nBtnDone.setID(DONE);
+			nBtnDone.setOnClickListener(this);
 		}
 		if (mBtnReward == null) {
 			mBtnReward = new RewardButton(mContext.getResources());
@@ -96,9 +105,13 @@ public class RewardPage extends AppPage implements OnClickListener {
 
 	@Override
 	public void onClick(AppObject obj) {
-		switch (obj.getID()) {		
-		case REWARD:
-			Message msg = mHandler.obtainMessage();     	
+		Message msg = mHandler.obtainMessage();
+		switch (obj.getID()) {
+		case DONE:			
+			msg.what = AppCmd.DONE;
+			mHandler.sendMessage(msg);
+			break;
+		case REWARD:			  	
 	        msg.what = AppCmd.REWARD;
 	        mHandler.sendMessage(msg);
 			break;

@@ -81,9 +81,9 @@ public class RewardBackground extends Background {
 	public void onDraw(Canvas c) {		
 		c.drawBitmap(mImages.get(0), 0, 0, null);
 		c.drawText("CONGRATULATIONS", mText1X, mText1Y, mPaintText1);
-		c.drawBitmap(mImages.get(1), (mCanvasWidth - mWidth) / 2, mBarHeight, null);
-		c.drawText("You have completed", mText2X, mText2Y, mPaintText2);
-		c.drawText("the Teen Activity Game", mText2X, mText2Y + AppScale.doScaleH(90), mPaintText2);
+//		c.drawBitmap(mImages.get(1), (mCanvasWidth - mWidth) / 2, mBarHeight, null);
+//		c.drawText("You have completed", mText2X, mText2Y, mPaintText2);
+//		c.drawText("the Teen Activity Game", mText2X, mText2Y + AppScale.doScaleH(90), mPaintText2);
 	}
 	
 }

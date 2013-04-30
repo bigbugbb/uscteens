@@ -302,7 +302,11 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         			DataStorage.GetValueString(getApplicationContext(), USCTeensGlobals.MERGE_SELECTION, "")
         		);
         		break;
+        	case AppCmd.DONE:
+        		switchPages(indexOfPage(PageType.DATE_PAGE)); 
+        		break;
         	case AppCmd.REWARD:
+        		Toast.makeText(getApplicationContext(), "reward", Toast.LENGTH_LONG).show();
         		break;
             default:
             	break;
