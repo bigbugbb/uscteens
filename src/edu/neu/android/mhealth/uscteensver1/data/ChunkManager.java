@@ -5,7 +5,11 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.RectF;
+import android.graphics.Bitmap.Config;
+import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.actions.Action;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -481,6 +485,7 @@ public class ChunkManager {
 		// split at the splitX
 		int i = sChunks.indexOf(chunkToSplit);				
 		Chunk newChunk = insertChunk(i + 1); // insert a new chunk, which should be updated later
+		newChunk.setAction(Action.createUnlabelledAction(sResources));
 		newChunk.setHeight(chunkToSplit.getHeight());		
 		newChunk.update((int) splitX, chunkToSplit.mStop, chunkToSplit.mOffset);
 		chunkToSplit.update(chunkToSplit.mStart, (int) splitX, chunkToSplit.mOffset);

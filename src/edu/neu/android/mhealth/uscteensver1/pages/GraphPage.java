@@ -38,9 +38,9 @@ import edu.neu.android.wocketslib.support.DataStorage;
 
 
 public class GraphPage extends AppPage implements OnClickListener,
-												 OnGraphMovedListener,
-												 OnSlideBarChangeListener,
-												 OnBoundaryScaleListener { 
+												  OnGraphMovedListener,
+												  OnSlideBarChangeListener,
+												  OnBoundaryScaleListener { 
 	
 	protected GraphBackground mBackground  = null;
 	protected MotionGraph	  mMotionGraph = null;

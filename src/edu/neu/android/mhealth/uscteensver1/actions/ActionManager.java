@@ -71,8 +71,7 @@ public class ActionManager {
 		
 		// first clear the action container
 		sActionWrap.clear();
-		Action action = new Action(USCTeensGlobals.UNLABELLED_GUID, "Unlabelled", "question_btn.png",
-				loadBitmapFromResource(sContext.getResources()));
+		Action action = Action.createUnlabelledAction(sContext.getResources());
 		sActionWrap.put(USCTeensGlobals.UNLABELLED_GUID, action);
 		try {
 			File aMappingFile = getMappingFile(dirPath);			
@@ -175,32 +174,6 @@ public class ActionManager {
         
         Bitmap image  = null;
     	Bitmap origin = BitmapFactory.decodeFile(icoPath, options);
-    	Bitmap scaled = null;
-    	// scale the image according to the current screen resolution
-    	float dstWidth  = origin.getWidth(),
-    	      dstHeight = origin.getHeight();        	
-		dstWidth  = AppScale.doScaleW(dstWidth);
-		dstHeight = AppScale.doScaleH(dstHeight);
-		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-		}                
-		// add to the image list
-    	if (scaled != null) {
-    		origin.recycle(); // explicit call to avoid out of memory
-    		image = scaled;
-        } else {
-        	image = origin;
-        }     	
-		return image;
-	}
-	
-	private static Bitmap loadBitmapFromResource(Resources res) {
-		BitmapFactory.Options options = new BitmapFactory.Options(); 
-        options.inPurgeable = true;
-        options.inPreferredConfig = Config.RGB_565;     
-        
-        Bitmap image  = null;
-    	Bitmap origin = BitmapFactory.decodeResource(res, R.drawable.question_btn, options);
     	Bitmap scaled = null;
     	// scale the image according to the current screen resolution
     	float dstWidth  = origin.getWidth(),

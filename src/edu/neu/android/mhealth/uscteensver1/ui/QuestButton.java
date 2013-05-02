@@ -2,6 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.ui;
 
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
@@ -11,9 +12,15 @@ import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 public class QuestButton extends ChunkButton {	
 		
 	public QuestButton(Resources res, Chunk host, OnClickListener listener) {
-		super(res, host);						
+		super(res, host);			
 		mListener = listener;
 		mID = UIID.QUEST;
+	}
+	
+	public void updateSize() {
+		Bitmap actImage = mHost.getAction().getActionImage();
+		mWidth  = actImage.getWidth();
+		mHeight = actImage.getHeight();
 	}
 	
 	public void setAction(Action action) {
