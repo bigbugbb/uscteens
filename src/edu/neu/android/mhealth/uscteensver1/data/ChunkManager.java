@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.RectF;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.actions.Action;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ClockButton;
 import edu.neu.android.mhealth.uscteensver1.ui.MergeButton;
@@ -70,10 +71,10 @@ public class ChunkManager {
 			// load each chunk
 			int start = (rawChunk.getStartTime() - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;
 			int stop  = (rawChunk.getStopTime()  - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;
-			int activityID = rawChunk.getActivityID();
+			Action action = rawChunk.getAction();
 			String createTime = rawChunk.getCreateTime();
 			String modifyTime = rawChunk.getModifyTime();
-			chunk.load(start, stop, timeOffset, activityID, createTime, modifyTime);						
+			chunk.load(start, stop, timeOffset, action, createTime, modifyTime);						
 		}
 	
 //		ChunkManager.selectChunk(0);

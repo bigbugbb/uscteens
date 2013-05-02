@@ -2,6 +2,9 @@ package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.util.ArrayList;
 
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.actions.Action;
+
 class RawChunksWrap extends ArrayList<RawChunk> {
 	
 	/**
@@ -11,7 +14,8 @@ class RawChunksWrap extends ArrayList<RawChunk> {
 
 	public boolean areAllChunksLabelled() {
 		for (RawChunk rawChunk : this) {
-			if (rawChunk.getActivityID() == -1) {
+			Action action = rawChunk.getAction();
+			if (action.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID)) {
 				return false;
 			}
 		}	

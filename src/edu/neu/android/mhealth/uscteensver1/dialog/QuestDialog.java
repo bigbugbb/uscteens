@@ -71,7 +71,7 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 	}
 	
 	private void adjustLayout() {
-		DisplayMetrics dm = new DisplayMetrics();  
+		DisplayMetrics dm = new DisplayMetrics();
         Display display = getWindowManager().getDefaultDisplay(); 		
         display.getMetrics(dm);
       
@@ -83,7 +83,7 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 		mActionsView.setLayoutParams(laParams);
 	}	
 
-	public void OnBackClicked() {
+	public void onBackClicked() {
 		finish();
 	}
 
@@ -95,10 +95,8 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 		return false;
 	} 
 	
-	protected void setResultAndExit(int index) {
-//		Intent i = new Intent();	
-//		setResult(index + 1, i); // plus one to distinguish from the cancel result
-		DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.QUEST_SELECTION, index);
+	protected void setResultAndExit(String actionID) {		
+		DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.QUEST_SELECTION, actionID);
 		Message msg = USCTeensGlobals.sGlobalHandler.obtainMessage();				
 		msg.what = AppCmd.QUEST_FINISHING;
 		USCTeensGlobals.sGlobalHandler.sendMessage(msg);	
@@ -109,14 +107,12 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 		public void handleMessage(Message msg) {        									
 	    	switch (msg.what) {    
 	    	case 1:
-	    		int index = (Integer) msg.obj;
-	    		setResultAndExit(index);
+	    		setResultAndExit((String) msg.obj);
 	    		break;
 	        default:
 	        	break;
 	        }            
         }			
     };
-
 	
 }

@@ -19,17 +19,17 @@ import edu.neu.android.mhealth.uscteensver1.ui.DateBackground;
 import edu.neu.android.mhealth.uscteensver1.ui.DateListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
+import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnBoundaryListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
-import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.support.DataStorage;
 
 
 public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteensver1.ui.OnClickListener,
-													OnReachedEndListener,
-													OnItemClickListener,
-													OnListViewScrollingListener {
+												 OnBoundaryListener,
+												 OnItemClickListener,
+												 OnListViewScrollingListener {
 	
 	private final static String TAG = "WeekdayPage";
 	protected DateBackground mBackground = null;
@@ -59,7 +59,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mObjects.add(mListViewWeek1);	
 			mListViewWeek1.setX(0);
 			mListViewWeek1.setY(AppScale.doScaleH(178 + mListViewWeek1.getBorderWidth()));
-			mListViewWeek1.setOnReachedEndListener(this);
+			mListViewWeek1.setOnBoundaryListener(this);
 			mListViewWeek1.setOnItemClickListener(this);
 			mListViewWeek1.setOnListViewScrollingListener(this);
 		}
@@ -68,7 +68,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 			mObjects.add(mListViewWeek2);
 			mListViewWeek2.setX(AppScale.doScaleW(643));
 			mListViewWeek2.setY(AppScale.doScaleH(178 + mListViewWeek2.getBorderWidth()));
-			mListViewWeek2.setOnReachedEndListener(this);
+			mListViewWeek2.setOnBoundaryListener(this);
 			mListViewWeek2.setOnItemClickListener(this);
 			mListViewWeek2.setOnListViewScrollingListener(this);
 		}
@@ -167,7 +167,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 	}
 
 	@Override
-	public void onReachedEnd(ListView view, boolean top, boolean left) { // ignore left here
+	public void onBoundary(ListView view, boolean top, boolean left) { // ignore left here
 		if (top) {
 			if (view == mListViewWeek1) {
 				mArrowLeftUp.setVisible(false);

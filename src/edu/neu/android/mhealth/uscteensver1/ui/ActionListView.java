@@ -1,5 +1,8 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -8,21 +11,29 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.actions.Action;
+import edu.neu.android.mhealth.uscteensver1.actions.ActionManager;
+import edu.neu.android.mhealth.uscteensver1.actions.ActionWrap;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
 public class ActionListView extends ListView {
 	
 	public class ActionItem extends ListItem {
+		protected Action mAction;
 		
-		public ActionItem(ListView parent, String text, int drawable, Bitmap image) {
-			super(parent, text, drawable, image);
-			
+		public ActionItem(ListView parent, Action action) {
+			super(parent, action.getActionName(), -1, action.getActionImage());
+			mAction = action;
 			mPaintTxt.setColor(Color.BLACK);
 			mPaintTxt.setTextSize(AppScale.doScaleT(45));
 			mPaintTxt.setTypeface(mTypeface);
 			mPaintTxt.setTextAlign(Align.CENTER);
 		}		
+		
+		public Action getAction() {
+			return mAction;
+		}
 
 		protected void onDraw(Canvas c) {
 			float y1 = mOffsetY + (mHeight + mBorderWidth) * mPosn;
@@ -35,43 +46,24 @@ public class ActionListView extends ListView {
 			c.drawBitmap(mImage, 8, y1, null);
 			c.drawRect(mImage.getWidth() + 16, y1, mWidth - 3, y2, mPaintBkg);
 			c.drawText(mText, (mWidth + mImage.getWidth()) / 2, y1 + mHeight * 0.6f, mPaintTxt);
-		}
-
+		}				
 	}
 	
 	public ActionListView(Resources res) {
-		super(res);
-				
-		for (int i = 0; i < USCTeensGlobals.ACTION_NAMES.length; ++i) {
-			addItem(USCTeensGlobals.ACTION_NAMES[i], USCTeensGlobals.ACTION_IMGS[i]);
-		}
+		super(res);		
+		ActionWrap actions = ActionManager.getActivatedActions();
+		Iterator iter = actions.entrySet().iterator(); 
+		while (iter.hasNext()) { 
+		    Map.Entry entry = (Map.Entry) iter.next(); 	
+		    Action action = (Action) entry.getValue();
+		    if (!action.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID)) {
+		    	addItem(action);
+		    }		    
+		}	
 	}
 	
-	public void addItem(String text, int drawable) {
-		BitmapFactory.Options options = new BitmapFactory.Options(); 
-        options.inPurgeable = true;
-        options.inPreferredConfig = Config.RGB_565;     
-        
-        Bitmap image  = null;
-    	Bitmap origin = BitmapFactory.decodeResource(mRes, drawable, options);
-    	Bitmap scaled = null;
-    	// scale the image according to the current screen resolution
-    	float dstWidth  = origin.getWidth(),
-    	      dstHeight = origin.getHeight();        	
-    	
-		dstWidth  = AppScale.doScaleW(dstWidth);
-		dstHeight = AppScale.doScaleH(dstHeight);
-		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-		}                
-		// add to the image list
-    	if (scaled != null) {
-    		origin.recycle(); // explicit call to avoid out of memory
-    		image = scaled;
-        } else {
-        	image = origin;
-        }               
-       	ListItem li = new ActionItem(this, text, drawable, image);
+	public void addItem(Action action) {		
+       	ListItem li = new ActionItem(this, action);
        	mItems.add(li);
        	li.register();
 	}

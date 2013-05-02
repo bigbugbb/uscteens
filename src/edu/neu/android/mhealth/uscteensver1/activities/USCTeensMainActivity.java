@@ -294,7 +294,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		break;
         	case AppCmd.QUEST_FINISHING:        	
         		((GraphPage) mCurPage).finishQuest(
-        			(int) DataStorage.GetValueLong(getApplicationContext(), USCTeensGlobals.QUEST_SELECTION, 0)
+        			DataStorage.GetValueString(getApplicationContext(), USCTeensGlobals.QUEST_SELECTION, "")
         		); 
             	break;
         	case AppCmd.MERGE_FINISHING:        		

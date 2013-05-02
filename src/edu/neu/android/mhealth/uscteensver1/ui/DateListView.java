@@ -185,14 +185,14 @@ public class DateListView extends ListView {
 			mOffsetY += -(mItemHeight + mBorderWidth) * daysAfterStarting;		
 			if (mOffsetY > 0) {
 				mOffsetY = (int) Math.min(mOffsetY, mItemHeight * 1.3f);			
-				if (mOnReachedEndListener != null) {
-					mOnReachedEndListener.onReachedEnd(this, true, false);
+				if (mOnBoundaryListener != null) {
+					mOnBoundaryListener.onBoundary(this, true, false);
 				}
 			} else if (mOffsetY + (mItemHeight + mBorderWidth) * mItems.size() - mBorderWidth <= mHeight) {			
 				mOffsetY = (int) Math.max(mOffsetY, 
 					- (mItemHeight + mBorderWidth) * (mItems.size() - 4) - mItemHeight * 1.3f);
-				if (mOnReachedEndListener != null) {
-					mOnReachedEndListener.onReachedEnd(this, false, false);
+				if (mOnBoundaryListener != null) {
+					mOnBoundaryListener.onBoundary(this, false, false);
 				}
 			}
 		}

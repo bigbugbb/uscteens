@@ -5,72 +5,56 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.actions.Action;
 
 // chunk data from XML in direct
 class RawChunk implements Serializable {
-	private static final long serialVersionUID = -3769827996533096658L;
-	
-	private static final int UNLABELLED = -1;
-	// data read directly from xml
+	private static final long serialVersionUID = -3769827996533096658L;	
+	// data read directly from XML
 	protected String mStartDate;
 	protected String mStopDate;
 	protected String mCreateTime;
 	protected String mModifyTime;
-	protected String mActivity;
-	
-	protected int mActivityID;
+	protected Action mAction;
 	
 	/*
 	 * seconds from the beginning of a day
 	 */	
 	public RawChunk(String date, int startTime, int stopTime) {				
 		mStartDate  = date + " " + getStringTimeFromSecond(startTime);
-		mStopDate   = date + " " + getStringTimeFromSecond(stopTime);
-		mActivity   = "UNLABELLED";
-		mActivityID = UNLABELLED;
-		
-		String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+		mStopDate   = date + " " + getStringTimeFromSecond(stopTime);				
+		String now  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
 		mCreateTime = now;
 		mModifyTime = now;
+		mAction     = null;
 	}
 	
 	public RawChunk(String startDate, String stopDate, 
-			String activity, String createTime, String modifyTime) {
+			Action action, String createTime, String modifyTime) {
 		mStartDate  = startDate;
 		mStopDate   = stopDate;		
 		mCreateTime = createTime;
 		mModifyTime = modifyTime;
-		setActivity(activity);
+		mAction     = action;
 	}
 	
 	public boolean isLabelled() {
-		return mActivityID != UNLABELLED;
+		if (mAction == null) {
+			return false;
+		}
+		return !mAction.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID);
 	}
 	
 	public boolean isModified() {
 		return mCreateTime.compareTo(mModifyTime) != 0;
 	}
 	
-	public int getActivityID() {
-		return mActivityID;
+	public void setAction(Action action) {
+		mAction = action;
 	}
 	
-	public String getActivity() {
-		return mActivity;
-	}
-	
-	public void setActivity(String activity) {
-		mActivity = activity;
-		if (mActivity.compareToIgnoreCase("UNLABELLED") == 0) {
-			mActivityID = -1;
-		} else {
-			for (int i = 0; i < USCTeensGlobals.ACTION_NAMES.length; ++i) {
-				if (mActivity.compareToIgnoreCase(USCTeensGlobals.ACTION_NAMES[i]) == 0) {
-					mActivityID = i;
-					break;
-				}
-			}
-		}
+	public Action getAction() {
+		return mAction;
 	}
 
 	protected String getStringTimeFromSecond(int secInDay) {
@@ -132,10 +116,6 @@ class RawChunk implements Serializable {
 		return Integer.parseInt(times[0]) * 3600 + // hour 
 			   Integer.parseInt(times[1]) * 60 +   // minute
 			   (int) Float.parseFloat(times[2]);   // second
-	}
-	
-	public String getActivityName() {
-		return mActivity;
 	}
 	
 	public String getCreateTime() {

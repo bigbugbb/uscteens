@@ -12,8 +12,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.actions.Action;
+import edu.neu.android.mhealth.uscteensver1.actions.ActionManager;
+import edu.neu.android.mhealth.uscteensver1.actions.ActionWrap;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleListener;
@@ -57,7 +59,9 @@ public class GraphPage extends AppPage implements OnClickListener,
 		ChunkManager.setUserData(this);
 		ChunkManager.setOnBoundaryScaleListener(this);
 		
-		LabelManager.initialize(context);
+		LabelManager.initialize(context);		
+		ActionManager.initialize(context);
+		ActionManager.start();
 	}
 
 	public MotionGraph getMotionGraph() {
@@ -107,7 +111,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	
 	public void start() {				
 		ChunkManager.start();
-		LabelManager.start();
+		LabelManager.start();		
 		
 		load();		
 		for (AppObject obj : mObjects) {
@@ -148,6 +152,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	public void stop() {
 		ChunkManager.stop();
 		LabelManager.stop();
+		ActionManager.stop();
 		
 		mBackground   = null;
 		mMotionGraph  = null;
@@ -375,8 +380,10 @@ public class GraphPage extends AppPage implements OnClickListener,
 	
 	public void finishQuest(Object... params) {
 		QuestButton quest = (QuestButton) mLastSelObject;
-		int index = (Integer) params[0];
-		quest.setAnswer(USCTeensGlobals.ACTION_IMGS[index], USCTeensGlobals.ACTION_NAMES[index]);
+		String actionID = (String) params[0];	
+		ActionWrap actions = ActionManager.getActions();
+		Action action = actions.get(actionID);
+		quest.setAnswer(action);
 		synchronized (this) {
 			mSlideBar.updateUnmarkedRange();
 		}
@@ -397,7 +404,8 @@ public class GraphPage extends AppPage implements OnClickListener,
 			maintain = mChunksToMerge.get(1);
 		} else { // "None"
 			maintain = mChunksToMerge.get(0);
-			maintain.mQuest.setAnswer(R.drawable.question_btn, "None");
+			Action action = ActionManager.getActions().get(USCTeensGlobals.UNLABELLED_GUID);
+			maintain.mQuest.setAnswer(action);
 		}    		
 		// it's not called from AppPage.onTouch, so explicit synchronized is necessary
     	synchronized (this) {

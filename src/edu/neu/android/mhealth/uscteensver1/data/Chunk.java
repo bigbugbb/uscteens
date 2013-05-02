@@ -9,8 +9,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.actions.Action;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.pages.GraphPage;
@@ -33,15 +33,17 @@ public class Chunk extends AppObject {
 	public MergeButton mMerge;
 	public SplitButton mSplit;
 	
-	private String  mCreateTime;
-	private String  mModifyTime;
+	private Action mAction;
+	
+	private String mCreateTime;
+	private String mModifyTime;
 	
 	public float mDispOffsetX;
 	public float mDispOffsetY;
 		
 	private static Paint   sPaint;
 	private static boolean sPaintCreated = false;
-	
+
 	private static StringBuilder sStringBuilder = new StringBuilder();	
 	
 	protected static void createPaint() {
@@ -73,13 +75,11 @@ public class Chunk extends AppObject {
 		createPaint();
 	}
 	
-	public RawChunk toRawChunk() {
-		
+	public RawChunk toRawChunk() {		
 		String startDate = toDateTime(mStart / USCTeensGlobals.PIXEL_PER_DATA + mOffset);
-		String stopDate  = toDateTime(mStop  / USCTeensGlobals.PIXEL_PER_DATA + mOffset);		
-		int actionID = getActionID();
-		String activity = (actionID == -1) ? "UNLABELLED" : USCTeensGlobals.ACTION_NAMES[actionID];			                  		
-		RawChunk rawChunk = new RawChunk(startDate, stopDate, activity, mCreateTime, mModifyTime);
+		String stopDate  = toDateTime(mStop  / USCTeensGlobals.PIXEL_PER_DATA + mOffset);					                  
+		RawChunk rawChunk = new RawChunk(
+				startDate, stopDate, mAction, mCreateTime, mModifyTime);
 		
 		return rawChunk;
 	}
@@ -120,21 +120,18 @@ public class Chunk extends AppObject {
 		return false;
 	}
 	
+	public void setAction(Action action) {
+		mAction = action;
+		updateModifyTime();
+	}
+	
+	public Action getAction() {
+		return mAction;
+	}
+	
 	public int getChunkWidth() {
 		assert(mStop - mStart >= MINIMUM_CHUNK_SPACE);
 		return mStop - mStart;
-	}
-
-	public int getActionID() {
-		if (mQuest.isAnswered()) {					
-			for (int i = 0; i < USCTeensGlobals.ACTION_IMGS.length; ++i) {
-				if (mQuest.getAnswer() == USCTeensGlobals.ACTION_IMGS[i]) {
-					return i;
-				}
-			}
-		}
-		
-		return -1;
 	}
 	
 	public int getChunkRealStartTime() {
@@ -173,13 +170,10 @@ public class Chunk extends AppObject {
 		mParent.getObjectList().remove(mSplit);
 	}
 	
-	public boolean load(int start, int stop, int offset, int activityID, 
+	public boolean load(int start, int stop, int offset, Action action, 
 			String createTime, String modifyTime) {		
-		boolean result = update(start, stop, offset);
-		mQuest.setAnswer(
-			activityID == -1 ? R.drawable.question_btn : USCTeensGlobals.ACTION_IMGS[activityID], 
-			activityID == -1 ? "None" : USCTeensGlobals.ACTION_NAMES[activityID]
-		);					
+		boolean result = update(start, stop, offset);		
+		mAction = action;			
 		// put it here because the methods above may update the modify time
 		mCreateTime = createTime; 
 		mModifyTime = modifyTime;

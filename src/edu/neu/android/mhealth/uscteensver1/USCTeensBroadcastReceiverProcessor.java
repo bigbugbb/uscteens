@@ -93,5 +93,6 @@ public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcess
 	public void respondHeadsetPluggedIn() {
 		Log.d(TAG, "Respond Headset Plugged In in " + TAG); 
 		Labeler.addLabel(getDateString(), "Plug earphones", true); 		
-	}	
+	}
+
 }

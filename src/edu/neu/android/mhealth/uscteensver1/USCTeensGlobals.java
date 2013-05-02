@@ -30,6 +30,7 @@ public class USCTeensGlobals {
 	public final static String LAST_SELECTED_CHUNK = "LAST_SELECTED_CHUNK";
 	public final static String LAST_DISPLAY_OFFSET_X = "LAST_DISPLAY_OFFSET_X";
 	public final static String SENSOR_FOLDER     = "/Sensor/";
+	public final static String ACTIVITY_FOLDER   = "/Activity/";
 	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String LABELS_FOLDER = "/Labels/";
 	public final static String SENSOR_TYPE = "InternalAccel";
@@ -41,105 +42,106 @@ public class USCTeensGlobals {
 	public static Context sContext = null;
 	public static Handler sGlobalHandler = null;
 	
-	public static final String[] ACTION_NAMES = new String[] {  		
-		"Reading/Homework", "Watching TV/Movies", "Using the computer",
-		"Eating", "Sports", "Going somewhere",
-		"Lying down", "Sitting", "Standing",
-		"Walking", "Hanging with friends", "Doing chores", 
-		"Cooking", "Riding in a car", "Playing video games", 
-		"Using the phone", "Showering/Bathing", "Sleeping",
-		"Doing something else", "I don't remember", "Running",
-		"Basketball", "Football", "Soccer", 
-		"Jogging", "Dance class", "Karate class",
-		"Strength training", "Bicycling", "Swimming",
-		"Baseball", "Skateboarding", /*"Walking pet",
-		"Playing pet", "Playing kid", "In meeting",
-		"Teaching", "Labeling my day", "Putting around",
-		"Cleaning up", "Doing dishes", "Charging phone",
-		"Driving a car", "Taking the train", "Taking the bus",
-		"Doing a mix of things", "Waiting around"*/
-	};
+//	public static final String[] ACTION_NAMES = new String[] {  		
+//		"Reading/Homework", "Watching TV/Movies", "Using the computer",
+//		"Eating", "Sports", "Going somewhere",
+//		"Lying down", "Sitting", "Standing",
+//		"Walking", "Hanging with friends", "Doing chores", 
+//		"Cooking", "Riding in a car", "Playing video games", 
+//		"Using the phone", "Showering/Bathing", "Sleeping",
+//		"Doing something else", "I don't remember", "Running",
+//		"Basketball", "Football", "Soccer", 
+//		"Jogging", "Dance class", "Karate class",
+//		"Strength training", "Bicycling", "Swimming",
+//		"Baseball", "Skateboarding", /*"Walking pet",
+//		"Playing pet", "Playing kid", "In meeting",
+//		"Teaching", "Labeling my day", "Putting around",
+//		"Cleaning up", "Doing dishes", "Charging phone",
+//		"Driving a car", "Taking the train", "Taking the bus",
+//		"Doing a mix of things", "Waiting around"*/
+//	};
 	
-	public static final int[] ACTION_IMGS = new int[] {	
-		R.drawable.reading, R.drawable.watchingtv, R.drawable.usingcomputer,
-		R.drawable.eating, R.drawable.sports, R.drawable.goingsomewhere,
-		R.drawable.lyingdown, R.drawable.sitting, R.drawable.standing,
-		R.drawable.walking, R.drawable.hangingwfriends, R.drawable.doingchores,
-		R.drawable.cooking, R.drawable.ridinginacar, R.drawable.videogames,
-		R.drawable.usingthephone, R.drawable.showering, R.drawable.sleeping,
-		R.drawable.somethingelse, R.drawable.idontremember, R.drawable.running,
-		R.drawable.basketball, R.drawable.football, R.drawable.soccer,
-		R.drawable.jogging, R.drawable.dance, R.drawable.karate,
-		R.drawable.strength_training, R.drawable.bicycling, R.drawable.swimming,
-		R.drawable.baseball, R.drawable.skateboarding
-	};
+//	public static final int[] ACTION_IMGS = new int[] {	
+//		R.drawable.reading, R.drawable.watchingtv, R.drawable.usingcomputer,
+//		R.drawable.eating, R.drawable.sports, R.drawable.goingsomewhere,
+//		R.drawable.lyingdown, R.drawable.sitting, R.drawable.standing,
+//		R.drawable.walking, R.drawable.hangingwfriends, R.drawable.doingchores,
+//		R.drawable.cooking, R.drawable.ridinginacar, R.drawable.videogames,
+//		R.drawable.usingthephone, R.drawable.showering, R.drawable.sleeping,
+//		R.drawable.somethingelse, R.drawable.idontremember, R.drawable.running,
+//		R.drawable.basketball, R.drawable.football, R.drawable.soccer,
+//		R.drawable.jogging, R.drawable.dance, R.drawable.karate,
+//		R.drawable.strength_training, R.drawable.bicycling, R.drawable.swimming,
+//		R.drawable.baseball, R.drawable.skateboarding
+//	};
 	
-	public static final String ANNOTATION_GUID = 
-		"2F996145-7EB0-4E25-935C-10D53B15012D";
+	public static final String ANNOTATION_GUID = "2F996145-7EB0-4E25-935C-10D53B15012D";
 	
-	public static final String[] ACTIONS_GUID = new String[] {
-		"D929FAB8-9614-466C-8E62-B845D53DB80D",
-		"28365949-D08E-443A-A8B2-FBD0893E01B9",
-		"2BCA02F4-27DB-4D18-8BB8-E43E72F54852",
-		"06F8226B-A0C5-42A6-95A3-8EFA770A0E4A",
-
-		"E1BB662B-BBF6-482E-9416-A3E9DF69870C",
-		"FDCAD523-3C2C-45F1-9705-130C14BDC30D",
-		"79637898-3F3F-4339-90AD-135665259479",
-		"6D748F4B-77A4-4876-ACFB-A0C194BF6E09",
-
-		"62A18268-D3FA-4A0E-A397-4170A961D2CE",
-		"004FF248-2439-4DE7-BD02-725FB6D9091D",
-		"28E2DCD3-D450-47A2-84FC-F1B474FAFB76",
-		"C8524DF3-E709-4AA8-BAC0-01AC26F1BF95",
-
-		"CC8B3B69-0806-419E-9515-25E7C33D608D",
-		"912D3872-8999-4A08-90EC-C5FBAAC7555F",
-		"7D4B6257-10F3-436E-9BD4-F9C2153767B1",
-		"D92248D8-E4F2-435F-A301-C1877044F20F",
-
-		"A11EF031-93F5-487A-B944-F0B0ED0F642C",
-		"1A812254-20BA-4823-8649-CE72CA640965",
-		"BE8C23CD-74DE-457B-925D-54CEF87413F6",
-		"3F1F4DA5-D973-4BF9-BEE4-E374B2EDBB5A",
-
-		"C38A7D91-FA60-49D3-84FA-3219F86CC209",
-		"71783773-27AF-45CE-B617-2B7D4F4F7E06",
-		"F842B45E-CCD3-40FB-935D-DAB8D8ACE8AA",
-		"3A82F7AF-1146-4783-946C-0CD9C00E59FC",
-
-		"2A43A7E9-2C31-43B0-B18E-C039A6FA11EC",
-		"71D004C4-D2DA-4C6A-9DB8-619C9428BE2C",
-		"1D082D89-C95E-456B-A093-484F44135552",
-		"A37B468C-7105-45BF-A4D6-9332E5846CB4",
-
-		"FFA9C6A2-2F0E-4E0F-A301-F777C123E9E6",
-		"10832F21-B1BE-4A25-B6B7-0F3CFC780E62",
-		"06D2F88D-0F25-445A-912A-819E90C1F162",
-		"850C114A-27C9-40E5-A9CA-873EC0C1A4FC",
-		/*
-		"30AF0C80-38D4-4DCC-8328-E5E9CB26244F",
-		"EA3C891A-DA60-4403-83EF-A02B135E5961",
-		"78B71146-47CF-4696-A7D5-0D8ADC63FAB5",
-		"DD98FB69-2131-45E2-9BF4-2BEE86AD21C6",
-		
-		"642EF652-DEC7-47A4-A3D2-A9BAE1E76461",
-		"36D12350-6B0E-4708-B9D5-42CF73F4434D",
-		"A536E5C6-4752-47C3-9277-2A9AAAE3D853",
-		"B3801125-0731-4C5A-B26C-323B5AABC141",
-		
-		"7BF7BD61-2992-42AA-A426-7DC6CC3D9154",
-		"CD4AE2EC-2F2D-48DC-9332-D766FD06A937",
-		"C5A54D27-742B-4192-92DC-56E97929ACF6",
-		"3AA860D1-E271-4D98-8BE9-6CF021CA8E51",
-
-		"7AA73808-7732-4F89-A835-0A6B9C5B2912",
-		"7C3B03D3-A738-4B40-9CA1-4B54232FA90B",
-		"02FF0313-8E27-4C13-AC20-F27784AA58DB",*/
-
-
-		"03F9A375-C162-4B24-AB74-BF23CD07B358",  // UNLABELLED
-	};
+	public static final String UNLABELLED_GUID = "03F9A375-C162-4B24-AB74-BF23CD07B358";
+//	
+//	public static final String[] ACTIONS_GUID = new String[] {
+//		"D929FAB8-9614-466C-8E62-B845D53DB80D",
+//		"28365949-D08E-443A-A8B2-FBD0893E01B9",
+//		"2BCA02F4-27DB-4D18-8BB8-E43E72F54852",
+//		"06F8226B-A0C5-42A6-95A3-8EFA770A0E4A",
+//
+//		"E1BB662B-BBF6-482E-9416-A3E9DF69870C",
+//		"FDCAD523-3C2C-45F1-9705-130C14BDC30D",
+//		"79637898-3F3F-4339-90AD-135665259479",
+//		"6D748F4B-77A4-4876-ACFB-A0C194BF6E09",
+//
+//		"62A18268-D3FA-4A0E-A397-4170A961D2CE",
+//		"004FF248-2439-4DE7-BD02-725FB6D9091D",
+//		"28E2DCD3-D450-47A2-84FC-F1B474FAFB76",
+//		"C8524DF3-E709-4AA8-BAC0-01AC26F1BF95",
+//
+//		"CC8B3B69-0806-419E-9515-25E7C33D608D",
+//		"912D3872-8999-4A08-90EC-C5FBAAC7555F",
+//		"7D4B6257-10F3-436E-9BD4-F9C2153767B1",
+//		"D92248D8-E4F2-435F-A301-C1877044F20F",
+//
+//		"A11EF031-93F5-487A-B944-F0B0ED0F642C",
+//		"1A812254-20BA-4823-8649-CE72CA640965",
+//		"BE8C23CD-74DE-457B-925D-54CEF87413F6",
+//		"3F1F4DA5-D973-4BF9-BEE4-E374B2EDBB5A",
+//
+//		"C38A7D91-FA60-49D3-84FA-3219F86CC209",
+//		"71783773-27AF-45CE-B617-2B7D4F4F7E06",
+//		"F842B45E-CCD3-40FB-935D-DAB8D8ACE8AA",
+//		"3A82F7AF-1146-4783-946C-0CD9C00E59FC",
+//
+//		"2A43A7E9-2C31-43B0-B18E-C039A6FA11EC",
+//		"71D004C4-D2DA-4C6A-9DB8-619C9428BE2C",
+//		"1D082D89-C95E-456B-A093-484F44135552",
+//		"A37B468C-7105-45BF-A4D6-9332E5846CB4",
+//
+//		"FFA9C6A2-2F0E-4E0F-A301-F777C123E9E6",
+//		"10832F21-B1BE-4A25-B6B7-0F3CFC780E62",
+//		"06D2F88D-0F25-445A-912A-819E90C1F162",
+//		"850C114A-27C9-40E5-A9CA-873EC0C1A4FC",
+//		/*
+//		"30AF0C80-38D4-4DCC-8328-E5E9CB26244F",
+//		"EA3C891A-DA60-4403-83EF-A02B135E5961",
+//		"78B71146-47CF-4696-A7D5-0D8ADC63FAB5",
+//		"DD98FB69-2131-45E2-9BF4-2BEE86AD21C6",
+//		
+//		"642EF652-DEC7-47A4-A3D2-A9BAE1E76461",
+//		"36D12350-6B0E-4708-B9D5-42CF73F4434D",
+//		"A536E5C6-4752-47C3-9277-2A9AAAE3D853",
+//		"B3801125-0731-4C5A-B26C-323B5AABC141",
+//		
+//		"7BF7BD61-2992-42AA-A426-7DC6CC3D9154",
+//		"CD4AE2EC-2F2D-48DC-9332-D766FD06A937",
+//		"C5A54D27-742B-4192-92DC-56E97929ACF6",
+//		"3AA860D1-E271-4D98-8BE9-6CF021CA8E51",
+//
+//		"7AA73808-7732-4F89-A835-0A6B9C5B2912",
+//		"7C3B03D3-A738-4B40-9CA1-4B54232FA90B",
+//		"02FF0313-8E27-4C13-AC20-F27784AA58DB",*/
+//
+//
+//		"03F9A375-C162-4B24-AB74-BF23CD07B358",  // UNLABELLED
+//	};
 	
 	public static void initGlobals(Context aContext) {
 		// By default the logging will go to the apps internal storage, not the external directory

@@ -1,114 +1,40 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
 
-import java.util.ArrayList;
-
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.actions.Action;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
-import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class QuestButton extends ChunkButton {	
-	
-	protected int mAnswer = R.drawable.question_btn;
-	protected String mActionName = "None";
-
-	protected static boolean sImageLoaded = false;
-	protected static ArrayList<Bitmap> sImages = new ArrayList<Bitmap>();
-
-	static protected void loadImages(Resources res, int[] resIDs) {
-		if (sImageLoaded) {
-			return;
-		}
-		sImageLoaded = true;
-        
-        BitmapFactory.Options options = new BitmapFactory.Options(); 
-        options.inPurgeable = true;
-        options.inPreferredConfig = Config.RGB_565;        
-        for (int id : resIDs) {
-        	Bitmap origin = BitmapFactory.decodeResource(res, id, options);
-        	Bitmap scaled = null;
-        	// scale the image according to the current screen resolution
-        	float dstWidth  = origin.getWidth(),
-        	      dstHeight = origin.getHeight();        	        
-    		dstWidth  = AppScale.doScaleW(dstWidth);
-    		dstHeight = AppScale.doScaleH(dstHeight);
-    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-    		}                   
-    		// add to the image list
-        	if (scaled != null) {
-	    		origin.recycle(); // explicit call to avoid out of memory
-	    		sImages.add(scaled);
-	        } else {
-	        	sImages.add(origin);
-	        }
-        }
-	}
-	
+		
 	public QuestButton(Resources res, Chunk host, OnClickListener listener) {
-		super(res, host);
-		loadImages(res, new int[]{ R.drawable.question_btn });
-		mWidth  = sImages.get(0).getWidth();
-		mHeight = sImages.get(0).getHeight();
+		super(res, host);						
 		mListener = listener;
 		mID = UIID.QUEST;
 	}
 	
+	public void setAction(Action action) {
+		getHost().setAction(action);
+	}
+	
 	public boolean isAnswered() {
-		return mAnswer != R.drawable.question_btn;
+		Action action = getHost().getAction();
+		return !action.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID);
 	}
 	
-	public void setAnswer(int answer, String actionName) {				
-		BitmapFactory.Options options = new BitmapFactory.Options(); 
-        options.inPurgeable = true;
-        options.inPreferredConfig = Config.RGB_565; 
-        
-		if (answer != mAnswer) {
-			Bitmap image  = null;
-			Bitmap origin = BitmapFactory.decodeResource(mRes, answer, options);
-        	Bitmap scaled = null;
-        	// scale the image according to the current screen resolution
-        	float dstWidth  = origin.getWidth(),
-        	      dstHeight = origin.getHeight();        	        	
-    		dstWidth  = AppScale.doScaleW(dstWidth);
-    		dstHeight = AppScale.doScaleH(dstHeight);
-    		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-    			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-    		}            
-    		// add to the image list
-        	if (scaled != null) {
-	    		origin.recycle(); // explicit call to avoid out of memory
-	    		image = scaled;
-	        } else {
-	        	image = origin;
-	        } 
-			// change answer			
-			if (mImages.size() == 0) { // initialize
-				mImages.add(image);				
-			} else { // update the answer
-				mImages.get(0).recycle();			
-				mImages.set(0, image);
-			}
-			mAnswer = answer;	
-			mActionName = actionName;
-			// notify the change to its parent chunk to update to modify time
-			getHost().updateModifyTime();
+	public void setAnswer(Action newAction) {	
+		Action oldAction = getHost().getAction();
+		
+		if (!newAction.getActionID().equals(oldAction.getActionID())) {
+			getHost().setAction(newAction);			
 		}
-    
-	}
-	
-	public int getAnswer() {
-		return mAnswer;
 	}
 	
 	public String getStringAnswer() {
-		return mActionName;
+		return getHost().getAction().getActionName();
 	}
 	
 	@Override
@@ -123,6 +49,9 @@ public class QuestButton extends ChunkButton {
 		if (mCanvasWidth == width && mCanvasHeight == height) {
 			return;
 		}
+		Action action = getHost().getAction();
+		mWidth  = action.getActionImage().getWidth();
+		mHeight = action.getActionImage().getHeight();
 		mCanvasWidth  = width;
 		mCanvasHeight = height;	
 		
@@ -132,7 +61,7 @@ public class QuestButton extends ChunkButton {
 	@Override
 	public void onDraw(Canvas c) {
 		if (mVisible) {
-			c.drawBitmap(mAnswer == R.drawable.question_btn ? sImages.get(0) : mImages.get(0), 
+			c.drawBitmap(mHost.getAction().getActionImage(), 
 					mX + mOffsetX + mOffsetInChunkX, mY + mOffsetY + mOffsetInChunkY, null);
 		}
 	}

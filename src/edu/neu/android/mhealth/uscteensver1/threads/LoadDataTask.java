@@ -78,7 +78,7 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 
 	@Override
 	protected Void doInBackground(String[] params) {
-		synchronized (sLock) {
+		synchronized (sLock) {			
 			mResult = DataSource.loadRawData(params[0]);
 		}
 		return null;

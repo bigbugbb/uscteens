@@ -27,19 +27,19 @@ import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ActionListView;
+import edu.neu.android.mhealth.uscteensver1.ui.ActionListView.ActionItem;
 import edu.neu.android.mhealth.uscteensver1.ui.ArrowButton;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
+import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnBoundaryListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
-import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnReachedEndListener;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 
 public class QuestView extends ImageView implements OnGestureListener, 
-													  OnItemClickListener, 
-													  OnReachedEndListener,
-													  OnListViewScrollingListener {
-	
+													OnItemClickListener, 
+													OnBoundaryListener,
+													OnListViewScrollingListener {
 	protected ArrowButton mArrowUp   = null;
 	protected ArrowButton mArrowDown = null;
 	protected ActionListView mActionList = null;
@@ -67,14 +67,13 @@ public class QuestView extends ImageView implements OnGestureListener,
 	public QuestView(Context context, AttributeSet attrs) {
 		super(context, attrs);	
 		
-		mArrowUp   = new ArrowButton(context.getResources());
+		mArrowUp = new ArrowButton(context.getResources());
 		mArrowUp.setVisible(false);
-		mArrowUp.changeArrowDir(false);
-		//mArrowUp.setVisible(false);
+		mArrowUp.changeArrowDir(false);		
 		mArrowDown = new ArrowButton(context.getResources());		
 		mActionList = new ActionListView(context.getResources());
 		mActionList.setOnItemClickListener(this);
-		mActionList.setOnReachedEndListener(this);
+		mActionList.setOnBoundaryListener(this);
 		mActionList.setOnListViewScrollingListener(this);
 		mObjects.add(mArrowUp);
 		mObjects.add(mArrowDown);
@@ -110,22 +109,19 @@ public class QuestView extends ImageView implements OnGestureListener,
 	}
 	
 	private String convertDateToDisplayFormat(String date) {
-		String[] MONTHS = {
+		String[] months = {
 			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"			
 		};
-		
 		String[] times = date.split("-");
 		String weekday = WeekdayCalculator.getWeekday(date);
-		String month   = MONTHS[Integer.parseInt(times[1]) - 1];
-		String day     = times[2];		
-		String formatted = " " + weekday.toUpperCase() + "  " + month + "  " + day;
+		String month   = months[Integer.parseInt(times[1]) - 1];
+		String day     = times[2];			
 		
-		return formatted;
+		return " " + weekday.toUpperCase() + "  " + month + "  " + day;
 	}
 	
 	// used to update the view for drawing
-	Runnable mRunnable = new Runnable() {		
-		
+	Runnable mRunnable = new Runnable() {
 		public void run() {
 			invalidate();
 			if (Math.abs(mActionList.getSpeedY()) > 0 || mActionList.outOfBound()) {
@@ -239,7 +235,7 @@ public class QuestView extends ImageView implements OnGestureListener,
 	protected OnBackClickedListener mListener = null;
 	
 	public interface OnBackClickedListener {
-		void OnBackClicked();
+		void onBackClicked();
 	}		
 	
 	public void setOnBackClickedListener(OnBackClickedListener listener) {
@@ -272,7 +268,7 @@ public class QuestView extends ImageView implements OnGestureListener,
 		
 		if (mBackArea.contains(e.getX(), e.getY())) {
 			if (mListener != null) {
-				mListener.OnBackClicked();
+				mListener.onBackClicked();
 			}
 			return true;
 		}
@@ -339,24 +335,21 @@ public class QuestView extends ImageView implements OnGestureListener,
 
 	@Override
 	public void onShowPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
-
 		return false; // do nothing here
 	}
 
 	@Override
 	public void onLongPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
 
 	@Override
-	public void onReachedEnd(ListView view, boolean top, boolean left) {				
+	public void onBoundary(ListView view, boolean top, boolean left) {				
 		if (top) {
 			mArrowUp.setVisible(false);
 			mArrowDown.setVisible(true);
@@ -369,7 +362,7 @@ public class QuestView extends ImageView implements OnGestureListener,
 	@Override
 	public void onItemClicked(ListView view, ListItem li, int posn) {
 		Message msg = mHandler.obtainMessage();
-		msg.obj  = Integer.valueOf(posn);
+		msg.obj  = ((ActionItem) li).getAction().getActionID();
 		msg.what = 1;
 		mHandler.sendMessage(msg);			
 	}

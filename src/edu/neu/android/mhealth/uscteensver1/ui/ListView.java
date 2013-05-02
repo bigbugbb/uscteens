@@ -35,8 +35,8 @@ public class ListView extends AppObject {
 	protected Typeface mTypeface = null;
 	protected Canvas   mInnerCanvas = null;
 	protected ArrayList<ListItem> mItems = new ArrayList<ListItem>();
-	protected OnReachedEndListener mOnReachedEndListener = null;
-	protected OnItemClickListener  mOnItemClickListener  = null;
+	protected OnBoundaryListener  mOnBoundaryListener  = null;
+	protected OnItemClickListener mOnItemClickListener = null;
 	protected OnListViewScrollingListener mOnListViewScrollingListener = null;
 	
 	public class ListItem {
@@ -225,16 +225,16 @@ public class ListView extends AppObject {
 		if (mOffsetY > 0) {				
 			mOffsetY = (int) Math.max(0, Math.min(mItemHeight * 1.3f, mOffsetY - mOffsetSpeedY));
 			mSpeedY = 0;
-			if (mOnReachedEndListener != null) {
-				mOnReachedEndListener.onReachedEnd(this, true, false);
+			if (mOnBoundaryListener != null) {
+				mOnBoundaryListener.onBoundary(this, true, false);
 			}
 		} else if (mOffsetY + (mItemHeight + mBorderWidth) * mItems.size() - mBorderWidth <= mHeight) {			
 			mOffsetY = (int) Math.min(- (mItemHeight + mBorderWidth) * (mItems.size() - 4), 
 				Math.max(mOffsetY + mOffsetSpeedY, 
 					- (mItemHeight + mBorderWidth) * (mItems.size() - 4) - mItemHeight * 1.3f));
 			mSpeedY = 0;
-			if (mOnReachedEndListener != null) {
-				mOnReachedEndListener.onReachedEnd(this, false, false);
+			if (mOnBoundaryListener != null) {
+				mOnBoundaryListener.onBoundary(this, false, false);
 			}
 		}
 		
@@ -314,14 +314,14 @@ public class ListView extends AppObject {
 		
 		if (mOffsetY > 0) {
 			mOffsetY = (int) Math.min(mOffsetY, mItemHeight * 1.3f);			
-			if (mOnReachedEndListener != null) {
-				mOnReachedEndListener.onReachedEnd(this, true, false);
+			if (mOnBoundaryListener != null) {
+				mOnBoundaryListener.onBoundary(this, true, false);
 			}
 		} else if (mOffsetY + (mItemHeight + mBorderWidth) * mItems.size() - mBorderWidth <= mHeight) {			
 			mOffsetY = (int) Math.max(mOffsetY, 
 				- (mItemHeight + mBorderWidth) * (mItems.size() - 4) - mItemHeight * 1.3f);
-			if (mOnReachedEndListener != null) {
-				mOnReachedEndListener.onReachedEnd(this, false, false);
+			if (mOnBoundaryListener != null) {
+				mOnBoundaryListener.onBoundary(this, false, false);
 			}
 		} else {
 			if (mOnListViewScrollingListener != null) {
@@ -333,8 +333,8 @@ public class ListView extends AppObject {
 		return true;
 	}
 	
-	public void setOnReachedEndListener(OnReachedEndListener listener) {
-		mOnReachedEndListener = listener;
+	public void setOnBoundaryListener(OnBoundaryListener listener) {
+		mOnBoundaryListener = listener;
 	}
 	
 	public void setOnItemClickListener(OnItemClickListener listener) {
@@ -349,8 +349,8 @@ public class ListView extends AppObject {
 		void onItemClicked(ListView view, ListItem li, int posn);
 	}
 
-	public interface OnReachedEndListener {
-		void onReachedEnd(ListView view, boolean top, boolean left);
+	public interface OnBoundaryListener {
+		void onBoundary(ListView view, boolean top, boolean left);
 	}
 	
 	public interface OnListViewScrollingListener {

@@ -30,6 +30,9 @@ import org.dom4j.io.XMLWriter;
 import android.content.Context;
 import android.util.Pair;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.actions.Action;
+import edu.neu.android.mhealth.uscteensver1.actions.ActionManager;
+import edu.neu.android.mhealth.uscteensver1.actions.ActionWrap;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
@@ -114,7 +117,7 @@ public class DataSource {
 					// OR date crossing case					
 					if (DataSource.loadRawData(select) == DataSource.LOADING_SUCCEEDED) {
 						result = true;
-					}					
+					}	
 				}
 			} catch (ParseException e) {				
 				e.printStackTrace();
@@ -134,11 +137,18 @@ public class DataSource {
 		
 		sCancelled = false;
 		
-		/* 
-		 * first load the accelerometer sensor data
+		/*
+		 * first load all actions
 		 */
-		int result = loadRawAccelData(date);
+		int result = ActionManager.loadActions();
 		if (result != LOADING_SUCCEEDED) {
+			return result;
+		}
+		
+		/* 
+		 * then load the accelerometer sensor data
+		 */		
+		if ((result = loadRawAccelData(date)) != LOADING_SUCCEEDED) {
 			return result;
 		}
 		
@@ -400,6 +410,14 @@ public class DataSource {
 			    	   Element stop  = (Element) k.next();
 			    	   Element prop  = (Element) k.next();			    	
 			    	   
+			    	   String guid = "";
+			    	   for (Iterator n = label.attributeIterator(); n.hasNext();) {
+			    	       Attribute attribute = (Attribute) n.next();			    	       
+			    	       if (attribute.getName().compareTo("GUID") == 0) {
+			    	    	   guid = attribute.getText();
+			    	       } 
+			    	   }
+			    	   
 			    	   String modify = "";
 			    	   String create = "";			    	   
 			    	   for (Iterator n = prop.attributeIterator(); n.hasNext();) {
@@ -410,9 +428,10 @@ public class DataSource {
 			    	    	   create = attribute.getText(); 	    	   
 			    	       }
 			    	   }
-			    	   
+			    	   //-----
+			    	   ActionWrap actions = ActionManager.getActions();			    	   
 			    	   RawChunk rawchunk = new RawChunk(
-			    			   start.getText(), stop.getText(), label.getText(), create, modify);
+			    			   start.getText(), stop.getText(), actions.get(guid), create, modify);
 			    	   sRawChksWrap.add(rawchunk);
 			       }
 		        
@@ -452,7 +471,7 @@ public class DataSource {
 		// first clear the data container		
 		rawLabelWrap.clear();		
 		
-		// load the daily data from the csv file	
+		// load the daily data from the csv file
 //		loadDailyLabelData(labelFilePaths[0]);
 		String result = null;
 		File labelFile = new File(labelFilePaths[0]);
@@ -701,8 +720,8 @@ public class DataSource {
 		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
 		assert(date.compareTo("") != 0);
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				USCTeensGlobals.ANNOTATION_FOLDER + date + File.separator + USCTeensGlobals.ANNOTATION_SET + "." + 
-				/*PhoneInfo.getID(mContext) + "." + */date + ".annotation.xml";			
+				USCTeensGlobals.ANNOTATION_FOLDER + date + File.separator + USCTeensGlobals.ANNOTATION_SET +
+				"." + date + ".annotation.xml";			
 
 		sRawChksWrap.clear();
 		for (int i = 0; i < chunks.size(); ++i) {
@@ -725,22 +744,16 @@ public class DataSource {
 	        .addAttribute("METHOD", "based on convolution & pre-defined thresholds")
 	        .addAttribute("NOTES", "")
 	        .addAttribute("ALL_LABELLED", sRawChksWrap.areAllChunksLabelled() ? "yes" : "no");
-        
+        //-----
         for (RawChunk rawChunk : sRawChksWrap) {
-        	int index = USCTeensGlobals.ACTIONS_GUID.length - 1; // unlabelled
-        	for (int i = 0; i < USCTeensGlobals.ACTION_NAMES.length; ++i) {
-        		String action = USCTeensGlobals.ACTION_NAMES[i];
-        		if (rawChunk.mActivity.compareToIgnoreCase(action) == 0) {
-        			index = i;
-        		}
-        	}
+        	Action action = rawChunk.getAction();
 	        // ANNOTATION
 	        Element annotation = annotations.addElement("ANNOTATION")
 	        	.addAttribute("GUID", USCTeensGlobals.ANNOTATION_GUID);
 	        // LABEL
 	        Element label = annotation.addElement("LABEL")
-		        .addAttribute("GUID", USCTeensGlobals.ACTIONS_GUID[index])
-		        .addText(rawChunk.mActivity);
+		        .addAttribute("GUID", action.getActionID())
+		        .addText(action.getActionName());
 	        // START_DT
 	        Element start_dt = annotation.addElement("START_DT")
 	        	.addText(rawChunk.mStartDate);
