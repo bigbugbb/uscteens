@@ -66,8 +66,7 @@ public class ChunkManager {
 		}
 		
 		int timeOffset = 0;
-		for (int i = 0; i < rawChunks.size(); ++i) {
-			Log.d("ChunkManager", "" + i);
+		for (int i = 0; i < rawChunks.size(); ++i) {			
 			Chunk chunk = insertChunk(i);	
 			RawChunk rawChunk = rawChunks.get(i);
 			
