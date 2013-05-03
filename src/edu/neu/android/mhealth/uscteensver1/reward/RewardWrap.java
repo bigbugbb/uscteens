@@ -1,23 +1,25 @@
-package edu.neu.android.mhealth.uscteensver1.actions;
+package edu.neu.android.mhealth.uscteensver1.reward;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-// id -> action
-public class ActionWrap extends HashMap<String, Action> {
+import edu.neu.android.mhealth.uscteensver1.reward.Reward;
+
+// date -> action
+public class RewardWrap extends HashMap<String, Reward> {
 
 	private static final long serialVersionUID = 6300932318196334092L;
 
-	public ActionWrap() {}
+	public RewardWrap() {}
 	
 	@Override
 	public void clear() {
 		Iterator iter = entrySet().iterator(); 
 		while (iter.hasNext()) { 
 		    Map.Entry entry = (Map.Entry) iter.next(); 	
-		    Action action = (Action) entry.getValue();
-		    action.clear();
+		    Reward reward = (Reward) entry.getValue();
+		    reward.clear();
 		}
 	}
 	

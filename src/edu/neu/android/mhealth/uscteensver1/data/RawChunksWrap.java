@@ -3,7 +3,7 @@ package edu.neu.android.mhealth.uscteensver1.data;
 import java.util.ArrayList;
 
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.actions.Action;
+import edu.neu.android.mhealth.uscteensver1.action.Action;
 
 class RawChunksWrap extends ArrayList<RawChunk> {
 	

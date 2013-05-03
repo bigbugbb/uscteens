@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.actions;
+package edu.neu.android.mhealth.uscteensver1.action;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,7 +25,7 @@ import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.WOCKETSException;
 
 public class ActionManager {
-	private final static String TAG = "ActionsManager";
+	private final static String TAG = "ActionManager";
 	// result code
 	public final static int LOADING_SUCCEEDED  = 0;
 	public final static int ERR_CANCELLED      = 1;

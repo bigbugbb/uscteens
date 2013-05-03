@@ -12,8 +12,9 @@
     <edu.neu.android.mhealth.uscteensver1.views.RewardView
         android:id="@+id/view_reward"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:paddingTop="64dip" />
+		android:layout_height="210dip"
+		android:layout_gravity="center" 		
+		android:padding="1dp" />
     
     <edu.neu.android.mhealth.uscteensver1.views.DummyView
     	android:id="@+id/view_dummy"

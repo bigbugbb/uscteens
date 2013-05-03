@@ -32,6 +32,7 @@ public class USCTeensGlobals {
 	public final static String LAST_DISPLAY_OFFSET_X = "LAST_DISPLAY_OFFSET_X";
 	public final static String SENSOR_FOLDER     = "/Sensor/";
 	public final static String ACTIVITY_FOLDER   = "/Activity/";
+	public final static String REWARD_FOLDER     = "/Reward/";
 	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String LABELS_FOLDER = "/Labels/";
 	public final static String SENSOR_TYPE = "InternalAccel";
@@ -83,8 +84,7 @@ public class USCTeensGlobals {
 
 		Globals.DEFAULT_MAIL_USERNAME = "wocketssmtp@gmail.com";
 		Globals.DEFAULT_MAIL_PASSWORD = "W0CKET$mtp";
-		Globals.DEFAULT_PING_ADDRESS = "http://wockets.ccs.neu.edu/ping.php";	//TODO change to wockets server
-		
+		Globals.DEFAULT_PING_ADDRESS  = "http://wockets.ccs.neu.edu/ping.php";	//TODO change to wockets server
 		Globals.DEFAULT_SAMPLING_RATE = 40;
 		
 //		public static String serverAddress = "http://wockets.ccs.neu.edu:8080/Wockets/android/getWocketsDetail.html";

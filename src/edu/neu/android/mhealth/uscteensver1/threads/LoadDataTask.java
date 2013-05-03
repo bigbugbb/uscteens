@@ -57,7 +57,7 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 		
 		Message msg = mHandler.obtainMessage();	
 		
-		if (mResult == DataSource.LOADING_SUCCEEDED){			
+		if (mResult == DataSource.LOADING_SUCCEEDED) {			
 			msg.arg1 = mResult;
 			msg.what = AppCmd.END_LOADING;			
 		} else if (mResult == DataSource.ERR_CANCELLED) { 
