@@ -50,6 +50,10 @@ public class ActionManager {
 		release();
 	}
 	
+	public static Action getAction(String actID) {
+		return sActionWrap.get(actID);
+	}
+	
 	public static ActionWrap getActions() {
 		return sActionWrap;
 	}

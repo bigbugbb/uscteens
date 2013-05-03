@@ -12,18 +12,11 @@ import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 public class QuestButton extends ChunkButton {	
 		
 	public QuestButton(Resources res, Chunk host, OnClickListener listener) {
-		super(res, host);			
+		super(res, host);		
+		mWidth  = mHost.getAction().getActionImage().getWidth();
+		mHeight = mHost.getAction().getActionImage().getHeight();
 		mListener = listener;
 		mID = UIID.QUEST;
-	}
-	
-	public void updateSize(float width, float height) {		
-		mWidth  = width;
-		mHeight = height;
-	}
-	
-	public void setAction(Action action) {
-		getHost().setAction(action);
 	}
 	
 	public boolean isAnswered() {
@@ -54,10 +47,7 @@ public class QuestButton extends ChunkButton {
 	public void onSizeChanged(int width, int height) {
 		if (mCanvasWidth == width && mCanvasHeight == height) {
 			return;
-		}
-		Action action = getHost().getAction();
-		mWidth  = action.getActionImage().getWidth();
-		mHeight = action.getActionImage().getHeight();
+		}		
 		mCanvasWidth  = width;
 		mCanvasHeight = height;	
 		

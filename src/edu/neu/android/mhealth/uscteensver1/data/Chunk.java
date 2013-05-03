@@ -55,11 +55,12 @@ public class Chunk extends AppObject {
 		}
 	}
 	
-	public Chunk(Resources res) {
+	public Chunk(Resources res, Action action) {
 		super(res);
 		mKind = CHUNK;
 		mZOrder = ZOrders.CHUNK;
 		
+		mAction = action;		
 		mParent = (GraphPage) ChunkManager.getUserData();		
 		mQuest = new QuestButton(res, this, mParent);
 		mClock = new ClockButton(res, this, mParent);
@@ -121,7 +122,7 @@ public class Chunk extends AppObject {
 	}
 	
 	public void setAction(Action action) {
-		mAction = action;
+		mAction = action;		
 		updateModifyTime();
 	}
 	
@@ -170,11 +171,8 @@ public class Chunk extends AppObject {
 		mParent.getObjectList().remove(mSplit);
 	}
 	
-	public boolean load(int start, int stop, int offset, Action action, 
-			String createTime, String modifyTime) {		
-		boolean result = update(start, stop, offset);		
-		mAction = action;	
-		mQuest.updateSize(action.getActionImage().getWidth(), action.getActionImage().getHeight());		
+	public boolean load(int start, int stop, int offset, String createTime, String modifyTime) {		
+		boolean result = update(start, stop, offset);						
 		// put it here because the methods above may update the modify time
 		mCreateTime = createTime; 
 		mModifyTime = modifyTime;

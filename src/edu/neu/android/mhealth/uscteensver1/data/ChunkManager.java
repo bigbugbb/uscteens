@@ -66,9 +66,9 @@ public class ChunkManager {
 		}
 		
 		int timeOffset = 0;
-		for (int i = 0; i < rawChunks.size(); ++i) {			
-			Chunk chunk = insertChunk(i);	
+		for (int i = 0; i < rawChunks.size(); ++i) {
 			RawChunk rawChunk = rawChunks.get(i);
+			Chunk chunk = insertChunk(i, rawChunk.getAction());				
 			
 			if (i == 0) { // save the start time offset
 				timeOffset = rawChunk.getStartTime();
@@ -79,7 +79,7 @@ public class ChunkManager {
 			Action action = rawChunk.getAction();
 			String createTime = rawChunk.getCreateTime();
 			String modifyTime = rawChunk.getModifyTime();
-			chunk.load(start, stop, timeOffset, action, createTime, modifyTime);						
+			chunk.load(start, stop, timeOffset, createTime, modifyTime);						
 		}
 	
 //		ChunkManager.selectChunk(0);
@@ -171,8 +171,8 @@ public class ChunkManager {
 		}
 	}
 
-	public static Chunk insertChunk(int index) {		
-		Chunk chunk = new Chunk(sResources);			
+	public static Chunk insertChunk(int index, Action action) {		
+		Chunk chunk = new Chunk(sResources, action);			
 		sChunks.add(index, chunk);
 		return chunk;
 	}		
@@ -468,7 +468,7 @@ public class ChunkManager {
 	
 	public static boolean splitChunk(Chunk chunkToSplit) {
 
-		int   centerX = (chunkToSplit.mStart + chunkToSplit.mStop) / 2;
+		int centerX = (chunkToSplit.mStart + chunkToSplit.mStop) / 2;
 		float offsetInChunkX = chunkToSplit.mSplit.getOffsetInChunkX();
 		float splitX = centerX + offsetInChunkX;
 
@@ -481,14 +481,13 @@ public class ChunkManager {
 			if (splitX - chunkToSplit.mStart < AppScale.doScaleW(Chunk.MINIMUM_CHUNK_SPACE)) {
 				return false;
 			}
-		}		
+		}
 
 		// split at the splitX
 		int i = sChunks.indexOf(chunkToSplit);				
-		Chunk newChunk = insertChunk(i + 1); // insert a new chunk, which should be updated later
-		newChunk.setAction(Action.createUnlabelledAction());
+		Chunk newChunk = insertChunk(i + 1, Action.createUnlabelledAction());	
 		newChunk.setHeight(chunkToSplit.getHeight());		
-		newChunk.update((int) splitX, chunkToSplit.mStop, chunkToSplit.mOffset);
+		newChunk.update((int) splitX, chunkToSplit.mStop, chunkToSplit.mOffset);		
 		chunkToSplit.update(chunkToSplit.mStart, (int) splitX, chunkToSplit.mOffset);
 
 		newChunk.mClock.measureSize((int) sCanvasWidth, (int) sCanvasHeight);
