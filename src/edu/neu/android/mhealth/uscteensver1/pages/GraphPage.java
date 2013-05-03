@@ -19,6 +19,7 @@ import edu.neu.android.mhealth.uscteensver1.actions.ActionWrap;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleListener;
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.LabelManager;
 import edu.neu.android.mhealth.uscteensver1.ui.BackButton;
 import edu.neu.android.mhealth.uscteensver1.ui.ChunkButton;
@@ -125,7 +126,12 @@ public class GraphPage extends AppPage implements OnClickListener,
 		ChunkManager.selectChunk(0);
 		mMotionGraph.moveGraph(0, 0);						
 		mSlideBar.moveSliderBarToProgress(0);
-		// try to recover from the record data		
+		// try to recover from the record data	
+		long loadingResult = DataStorage.GetValueLong(
+				mContext, USCTeensGlobals.DATA_LOADING_RESULT, DataSource.LOADING_SUCCEEDED);
+		if (loadingResult == DataSource.ERR_NO_SENSOR_DATA) {
+			return;
+		}
 		try {
 			int diff = WeekdayCalculator.daysBetween(startDate, selDate);
 			int index   = (int) DataStorage.GetValueLong(mContext, USCTeensGlobals.LAST_SELECTED_CHUNK + diff, 0);

@@ -68,15 +68,15 @@ public class ChunkManager {
 		int timeOffset = 0;
 		for (int i = 0; i < rawChunks.size(); ++i) {
 			RawChunk rawChunk = rawChunks.get(i);
-			Chunk chunk = insertChunk(i, rawChunk.getAction());				
+			Action action = rawChunk.getAction();
+			Chunk chunk = insertChunk(i, action == null ? Action.createUnlabelledAction() : action);				
 			
 			if (i == 0) { // save the start time offset
 				timeOffset = rawChunk.getStartTime();
 			}
 			// load each chunk
 			int start = (rawChunk.getStartTime() - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;
-			int stop  = (rawChunk.getStopTime()  - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;
-			Action action = rawChunk.getAction();
+			int stop  = (rawChunk.getStopTime()  - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;			
 			String createTime = rawChunk.getCreateTime();
 			String modifyTime = rawChunk.getModifyTime();
 			chunk.load(start, stop, timeOffset, createTime, modifyTime);						

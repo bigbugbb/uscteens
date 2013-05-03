@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
@@ -135,6 +137,13 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 			WindowManager.LayoutParams.FLAG_FULLSCREEN, 
 			WindowManager.LayoutParams.FLAG_FULLSCREEN
 		);
+		
+//		RelativeLayout.LayoutParams parms=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+//		parms.leftMargin=0;
+//		parms.rightMargin=0;
+//		parms.topMargin=100;
+//		parms.bottomMargin=100;
+//		mRewardView.setLayoutParams(parms);
 	}
 
 	private void initPages() {		

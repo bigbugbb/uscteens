@@ -63,6 +63,9 @@ public class ActionManager {
 	}
 	
 	public static int loadActions() {
+		// first clear the action container
+		sActionWrap.clear();
+		
 		String dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.ACTIVITY_FOLDER;
 		String[] actionDir = FileHelper.getFilePathsDir(dirPath);
@@ -73,9 +76,7 @@ public class ActionManager {
 				return ERR_NO_ACTION_DATA;
 			}
 		}
-		
-		// first clear the action container
-		sActionWrap.clear();
+				
 		Action action = Action.createUnlabelledAction();
 		sActionWrap.put(USCTeensGlobals.UNLABELLED_GUID, action);
 		try {
@@ -169,7 +170,7 @@ public class ActionManager {
 	}
 	
 	public static void release() {
-		
+		sActionWrap.clear();
 	}
 	
 	private static Bitmap loadBitmapFromFile(String icoPath) {		 

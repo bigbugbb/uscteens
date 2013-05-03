@@ -2,6 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 
@@ -14,13 +15,7 @@ public class RewardView extends WebView {
 		
         getSettings().setJavaScriptEnabled(true);
         setScrollBarStyle(0);
-//        setWebViewClient(new WebViewClient() {
-//            public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
-//            	loadurl(view, url);
-//                return true;
-//            }
-//        });	
-//        loadUrl(mUrl);
+
         new Thread() {
         	public void run(){        		
         		loadUrl(mUrl);
@@ -28,17 +23,10 @@ public class RewardView extends WebView {
 	    }.start();
 	}
 
-//	public void loadurl(final WebView view, final String url) {
-//    	new Thread() {
-//        	public void run(){        		
-//        		view.loadUrl(mUrl);
-//        	}
-//	    }.start();
-//	}
-	
-//	@Override
-//	protected void onDraw(Canvas canvas) {
-//		canvas.drawColor(Color.argb(0xff, 0xcc, 0xcc, 0xcc));
-//	}
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+		return super.onTouchEvent(event);
+	}
 
 }

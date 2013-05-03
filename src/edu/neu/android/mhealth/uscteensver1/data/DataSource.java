@@ -429,9 +429,9 @@ public class DataSource {
 			    	       }
 			    	   }
 			    	   //-----
-			    	   ActionWrap actions = ActionManager.getActions();			    	   
+			    	   Action action = ActionManager.getAction(guid);			    	   
 			    	   RawChunk rawchunk = new RawChunk(
-			    			   start.getText(), stop.getText(), actions.get(guid), create, modify);
+			    			   start.getText(), stop.getText(), action, create, modify);
 			    	   sRawChksWrap.add(rawchunk);
 			       }
 		        
@@ -671,13 +671,18 @@ public class DataSource {
 	}
 	
 	
-	
 	/*
 	 * create raw chunk data from raw accelerometer data	 
 	 */
 	protected static boolean createRawChunkData() {
 		int size = createRawChunkData(0, 3600 * 24, sRawChksWrap);		
 		return size > 0;
+	}
+	
+	public static void clearRawData() {
+		sRawChksWrap.clear();
+		sAccelDataWrap.clear();
+		ActionManager.release();
 	}
 	
 	public static boolean areAllChunksLabelled(String date) {
