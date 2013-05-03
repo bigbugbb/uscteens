@@ -359,22 +359,22 @@ public class GraphPage extends AppPage implements OnClickListener,
 		String actionL = mChunksToMerge.get(0).mQuest.getStringAnswer();
 		String actionR = mChunksToMerge.get(1).mQuest.getStringAnswer();
 		ArrayList<String> actions = new ArrayList<String>();
-		if (actionL.compareTo("None") != 0) {
+		if (!actionL.equals(USCTeensGlobals.UNLABELLED_STRING)) {
 			actions.add(actionL);
 		}
-		if (actionR.compareTo("None") != 0) {
+		if (!actionR.equals(USCTeensGlobals.UNLABELLED_STRING)) {
 			actions.add(actionR);
 		}
-		// the left and right chunks are both unanswered, merge them directly
-		if (actions.size() == 0 || actionL.compareTo(actionR) == 0) {
+		// the left and right chunks are both unlabelled or are the same, merge them directly
+		if (actions.size() == 0 || actionL.equals(actionR)) {
 			ChunkManager.mergeChunk(mChunksToMerge.get(0), mChunksToMerge.get(1), null);	
 			mSlideBar.updateUnmarkedRange();
 		} else {
-			actions.add("None");			
-			Message msg = mHandler.obtainMessage();			
+			actions.add("None");
+			Message msg = mHandler.obtainMessage();
 			msg.obj  = actions;
 			msg.what = AppCmd.MERGE;
-			mHandler.sendMessage(msg);									
+			mHandler.sendMessage(msg);	
 		}
 	}
 	

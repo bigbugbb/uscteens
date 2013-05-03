@@ -17,10 +17,9 @@ public class QuestButton extends ChunkButton {
 		mID = UIID.QUEST;
 	}
 	
-	public void updateSize() {
-		Bitmap actImage = mHost.getAction().getActionImage();
-		mWidth  = actImage.getWidth();
-		mHeight = actImage.getHeight();
+	public void updateSize(float width, float height) {		
+		mWidth  = width;
+		mHeight = height;
 	}
 	
 	public void setAction(Action action) {

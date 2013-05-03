@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
 import android.graphics.Bitmap.Config;
+import android.util.Log;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.actions.Action;
@@ -66,6 +67,7 @@ public class ChunkManager {
 		
 		int timeOffset = 0;
 		for (int i = 0; i < rawChunks.size(); ++i) {
+			Log.d("ChunkManager", "" + i);
 			Chunk chunk = insertChunk(i);	
 			RawChunk rawChunk = rawChunks.get(i);
 			
@@ -485,7 +487,7 @@ public class ChunkManager {
 		// split at the splitX
 		int i = sChunks.indexOf(chunkToSplit);				
 		Chunk newChunk = insertChunk(i + 1); // insert a new chunk, which should be updated later
-		newChunk.setAction(Action.createUnlabelledAction(sResources));
+		newChunk.setAction(Action.createUnlabelledAction());
 		newChunk.setHeight(chunkToSplit.getHeight());		
 		newChunk.update((int) splitX, chunkToSplit.mStop, chunkToSplit.mOffset);
 		chunkToSplit.update(chunkToSplit.mStart, (int) splitX, chunkToSplit.mOffset);

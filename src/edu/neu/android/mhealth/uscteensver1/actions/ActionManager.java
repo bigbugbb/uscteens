@@ -38,7 +38,8 @@ public class ActionManager {
 	protected static ActionWrap sActivatedActionWrap = new ActionWrap();
 	
 	public static void initialize(Context context) {
-		sContext = context;		
+		sContext = context;
+		Action.initialize(context);
 	}
 	
 	public static void start() {
@@ -71,7 +72,7 @@ public class ActionManager {
 		
 		// first clear the action container
 		sActionWrap.clear();
-		Action action = Action.createUnlabelledAction(sContext.getResources());
+		Action action = Action.createUnlabelledAction();
 		sActionWrap.put(USCTeensGlobals.UNLABELLED_GUID, action);
 		try {
 			File aMappingFile = getMappingFile(dirPath);			

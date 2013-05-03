@@ -173,8 +173,8 @@ public class Chunk extends AppObject {
 	public boolean load(int start, int stop, int offset, Action action, 
 			String createTime, String modifyTime) {		
 		boolean result = update(start, stop, offset);		
-		mAction = action;		
-		mQuest.updateSize();
+		mAction = action;	
+		mQuest.updateSize(action.getActionImage().getWidth(), action.getActionImage().getHeight());		
 		// put it here because the methods above may update the modify time
 		mCreateTime = createTime; 
 		mModifyTime = modifyTime;

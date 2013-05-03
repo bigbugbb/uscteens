@@ -26,7 +26,7 @@ class RawChunk implements Serializable {
 		String now  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
 		mCreateTime = now;
 		mModifyTime = now;
-		mAction     = null;
+		mAction     = Action.createUnlabelledAction();
 	}
 	
 	public RawChunk(String startDate, String stopDate, 

@@ -2,10 +2,10 @@ package edu.neu.android.mhealth.uscteensver1.actions;
 
 import java.io.Serializable;
 
-import android.content.res.Resources;
+import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 
 import com.google.gson.Gson;
 
@@ -15,10 +15,16 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class Action implements Serializable {	
 	private static final long serialVersionUID = -6124174446308636095L;
+	protected static Context sContext;
+	
 	protected String  mActID;
 	protected String  mActName;
 	protected String  mIcoName;
 	protected Bitmap  mActImage;
+	
+	public static void initialize(Context context) {
+		sContext = context;
+	}
 	
 	public Action(String actID, String actName, String icoName, Bitmap actImage) {
 		mActID    = actID.trim();
@@ -76,13 +82,13 @@ public class Action implements Serializable {
 		return gson.fromJson(aJSONString, Action.class);
 	}
 	
-	public static Action createUnlabelledAction(Resources res) {		
+	public static Action createUnlabelledAction() {		
 		BitmapFactory.Options options = new BitmapFactory.Options(); 
         options.inPurgeable = true;
         options.inPreferredConfig = Config.RGB_565;     
         
         Bitmap image  = null;
-    	Bitmap origin = BitmapFactory.decodeResource(res, R.drawable.question_btn, options);
+    	Bitmap origin = BitmapFactory.decodeResource(sContext.getResources(), R.drawable.question_btn, options);
     	Bitmap scaled = null;
     	// scale the image according to the current screen resolution
     	float dstWidth  = origin.getWidth(),
