@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import edu.neu.android.mhealth.uscteensver1.reward.Reward;
-
 // date -> action
 public class RewardWrap extends HashMap<String, Reward> {
 
@@ -19,12 +17,12 @@ public class RewardWrap extends HashMap<String, Reward> {
 		while (iter.hasNext()) { 
 		    Map.Entry entry = (Map.Entry) iter.next(); 	
 		    Reward reward = (Reward) entry.getValue();
-		    reward.clear();
+//		    reward.clear();
 		}
 	}
 	
 	@Override
-	public Action put(String key, Action value) {		
+	public Reward put(String key, Reward value) {		
 		return super.put(key.trim(), value);
 	}
 }
