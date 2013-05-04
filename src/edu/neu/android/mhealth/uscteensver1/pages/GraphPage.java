@@ -13,14 +13,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.action.Action;
-import edu.neu.android.mhealth.uscteensver1.action.ActionManager;
-import edu.neu.android.mhealth.uscteensver1.action.ActionWrap;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleListener;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.LabelManager;
+import edu.neu.android.mhealth.uscteensver1.extra.Action;
+import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
+import edu.neu.android.mhealth.uscteensver1.extra.ActionWrap;
 import edu.neu.android.mhealth.uscteensver1.ui.BackButton;
 import edu.neu.android.mhealth.uscteensver1.ui.ChunkButton;
 import edu.neu.android.mhealth.uscteensver1.ui.GraphBackground;
@@ -60,9 +60,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 		ChunkManager.setUserData(this);
 		ChunkManager.setOnBoundaryScaleListener(this);
 		
-		LabelManager.initialize(context);		
-		ActionManager.initialize(context);
-		ActionManager.start();
+		LabelManager.initialize(context);				
 	}
 
 	public MotionGraph getMotionGraph() {
@@ -157,8 +155,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	
 	public void stop() {
 		ChunkManager.stop();
-		LabelManager.stop();
-		ActionManager.stop();
+		LabelManager.stop();		
 		
 		mBackground   = null;
 		mMotionGraph  = null;

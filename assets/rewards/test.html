@@ -3,11 +3,11 @@
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Test</title>
+<title>Teen Activity Game Reward</title>
 <link href="reward.css" rel="stylesheet" type="text/css" media="screen"/>
 
 <script>
-	function getstyle(sname) { 
+	function getStyle(sname) { 
 		for (var i = 0; i < document.styleSheets.length; ++i) { 
 			var rules; 
 			if (document.styleSheets[i].cssRules) { 
@@ -23,6 +23,12 @@
 		}
 	}
 	
+	function getClientSize() {		
+		var h = document.documentElement.clientHeight;
+		var w = document.documentElement.clientWidth;
+		document.write('w='+w+' h='+h);
+	}
+	
 	window.onresize = window.onload = function() {
 		var w, h;
 		if (!!(window.attachEvent && !window.opera)) {
@@ -31,22 +37,23 @@
 		} else {
 			h =	window.innerHeight;
 			w = window.innerWidth;
-		}
-		document.getElementById('msg').value ='window size:' + 'width:' + w + '; height:' + h;
-		var bgImg = document.getElementById('bkg').getElementsByTagName('img')[0];
-		//getstyle(".bkg").left = w * 0.1;
-		bgImg.width  = (w - 5);
-		bgImg.height = (h - 5);											
+		}		
+		
+		var img = new Image();
+		img.src = "win_background.png";		
+		var aspect_ratio = img.width / img.height;
+		
+		document.body.background="win_background.png"
+		document.body.background.width  = (h - 5) * aspect_radio;
+		document.body.background.height = (h - 5);											
 	}
 </script>
 
 </head>
 
 <body>
-
-<p id="msg"></p>
-<div id="bkg"><img src="win_background.png" alt="HIGH"></div>
-
+<h2>You have completed</h2>
+<h2>the Teen Activity Game for</h2>
 </body>
 
 </html>

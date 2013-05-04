@@ -11,9 +11,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.action.Action;
-import edu.neu.android.mhealth.uscteensver1.action.ActionManager;
-import edu.neu.android.mhealth.uscteensver1.action.ActionWrap;
+import edu.neu.android.mhealth.uscteensver1.extra.Action;
+import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
+import edu.neu.android.mhealth.uscteensver1.extra.ActionWrap;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 

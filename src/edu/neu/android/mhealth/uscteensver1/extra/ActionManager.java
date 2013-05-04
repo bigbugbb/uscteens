@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.action;
+package edu.neu.android.mhealth.uscteensver1.extra;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -91,9 +91,9 @@ public class ActionManager {
 					while ((result = br.readLine()) != null) {						
 						// parse the line
 						String[] split = result.split("[,]");
-						action = new Action(split[0], split[1], split[2],
+						action = new Action(split[0].trim(), split[1].trim(), split[2].trim(),
 								loadBitmapFromFile(dirPath + split[2].trim()));
-						sActionWrap.put(split[0], action);
+						sActionWrap.put(split[0].trim(), action);
 					}										
 				} catch (IOException e) {
 					Log.e(TAG, "readStringInternal: problem reading: " + aMappingFile.getAbsolutePath());

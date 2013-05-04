@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.action;
+package edu.neu.android.mhealth.uscteensver1.extra;
 
 import java.io.Serializable;
 
@@ -27,9 +27,9 @@ public class Action implements Serializable {
 	}
 	
 	public Action(String actID, String actName, String icoName, Bitmap actImage) {
-		mActID    = actID.trim();
-		mActName  = actName.trim();
-		mIcoName  = icoName.trim();
+		mActID    = actID;
+		mActName  = actName;
+		mIcoName  = icoName;
 		mActImage = actImage;
 	}
 	

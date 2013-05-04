@@ -7,7 +7,7 @@ import android.view.View;
 import android.webkit.WebView;
 
 public class RewardView extends WebView {
-	protected String mUrl = "file:///android_asset/html/test.html";
+	protected String mUrl = "file:///android_asset/rewards/test.html";
 
 	public RewardView(Context context, AttributeSet attrs) {
 		super(context, attrs);

@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.action.Action;
+import edu.neu.android.mhealth.uscteensver1.extra.Action;
 
 // chunk data from XML in direct
 class RawChunk implements Serializable {

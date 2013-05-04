@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.reward;
+package edu.neu.android.mhealth.uscteensver1.extra;
 
 import java.io.Serializable;
 

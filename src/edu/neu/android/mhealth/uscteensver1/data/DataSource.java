@@ -30,8 +30,8 @@ import org.dom4j.io.XMLWriter;
 import android.content.Context;
 import android.util.Pair;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.action.Action;
-import edu.neu.android.mhealth.uscteensver1.action.ActionManager;
+import edu.neu.android.mhealth.uscteensver1.extra.Action;
+import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
@@ -388,12 +388,15 @@ public class DataSource {
 	private static boolean loadRawChunkData(String date) {
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.ANNOTATION_FOLDER + date;
+		
+		// first clear the data container	
+		sRawChksWrap.clear();
+		
 		String[] chunkFilePaths = FileHelper.getFilePathsDir(path);
 		if (chunkFilePaths == null || chunkFilePaths.length == 0) {			
 			return false;
 		}	
-		// first clear the data container
-		sRawChksWrap.clear();		
+				
 		SAXReader saxReader = new SAXReader();				
 		try {
 			Document document = saxReader.read(new File(chunkFilePaths[0]));				
@@ -680,8 +683,7 @@ public class DataSource {
 	
 	public static void clearRawData() {
 		sRawChksWrap.clear();
-		sAccelDataWrap.clear();
-		ActionManager.release();
+		sAccelDataWrap.clear();		
 	}
 	
 	public static boolean areAllChunksLabelled(String date) {

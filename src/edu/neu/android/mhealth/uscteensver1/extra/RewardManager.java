@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.reward;
+package edu.neu.android.mhealth.uscteensver1.extra;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,6 +30,10 @@ public class RewardManager {
 	protected static Context sContext = null;
 	protected static RewardWrap sRewardWrap = new RewardWrap();
 	
+	public static void initialize(Context context) {
+		sContext = context;		
+	}
+	
 	public static void start() {
 		loadRewards();
 	}
@@ -51,7 +55,7 @@ public class RewardManager {
 		sRewardWrap.clear();
 		
 		String dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.ACTIVITY_FOLDER;
+				Globals.DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
 		String[] rewardDir = FileHelper.getFilePathsDir(dirPath);
 		if (rewardDir == null || rewardDir.length == 0) {
 			copyRewardConfigFromAssets();
@@ -75,9 +79,9 @@ public class RewardManager {
 					while ((result = br.readLine()) != null) {						
 						// parse the line
 						String[] split = result.split("[,]");
-						Reward reward = new Reward(split[0], split[1], 
-								split.length > 2 ? split[2] : "");
-						sRewardWrap.put(split[0], reward);
+						Reward reward = new Reward(split[0].trim(), split[1].trim(), 
+								split.length == 3 ? split[2].trim() : "");
+						sRewardWrap.put(split[0].trim(), reward);
 					}										
 				} catch (IOException e) {
 					Log.e(TAG, "readStringInternal: problem reading: " + aMappingFile.getAbsolutePath());

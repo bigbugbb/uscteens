@@ -27,6 +27,8 @@ import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuitDialog;
+import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
+import edu.neu.android.mhealth.uscteensver1.extra.RewardManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -86,6 +88,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		adjustLayout();	
 		// create app pages and all the UIs in the pages
 		initPages();	
+		// load extra data
+		loadExtra();
 	}
 	
 	@Override
@@ -96,7 +100,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 			} catch (NullPointerException e) {
 				e.printStackTrace();
 			}
-		}
+		}		
+		releaseExtra();
 		
 		super.onDestroy();
 	}
@@ -135,13 +140,6 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 			WindowManager.LayoutParams.FLAG_FULLSCREEN, 
 			WindowManager.LayoutParams.FLAG_FULLSCREEN
 		);
-		
-//		RelativeLayout.LayoutParams parms=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-//		parms.leftMargin=0;
-//		parms.rightMargin=0;
-//		parms.topMargin=100;
-//		parms.bottomMargin=100;
-//		mRewardView.setLayoutParams(parms);
 	}
 
 	private void initPages() {		
@@ -156,6 +154,19 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		((RewardPage) mPages.get(indexOfPage(PageType.REWARD_PAGE))).bindRewardView(mRewardView);
 		// set pages to main view
 		mGraphView.setPages(mPages);		
+	}
+	
+	private void loadExtra() {
+		Context context = getApplicationContext();
+		ActionManager.initialize(context);
+		ActionManager.start();
+		RewardManager.initialize(context);
+		RewardManager.start();
+	}
+	
+	private void releaseExtra() {
+		ActionManager.stop();
+		RewardManager.stop();
 	}
 	
 	private int indexOfPage(PageType pageType) {
@@ -313,7 +324,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		switchPages(indexOfPage(PageType.DATE_PAGE)); 
         		break;
         	case AppCmd.REWARD:
-        		Toast.makeText(getApplicationContext(), "reward", Toast.LENGTH_LONG).show();
+        		i = new Intent("android.intent.action.VIEW", Uri.parse("http://www.google.com"));
+        		startActivity(i);        	        	
         		break;
             default:
             	break;
