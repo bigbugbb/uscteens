@@ -136,18 +136,15 @@ public class DataSource {
 		
 		sCancelled = false;
 		
-		/*
-		 * first load all actions
-		 */
-		int result = ActionManager.loadActions();
-		if (result != LOADING_SUCCEEDED) {
-			return result;
-		}
-		
 		/* 
-		 * then load the accelerometer sensor data
+		 * first load the accelerometer sensor data
 		 */		
-		if ((result = loadRawAccelData(date)) != LOADING_SUCCEEDED) {
+		int result = loadRawAccelData(date);
+		if (result != LOADING_SUCCEEDED) {
+			if (result == ERR_NO_SENSOR_DATA) {
+				String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+				sRawChksWrap.add(new RawChunk(today, 0, 3600 * 24));
+			}
 			return result;
 		}
 		
@@ -254,11 +251,7 @@ public class DataSource {
 		// get extension name indicating which type of file we should read from
 		String extName = filePath.substring(filePath.lastIndexOf("."), filePath.length());
 		
-		// first clear the data container
-//		hourlyAccelData.clear();
-		
 		// load the daily data from the csv file	
-//		loadDailyLabelData(labelFilePaths[0]);
 		if (extName.equals(".bin")) {
 			File binFile = new File(filePath);	
 			ObjectInputStream ois = null;
@@ -336,9 +329,7 @@ public class DataSource {
 		String[] hourDirs = FileHelper.getFilePathsDir(
 				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);
-		
-		// first clear the data container
-		sAccelDataWrap.clear();
+				
 		try {
 			// load the daily data from .bin files hour by hour		
 			for (int i = 0; i < hourDirs.length; ++i) {
@@ -388,9 +379,6 @@ public class DataSource {
 	private static boolean loadRawChunkData(String date) {
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.ANNOTATION_FOLDER + date;
-		
-		// first clear the data container	
-		sRawChksWrap.clear();
 		
 		String[] chunkFilePaths = FileHelper.getFilePathsDir(path);
 		if (chunkFilePaths == null || chunkFilePaths.length == 0) {			
