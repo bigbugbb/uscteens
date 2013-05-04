@@ -20,7 +20,7 @@ public class RewardButton extends CustomButton {
 
 	public RewardButton(Resources res) {
 		super(res);
-		loadImages(new int[]{ R.drawable.reward_btn });
+		loadImages(new int[]{ R.drawable.reward_btn, R.drawable.reward_disable_btn });
 		
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText.setColor(Color.WHITE);
@@ -42,8 +42,8 @@ public class RewardButton extends CustomButton {
 	}
 
 	@Override
-	public void onDraw(Canvas c) {
-		c.drawBitmap(mImages.get(0), mX, mY, null);
+	public void onDraw(Canvas c) {	
+		c.drawBitmap(mImages.get(mEnable ? 0 : 1), mX, mY, null);		
 		c.drawText("REWARD", mTextX, mTextY, mPaintText);
 	}
 

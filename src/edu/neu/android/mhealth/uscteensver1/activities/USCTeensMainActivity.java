@@ -324,8 +324,10 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		switchPages(indexOfPage(PageType.DATE_PAGE)); 
         		break;
         	case AppCmd.REWARD:
-        		i = new Intent("android.intent.action.VIEW", Uri.parse("http://www.google.com"));
-        		startActivity(i);        	        	
+        		if (msg.obj != null) {
+        			i = new Intent("android.intent.action.VIEW", Uri.parse((String) msg.obj));
+        			startActivity(i);     
+        		}
         		break;
             default:
             	break;
