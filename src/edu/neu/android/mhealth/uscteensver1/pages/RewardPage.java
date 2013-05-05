@@ -82,6 +82,8 @@ public class RewardPage extends AppPage implements OnClickListener {
 		mReward = RewardManager.getReward(selctedDate);
 		if (mReward == null) {
 			mBtnReward.setEnable(false);
+		} else {
+			mRewardView.loadRewardUrl(mReward.getHtml());
 		}
 	}
 	

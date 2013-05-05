@@ -7,18 +7,18 @@ import android.view.View;
 import android.webkit.WebView;
 
 public class RewardView extends WebView {
-	protected String mUrl = "file:///android_asset/rewards/test.html";
+	protected final static String DEFAULT_URL = "file:///android_asset/rewards/default.html";
 
 	public RewardView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		setVisibility(View.GONE);	
+		setVisibility(View.GONE);
 		
         getSettings().setJavaScriptEnabled(true);
         setScrollBarStyle(0);
 
         new Thread() {
         	public void run(){        		
-        		loadUrl(mUrl);
+        		loadUrl(DEFAULT_URL);
         	}
 	    }.start();
 	}
@@ -29,4 +29,11 @@ public class RewardView extends WebView {
 		return super.onTouchEvent(event);
 	}
 
+	public void loadRewardUrl(final String rewardUrl) {
+		new Thread() {
+        	public void run(){        		
+        		loadUrl(rewardUrl);
+        	}
+	    }.start();
+	}
 }

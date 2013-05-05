@@ -140,11 +140,7 @@ public class DataSource {
 		 * first load the accelerometer sensor data
 		 */		
 		int result = loadRawAccelData(date);
-		if (result != LOADING_SUCCEEDED) {
-			if (result == ERR_NO_SENSOR_DATA) {
-				String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-				sRawChksWrap.add(new RawChunk(today, 0, 3600 * 24));
-			}
+		if (result != LOADING_SUCCEEDED && result != ERR_NO_SENSOR_DATA) {
 			return result;
 		}
 		

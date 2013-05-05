@@ -58,13 +58,50 @@ public class RewardManager {
 				Globals.DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
 		String[] rewardDir = FileHelper.getFilePathsDir(dirPath);
 		if (rewardDir == null || rewardDir.length == 0) {
-			copyRewardConfigFromAssets();
+			copyRewardFromAssets();
 			rewardDir = FileHelper.getFilePathsDir(dirPath);
 			if (rewardDir == null || rewardDir.length == 0) {
 				return ERR_NO_REWARD_DATA;
 			}
 		}
+		
+		// load the rewards from assets
+	    AssetManager assetManager = sContext.getAssets();
+	    String[] files = null;
+	    try {
+	        files = assetManager.list(ASSETS_DIR);
+	    } catch (IOException e) {
+	        Log.e(TAG, "Failed to get asset file list.", e);
+	    }
+	    for (String filename : files) {
+	    	String extName = filename.substring(filename.lastIndexOf("."), filename.length());
+			if (!extName.equals(".csv")) {
+				continue;
+			}
+	        InputStream in = null;
+	        InputStreamReader isr = null;
+			BufferedReader br = null;
+	        try {
+	        	String filePath = ASSETS_DIR + File.separator + filename;
+				in = assetManager.open(filePath);			
+				isr = new InputStreamReader(in); 
+                br = new BufferedReader(isr);
+                String result = br.readLine();
+				while ((result = br.readLine()) != null) {						
+					// parse the line
+					String[] split = result.split("[,]");
+					Reward reward = new Reward(split[0].trim(), 
+							"file:///android_asset/rewards/" + split[1].trim(), 
+							split.length == 3 ? split[2].trim() : "");
+					sRewardWrap.put(split[0].trim(), reward);
+				}	
+				in.close();
+	        } catch (IOException e) {
+	            Log.e(TAG, "Failed to copy asset file: " + filename, e);
+	        }       
+	    }
 			
+		// then load the other rewards that might be added by user from external directory
 		try {
 			File aMappingFile = getMappingFile(dirPath);			
 			FileInputStream fis = null;
@@ -79,7 +116,7 @@ public class RewardManager {
 					while ((result = br.readLine()) != null) {						
 						// parse the line
 						String[] split = result.split("[,]");
-						Reward reward = new Reward(split[0].trim(), split[1].trim(), 
+						Reward reward = new Reward(split[0].trim(), "file:///" + dirPath + split[1].trim(), 
 								split.length == 3 ? split[2].trim() : "");
 						sRewardWrap.put(split[0].trim(), reward);
 					}										
@@ -132,7 +169,7 @@ public class RewardManager {
 		return new File(filePath);
 	}
 	
-	private static void copyRewardConfigFromAssets() {
+	private static void copyRewardFromAssets() {
 		String outfilePath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
 		// create new directory if doesn't exist
@@ -169,7 +206,7 @@ public class RewardManager {
 	
 	private static void copyFile(InputStream in, OutputStream out) throws IOException {
 	    byte[] buffer = new byte[1024];
-	    int read;
+	    int read;	    
 	    while ((read = in.read(buffer)) != -1) {
 	    	out.write(buffer, 0, read);
 	    }
