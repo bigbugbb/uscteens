@@ -413,8 +413,7 @@ public class DataSource {
 			    	       } else if (attribute.getName().compareTo("DATE_CREATED") == 0) {
 			    	    	   create = attribute.getText(); 	    	   
 			    	       }
-			    	   }
-			    	   //-----
+			    	   }			    	   
 			    	   Action action = ActionManager.getAction(guid);			    	   
 			    	   RawChunk rawchunk = new RawChunk(
 			    			   start.getText(), stop.getText(), action, create, modify);
@@ -734,7 +733,7 @@ public class DataSource {
 	        .addAttribute("METHOD", "based on convolution & pre-defined thresholds")
 	        .addAttribute("NOTES", "")
 	        .addAttribute("ALL_LABELLED", sRawChksWrap.areAllChunksLabelled() ? "yes" : "no");
-        //-----
+
         for (RawChunk rawChunk : sRawChksWrap) {
         	Action action = rawChunk.getAction();
 	        // ANNOTATION

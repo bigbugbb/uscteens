@@ -1,7 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import java.util.Iterator;
-import java.util.Map;
+import java.util.ArrayList;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -13,7 +12,6 @@ import android.graphics.Paint.Align;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
-import edu.neu.android.mhealth.uscteensver1.extra.ActionWrap;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
@@ -51,11 +49,9 @@ public class ActionListView extends ListView {
 	
 	public ActionListView(Resources res) {
 		super(res);		
-		ActionWrap actions = ActionManager.getActivatedActions();
-		Iterator iter = actions.entrySet().iterator(); 
-		while (iter.hasNext()) { 
-		    Map.Entry entry = (Map.Entry) iter.next(); 	
-		    Action action = (Action) entry.getValue();
+		ArrayList<Action> actions = ActionManager.getActivatedActions();
+		
+		for (Action action : actions) {		
 		    if (!action.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID)) {
 		    	addItem(action);
 		    }		    

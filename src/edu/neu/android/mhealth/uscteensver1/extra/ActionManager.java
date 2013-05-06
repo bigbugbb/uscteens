@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -33,7 +34,7 @@ public class ActionManager {
 	
 	protected static Context sContext = null;
 	protected static ActionWrap sActionWrap = new ActionWrap();
-	protected static ActionWrap sActivatedActionWrap = new ActionWrap();
+	protected static ArrayList<Action> sActivatedActions = new ArrayList<Action>();
 	
 	public static void initialize(Context context) {
 		sContext = context;
@@ -56,8 +57,8 @@ public class ActionManager {
 		return sActionWrap;
 	}
 	
-	public static ActionWrap getActivatedActions() {
-		return sActivatedActionWrap;
+	public static ArrayList<Action> getActivatedActions() {
+		return sActivatedActions;
 	}
 	
 	public static int loadActions() {
@@ -74,7 +75,8 @@ public class ActionManager {
 				return ERR_NO_ACTION_DATA;
 			}
 		}
-				
+			
+		// load all activities
 		Action action = Action.createUnlabelledAction();
 		sActionWrap.put(USCTeensGlobals.UNLABELLED_GUID, action);
 		try {
@@ -121,7 +123,8 @@ public class ActionManager {
 		} catch (Exception e) {
 			e.printStackTrace();			
 		}		
-				
+		
+		// load the activated activities
 		try {
 			File aActivatedFile = getUsingFile(dirPath);		
 			FileInputStream fis = null;
@@ -133,9 +136,13 @@ public class ActionManager {
 				try {
 					// skip the first line
 					String result = br.readLine();
-					while ((result = br.readLine()) != null) {						
-						// parse the line												
-						sActivatedActionWrap.put(result, getActions().get(result));
+					while ((result = br.readLine()) != null) {																
+						// parse the line
+						String key = result.split("[,]")[0].trim();	
+						Action value = getActions().get(key);
+						if (value != null) {
+							sActivatedActions.add(value);
+						}
 					}										
 				} catch (IOException e) {
 					Log.e(TAG, "readStringInternal: problem reading: " + aActivatedFile.getAbsolutePath());
@@ -169,6 +176,7 @@ public class ActionManager {
 	
 	public static void release() {
 		sActionWrap.clear();
+		sActivatedActions.clear();
 	}
 	
 	private static Bitmap loadBitmapFromFile(String icoPath) {		 
