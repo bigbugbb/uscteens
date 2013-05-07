@@ -10,7 +10,7 @@ import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion;
 public class USCTeensSurveyActivity extends SurveyActivity {
 	
 	protected void onExit() {
-		for (SurveyQuestion question : popedQuestions) {
+		for (SurveyQuestion question : poppedQuestions) {
 			String id = question.getQuestionId(); 
 			id = id.substring(0, id.lastIndexOf('_'));
 			if (isLocationQuestion(id)) { // location
