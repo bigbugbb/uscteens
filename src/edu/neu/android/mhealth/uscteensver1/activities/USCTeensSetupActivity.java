@@ -191,7 +191,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 		csEMA.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
+				Intent i = new Intent(USCTeensSetupActivity.this, USCTeensSurveyActivity.class);
 				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(USCTeensSetupActivity.this, Globals.SURVEY);
 				long currentTime = System.currentTimeMillis();
 				int classType = 0;

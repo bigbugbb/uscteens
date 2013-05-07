@@ -327,6 +327,12 @@
 			android:screenOrientation="portrait">
 		</activity>
 		
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.USCTeensSurveyActivity"
+            android:excludeFromRecents="true"
+		    android:launchMode="singleInstance"
+			android:screenOrientation="portrait">
+    	</activity>
+    	
 	</application>	
 
 	<!-- PERMISSIONS -->

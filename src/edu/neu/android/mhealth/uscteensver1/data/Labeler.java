@@ -11,12 +11,12 @@ public class Labeler {
 	
 	private static RawLabelWrap sRawLabels = new RawLabelWrap();
 	private static SimpleDateFormat sDateFormat     = new SimpleDateFormat("yyyy-MM-dd");
-	private static SimpleDateFormat sDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static SimpleDateFormat sDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
 
 	
 	/**
 	 * add a new label
-	 * @param dateTime  yyyy-MM-dd HH:mm:ss
+	 * @param dateTime  yyyy-MM-dd kk:mm:ss
 	 * @param name	    the label name
 	 * @param commit    true if the change should be committed to the file immediately,
 	 * 				    if the file does not exist, a new one will be created.
@@ -57,7 +57,7 @@ public class Labeler {
 	/**
 	 * remove labels where the time matches. I.e., if there are two labels for "somename"
 	 * at two different times, then it should only remove the label at the given time. 
-	 * @param dateTime    yyyy-MM-dd HH:mm:ss
+	 * @param dateTime    yyyy-MM-dd kk:mm:ss
 	 * @param name		  the label name
 	 * @param commit 	  true if the change should be committed to the file immediately
 	 * @return true if the label is removed, otherwise false

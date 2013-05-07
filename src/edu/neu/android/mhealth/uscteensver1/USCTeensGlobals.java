@@ -22,7 +22,7 @@ public class USCTeensGlobals {
 	public final static int    PIXEL_PER_DATA = 2;	
 	public final static int    MAX_WIDTH_IN_PIXEL = 3600 * 24 * PIXEL_PER_DATA;
 	public final static int    UPDATING_TIME_THRESHOLD = 60 * 1000; // in ms
-	public final static int	   MAX_AVAILABLE_LABELING_DAYS = 9;
+	public final static int	   MAX_AVAILABLE_LABELING_DAYS = 2;
 	public final static String DATA_LOADING_RESULT = "DATA_LOADING_RESULT";
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
 	public final static String MERGE_SELECTION = "MERGE_SELECTION";

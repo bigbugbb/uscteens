@@ -602,14 +602,11 @@ public class EMAQuestionSet extends QuestionSet {
 		
 		// set up probabilities for questions be chosen
 		Q1_MainActivity.addRules(new ChanceBeChosen(1));
-		Q1_a_UsingTech.addRules(new ChanceBeChosen(1));/**/
 		Q2_a_HowLong.addRules(new ChanceBeChosen(1));
-		Q2_b_a_WereYou.addRules(new ChanceBeChosen(1));/**/
-		Q2_b_b_WereYou.addRules(new ChanceBeChosen(1));/**/
+		Q2_b_a_WereYou.addRules(new ChanceBeChosen(1));
 		Q2_c_WherePhone.addRules(new ChanceBeChosen(1));
 		Q2_d_YNotCarrying.addRules(new ChanceBeChosen(1));
-		Q2_e_a_MainPurpose.addRules(new ChanceBeChosen(0.3));/**/
-		Q2_e_b_MainPurpose.addRules(new ChanceBeChosen(0.3));/**/
+		Q2_e_a_MainPurpose.addRules(new ChanceBeChosen(0.3));
 		Q2_f_HowEnjoyable.addRules(new ChanceBeChosen(0.3));
 		Q2_g_SelfMotivated.addRules(new ChanceBeChosen(0.3));
 		Q2_h_ParentsMotivated.addRules(new ChanceBeChosen(1));
@@ -647,7 +644,7 @@ public class EMAQuestionSet extends QuestionSet {
 		Q4_i_ParentsMotivated.addRules(new ChanceBeChosen(1));
 		Q4_j_FriendsMotivated.addRules(new ChanceBeChosen(1));
 		Q4_k_TeacherMotivated.addRules(new ChanceBeChosen(1));
-		Q4_l_Alone.addRules(new ChanceBeChosen(0.3));/**/
+		Q4_l_Alone.addRules(new ChanceBeChosen(0.3));
 		Q4_m_Accompanies.addRules(new ChanceBeChosen(1));
 		Q5_a_SomethingElse.addRules(new ChanceBeChosen(1));
 		Q5_b_HowManyMins.addRules(new ChanceBeChosen(1));
@@ -681,19 +678,25 @@ public class EMAQuestionSet extends QuestionSet {
 		questionSection_1a.add(Q1_a_UsingTech);	// 1a
 		Q1_MainActivity.addRules(new QuesFromAns(new int[]{1}, questionSection_1a));
 
-		ArrayList<SurveyQuestion> questionSection_20 = new ArrayList<SurveyQuestion>(3);
-		questionSection_20.add(Q2_f_HowEnjoyable);	// 2f
-		questionSection_20.add(Q2_g_SelfMotivated);	// 2g
-		questionSection_20.add(Q2_k_Alone);			// 2k
-		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,2,4,5}, questionSection_20, 0.3));
-
 		ArrayList<SurveyQuestion> questionSection_20a = new ArrayList<SurveyQuestion>(1);
-		questionSection_20a.add(Q2_e_a_MainPurpose);// 2e
-		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,4,5}, questionSection_20a, 0.3));
-
+		questionSection_20a.add(Q2_f_HowEnjoyable);	// 2f
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,2,4,5}, questionSection_20a, 0.3));
+		
 		ArrayList<SurveyQuestion> questionSection_20b = new ArrayList<SurveyQuestion>(1);
-		questionSection_20b.add(Q2_e_b_MainPurpose);// 2e.a
-		Q1_MainActivity.addRules(new QuesFromAns(new int[]{2}, questionSection_20b, 0.3));
+		questionSection_20b.add(Q2_g_SelfMotivated);// 2g
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,2,4,5}, questionSection_20b, 0.3));
+		
+		ArrayList<SurveyQuestion> questionSection_20c = new ArrayList<SurveyQuestion>(1);
+		questionSection_20c.add(Q2_k_Alone);		// 2k
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,2,4,5}, questionSection_20c, 0.3));
+
+		ArrayList<SurveyQuestion> questionSection_20d = new ArrayList<SurveyQuestion>(1);
+		questionSection_20d.add(Q2_e_a_MainPurpose);// 2e
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,4,5}, questionSection_20d, 0.3));
+
+		ArrayList<SurveyQuestion> questionSection_20e = new ArrayList<SurveyQuestion>(1);
+		questionSection_20e.add(Q2_e_b_MainPurpose);// 2e.a
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{2}, questionSection_20e, 0.3));
 
 		ArrayList<SurveyQuestion> questionSection_2 = new ArrayList<SurveyQuestion>(1);
 		questionSection_2.add(Q2_d_YNotCarrying);	// 2c
@@ -709,21 +712,51 @@ public class EMAQuestionSet extends QuestionSet {
 		questionSection_4.add(Q2_l_Accompanies);	// 2l
 		Q2_k_Alone.addRules(new QuesFromAns(new int[]{1}, questionSection_4));
 
-		ArrayList<SurveyQuestion> questionSection_5 = new ArrayList<SurveyQuestion>(13);
+		ArrayList<SurveyQuestion> questionSection_5 = new ArrayList<SurveyQuestion>(3);
 		questionSection_5.add(Q3_a_Type);			// 3a
 		questionSection_5.add(Q3_b_HowManyMins);	// 3b
-		questionSection_5.add(Q3_c_WhatInvolve);	// 3c
-		questionSection_5.add(Q3_d_ExtraWeight);	// 3d
-		questionSection_5.add(Q3_e_UpOrDown);		// 3e
-		questionSection_5.add(Q3_f_HowSoreness);	// 3f
-		questionSection_5.add(Q3_g_MainPurpose);	// 3g
-		questionSection_5.add(Q3_h_HowEnjoyable);	// 3h
-		questionSection_5.add(Q3_i_SelfMotivated);	// 3i
-		questionSection_5.add(Q3_m_Where);			// 3m
-		questionSection_5.add(Q3_o_Outdoors);		// 3o
-		questionSection_5.add(Q3_p_Alone);			// 3p
 		questionSection_5.add(Q3_r_WherePhone);		// 3r
 		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5));
+		
+		ArrayList<SurveyQuestion> questionSection_5a = new ArrayList<SurveyQuestion>(1);
+		questionSection_5a.add(Q3_c_WhatInvolve);	// 3c	
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5a, 0.4));
+		
+		ArrayList<SurveyQuestion> questionSection_5b = new ArrayList<SurveyQuestion>(1);	
+		questionSection_5b.add(Q3_d_ExtraWeight);	// 3d	
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5b, 0.4));
+		
+		ArrayList<SurveyQuestion> questionSection_5c = new ArrayList<SurveyQuestion>(1);
+		questionSection_5c.add(Q3_e_UpOrDown);		// 3e
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5c, 0.4));
+		
+		ArrayList<SurveyQuestion> questionSection_5d = new ArrayList<SurveyQuestion>(1);
+		questionSection_5d.add(Q3_f_HowSoreness);	// 3f
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5d, 0.4));
+		
+		ArrayList<SurveyQuestion> questionSection_5e = new ArrayList<SurveyQuestion>(1);
+		questionSection_5e.add(Q3_g_MainPurpose);	// 3g
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5e, 0.4));
+		
+		ArrayList<SurveyQuestion> questionSection_5f = new ArrayList<SurveyQuestion>(1);
+		questionSection_5f.add(Q3_h_HowEnjoyable);	// 3h
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5f, 0.4));
+		
+		ArrayList<SurveyQuestion> questionSection_5g = new ArrayList<SurveyQuestion>(1);
+		questionSection_5g.add(Q3_i_SelfMotivated);	// 3i
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5g, 0.4));
+		
+		ArrayList<SurveyQuestion> questionSection_5h = new ArrayList<SurveyQuestion>(1);
+		questionSection_5h.add(Q3_m_Where);			// 3m
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5h, 0.4));
+		
+		ArrayList<SurveyQuestion> questionSection_5i = new ArrayList<SurveyQuestion>(1);
+		questionSection_5i.add(Q3_o_Outdoors);		// 3o
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5i, 0.4));
+		
+		ArrayList<SurveyQuestion> questionSection_5j = new ArrayList<SurveyQuestion>(1);
+		questionSection_5j.add(Q3_p_Alone);			// 3p		
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5j, 0.4));
 
 		ArrayList<SurveyQuestion> questionSection_6 = new ArrayList<SurveyQuestion>(3);
 		questionSection_6.add(Q3_j_ParentsMotivated);// 3j
@@ -756,16 +789,21 @@ public class EMAQuestionSet extends QuestionSet {
 		questionSection_11.add(Q4_c_WereYou);		// 4c
 		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,3,4,5,6,7,8,9,10}, questionSection_11));
 		
-		ArrayList<SurveyQuestion> questionSection_19 = new ArrayList<SurveyQuestion>(3);
-		questionSection_19.add(Q4_f_MainPurpose);	// 4f
-		questionSection_19.add(Q4_g_HowEnjoyable);	// 4g
-		questionSection_19.add(Q4_h_SelfMotivated);	// 4h
-//		questionSection_19.add(Q4_l_Alone);/////////////////////////////////////////////
-		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,1,2,3,4,5,6,7,8,9,10}, questionSection_19, 0.3));
+		ArrayList<SurveyQuestion> questionSection_19a = new ArrayList<SurveyQuestion>(3);
+		questionSection_19a.add(Q4_f_MainPurpose);	// 4f
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,1,2,3,4,5,6,7,8,9,10}, questionSection_19a, 0.3));
+		
+		ArrayList<SurveyQuestion> questionSection_19b = new ArrayList<SurveyQuestion>(3);
+		questionSection_19b.add(Q4_g_HowEnjoyable);	// 4g
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,1,2,3,4,5,6,7,8,9,10}, questionSection_19b, 0.3));
+		
+		ArrayList<SurveyQuestion> questionSection_19c = new ArrayList<SurveyQuestion>(3);
+		questionSection_19c.add(Q4_h_SelfMotivated);// 4h
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,1,2,3,4,5,6,7,8,9,10}, questionSection_19c, 0.3));
 
-		ArrayList<SurveyQuestion> questionSection_19a = new ArrayList<SurveyQuestion>(1);		
-		questionSection_19a.add(Q4_l_Alone);
-		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,3,4,5,6,7,8,9,10}, questionSection_19a, 0.3));
+		ArrayList<SurveyQuestion> questionSection_19d = new ArrayList<SurveyQuestion>(1);		
+		questionSection_19d.add(Q4_l_Alone);		// 4l
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,3,4,5,6,7,8,9,10}, questionSection_19d, 0.3));
 				
 		ArrayList<SurveyQuestion> questionSection_12 = new ArrayList<SurveyQuestion>(1);
 		questionSection_12.add(Q4_e_YNotCarrying);	// 4e
@@ -788,12 +826,21 @@ public class EMAQuestionSet extends QuestionSet {
 		questionSection_15.add(Q5_d_WherePhone);	// 5d
 		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{11}, questionSection_15));
 		
-		ArrayList<SurveyQuestion> questionSection_21 = new ArrayList<SurveyQuestion>(4);
-		questionSection_21.add(Q5_f_MainPurpose);	// 5f
-		questionSection_21.add(Q5_g_HowEnjoyable);	// 5g
-		questionSection_21.add(Q5_h_SelfMotivated);	// 5h
-		questionSection_21.add(Q5_l_Alone);			// 5l
-		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{11}, questionSection_21, 0.3));
+		ArrayList<SurveyQuestion> questionSection_21a = new ArrayList<SurveyQuestion>(4);
+		questionSection_21a.add(Q5_f_MainPurpose);	// 5f
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{11}, questionSection_21a, 0.3));
+		
+		ArrayList<SurveyQuestion> questionSection_21b = new ArrayList<SurveyQuestion>(4);
+		questionSection_21b.add(Q5_g_HowEnjoyable);	// 5g
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{11}, questionSection_21b, 0.3));
+		
+		ArrayList<SurveyQuestion> questionSection_21c = new ArrayList<SurveyQuestion>(4);
+		questionSection_21c.add(Q5_h_SelfMotivated);// 5h
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{11}, questionSection_21c, 0.3));
+		
+		ArrayList<SurveyQuestion> questionSection_21d = new ArrayList<SurveyQuestion>(4);
+		questionSection_21d.add(Q5_l_Alone);		// 5l
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{11}, questionSection_21d, 0.3));
 
 		ArrayList<SurveyQuestion> questionSection_16 = new ArrayList<SurveyQuestion>(1);
 		questionSection_16.add(Q5_e_YNotCarrying);	// 5e
