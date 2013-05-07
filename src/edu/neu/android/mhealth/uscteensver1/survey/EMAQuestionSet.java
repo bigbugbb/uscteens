@@ -23,11 +23,11 @@ public class EMAQuestionSet extends QuestionSet {
 
 	public EMAQuestionSet(QuestionSetParamHandler param){
 		super();
-		if(param.getParamNum() != 1)
+		if (param.getParamNum() != 1)
 			return;
 		int type = (Integer)param.getParams()[0];
 		
-		switch(type){
+		switch (type) {
 		case EMA_DEFAULT:
 			context = defaultContext;
 			break;
@@ -52,13 +52,14 @@ public class EMAQuestionSet extends QuestionSet {
 		
 		/************ Initialize questions and answers *********/
 		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity","What have you been DOING "+context+"?\n(Choose all that apply)",TYPE.MULTI_CHOICE);
-		SurveyAnswer[] answerSet1 = new SurveyAnswer[6];
+		SurveyAnswer[] answerSet1 = new SurveyAnswer[7];
 		answerSet1[0] = new SurveyAnswer(0, "Reading or doing homework");
 		answerSet1[1] = new SurveyAnswer(1, "Using technology (TV, phone)");
 		answerSet1[2] = new SurveyAnswer(2, "Eating/Drinking");
 		answerSet1[3] = new SurveyAnswer(3, "Sports/Exercising");
 		answerSet1[4] = new SurveyAnswer(4, "Going somewhere");
-		answerSet1[5] = new SurveyAnswer(5, "Other");		
+		answerSet1[5] = new SurveyAnswer(5, "Hanging out");
+		answerSet1[6] = new SurveyAnswer(6, "Other");		
 		Q1_MainActivity.setDefault(SurveyQuestion.NO_DATA, answerSet1);
 		defaultQuestionSet.add(Q1_MainActivity);
 
@@ -100,12 +101,13 @@ public class EMAQuestionSet extends QuestionSet {
 		defaultQuestionSet.add(Q2_b_b_WereYou);
 		
 		SurveyQuestion Q2_c_WherePhone = new SurveyQuestion("Q2_c_WherePhone","How did you have the PHONE while "+mainActivity+"?",TYPE.SINGLE_CHOICE);
-		SurveyAnswer[] answerSet2c = new SurveyAnswer[5];
+		SurveyAnswer[] answerSet2c = new SurveyAnswer[6];
 		answerSet2c[0] = new SurveyAnswer(0, "On my belt");
 		answerSet2c[1] = new SurveyAnswer(1, "In my pocket");
 		answerSet2c[2] = new SurveyAnswer(2, "In my handbag/purse/backpack");
 		answerSet2c[3] = new SurveyAnswer(3, "Holding in my hand");
-		answerSet2c[4] = new SurveyAnswer(4, "Not with me");/**/
+		answerSet2c[4] = new SurveyAnswer(4, "Within reach, but not on me");
+		answerSet2c[5] = new SurveyAnswer(5, "Not with me");/**/
 		Q2_c_WherePhone.setDefault("Q1_MainActivity", answerSet2c);
 		defaultQuestionSet.add(Q2_c_WherePhone);
 
@@ -113,11 +115,11 @@ public class EMAQuestionSet extends QuestionSet {
 		SurveyAnswer[] answerSet2d = new SurveyAnswer[7];
 		answerSet2d[0] = new SurveyAnswer(0, "Forgot it");
 		answerSet2d[1] = new SurveyAnswer(1, "Battery died");
-		answerSet2d[2] = new SurveyAnswer(2, "Could not get it wet");
+		answerSet2d[2] = new SurveyAnswer(2, "Did not want to damage");
 		answerSet2d[3] = new SurveyAnswer(3, "Too bulky");
-		answerSet2d[4] = new SurveyAnswer(4, "Too Uncomfortable");
+		answerSet2d[4] = new SurveyAnswer(4, "Too uncomfortable");
 		answerSet2d[5] = new SurveyAnswer(5, "Embarrassed to carry it");
-		answerSet2d[6] = new SurveyAnswer(6, "Not allowed to carry  it");
+		answerSet2d[6] = new SurveyAnswer(6, "Not allowed to carry it");
 		Q2_d_YNotCarrying.setDefault("Q2_c_WherePhone", answerSet2d);
 		defaultQuestionSet.add(Q2_d_YNotCarrying);
 
@@ -301,23 +303,21 @@ public class EMAQuestionSet extends QuestionSet {
 		defaultQuestionSet.add(Q3_l_TeacherMotivated);
 
 		SurveyQuestion Q3_m_Where = new SurveyQuestion("Q3_m_Where","Where did you participate in the sport or exercise activity?",TYPE.SINGLE_CHOICE);
-		SurveyAnswer[] answerSet3m = new SurveyAnswer[5];
+		SurveyAnswer[] answerSet3m = new SurveyAnswer[4];
 		answerSet3m[0] = new SurveyAnswer(0, "Home");
 		answerSet3m[1] = new SurveyAnswer(1, "Work");
 		answerSet3m[2] = new SurveyAnswer(2, "School");
-		answerSet3m[3] = new SurveyAnswer(3, "Car/Bus/Metro/Train");
-		answerSet3m[4] = new SurveyAnswer(4, "Other");
+		answerSet3m[3] = new SurveyAnswer(3, "Other");
 		Q3_m_Where.setDefault("Q1_MainActivity",  answerSet3m);
 		defaultQuestionSet.add(Q3_m_Where);
 
 		SurveyQuestion Q3_n_WhereOther = new SurveyQuestion("Q3_n_WhereOther","WHERE was this OTHER place?",TYPE.SINGLE_CHOICE);
-		SurveyAnswer[] answerSet3n = new SurveyAnswer[6];
-		answerSet3n[0] = new SurveyAnswer(0, "Restaurant");
-		answerSet3n[1] = new SurveyAnswer(1, "Store/Mall");
-		answerSet3n[2] = new SurveyAnswer(2, "Someone else’s house");
-		answerSet3n[3] = new SurveyAnswer(3, "Gym/Health Club");
-		answerSet3n[4] = new SurveyAnswer(4, "Park/Trail");
-		answerSet3n[5] = new SurveyAnswer(5, "Someplace else");
+		SurveyAnswer[] answerSet3n = new SurveyAnswer[5];
+		answerSet3n[0] = new SurveyAnswer(0, "Store/Mall");
+		answerSet3n[1] = new SurveyAnswer(1, "Someone else\'s house");
+		answerSet3n[2] = new SurveyAnswer(2, "Gym/Health Club");
+		answerSet3n[3] = new SurveyAnswer(3, "Park/Trail");
+		answerSet3n[4] = new SurveyAnswer(4, "Someplace else");
 		Q3_n_WhereOther.setDefault("Q3_m_Where", answerSet3n);
 		defaultQuestionSet.add(Q3_n_WhereOther);
 
@@ -359,24 +359,28 @@ public class EMAQuestionSet extends QuestionSet {
 		SurveyAnswer[] answerSet3s = new SurveyAnswer[7];
 		answerSet3s[0] = new SurveyAnswer(0, "Forgot it");
 		answerSet3s[1] = new SurveyAnswer(1, "Battery died");
-		answerSet3s[2] = new SurveyAnswer(2, "Could not get it wet");
+		answerSet3s[2] = new SurveyAnswer(2, "Did not want to damage it");
 		answerSet3s[3] = new SurveyAnswer(3, "Too bulky");
-		answerSet3s[4] = new SurveyAnswer(4, "Too Uncomfortable");
+		answerSet3s[4] = new SurveyAnswer(4, "Too uncomfortable");
 		answerSet3s[5] = new SurveyAnswer(5, "Embarrassed to carry it");
 		answerSet3s[6] = new SurveyAnswer(6, "Not allowed to carry  it");
 		Q3_s_YNotCarrying.setDefault("Q3_r_WherePhone", answerSet3s);
 		defaultQuestionSet.add(Q3_s_YNotCarrying);
 
 		SurveyQuestion Q4_a_WhatOther = new SurveyQuestion("Q4_a_WhatOther","What was this other activity?",TYPE.SINGLE_CHOICE);
-		SurveyAnswer[] answerSet4a = new SurveyAnswer[8];
-		answerSet4a[0] = new SurveyAnswer(0, "Hanging with friends");
-		answerSet4a[1] = new SurveyAnswer(1, "Doing chores/cooking");
-		answerSet4a[2] = new SurveyAnswer(2, "Riding in a car");
-		answerSet4a[3] = new SurveyAnswer(3, "Playing video games");
-		answerSet4a[4] = new SurveyAnswer(4, "Using the phone (talking/texting/Internet)");
-		answerSet4a[5] = new SurveyAnswer(5, "Showering/Bathing");
-		answerSet4a[6] = new SurveyAnswer(6, "Sleeping");
-		answerSet4a[7] = new SurveyAnswer(7, "Doing something else");
+		SurveyAnswer[] answerSet4a = new SurveyAnswer[12];
+		answerSet4a[0] = new SurveyAnswer(0, "Doing chores/cooking");
+		answerSet4a[1] = new SurveyAnswer(1, "Showering/Bathing");
+		answerSet4a[2] = new SurveyAnswer(2, "Sleeping");
+		answerSet4a[3] = new SurveyAnswer(3, "Working/Part-time job");
+		answerSet4a[4] = new SurveyAnswer(4, "Getting ready for something");
+		answerSet4a[5] = new SurveyAnswer(5, "Shopping");
+		answerSet4a[6] = new SurveyAnswer(6, "Getting dressed");
+		answerSet4a[7] = new SurveyAnswer(7, "Class/school");
+		answerSet4a[8] = new SurveyAnswer(8, "Playing with children");
+		answerSet4a[9] = new SurveyAnswer(9, "Playing catch");
+		answerSet4a[10] = new SurveyAnswer(10, "Waiting");
+		answerSet4a[11] = new SurveyAnswer(11, "Doing something else");
 		Q4_a_WhatOther.setDefault("Q1_MainActivity", answerSet4a);
 		defaultQuestionSet.add(Q4_a_WhatOther);
 
@@ -409,9 +413,9 @@ public class EMAQuestionSet extends QuestionSet {
 		SurveyAnswer[] answerSet4e = new SurveyAnswer[7];
 		answerSet4e[0] = new SurveyAnswer(0, "Forgot it");
 		answerSet4e[1] = new SurveyAnswer(1, "Battery died");
-		answerSet4e[2] = new SurveyAnswer(2, "Could not get it wet");
+		answerSet4e[2] = new SurveyAnswer(2, "Did not want to damage it");
 		answerSet4e[3] = new SurveyAnswer(3, "Too bulky");
-		answerSet4e[4] = new SurveyAnswer(4, "Too Uncomfortable");
+		answerSet4e[4] = new SurveyAnswer(4, "Too uncomfortable");
 		answerSet4e[5] = new SurveyAnswer(5, "Embarrassed to carry it");
 		answerSet4e[6] = new SurveyAnswer(6, "Not allowed to carry  it");
 		Q4_e_YNotCarrying.setDefault("Q4_d_WherePhone", answerSet4e);
@@ -470,7 +474,7 @@ public class EMAQuestionSet extends QuestionSet {
 		SurveyAnswer[] answerSet4l = new SurveyAnswer[2];
 		answerSet4l[0] = new SurveyAnswer(0, "Yes");
 		answerSet4l[1] = new SurveyAnswer(1, "No");
-		Q4_l_Alone.setDefault("Q4_a_WhatOther", answerSet4l);
+		Q4_l_Alone.setDefault("Q4_a_WhatOther", answerSet4l);/**/
 		defaultQuestionSet.add(Q4_l_Alone);
 
 		SurveyQuestion Q4_m_Accompanies = new SurveyQuestion("Q4_m_Accompanies", "While "+mainActivity+", were you with:\n(Choose all that apply)", TYPE.MULTI_CHOICE);
@@ -519,7 +523,7 @@ public class EMAQuestionSet extends QuestionSet {
 		answerSet5e[1] = new SurveyAnswer(1, "Battery died");
 		answerSet5e[2] = new SurveyAnswer(2, "Did not want to damage it");
 		answerSet5e[3] = new SurveyAnswer(3, "Too bulky");
-		answerSet5e[4] = new SurveyAnswer(4, "Too Uncomfortable");
+		answerSet5e[4] = new SurveyAnswer(4, "Too uncomfortable");
 		answerSet5e[5] = new SurveyAnswer(5, "Embarrassed to carry it");
 		answerSet5e[6] = new SurveyAnswer(6, "Not allowed to carry  it");
 		Q5_e_YNotCarrying.setDefault("Q5_d_WherePhone", answerSet5e);
@@ -598,11 +602,14 @@ public class EMAQuestionSet extends QuestionSet {
 		
 		// set up probabilities for questions be chosen
 		Q1_MainActivity.addRules(new ChanceBeChosen(1));
+		Q1_a_UsingTech.addRules(new ChanceBeChosen(1));/**/
 		Q2_a_HowLong.addRules(new ChanceBeChosen(1));
-		Q2_b_a_WereYou.addRules(new ChanceBeChosen(1));
+		Q2_b_a_WereYou.addRules(new ChanceBeChosen(1));/**/
+		Q2_b_b_WereYou.addRules(new ChanceBeChosen(1));/**/
 		Q2_c_WherePhone.addRules(new ChanceBeChosen(1));
 		Q2_d_YNotCarrying.addRules(new ChanceBeChosen(1));
 		Q2_e_a_MainPurpose.addRules(new ChanceBeChosen(0.3));/**/
+		Q2_e_b_MainPurpose.addRules(new ChanceBeChosen(0.3));/**/
 		Q2_f_HowEnjoyable.addRules(new ChanceBeChosen(0.3));
 		Q2_g_SelfMotivated.addRules(new ChanceBeChosen(0.3));
 		Q2_h_ParentsMotivated.addRules(new ChanceBeChosen(1));
@@ -640,7 +647,7 @@ public class EMAQuestionSet extends QuestionSet {
 		Q4_i_ParentsMotivated.addRules(new ChanceBeChosen(1));
 		Q4_j_FriendsMotivated.addRules(new ChanceBeChosen(1));
 		Q4_k_TeacherMotivated.addRules(new ChanceBeChosen(1));
-		Q4_l_Alone.addRules(new ChanceBeChosen(0.3));
+		Q4_l_Alone.addRules(new ChanceBeChosen(0.3));/**/
 		Q4_m_Accompanies.addRules(new ChanceBeChosen(1));
 		Q5_a_SomethingElse.addRules(new ChanceBeChosen(1));
 		Q5_b_HowManyMins.addRules(new ChanceBeChosen(1));
@@ -656,147 +663,150 @@ public class EMAQuestionSet extends QuestionSet {
 		Q5_l_Alone.addRules(new ChanceBeChosen(0.3));
 		Q5_m_Accompanies.addRules(new ChanceBeChosen(1));
 
-		// set up branching questions and rules		
+		// set up branching questions and rules
 		ArrayList<SurveyQuestion> questionSection_1 = new ArrayList<SurveyQuestion>(2);
-		questionSection_1.add(Q2_a_HowLong);
-		questionSection_1.add(Q2_c_WherePhone);
-		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,2,4}, questionSection_1));
+		questionSection_1.add(Q2_a_HowLong);	// 2a
+		questionSection_1.add(Q2_c_WherePhone);	// 2c
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,2,4,5}, questionSection_1));
 		
 		ArrayList<SurveyQuestion> questionSection_2a = new ArrayList<SurveyQuestion>(1);
-		questionSection_2a.add(Q2_b_a_WereYou);
-		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,2}, questionSection_2a));
+		questionSection_2a.add(Q2_b_a_WereYou);	// 2b
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,2,5}, questionSection_2a));
 
 		ArrayList<SurveyQuestion> questionSection_2b = new ArrayList<SurveyQuestion>(1);
-		questionSection_2b.add(Q2_b_b_WereYou);
+		questionSection_2b.add(Q2_b_b_WereYou);	// 2b.a
 		Q1_MainActivity.addRules(new QuesFromAns(new int[]{4}, questionSection_2b));
 
-		
 		ArrayList<SurveyQuestion> questionSection_1a = new ArrayList<SurveyQuestion>(1);
-		questionSection_1a.add(Q1_a_UsingTech);
+		questionSection_1a.add(Q1_a_UsingTech);	// 1a
 		Q1_MainActivity.addRules(new QuesFromAns(new int[]{1}, questionSection_1a));
 
 		ArrayList<SurveyQuestion> questionSection_20 = new ArrayList<SurveyQuestion>(3);
-		questionSection_20.add(Q2_f_HowEnjoyable);
-		questionSection_20.add(Q2_g_SelfMotivated);
-		questionSection_20.add(Q2_k_Alone);
-		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,2,4}, questionSection_20, 0.3));
+		questionSection_20.add(Q2_f_HowEnjoyable);	// 2f
+		questionSection_20.add(Q2_g_SelfMotivated);	// 2g
+		questionSection_20.add(Q2_k_Alone);			// 2k
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,2,4,5}, questionSection_20, 0.3));
 
 		ArrayList<SurveyQuestion> questionSection_20a = new ArrayList<SurveyQuestion>(1);
-		questionSection_20a.add(Q2_e_a_MainPurpose);
-		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,4}, questionSection_20a, 0.3));
+		questionSection_20a.add(Q2_e_a_MainPurpose);// 2e
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,4,5}, questionSection_20a, 0.3));
 
 		ArrayList<SurveyQuestion> questionSection_20b = new ArrayList<SurveyQuestion>(1);
-		questionSection_20b.add(Q2_e_b_MainPurpose);
+		questionSection_20b.add(Q2_e_b_MainPurpose);// 2e.a
 		Q1_MainActivity.addRules(new QuesFromAns(new int[]{2}, questionSection_20b, 0.3));
 
 		ArrayList<SurveyQuestion> questionSection_2 = new ArrayList<SurveyQuestion>(1);
-		questionSection_2.add(Q2_d_YNotCarrying);
-		Q2_c_WherePhone.addRules(new QuesFromAns(new int[]{4}, questionSection_2));
+		questionSection_2.add(Q2_d_YNotCarrying);	// 2c
+		Q2_c_WherePhone.addRules(new QuesFromAns(new int[]{5}, questionSection_2));
 
 		ArrayList<SurveyQuestion> questionSection_3 = new ArrayList<SurveyQuestion>(3);
-		questionSection_3.add(Q2_h_ParentsMotivated);
-		questionSection_3.add(Q2_i_FriendsMotivated);
-		questionSection_3.add(Q2_j_TeacherMotivated);
+		questionSection_3.add(Q2_h_ParentsMotivated);// 2h
+		questionSection_3.add(Q2_i_FriendsMotivated);// 2i
+		questionSection_3.add(Q2_j_TeacherMotivated);// 2j
 		Q2_g_SelfMotivated.addRules(new QuesAsSequence(questionSection_3));
 		
 		ArrayList<SurveyQuestion> questionSection_4 = new ArrayList<SurveyQuestion>(1);
-		questionSection_4.add(Q2_l_Accompanies);
+		questionSection_4.add(Q2_l_Accompanies);	// 2l
 		Q2_k_Alone.addRules(new QuesFromAns(new int[]{1}, questionSection_4));
 
 		ArrayList<SurveyQuestion> questionSection_5 = new ArrayList<SurveyQuestion>(13);
-		questionSection_5.add(Q3_a_Type);
-		questionSection_5.add(Q3_b_HowManyMins);
-		questionSection_5.add(Q3_c_WhatInvolve);
-		questionSection_5.add(Q3_d_ExtraWeight);
-		questionSection_5.add(Q3_e_UpOrDown);
-		questionSection_5.add(Q3_f_HowSoreness);
-		questionSection_5.add(Q3_g_MainPurpose);
-		questionSection_5.add(Q3_h_HowEnjoyable);
-		questionSection_5.add(Q3_i_SelfMotivated);
-		questionSection_5.add(Q3_m_Where);
-		questionSection_5.add(Q3_o_Outdoors);
-		questionSection_5.add(Q3_p_Alone);
-		questionSection_5.add(Q3_r_WherePhone);
+		questionSection_5.add(Q3_a_Type);			// 3a
+		questionSection_5.add(Q3_b_HowManyMins);	// 3b
+		questionSection_5.add(Q3_c_WhatInvolve);	// 3c
+		questionSection_5.add(Q3_d_ExtraWeight);	// 3d
+		questionSection_5.add(Q3_e_UpOrDown);		// 3e
+		questionSection_5.add(Q3_f_HowSoreness);	// 3f
+		questionSection_5.add(Q3_g_MainPurpose);	// 3g
+		questionSection_5.add(Q3_h_HowEnjoyable);	// 3h
+		questionSection_5.add(Q3_i_SelfMotivated);	// 3i
+		questionSection_5.add(Q3_m_Where);			// 3m
+		questionSection_5.add(Q3_o_Outdoors);		// 3o
+		questionSection_5.add(Q3_p_Alone);			// 3p
+		questionSection_5.add(Q3_r_WherePhone);		// 3r
 		Q1_MainActivity.addRules(new QuesFromAns(new int[]{3}, questionSection_5));
 
 		ArrayList<SurveyQuestion> questionSection_6 = new ArrayList<SurveyQuestion>(3);
-		questionSection_6.add(Q3_j_ParentsMotivated);
-		questionSection_6.add(Q3_k_FriendsMotivated);
-		questionSection_6.add(Q3_l_TeacherMotivated);
+		questionSection_6.add(Q3_j_ParentsMotivated);// 3j
+		questionSection_6.add(Q3_k_FriendsMotivated);// 3k
+		questionSection_6.add(Q3_l_TeacherMotivated);// 3l
 		Q3_i_SelfMotivated.addRules(new QuesAsSequence(questionSection_6));
 
 		ArrayList<SurveyQuestion> questionSection_7 = new ArrayList<SurveyQuestion>(1);
-		questionSection_7.add(Q3_n_WhereOther);
-		Q3_m_Where.addRules(new QuesFromAns(new int[]{1}, questionSection_7));
+		questionSection_7.add(Q3_n_WhereOther);		// 3n
+		Q3_m_Where.addRules(new QuesFromAns(new int[]{3}, questionSection_7));
 
 		ArrayList<SurveyQuestion> questionSection_8 = new ArrayList<SurveyQuestion>(1);
-		questionSection_8.add(Q3_q_Accompanies);
+		questionSection_8.add(Q3_q_Accompanies);	// 3q
 		Q3_p_Alone.addRules(new QuesFromAns(new int[]{1}, questionSection_8));
 
 		ArrayList<SurveyQuestion> questionSection_9 = new ArrayList<SurveyQuestion>(1);
-		questionSection_9.add(Q3_s_YNotCarrying);
+		questionSection_9.add(Q3_s_YNotCarrying);	// 3s
 		Q3_r_WherePhone.addRules(new QuesFromAns(new int[]{4}, questionSection_9));
 
 		ArrayList<SurveyQuestion> questionSection_10 = new ArrayList<SurveyQuestion>(1);
-		questionSection_10.add(Q4_a_WhatOther);
-		Q1_MainActivity.addRules(new QuesFromAns(new int[]{5}, questionSection_10));
+		questionSection_10.add(Q4_a_WhatOther);		// 4a
+		Q1_MainActivity.addRules(new QuesFromAns(new int[]{6}, questionSection_10));
 
 		ArrayList<SurveyQuestion> questionSection_22 = new ArrayList<SurveyQuestion>(2);
-		questionSection_22.add(Q4_b_HowManyMins);
-		questionSection_22.add(Q4_d_WherePhone);
-		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,1,2,3,4,5,6,7}, questionSection_22));
+		questionSection_22.add(Q4_b_HowManyMins);	// 4b
+		questionSection_22.add(Q4_d_WherePhone);	// 4d
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,1,2,3,4,5,6,7,8,9,10,11}, questionSection_22));
 
 		ArrayList<SurveyQuestion> questionSection_11 = new ArrayList<SurveyQuestion>(1);
-		questionSection_11.add(Q4_c_WereYou);
-		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,1,3,4}, questionSection_11));
+		questionSection_11.add(Q4_c_WereYou);		// 4c
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,3,4,5,6,7,8,9,10}, questionSection_11));
 		
-		ArrayList<SurveyQuestion> questionSection_19 = new ArrayList<SurveyQuestion>(4);
-		questionSection_19.add(Q4_f_MainPurpose);
-		questionSection_19.add(Q4_g_HowEnjoyable);
-		questionSection_19.add(Q4_h_SelfMotivated);
-		questionSection_19.add(Q4_l_Alone);
-		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,1,2,3,4,5,6}, questionSection_19, 0.3));
+		ArrayList<SurveyQuestion> questionSection_19 = new ArrayList<SurveyQuestion>(3);
+		questionSection_19.add(Q4_f_MainPurpose);	// 4f
+		questionSection_19.add(Q4_g_HowEnjoyable);	// 4g
+		questionSection_19.add(Q4_h_SelfMotivated);	// 4h
+//		questionSection_19.add(Q4_l_Alone);/////////////////////////////////////////////
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,1,2,3,4,5,6,7,8,9,10}, questionSection_19, 0.3));
 
+		ArrayList<SurveyQuestion> questionSection_19a = new ArrayList<SurveyQuestion>(1);		
+		questionSection_19a.add(Q4_l_Alone);
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{0,3,4,5,6,7,8,9,10}, questionSection_19a, 0.3));
+				
 		ArrayList<SurveyQuestion> questionSection_12 = new ArrayList<SurveyQuestion>(1);
-		questionSection_12.add(Q4_e_YNotCarrying);
+		questionSection_12.add(Q4_e_YNotCarrying);	// 4e
 		Q4_d_WherePhone.addRules(new QuesFromAns(new int[]{4}, questionSection_12));
 
 		ArrayList<SurveyQuestion> questionSection_13 = new ArrayList<SurveyQuestion>(3);
-		questionSection_13.add(Q4_i_ParentsMotivated);
-		questionSection_13.add(Q4_j_FriendsMotivated);
-		questionSection_13.add(Q4_k_TeacherMotivated);
+		questionSection_13.add(Q4_i_ParentsMotivated);// 4i
+		questionSection_13.add(Q4_j_FriendsMotivated);// 4j
+		questionSection_13.add(Q4_k_TeacherMotivated);// 4k
 		Q4_h_SelfMotivated.addRules(new QuesAsSequence(questionSection_13));
 
 		ArrayList<SurveyQuestion> questionSection_14 = new ArrayList<SurveyQuestion>(1);
-		questionSection_14.add(Q4_m_Accompanies);
+		questionSection_14.add(Q4_m_Accompanies);	// 4m
 		Q4_l_Alone.addRules(new QuesFromAns(new int[]{1}, questionSection_14));
 
 		ArrayList<SurveyQuestion> questionSection_15 = new ArrayList<SurveyQuestion>(4);
-		questionSection_15.add(Q5_a_SomethingElse);
-		questionSection_15.add(Q5_b_HowManyMins);
-		questionSection_15.add(Q5_c_WereYou);
-		questionSection_15.add(Q5_d_WherePhone);
-		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{7}, questionSection_15));
+		questionSection_15.add(Q5_a_SomethingElse);	// 5a
+		questionSection_15.add(Q5_b_HowManyMins);	// 5b
+		questionSection_15.add(Q5_c_WereYou);		// 5c
+		questionSection_15.add(Q5_d_WherePhone);	// 5d
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{11}, questionSection_15));
 		
 		ArrayList<SurveyQuestion> questionSection_21 = new ArrayList<SurveyQuestion>(4);
-		questionSection_21.add(Q5_f_MainPurpose);
-		questionSection_21.add(Q5_g_HowEnjoyable);
-		questionSection_21.add(Q5_h_SelfMotivated);
-		questionSection_21.add(Q5_l_Alone);
-		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{7}, questionSection_21, 0.3));
+		questionSection_21.add(Q5_f_MainPurpose);	// 5f
+		questionSection_21.add(Q5_g_HowEnjoyable);	// 5g
+		questionSection_21.add(Q5_h_SelfMotivated);	// 5h
+		questionSection_21.add(Q5_l_Alone);			// 5l
+		Q4_a_WhatOther.addRules(new QuesFromAns(new int[]{11}, questionSection_21, 0.3));
 
 		ArrayList<SurveyQuestion> questionSection_16 = new ArrayList<SurveyQuestion>(1);
-		questionSection_16.add(Q5_e_YNotCarrying);
+		questionSection_16.add(Q5_e_YNotCarrying);	// 5e
 		Q5_d_WherePhone.addRules(new QuesFromAns(new int[]{4}, questionSection_16));
 
 		ArrayList<SurveyQuestion> questionSection_17 = new ArrayList<SurveyQuestion>(3);
-		questionSection_17.add(Q5_i_ParentsMotivated);
-		questionSection_17.add(Q5_j_FriendsMotivated);
-		questionSection_17.add(Q5_k_TeacherMotivated);
+		questionSection_17.add(Q5_i_ParentsMotivated);// 5i
+		questionSection_17.add(Q5_j_FriendsMotivated);// 5j
+		questionSection_17.add(Q5_k_TeacherMotivated);// 5k
 		Q5_h_SelfMotivated.addRules(new QuesAsSequence(questionSection_17));
 
 		ArrayList<SurveyQuestion> questionSection_18 = new ArrayList<SurveyQuestion>(1);
-		questionSection_18.add(Q5_m_Accompanies);
+		questionSection_18.add(Q5_m_Accompanies);	// 5m
 		Q5_l_Alone.addRules(new QuesFromAns(new int[]{1}, questionSection_18));
 	}
 	
