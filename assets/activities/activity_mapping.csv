@@ -1,75 +1,1 @@
-<<<<<<< HEAD
 ActivityID, ActivityName, IconNameD929FAB8-9614-466C-8E62-B845D53DB80D, Attending church, attending_church.png28365949-D08E-443A-A8B2-FBD0893E01B9, Baseball, baseball.png2BCA02F4-27DB-4D18-8BB8-E43E72F54852, Basketball, basketball.png06F8226B-A0C5-42A6-95A3-8EFA770A0E4A, Bicycling, bicycling.pngE1BB662B-BBF6-482E-9416-A3E9DF69870C, Charging phone, chargingPhone.pngECF13891-9A3D-4E9D-84D2-B0C6F9526107, Class/school, dummy.pngFDCAD523-3C2C-45F1-9705-130C14BDC30D, Cleaning up, cleaningUp.png79637898-3F3F-4339-90AD-135665259479, Cooking, cooking.png6D748F4B-77A4-4876-ACFB-A0C194BF6E09, Dance class, dance.png62A18268-D3FA-4A0E-A397-4170A961D2CE, Doing laundry, doing_laundry.png004FF248-2439-4DE7-BD02-725FB6D9091D, Doing chores, doingchores.png28E2DCD3-D450-47A2-84FC-F1B474FAFB76, Doing dishes, doingDishes.pngB3801125-0731-4C5A-B26C-323B5AABC141, Doing something else, somethingelse.pngC8524DF3-E709-4AA8-BAC0-01AC26F1BF95, Driving car, drivingCar.pngCC8B3B69-0806-419E-9515-25E7C33D608D, Eating/Drinking, eating.pngBF98F08D-BEEC-4CBA-A46A-D67E0A5ADC8C, Exercise class, dummy.png912D3872-8999-4A08-90EC-C5FBAAC7555F, Football, football.png2B77F3C4-2FE5-44CC-9C7C-F282795F1CDE, Getting dressed, dummy.png7D4B6257-10F3-436E-9BD4-F9C2153767B1, Getting ready for something, getting_ready_something.pngD92248D8-E4F2-435F-A301-C1877044F20F, Going somewhere, goingsomewhere.png22F2124B-4A09-4D32-AE02-AADD3EAE668E, Hanging out, dummy.pngA11EF031-93F5-487A-B944-F0B0ED0F642C, Hanging with friends, hangingwfriends.png1A812254-20BA-4823-8649-CE72CA640965, I don't remember, idontremember.pngBE8C23CD-74DE-457B-925D-54CEF87413F6, In meeting, inMeeting.png3F1F4DA5-D973-4BF9-BEE4-E374B2EDBB5A, Jogging, jogging.pngC38A7D91-FA60-49D3-84FA-3219F86CC209, Karate class, karate.png71783773-27AF-45CE-B617-2B7D4F4F7E06, Labeling my day, LabelingMyDay.pngF842B45E-CCD3-40FB-935D-DAB8D8ACE8AA, Lying down, lyingdown.png3A82F7AF-1146-4783-946C-0CD9C00E59FC, Mix of things, mixOfthings.png2A43A7E9-2C31-43B0-B18E-C039A6FA11EC, Other sports/exercise, other.png6DF5440E-9066-458C-A8E3-B535F94468C5, Playing catch, dummy.png71D004C4-D2DA-4C6A-9DB8-619C9428BE2C, Playing instrument, playing_instrument.png1D082D89-C95E-456B-A093-484F44135552, Playing with children, playingKid.pngA37B468C-7105-45BF-A4D6-9332E5846CB4, Playing with pet, playingPet.png1C40A9D7-20AE-4A5C-BEA3-D8E694459EF2, Playing video games, videogames.pngFFA9C6A2-2F0E-4E0F-A301-F777C123E9E6, Putting around, puttingAround.png10832F21-B1BE-4A25-B6B7-0F3CFC780E62, Reading/Doing homework, reading.png06D2F88D-0F25-445A-912A-819E90C1F162, Riding in a car, ridinginacar.png850C114A-27C9-40E5-A9CA-873EC0C1A4FC, Running, running.png30AF0C80-38D4-4DCC-8328-E5E9CB26244F, Shopping food, shopping_food.pngEA3C891A-DA60-4403-83EF-A02B135E5961, Shopping other, shopping_other.png78B71146-47CF-4696-A7D5-0D8ADC63FAB5, Showering/Bathing, showering.pngDD98FB69-2131-45E2-9BF4-2BEE86AD21C6, Sitting, sitting.png642EF652-DEC7-47A4-A3D2-A9BAE1E76461, Skate boarding, skateboarding.png36D12350-6B0E-4708-B9D5-42CF73F4434D, Sleeping, sleeping.pngA536E5C6-4752-47C3-9277-2A9AAAE3D853, Soccer, soccer.png7BF7BD61-2992-42AA-A426-7DC6CC3D9154, Sports/Exercising, sports.pngCD4AE2EC-2F2D-48DC-9332-D766FD06A937, Standing, standing.pngC5A54D27-742B-4192-92DC-56E97929ACF6, Weightlifting/Strength Training, strength_training.png3AA860D1-E271-4D98-8BE9-6CF021CA8E51, Swimming, swimming.png7AA73808-7732-4F89-A835-0A6B9C5B2912, Taking stairs, taking_stairs.png7C3B03D3-A738-4B40-9CA1-4B54232FA90B, Taking bus, takingBus.png02FF0313-8E27-4C13-AC20-F27784AA58DB, Taking train, takingTrain.png5284ED9D-4370-4543-944F-9EC9B94BB9DA, Talking(phone/computer), dummy.pngF623CCA1-1B1C-4297-80F2-8FE6AA1BBA6F, Teaching, Teaching.png1E0DEA70-6376-402B-81CF-9E1BFEA4DC33, Texting, dummy.pngD2945BAD-82BA-45D7-8E0F-7F2498980520, Using computer, usingcomputer.png25D49E7E-E642-42F9-95CA-6EF8EBBB642F, Using other technology, dummy.pngEF76C8B6-7468-4881-B69E-EB210FB4FB63, Using phone, usingthephone.png9E202263-43E3-4CED-B377-AC372CB40ADC, Using the Internet, dummy.pngCB777EDB-31D1-47AF-A241-252A7D45E1F8, Waiting around, waitingAround.png2A679141-8D7F-4A36-8D22-53AB629A5863, Walking, walking.pngDB4762D3-37CB-4D12-9864-B564EE675A1A, Walking pet, WalkingPet.pngDC512AF0-E20E-4ABA-BC3E-70B1C97D49DE, Watching shows/movies, watchingtv.png52FF0BBE-F544-4752-BA3E-822464112BB6, Working/Part-time job, dummy.png
-=======
-ActivityID,ActivityName,IconName
-D929FAB8-9614-466C-8E62-B845D53DB80D,Attending church,attending_church.png
-28365949-D08E-443A-A8B2-FBD0893E01B9,Baseball,baseball.png
-2BCA02F4-27DB-4D18-8BB8-E43E72F54852,Basketball,basketball.png
-06F8226B-A0C5-42A6-95A3-8EFA770A0E4A,Bicycling,bicycling.png
-E1BB662B-BBF6-482E-9416-A3E9DF69870C,Charging phone,charging_phone.png
-FDCAD523-3C2C-45F1-9705-130C14BDC30D,Cleaning up,cleaning_up.png
-79637898-3F3F-4339-90AD-135665259479,Cooking,cooking.png
-6D748F4B-77A4-4876-ACFB-A0C194BF6E09,Dance class,dance.png
-62A18268-D3FA-4A0E-A397-4170A961D2CE,Doing laundry,doing_laundry.png
-004FF248-2439-4DE7-BD02-725FB6D9091D,Doing chores,doing_chores.png
-28E2DCD3-D450-47A2-84FC-F1B474FAFB76,Doing dishes,doing_dishes.png
-B3801125-0731-4C5A-B26C-323B5AABC141,Doing something else,doing_something_else.png
-C8524DF3-E709-4AA8-BAC0-01AC26F1BF95,Driving car,driving_car.png
-CC8B3B69-0806-419E-9515-25E7C33D608D,Eating/drinking,eating.png
-CC8A3B63-0806-419E-9515-25E7C33D608D,Exercise class,no_icon_yet.png
-912D3872-8999-4A08-90EC-C5FBAAC7555F,Football,football.png
-002D3372-8999-4A08-90EC-C5FBAAC7555F,Getting dressed,no_icon_yet.png
-7D4B6257-10F3-436E-9BD4-F9C2153767B1,Getting ready for something,getting_ready_something.png
-D92248D8-E4F2-435F-A301-C1877044F20F,Going somewhere,going_somewhere.png
-D14448D8-E4F2-435F-A301-C1877044F20F,Going somewhere (walking),no_icon_yet.png
-D92248D8-E2F2-436F-A301-C1877044F20F,Going somewhere (biking),no_icon_yet.png
-D91149D8-E2F2-436F-A301-C1877044F20F,"Going somewhere (bus,train,car)",no_icon_yet.png
-D91149D8-E1F1-536F-A301-C1877044F20F,Going somewhere (skateboarding),no_icon_yet.png
-A11EF031-93F5-487A-B944-F0B0ED0F642C,Hanging with friends,hanging_with_friends.png
-1A812254-20BA-4823-8649-CE72CA640965,I don't remember,i_dont_remember.png
-BE8C23CD-74DE-457B-925D-54CEF87413F6,In meeting,in_meeting.png
-BE8C23CD-74DE-127B-925D-54CEF87413F6,In class/school,no_icon_yet.png
-3F1F4DA5-D973-4BF9-BEE4-E374B2EDBB5A,Jogging,jogging.png
-C38A7D91-FA60-49D3-84FA-3219F86CC209,Karate class,karate.png
-71783773-27AF-45CE-B617-2B7D4F4F7E06,Labeling my day,labeling_my_day.png
-F842B45E-CCD3-40FB-935D-DAB8D8ACE8AA,Lying down,lying_down.png
-3A82F7AF-1146-4783-946C-0CD9C00E59FC,Mix of things,mix_of_things.png
-2A43A7E9-2C31-43B0-B18E-C039A6FA11EC,Other,other.png
-2A43A7E9-1C36-43B0-B18E-C039A6FA11EC,Other sports/exercise,no_icon_yet.png
-2A43A7E9-1A31-43B0-B18E-C039A6FA11EC,Playing catch,no_icon_yet.png
-71D004C4-D2DA-4C6A-9DB8-619C9428BE2C,Playing instrument,playing_instrument.png
-1D082D89-C95E-456B-A093-484F44135552,Playing with child(ren),playing_kid.png
-A37B468C-7105-45BF-A4D6-9332E5846CB4,Playing pet,playing_pet.png
-1C40A9D7-20AE-4A5C-BEA3-D8E694459EF2,Playing video games,playing_videogames.png
-FFA9C6A2-2F0E-4E0F-A301-F777C123E9E6,Puttering around,puttering_around.png
-10832F21-B1BE-4A25-B6B7-0F3CFC780E62,Reading/homework,reading.png
-06D2F88D-0F25-445A-912A-819E90C1F162,Riding in a car,riding_in_a_car.png
-850C114A-27C9-40E5-A9CA-873EC0C1A4FC,Running,running.png
-30AF0C80-38D4-4DCC-8328-E5E9CB26244F,Shopping food,shopping_food.png
-EA3C891A-DA60-4403-83EF-A02B135E5961,Shopping other,shopping_other.png
-78B71146-47CF-4696-A7D5-0D8ADC63FAB5,Showering/Bathing,showering.png
-DD98FB69-2131-45E2-9BF4-2BEE86AD21C6,Sitting,sitting.png
-642EF652-DEC7-47A4-A3D2-A9BAE1E76461,Skateboarding,skateboarding.png
-36D12350-6B0E-4708-B9D5-42CF73F4434D,Sleeping,sleeping.png
-A536E5C6-4752-47C3-9277-2A9AAAE3D853,Soccer,soccer.png
-7BF7BD61-2992-42AA-A426-7DC6CC3D9154,Sports/exercising,sports.png
-CD4AE2EC-2F2D-48DC-9332-D766FD06A937,Standing,standing.png
-C5A54D27-742B-4192-92DC-56E97929ACF6,Strength training,strength_training.png
-3AA860D1-E271-4D98-8BE9-6CF021CA8E51,Swimming,swimming.png
-7AA73808-7732-4F89-A835-0A6B9C5B2912,Taking stairs,taking_stairs.png
-7C3B03D3-A738-4B40-9CA1-4B54232FA90B,Taking bus,taking_bus.png
-02FF0313-8E27-4C13-AC20-F27784AA58DB,Taking train,taking_train.png
-02110313-8E27-4C13-AC20-F27784AA58DB,"Talking (phone,computer)",no_icon_yet.png
-F623CCA1-1B1C-4297-80F2-8FE6AA1BBA6F,Teaching,teaching.png
-F623CCA1-1B1C-1111-80F2-8FE6AA1BBA6F,Texting,no_icon_yet.png
-D2945BAD-82BA-45D7-8E0F-7F2498980520,Using computer,using_computer.png
-D2945BAD-2222-45D7-8E0F-7F2498980520,Using other technology,no_icon_yet.png
-EF76C8B6-7468-4881-B69E-EB210FB4FB63,Using phone,using_phone.png
-EF76C8B6-3333-4881-B69E-EB210FB4FB63,Using the Internet,no_icon_yet.png
-CB777EDB-31D1-47AF-A241-252A7D45E1F8,Waiting around,waiting_around.png
-2A679141-8D7F-4A36-8D22-53AB629A5863,Walking,walking.png
-DB4762D3-37CB-4D12-9864-B564EE675A1A,Walking pet,walking_pet.png
-DC512AF0-E20E-4ABA-BC3E-70B1C97D49DE,Watching shows/movies,watching_tv.png
-DC512AF0-4444-4ABA-BC3E-70B1C97D49DE,Weightlifting/strength training,no_icon_yet.png
-DC512AF0-5555-4ABA-BC3E-70B1C97D49DE,Working job,no_icon_yet.png
->>>>>>> 3594980b739181affa82c0cd1b802d57faa44729
