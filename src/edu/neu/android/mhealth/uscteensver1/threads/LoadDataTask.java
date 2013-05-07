@@ -45,9 +45,9 @@ public class LoadDataTask extends AsyncTask<String, Void, Void>{
 
 	@Override
 	protected void onPreExecute() {
-		// TODO Auto-generated method stub
-		super.onPreExecute();
 		mLoadingDialog.show();
+		super.onPreExecute();
+		
 	}
 
 	@Override
