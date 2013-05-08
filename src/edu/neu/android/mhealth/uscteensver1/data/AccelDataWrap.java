@@ -56,7 +56,7 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 		// correct the error case for day crossing
 		ArrayList<AccelData> firstHourData = get(0);
 		ArrayList<AccelData> uselessData = new ArrayList<AccelData>();
-		for (int i = 0; i < DATA_COUNT_FOR_DAY_CROSSING; ++i) {			
+		for (int i = 0; i < DATA_COUNT_FOR_DAY_CROSSING && i < firstHourData.size(); ++i) {			
 			AccelData aData = firstHourData.get(i);
 			if (aData.mHour == 23 && aData.mMinute == 59) {
 				uselessData.add(aData);

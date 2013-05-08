@@ -43,10 +43,10 @@ public class DataSource {
 	private final static String TAG = "DataSource";
 	// result code
 	public final static int LOADING_SUCCEEDED  		= 0;
-	public final static int ERR_CANCELLED           = 1;
-	public final static int ERR_NO_SENSOR_DATA 		= 2;
-	public final static int ERR_NO_CHUNK_DATA  		= 3;	
-	public final static int ERR_WAITING_SENSOR_DATA = 4;
+	public final static int ERR_CANCELLED           = -1;
+	public final static int ERR_NO_SENSOR_DATA 		= -2;
+	public final static int ERR_NO_CHUNK_DATA  		= -3;	
+	public final static int ERR_WAITING_SENSOR_DATA = -4;
 	
 	// thresholds for chunking generation
 	public final static int CHUNKING_MIN_MEAN_AVG      = 350;
