@@ -11,16 +11,16 @@ import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
-public class RewardButton extends CustomButton {
+public class FixButton extends CustomButton {
 
 	protected int   mColor = 0xff0066ff;
 	protected float mTextX = 0;
 	protected float mTextY = 0;	
 	protected Paint mPaintText = null;	
 
-	public RewardButton(Resources res) {
+	public FixButton(Resources res) {
 		super(res);
-		loadImages(new int[]{ R.drawable.reward_btn, R.drawable.reward_disable_btn });
+		loadImages(new int[]{ R.drawable.fix_btn });
 		
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText.setColor(Color.WHITE);
@@ -35,19 +35,16 @@ public class RewardButton extends CustomButton {
 	public void onSizeChanged(int width, int height) {		
 		mWidth  = mImages.get(0).getWidth();
 		mHeight = mImages.get(0).getHeight();
-		mX = width * 0.93f - mWidth;
+		mX = (width - mWidth) / 2;
 		mY = height * 0.84f;		
 	}
 
 	@Override
-	public void onDraw(Canvas c) {	
-		if (!mVisible) {
-			return;
-		}
+	public void onDraw(Canvas c) {
 		mTextX = mX + mWidth / 2;
 		mTextY = mY + mHeight * 0.675f;
-		c.drawBitmap(mImages.get(mEnable ? 0 : 1), mX, mY, null);		
-		c.drawText("Get reward", mTextX, mTextY, mPaintText);
+		c.drawBitmap(mImages.get(0), mX, mY, null);
+		c.drawText("Fix", mTextX, mTextY, mPaintText);
 	}
 
 	@Override
@@ -69,4 +66,5 @@ public class RewardButton extends CustomButton {
 	public void onCancelSelection(MotionEvent e) {
 		mPaintText.setColor(Color.WHITE);
 	}
+
 }

@@ -17,7 +17,7 @@ public class RewardView extends WebView {
         setScrollBarStyle(0);
 
         new Thread() {
-        	public void run(){        		
+        	public void run() {        		
         		loadUrl(DEFAULT_URL);
         	}
 	    }.start();

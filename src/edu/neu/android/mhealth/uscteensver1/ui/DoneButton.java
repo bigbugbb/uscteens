@@ -34,17 +34,17 @@ public class DoneButton extends CustomButton {
 	@Override
 	public void onSizeChanged(int width, int height) {		
 		mWidth  = mImages.get(0).getWidth();
-		mHeight = mImages.get(0).getHeight() / 2;
-		mX = width * 0.25f - mWidth / 2;
-		mY = height * 0.84f;
-		mTextX = width * 0.25f;
-		mTextY = mY + mHeight * 1.35f;
+		mHeight = mImages.get(0).getHeight();
+		mX = width * 0.07f;
+		mY = height * 0.84f;		
 	}
 
 	@Override
 	public void onDraw(Canvas c) {
+		mTextX = mX + mWidth / 2;
+		mTextY = mY + mHeight * 0.675f;
 		c.drawBitmap(mImages.get(0), mX, mY, null);
-		c.drawText("DONE", mTextX, mTextY, mPaintText);
+		c.drawText("Done", mTextX, mTextY, mPaintText);		
 	}
 
 	@Override
