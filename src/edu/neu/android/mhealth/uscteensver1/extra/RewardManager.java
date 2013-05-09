@@ -57,7 +57,7 @@ public class RewardManager {
 		String dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
 		String[] rewardDir = FileHelper.getFilePathsDir(dirPath);
-		if (rewardDir == null || rewardDir.length == 0) {
+		if (rewardDir == null || rewardDir.length == 0 || USCTeensGlobals.sUpdateConfig) {
 			copyRewardFromAssets();
 			rewardDir = FileHelper.getFilePathsDir(dirPath);
 			if (rewardDir == null || rewardDir.length == 0) {

@@ -73,7 +73,7 @@ public abstract class AppObject {
     		}                 	
     		// add to the image list
         	if (scaled != null) {
-	    		origin.recycle(); // explicit call to avoid out of memory
+	    		origin.recycle(); // explicit call to avoid out of memory	    		
 	    		mImages.add(scaled);
 	        } else {
 	        	mImages.add(origin);

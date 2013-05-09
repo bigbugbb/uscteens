@@ -42,7 +42,8 @@ public class USCTeensGlobals {
 	public static int sAccelDataScalingFactor = 1800;
 	
 	public static Context sContext = null;
-	public static Handler sGlobalHandler = null;
+	public static Handler sGlobalHandler = null;	
+	public static boolean sUpdateConfig = false;
 	
 	public static final String ANNOTATION_GUID = "2F996145-7EB0-4E25-935C-10D53B15012D";
 	public static final String UNLABELLED_GUID = "03F9A375-C162-4B24-AB74-BF23CD07B358";

@@ -45,6 +45,7 @@ import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.AppUsageLogger;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 
 public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouchListener {
@@ -76,10 +77,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		super.onCreate(savedInstanceState, "MainActivity");
 		setContentView(R.layout.activity_main);					
 
-		USCTeensGlobals.sContext = getApplicationContext();
-		USCTeensGlobals.sGlobalHandler = mHandler;
-		DataSource.initialize(getApplicationContext());	
-
+		// setup global params
+		setupGlobal();
 		// setup scale param according to the screen resolution
 		setupScale();
 		// get views and set listeners
@@ -87,7 +86,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		// adjust layouts according to the screen resolution
 		adjustLayout();	
 		// create app pages and all the UIs in the pages
-		initPages();	
+		initPages();
 		// load extra data
 		loadExtra();
 	}
@@ -111,6 +110,18 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
+	}
+	
+	private void setupGlobal() {
+		Context context = getApplicationContext();
+		USCTeensGlobals.sContext = context;
+		USCTeensGlobals.sGlobalHandler = mHandler;
+		DataSource.initialize(getApplicationContext());	
+		
+		String oldVersion = DataStorage.getVersion(context, "");	
+		String newVersion = AppUsageLogger.getVersion(context, "USCTeens");
+		DataStorage.setVersion(context, newVersion);
+		USCTeensGlobals.sUpdateConfig = !newVersion.equals(oldVersion);	
 	}
 
 	private void setupScale() {
@@ -241,7 +252,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 
 	@Override
 	public void onStart() {
-		Log.d("USCTeensMainActivity", "onStart in");
+		Log.d("USCTeensMainActivity", "onStart in");		
+				
 		// the initial page is not graph page, so it's ok here
 		if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {	
 			DataSource.updateRawData();		
@@ -257,7 +269,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	public void onStop() {	
 		Log.d("USCTeensMainActivity", "onStop in");		
 		mGraphView.onStop();
-		mCurPage.stop();
+		mCurPage.stop();				
 		
 		super.onStop();
 		Log.d("USCTeensMainActivity", "onStop out");

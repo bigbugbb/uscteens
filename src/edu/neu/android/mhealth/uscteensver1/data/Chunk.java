@@ -160,6 +160,8 @@ public class Chunk extends AppObject {
 	public void release() {
 		super.release();
 		
+		mAction = null;
+		
 		mQuest.release();
 		mClock.release();
 		mMerge.release();

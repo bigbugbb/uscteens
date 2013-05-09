@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.pm.PackageManager.NameNotFoundException;
 import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.AppUsageLogger;
 
 
 public class USCTeensAppManager extends ApplicationManager {
@@ -22,7 +24,7 @@ public class USCTeensAppManager extends ApplicationManager {
     	Globals.setArbitrater(arbitrater);   
     	
     	try {
-			USCTeensGlobals.VERSION_NAME = "Ver. " + getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			USCTeensGlobals.VERSION_NAME = "Ver. " + getPackageManager().getPackageInfo(getPackageName(), 0).versionName;					
 		} catch (NameNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

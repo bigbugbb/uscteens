@@ -20,10 +20,20 @@ public class Action implements Serializable {
 	protected String  mActID;
 	protected String  mActName;
 	protected String  mIcoName;
-	protected Bitmap  mActImage;
+	protected String  mIcoPath;
+	protected Bitmap  mActImage;	
+	protected boolean mImageLoaded = false;
 	
 	public static void initialize(Context context) {
 		sContext = context;
+	}
+	
+	public Action(String actID, String actName, String icoName, String icoPath) {
+		mActID    = actID;
+		mActName  = actName;
+		mIcoName  = icoName;
+		mIcoPath  = icoPath;
+		mActImage = null;
 	}
 	
 	public Action(String actID, String actName, String icoName, Bitmap actImage) {
@@ -31,6 +41,35 @@ public class Action implements Serializable {
 		mActName  = actName;
 		mIcoName  = icoName;
 		mActImage = actImage;
+	}
+	
+	public void loadIcon() {
+		if (mImageLoaded) {
+			return;
+		}
+		mImageLoaded = true;
+		
+		BitmapFactory.Options options = new BitmapFactory.Options(); 
+        options.inPurgeable = true;
+        options.inPreferredConfig = Config.RGB_565;     
+                
+    	Bitmap origin = BitmapFactory.decodeFile(mIcoPath, options);
+    	Bitmap scaled = null;
+    	// scale the image according to the current screen resolution
+    	float dstWidth  = origin.getWidth(),
+    	      dstHeight = origin.getHeight();        	
+		dstWidth  = AppScale.doScaleW(dstWidth);
+		dstHeight = AppScale.doScaleH(dstHeight);
+		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
+			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
+		}                
+		// add to the image list
+    	if (scaled != null) {
+    		origin.recycle(); // explicit call to avoid out of memory    		    	
+    		mActImage = scaled;
+        } else {
+        	mActImage = origin;
+        }    	
 	}
 	
 	public void setActionID(String actID) {
@@ -65,11 +104,12 @@ public class Action implements Serializable {
 		return mActImage;
 	}
 	
-	public void clear() {
-		if (mActImage != null) {
-			mActImage.recycle();
+	public void clear() {		
+		if (mActImage != null) {			
+			mActImage.recycle();		
 			mActImage = null;
-		}
+			mImageLoaded = false;
+		}				
 	}
 	
 	public static String toJSON(Action action) {
@@ -82,7 +122,7 @@ public class Action implements Serializable {
 		return gson.fromJson(aJSONString, Action.class);
 	}
 	
-	public static Action createUnlabelledAction() {		
+	public static Action createUnlabelledAction() {				
 		BitmapFactory.Options options = new BitmapFactory.Options(); 
         options.inPurgeable = true;
         options.inPreferredConfig = Config.RGB_565;     
@@ -104,7 +144,7 @@ public class Action implements Serializable {
     		image = scaled;
         } else {
         	image = origin;
-        } 
+        } 	   		
     	
     	return new Action(USCTeensGlobals.UNLABELLED_GUID, "Unlabelled", "question_btn.png", image);
 	}

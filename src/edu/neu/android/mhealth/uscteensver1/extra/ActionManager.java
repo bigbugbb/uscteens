@@ -13,12 +13,8 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.WOCKETSException;
@@ -68,7 +64,7 @@ public class ActionManager {
 		String dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.ACTIVITY_FOLDER;
 		String[] actionDir = FileHelper.getFilePathsDir(dirPath);
-		if (actionDir == null || actionDir.length == 0) {
+		if (actionDir == null || actionDir.length == 0 || USCTeensGlobals.sUpdateConfig) {
 			copyActionsFromAssets();
 			actionDir = FileHelper.getFilePathsDir(dirPath);
 			if (actionDir == null || actionDir.length == 0) {
@@ -94,7 +90,8 @@ public class ActionManager {
 						// parse the line
 						String[] split = result.split("[,]");
 						action = new Action(split[0].trim(), split[1].trim(), split[2].trim(),
-								loadBitmapFromFile(dirPath + split[2].trim()));
+									dirPath + split[2].trim());
+//								loadBitmapFromFile(dirPath + split[2].trim()));
 						sActionWrap.put(split[0].trim(), action);
 					}										
 				} catch (IOException e) {
@@ -124,7 +121,7 @@ public class ActionManager {
 			e.printStackTrace();			
 		}		
 		
-		// load the activated activities
+		// load the activated activities		
 		try {
 			File aActivatedFile = getUsingFile(dirPath);		
 			FileInputStream fis = null;
@@ -139,8 +136,9 @@ public class ActionManager {
 					while ((result = br.readLine()) != null) {																
 						// parse the line
 						String key = result.split("[,]")[0].trim();	
-						Action value = getActions().get(key);
+						Action value = getActions().get(key);						
 						if (value != null) {
+							value.loadIcon();
 							sActivatedActions.add(value);
 						}
 					}										
@@ -174,35 +172,10 @@ public class ActionManager {
 		return LOADING_SUCCEEDED;
 	}
 	
-	public static void release() {
+	public static void release() {		
 		sActionWrap.clear();
 		sActivatedActions.clear();
-	}
-	
-	private static Bitmap loadBitmapFromFile(String icoPath) {		 
-		BitmapFactory.Options options = new BitmapFactory.Options(); 
-        options.inPurgeable = true;
-        options.inPreferredConfig = Config.RGB_565;     
-        
-        Bitmap image  = null;
-    	Bitmap origin = BitmapFactory.decodeFile(icoPath, options);
-    	Bitmap scaled = null;
-    	// scale the image according to the current screen resolution
-    	float dstWidth  = origin.getWidth(),
-    	      dstHeight = origin.getHeight();        	
-		dstWidth  = AppScale.doScaleW(dstWidth);
-		dstHeight = AppScale.doScaleH(dstHeight);
-		if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
-			scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
-		}                
-		// add to the image list
-    	if (scaled != null) {
-    		origin.recycle(); // explicit call to avoid out of memory
-    		image = scaled;
-        } else {
-        	image = origin;
-        }     	
-		return image;
+		System.gc();
 	}
 	
 	private static File getMappingFile(String dirPath) {
