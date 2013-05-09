@@ -23,8 +23,8 @@ public class ActionManager {
 	private final static String TAG = "ActionManager";
 	// result code
 	public final static int LOADING_SUCCEEDED  = 0;
-	public final static int ERR_CANCELLED      = 1;
-	public final static int ERR_NO_ACTION_DATA = 2;	
+	public final static int ERR_CANCELLED      = -1;
+	public final static int ERR_NO_ACTION_DATA = -2;	
 	
 	private final static String ASSETS_DIR = "activities";
 	
