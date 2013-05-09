@@ -384,9 +384,9 @@ public class GraphPage extends AppPage implements OnClickListener,
 	public void finishQuest(Object... params) {
 		QuestButton quest = null;
 		
-		// between the Handler receiving and handling the message,
+		// During the Handler receiving and handling the message,
 		// mLastSelObject might be changed, so it's necessary to 
-		// handle the class cast exception
+		// handle the class cast exception.
 		try {
 			quest = (QuestButton) mLastSelObject;
 		} catch (ClassCastException e) {
@@ -408,7 +408,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 		
 		// During the Handler receiving and handling the message,
 		// mLastSelObject might be changed, so it's necessary to 
-		// handle the class cast exception
+		// handle the class cast exception.
 		try {
 			merge = (MergeButton) mLastSelObject;
 		} catch (ClassCastException e) {
