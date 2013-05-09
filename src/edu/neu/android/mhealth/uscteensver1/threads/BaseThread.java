@@ -47,7 +47,9 @@ public class BaseThread extends Thread {
 	@Override
 	public void start() {
 		mRun = true;
-		super.start();
+		if (!isAlive()) {
+			super.start();
+		}
 	}
 	
 	public void notifyEvent(AppEvent e) {
