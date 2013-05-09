@@ -21,9 +21,10 @@ import edu.neu.android.wocketslib.utils.WOCKETSException;
 public class RewardManager {
 	private final static String TAG = "RewardManager";
 	// result code
-	public final static int LOADING_SUCCEEDED  = 0;
-	public final static int ERR_CANCELLED      = 1;
-	public final static int ERR_NO_REWARD_DATA = 2;	
+	public final static int LOADING_SUCCEEDED    = 0;
+	public final static int ERR_CANCELLED        = -1;
+	public final static int ERR_NO_REWARD_DATA   = -2;
+	public final static int ERR_NO_EXTERNAL_DATA = -3;
 	
 	private final static String ASSETS_DIR = "rewards";
 	
@@ -103,11 +104,14 @@ public class RewardManager {
 			
 		// then load the other configuration that might be modified by user from external storage
 		try {
-			File aMappingFile = getMappingFile(dirPath);			
+			File aMappingFile = getMappingFile(dirPath);
+			if (aMappingFile == null) {
+				return LOADING_SUCCEEDED;
+			}
 			FileInputStream fis = null;
 			BufferedReader br = null;
 			try {
-				fis = new FileInputStream(aMappingFile);
+				fis = new FileInputStream(aMappingFile);				
 				InputStreamReader in = new InputStreamReader(fis);
 				br = new BufferedReader(in);
 				try {
@@ -156,7 +160,7 @@ public class RewardManager {
 	
 	private static File getMappingFile(String dirPath) {
 		String[] filePaths = FileHelper.getFilePathsDir(dirPath);
-		String filePath = filePaths[0]; // set a default value
+		String filePath = null;
 		
 		for (String path : filePaths) {
 			String extName = path.substring(path.lastIndexOf("."), path.length());
@@ -166,7 +170,7 @@ public class RewardManager {
 			}
 		}
 		
-		return new File(filePath);
+		return (filePath != null) ? new File(filePath) : null;
 	}
 	
 	private static void copyRewardFromAssets() {
