@@ -98,7 +98,6 @@ public class RewardPage extends AppPage implements OnClickListener {
 		try {
 			aStartDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		int daysAfterStarting = 0;		
@@ -158,8 +157,9 @@ public class RewardPage extends AppPage implements OnClickListener {
 			msg.what = AppCmd.DONE;
 			mHandler.sendMessage(msg);
 			break;
-		case FIX:
-			msg.what = AppCmd.FIX;
+		case FIX:						
+			msg.what = AppCmd.BEGIN_LOADING;
+			msg.obj  = DataStorage.GetValueString(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
 			mHandler.sendMessage(msg);
 			break;
 		case REWARD:

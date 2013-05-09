@@ -63,9 +63,45 @@ public class RewardManager {
 			if (rewardDir == null || rewardDir.length == 0) {
 				return ERR_NO_REWARD_DATA;
 			}
-		}			    			
+		}	
+		
+		// load reward configuration from assets
+		AssetManager assetManager = sContext.getAssets();
+	    String[] files = null;
+	    try {
+	        files = assetManager.list(ASSETS_DIR);
+	    } catch (IOException e) {
+	        Log.e(TAG, "Failed to get asset file list.", e);
+	    }
+	    for (String filename : files) {
+	    	String extName = filename.substring(filename.lastIndexOf("."), filename.length());
+			if (!extName.equals(".csv")) {
+				continue;
+			}
+	        InputStream in = null;
+	        InputStreamReader isr = null;
+			BufferedReader br = null;
+	        try {
+	        	String filePath = ASSETS_DIR + File.separator + filename;
+				in = assetManager.open(filePath);			
+				isr = new InputStreamReader(in); 
+                br = new BufferedReader(isr);
+                String result = br.readLine();
+				while ((result = br.readLine()) != null) {						
+					// parse the line
+					String[] split = result.split("[,]");
+					Reward reward = new Reward(split[0].trim(), 
+							"file:///android_asset/rewards/" + split[1].trim(), 
+							split.length == 3 ? split[2].trim() : "");
+					sRewardWrap.put(split[0].trim(), reward);
+				}	
+				in.close();
+	        } catch (IOException e) {
+	            Log.e(TAG, "Failed to copy asset file: " + filename, e);
+	        }       
+	    }
 			
-		// then load the other rewards that might be added by user from external directory
+		// then load the other configuration that might be modified by user from external storage
 		try {
 			File aMappingFile = getMappingFile(dirPath);			
 			FileInputStream fis = null;

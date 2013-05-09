@@ -118,6 +118,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		USCTeensGlobals.sGlobalHandler = mHandler;
 		DataSource.initialize(getApplicationContext());	
 		
+		// update flag indicating whether we should 
+		// copy folders from assets to external storage
 		String oldVersion = DataStorage.getVersion(context, "");	
 		String newVersion = AppUsageLogger.getVersion(context, "USCTeens");
 		DataStorage.setVersion(context, newVersion);
@@ -127,7 +129,6 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	private void setupScale() {
 		DisplayMetrics dm = new DisplayMetrics();  
         getWindowManager().getDefaultDisplay().getMetrics(dm);	
-        
         AppScale.calcScale(dm.widthPixels, dm.heightPixels);
 	}
 
@@ -210,6 +211,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		if (drawer != null) {
 			drawer.pause(true);
 		}
+		
 		// first stop to update the page
 		mCurPage.pause();
 		mCurPage.stop();
@@ -220,6 +222,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		// finally start the new game mode
 		mCurPage.start();
 		mCurPage.resume();
+		
 		// set the new page to graph drawer
 		if (drawer != null) {
 			drawer.setPage(mCurPage);
@@ -292,6 +295,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	
 	// use main looper as the default
 	protected final Handler mHandler = new Handler() {	
+		@SuppressWarnings("unchecked")
 		public void handleMessage(Message msg) {        					
 			Intent i = null;				
 			
@@ -334,7 +338,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		break;
         	case AppCmd.DONE:
         		switchPages(indexOfPage(PageType.DATE_PAGE)); 
-        		break;
+        		break;        	
         	case AppCmd.REWARD:
         		if (msg.obj != null) {
         			i = new Intent("android.intent.action.VIEW", Uri.parse((String) msg.obj));

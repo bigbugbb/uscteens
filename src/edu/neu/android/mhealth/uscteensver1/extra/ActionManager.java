@@ -91,7 +91,6 @@ public class ActionManager {
 						String[] split = result.split("[,]");
 						action = new Action(split[0].trim(), split[1].trim(), split[2].trim(),
 									dirPath + split[2].trim());
-//								loadBitmapFromFile(dirPath + split[2].trim()));
 						sActionWrap.put(split[0].trim(), action);
 					}										
 				} catch (IOException e) {

@@ -382,7 +382,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	}
 	
 	public void finishQuest(Object... params) {
-		QuestButton quest = (QuestButton) mLastSelObject;
+		QuestButton quest = (QuestButton) mLastSelObject; //---
 		String actionID = (String) params[0];	
 		ActionWrap actions = ActionManager.getActions();
 		Action action = actions.get(actionID);
