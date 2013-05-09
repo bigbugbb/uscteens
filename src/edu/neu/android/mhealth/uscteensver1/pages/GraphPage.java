@@ -382,19 +382,40 @@ public class GraphPage extends AppPage implements OnClickListener,
 	}
 	
 	public void finishQuest(Object... params) {
-		QuestButton quest = (QuestButton) mLastSelObject; //---
+		QuestButton quest = null;
+		
+		// between the Handler receiving and handling the message,
+		// mLastSelObject might be changed, so it's necessary to 
+		// handle the class cast exception
+		try {
+			quest = (QuestButton) mLastSelObject;
+		} catch (ClassCastException e) {
+			e.printStackTrace();
+			return;
+		}
+		
 		String actionID = (String) params[0];	
 		ActionWrap actions = ActionManager.getActions();
 		Action action = actions.get(actionID);
 		quest.setAnswer(action);
 		synchronized (this) {
 			mSlideBar.updateUnmarkedRange();
-		}
-		
+		}		
 	}		
 	
 	public void finishMerge(Object... params) {
-		MergeButton merge = (MergeButton) mLastSelObject;
+		MergeButton merge = null;
+		
+		// between the Handler receiving and handling the message,
+		// mLastSelObject might be changed, so it's necessary to 
+		// handle the class cast exception
+		try {
+			merge = (MergeButton) mLastSelObject;
+		} catch (ClassCastException e) {
+			e.printStackTrace();
+			return;
+		}
+		
 		String selection = (String) params[0];
 		Chunk maintain = null; 		
 		ArrayList<Chunk> mChunksToMerge = ChunkManager.getMergingChunks(merge);

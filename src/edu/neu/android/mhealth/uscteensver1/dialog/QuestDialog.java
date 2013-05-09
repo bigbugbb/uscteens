@@ -95,24 +95,24 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 		return false;
 	} 
 	
-	protected void setResultAndExit(String actionID) {		
+	protected void setResultAndExit(String actionID) {
 		DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.QUEST_SELECTION, actionID);
-		Message msg = USCTeensGlobals.sGlobalHandler.obtainMessage();				
+		Message msg = USCTeensGlobals.sGlobalHandler.obtainMessage();		
 		msg.what = AppCmd.QUEST_FINISHING;
-		USCTeensGlobals.sGlobalHandler.sendMessage(msg);	
+		USCTeensGlobals.sGlobalHandler.sendMessage(msg);
 		finish();
 	}
 	
-	protected final Handler mHandler = new Handler() {	
-		public void handleMessage(Message msg) {        									
-	    	switch (msg.what) {    
+	protected final Handler mHandler = new Handler() {
+		public void handleMessage(Message msg) {
+	    	switch (msg.what) {
 	    	case 1:
 	    		setResultAndExit((String) msg.obj);
 	    		break;
 	        default:
 	        	break;
-	        }            
-        }			
+	        }
+        }
     };
 	
 }
