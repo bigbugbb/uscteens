@@ -179,9 +179,10 @@ public class DateListView extends ListView {
 			} 
 		}
 		
-		// scroll to the current day if possible		
-		daysAfterStarting = daysAfterStarting > 3 ? 3 : daysAfterStarting;
-		if (daysAfterStarting != 0) {
+		// scroll to the current day if possible				
+		if (daysAfterStarting > 0) {			
+			daysAfterStarting = daysAfterStarting > 3 ? 3 : daysAfterStarting;
+			
 			mOffsetY += -(mItemHeight + mBorderWidth) * daysAfterStarting;		
 			if (mOffsetY > 0) {
 				mOffsetY = (int) Math.min(mOffsetY, mItemHeight * 1.3f);			
