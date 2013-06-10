@@ -25,6 +25,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 	private Button setStartDate;
 //	private Button randomEMA;
 	private Button csEMA;
+	private Button rewards;
 	private Button finishStudy;
 	private Button setupdone;
 
@@ -125,8 +126,9 @@ public class USCTeensSetupActivity extends BaseActivity {
 		setContentView(R.layout.activity_setup);
 		setStartDate = (Button) findViewById(R.id.setstartdate);
 		startService = (Button) findViewById(R.id.startservice);		
-		csEMA        = (Button) findViewById(R.id.csema);
+		csEMA        = (Button) findViewById(R.id.csema);		
 //		randomEMA    = (Button) findViewById(R.id.randomema);
+		rewards      = (Button) findViewById(R.id.rewards);
 		finishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
 		setupdone    = (Button) findViewById(R.id.setupdone);
 
@@ -202,6 +204,14 @@ public class USCTeensSetupActivity extends BaseActivity {
 				}
 				i.putExtra("className", EMAQuestionSet.class.getCanonicalName());
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,new Object[]{classType}));
+				startActivity(i);
+			}
+		});
+		
+		rewards.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getApplicationContext(), RewardsStateActivity.class);
 				startActivity(i);
 			}
 		});

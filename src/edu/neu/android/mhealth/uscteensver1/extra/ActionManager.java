@@ -29,6 +29,7 @@ public class ActionManager {
 	private final static String ASSETS_DIR = "activities";
 	
 	protected static Context sContext = null;
+	protected static boolean sCopied = false;
 	protected static ActionWrap sActionWrap = new ActionWrap();
 	protected static ArrayList<Action> sActivatedActions = new ArrayList<Action>();
 	
@@ -64,7 +65,8 @@ public class ActionManager {
 		String dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.ACTIVITY_FOLDER;
 		String[] actionDir = FileHelper.getFilePathsDir(dirPath);
-		if (actionDir == null || actionDir.length == 0 || USCTeensGlobals.sUpdateConfig) {
+		if (actionDir == null || actionDir.length == 0 || (USCTeensGlobals.sUpdateConfig && !sCopied)) {
+			sCopied = true;
 			copyActionsFromAssets();
 			actionDir = FileHelper.getFilePathsDir(dirPath);
 			if (actionDir == null || actionDir.length == 0) {

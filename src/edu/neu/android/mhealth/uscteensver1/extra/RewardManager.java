@@ -29,6 +29,7 @@ public class RewardManager {
 	private final static String ASSETS_DIR = "rewards";
 	
 	protected static Context sContext = null;
+	protected static boolean sCopied = false;
 	protected static RewardWrap sRewardWrap = new RewardWrap();
 	
 	public static void initialize(Context context) {
@@ -58,7 +59,8 @@ public class RewardManager {
 		String dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
 		String[] rewardDir = FileHelper.getFilePathsDir(dirPath);
-		if (rewardDir == null || rewardDir.length == 0 || USCTeensGlobals.sUpdateConfig) {
+		if (rewardDir == null || rewardDir.length == 0 || (USCTeensGlobals.sUpdateConfig && !sCopied)) {
+			sCopied = true;
 			copyRewardFromAssets();
 			rewardDir = FileHelper.getFilePathsDir(dirPath);
 			if (rewardDir == null || rewardDir.length == 0) {

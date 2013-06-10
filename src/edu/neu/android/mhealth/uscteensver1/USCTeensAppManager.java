@@ -6,8 +6,6 @@ import android.app.Activity;
 import android.content.pm.PackageManager.NameNotFoundException;
 import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.Globals;
-import edu.neu.android.wocketslib.support.DataStorage;
-import edu.neu.android.wocketslib.utils.AppUsageLogger;
 
 
 public class USCTeensAppManager extends ApplicationManager {

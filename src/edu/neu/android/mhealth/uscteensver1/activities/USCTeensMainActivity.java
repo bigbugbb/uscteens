@@ -24,6 +24,8 @@ import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.database.DatabaseHandler;
+import edu.neu.android.mhealth.uscteensver1.database.RewardState;
 import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuitDialog;
@@ -279,13 +281,13 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	}	
 	
 	private boolean isAuthorized() {
-		AuthorizationChecker.isAuthorized24hrs(getApplicationContext());
+		AuthorizationChecker.isAuthorized24hrs(this);
 		
-		String subjectID = DataStorage.GetValueString(getApplicationContext(), 
+		String subjectID = DataStorage.GetValueString(this, 
 				DataStorage.KEY_SUBJECT_ID, AuthorizationChecker.SUBJECT_ID_UNDEFINED);
-		String subjectLastName = DataStorage.GetValueString(getApplicationContext(), 
+		String subjectLastName = DataStorage.GetValueString(this, 
 				DataStorage.KEY_LAST_NAME, AuthorizationChecker.SUBJECT_LAST_NAME_UNDEFINED);
-		long dob = DataStorage.GetValueLong(getApplicationContext(), 
+		long dob = DataStorage.GetValueLong(this, 
 				DataStorage.KEY_DATE_OF_BIRTH, AuthorizationChecker.SUBJECT_DATE_OF_BIRTH_UNDEFINED);
 		
 		return subjectID != AuthorizationChecker.SUBJECT_ID_UNDEFINED &&
@@ -340,10 +342,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		switchPages(indexOfPage(PageType.DATE_PAGE)); 
         		break;        	
         	case AppCmd.REWARD:
-        		if (msg.obj != null) {
-        			i = new Intent("android.intent.action.VIEW", Uri.parse((String) msg.obj));
-        			startActivity(i);     
-        		}
+        		onReward(msg);
         		break;
             default:
             	break;
@@ -352,7 +351,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         	Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 			vibrator.vibrate(20);
         }			
-    };
+    };       
     
     private void onBeginLoading(Message msg) {
     	// avoid multiple loading operations
@@ -391,6 +390,37 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		if (drawer != null) {
 			drawer.setPage(mCurPage);
 			drawer.pause(false);
+		}
+    }
+    
+    private void onReward(Message msg) {
+    	DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+        
+        /**
+         * CRUD Operations
+         * */
+        // Inserting the reward state which is not contained in the table
+    	// Reading all states
+    	boolean isContained = false;
+    	String select = DataStorage.GetValueString(
+			getApplicationContext(), USCTeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
+		);
+        Log.d("Reading: ", "Reading all states..");
+        List<RewardState> states = db.getAllRewardStates();       
+        for (RewardState s : states) {
+            if (s.getDate().equals(select)) {
+            	isContained = true;
+            	break;
+            }
+        }
+        if (!isContained) {
+        	Log.d("Insert: ", "Inserting ..");        
+        	db.addRewardState(new RewardState(select, RewardState.ACHIEVED));
+        }
+        
+        if (msg.obj != null) {
+			Intent i = new Intent("android.intent.action.VIEW", Uri.parse((String) msg.obj));
+			startActivity(i);   
 		}
     }
     
@@ -459,7 +489,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	}
     
 //
-//  It seems that onActivityResult can't work if USCTeensMainActivity 
+//  It seems that onActivityResult can't work if USCTeensMainActivity
 //  has been set into singleInstance in AndroidManifest.xml.
 //    
 //	@Override
