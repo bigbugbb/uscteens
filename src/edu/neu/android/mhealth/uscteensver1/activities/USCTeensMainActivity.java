@@ -1,5 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,7 @@ import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.AppUsageLogger;
+import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 
 public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouchListener {
@@ -125,7 +127,11 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		String oldVersion = DataStorage.getVersion(context, "");	
 		String newVersion = AppUsageLogger.getVersion(context, "USCTeens");
 		DataStorage.setVersion(context, newVersion);
-		USCTeensGlobals.sUpdateConfig = !newVersion.equals(oldVersion);	
+		USCTeensGlobals.sUpdateConfig = !newVersion.equals(oldVersion);
+		if (USCTeensGlobals.sUpdateConfig) {
+			String dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY;
+			FileHelper.deleteDir(dirPath);
+		}
 	}
 
 	private void setupScale() {

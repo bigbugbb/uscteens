@@ -180,7 +180,7 @@ public class MotionGraph extends AppObject {
 			LabelManager.setDisplayOffset(-mStart, 0);
 			
 			if (mListener != null) {
-				mListener.OnGraphMoved(this, (float) mStart / mRightBound);
+				mListener.onGraphMoved(this, (float) mStart / mRightBound);
 			}
 		}				
 		
@@ -379,7 +379,7 @@ public class MotionGraph extends AppObject {
 		LabelManager.setDisplayOffset(-mStart, 0);
 		
 		if (mListener != null) {
-			mListener.OnGraphMoved(this, (float) mStart / mRightBound);
+			mListener.onGraphMoved(this, (float) mStart / mRightBound);
 		}
 		
 		return true;
@@ -423,6 +423,6 @@ public class MotionGraph extends AppObject {
 	}
 	
 	public interface OnGraphMovedListener {
-		void OnGraphMoved(MotionGraph graph, float progress);
+		void onGraphMoved(MotionGraph graph, float progress);
 	}
 }

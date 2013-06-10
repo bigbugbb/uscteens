@@ -89,7 +89,7 @@ public class ClockButton extends ChunkButton {
 		
 		createPaint();
 	}
-	
+
 	@Override
 	public void measureSize(int width, int height) {
 		mCanvasWidth  = width;
@@ -150,15 +150,15 @@ public class ClockButton extends ChunkButton {
 	}	
 	
 	@Override
-	public boolean onDown(MotionEvent e) {		
+	public boolean onDown(MotionEvent e) {
+		if (mListener != null) {
+			mListener.onClick(this);
+		}
 		return true;
 	}
 	
 	@Override
-	public boolean onUp(MotionEvent e) {
-		if (mListener != null) {
-			mListener.onClick(this);
-		}
+	public boolean onUp(MotionEvent e) {		
 		return true;
 	}
 

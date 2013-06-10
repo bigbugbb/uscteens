@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -280,7 +281,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	}
 
 	@Override
-	public void OnGraphMoved(MotionGraph graph, float progress) {
+	public void onGraphMoved(MotionGraph graph, float progress) {
 		mSlideBar.moveSliderBarToProgress(progress);		
 	}
 	
@@ -293,7 +294,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 			break;
 		case UIID.NEXT:    	
 			tryToNext((NextButton) obj);
-			break;
+			break;		
 		case UIID.QUEST:						
 	        tryToQuest((QuestButton) obj);
 			break;
@@ -302,6 +303,10 @@ public class GraphPage extends AppPage implements OnClickListener,
 			break;
 		case UIID.MERGE:
 			tryToMerge((MergeButton) obj);
+			break;
+		case UIID.CLOCK:
+			Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+			vibrator.vibrate(20);
 			break;
 		default:
 			break;
