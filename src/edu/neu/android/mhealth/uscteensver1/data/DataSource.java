@@ -136,6 +136,7 @@ public class DataSource {
 		
 		sCancelled = false;
 		
+		clearRawData();
 		/* 
 		 * first load the accelerometer sensor data
 		 */		
