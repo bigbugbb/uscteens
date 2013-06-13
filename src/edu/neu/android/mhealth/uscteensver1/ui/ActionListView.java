@@ -8,7 +8,9 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.Paint.Style;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
@@ -19,14 +21,29 @@ public class ActionListView extends ListView {
 	
 	public class ActionItem extends ListItem {
 		protected Action mAction;
+		protected String mActSubName;
+		protected Paint  mPaintSubTxt;
+		//protected Paint  mPaintHighlight;
 		
-		public ActionItem(ListView parent, Action action) {
+		public ActionItem(ListView parent, Action action) {	
 			super(parent, action.getActionName(), -1, action.getActionImage());
 			mAction = action;
+			mActSubName = action.getActionSubName();
+			
 			mPaintTxt.setColor(Color.BLACK);
 			mPaintTxt.setTextSize(AppScale.doScaleT(45));
 			mPaintTxt.setTypeface(mTypeface);
 			mPaintTxt.setTextAlign(Align.CENTER);
+			
+			mPaintSubTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
+			mPaintSubTxt.setColor(Color.BLACK);		
+			mPaintSubTxt.setTextSize(AppScale.doScaleT(30));
+			mPaintSubTxt.setTypeface(mTypeface);
+			mPaintSubTxt.setTextAlign(Align.CENTER);
+			
+//			mPaintHighlight = new Paint(Paint.ANTI_ALIAS_FLAG);
+//			mPaintHighlight.setColor(Color.WHITE);
+//			mPaintHighlight.setStyle(Style.FILL);					
 		}		
 		
 		public Action getAction() {
@@ -43,7 +60,12 @@ public class ActionListView extends ListView {
 			
 			c.drawBitmap(mImage, 8, y1, null);
 			c.drawRect(mImage.getWidth() + 16, y1, mWidth - 3, y2, mPaintBkg);
-			c.drawText(mText, (mWidth + mImage.getWidth()) / 2, y1 + mHeight * 0.6f, mPaintTxt);
+			if (mActSubName == null) {
+				c.drawText(mText, (mWidth + mImage.getWidth()) / 2, y1 + mHeight * 0.6f, mPaintTxt);
+			} else {
+				c.drawText(mText, (mWidth + mImage.getWidth()) / 2, y1 + mHeight * 0.45f, mPaintTxt);
+				c.drawText(mActSubName, (mWidth + mImage.getWidth()) / 2, y1 + mHeight * 0.75f, mPaintSubTxt);
+			}
 		}				
 	}
 	

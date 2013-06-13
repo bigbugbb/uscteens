@@ -306,6 +306,9 @@ public class MotionGraph extends AppObject {
 		for (int i = 0; i < mScaledData.length; ++i) {
 			if (mScaledData[i] >= 0) {
 				mScaledData[i] *= scale;
+				if (mScaledData[i] > mHeight) {
+					mScaledData[i] = (int) mHeight - 4;
+				}
 				mScaledData[i] += Math.max(1.0f, Math.min(AppScale.doScaleT(4.0f), 4.0f)) / 2;
 			}			
 		}

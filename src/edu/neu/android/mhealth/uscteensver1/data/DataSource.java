@@ -228,7 +228,8 @@ public class DataSource {
 	
 	public static int getMaxDrawableDataValue() {
 		int max = sAccelDataWrap.getMaxDrawableDataValue();
-		return max < USCTeensGlobals.sAccelDataScalingFactor ? USCTeensGlobals.sAccelDataScalingFactor : max;
+		//return max < USCTeensGlobals.sAccelDataScalingFactor ? USCTeensGlobals.sAccelDataScalingFactor : max;
+		return USCTeensGlobals.sAccelDataScalingFactor;
 	}
 	
 	public static ArrayList<Pair<Integer, Integer>> getNoDataTimePeriods() {

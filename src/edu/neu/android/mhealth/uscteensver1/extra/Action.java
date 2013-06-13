@@ -18,9 +18,10 @@ public class Action implements Serializable {
 	protected static Context sContext;
 	
 	protected String  mActID;
-	protected String  mActName;
+	protected String  mActName;	
 	protected String  mIcoName;
 	protected String  mIcoPath;
+	protected String  mActSubName;
 	protected Bitmap  mActImage;	
 	protected boolean mImageLoaded = false;
 	
@@ -30,10 +31,15 @@ public class Action implements Serializable {
 	
 	public Action(String actID, String actName, String icoName, String icoPath) {
 		mActID    = actID;
-		mActName  = actName;
+		mActName  = actName;		
 		mIcoName  = icoName;
 		mIcoPath  = icoPath;
 		mActImage = null;
+		
+		if (mActName.indexOf('|') != -1) {
+			mActSubName = mActName.substring(mActName.indexOf('|') + 1, mActName.length()).trim();
+			mActName = mActName.substring(0, mActName.indexOf('|')).trim();
+		}
 	}
 	
 	public Action(String actID, String actName, String icoName, Bitmap actImage) {
@@ -41,6 +47,11 @@ public class Action implements Serializable {
 		mActName  = actName;
 		mIcoName  = icoName;
 		mActImage = actImage;
+		
+		if (mActName.indexOf('|') != -1) {
+			mActSubName = mActName.substring(mActName.indexOf('|') + 1, mActName.length()).trim();
+			mActName = mActName.substring(0, mActName.indexOf('|')).trim();
+		}
 	}
 	
 	public void loadIcon() {
@@ -88,13 +99,21 @@ public class Action implements Serializable {
 		return mActName;
 	}	
 	
+	public void setActionSubName(String actSubName) {
+		mActSubName = actSubName;
+	}
+	
+	public String getActionSubName() {
+		return mActSubName;
+	}
+	
 	public void setIconName(String icoName) {
 		mIcoName = icoName;
 	}
 	
 	public String getIconName() {
 		return mIcoName;
-	}
+	}		
 	
 	public void setActionImage(Bitmap actImage) {
 		mActImage = actImage;
