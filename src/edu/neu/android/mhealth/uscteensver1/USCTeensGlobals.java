@@ -27,6 +27,7 @@ public class USCTeensGlobals {
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
 	public final static String MERGE_SELECTION = "MERGE_SELECTION";
 	public final static String LAST_DATA_LOADING_TIME = "LAST_DATA_LOADING_TIME";
+	public final static String LAST_LABELING_TIME = "LAST_LABELING_TIME";
 	public final static String CURRENT_SELECTED_DATE = "CURRENT_SELECTED_DATE";
 	public final static String LAST_SELECTED_CHUNK = "LAST_SELECTED_CHUNK";
 	public final static String LAST_DISPLAY_OFFSET_X = "LAST_DISPLAY_OFFSET_X";

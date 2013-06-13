@@ -150,7 +150,6 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		mGraphView.setLongClickable(true);
 		
 		mRewardView = (RewardView) findViewById(R.id.view_reward);		
-        
 		mDummyView = (DummyView) findViewById(R.id.view_dummy);
 		//mProgressView = (ProgressView) findViewById(R.id.view_progress);		
 	}
