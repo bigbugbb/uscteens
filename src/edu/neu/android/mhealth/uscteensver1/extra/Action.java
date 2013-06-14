@@ -7,8 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 
-import com.google.gson.Gson;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -130,17 +128,7 @@ public class Action implements Serializable {
 			mImageLoaded = false;
 		}				
 	}
-	
-	public static String toJSON(Action action) {
-		Gson gson = new Gson(); 
-		return gson.toJson(action);
-	}
-	
-	public static Action fromJSON(String aJSONString) {
-		Gson gson = new Gson();
-		return gson.fromJson(aJSONString, Action.class);
-	}
-	
+
 	public static Action createUnlabelledAction() {				
 		BitmapFactory.Options options = new BitmapFactory.Options(); 
         options.inPurgeable = true;
