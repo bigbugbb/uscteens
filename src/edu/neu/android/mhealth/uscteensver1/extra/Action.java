@@ -6,11 +6,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
+/*
+ *  Activity is an android class, I don't want to get confused so
+ *	I use the word Action for all children's activities in my program.
+ */
 public class Action implements Serializable {	
 	private static final long serialVersionUID = -6124174446308636095L;
 	protected static Context sContext;

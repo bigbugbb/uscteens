@@ -126,14 +126,8 @@ public class ListView extends AppObject {
 			return mPaintBkg;
 		}
 		
-		public int getBackgroundColor() {		
-			int color = Color.WHITE;
-
-			if (mSelected) {
-				color = Color.rgb(198, 235, 245);
-			}
-			
-			return color;
+		public int getBackgroundColor() {					
+			return mSelected ? Color.rgb(198, 235, 245) : Color.WHITE;
 		}
 		
 		public void setPaintText(Paint text) {

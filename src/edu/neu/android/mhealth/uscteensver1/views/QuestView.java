@@ -26,6 +26,8 @@ import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
+import edu.neu.android.mhealth.uscteensver1.extra.Action;
+import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ActionListView;
@@ -364,10 +366,15 @@ public class QuestView extends ImageView implements OnGestureListener,
 
 	@Override
 	public void onItemClicked(ListView view, ListItem li, int posn) {
+		Action action = ((ActionItem) li).getAction();
+		
 		Message msg = mHandler.obtainMessage();
-		msg.obj  = ((ActionItem) li).getAction().getActionID();
+		msg.obj  = action.getActionID();
 		msg.what = 1;
 		mHandler.sendMessage(msg);
+		
+		// update the most recent selected activity
+		ActionManager.setMostRecentAction(action);
 		
 		// automatically label "Labeling activity"
 		long lastLabelingTime = DataStorage.GetValueLong(

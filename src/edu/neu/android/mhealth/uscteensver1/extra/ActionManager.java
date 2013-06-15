@@ -16,6 +16,7 @@ import android.content.res.AssetManager;
 import android.util.Log;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.WOCKETSException;
 
@@ -24,14 +25,18 @@ public class ActionManager {
 	// result code
 	public final static int LOADING_SUCCEEDED  = 0;
 	public final static int ERR_CANCELLED      = -1;
-	public final static int ERR_NO_ACTION_DATA = -2;	
+	public final static int ERR_NO_ACTION_DATA = -2;
+	
+	public final static int MOST_RECENT_ACTIONS_COUNT = 3;
+	public final static String MOST_RECENT_ACTION_ID = "MOST_RECENT_ACTION_ID";
 	
 	private final static String ASSETS_DIR = "activities";
 	
 	protected static Context sContext = null;
 	protected static boolean sCopied = false;
 	protected static ActionWrap sActionWrap = new ActionWrap();
-	protected static ArrayList<Action> sActivatedActions = new ArrayList<Action>();
+	protected static ArrayList<Action> sActivatedActions  = new ArrayList<Action>();
+	protected static ArrayList<Action> sMostRecentActions = new ArrayList<Action>(); 
 	
 	public static void initialize(Context context) {
 		sContext = context;
@@ -56,6 +61,65 @@ public class ActionManager {
 	
 	public static ArrayList<Action> getActivatedActions() {
 		return sActivatedActions;
+	}
+	
+	public static ArrayList<Action> getMostRecentActions() {
+		sMostRecentActions.clear();
+		ArrayList<Action> activated = getActivatedActions();
+		
+		// try to get the most recent actions as much as possible
+		for (int i = 0; i < MOST_RECENT_ACTIONS_COUNT; ++i) {
+			String actID = DataStorage.GetValueString(sContext, MOST_RECENT_ACTION_ID + i, null);
+			if (actID != null) {
+				for (Action action : activated) {
+					if (action.getActionID().equals(actID)) {								
+						sMostRecentActions.add(action);
+						break;
+					}
+				}
+			}
+		}
+		
+		// if the actions got are not enough, add the last several 
+		// actions from the activated action list for convenience		
+		for (int j = activated.size() - 1; j >= 0; --j) {
+			if (sMostRecentActions.size() >= MOST_RECENT_ACTIONS_COUNT) { 
+				break;
+			}
+			Action action = activated.get(j);
+			// check whether the current action has already been added
+			boolean isExistent = false;
+			for (Action recent : sMostRecentActions) {
+				if (recent.getActionID().equals(action.getActionID())) {
+					// already in the most recent action list, skip it
+					isExistent = true;
+					break;
+				}
+			}
+			if (!isExistent) {
+				sMostRecentActions.add(action);
+			}
+		}		
+		
+		return sMostRecentActions;
+	}
+	
+	public static void setMostRecentAction(Action action) {	
+		int i = 0;				
+		for (i = 0; i < MOST_RECENT_ACTIONS_COUNT; ++i) {
+			String actID = DataStorage.GetValueString(sContext, MOST_RECENT_ACTION_ID + i, null);
+			if (actID.equals(action.getActionID())) { // the activity is currently in the most recent list
+				++i;
+				break;
+			}
+		}
+		
+		for (int j = i - 2; j >= 0 ; --j) {
+			int next = j + 1;
+			String actID = DataStorage.GetValueString(sContext, MOST_RECENT_ACTION_ID + j, null);
+			DataStorage.SetValue(sContext, MOST_RECENT_ACTION_ID + next, actID);
+		}
+		DataStorage.SetValue(sContext, MOST_RECENT_ACTION_ID + 0, action.getActionID());
 	}
 	
 	public static int loadActions() {
@@ -93,7 +157,7 @@ public class ActionManager {
 						String[] split = result.split("[,]");
 						action = new Action(split[0].trim(), split[1].trim(), split[2].trim(),
 									dirPath + split[2].trim());
-						sActionWrap.put(split[0].trim(), action);
+						sActionWrap.put(split[0].trim(), action); // key = actID, value = Action
 					}										
 				} catch (IOException e) {
 					Log.e(TAG, "readStringInternal: problem reading: " + aMappingFile.getAbsolutePath());
@@ -176,6 +240,7 @@ public class ActionManager {
 	public static void release() {		
 		sActionWrap.clear();
 		sActivatedActions.clear();
+		sMostRecentActions.clear();
 		System.gc();
 	}
 	
@@ -209,6 +274,9 @@ public class ActionManager {
 		return new File(filePath);
 	}
 	
+	// users can delete the Activity folder under the data directory, and when they
+	// do that, the whole Activity folder will be copied from the assets to the data
+	// directory which locates in the external storage
 	private static void copyActionsFromAssets() {
 		String outfilePath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.ACTIVITY_FOLDER;

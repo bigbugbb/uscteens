@@ -54,14 +54,14 @@ public class ActionListView extends ListView {
 		}
 		
 		public Paint getBackgroundPaint() {
-			return mPosn < USCTeensGlobals.MOST_RECENT_ACTIVITIES ? 
+			return mPosn < ActionManager.MOST_RECENT_ACTIONS_COUNT ? 
 				mPaintHighlight : mPaintBkg;
 		}
 		
 		public int getBackgroundColor() {		
 			int color = Color.WHITE;
 			
-			if (mPosn < USCTeensGlobals.MOST_RECENT_ACTIVITIES) {				 
+			if (mPosn < ActionManager.MOST_RECENT_ACTIONS_COUNT) {				 
 				color = Color.rgb(92, 189, 150);				
 			}
 			if (mSelected) {
@@ -98,7 +98,16 @@ public class ActionListView extends ListView {
 	public ActionListView(Resources res) {
 		super(res);		
 		ArrayList<Action> actions = ActionManager.getActivatedActions();
+		ArrayList<Action> recents  = ActionManager.getMostRecentActions();
 		
+		// add the most recent selections first
+		for (Action action : recents) {
+			if (!action.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID)) {
+		    	addItem(action);
+		    }		
+		}
+		
+		// then add the other activities
 		for (Action action : actions) {		
 		    if (!action.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID)) {
 		    	addItem(action);

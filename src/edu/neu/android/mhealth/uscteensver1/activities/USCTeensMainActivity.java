@@ -181,8 +181,10 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	
 	private void loadExtra() {
 		Context context = getApplicationContext();
+		// load activities for activity selection list
 		ActionManager.initialize(context);
 		ActionManager.start();
+		// load rewards for the reward view
 		RewardManager.initialize(context);
 		RewardManager.start();
 	}
