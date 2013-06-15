@@ -378,7 +378,7 @@ public class QuestView extends ImageView implements OnGestureListener,
 		
 		// automatically label "Labeling activity"
 		long lastLabelingTime = DataStorage.GetValueLong(
-			getContext(), USCTeensGlobals.LAST_DATA_LOADING_TIME, 0
+			getContext(), USCTeensGlobals.LAST_LABELING_TIME, 0
 		);	
 		long currentTime = System.currentTimeMillis();
 		if (currentTime - lastLabelingTime > 1000 * 300) { // 5 minutes
