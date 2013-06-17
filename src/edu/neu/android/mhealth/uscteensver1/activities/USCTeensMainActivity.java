@@ -132,9 +132,9 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 			String dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator +
 					Globals.DATA_DIRECTORY + USCTeensGlobals.ACTIVITY_FOLDER;
 			FileHelper.deleteDir(dirPath);
-			dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator +
-					Globals.DATA_DIRECTORY + USCTeensGlobals.ANNOTATION_FOLDER;
-			FileHelper.deleteDir(dirPath);			
+//			dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator +
+//					Globals.DATA_DIRECTORY + USCTeensGlobals.ANNOTATION_FOLDER;
+//			FileHelper.deleteDir(dirPath);			
 		}
 	}
 
