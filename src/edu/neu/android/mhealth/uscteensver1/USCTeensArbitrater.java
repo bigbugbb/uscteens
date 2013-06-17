@@ -32,11 +32,8 @@ import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent.PROMPT_AUDIO;
 import edu.neu.android.wocketslib.sensormonitor.Arbitrater;
-import edu.neu.android.wocketslib.sensormonitor.DataStore;
-import edu.neu.android.wocketslib.sensormonitor.Sensor;
 import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
-import edu.neu.android.wocketslib.support.LogcatReader;
 import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
@@ -45,7 +42,6 @@ import edu.neu.android.wocketslib.utils.PackageChecker;
 import edu.neu.android.wocketslib.utils.PhoneInfo;
 import edu.neu.android.wocketslib.utils.PhonePrompter;
 import edu.neu.android.wocketslib.utils.PhoneVibrator;
-import edu.neu.android.wocketslib.utils.Util;
 import edu.neu.android.wocketslib.utils.WOCKETSException;
 //import org.omg.PortableInterceptor.INACTIVE;
 
@@ -66,31 +62,21 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static final String KEY_RANDOM_PROMPT_COUNTER = "_KEY_RANDOM_PROMPT_COUNTER";
 	private static final String KEY_CS_PROMPT_COUNTER = "_KEY_CS_PROMPT_COUNTER";
 
-	private static String inhaler = null;
-	private static long inhalerUseTime;
-
 	private static final String NEWLINE = "\n";
 	private static final String SKIPLINE = "\n\n";
 	
 	private static boolean sIsFirstRun = true;
 
-	protected static Context aContext = null;
+	protected static Context sContext = null;
 
-	/**
-	 * Obscure a MAC address so that when this function runs, the Asthmapolis
-	 * detection hack does not trigger itself.
-	 * 
-	 * @param anAddress
-	 * @return
-	 */
 
 	public USCTeensArbitrater(Context aContext) {
-		this.aContext = aContext;
+		sContext = aContext;
 	}
 
 	private String[] getFileNamesForSavingInternalAccelData() {
 		boolean isNewFileNeeded = false;				
-		String lastCSVFileCreateTime = DataStorage.GetValueString(aContext, KEY_CSVFILE_CREATE_TIME, DataStorage.EMPTY);		
+		String lastCSVFileCreateTime = DataStorage.GetValueString(sContext, KEY_CSVFILE_CREATE_TIME, DataStorage.EMPTY);		
 		
 		if (lastCSVFileCreateTime.compareTo(DataStorage.EMPTY) != 0) {
 			String time[] = lastCSVFileCreateTime.split("-");
@@ -116,14 +102,14 @@ public class USCTeensArbitrater extends Arbitrater {
 		if (isNewFileNeeded) {
 			Date curTime = new Date();
 			lastCSVFileCreateTime = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(curTime);							
-			DataStorage.SetValue(aContext, KEY_CSVFILE_CREATE_TIME, lastCSVFileCreateTime);
+			DataStorage.SetValue(sContext, KEY_CSVFILE_CREATE_TIME, lastCSVFileCreateTime);
 		}
 		
 		// compose the file names
 		String[] names = new String[2];
-		names[0] = USCTeensGlobals.SENSOR_TYPE + "." + PhoneInfo.getID(aContext)
+		names[0] = USCTeensGlobals.SENSOR_TYPE + "." + PhoneInfo.getID(sContext)
 				+ "." + lastCSVFileCreateTime + ".log.csv";
-		names[1] = USCTeensGlobals.SENSOR_TYPE + "." + PhoneInfo.getID(aContext)
+		names[1] = USCTeensGlobals.SENSOR_TYPE + "." + PhoneInfo.getID(sContext)
 				+ "." + lastCSVFileCreateTime + ".log.bin";
 		
 		return names;
@@ -148,16 +134,16 @@ public class USCTeensArbitrater extends Arbitrater {
 		data.add(readable); // dummy		
 		
 //		int maxSeconds = USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER / 1000;
-		int count = (int) DataStorage.GetValueLong(aContext, 
+		int count = (int) DataStorage.GetValueLong(sContext, 
 				DataStorage.KEY_INTERNAL_ACCEL_RECORDING_COUNT, 0);
-		DataStorage.SetValue(aContext, DataStorage.KEY_INTERNAL_ACCEL_RECORDING_COUNT, 0); 
+		DataStorage.SetValue(sContext, DataStorage.KEY_INTERNAL_ACCEL_RECORDING_COUNT, 0); 
 		for (int i = 1; i <= count; ++i) {	
-			String time = DataStorage.GetValueString(aContext, 
+			String time = DataStorage.GetValueString(sContext, 
 					DataStorage.KEY_INTERNAL_ACCEL_RECORDING_TIME + i, DataStorage.EMPTY);
 			int intAccelAverage = (int) DataStorage.GetValueLong(
-					aContext, DataStorage.KEY_INTERNAL_ACCEL_AVERAGE + i, 0);
+					sContext, DataStorage.KEY_INTERNAL_ACCEL_AVERAGE + i, 0);
 			int intAccelSamples = (int) DataStorage.GetValueLong(
-					aContext, DataStorage.KEY_INTERNAL_ACCEL_SAMPLES + i, 0);
+					sContext, DataStorage.KEY_INTERNAL_ACCEL_SAMPLES + i, 0);
 			readable += time + ", " + intAccelAverage + ", " + intAccelSamples + "\n";
 			
 			String[] split = time.split("[ :,.]");
@@ -340,7 +326,7 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	public void getAndPrintPromptingSchedule() {
 		if (Globals.IS_DEBUG) {
-			long[] promptTimes = DataStorage.getPromptTimesKey(aContext, KEY_RANDOM_PROMPT);
+			long[] promptTimes = DataStorage.getPromptTimesKey(sContext, KEY_RANDOM_PROMPT);
 			if (promptTimes != null) {
 				for (int i = 0; i < promptTimes.length; i++) {
 					Log.d(TAG, "Scheduled prompt: " + DateHelper.getDate(promptTimes[i]));
@@ -348,7 +334,7 @@ public class USCTeensArbitrater extends Arbitrater {
 			} else {
 				Log.d(TAG, "No Scheduled prompt times");
 			}
-			promptTimes = DataStorage.getPromptTimesKey(aContext, KEY_CS_PROMPT);
+			promptTimes = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
 			if (promptTimes != null) {
 				for (int i = 0; i < promptTimes.length; i++) {
 					Log.d(TAG, "Triggered prompt: " + DateHelper.getDate(promptTimes[i]));
@@ -362,10 +348,10 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	private boolean setInhalerTriggeredSchedule(long inhalerUsedTime) {
 		inhalerUsedTime += PROMPT_OFFSET;
-		long[] somePromptTimes = DataStorage.getPromptTimesKey(aContext, KEY_CS_PROMPT);
+		long[] somePromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
 		if (somePromptTimes == null) {
 			long[] finalPromptTimes = new long[] { inhalerUsedTime };
-			DataStorage.setPromptTimesKey(aContext, finalPromptTimes, KEY_CS_PROMPT);
+			DataStorage.setPromptTimesKey(sContext, finalPromptTimes, KEY_CS_PROMPT);
 			return true;
 		}
 		long latestPromptTime = somePromptTimes[somePromptTimes.length - 1];
@@ -375,15 +361,15 @@ public class USCTeensArbitrater extends Arbitrater {
 				finalPromptTimes[i] = somePromptTimes[i];
 			}
 			finalPromptTimes[somePromptTimes.length] = inhalerUsedTime;
-			DataStorage.setPromptTimesKey(aContext, finalPromptTimes, KEY_CS_PROMPT);
+			DataStorage.setPromptTimesKey(sContext, finalPromptTimes, KEY_CS_PROMPT);
 			return true;
 		}
 		return false;
 	}
 
 	private void resetSchedule() {
-		long[] randomPromptTimes = DataStorage.getPromptTimesKey(aContext, KEY_RANDOM_PROMPT);
-		long[] csPromptTimes = DataStorage.getPromptTimesKey(aContext, KEY_CS_PROMPT);
+		long[] randomPromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_RANDOM_PROMPT);
+		long[] csPromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
 		PriorityQueue<Long> prompTimes = new PriorityQueue<Long>(csPromptTimes.length);
 		for (int i = 0; i < csPromptTimes.length; i++) {
 			prompTimes.add(csPromptTimes[i]);
@@ -404,7 +390,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		for (int j = 0; j < finalPromptTime.length; j++) {
 			finalPromptTime[j] = prompTimes.poll();
 		}
-		DataStorage.setPromptTimesKey(aContext, finalPromptTime, KEY_ALL_PROMPT);
+		DataStorage.setPromptTimesKey(sContext, finalPromptTime, KEY_ALL_PROMPT);
 	}
 
 	private void setAndSavePromptingSchedule(int promptsPerDay, double startTimeHour, double endTimeHour) {
@@ -443,14 +429,14 @@ public class USCTeensArbitrater extends Arbitrater {
 				promptSchedule.append("Prompt: " + DateHelper.getDate(promptTimes[i]) + NEWLINE);
 			}
 
-		ServerLogger.sendNote(aContext, promptSchedule.toString(), Globals.NO_PLOT);
+		ServerLogger.sendNote(sContext, promptSchedule.toString(), Globals.NO_PLOT);
 
 		// reset prompt schedule for the day
-		DataStorage.setPromptTimesKey(aContext, promptTimes, KEY_RANDOM_PROMPT);
-		PromptRecorder.writePromptSchedule(aContext, System.currentTimeMillis(), KEY_RANDOM_PROMPT, promptsPerDay, startTimeHour, endTimeHour);
-		DataStorage.setPromptTimesKey(aContext, new long[] { promptsPerDay, startIntervalTimeMS, intervalIncMS }, KEY_SCHEDULE);
-		DataStorage.setPromptTimesKey(aContext, new long[] {}, KEY_CS_PROMPT);
-		DataStorage.setPromptTimesKey(aContext, promptTimes, KEY_ALL_PROMPT);
+		DataStorage.setPromptTimesKey(sContext, promptTimes, KEY_RANDOM_PROMPT);
+		PromptRecorder.writePromptSchedule(sContext, System.currentTimeMillis(), KEY_RANDOM_PROMPT, promptsPerDay, startTimeHour, endTimeHour);
+		DataStorage.setPromptTimesKey(sContext, new long[] { promptsPerDay, startIntervalTimeMS, intervalIncMS }, KEY_SCHEDULE);
+		DataStorage.setPromptTimesKey(sContext, new long[] {}, KEY_CS_PROMPT);
+		DataStorage.setPromptTimesKey(sContext, promptTimes, KEY_ALL_PROMPT);
 	}
 
 	/**
@@ -515,7 +501,7 @@ public class USCTeensArbitrater extends Arbitrater {
 	}
 
 	private boolean isInhalerPrompt(long lastScheduledPromptTime) {
-		long[] somePromptTimes = DataStorage.getPromptTimesKey(aContext, KEY_CS_PROMPT);
+		long[] somePromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
 		if (somePromptTimes == null)
 			return false;
 		for (int i = 0; i < somePromptTimes.length; i++) {
@@ -554,7 +540,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		boolean isOkPrompt = false;
 		Date now = new Date();
 		int hour = now.getHours();
-		int min = now.getMinutes();
+		int min  = now.getMinutes();
 		Calendar today = Calendar.getInstance();
 		if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
 			if ((hour >= 6 && hour < 7) || (hour >= 15 && hour < 20) || (hour == 20 && min < 30))
@@ -567,8 +553,6 @@ public class USCTeensArbitrater extends Arbitrater {
 			else
 				isOkPrompt = false;
 		}
-		if (isOkPrompt)
-			inhalerUseTime = System.currentTimeMillis();
 	}
 
 	/**
@@ -578,7 +562,7 @@ public class USCTeensArbitrater extends Arbitrater {
 	 * @param aContext
 	 */
 	protected void SetAppActivityUsingSchedule(long lastArbitrationTime, int studyDay, boolean isNewSoftwareVersion) {
-		boolean isForceReset = DataStorage.isForceReset(aContext);
+		boolean isForceReset = DataStorage.isForceReset(sContext);
 		if ((!DateHelper.isToday(lastArbitrationTime)) || isNewSoftwareVersion || isForceReset) {
 			// if (Globals.IS_DEBUG)
 			if (isNewSoftwareVersion)
@@ -593,7 +577,7 @@ public class USCTeensArbitrater extends Arbitrater {
 			// if (VersionChecker.isNewUpdateAvailable(aContext))
 			// Log.h(TAG, "NewVersionAvailable", Log.NO_LOG_SHOW);
 
-			PackageChecker.installedPackageLogging(TAG, aContext);
+			PackageChecker.installedPackageLogging(TAG, sContext);
 
 			// // Force download check of all key files, including tutorials
 			// Intent i = new Intent(aContext, FileGrabberService.class);
@@ -605,7 +589,7 @@ public class USCTeensArbitrater extends Arbitrater {
 			// BasicLogger.basicLogging(TAG, aContext);
 
 			if (isForceReset) {
-				DataStorage.setIsForceReset(aContext, false);
+				DataStorage.setIsForceReset(sContext, false);
 			}
 
 			// Set a lock so main app waits until this is done before doing
@@ -613,9 +597,9 @@ public class USCTeensArbitrater extends Arbitrater {
 			// because variables are temporarily cleared then reset. Don't want
 			// to
 			// access during that.
-			DataStorage.setIsInUpdate(aContext, true);
+			DataStorage.setIsInUpdate(sContext, true);
 
-			AppInfo.resetAvailabilityAndTiming(aContext);
+			AppInfo.resetAvailabilityAndTiming(sContext);
 
 			int promptsPerDay = Globals.DEFAULT_PROMPTS_PER_DAY;
 			double startTimeHour = Globals.DEFAULT_START_HOUR;
@@ -633,19 +617,13 @@ public class USCTeensArbitrater extends Arbitrater {
 			}
 
 			setAndSavePromptingSchedule(promptsPerDay, startTimeHour, endTimeHour);
+		}
 
-		}
-		// if inhaler used, reset schedule
-		if (lastArbitrationTime < inhalerUseTime) {
-			Log.i(TAG, "Resetting because inhaler used");
-			if (setInhalerTriggeredSchedule(inhalerUseTime))
-				resetSchedule();
-		}
 		// Always unset this in case program was updated at awkward time
 		// If this is before prior }, it is possible to get stuck always in an
 		// update!
 
-		DataStorage.setIsInUpdate(aContext, false); // TODO Change to use a date
+		DataStorage.setIsInUpdate(sContext, false); // TODO Change to use a date
 													// so this is less brittle
 													// to an odd crash
 	}
@@ -699,44 +677,10 @@ public class USCTeensArbitrater extends Arbitrater {
 		 * This is the app that decides what to do in terms of prompting each
 		 * time it is called.
 		 */
-
-		boolean isInhalerUsed = false;
-		inhaler = null;
-		inhalerUseTime = 0;
-		String inhalerAddress = "";
-		for (int x = 0; x < DataStore.mSensors.size(); x++) {
-			if (DataStore.mSensors.get(x).mType == Sensor.ASTHMA) {
-				inhalerAddress = DataStore.mSensors.get(x).mAddress;
-				String nameColon = Util.insertColons(inhalerAddress);
-				String nameUnder = Util.insertUnderscores(inhalerAddress);
-
-				if ((LogcatReader.isInLogcat(nameColon, false)) || (LogcatReader.isInLogcat(nameUnder, false))) {
-
-					// Rule out the case of a reboot of the phone
-					if (LogcatReader.isInLogcat("updateDeviceServiceChannelCache(" + inhalerAddress.substring(0, 2), false)) {
-						Log.e(TAG, "Detected inhaler BT Address but ruled out due to potential reboot.");
-						isInhalerUsed = false;
-					} else {
-						isInhalerUsed = true;
-						inhaler = inhalerAddress;
-					}
-				}
-			}
-		}
-		isInhalerUsed &= LogcatReader.isElapsedWithinTime(120);
-
-		LogcatReader.clearLogcat();
-
-		if (isInhalerUsed) {
-
-			Log.e(TAG, "Inhaler used elapsed just now: " + inhalerAddress);
-			SetInhalerUsedPromptWithSchedule();
-		}
-
 		// Mark that arbitration taking place
-		long lastArbitrationTime = DataStorage.getLastTimeArbitrate(aContext, 0);
-		DataStorage.setLastTimeArbitrate(aContext, System.currentTimeMillis());
-		int studyDay = DataStorage.getDayNumber(aContext, true);
+		long lastArbitrationTime = DataStorage.getLastTimeArbitrate(sContext, 0);
+		DataStorage.setLastTimeArbitrate(sContext, System.currentTimeMillis());
+		int studyDay = DataStorage.getDayNumber(sContext, true);
 
 		// Set which apps are available based on the day of the study
 		SetAppActivityUsingSchedule(lastArbitrationTime, studyDay, isNewSoftwareVersion);
@@ -756,19 +700,19 @@ public class USCTeensArbitrater extends Arbitrater {
 
 		// Determine which apps are in the task list as needing to run
 		// Sets the postponed app info as well
-		GatherPendingTasks(aContext);
+		GatherPendingTasks(sContext);
 
 		int aKey = 0;
 
 		// Now just check tasks
 		if (someTasks.size() > 0) {
 			aKey = someTasks.get(0);
-			PromptApp(aContext, aKey, isOkAudioPrompt, false);
+			PromptApp(sContext, aKey, isOkAudioPrompt, false);
 		}
 
 		// move the data from internal memory to external memory hourly
 		// TODO SSI Remove to make testing simpler 
-		uploadDataAndLogToServer(aContext);
+		uploadDataAndLogToServer(sContext);
 
 		if (Globals.IS_DEBUG) 
 			Log.d(TAG, "End arbitrate");
