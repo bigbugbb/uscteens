@@ -607,7 +607,7 @@ public class USCTeensArbitrater extends Arbitrater {
 			Calendar today = Calendar.getInstance();
 			if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
 				promptsPerDay = 3;
-				startTimeHour = 12;
+				startTimeHour = 15;
 				endTimeHour = 21;
 			} else {
 				promptsPerDay = 7;
