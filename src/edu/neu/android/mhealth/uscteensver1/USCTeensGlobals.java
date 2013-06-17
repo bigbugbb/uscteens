@@ -71,8 +71,6 @@ public class USCTeensGlobals {
 		
 		Globals.WOCKETS_SP_URI = Uri.parse("content://edu.neu.android.mhealth.uscteensver1.provider");
 		Globals.PACKAGE_NAME = "edu.neu.android.mhealth.uscteensver1";
-		Globals.REPROMPT_DELAY_MS = 6 * 60 * 1000; 
-		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = 15 * 60 * 1000; // 15 minutes 
 
 		Globals.FAQ_URL = "http://www.ccs.neu.edu/home/intille/studyinfo/asthmafaq.html";
 		Globals.NEWS_URL = "http://www.ccs.neu.edu/home/intille/studyinfo/asthmafaq.html";
@@ -105,14 +103,11 @@ public class USCTeensGlobals {
 //		Globals.PW_STATDOWN_PASSWORD1 = "stattest";
 //		Globals.PW_SYNC_PASSWORD = "sync";
 
+		// Survey prompting parameters 
 		Globals.AUDIO_PROMPT_START_HOUR = 7;
-		Globals.AUDIO_PROMPT_END_HOUR = 23;
-
-		// Appinfo
-		// Order of preference in main menu
-		Globals.ALL_APP_KEYS = new String[2];
-		Globals.ALL_APP_KEYS[0] = Globals.GETHELP;
-		Globals.ALL_APP_KEYS[1] = Globals.SURVEY;
+		Globals.AUDIO_PROMPT_END_HOUR = 23; 
+		Globals.REPROMPT_DELAY_MS = 5 * 60 * 1000; 
+		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = 15 * 60 * 1000; // 15 minutes 
 
 		// Only apps that are prompted 
 		Globals.ALL_APP_KEYS_PROMPTED = new String[1];
@@ -121,6 +116,11 @@ public class USCTeensGlobals {
 		Globals.classFromKey = new HashMap<String, Class<?>>();
 		Globals.classFromKey.put(Globals.GETHELP, edu.neu.android.wocketslib.activities.helpcomment.GetHelpActivity.class);
 		Globals.classFromKey.put(Globals.SURVEY, edu.neu.android.wocketslib.emasurvey.SurveyActivity.class);
+
+		// Appinfo order of preference in main menu
+		Globals.ALL_APP_KEYS = new String[2];
+		Globals.ALL_APP_KEYS[0] = Globals.GETHELP;
+		Globals.ALL_APP_KEYS[1] = Globals.SURVEY;
 
 		Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 0;
 	}

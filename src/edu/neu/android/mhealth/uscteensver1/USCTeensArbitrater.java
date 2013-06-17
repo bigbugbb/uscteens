@@ -270,11 +270,10 @@ public class USCTeensArbitrater extends Arbitrater {
 			break;
 		case KEY_RANDOM_EMA:
 			counter = (int) DataStorage.GetValueLong(aContext, KEY_RANDOM_PROMPT_COUNTER, 0);
-			if(!isReprompt){
-				counter ++;
-				DataStorage.SetValue(aContext, KEY_RANDOM_PROMPT_COUNTER, counter);
+			if (!isReprompt) {				
+				DataStorage.SetValue(aContext, KEY_RANDOM_PROMPT_COUNTER, ++counter);
 			}
-			promptEvent.AddSurveySpecifiedRecord("RAN_NUM", counter+"");
+			promptEvent.AddSurveySpecifiedRecord("RAN_NUM", counter + "");
 			if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
 				classType = RandomTeensSurvey.RANDOM_EMA_DEFAULT;
 				promptEvent.AddSurveySpecifiedRecord("RAN_SPAN", "1");
@@ -548,7 +547,7 @@ public class USCTeensArbitrater extends Arbitrater {
 			else
 				isOkPrompt = false;
 		} else {
-			if (hour >= 7 && hour < 21)
+			if (hour >= 8 && hour < 22)
 				isOkPrompt = true;
 			else
 				isOkPrompt = false;
@@ -608,12 +607,12 @@ public class USCTeensArbitrater extends Arbitrater {
 			Calendar today = Calendar.getInstance();
 			if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
 				promptsPerDay = 3;
-				startTimeHour = 15;
+				startTimeHour = 12;
 				endTimeHour = 21;
 			} else {
 				promptsPerDay = 7;
-				startTimeHour = 7;
-				endTimeHour = 21;
+				startTimeHour = 8;
+				endTimeHour = 22;
 			}
 
 			setAndSavePromptingSchedule(promptsPerDay, startTimeHour, endTimeHour);
