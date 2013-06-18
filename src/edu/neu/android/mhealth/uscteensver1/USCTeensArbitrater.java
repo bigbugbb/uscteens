@@ -23,6 +23,7 @@ import edu.neu.android.mhealth.uscteensver1.data.AccelDataChecker;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataOutputStream;
 import edu.neu.android.mhealth.uscteensver1.data.ContextSensitiveState;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.survey.CSTeensSurvey;
 import edu.neu.android.mhealth.uscteensver1.survey.RandomTeensSurvey;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.dataupload.DataSender;
@@ -272,6 +273,21 @@ public class USCTeensArbitrater extends Arbitrater {
 		
 		switch (aKey) {
 		case KEY_CS_EMA:
+			counter = (int) DataStorage.GetValueLong(aContext, KEY_CS_PROMPT_COUNTER, 0);
+			if (!isReprompt) {				
+				DataStorage.SetValue(aContext, KEY_CS_PROMPT_COUNTER, ++counter);
+			}
+			promptEvent.AddSurveySpecifiedRecord("CS_NUM", counter + "");
+			if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
+				classType = CSTeensSurvey.CS_EMA_DEFAULT;
+				promptEvent.AddSurveySpecifiedRecord("CS_SPAN", "1");
+			} else {
+				classType = CSTeensSurvey.CS_EMA_OPTIONAL;
+				promptEvent.AddSurveySpecifiedRecord("CS_SPAN", "2");
+			}
+			surveyName = CSTeensSurvey.class.getCanonicalName();
+			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, true, PhonePrompter.CHIMES_NAMBOKU1, PhoneVibrator.VIBRATE_INTENSE);						
+			promptEvent.setPromptType("Teen Activity");
 			break;
 		case KEY_RANDOM_EMA:
 			counter = (int) DataStorage.GetValueLong(aContext, KEY_RANDOM_PROMPT_COUNTER, 0);
