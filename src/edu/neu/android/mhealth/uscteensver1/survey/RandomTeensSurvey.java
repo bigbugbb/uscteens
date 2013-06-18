@@ -20,15 +20,15 @@ public class RandomTeensSurvey extends QuestionSet {
 	private ArrayList<SurveyQuestion> defaultQuestionSet;
 	private String contextUpperCase = null;
 	public static final String optionalContextUpperCase = "In the past four hours";
-	public static final String defaultContextUpperCase  = "Since the last survey you answered";
+	public static final String defaultContextUpperCase  = "For the past hour/Since the last survey you answered";
 	private String contextLowerCase = null;
 	public static final String optionalContextLowerCase = "in the past four hours";
-	public static final String defaultContextLowerCase  = "since the last survey you answered";
+	public static final String defaultContextLowerCase  = "for the past hour/since the last survey you answered";
 
 	public static final int RANDOM_EMA_DEFAULT = 0;
 	public static final int RANDOM_EMA_OPTIONAL = 1;
 	
-	public RandomTeensSurvey(QuestionSetParamHandler param){
+	public RandomTeensSurvey(QuestionSetParamHandler param) {
 		super();
 		if(param.getParamNum() != 1)
 			return;

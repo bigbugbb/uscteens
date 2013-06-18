@@ -40,7 +40,7 @@ public class USCTeensGlobals {
 	public final static String ANNOTATION_SET = "Activities";	
 	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
 	
-	public static int sAccelDataScalingFactor = 3500;
+	public static int SENSOR_DATA_SCALING_FACTOR = 3500;
 	
 	public static Context sContext = null;
 	public static Handler sGlobalHandler = null;	

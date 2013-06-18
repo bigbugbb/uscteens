@@ -10,11 +10,12 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 	protected int   mMaxAccelAvgValue;
 	protected int[] mDrawableData = new int[SECONDS_IN_DAY];
 	protected ArrayList<Pair<Integer, Integer>> mNoDataTime = new ArrayList<Pair<Integer, Integer>>();
-	protected final static int DATA_VALUE_FOR_FILLING = 0;
-	protected final static int NO_SENSOR_DATA = -1;
+	protected final static int DATA_VALUE_FOR_FILLING = 0;	
 	protected final static int NO_SENSOR_DATA_TIME_THRESHOLD = 300;
 	protected final static int SECONDS_IN_DAY = 3600 * 24;
 	protected final static int DATA_COUNT_FOR_DAY_CROSSING = 30;
+	
+	public final static int NO_SENSOR_DATA = -1;
 	
 	public AccelDataWrap() {
 		clear();

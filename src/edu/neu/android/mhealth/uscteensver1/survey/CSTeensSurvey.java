@@ -23,7 +23,7 @@ public class CSTeensSurvey extends QuestionSet {
 	public static final int CS_EMA_DEFAULT = 0;
 	public static final int CS_EMA_OPTIONAL = 1;
 	
-	public CSTeensSurvey(QuestionSetParamHandler param){
+	public CSTeensSurvey(QuestionSetParamHandler param) {
 		super();
 		if(param.getParamNum() != 1)
 			return;

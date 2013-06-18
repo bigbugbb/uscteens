@@ -229,7 +229,7 @@ public class DataSource {
 	public static int getMaxDrawableDataValue() {
 		int max = sAccelDataWrap.getMaxDrawableDataValue();
 		//return max < USCTeensGlobals.sAccelDataScalingFactor ? USCTeensGlobals.sAccelDataScalingFactor : max;
-		return USCTeensGlobals.sAccelDataScalingFactor;
+		return USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR;
 	}
 	
 	public static ArrayList<Pair<Integer, Integer>> getNoDataTimePeriods() {
@@ -245,11 +245,11 @@ public class DataSource {
 		return sRawChksWrap;
 	}
 	
-	private static int loadHourlyRawAccelData(String filePath, ArrayList<AccelData> hourlyAccelData) {
+	public static int loadHourlyRawAccelData(String filePath, ArrayList<AccelData> hourlyAccelData, boolean cancelable) {
 		// get extension name indicating which type of file we should read from
 		String extName = filePath.substring(filePath.lastIndexOf("."), filePath.length());
 		
-		// load the daily data from the csv file	
+		// load the daily data from .bin file (it's faster)	
 		if (extName.equals(".bin")) {
 			File binFile = new File(filePath);	
 			ObjectInputStream ois = null;
@@ -257,7 +257,7 @@ public class DataSource {
 				ois = new ObjectInputStream(new FileInputStream(binFile));
 				AccelData data = (AccelData) ois.readObject();
 				while (data != null) {		
-					if (sCancelled) {
+					if (sCancelled && cancelable) {
 						return ERR_CANCELLED;
 					}													
 					hourlyAccelData.add(data); 								
@@ -275,7 +275,7 @@ public class DataSource {
 					e.printStackTrace();
 				}
 			}
-		} else if (extName.equals(".csv")) { // .csv file if .bin does not exist		
+		} else if (extName.equals(".csv")) { // load from .csv file if .bin does not exist		
 			FileInputStream fis = null;
 			BufferedReader br = null;
 			File csvFile = new File(filePath);
@@ -287,7 +287,7 @@ public class DataSource {
 					// skip the first line
 					String result = br.readLine();
 					while ((result = br.readLine()) != null) {
-						if (sCancelled) {
+						if (sCancelled && cancelable) {
 							return ERR_CANCELLED;
 						}
 						// parse the line
@@ -342,7 +342,7 @@ public class DataSource {
 				}
 				// load the hourly data from .bin file
 				ArrayList<AccelData> hourlyAccelData = new ArrayList<AccelData>();						
-				int result = loadHourlyRawAccelData(filePath, hourlyAccelData);	
+				int result = loadHourlyRawAccelData(filePath, hourlyAccelData, true);	
 				if (result == ERR_CANCELLED) {
 					return ERR_CANCELLED;
 				}

@@ -19,7 +19,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import edu.neu.android.mhealth.uscteensver1.data.AccelData;
+import edu.neu.android.mhealth.uscteensver1.data.AccelDataChecker;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataOutputStream;
+import edu.neu.android.mhealth.uscteensver1.data.ContextSensitiveState;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.survey.RandomTeensSurvey;
 import edu.neu.android.wocketslib.Globals;
@@ -57,8 +59,8 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	private static final long PROMPT_OFFSET = 5 * 60 * 1000;
 
-	private static final int KEY_RANDOM_EMA = 0;
-	private static final int KEY_CS_EMA = 1;
+	private static final int KEY_CS_EMA     = 1;
+	private static final int KEY_RANDOM_EMA = 0;	
 	private static final String KEY_RANDOM_PROMPT_COUNTER = "_KEY_RANDOM_PROMPT_COUNTER";
 	private static final String KEY_CS_PROMPT_COUNTER = "_KEY_CS_PROMPT_COUNTER";
 
@@ -66,6 +68,8 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static final String SKIPLINE = "\n\n";
 	
 	private static boolean sIsFirstRun = true;
+	
+	private static long sActivityCheckingTime = 0;
 
 	protected static Context sContext = null;
 
@@ -162,10 +166,10 @@ public class USCTeensArbitrater extends Arbitrater {
 		String[] fileNames = getFileNamesForSavingInternalAccelData();
 		// Get the data that should be written, for both .csv and .bin
 		Object[] data = getInternalAccelDataForSaving();
-		// Get the whole file path name
+		// Get the complete file path name
 		String[] filePathNames = getFilePathNamesForSavingInternalAccelData(fileNames);
 		
-		// Write the file. If the file does not exist, create a new one.ll 
+		// Write the file. If the file does not exist, create a new one.
 		File csvFile = new File(filePathNames[0]);
 		File binFile = new File(filePathNames[1]);
 		
@@ -194,7 +198,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		}
 		
 		// Then write the .bin file, we use this file for loading 
-		// because parsing all the strings in .csv file is very slow
+		// because parsing all the strings from .csv file is very slow
 		AccelDataOutputStream oos = null;
 		try { 
 			FileHelper.createDirsIfDontExist(binFile);
@@ -265,6 +269,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		int classType = 0;
 		String surveyName = null;		
 		int counter;
+		
 		switch (aKey) {
 		case KEY_CS_EMA:
 			break;
@@ -345,21 +350,21 @@ public class USCTeensArbitrater extends Arbitrater {
 		}
 	}
 
-	private boolean setInhalerTriggeredSchedule(long inhalerUsedTime) {
-		inhalerUsedTime += PROMPT_OFFSET;
+	private boolean setActivityTriggeredSchedule(long activityTriggeredTime) {
+		activityTriggeredTime += PROMPT_OFFSET;
 		long[] somePromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
 		if (somePromptTimes == null) {
-			long[] finalPromptTimes = new long[] { inhalerUsedTime };
+			long[] finalPromptTimes = new long[] { activityTriggeredTime };
 			DataStorage.setPromptTimesKey(sContext, finalPromptTimes, KEY_CS_PROMPT);
 			return true;
 		}
 		long latestPromptTime = somePromptTimes[somePromptTimes.length - 1];
-		if ((inhalerUsedTime - latestPromptTime) > Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS) {
+		if ((activityTriggeredTime - latestPromptTime) > Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS) {
 			long[] finalPromptTimes = new long[somePromptTimes.length + 1];
 			for (int i = 0; i < somePromptTimes.length; i++) {
 				finalPromptTimes[i] = somePromptTimes[i];
 			}
-			finalPromptTimes[somePromptTimes.length] = inhalerUsedTime;
+			finalPromptTimes[somePromptTimes.length] = activityTriggeredTime;
 			DataStorage.setPromptTimesKey(sContext, finalPromptTimes, KEY_CS_PROMPT);
 			return true;
 		}
@@ -487,7 +492,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		// Check if time to prompt
 		if (((currentTime - lastScheduledPromptTime) < (Globals.REPROMPT_TIMES * Globals.REPROMPT_DELAY_MS + Globals.MINUTES_1) && (timeSincePrompted > Globals.REPROMPT_DELAY_MS))) {
 			Log.i(TAG, "Prompt!");
-			if (isInhalerPrompt(lastScheduledPromptTime))
+			if (isActivityPrompt(lastScheduledPromptTime))
 				someTasks.add(KEY_CS_EMA);
 			else
 				someTasks.add(KEY_RANDOM_EMA);
@@ -499,7 +504,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		}
 	}
 
-	private boolean isInhalerPrompt(long lastScheduledPromptTime) {
+	private boolean isActivityPrompt(long lastScheduledPromptTime) {
 		long[] somePromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
 		if (somePromptTimes == null)
 			return false;
@@ -530,28 +535,6 @@ public class USCTeensArbitrater extends Arbitrater {
 		Date dateA = new Date(timeA);
 		Date dateB = new Date(timeB);
 		return (Math.abs(timeA - timeB) < 60) && dateA.getMinutes() == dateB.getMinutes();
-	}
-
-	/**
-	 * Setup prompt due to inhaler use with schedule
-	 */
-	protected void SetInhalerUsedPromptWithSchedule() {
-		boolean isOkPrompt = false;
-		Date now = new Date();
-		int hour = now.getHours();
-		int min  = now.getMinutes();
-		Calendar today = Calendar.getInstance();
-		if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-			if ((hour >= 6 && hour < 7) || (hour >= 15 && hour < 20) || (hour == 20 && min < 30))
-				isOkPrompt = true;
-			else
-				isOkPrompt = false;
-		} else {
-			if (hour >= 8 && hour < 22)
-				isOkPrompt = true;
-			else
-				isOkPrompt = false;
-		}
 	}
 
 	/**
@@ -608,14 +591,29 @@ public class USCTeensArbitrater extends Arbitrater {
 			if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
 				promptsPerDay = 3;
 				startTimeHour = 15;
-				endTimeHour = 21;
+				endTimeHour   = 21;
 			} else {
 				promptsPerDay = 7;
 				startTimeHour = 8;
-				endTimeHour = 22;
+				endTimeHour   = 22;
 			}
 
 			setAndSavePromptingSchedule(promptsPerDay, startTimeHour, endTimeHour);
+		}
+		
+		// Check the accelerometer data state to set the context sensitive schedule
+		long now  = System.currentTimeMillis();
+		long to   = now - 60 * 1000;
+		long from = to - 45 * 60 * 1000;
+		ContextSensitiveState css = AccelDataChecker.checkDataState(from, to);
+		if (css.getState() != ContextSensitiveState.DATA_STATE_ERROR && 
+			css.getState() != ContextSensitiveState.DATA_STATE_NORMAL) {
+			//Log.i(TAG, "Resetting because inhaler used");						
+			if (isOkActivityPrompt()) {				
+				if (setActivityTriggeredSchedule(now)) {
+					resetSchedule();
+				}
+			}
 		}
 
 		// Always unset this in case program was updated at awkward time
@@ -625,6 +623,28 @@ public class USCTeensArbitrater extends Arbitrater {
 		DataStorage.setIsInUpdate(sContext, false); // TODO Change to use a date
 													// so this is less brittle
 													// to an odd crash
+	}
+	
+	private static boolean isOkActivityPrompt() {
+		boolean isOkPrompt = false;
+		Date cur = new Date();
+		int hour = cur.getHours();
+		int min  = cur.getMinutes();
+		Calendar today = Calendar.getInstance();
+		
+		if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+			if ((hour >= 6 && hour < 7) || (hour >= 15 && hour < 20) || (hour == 20 && min < 30))
+				isOkPrompt = true;
+			else
+				isOkPrompt = false;
+		} else {
+			if (hour >= 7 && hour < 21)
+				isOkPrompt = true;
+			else
+				isOkPrompt = false;
+		}
+		
+		return isOkPrompt;
 	}
 
 	// TODO Fix to use settings by week
@@ -679,8 +699,8 @@ public class USCTeensArbitrater extends Arbitrater {
 		// Mark that arbitration taking place
 		long lastArbitrationTime = DataStorage.getLastTimeArbitrate(sContext, 0);
 		DataStorage.setLastTimeArbitrate(sContext, System.currentTimeMillis());
-		int studyDay = DataStorage.getDayNumber(sContext, true);
-
+		int studyDay = DataStorage.getDayNumber(sContext, true);				
+		
 		// Set which apps are available based on the day of the study
 		SetAppActivityUsingSchedule(lastArbitrationTime, studyDay, isNewSoftwareVersion);
 
