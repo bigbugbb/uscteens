@@ -606,6 +606,7 @@ public class USCTeensArbitrater extends Arbitrater {
 				if (isOkActivityPrompt()) {				
 					if (setActivityTriggeredSchedule(now)) {
 						resetSchedule();
+						CSTeensSurvey.setLatestPromptTime(css.getStartTime(), css.getEndTime());
 					}
 				}
 			}

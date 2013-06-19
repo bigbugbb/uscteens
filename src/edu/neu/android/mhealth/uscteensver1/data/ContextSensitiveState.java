@@ -28,10 +28,18 @@ public class ContextSensitiveState implements Serializable {
 	}
 	
 	public String getStartTime() {
-		return "";
+		int hour = mStartTime.getHours();
+		String postfix = hour >= 12 ? " PM" : " AM";
+		hour = hour > 12 ? hour - 12 : hour;
+		String time = hour + ":" + mStartTime.getMinutes() + postfix;
+		return time;
 	}
 	
 	public String getEndTime() {
-		return "";
+		int hour = mEndTime.getHours();
+		String postfix = hour >= 12 ? " PM" : " AM";
+		hour = hour > 12 ? hour - 12 : hour;
+		String time = hour + ":" + mEndTime.getMinutes() + postfix;
+		return time;
 	}
 }

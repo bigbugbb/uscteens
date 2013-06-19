@@ -20,8 +20,11 @@ public class CSTeensSurvey extends QuestionSet {
 	private String context = null;
 	public static final String optionalContext = "In the past four hours";
 	public static final String defaultContext  = "Since the last survey you answered";
-	public static final int CS_EMA_DEFAULT = 0;
+	public static final int CS_EMA_DEFAULT  = 0;
 	public static final int CS_EMA_OPTIONAL = 1;
+	
+	private static String sLatestStartTime;
+	private static String sLatestEndTime;
 	
 	public CSTeensSurvey(QuestionSetParamHandler param) {
 		super();
@@ -40,6 +43,11 @@ public class CSTeensSurvey extends QuestionSet {
 		setQuestions();
 	}
 	
+	public static void setLatestPromptTime(String startTime, String endTime) {
+		sLatestStartTime = startTime;
+		sLatestEndTime   = endTime;
+	}
+	
 	@Override
 	public int getQuestionNum() {
 		return defaultQuestionSet.size();
@@ -51,11 +59,11 @@ public class CSTeensSurvey extends QuestionSet {
 	}
 
 	@Override
-	protected void setQuestions(){
+	protected void setQuestions() {
 		defaultQuestionSet = new ArrayList<SurveyQuestion>();
 		
 		/************ Initialize questions and answers *********/
-		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity","What have you been DOING "+context+"?\n(Choose all that apply)",TYPE.MULTI_CHOICE);
+		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity", "What have you been DOING between " + sLatestStartTime + " and " + sLatestEndTime + "?\n(Choose all that apply)", TYPE.MULTI_CHOICE);
 		SurveyAnswer[] answerSet1 = new SurveyAnswer[7];
 		answerSet1[0] = new SurveyAnswer(0, "Reading or doing homework");
 		answerSet1[1] = new SurveyAnswer(1, "Using technology (TV, phone)");
@@ -67,7 +75,7 @@ public class CSTeensSurvey extends QuestionSet {
 		Q1_MainActivity.setDefault(SurveyQuestion.NO_DATA, answerSet1);
 		defaultQuestionSet.add(Q1_MainActivity);
 
-		SurveyQuestion Q1_a_UsingTech = new SurveyQuestion("Q1_a_UsingTech","While using technology (TV, phone), were you:",TYPE.SINGLE_CHOICE);
+		SurveyQuestion Q1_a_UsingTech = new SurveyQuestion("Q1_a_UsingTech", "While using technology (TV, phone), were you:", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet1a = new SurveyAnswer[6];
 		answerSet1a[0] = new SurveyAnswer(0, "Playing video games");
 		answerSet1a[1] = new SurveyAnswer(1, "Talking");
@@ -78,12 +86,12 @@ public class CSTeensSurvey extends QuestionSet {
 		Q1_a_UsingTech.setDefault("Q1_MainActivity", answerSet1a);
 		defaultQuestionSet.add(Q1_a_UsingTech);
 
-		SurveyQuestion Q2_a_HowLong = new SurveyQuestion("Q2_a_HowLong","Approximately how many minutes did you spend "+mainActivity+"?", TYPE.MINUTES_PICKER);
+		SurveyQuestion Q2_a_HowLong = new SurveyQuestion("Q2_a_HowLong", "Approximately how many minutes did you spend "+mainActivity+"?", TYPE.MINUTES_PICKER);
 		SurveyAnswer[] answerSet2a = new SurveyAnswer[1];
 		Q2_a_HowLong.setDefault("Q1_MainActivity", answerSet2a);
 		defaultQuestionSet.add(Q2_a_HowLong);
 
-		SurveyQuestion Q2_b_a_WereYou = new SurveyQuestion("Q2_b_a_WereYou","While "+mainActivity+", were you:",TYPE.SINGLE_CHOICE);
+		SurveyQuestion Q2_b_a_WereYou = new SurveyQuestion("Q2_b_a_WereYou", "While "+mainActivity+", were you:", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2ba = new SurveyAnswer[5];
 		answerSet2ba[0] = new SurveyAnswer(0, "Lying down");
 		answerSet2ba[1] = new SurveyAnswer(1, "Sitting");
@@ -93,7 +101,7 @@ public class CSTeensSurvey extends QuestionSet {
 		Q2_b_a_WereYou.setDefault("Q1_MainActivity", answerSet2ba);
 		defaultQuestionSet.add(Q2_b_a_WereYou);
 
-		SurveyQuestion Q2_b_b_WereYou = new SurveyQuestion("Q2_b_b_WereYou","While going somewhere, were you:",TYPE.SINGLE_CHOICE);
+		SurveyQuestion Q2_b_b_WereYou = new SurveyQuestion("Q2_b_b_WereYou", "While going somewhere, were you:", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2bb = new SurveyAnswer[6];
 		answerSet2bb[0] = new SurveyAnswer(0, "Walking");
 		answerSet2bb[1] = new SurveyAnswer(1, "Biking");
@@ -104,7 +112,7 @@ public class CSTeensSurvey extends QuestionSet {
 		Q2_b_b_WereYou.setDefault("Q1_MainActivity", answerSet2bb);
 		defaultQuestionSet.add(Q2_b_b_WereYou);
 		
-		SurveyQuestion Q2_c_WherePhone = new SurveyQuestion("Q2_c_WherePhone","How did you have the PHONE while "+mainActivity+"?",TYPE.SINGLE_CHOICE);
+		SurveyQuestion Q2_c_WherePhone = new SurveyQuestion("Q2_c_WherePhone", "How did you have the PHONE while "+mainActivity+"?",TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2c = new SurveyAnswer[6];
 		answerSet2c[0] = new SurveyAnswer(0, "On my belt");
 		answerSet2c[1] = new SurveyAnswer(1, "In my pocket");
