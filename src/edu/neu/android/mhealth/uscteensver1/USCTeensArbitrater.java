@@ -67,12 +67,11 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	private static final String NEWLINE = "\n";
 	private static final String SKIPLINE = "\n\n";
+	private static final long ONE_MINUTE = 60 * 1000;
+	private static final String KEY_LAST_CHECK_TIME = "_KEY_LAST_CHECK_TIME";
 	
 	private static boolean sIsFirstRun = true;
-	
-	private static long sActivityCheckingTime = 0;
-
-	protected static Context sContext = null;
+	private static Context sContext = null;
 
 
 	public USCTeensArbitrater(Context aContext) {
@@ -251,24 +250,15 @@ public class USCTeensArbitrater extends Arbitrater {
 		boolean isReprompt = (System.currentTimeMillis() - lastScheduledPromptTime) > 60 * 1000 ? true : false;
 		SurveyPromptEvent promptEvent = new SurveyPromptEvent(lastScheduledPromptTime, System.currentTimeMillis());
 		String msg = "";
-		// Intent appIntentToRun = new Intent(Intent.ACTION_MAIN);
-		// String pkg = AppInfo.GetPackageName(aContext, aKey);
-		// String className = AppInfo.GetClassName(aContext, aKey);
-
-		// Indicate that a prompt took place so another one isn't done too soon
-		// DataStorage.setTime(aContext, DataStorage.KEY_LAST_ALARM_TIME,
-		// System.currentTimeMillis());
+		
 		// Indicate that this particular app was prompted
 		AppInfo.SetLastTimePrompted(aContext, Globals.SURVEY, System.currentTimeMillis());
-		// AppInfo.SetStartEntryTime(aContext, aKey,
-		// System.currentTimeMillis());
-		// appIntentToRun.setClassName(pkg, pkg + className);
-		// appIntentToRun.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		
 		Intent i = new Intent(aContext, SurveyActivity.class);
 		long lastTimeCompleted = AppInfo.GetLastTimeCompleted(aContext, Globals.SURVEY);
 		long currentTime = System.currentTimeMillis();
 		int classType = 0;
-		String surveyName = null;		
+		String surveyName = null;
 		int counter;
 		
 		switch (aKey) {
@@ -278,7 +268,7 @@ public class USCTeensArbitrater extends Arbitrater {
 				DataStorage.SetValue(aContext, KEY_CS_PROMPT_COUNTER, ++counter);
 			}
 			promptEvent.AddSurveySpecifiedRecord("CS_NUM", counter + "");
-			if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
+			if (currentTime - lastTimeCompleted < 4 * 60 * ONE_MINUTE) {
 				classType = CSTeensSurvey.CS_EMA_DEFAULT;
 				promptEvent.AddSurveySpecifiedRecord("CS_SPAN", "1");
 			} else {
@@ -295,7 +285,7 @@ public class USCTeensArbitrater extends Arbitrater {
 				DataStorage.SetValue(aContext, KEY_RANDOM_PROMPT_COUNTER, ++counter);
 			}
 			promptEvent.AddSurveySpecifiedRecord("RAN_NUM", counter + "");
-			if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
+			if ((currentTime - lastTimeCompleted) < 4 * 60 * ONE_MINUTE) {
 				classType = RandomTeensSurvey.RANDOM_EMA_DEFAULT;
 				promptEvent.AddSurveySpecifiedRecord("RAN_SPAN", "1");
 			} else {
@@ -570,21 +560,7 @@ public class USCTeensArbitrater extends Arbitrater {
 			else
 				Log.i(TAG, "Resetting because day changed");
 
-			// This is causing a problem so commented out ...
-			// Log a few things we want to be sure are logged every day
-			// if (VersionChecker.isNewUpdateAvailable(aContext))
-			// Log.h(TAG, "NewVersionAvailable", Log.NO_LOG_SHOW);
-
 			PackageChecker.installedPackageLogging(TAG, sContext);
-
-			// // Force download check of all key files, including tutorials
-			// Intent i = new Intent(aContext, FileGrabberService.class);
-			// i.putExtra(FileGrabberService.EXTRA_FILES_LIST,
-			// Globals.MASTER_FILE_LIST);
-			// aContext.startService(i);
-
-			// Not useful for Asthma
-			// BasicLogger.basicLogging(TAG, aContext);
 
 			if (isForceReset) {
 				DataStorage.setIsForceReset(sContext, false);
@@ -593,15 +569,14 @@ public class USCTeensArbitrater extends Arbitrater {
 			// Set a lock so main app waits until this is done before doing
 			// anything
 			// because variables are temporarily cleared then reset. Don't want
-			// to
-			// access during that.
+			// to access during that.
 			DataStorage.setIsInUpdate(sContext, true);
 
 			AppInfo.resetAvailabilityAndTiming(sContext);
 
-			int promptsPerDay = Globals.DEFAULT_PROMPTS_PER_DAY;
+			int promptsPerDay    = Globals.DEFAULT_PROMPTS_PER_DAY;
 			double startTimeHour = Globals.DEFAULT_START_HOUR;
-			double endTimeHour = Globals.DEFAULT_END_HOUR;
+			double endTimeHour   = Globals.DEFAULT_END_HOUR;
 
 			Calendar today = Calendar.getInstance();
 			if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
@@ -617,19 +592,24 @@ public class USCTeensArbitrater extends Arbitrater {
 			setAndSavePromptingSchedule(promptsPerDay, startTimeHour, endTimeHour);
 		}
 		
-		// Check the accelerometer data state to set the context sensitive schedule
+		// Check the previous 30+ minutes accelerometer data state every 10 minutes
+		// to determine whether the context sensitive schedule should be reset
 		long now  = System.currentTimeMillis();
-		long to   = now - 60 * 1000;
-		long from = to - 45 * 60 * 1000;
-		ContextSensitiveState css = AccelDataChecker.checkDataState(from, to);
-		if (css.getState() != ContextSensitiveState.DATA_STATE_ERROR && 
-			css.getState() != ContextSensitiveState.DATA_STATE_NORMAL) {
-			//Log.i(TAG, "Resetting because inhaler used");						
-			if (isOkActivityPrompt()) {				
-				if (setActivityTriggeredSchedule(now)) {
-					resetSchedule();
+		long to   = now - ONE_MINUTE;
+		long from = to - 45 * ONE_MINUTE;
+		long lastCheckTime = DataStorage.GetValueLong(sContext, KEY_LAST_CHECK_TIME, now);
+		if (now - lastCheckTime >= 10 * ONE_MINUTE) {
+			ContextSensitiveState css = AccelDataChecker.checkDataState(from, to);
+			if (css.getState() != ContextSensitiveState.DATA_STATE_ERROR && 
+				css.getState() != ContextSensitiveState.DATA_STATE_NORMAL) {
+				Log.i(TAG, "Resetting because activity is detected or missed");						
+				if (isOkActivityPrompt()) {				
+					if (setActivityTriggeredSchedule(now)) {
+						resetSchedule();
+					}
 				}
 			}
+			DataStorage.SetValue(sContext, KEY_LAST_CHECK_TIME, now);
 		}
 
 		// Always unset this in case program was updated at awkward time
@@ -648,16 +628,11 @@ public class USCTeensArbitrater extends Arbitrater {
 		int min  = cur.getMinutes();
 		Calendar today = Calendar.getInstance();
 		
-		if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-			if ((hour >= 6 && hour < 7) || (hour >= 15 && hour < 20) || (hour == 20 && min < 30))
-				isOkPrompt = true;
-			else
-				isOkPrompt = false;
-		} else {
-			if (hour >= 7 && hour < 21)
-				isOkPrompt = true;
-			else
-				isOkPrompt = false;
+		int dayOfWeek = today.get(Calendar.DAY_OF_WEEK);
+		if (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {			
+			isOkPrompt = (hour >= 15 && hour < 20) || (hour == 20 && min < 45);
+		} else {			
+			isOkPrompt = (hour >= 8 && hour < 22);			
 		}
 		
 		return isOkPrompt;

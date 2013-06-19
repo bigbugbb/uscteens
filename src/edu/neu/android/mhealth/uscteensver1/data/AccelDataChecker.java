@@ -35,9 +35,9 @@ public class AccelDataChecker {
 		int[] sensorData = getData(dateFrom, dateTo);	
 		
 		// Analyze data to get the state for context sensitive prompt	
-		ContextSensitiveState state = analyzeData(sensorData, dateFrom, dateTo);
+		ContextSensitiveState css = analyzeData(sensorData, dateFrom, dateTo);
 		
-		return state;
+		return css;
 	}
 	
 	private static int[] getData(Date dateFrom, Date dateTo) {		
@@ -49,6 +49,7 @@ public class AccelDataChecker {
 		int hourFrom = dateFrom.getHours();
 		int hourTo   = dateTo.getHours();
 		AccelDataWrap accelDataWrap = new AccelDataWrap();
+		
 		for (int i = hourFrom; i <= hourTo; ++i) {
 			// each hour corresponds to one .bin file
 			String[] filePaths = FileHelper.getFilePathsDir(hourDirs[i]);
@@ -64,15 +65,15 @@ public class AccelDataChecker {
 			DataSource.loadHourlyRawAccelData(filePath, hourlyAccelData, false);
 			accelDataWrap.add(hourlyAccelData);
 		}		
-		
-		/*
-		 *  analyze the data of the previous 30+ minutes 
-		 */
 		accelDataWrap.updateDrawableData();
 		
 		return accelDataWrap.getDrawableData();
 	}
 	
+
+	/*
+	 *  analyze the data of the previous 30+ minutes 
+	 */
 	private static ContextSensitiveState analyzeData(int[] sensorData, Date dateFrom, Date dateTo) {
 		// convert Date to seconds
 //		int secFrom = dateFrom.getHours() * 3600 + dateFrom.getMinutes() * 60 + dateFrom.getSeconds();

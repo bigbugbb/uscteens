@@ -155,7 +155,11 @@ public class USCTeensSetupActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				Intent i = new Intent(MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
 				sendBroadcast(i);
-				Toast.makeText(getApplicationContext(), "Starting the service...", Toast.LENGTH_LONG).show();
+				Toast toast = Toast.makeText(
+					getApplicationContext(), "Starting the service...", Toast.LENGTH_LONG
+				);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
 			}
 		});
 		
