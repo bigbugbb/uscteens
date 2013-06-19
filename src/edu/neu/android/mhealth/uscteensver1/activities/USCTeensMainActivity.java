@@ -25,7 +25,6 @@ import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.mhealth.uscteensver1.database.DatabaseHandler;
 import edu.neu.android.mhealth.uscteensver1.database.RewardState;
 import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;

@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.survey;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
@@ -57,10 +58,28 @@ public class CSTeensSurvey extends QuestionSet {
 	public ArrayList<SurveyQuestion> getDefaultQuestionSet() {
 		return defaultQuestionSet;
 	}
+	
+	private String getStringTime(Date time) {
+		if (time == null) {
+			return "undefined";
+		}
+		int hour   = time.getHours();
+		int minute = time.getMinutes();
+		String postfix = hour >= 12 ? " PM" : " AM";
+		hour = hour > 12 ? hour - 12 : hour;
+		return hour + ":" + (minute < 10 ? "0" + minute : minute) + postfix;
+	}
 
 	@Override
 	protected void setQuestions() {
 		defaultQuestionSet = new ArrayList<SurveyQuestion>();
+		
+		if (sLatestStartTime == null || sLatestEndTime == null) {
+			Date endDate = new Date();
+			Date startDate = new Date(System.currentTimeMillis() - 30 * 60 * 1000);
+			sLatestEndTime   = getStringTime(endDate);
+			sLatestStartTime = getStringTime(startDate);
+		}
 		
 		/************ Initialize questions and answers *********/
 		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity", "What have you been DOING between " + sLatestStartTime + " and " + sLatestEndTime + "?\n(Choose all that apply)", TYPE.MULTI_CHOICE);

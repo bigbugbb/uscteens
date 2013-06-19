@@ -639,7 +639,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		
 		int dayOfWeek = today.get(Calendar.DAY_OF_WEEK);
 		if (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {			
-			isOkPrompt = (hour >= 15 && hour < 20) || (hour == 20 && min < 45);
+			isOkPrompt = (hour >= 15 && hour < 20) || (hour == 20 && min < 30);
 		} else {			
 			isOkPrompt = (hour >= 8 && hour < 22);			
 		}
