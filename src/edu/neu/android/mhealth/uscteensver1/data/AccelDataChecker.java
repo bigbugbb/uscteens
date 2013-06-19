@@ -50,7 +50,7 @@ public class AccelDataChecker {
 		int hourTo   = dateTo.getHours();
 		AccelDataWrap accelDataWrap = new AccelDataWrap();
 		
-		for (int i = hourFrom; i <= hourTo; ++i) {
+		for (int i = 0; i <= hourTo - hourFrom; ++i) {
 			// each hour corresponds to one .bin file
 			String[] filePaths = FileHelper.getFilePathsDir(hourDirs[i]);
 			String filePath = filePaths[0]; // set a default value
