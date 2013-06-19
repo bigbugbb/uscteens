@@ -381,7 +381,7 @@ public class QuestView extends ImageView implements OnGestureListener,
 			getContext(), USCTeensGlobals.LAST_LABELING_TIME, 0
 		);	
 		long currentTime = System.currentTimeMillis();
-		if (currentTime - lastLabelingTime > 1000 * 300) { // 5 minutes
+		if (currentTime - lastLabelingTime > 5 * 60 * 1000) { // 5 minutes
 			// add the label "Labeling activity"			
 			Labeler.addLabel(new Date(), "", true);
 			// update the last labeling time

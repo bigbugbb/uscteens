@@ -13,6 +13,7 @@ import edu.neu.android.wocketslib.support.DataStorage;
 
 public class Labeler {
 	private static final String TAG = "Labeler";
+	
 	private static RawLabelWrap sRawLabels = new RawLabelWrap();
 	private static SimpleDateFormat sDateFormat     = new SimpleDateFormat("yyyy-MM-dd");
 	private static SimpleDateFormat sDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");

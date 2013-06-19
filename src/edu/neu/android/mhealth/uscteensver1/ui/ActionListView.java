@@ -98,7 +98,7 @@ public class ActionListView extends ListView {
 	public ActionListView(Resources res) {
 		super(res);		
 		ArrayList<Action> actions = ActionManager.getActivatedActions();
-		ArrayList<Action> recents  = ActionManager.getMostRecentActions();
+		ArrayList<Action> recents = ActionManager.getMostRecentActions();
 		
 		// add the most recent selections first
 		for (Action action : recents) {

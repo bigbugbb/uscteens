@@ -97,9 +97,15 @@ public class ActionManager {
 				}
 			}
 			if (!isExistent) {
-				sMostRecentActions.add(action);
+				sMostRecentActions.add(action);				
 			}
-		}		
+		}
+		
+		// make sure all the action id are stored
+		for (int i = 0; i < sMostRecentActions.size(); ++i) {
+			Action action = sMostRecentActions.get(i);
+			DataStorage.SetValue(sContext, MOST_RECENT_ACTION_ID + i, action.getActionID());
+		}
 		
 		return sMostRecentActions;
 	}
