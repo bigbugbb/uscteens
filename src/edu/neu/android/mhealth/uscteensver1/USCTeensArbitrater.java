@@ -389,10 +389,10 @@ public class USCTeensArbitrater extends Arbitrater {
 			boolean isExcluded = false;
 			for (int j = 0; j < randomPromptTimes.length; j++) {
 				isExcluded = false;
-				for (int i = 0; i < csPromptTimes.length; i++) {
-					if (Math.abs((csPromptTimes[i] - randomPromptTimes[j])) < Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS)
-						isExcluded = true;
-				}
+//				for (int i = 0; i < csPromptTimes.length; i++) {
+//					if (Math.abs((csPromptTimes[i] - randomPromptTimes[j])) < Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS)
+//						isExcluded = true;
+//				}
 				if (!isExcluded)
 					prompTimes.add(randomPromptTimes[j]);
 			}

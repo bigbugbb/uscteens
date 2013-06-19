@@ -1,18 +1,30 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import android.content.Context;
+import edu.neu.android.wocketslib.support.DataStorage;
 
 /*
  * This class gives you the ability to update the label file directly
  */
 
 public class Labeler {
-	
+	private static final String TAG = "Labeler";
 	private static RawLabelWrap sRawLabels = new RawLabelWrap();
 	private static SimpleDateFormat sDateFormat     = new SimpleDateFormat("yyyy-MM-dd");
 	private static SimpleDateFormat sDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
-
+	
+	private static Context sContext;
+	private static final long ONE_MINUTE = 60 * 1000;
+	private static final String KEY_LAST_LABEL_NAME = "_KEY_LAST_LABEL_NAME";
+	private static final String KEY_LAST_LABEL_TIME = "_KEY_LAST_LABEL_TIME";
+	
+	public static void initialize(Context context) {
+		sContext = context;
+	}
 	
 	/**
 	 * add a new label
@@ -24,14 +36,29 @@ public class Labeler {
 	 */
 	public static boolean addLabel(String dateTime, String name, boolean commit) {
 		boolean result = true;
+				
+		try {
+			long currentLabelTime = sDateTimeFormat.parse(dateTime).getTime();
+			long lastLabelTime = DataStorage.GetValueLong(sContext, KEY_LAST_LABEL_TIME, 0);
+			String lastLabelName = DataStorage.GetValueString(sContext, KEY_LAST_LABEL_TIME, ":-)");
+			if (Math.abs(lastLabelTime - currentLabelTime) < ONE_MINUTE && name.equals(lastLabelName)) {
+				return false; // skip this label because it's too frequent
+			} else {
+				DataStorage.SetValue(sContext, KEY_LAST_LABEL_NAME, name);		
+				DataStorage.SetValue(sContext, KEY_LAST_LABEL_TIME, currentLabelTime);
+			}
+		} catch (ParseException e1) {			
+			e1.printStackTrace();
+		}
 		
 		String date = dateTime.split(" ")[0];
 		if (date.compareTo(sRawLabels.getDate()) != 0) {
 			sRawLabels.clear();
+			sRawLabels.setDate(date);
 		}
 		
 		DataSource.loadLabelData(date, sRawLabels, false);
-		result = sRawLabels.add(dateTime, name);
+		result = sRawLabels.add(dateTime, name);					
 		
 		if (commit && result) {
 			result = commitChanges(date);

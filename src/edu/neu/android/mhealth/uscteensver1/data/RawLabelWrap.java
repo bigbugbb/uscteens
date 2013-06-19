@@ -36,7 +36,7 @@ class RawLabelWrap extends HashMap<String, ArrayList<RawLabel>> {
 		return array;
 	}
 	
-	public boolean isDateLoaded(String date) {
+	public boolean isSameDate(String date) {
 		return mDate.equals(date);
 	}
 	

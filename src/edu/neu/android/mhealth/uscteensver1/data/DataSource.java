@@ -441,7 +441,7 @@ public class DataSource {
 	 */
 	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap, boolean alwaysLoad) {
 		// check if the date is loaded
-		if (rawLabelWrap.isDateLoaded(date) && !alwaysLoad) {
+		if (rawLabelWrap.isSameDate(date) && !alwaysLoad) {
 			return true;
 		}
 				
@@ -517,6 +517,8 @@ public class DataSource {
 	public static boolean saveLabelData(String date, RawLabelWrap rawLabelWrap) {						
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.LABELS_FOLDER + date;
+		
+		// build the file path name
 		String filePathName = ""; 
 		String[] labelFilePaths = FileHelper.getFilePathsDir(path);		
 		if (labelFilePaths == null || labelFilePaths.length == 0) {	
@@ -544,7 +546,7 @@ public class DataSource {
 		} 
 		String content = sb.toString();
 
-		// First write the .csv file
+		// write the .csv file
 		File labelFile = new File(filePathName);		
 		boolean result = FileHelper.saveStringToFile(content, labelFile, false);
 				
