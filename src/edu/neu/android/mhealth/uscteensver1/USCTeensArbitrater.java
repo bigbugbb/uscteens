@@ -68,7 +68,8 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static final String NEWLINE = "\n";
 	private static final String SKIPLINE = "\n\n";
 	private static final long ONE_MINUTE = 60 * 1000;
-	private static final String KEY_LAST_CHECK_TIME = "_KEY_LAST_CHECK_TIME";
+	private static final String KEY_FIRST_CHECK_TIME  = "_KEY_FIRST_CHECK_TIME";
+	private static final String KEY_LATEST_CHECK_TIME = "_KEY_LATEST_CHECK_TIME";
 	
 	private static boolean sIsFirstRun = true;
 	private static Context sContext = null;
@@ -597,8 +598,15 @@ public class USCTeensArbitrater extends Arbitrater {
 		long now  = System.currentTimeMillis();
 		long to   = now - ONE_MINUTE;
 		long from = to - 45 * ONE_MINUTE;
-		long lastCheckTime = DataStorage.GetValueLong(sContext, KEY_LAST_CHECK_TIME, now);
-		if (now - lastCheckTime >= 10 * ONE_MINUTE) {
+		long firstCheckTime  = DataStorage.GetValueLong(sContext, KEY_FIRST_CHECK_TIME, -1);
+		long latestCheckTime = DataStorage.GetValueLong(sContext, KEY_LATEST_CHECK_TIME, -1);
+		if (firstCheckTime == -1) { // the first time trying to check
+			DataStorage.SetValue(sContext, KEY_FIRST_CHECK_TIME, now);
+			DataStorage.SetValue(sContext, KEY_LATEST_CHECK_TIME, now);	
+			firstCheckTime = latestCheckTime = now;
+		}		
+		// make sure we have enough data (more than 30 minutes) to analyze
+		if (now - firstCheckTime >= 30 * ONE_MINUTE && now - latestCheckTime >= 10 * ONE_MINUTE) {
 			ContextSensitiveState css = AccelDataChecker.checkDataState(from, to);
 			if (css.getState() != ContextSensitiveState.DATA_STATE_ERROR && 
 				css.getState() != ContextSensitiveState.DATA_STATE_NORMAL) {
@@ -610,7 +618,7 @@ public class USCTeensArbitrater extends Arbitrater {
 					}
 				}
 			}
-			DataStorage.SetValue(sContext, KEY_LAST_CHECK_TIME, now);
+			DataStorage.SetValue(sContext, KEY_LATEST_CHECK_TIME, now);
 		}
 
 		// Always unset this in case program was updated at awkward time
