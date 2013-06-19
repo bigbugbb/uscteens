@@ -30,7 +30,7 @@ public class RandomTeensSurvey extends QuestionSet {
 	
 	public RandomTeensSurvey(QuestionSetParamHandler param) {
 		super();
-		if(param.getParamNum() != 1)
+		if (param.getParamNum() != 1)
 			return;
 		int type = (Integer) param.getParams()[0];
 		

@@ -25,7 +25,7 @@ public class CSTeensSurvey extends QuestionSet {
 	
 	public CSTeensSurvey(QuestionSetParamHandler param) {
 		super();
-		if(param.getParamNum() != 1)
+		if (param.getParamNum() != 1)
 			return;
 		int type = (Integer) param.getParams()[0];
 		
