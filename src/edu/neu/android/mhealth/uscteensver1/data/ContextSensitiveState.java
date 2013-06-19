@@ -28,6 +28,9 @@ public class ContextSensitiveState implements Serializable {
 	}
 	
 	public String getStartTime() {
+		if (mStartTime == null) {
+			return "undefined";
+		}
 		int hour = mStartTime.getHours();
 		String postfix = hour >= 12 ? " PM" : " AM";
 		hour = hour > 12 ? hour - 12 : hour;
@@ -36,6 +39,9 @@ public class ContextSensitiveState implements Serializable {
 	}
 	
 	public String getEndTime() {
+		if (mEndTime == null) {
+			return "undefined";
+		}
 		int hour = mEndTime.getHours();
 		String postfix = hour >= 12 ? " PM" : " AM";
 		hour = hour > 12 ? hour - 12 : hour;

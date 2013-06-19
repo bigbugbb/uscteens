@@ -29,18 +29,18 @@ public class AccelDataChecker {
 			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_ERROR, null, null);
 		}
 		
-		// Get data first
-		Date dateFrom = new Date(from);
-		Date dateTo   = new Date(to);
-		int[] sensorData = getData(dateFrom, dateTo);	
+		// Get data first		
+		int[] sensorData = getData(from, to);	
 		
 		// Analyze data to get the state for context sensitive prompt	
-		ContextSensitiveState css = analyzeData(sensorData, dateFrom, dateTo);
+		ContextSensitiveState css = analyzeData(sensorData, from, to);
 		
 		return css;
 	}
 	
-	private static int[] getData(Date dateFrom, Date dateTo) {		
+	private static int[] getData(long from, long to) {
+		Date dateFrom = new Date(from);
+		Date dateTo   = new Date(to);
 		// read the whole piece of data according to the input time
 		String date = DateHelper.getServerDateString(new Date());
 		String[] hourDirs = FileHelper.getFilePathsDir(
@@ -74,7 +74,9 @@ public class AccelDataChecker {
 	/*
 	 *  analyze the data of the previous 30+ minutes 
 	 */
-	private static ContextSensitiveState analyzeData(int[] sensorData, Date dateFrom, Date dateTo) {
+	private static ContextSensitiveState analyzeData(int[] sensorData, long from, long to) {
+		Date dateFrom = new Date(from);
+		Date dateTo   = new Date(to);
 		// convert Date to seconds
 //		int secFrom = dateFrom.getHours() * 3600 + dateFrom.getMinutes() * 60 + dateFrom.getSeconds();
 		int secTo   = dateTo.getHours() * 3600 + dateTo.getMinutes() * 60 + dateTo.getSeconds();
@@ -91,7 +93,8 @@ public class AccelDataChecker {
 				sum += sensorData[i];
 			}
 			if (sum / (10 * 60) < LOW_INTENSITY_THRESHOLD) {
-				return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_HIGH_INTENSITY, dateFrom, dateTo);
+				return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_HIGH_INTENSITY,
+						new Date(to - 40 * ONE_MINUTE), dateTo);
 			}
 		}
 		
@@ -105,7 +108,8 @@ public class AccelDataChecker {
 			}
 		}		
 		if (isMissing) {
-			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_MISSING, dateFrom, dateTo);
+			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_MISSING, 
+					new Date(to - 30 * ONE_MINUTE), dateTo);
 		}
 		
 		// finally, check 30+ minutes of low-intensity data
@@ -116,7 +120,8 @@ public class AccelDataChecker {
 			}
 		}
 		if (isLowIntensity) {
-			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_LOW_INTENSITY, dateFrom, dateTo);
+			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_LOW_INTENSITY, 
+					new Date(to - 30 * ONE_MINUTE), dateTo);
 		}
 		
 		return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, dateFrom, dateTo);
