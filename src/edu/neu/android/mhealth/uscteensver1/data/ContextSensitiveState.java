@@ -31,10 +31,11 @@ public class ContextSensitiveState implements Serializable {
 		if (mStartTime == null) {
 			return "undefined";
 		}
-		int hour = mStartTime.getHours();
+		int hour   = mStartTime.getHours();
+		int minute = mStartTime.getMinutes();
 		String postfix = hour >= 12 ? " PM" : " AM";
 		hour = hour > 12 ? hour - 12 : hour;
-		String time = hour + ":" + mStartTime.getMinutes() + postfix;
+		String time = hour + ":" + (minute < 10 ? "0" + minute : minute) + postfix;
 		return time;
 	}
 	
@@ -42,10 +43,11 @@ public class ContextSensitiveState implements Serializable {
 		if (mEndTime == null) {
 			return "undefined";
 		}
-		int hour = mEndTime.getHours();
+		int hour   = mEndTime.getHours();
+		int minute = mEndTime.getMinutes();
 		String postfix = hour >= 12 ? " PM" : " AM";
 		hour = hour > 12 ? hour - 12 : hour;
-		String time = hour + ":" + mEndTime.getMinutes() + postfix;
+		String time = hour + ":" + (minute < 10 ? "0" + minute : minute) + postfix;
 		return time;
 	}
 }
