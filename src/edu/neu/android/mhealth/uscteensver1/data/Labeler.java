@@ -55,7 +55,7 @@ public class Labeler {
 		String date = dateTime.split(" ")[0];
 		if (date.compareTo(sRawLabels.getDate()) != 0) {
 			sRawLabels.clear();
-			sRawLabels.setDate(date);
+			//sRawLabels.setDate(date);
 		}
 		
 		DataSource.loadLabelData(date, sRawLabels, false);

@@ -80,7 +80,7 @@ public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcess
 	@Override
 	public void respondSMSReceived() {
 		Log.d(TAG, "Respond Received SMS in " + TAG); 
-//		Labeler.addLabel(getDateString(), "Received SMS", true); 		
+		Labeler.addLabel(getDateString(), "Received SMS", true); 		
 	}
 	
 	@Override
