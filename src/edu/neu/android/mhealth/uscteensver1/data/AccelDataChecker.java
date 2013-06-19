@@ -51,7 +51,7 @@ public class AccelDataChecker {
 		AccelDataWrap accelDataWrap = new AccelDataWrap();
 		
 		for (int i = 0; i < hourDirs.length; ++i) {
-			int targetHour = Integer.valueOf(hourDirs[i].substring(hourDirs[i].lastIndexOf('/')));
+			int targetHour = Integer.valueOf(hourDirs[i].substring(hourDirs[i].lastIndexOf('/') + 1));
 			if (targetHour < hourFrom || targetHour > hourTo) {
 				continue;
 			}

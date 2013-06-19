@@ -326,8 +326,8 @@ public class DataSource {
 	private static int loadRawAccelData(String date) {
 		String[] hourDirs = FileHelper.getFilePathsDir(
 				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);
-				
+				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);		
+		
 		try {
 			// load the daily data from .bin files hour by hour		
 			for (int i = 0; i < hourDirs.length; ++i) {
