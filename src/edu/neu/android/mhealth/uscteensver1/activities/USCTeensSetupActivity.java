@@ -1,5 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
+import java.util.Date;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.mhealth.uscteensver1.survey.CSTeensSurvey;
 import edu.neu.android.mhealth.uscteensver1.survey.RandomTeensSurvey;
 import edu.neu.android.wocketslib.Globals;
@@ -197,6 +200,8 @@ public class USCTeensSetupActivity extends BaseActivity {
 				i.putExtra("className", RandomTeensSurvey.class.getCanonicalName());
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1, new Object[] { classType }));
 				startActivity(i);
+				// add new label
+				Labeler.addLabel(new Date(), "Random Survey", true);
 			}
 		});
 		csEMA.setOnClickListener(new OnClickListener() {
@@ -219,6 +224,8 @@ public class USCTeensSetupActivity extends BaseActivity {
 				i.putExtra("className", CSTeensSurvey.class.getCanonicalName());
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1, new Object[] { classType }));
 				startActivity(i);
+				// add new label
+				Labeler.addLabel(new Date(), "CS Survey", true);
 			}
 		});
 		

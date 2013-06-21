@@ -23,6 +23,7 @@ import edu.neu.android.mhealth.uscteensver1.data.AccelDataChecker;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataOutputStream;
 import edu.neu.android.mhealth.uscteensver1.data.ContextSensitiveState;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.mhealth.uscteensver1.survey.CSTeensSurvey;
 import edu.neu.android.mhealth.uscteensver1.survey.RandomTeensSurvey;
 import edu.neu.android.wocketslib.Globals;
@@ -279,6 +280,7 @@ public class USCTeensArbitrater extends Arbitrater {
 			surveyName = CSTeensSurvey.class.getCanonicalName();
 			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, true, PhonePrompter.CHIMES_NAMBOKU1, PhoneVibrator.VIBRATE_INTENSE);						
 			promptEvent.setPromptType("Teen Activity");
+			Labeler.addLabel(new Date(), "CS Survey", true);
 			break;
 		case KEY_RANDOM_EMA:
 			counter = (int) DataStorage.GetValueLong(aContext, KEY_RANDOM_PROMPT_COUNTER, 0);
@@ -299,8 +301,10 @@ public class USCTeensArbitrater extends Arbitrater {
 			long[] schedule = DataStorage.getPromptTimesKey(aContext, KEY_SCHEDULE);
 			if (schedule != null && schedule.length >= 3)
 				promptEvent.setPromptSchedule(lastScheduledPromptTime, (int) schedule[0], (int) schedule[1], schedule[2]);
+			// add new label
+			Labeler.addLabel(new Date(), "Random Survey", true);
 			break;
-		}
+		} // switch end
 		if (msg.toLowerCase().contains("silence"))
 			promptEvent.setPromptAudio(PROMPT_AUDIO.NONE);
 		else if (msg.toLowerCase().contains("normal"))
@@ -320,7 +324,7 @@ public class USCTeensArbitrater extends Arbitrater {
 			e.printStackTrace();
 		}
 		aContext.startActivity(i);
-		// aContext.startActivity(appIntentToRun);
+		// aContext.startActivity(appIntentToRun);		
 		// appIntentToRun = null;
 		msg += " Is reprompt: " + isReprompt;
 		// Give the audio or vibration time to work
@@ -331,8 +335,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		// } catch (InterruptedException e) {
 		// // TODO Auto-generated catch block
 		// e.printStackTrace();
-		// }
-
+		// }		
 	}
 
 	public void getAndPrintPromptingSchedule() {
