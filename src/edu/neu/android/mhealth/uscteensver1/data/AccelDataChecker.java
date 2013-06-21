@@ -24,7 +24,7 @@ public class AccelDataChecker {
 		long oneMinAgo = now - ONE_MINUTE;			
 		
 		// check the input parameters
-		if (to > oneMinAgo || from > to - MIN_TIME_INTERVAL) {
+		if (to < MIN_TIME_INTERVAL || to > oneMinAgo || from > to - MIN_TIME_INTERVAL) {
 			Log.d(TAG, "Input time is not acceptable for checking data state!");
 			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_ERROR, null, null);
 		}

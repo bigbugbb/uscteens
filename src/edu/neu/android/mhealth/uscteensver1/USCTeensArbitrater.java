@@ -85,7 +85,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		
 		if (lastCSVFileCreateTime.compareTo(DataStorage.EMPTY) != 0) {
 			String time[] = lastCSVFileCreateTime.split("-");
-			// Get create date
+			// Get creating date
 			Date createTime = new Date();
 			createTime.setYear(Integer.parseInt(time[0]));
 			createTime.setMonth(Integer.parseInt(time[1]));
@@ -607,11 +607,11 @@ public class USCTeensArbitrater extends Arbitrater {
 		}		
 		// make sure we have enough data (more than 30 minutes) to analyze
 		if (now - firstCheckTime >= 30 * ONE_MINUTE && now - latestCheckTime >= 10 * ONE_MINUTE) {
-			ContextSensitiveState css = AccelDataChecker.checkDataState(from, to);
-			if (css.getState() != ContextSensitiveState.DATA_STATE_ERROR && 
-				css.getState() != ContextSensitiveState.DATA_STATE_NORMAL) {
-				Log.i(TAG, "Resetting because activity is detected or missed");						
-				if (isOkActivityPrompt()) {				
+			if (isOkActivityPrompt()) {	
+				ContextSensitiveState css = AccelDataChecker.checkDataState(from, to);
+				if (css.getState() != ContextSensitiveState.DATA_STATE_ERROR && 
+					css.getState() != ContextSensitiveState.DATA_STATE_NORMAL) {
+					Log.i(TAG, "Resetting because activity is detected or missed");														
 					if (setActivityTriggeredSchedule(now)) {
 						resetSchedule();
 						CSTeensSurvey.setLatestPromptTime(css.getStartTime(), css.getEndTime());
@@ -670,7 +670,6 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	public void doArbitrate(boolean isNewSoftwareVersion) {
 
-		// Debug: save all Asthmapolis and related messages to SD card
 		// Only for testing purpose
 		saveRecordsInLogcat(false);
 		
@@ -791,7 +790,7 @@ public class USCTeensArbitrater extends Arbitrater {
 
 			String line = "";
 			while ((line = bufferedReader.readLine()) != null) {
-				if (line.contains("Asthma") && (line.contains("29 bytes")) || line.contains("elapsed")) {
+				if (line.contains("uscteens") && (line.contains("29 bytes")) || line.contains("elapsed")) {
 					log.append(line + "\r\n");
 				}
 
