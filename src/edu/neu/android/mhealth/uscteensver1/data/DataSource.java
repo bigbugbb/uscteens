@@ -439,14 +439,10 @@ public class DataSource {
 	 * @param rawLabelWrap
 	 * @return true if the raw label wrap has label data, otherwise false
 	 */
-	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap, boolean alwaysLoad) {
-		// check if the date is loaded
-		if (rawLabelWrap.isSameDate(date) && !alwaysLoad) {
-			return true;
-		}
-				
+	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap) {		
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.LABELS_FOLDER + date;
+		
 		if (!FileHelper.isFileExists(path)) {
 			return false;
 		}
@@ -459,7 +455,6 @@ public class DataSource {
 		rawLabelWrap.clear();		
 		
 		// load the daily data from the csv file
-//		loadDailyLabelData(labelFilePaths[0]);
 		String result = null;
 		File labelFile = new File(labelFilePaths[0]);
 		FileInputStream fis = null;
@@ -505,7 +500,7 @@ public class DataSource {
 	}
 	
 	private static boolean loadLabelData(String date) {
-		return loadLabelData(date, sRawLabelsWrap, true);
+		return loadLabelData(date, sRawLabelsWrap);
 	}
 	
 	/**

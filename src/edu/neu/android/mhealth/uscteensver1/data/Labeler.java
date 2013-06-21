@@ -41,7 +41,7 @@ public class Labeler {
 		try {
 			long currentLabelTime = sDateTimeFormat.parse(dateTime).getTime();
 			long lastLabelTime = DataStorage.GetValueLong(sContext, KEY_LAST_LABEL_TIME, 0);
-			String lastLabelName = DataStorage.GetValueString(sContext, KEY_LAST_LABEL_TIME, ":-)");
+			String lastLabelName = DataStorage.GetValueString(sContext, KEY_LAST_LABEL_NAME, ":-)");
 			if (Math.abs(lastLabelTime - currentLabelTime) < TWO_MINUTE && name.equals(lastLabelName)) {
 				return false; // skip this label because it's too frequent
 			} else {
@@ -58,7 +58,7 @@ public class Labeler {
 			//sRawLabels.setDate(date);
 		}
 		
-		DataSource.loadLabelData(date, sRawLabels, false);
+		DataSource.loadLabelData(date, sRawLabels);
 		result = sRawLabels.add(dateTime, name);					
 		
 		if (commit && result) {
@@ -92,7 +92,7 @@ public class Labeler {
 	 */
 	public static boolean removeLabel(String dateTime, String name, boolean commit) {
 		String date = dateTime.split(" ")[0];
-		DataSource.loadLabelData(date, sRawLabels, false);
+		DataSource.loadLabelData(date, sRawLabels);
 		boolean result = sRawLabels.remove(dateTime, name);
 		
 		if (commit && result) {
@@ -112,7 +112,6 @@ public class Labeler {
 	 */
 	public static boolean removeLabel(Date aDate, String name, boolean commit) {
 		String dateTime = sDateTimeFormat.format(aDate);
-		String date = dateTime.split(" ")[0];
 		boolean result = removeLabel(dateTime, name, commit);
 		return result;
 	}
@@ -125,7 +124,7 @@ public class Labeler {
 	 * @return
 	 */
 	public static boolean removeAllLabelsNamed(String date, String name, boolean commit) {
-		DataSource.loadLabelData(date, sRawLabels, false);
+		DataSource.loadLabelData(date, sRawLabels);
 		boolean result = sRawLabels.removeAll(name);	
 		
 		if (commit && result) {
@@ -144,7 +143,7 @@ public class Labeler {
 	 */
 	public static boolean removeAllLabelsNamed(Date aDate, String name, boolean commit) {
 		String date = sDateFormat.format(aDate);	
-		DataSource.loadLabelData(date, sRawLabels, false);
+		DataSource.loadLabelData(date, sRawLabels);
 		boolean result = sRawLabels.removeAll(name);
 		return result;
 	}
@@ -157,7 +156,7 @@ public class Labeler {
 	 */
 	public static boolean clearAllLabels(String date, boolean commit) {				
 		boolean result = true;
-		DataSource.loadLabelData(date, sRawLabels, false);
+		DataSource.loadLabelData(date, sRawLabels);
 		sRawLabels.clear();
 		
 		if (commit) {
@@ -205,7 +204,7 @@ public class Labeler {
 	 * @param date    the date to load, should be the format: yyyy-MM-dd
 	 */
 	public static void peekLabels(String date) {
-		DataSource.loadLabelData(date, sRawLabels, true);
+		DataSource.loadLabelData(date, sRawLabels);
 	}
 	
 	/**
@@ -214,6 +213,6 @@ public class Labeler {
 	 */
 	public static void peekLabels(Date aDate) {
 		String date = sDateFormat.format(aDate);
-		DataSource.loadLabelData(date, sRawLabels, true);
+		DataSource.loadLabelData(date, sRawLabels);
 	}
 }

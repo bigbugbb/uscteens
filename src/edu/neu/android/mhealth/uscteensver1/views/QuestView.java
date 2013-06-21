@@ -377,18 +377,18 @@ public class QuestView extends ImageView implements OnGestureListener,
 		ActionManager.setMostRecentAction(action);
 		
 		// automatically label "Labeling activity"
-		long lastLabelingTime = DataStorage.GetValueLong(
-			getContext(), USCTeensGlobals.LAST_LABELING_TIME, 0
-		);	
-		long currentTime = System.currentTimeMillis();
-		if (currentTime - lastLabelingTime > 5 * 60 * 1000) { // 5 minutes
+//		long lastLabelingTime = DataStorage.GetValueLong(
+//			getContext(), USCTeensGlobals.LAST_LABELING_TIME, 0
+//		);	
+//		long currentTime = System.currentTimeMillis();
+//		if (currentTime - lastLabelingTime > 5 * 60 * 1000) { // 5 minutes
 			// add the label "Labeling activity"			
 			Labeler.addLabel(new Date(), "Labeling", true);
 			// update the last labeling time
-			DataStorage.SetValue(
-				getContext(), USCTeensGlobals.LAST_LABELING_TIME, currentTime
-			);
-		}
+//			DataStorage.SetValue(
+//				getContext(), USCTeensGlobals.LAST_LABELING_TIME, currentTime
+//			);
+//		}
 	}
 
 	@Override
