@@ -443,16 +443,17 @@ public class DataSource {
 		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				USCTeensGlobals.LABELS_FOLDER + date;
 		
+		// first clear the data container		
+		rawLabelWrap.clear();
+		rawLabelWrap.setDate(date);
+		
 		if (!FileHelper.isFileExists(path)) {
 			return false;
 		}
 		String[] labelFilePaths = FileHelper.getFilePathsDir(path);
 		if (labelFilePaths == null || labelFilePaths.length == 0) {			
 			return false;
-		}
-		
-		// first clear the data container		
-		rawLabelWrap.clear();		
+		}					
 		
 		// load the daily data from the csv file
 		String result = null;
@@ -470,8 +471,7 @@ public class DataSource {
 					// parse the line
 					String[] split = result.split("[,]");
 					rawLabelWrap.add(split[0].trim(), split[1].trim());
-				}
-				rawLabelWrap.setDate(date);
+				}				
 			} catch (IOException e) {
 				Log.e(TAG, "readStringInternal: problem reading: " + labelFile.getAbsolutePath());
 				e.printStackTrace();

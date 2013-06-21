@@ -37,6 +37,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 	private Button randomEMA;
 	private Button csEMA;
 	private Button rewards;
+	private Button playTutorial;
 	private Button finishStudy;
 	private Button setupdone;
 
@@ -139,6 +140,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 		startService = (Button) findViewById(R.id.startservice);		
 		csEMA        = (Button) findViewById(R.id.csema);		
 		randomEMA    = (Button) findViewById(R.id.randomema);
+		playTutorial = (Button) findViewById(R.id.tutorial);
 		rewards      = (Button) findViewById(R.id.rewards);
 		finishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
 		setupdone    = (Button) findViewById(R.id.setupdone);
@@ -201,9 +203,10 @@ public class USCTeensSetupActivity extends BaseActivity {
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1, new Object[] { classType }));
 				startActivity(i);
 				// add new label
-				Labeler.addLabel(new Date(), "Random Survey", true);
+				Labeler.addLabel(new Date(), "Random Survey");
 			}
 		});
+		
 		csEMA.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -225,7 +228,14 @@ public class USCTeensSetupActivity extends BaseActivity {
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1, new Object[] { classType }));
 				startActivity(i);
 				// add new label
-				Labeler.addLabel(new Date(), "CS Survey", true);
+				Labeler.addLabel(new Date(), "CS Survey");
+			}
+		});
+		
+		playTutorial.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO:
 			}
 		});
 		

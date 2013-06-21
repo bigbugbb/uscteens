@@ -280,7 +280,7 @@ public class USCTeensArbitrater extends Arbitrater {
 			surveyName = CSTeensSurvey.class.getCanonicalName();
 			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, true, PhonePrompter.CHIMES_NAMBOKU1, PhoneVibrator.VIBRATE_INTENSE);						
 			promptEvent.setPromptType("Teen Activity");
-			Labeler.addLabel(new Date(), "CS Survey", true);
+			Labeler.addLabel(new Date(), "CS Survey");
 			break;
 		case KEY_RANDOM_EMA:
 			counter = (int) DataStorage.GetValueLong(aContext, KEY_RANDOM_PROMPT_COUNTER, 0);
@@ -302,7 +302,7 @@ public class USCTeensArbitrater extends Arbitrater {
 			if (schedule != null && schedule.length >= 3)
 				promptEvent.setPromptSchedule(lastScheduledPromptTime, (int) schedule[0], (int) schedule[1], schedule[2]);
 			// add new label
-			Labeler.addLabel(new Date(), "Random Survey", true);
+			Labeler.addLabel(new Date(), "Random Survey");
 			break;
 		} // switch end
 		if (msg.toLowerCase().contains("silence"))
