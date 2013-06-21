@@ -24,18 +24,19 @@ public class AccelDataChecker {
 		long oneMinAgo = now - ONE_MINUTE;			
 		
 		// check the input parameters
-		if (to < MIN_TIME_INTERVAL || to > oneMinAgo || from > to - MIN_TIME_INTERVAL) {
+		if (to > oneMinAgo || from > to - MIN_TIME_INTERVAL) {
 			Log.d(TAG, "Input time is not acceptable for checking data state!");
 			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_ERROR, null, null);
 		}
 		
 		// Get data first		
 		int[] sensorData = getData(from, to);	
+		if (sensorData == null) {
+			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_ERROR, null, null);
+		}
 		
-		// Analyze data to get the state for context sensitive prompt	
-		ContextSensitiveState css = analyzeData(sensorData, from, to);
-		
-		return css;
+		// Analyze data to get the state for context sensitive prompt
+		return analyzeData(sensorData, from, to);
 	}
 	
 	private static int[] getData(long from, long to) {
@@ -46,28 +47,39 @@ public class AccelDataChecker {
 		String[] hourDirs = FileHelper.getFilePathsDir(
 				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);	
+		if (hourDirs == null) {
+			// no data to get
+			return null;
+		}
+		
 		int hourFrom = dateFrom.getHours();
 		int hourTo   = dateTo.getHours();
 		AccelDataWrap accelDataWrap = new AccelDataWrap();
 		
 		for (int i = 0; i < hourDirs.length; ++i) {
 			int targetHour = Integer.valueOf(hourDirs[i].substring(hourDirs[i].lastIndexOf('/') + 1));
-			if (targetHour < hourFrom || targetHour > hourTo) {
+			if (targetHour < hourFrom || targetHour > hourTo) { // 12AM can not be handled here!!!
 				continue;
 			}
-			// each hour corresponds to one .bin file
-			String[] filePaths = FileHelper.getFilePathsDir(hourDirs[i]);
-			String filePath = filePaths[0];			
-			for (String path : filePaths) {				
-				String extName = path.substring(path.lastIndexOf("."), path.length());
-				if (extName.equals(".bin")) {
-					filePath = path;
+			
+			try {
+				// each hour corresponds to one .bin file
+				String[] filePaths = FileHelper.getFilePathsDir(hourDirs[i]);
+				String filePath = filePaths[0];			
+				for (String path : filePaths) {				
+					String extName = path.substring(path.lastIndexOf("."), path.length());
+					if (extName.equals(".bin")) {
+						filePath = path;
+					}
 				}
-			}
-			// load the hourly data from .bin file
-			ArrayList<AccelData> hourlyAccelData = new ArrayList<AccelData>();						
-			DataSource.loadHourlyRawAccelData(filePath, hourlyAccelData, false);
-			accelDataWrap.add(hourlyAccelData);
+				// load the hourly data from .bin file
+				ArrayList<AccelData> hourlyAccelData = new ArrayList<AccelData>();						
+				DataSource.loadHourlyRawAccelData(filePath, hourlyAccelData, false);
+				accelDataWrap.add(hourlyAccelData);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}			
 		}		
 		accelDataWrap.updateDrawableData();
 		
@@ -84,6 +96,9 @@ public class AccelDataChecker {
 		// convert Date to seconds
 //		int secFrom = dateFrom.getHours() * 3600 + dateFrom.getMinutes() * 60 + dateFrom.getSeconds();
 		int secTo   = dateTo.getHours() * 3600 + dateTo.getMinutes() * 60 + dateTo.getSeconds();
+		if (secTo < 40 * 60) { // at least 40 minutes of data is needed to analyze
+			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_ERROR, null, null);					
+		}
 		
 		// first, check 30+ minutes of Òhigh intensityÓ data (use a global threshold) 
 		// followed by 10 minutes of low intensity data
