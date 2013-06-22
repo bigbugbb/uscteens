@@ -38,7 +38,9 @@ public class QuestButton extends ChunkButton {
 	}
 	
 	public String getStringAnswer() {
-		return getHost().getAction().getActionName();
+		String actName = getHost().getAction().getActionName();
+		String actSubName = getHost().getAction().getActionSubName();
+		return actName + (actSubName != null ? "|" + actSubName : ""); 
 	}
 	
 	@Override
