@@ -39,7 +39,6 @@ import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnBoundaryListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
-import edu.neu.android.wocketslib.support.DataStorage;
 
 public class QuestView extends ImageView implements OnGestureListener, 
 													OnItemClickListener, 

@@ -24,7 +24,7 @@
          -->
 	<application android:name="edu.neu.android.mhealth.uscteensver1.USCTeensAppManager"
 		android:icon="@drawable/ic_launcher" android:label="@string/app_name"
-		android:theme="@style/AppTheme" android:debuggable="false">
+		android:theme="@style/AppTheme" android:debuggable="true">
 	    
 		<provider android:name="edu.neu.android.wocketslib.support.WOCKETSContentProvider"
 			android:authorities="edu.neu.android.mhealth.uscteensver1.provider"
@@ -338,6 +338,21 @@
 			android:screenOrientation="portrait">
     	</activity>
     	
+        <activity
+            android:name="edu.neu.android.mhealth.uscteensver1.video.VideoActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:process=":video">
+        </activity>    	
+    	
+    	<activity  
+            android:name="edu.neu.android.mhealth.uscteensver1.openyoutubeplayer.OpenYouTubePlayerActivity"  
+            android:configChanges="orientation"
+            android:theme="@android:style/Theme.Black"
+            android:label="@string/app_name"
+            android:process=":video"> 
+        </activity> 
+         
 	</application>	
 
 	<!-- PERMISSIONS -->

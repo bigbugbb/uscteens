@@ -796,7 +796,6 @@ public class USCTeensArbitrater extends Arbitrater {
 				if (line.contains("uscteens") && (line.contains("29 bytes")) || line.contains("elapsed")) {
 					log.append(line + "\r\n");
 				}
-
 			}
 			if (log.length() > 0)
 				saveLogCatRecord(log.toString());

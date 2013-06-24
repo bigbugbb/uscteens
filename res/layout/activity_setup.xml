@@ -148,7 +148,7 @@
 	                    android:shadowDx="1"
 	                    android:shadowDy="-1"
 	                    android:shadowRadius="1.5"
-	                    android:text="Tutorial Video"
+	                    android:text="Tutorial"
 	                    android:textColor="@color/black"
 	                    android:textSize="18sp" />
 	            </TableRow>	            

@@ -14,6 +14,7 @@ import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.mhealth.uscteensver1.survey.CSTeensSurvey;
 import edu.neu.android.mhealth.uscteensver1.survey.RandomTeensSurvey;
+import edu.neu.android.mhealth.uscteensver1.video.VideoActivity;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import edu.neu.android.wocketslib.dataupload.DataManager;
@@ -37,7 +38,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 	private Button randomEMA;
 	private Button csEMA;
 	private Button rewards;
-	private Button playTutorial;
+	private Button tutorial;
 	private Button finishStudy;
 	private Button setupdone;
 
@@ -140,7 +141,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 		startService = (Button) findViewById(R.id.startservice);		
 		csEMA        = (Button) findViewById(R.id.csema);		
 		randomEMA    = (Button) findViewById(R.id.randomema);
-		playTutorial = (Button) findViewById(R.id.tutorial);
+		tutorial 	 = (Button) findViewById(R.id.tutorial);
 		rewards      = (Button) findViewById(R.id.rewards);
 		finishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
 		setupdone    = (Button) findViewById(R.id.setupdone);
@@ -232,10 +233,11 @@ public class USCTeensSetupActivity extends BaseActivity {
 			}
 		});
 		
-		playTutorial.setOnClickListener(new OnClickListener() {
+		tutorial.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO:
+				Intent i = new Intent(getApplicationContext(), VideoActivity.class);
+				startActivity(i);
 			}
 		});
 		
