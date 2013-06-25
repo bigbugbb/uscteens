@@ -37,7 +37,7 @@ public class USCTeensGlobals {
 	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String LABELS_FOLDER = "/Labels/";
 	public final static String SENSOR_TYPE = "InternalAccel";
-	public final static String ANNOTATION_SET = "Activities";	
+	public final static String ANNOTATION_SET = "Activities";
 	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
 	
 	public static int SENSOR_DATA_SCALING_FACTOR = 3500;
@@ -52,7 +52,7 @@ public class USCTeensGlobals {
 	
 	public static void initGlobals(Context aContext) {
 		// By default the logging will go to the apps internal storage, not the external directory
-		Globals.IS_DEBUG = false;
+		Globals.IS_DEBUG = true;
 		Globals.IS_LOG_EXTERNAL = false;
 		Globals.APP_DIRECTORY = "uscteens";
 		Globals.LOG_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "logs";

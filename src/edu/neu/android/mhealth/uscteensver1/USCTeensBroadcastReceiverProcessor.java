@@ -2,6 +2,7 @@ package edu.neu.android.mhealth.uscteensver1;
 
 import java.util.Date;
 
+import android.content.Context;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.wocketslib.broadcastreceivers.BroadcastReceiverProcessor;
 import edu.neu.android.wocketslib.utils.DateHelper;
@@ -16,9 +17,13 @@ public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcess
 		return aSDate; 
 	}
 	
+	public void setContext(Context context) {
+		Labeler.initialize(context);
+	}
+	
 	//TODO change all the methods below to use addLabel with sending a date (vs a string of a date). Will clean up code. 
 	@Override
-	public void respondSendSMS() {
+	public void respondSendSMS() {		
 		Log.d(TAG, "Respond SendSMS in " + TAG); 
 		Labeler.addLabel(getDateString(), "Sent SMS"); 		
 	}
