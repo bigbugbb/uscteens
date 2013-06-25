@@ -89,8 +89,10 @@ public class USCTeensGlobals {
 		
 //		public static String serverAddress = "http://wockets.ccs.neu.edu:8080/Wockets/android/getWocketsDetail.html";
 //		public static String serverAddress = "http://wockets.ccs.neu.edu:9080/Wockets/android/getWocketsDetail.html";
-		
 		Globals.DEFAULT_SERVER_ADDR = "http://wockets.ccs.neu.edu:8080/";
+		
+		// These variable are most easily set by calling initServerWebCalls() from
+		// the main app after setting DEFAULT_SERVER_ADDR and PHP_DEFAULT_SERVER_ADDR
 		Globals.SERVER_ADDRESS_PID = Globals.DEFAULT_SERVER_ADDR + "Wockets/android/getParticipantId.html";
 		Globals.GET_WOCKETS_DETAIL_URL = Globals.DEFAULT_SERVER_ADDR + "Wockets/android/getWocketsDetail.html";
 		Globals.POST_ANDROID_DATA_LOG_URL = Globals.DEFAULT_SERVER_ADDR + "Wockets/AndroidDataLog.html";
