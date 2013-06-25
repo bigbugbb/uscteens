@@ -327,6 +327,8 @@ public class GraphPage extends AppPage implements OnClickListener,
 			mHandler.sendMessage(msg);
 		}
 
+		Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+		vibrator.vibrate(20);
 	}
 	
 	private void tryToNext(NextButton next) {
@@ -343,6 +345,8 @@ public class GraphPage extends AppPage implements OnClickListener,
 			mHandler.sendMessage(msg);
 		}
 		
+		Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+		vibrator.vibrate(20);
 	}
 	
 	private void tryToQuest(QuestButton quest) {

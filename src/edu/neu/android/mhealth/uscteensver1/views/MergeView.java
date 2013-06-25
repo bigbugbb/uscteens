@@ -32,6 +32,7 @@ public class MergeView extends View {
 	protected Paint mPaintText0 = null;
 	protected Paint mPaintText1 = null;
 	protected Paint mPaintText2 = null;	
+	protected Paint mPaintText3 = null;
 	protected List<RectF> mAreas = new ArrayList<RectF>();
 	protected int mSelection = 0;
 	protected OnItemClickListener   mItemListener = null;
@@ -71,6 +72,14 @@ public class MergeView extends View {
 		mPaintText2.setFakeBoldText(false);
 		mPaintText2.setTextSize(AppScale.doScaleT(40));
 		mPaintText2.setTextAlign(Paint.Align.LEFT);
+		
+		mPaintText3 = new Paint(Paint.ANTI_ALIAS_FLAG);
+		mPaintText3.setColor(Color.BLACK);
+		mPaintText3.setStyle(Style.STROKE);
+		mPaintText3.setTypeface(tf);
+		mPaintText3.setFakeBoldText(false);
+		mPaintText3.setTextSize(AppScale.doScaleT(27));
+		mPaintText3.setTextAlign(Paint.Align.CENTER);
 		
 		mBackArea.left   = AppScale.doScaleW(10);
 		mBackArea.right  = mBackArea.left + mImages.get(1).getWidth();
@@ -131,12 +140,21 @@ public class MergeView extends View {
 		canvas.drawText("Do you want to merge", getWidth() / 2, AppScale.doScaleH(220), mPaintText1);
 		canvas.drawText("these activities to:", getWidth() / 2, AppScale.doScaleH(310), mPaintText1);
 		
-		float left = getWidth() * 0.18f;
+		float left = getWidth() * 0.16f;
 		for (int i = 0; i < mAreas.size(); ++i) {
 			canvas.drawBitmap(mImages.get(2 + (mSelection == i ? 1 : 0)), left, 
 				(AppScale.doScaleH(100) - mImages.get(2).getHeight()) / 2 + mAreas.get(i).top, mPaintText1);
-			canvas.drawText(mActions.get(i), left + AppScale.doScaleH(100), 
-				mAreas.get(i).top + AppScale.doScaleH(64), mPaintText2);			
+			int slashIndex = mActions.get(i).indexOf('|');
+			if (slashIndex != -1) {
+				String actName = mActions.get(i).substring(0, slashIndex);
+				String subName = mActions.get(i).substring(slashIndex + 1, mActions.get(i).length());
+				canvas.drawText(actName, left + AppScale.doScaleW(100), 
+					mAreas.get(i).top + AppScale.doScaleH(64), mPaintText2);
+				canvas.drawText(subName, getWidth() * 0.55f, mAreas.get(i).top + AppScale.doScaleH(100), mPaintText3);
+			} else {
+				canvas.drawText(mActions.get(i), left + AppScale.doScaleW(100), 
+					mAreas.get(i).top + AppScale.doScaleH(64), mPaintText2);
+			}
 		}				
 	}
 

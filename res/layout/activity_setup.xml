@@ -12,8 +12,7 @@
         <LinearLayout 
 		    style="?pageBackground"
 		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent"
-		    android:layout_marginTop="20dp"			  
+		    android:layout_height="fill_parent"			  
 		    android:orientation="vertical" >
 		    
             <TextView
@@ -25,8 +24,8 @@
 		       android:textSize="@dimen/text_size_large"
 		       android:textStyle="bold"
 		       android:typeface="serif"
-		       android:paddingTop="12sp"
-		       android:paddingBottom="12sp" />
+		       android:paddingTop="14sp"
+		       android:paddingBottom="14sp" />
 			
 			<View
 			    style="?listDivider"
@@ -49,14 +48,14 @@
 	                android:layout_height="wrap_content"
 	                android:baselineAligned="false"
 	                android:gravity="center_horizontal" 
-	            	android:layout_marginTop="20dp">
+	            	android:layout_marginTop="4dp">
 	
 	                <Button
 	                    android:id="@+id/setstartdate"
 	                    style="@style/test"
 	                    android:layout_width="120dp"
-	                    android:layout_height="60dp"
-	                    android:layout_margin="3pt"
+	                    android:layout_height="50dp"
+	                    android:layout_margin="2pt"
 	                    android:layout_weight="1"
 	                    android:shadowDx="1"
 	                    android:shadowDy="-1"
@@ -77,8 +76,8 @@
 	                    android:id="@+id/startservice"
 	                    style="@style/test"
 	                    android:layout_width="120dp"
-	                    android:layout_height="60dp"
-	                    android:layout_margin="3pt"
+	                    android:layout_height="50dp"
+	                    android:layout_margin="2pt"
 	                    android:layout_weight="1"
 	                    android:shadowDx="1"
 	                    android:shadowDy="-1"
@@ -88,7 +87,7 @@
 	                    android:textSize="18sp" />
 	            </TableRow>
 	
-	           <!--  <TableRow
+	            <TableRow
 	                android:id="@+id/tableRow3"
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
@@ -99,8 +98,8 @@
 	                    android:id="@+id/randomema"
 	                    style="@style/test"
 	                    android:layout_width="120dp"
-	                    android:layout_height="60dp"
-	                    android:layout_margin="3pt"
+	                    android:layout_height="50dp"
+	                    android:layout_margin="2pt"
 	                    android:layout_weight="1"
 	                    android:shadowDx="1"
 	                    android:shadowDy="-1"
@@ -108,7 +107,7 @@
 	                    android:text="Test Random EMA Survey"
 	                    android:textColor="@color/black"
 	                    android:textSize="18sp" />
-	            </TableRow> -->
+	            </TableRow>
 	
 	            <TableRow
 	                android:id="@+id/tableRow4"
@@ -121,8 +120,8 @@
 	                    android:id="@+id/csema"
 	                    style="@style/test"
 	                    android:layout_width="120dp"
-	                    android:layout_height="60dp"
-	                    android:layout_margin="3pt"
+	                    android:layout_height="50dp"
+	                    android:layout_margin="2pt"
 	                    android:layout_weight="1"
 	                    android:shadowDx="1"
 	                    android:shadowDy="-1"
@@ -140,11 +139,33 @@
 	                android:gravity="center_horizontal" >
 	
 	                <Button
+	                    android:id="@+id/tutorial"
+	                    style="@style/test"
+	                    android:layout_width="120dp"
+	                    android:layout_height="50dp"
+	                    android:layout_margin="2pt"
+	                    android:layout_weight="1"
+	                    android:shadowDx="1"
+	                    android:shadowDy="-1"
+	                    android:shadowRadius="1.5"
+	                    android:text="Tutorial"
+	                    android:textColor="@color/black"
+	                    android:textSize="18sp" />
+	            </TableRow>	            
+	            
+	            <TableRow
+	                android:id="@+id/tableRow6"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:baselineAligned="false"
+	                android:gravity="center_horizontal" >
+	
+	                <Button
 	                    android:id="@+id/rewards"
 	                    style="@style/test"
 	                    android:layout_width="120dp"
-	                    android:layout_height="60dp"
-	                    android:layout_margin="3pt"
+	                    android:layout_height="50dp"
+	                    android:layout_margin="2pt"
 	                    android:layout_weight="1"
 	                    android:shadowDx="1"
 	                    android:shadowDy="-1"
@@ -155,18 +176,19 @@
 	            </TableRow>
 	
 	            <TableRow
-	                android:id="@+id/tableRow6"
+	                android:id="@+id/tableRow7"
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
 	                android:baselineAligned="false"
-	                android:gravity="center_horizontal" >
+	                android:gravity="center_horizontal"
+	                android:layout_marginBottom="2dp" >
 	
 	                <Button
 	                    android:id="@+id/buttonfinishstudy"
 	                    style="@style/test"
 	                    android:layout_width="120dp"
-	                    android:layout_height="60dp"
-	                    android:layout_margin="3pt"
+	                    android:layout_height="50dp"
+	                    android:layout_margin="2pt"
 	                    android:layout_weight="1"
 	                    android:shadowDx="1"
 	                    android:shadowDy="-1"
@@ -190,9 +212,9 @@
 		        android:id="@+id/setupdone"
 		        style="@style/test"
 		        android:layout_width="150dp"
-		        android:layout_height="60dp"  
+		        android:layout_height="50dp"  
 		        android:layout_gravity="center"	      
-		        android:layout_margin="3pt"
+		        android:layout_margin="2pt"
 		        android:text="Done"
 		        android:shadowDx="1"
 		        android:shadowDy="-1"

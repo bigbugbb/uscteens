@@ -13,7 +13,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.wocketslib.support.DataStorage;
 
 
-public class LoadDataTask extends AsyncTask<String, Void, Void>{
+public class LoadDataTask extends AsyncTask<String, Void, Void> {
 	private Context mContext;
 	private int 	mResult;	
 	private Handler mHandler;

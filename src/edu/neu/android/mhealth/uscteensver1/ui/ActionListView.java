@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.Paint.Style;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
@@ -22,31 +23,52 @@ public class ActionListView extends ListView {
 		protected Action mAction;
 		protected String mActSubName;
 		protected Paint  mPaintSubTxt;
-		//protected Paint  mPaintHighlight;
+		protected Paint  mPaintHighlight;		
 		
 		public ActionItem(ListView parent, Action action) {	
 			super(parent, action.getActionName(), -1, action.getActionImage());
 			mAction = action;
 			mActSubName = action.getActionSubName();
 			
+			// the paint for text before '|'
 			mPaintTxt.setColor(Color.BLACK);
 			mPaintTxt.setTextSize(AppScale.doScaleT(45));
 			mPaintTxt.setTypeface(mTypeface);
 			mPaintTxt.setTextAlign(Align.CENTER);
 			
+			// the paint for text after '|'
 			mPaintSubTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
 			mPaintSubTxt.setColor(Color.BLACK);		
 			mPaintSubTxt.setTextSize(AppScale.doScaleT(30));
 			mPaintSubTxt.setTypeface(mTypeface);
 			mPaintSubTxt.setTextAlign(Align.CENTER);
 			
-//			mPaintHighlight = new Paint(Paint.ANTI_ALIAS_FLAG);
-//			mPaintHighlight.setColor(Color.WHITE);
-//			mPaintHighlight.setStyle(Style.FILL);					
+			// paint for highlighting the most recent selections
+			mPaintHighlight = new Paint(Paint.ANTI_ALIAS_FLAG);
+			mPaintHighlight.setColor(Color.rgb(92, 189, 150));
+			mPaintHighlight.setStyle(Style.FILL);
 		}		
 		
 		public Action getAction() {
 			return mAction;
+		}
+		
+		public Paint getBackgroundPaint() {
+			return mPosn < ActionManager.MOST_RECENT_ACTIONS_COUNT ? 
+				mPaintHighlight : mPaintBkg;
+		}
+		
+		public int getBackgroundColor() {		
+			int color = Color.WHITE;
+			
+			if (mPosn < ActionManager.MOST_RECENT_ACTIONS_COUNT) {				 
+				color = Color.rgb(92, 189, 150);				
+			}
+			if (mSelected) {
+				color = Color.rgb(198, 235, 245);
+			}
+			
+			return color;
 		}
 
 		protected void onDraw(Canvas c) {
@@ -57,8 +79,13 @@ public class ActionListView extends ListView {
 				return;
 			}
 			
+			// draw activity icon
 			c.drawBitmap(mImage, 8, y1, null);
-			c.drawRect(mImage.getWidth() + 16, y1, mWidth - 3, y2, mPaintBkg);
+			
+			// draw the background for the text
+			c.drawRect(mImage.getWidth() + 16, y1, mWidth - 3, y2, getBackgroundPaint());
+			
+			// draw the activity name ('|' breaks the text into two lines)
 			if (mActSubName == null) {
 				c.drawText(mText, (mWidth + mImage.getWidth()) / 2, y1 + mHeight * 0.6f, mPaintTxt);
 			} else {
@@ -71,12 +98,21 @@ public class ActionListView extends ListView {
 	public ActionListView(Resources res) {
 		super(res);		
 		ArrayList<Action> actions = ActionManager.getActivatedActions();
+		ArrayList<Action> recents = ActionManager.getMostRecentActions();
 		
+		// add the most recent selections first
+		for (Action action : recents) {
+			if (!action.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID)) {
+		    	addItem(action);
+		    }		
+		}
+		
+		// then add the other activities
 		for (Action action : actions) {		
 		    if (!action.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID)) {
 		    	addItem(action);
 		    }		    
-		}	
+		}						
 	}
 	
 	public void addItem(Action action) {		

@@ -1,6 +1,9 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
+import java.util.Date;
+
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -8,14 +11,23 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.survey.EMAQuestionSet;
+import edu.neu.android.mhealth.uscteensver1.data.Labeler;
+import edu.neu.android.mhealth.uscteensver1.survey.CSTeensSurvey;
+import edu.neu.android.mhealth.uscteensver1.survey.RandomTeensSurvey;
+import edu.neu.android.mhealth.uscteensver1.video.VideoActivity;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
+import edu.neu.android.wocketslib.dataupload.DataManager;
+import edu.neu.android.wocketslib.dataupload.DataSender;
+import edu.neu.android.wocketslib.dataupload.RawUploader;
+import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
 import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.BaseActivity;
+import edu.neu.android.wocketslib.utils.Log;
 
 
 public class USCTeensSetupActivity extends BaseActivity {
@@ -23,9 +35,10 @@ public class USCTeensSetupActivity extends BaseActivity {
 	public static final String KEY_RESCUE_INHALER = "_KEY_RESCUE_INHALER";
 	private Button startService;
 	private Button setStartDate;
-//	private Button randomEMA;
+	private Button randomEMA;
 	private Button csEMA;
 	private Button rewards;
+	private Button tutorial;
 	private Button finishStudy;
 	private Button setupdone;
 
@@ -39,8 +52,8 @@ public class USCTeensSetupActivity extends BaseActivity {
 	 * Set the update button on/off depending on if the code detects that the software
 	 * is or is not at the latest version on the Android Market. 
 	 */
-	/*
-	private class SendAllFilesToServerTask extends AsyncTask<Void, Void, Boolean> { 
+	private class SendAllFilesToServerTask extends AsyncTask<Void, Void, Boolean> 
+	{ 
 		@Override
 		protected Boolean doInBackground(Void... params) {
 
@@ -76,15 +89,15 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 			//Upload JSON files and remove
 			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
-					true, true, true, false, .85, true);
+					true, true, true, false, .85, false);
 
 			//Upload Log and SurveyLog files, backup and remove
 			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
-					false, true, true, true, .85, true);
+					false, true, true, true, .85, false);
 
 			//Upload possible remaining files in the internal memory
 			filesRemaining = RawUploader.uploadDataFromInternalDir(USCTeensSetupActivity.this,
-					false, true, true, false, .85, true);
+					false, true, true, false, .85, false);
 
 			msg = "Completed user-initiated file upload after "
 					+ String.format(
@@ -99,7 +112,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 			displayToastMessage("Transmission complete.");
 			finishStudy.setEnabled(true);
 		}
-	}*/
+	}
 
 	/**
 	 * Set the update button on/off depending on if the code detects that the software
@@ -127,7 +140,8 @@ public class USCTeensSetupActivity extends BaseActivity {
 		setStartDate = (Button) findViewById(R.id.setstartdate);
 		startService = (Button) findViewById(R.id.startservice);		
 		csEMA        = (Button) findViewById(R.id.csema);		
-//		randomEMA    = (Button) findViewById(R.id.randomema);
+		randomEMA    = (Button) findViewById(R.id.randomema);
+		tutorial 	 = (Button) findViewById(R.id.tutorial);
 		rewards      = (Button) findViewById(R.id.rewards);
 		finishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
 		setupdone    = (Button) findViewById(R.id.setupdone);
@@ -145,11 +159,13 @@ public class USCTeensSetupActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent i = new Intent(
-						MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
+				Intent i = new Intent(MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
 				sendBroadcast(i);
-				Toast.makeText(getApplicationContext(),
-						"Starting the service...", Toast.LENGTH_LONG).show();
+				Toast toast = Toast.makeText(
+					getApplicationContext(), "Starting the service...", Toast.LENGTH_LONG
+				);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
 			}
 		});
 		
@@ -157,53 +173,70 @@ public class USCTeensSetupActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				
-			//	Log.i(TAG, "Send all data and log files");
-			//	displayToastMessage("Request to finish this study, sending all data to the server now.");
-			//	finishStudy.setEnabled(false);
-			//	new SendAllFilesToServerTask().execute();
+				DataManager.listFilesInternalStorage();
+				DataManager.listFilesExternalStorage();
+
+				Log.o(TAG, Log.USER_ACTION, "Send all data and log files");
+				displayToastMessage("Request to finish this study, sending all data to the server now.");
+				finishStudy.setEnabled(false);
+				new SendAllFilesToServerTask().execute();
 			}
 		});
 		
-//		randomEMA.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				AppInfo.SetStartManualTime(getApplicationContext(),
-//						Globals.SURVEY, System.currentTimeMillis());
-//				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
-//				
-//				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
-//						USCTeensSetupActivity.this, Globals.SURVEY);
-//				long currentTime = System.currentTimeMillis();
-//				int classType = 0;
-//				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-//					classType = RandomTeensSurveyQuestionSet.RANDOM_EMA_DEFAULT;
-//				} else {
-//					classType = RandomTeensSurveyQuestionSet.RANDOM_EMA_OPTIONAL;
-//				}
-//				i.putExtra("className",
-//						RandomTeensSurveyQuestionSet.class.getCanonicalName());
-//				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,
-//						new Object[] { classType }));
-//				startActivity(i);
-//			}
-//		});
-		
-		csEMA.setOnClickListener(new OnClickListener() {
+		randomEMA.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(USCTeensSetupActivity.this, USCTeensSurveyActivity.class);
-				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(USCTeensSetupActivity.this, Globals.SURVEY);
+				// TODO Auto-generated method stub
+				AppInfo.SetStartManualTime(getApplicationContext(),
+						Globals.SURVEY, System.currentTimeMillis());
+				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
+				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
+						USCTeensSetupActivity.this, Globals.SURVEY);
 				long currentTime = System.currentTimeMillis();
 				int classType = 0;
-				if((currentTime - lastTimeCompleted) < 4*60*60*1000){
-					classType = EMAQuestionSet.EMA_DEFAULT;
+				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
+					classType = RandomTeensSurvey.RANDOM_EMA_DEFAULT;
+				} else {
+					classType = RandomTeensSurvey.RANDOM_EMA_OPTIONAL;
 				}
-				else{
-					classType = EMAQuestionSet.EMA_OPTIONAL;
+				i.putExtra("className", RandomTeensSurvey.class.getCanonicalName());
+				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1, new Object[] { classType }));
+				startActivity(i);
+				// add new label
+				Labeler.addLabel(new Date(), "Random Survey");
+			}
+		});
+		
+		csEMA.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				AppInfo.SetStartManualTime(getApplicationContext(),
+						Globals.SURVEY, System.currentTimeMillis());
+				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
+				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
+						USCTeensSetupActivity.this, Globals.SURVEY);
+				long currentTime = System.currentTimeMillis();
+				int classType = 0;
+				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
+					classType = CSTeensSurvey.CS_EMA_DEFAULT;
+				} else {
+					classType = CSTeensSurvey.CS_EMA_OPTIONAL;
 				}
-				i.putExtra("className", EMAQuestionSet.class.getCanonicalName());
-				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1,new Object[]{classType}));
+				i.putExtra("className", CSTeensSurvey.class.getCanonicalName());
+				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1, new Object[] { classType }));
+				startActivity(i);
+				// add new label
+				Labeler.addLabel(new Date(), "CS Survey");
+			}
+		});
+		
+		tutorial.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getApplicationContext(), VideoActivity.class);
 				startActivity(i);
 			}
 		});

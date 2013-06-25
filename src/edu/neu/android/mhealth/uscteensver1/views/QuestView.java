@@ -26,6 +26,8 @@ import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
+import edu.neu.android.mhealth.uscteensver1.extra.Action;
+import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ActionListView;
@@ -37,7 +39,6 @@ import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnBoundaryListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
 import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
-import edu.neu.android.wocketslib.support.DataStorage;
 
 public class QuestView extends ImageView implements OnGestureListener, 
 													OnItemClickListener, 
@@ -364,24 +365,29 @@ public class QuestView extends ImageView implements OnGestureListener,
 
 	@Override
 	public void onItemClicked(ListView view, ListItem li, int posn) {
+		Action action = ((ActionItem) li).getAction();
+		
 		Message msg = mHandler.obtainMessage();
-		msg.obj  = ((ActionItem) li).getAction().getActionID();
+		msg.obj  = action.getActionID();
 		msg.what = 1;
 		mHandler.sendMessage(msg);
 		
+		// update the most recent selected activity
+		ActionManager.setMostRecentAction(action);
+		
 		// automatically label "Labeling activity"
-		long lastLabelingTime = DataStorage.GetValueLong(
-			getContext(), USCTeensGlobals.LAST_DATA_LOADING_TIME, 0
-		);	
-		long currentTime = System.currentTimeMillis();
-		if (currentTime - lastLabelingTime > 1000 * 300) { // 5 minutes
+//		long lastLabelingTime = DataStorage.GetValueLong(
+//			getContext(), USCTeensGlobals.LAST_LABELING_TIME, 0
+//		);	
+//		long currentTime = System.currentTimeMillis();
+//		if (currentTime - lastLabelingTime > 5 * 60 * 1000) { // 5 minutes
 			// add the label "Labeling activity"			
-			Labeler.addLabel(new Date(), "", true);
+			Labeler.addLabel(new Date(), "Labeling");
 			// update the last labeling time
-			DataStorage.SetValue(
-				getContext(), USCTeensGlobals.LAST_LABELING_TIME, currentTime
-			);
-		}
+//			DataStorage.SetValue(
+//				getContext(), USCTeensGlobals.LAST_LABELING_TIME, currentTime
+//			);
+//		}
 	}
 
 	@Override

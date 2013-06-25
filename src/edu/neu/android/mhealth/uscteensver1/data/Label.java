@@ -19,8 +19,8 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class Label extends AppObject {
 
-	public final static int MAXIMUM_LABEL_WIDTH = 225;
-	public final static int MAXIMUM_TEXT_WIDTH = 175;
+	public final static int MAXIMUM_LABEL_WIDTH = 300;
+	public final static int MAXIMUM_TEXT_WIDTH = 250;
 	
 	public int mX;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
 	public int mY;   // in pixel, has been scaled by DataSource.PIXEL_SCALE

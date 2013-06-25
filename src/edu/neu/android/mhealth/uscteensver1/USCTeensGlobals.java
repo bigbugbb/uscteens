@@ -22,7 +22,7 @@ public class USCTeensGlobals {
 	public final static int    PIXEL_PER_DATA = 2;	
 	public final static int    MAX_WIDTH_IN_PIXEL = 3600 * 24 * PIXEL_PER_DATA;
 	public final static int    UPDATING_TIME_THRESHOLD = 60 * 1000; // in ms
-	public final static int	   MAX_AVAILABLE_LABELING_DAYS = 2;
+	public final static int	   MAX_AVAILABLE_LABELING_DAYS = 2;	
 	public final static String DATA_LOADING_RESULT = "DATA_LOADING_RESULT";
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
 	public final static String MERGE_SELECTION = "MERGE_SELECTION";
@@ -40,7 +40,7 @@ public class USCTeensGlobals {
 	public final static String ANNOTATION_SET = "Activities";	
 	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
 	
-	public static int sAccelDataScalingFactor = 3500;
+	public static int SENSOR_DATA_SCALING_FACTOR = 3500;
 	
 	public static Context sContext = null;
 	public static Handler sGlobalHandler = null;	
@@ -52,7 +52,7 @@ public class USCTeensGlobals {
 	
 	public static void initGlobals(Context aContext) {
 		// By default the logging will go to the apps internal storage, not the external directory
-		Globals.IS_DEBUG = true;
+		Globals.IS_DEBUG = false;
 		Globals.IS_LOG_EXTERNAL = false;
 		Globals.APP_DIRECTORY = "uscteens";
 		Globals.LOG_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "logs";
@@ -71,8 +71,6 @@ public class USCTeensGlobals {
 		
 		Globals.WOCKETS_SP_URI = Uri.parse("content://edu.neu.android.mhealth.uscteensver1.provider");
 		Globals.PACKAGE_NAME = "edu.neu.android.mhealth.uscteensver1";
-		Globals.REPROMPT_DELAY_MS = 6 * 60 * 1000; 
-		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = 15 * 60 * 1000; // 15 minutes 
 
 		Globals.FAQ_URL = "http://www.ccs.neu.edu/home/intille/studyinfo/asthmafaq.html";
 		Globals.NEWS_URL = "http://www.ccs.neu.edu/home/intille/studyinfo/asthmafaq.html";
@@ -91,8 +89,10 @@ public class USCTeensGlobals {
 		
 //		public static String serverAddress = "http://wockets.ccs.neu.edu:8080/Wockets/android/getWocketsDetail.html";
 //		public static String serverAddress = "http://wockets.ccs.neu.edu:9080/Wockets/android/getWocketsDetail.html";
-		
 		Globals.DEFAULT_SERVER_ADDR = "http://wockets.ccs.neu.edu:8080/";
+		
+		// These variable are most easily set by calling initServerWebCalls() from
+		// the main app after setting DEFAULT_SERVER_ADDR and PHP_DEFAULT_SERVER_ADDR
 		Globals.SERVER_ADDRESS_PID = Globals.DEFAULT_SERVER_ADDR + "Wockets/android/getParticipantId.html";
 		Globals.GET_WOCKETS_DETAIL_URL = Globals.DEFAULT_SERVER_ADDR + "Wockets/android/getWocketsDetail.html";
 		Globals.POST_ANDROID_DATA_LOG_URL = Globals.DEFAULT_SERVER_ADDR + "Wockets/AndroidDataLog.html";
@@ -105,14 +105,11 @@ public class USCTeensGlobals {
 //		Globals.PW_STATDOWN_PASSWORD1 = "stattest";
 //		Globals.PW_SYNC_PASSWORD = "sync";
 
+		// Survey prompting parameters 
 		Globals.AUDIO_PROMPT_START_HOUR = 7;
-		Globals.AUDIO_PROMPT_END_HOUR = 23;
-
-		// Appinfo
-		// Order of preference in main menu
-		Globals.ALL_APP_KEYS = new String[2];
-		Globals.ALL_APP_KEYS[0] = Globals.GETHELP;
-		Globals.ALL_APP_KEYS[1] = Globals.SURVEY;
+		Globals.AUDIO_PROMPT_END_HOUR   = 23; 
+		Globals.REPROMPT_DELAY_MS = 5 * 60 * 1000; 
+		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = 30 * 60 * 1000; // 30 minutes 
 
 		// Only apps that are prompted 
 		Globals.ALL_APP_KEYS_PROMPTED = new String[1];
@@ -121,6 +118,11 @@ public class USCTeensGlobals {
 		Globals.classFromKey = new HashMap<String, Class<?>>();
 		Globals.classFromKey.put(Globals.GETHELP, edu.neu.android.wocketslib.activities.helpcomment.GetHelpActivity.class);
 		Globals.classFromKey.put(Globals.SURVEY, edu.neu.android.wocketslib.emasurvey.SurveyActivity.class);
+
+		// Appinfo order of preference in main menu
+		Globals.ALL_APP_KEYS = new String[2];
+		Globals.ALL_APP_KEYS[0] = Globals.GETHELP;
+		Globals.ALL_APP_KEYS[1] = Globals.SURVEY;
 
 		Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 0;
 	}

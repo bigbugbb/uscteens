@@ -25,7 +25,7 @@ public class USCTeensSurveyActivity extends SurveyActivity {
 		SurveyAnswer[] answers = question.getAnswers();
 		for (SurveyAnswer answer : answers) {
 			if (answer.isSelected()) {
-				Labeler.addLabel(new Date(), answer.getAnswerText(), true);
+				Labeler.addLabel(new Date(), answer.getAnswerText());
 			}
 		}
 	}

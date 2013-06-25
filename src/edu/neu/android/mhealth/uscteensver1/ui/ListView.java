@@ -48,6 +48,7 @@ public class ListView extends AppObject {
 		protected String   mText;
 		protected Bitmap   mImage;
 		protected int	   mDrawable;
+		protected boolean  mSelected;
 		protected Paint    mPaintBkg;		
 		protected Paint    mPaintTxt;
 		protected Paint	   mPaintLine;
@@ -86,6 +87,20 @@ public class ListView extends AppObject {
 			mPosn = mItems.indexOf(this);
 		}
 		
+		protected void onSelected(boolean selected) {
+			Paint paint = getBackgroundPaint();
+			paint.setColor(getBackgroundColor());
+		}
+		
+		protected void setSelected(boolean selected) {
+			mSelected = selected;
+			onSelected(selected);
+		}
+		
+		protected boolean isSelected() {
+			return mSelected;
+		}
+		
 		protected void onSizeChange(int width, int height) {
 			
 		}
@@ -103,12 +118,16 @@ public class ListView extends AppObject {
 			c.drawBitmap(mImage, mWidth * 0.86f - mImage.getWidth() * 0.5f, y1 + AppScale.doScaleH(26), null);
 		}
 		
-		public void setPaintBackground(Paint background) {
+		public void setBackgroundPaint(Paint background) {
 			mPaintBkg = background;
 		}
 		
-		public Paint getPaintBackground() {
+		public Paint getBackgroundPaint() {
 			return mPaintBkg;
+		}
+		
+		public int getBackgroundColor() {					
+			return mSelected ? Color.rgb(198, 235, 245) : Color.WHITE;
 		}
 		
 		public void setPaintText(Paint text) {
@@ -270,8 +289,7 @@ public class ListView extends AppObject {
 		
 		for (ListItem li : mItems) {
 			if (li.contains(e.getX(), e.getY())) {
-				Paint paint = li.getPaintBackground();
-				paint.setColor(Color.rgb(198, 235, 245));
+				li.setSelected(true);				
 				break;
 			}
 		}
@@ -287,10 +305,9 @@ public class ListView extends AppObject {
 			if (li.contains(e.getX(), e.getY())) {
 				if (mOnItemClickListener != null && mLastAction == MotionEvent.ACTION_DOWN) {	
 					mOnItemClickListener.onItemClicked(this, li, i);					
-				}					
-			}
-			Paint paint = li.getPaintBackground();
-			paint.setColor(Color.WHITE);
+				}		
+				li.setSelected(false);
+			}			
 		}
 		mLastAction = e.getAction();										
 		
@@ -361,8 +378,7 @@ public class ListView extends AppObject {
 	public void setSelected(boolean selected) {
 		if (selected == false) {
 			for (ListItem li : mItems) {				
-				Paint paint = li.getPaintBackground();
-				paint.setColor(Color.WHITE);				
+				li.setSelected(false);				
 			}
 		}
 		super.setSelected(selected);

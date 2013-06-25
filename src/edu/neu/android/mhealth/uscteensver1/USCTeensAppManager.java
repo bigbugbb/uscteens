@@ -23,8 +23,7 @@ public class USCTeensAppManager extends ApplicationManager {
     	
     	try {
 			USCTeensGlobals.VERSION_NAME = "Ver. " + getPackageManager().getPackageInfo(getPackageName(), 0).versionName;					
-		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
+		} catch (NameNotFoundException e) {		
 			e.printStackTrace();
 		}
     	
