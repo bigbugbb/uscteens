@@ -105,7 +105,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 							((System.currentTimeMillis() - currentTime) / 1000.0 / 60.0))
 					+ " minutes. Files remaining to upload: " + filesRemaining;
 			ServerLogger.sendNote(USCTeensSetupActivity.this, msg, true);
-			return true; 
+			return true;
 		}
 
 		protected void onPostExecute(Boolean isNeedUpdate) {

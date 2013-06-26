@@ -37,7 +37,7 @@ public class USCTeensGlobals {
 	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String LABELS_FOLDER = "/Labels/";
 	public final static String SENSOR_TYPE = "InternalAccel";
-	public final static String ANNOTATION_SET = "Activities";	
+	public final static String ANNOTATION_SET = "Activities";
 	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
 	
 	public static int SENSOR_DATA_SCALING_FACTOR = 3500;
