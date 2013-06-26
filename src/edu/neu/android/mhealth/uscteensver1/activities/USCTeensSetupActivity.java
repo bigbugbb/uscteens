@@ -89,7 +89,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 			//Upload JSON files and remove
 			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
-					true, true, true, false, .85, false);
+					true, true, true, true, .85, false);
 
 			//Upload Log and SurveyLog files, backup and remove
 			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
@@ -97,7 +97,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 			//Upload possible remaining files in the internal memory
 			filesRemaining = RawUploader.uploadDataFromInternalDir(USCTeensSetupActivity.this,
-					false, true, true, false, .85, false);
+					false, true, true, true, .85, false);
 
 			msg = "Completed user-initiated file upload after "
 					+ String.format(

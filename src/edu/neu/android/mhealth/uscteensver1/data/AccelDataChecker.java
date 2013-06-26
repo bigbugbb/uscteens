@@ -100,7 +100,7 @@ public class AccelDataChecker {
 			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_ERROR, null, null);					
 		}
 		
-		// first, check 30+ minutes of “high intensity” data (use a global threshold) 
+		// first, check 30+ minutes of high intensity data (use a global threshold)
 		// followed by 10 minutes of low intensity data
 		float sum = 0;
 		for (int i = secTo - 40 * 60; i < secTo - 10 * 60; ++i) {

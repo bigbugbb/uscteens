@@ -550,10 +550,9 @@ public class USCTeensArbitrater extends Arbitrater {
 	/**
 	 * Set which apps are available based on intervention schedule based on days
 	 * into the study
-	 * 
-	 * @param aContext
+     *
 	 */
-	protected void SetAppActivityUsingSchedule(long lastArbitrationTime, int studyDay, boolean isNewSoftwareVersion) {
+	protected void SetAppActivityUsingSchedule(long lastArbitrationTime, boolean isNewSoftwareVersion) {
 		boolean isForceReset = DataStorage.isForceReset(sContext);
 		if ((!DateHelper.isToday(lastArbitrationTime)) || isNewSoftwareVersion || isForceReset) {
 			// if (Globals.IS_DEBUG)
@@ -701,10 +700,10 @@ public class USCTeensArbitrater extends Arbitrater {
 		// Mark that arbitration taking place
 		long lastArbitrationTime = DataStorage.getLastTimeArbitrate(sContext, 0);
 		DataStorage.setLastTimeArbitrate(sContext, System.currentTimeMillis());
-		int studyDay = DataStorage.getDayNumber(sContext, true);				
+		//int studyDay = DataStorage.getDayNumber(sContext, true);
 		
 		// Set which apps are available based on the day of the study
-		SetAppActivityUsingSchedule(lastArbitrationTime, studyDay, isNewSoftwareVersion);
+		SetAppActivityUsingSchedule(lastArbitrationTime, isNewSoftwareVersion);
 
 		getAndPrintPromptingSchedule();
 
@@ -771,8 +770,9 @@ public class USCTeensArbitrater extends Arbitrater {
 			}
 			Log.i(TAG, msg);
 			ServerLogger.transmitOrQueueNote(aContext, msg, true);
-			// Upload JSON files and remove (dont backup)
-			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(aContext, true, true, true, false, .85, false);
+			// Upload JSON files and remove (currently backup)
+            // TODO change to not backup after robust testing
+			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(aContext, true, true, true, true, .85, false);
 			// Upload Log and SurveyLog files, backup and remove
 			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(aContext, false, true, true, true, .85, false);
 
