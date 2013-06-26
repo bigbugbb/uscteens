@@ -48,14 +48,14 @@ public class DataSource {
 	public final static int ERR_NO_CHUNK_DATA  		= -3;	
 	public final static int ERR_WAITING_SENSOR_DATA = -4;
 	
-	// thresholds for chunking generation
-	public final static int CHUNKING_MIN_MEAN_AVG      = 350;
-	public final static int CHUNKING_MIN_MEAN_AVG_DIFF = 350;
-	public final static int CHUNKING_MAX_MEAN_AVG_DIFF = 800;
+	// thresholds for chunking generation	
+	public final static int CHUNKING_MIN_MEAN_AVG_DIFF = (int) (USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.1f);
+	public final static int CHUNKING_MAX_MEAN_AVG_DIFF = (int) (USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.3f);
 	public final static int CHUNKING_MEAN_AVG_DISTANCE = 60;
-	public final static int CHUNKING_MIN_SENSITIVITY   = 400;
-	public final static int CHUNKING_MAX_SENSITIVITY   = 999;
-	public final static int CHUNKING_MIN_DISTANCE 	   = 120;
+	public final static int CHUNKING_TINY_VALUE		   = 50;
+	public final static int CHUNKING_LOW_VALUE		   = (int) (USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.1f);
+	public final static int CHUNKING_SENSITIVITY       = (int) (USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.3f);
+	public final static int CHUNKING_MIN_DISTANCE 	   = 120;	// 2 minutes
 	
 	// value for no data period
 	protected final static int NO_SENSOR_DATA = -1;
@@ -552,14 +552,13 @@ public class DataSource {
 	/**
 	 * Create new raw chunks and add it to the raw chunk wrap
 	 * @param startSecond	The start position to analyze the sensor data.
-	 * @return true if successful, otherwise false
+	 * @return the number of created chunks
 	 */
 	private static int createRawChunkData(int startSecond, int stopSecond, ArrayList<RawChunk> rawChunks) {
 		if (rawChunks == null) {
 			return 0;
 		}
 		
-		//int[] chunkPos = createDailyRawChunkData(startSecond, stopSecond, sAccelDataWrap.getDrawableData());
 		ArrayList<Integer> chunkPos = new ArrayList<Integer>();
 		int[] sensorData = sAccelDataWrap.getDrawableData();
 		int size = sensorData.length;
@@ -570,8 +569,8 @@ public class DataSource {
 		}
 		// convolution to the accelerometer data
 		int[] convolution = Arrays.copyOf(sensorData, size);
-		for (int i = 1; i < size - 1; ++i) { // [-1 0 1]
-			convolution[i] = sensorData[i + 1] - sensorData[i - 1];
+		for (int i = 1; i < size - 1; ++i) { // [-2 0 2]
+			convolution[i] = Math.abs(sensorData[i + 1] - sensorData[i - 1]) << 1;
 		}
 
 		// calculate mean average of CHUNKING_MIN_DISTANCE points' of data to the left of current position
@@ -607,6 +606,23 @@ public class DataSource {
 			if (i - prev < CHUNKING_MIN_DISTANCE) {
 				continue;
 			}
+			
+			// check the jumped area to determine the possible end of chunk
+			if (i - prev == CHUNKING_MIN_DISTANCE) {
+				boolean hasBigChange = false;
+				for (int j = i; j > i - CHUNKING_MIN_DISTANCE * 0.75f; --j) {
+					if (convolution[j] > CHUNKING_SENSITIVITY) {
+						hasBigChange = true;
+						break;
+					}
+				}
+				if (hasBigChange && meanAverageR[i] < CHUNKING_TINY_VALUE) {
+					chunkPos.add(i);
+					prev = i;
+					continue;
+				}
+			}
+			
 			// chunking for no data area
 			if (sensorData[i] == NO_SENSOR_DATA) {
 				if (sensorData[i - 1] != NO_SENSOR_DATA || sensorData[i + 1] != NO_SENSOR_DATA) {
@@ -615,30 +631,88 @@ public class DataSource {
 					continue;
 				}
 			}
+			
+			int next = i + CHUNKING_MIN_DISTANCE;
 			// chunking for data change area
-			if (convolution[i] > CHUNKING_MIN_SENSITIVITY &&
-				sensorData[i] > CHUNKING_MIN_SENSITIVITY && sensorData[i] < CHUNKING_MAX_SENSITIVITY) {
-				if (Math.abs(meanAverageL[i] - meanAverageR[i]) > CHUNKING_MIN_MEAN_AVG_DIFF) {
+			if (convolution[i] > CHUNKING_SENSITIVITY) {
+				if (meanAverageL[i] > CHUNKING_LOW_VALUE && meanAverageR[i] < CHUNKING_LOW_VALUE) {
 					chunkPos.add(i);
 					prev = i;
 					continue;
 				}
-			}
-			// chunking for separated sensor data with huge value
-			if (sensorData[i] > CHUNKING_MAX_SENSITIVITY) {
-				int next = i + CHUNKING_MIN_DISTANCE;
-				if (meanAverageL[i] < CHUNKING_MIN_MEAN_AVG && meanAverageR[next] < CHUNKING_MIN_MEAN_AVG) {
+				if ((meanAverageL[i] < CHUNKING_LOW_VALUE && meanAverageR[i] > CHUNKING_LOW_VALUE) ||					 
+					Math.abs(meanAverageL[i] - meanAverageR[i]) > CHUNKING_MAX_MEAN_AVG_DIFF) {					
 					chunkPos.add(i);
-				} else {
+					if (next < size - CHUNKING_MIN_DISTANCE && sensorData[next] < CHUNKING_LOW_VALUE) {
+						chunkPos.add(next);
+						prev = next;
+					} else {
+						prev = i;
+					}
 					continue;
-				}
-				if (next < size - CHUNKING_MIN_DISTANCE) {
-					chunkPos.add(next);
-					prev = next;
-				} else {
+				}				
+			}
+			
+			// chunking for isolated sensor data with huge value
+			if (sensorData[i] > CHUNKING_SENSITIVITY) {				
+				if (meanAverageL[i] < CHUNKING_LOW_VALUE && meanAverageR[next] < CHUNKING_LOW_VALUE) {
+					chunkPos.add(i);
+					if (next < size - CHUNKING_MIN_DISTANCE && sensorData[next] < CHUNKING_LOW_VALUE) {
+						chunkPos.add(next);
+						prev = next;
+					} else {
+						prev = i;
+					}
+				}	
+				continue;
+			}
+			
+			// sensor data increases gradually
+			if (Math.abs(meanAverageL[i] - meanAverageR[i]) > CHUNKING_MIN_MEAN_AVG_DIFF) {
+				if (meanAverageL[i] < CHUNKING_TINY_VALUE) {
+					chunkPos.add(i);
+					if (next < size - CHUNKING_MIN_DISTANCE && sensorData[next] < CHUNKING_LOW_VALUE) {
+						chunkPos.add(next);
+						prev = next;
+					} else {
+						prev = i;
+					}
+					continue;
+				} else if (meanAverageR[i] < CHUNKING_TINY_VALUE) {
+					chunkPos.add(i);
+					prev = i;
+					continue;
+				} else if (meanAverageL[i] < CHUNKING_LOW_VALUE && meanAverageR[i] > CHUNKING_LOW_VALUE) {	
+					// if some big change happens in the near future
+					boolean hasBigChange = false;
+					for (int j = i; j < i + CHUNKING_MIN_DISTANCE / 2 && !hasBigChange; ++j) {						
+						if (convolution[j] > CHUNKING_SENSITIVITY) {
+							hasBigChange = true;	
+							i = j - 1;
+						}
+					}
+					if (hasBigChange) {						
+						continue;
+					}
+										
+					chunkPos.add(i);
+					if (next < size - CHUNKING_MIN_DISTANCE && sensorData[next] < CHUNKING_LOW_VALUE) {
+						chunkPos.add(next);
+						prev = next;
+					} else {
+						prev = i;
+					}							
+				} else if (meanAverageL[i] > CHUNKING_LOW_VALUE && meanAverageR[i] < CHUNKING_LOW_VALUE) {											
+					chunkPos.add(i);
+//					if (next < size - CHUNKING_MIN_DISTANCE && sensorData[next] < CHUNKING_LOW_VALUE) {
+//						chunkPos.add(next);
+//						prev = next;
+//					} else {
+//						prev = i;
+//					}
 					prev = i;
 				}
-			}
+			}			
 		}
 		chunkPos.add(stopSecond);		
 		

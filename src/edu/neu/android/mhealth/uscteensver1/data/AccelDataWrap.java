@@ -101,7 +101,7 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 								int value = mDrawableData[start - k] == NO_SENSOR_DATA ? 
 										DATA_VALUE_FOR_FILLING : mDrawableData[start - k];
 								if (start - k < prev_end) {
-									value = mDrawableData[prev_end] + (int) (Math.random() * (mDrawableData[prev_end] >> 2));
+									value = mDrawableData[prev_end] + (int) (Math.random() * (mDrawableData[prev_end] >> 1));
 								}
 								mDrawableData[j]     = value;
 								mDrawableData[j + 1] = (j + 1 == end) ? mDrawableData[j + 1] : value;

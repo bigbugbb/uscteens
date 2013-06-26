@@ -17,6 +17,7 @@ public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcess
 		return aSDate; 
 	}
 	
+	@Override
 	public void setContext(Context context) {
 		Labeler.initialize(context);
 	}
