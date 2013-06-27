@@ -59,7 +59,7 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static final String KEY_ALL_PROMPT = "_KEY_ALL_PROMPT";
 	private static final String KEY_SCHEDULE = "_KEY_SCHEDULE";		
 
-	private static final long PROMPT_OFFSET = 5 * 60 * 1000;
+	private static final long PROMPT_OFFSET = 1 * 60 * 1000;
 
 	private static final int KEY_CS_EMA     = 1;
 	private static final int KEY_RANDOM_EMA = 0;	
@@ -67,7 +67,6 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static final String KEY_CS_PROMPT_COUNTER = "_KEY_CS_PROMPT_COUNTER";
 
 	private static final String NEWLINE = "\n";
-	private static final String SKIPLINE = "\n\n";
 	private static final long ONE_MINUTE = 60 * 1000;
 	private static final String KEY_FIRST_CHECK_TIME  = "_KEY_FIRST_CHECK_TIME";
 	private static final String KEY_LATEST_CHECK_TIME = "_KEY_LATEST_CHECK_TIME";
@@ -75,6 +74,8 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static boolean sIsFirstRun = true;
 	private static Context sContext = null;
 
+	// Status info
+	private ArrayList<Integer> mSomeTasks = new ArrayList<Integer>();
 
 	public USCTeensArbitrater(Context aContext) {
 		sContext = aContext;
@@ -161,7 +162,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		return data.toArray();
 	}
 	
-	protected boolean writePhoneAccelDataToInternalDirectory() {
+	protected boolean writeAccelDataToInternalDirectory() {
 		boolean result = true;
 				
 		// Get the csv and bin file name
@@ -233,35 +234,24 @@ public class USCTeensArbitrater extends Arbitrater {
 		return result;
 	}
 
-	// Temp for one run
-	protected boolean isOkAudioPrompt = false;
-	// private static boolean isPostponedPromptWaiting = false;
-	// private static Timer alert_timer;
-
-	// Status info
-	private ArrayList<Integer> someTasks = new ArrayList<Integer>();
-
-	// TODO change to private
 	private void PromptApp(Context aContext, int aKey, boolean isAudible, boolean isPostponed) {
-
 		Log.i(TAG, "prompt: " + aKey + ",audible: " + isAudible + ",postponed: " + isPostponed);
 
-		long[] somePromptTimes = DataStorage.getPromptTimesKey(aContext, KEY_ALL_PROMPT);
-		// Will be 0 if none
-		long lastScheduledPromptTime = getLastScheduledPromptTime(System.currentTimeMillis(), somePromptTimes);
-		boolean isReprompt = (System.currentTimeMillis() - lastScheduledPromptTime) > 60 * 1000 ? true : false;
-		SurveyPromptEvent promptEvent = new SurveyPromptEvent(lastScheduledPromptTime, System.currentTimeMillis());
+		long[] allPromptTime = DataStorage.getPromptTimesKey(aContext, KEY_ALL_PROMPT);		
+		long now = System.currentTimeMillis();
+		long lastScheduledPromptTime = getLastScheduledPromptTime(now, allPromptTime); // would be 0 if none
+		boolean isReprompt = now - lastScheduledPromptTime > ONE_MINUTE; // !!!!!
+		SurveyPromptEvent promptEvent = new SurveyPromptEvent(lastScheduledPromptTime, now);
 		String msg = "";
 		
 		// Indicate that this particular app was prompted
-		AppInfo.SetLastTimePrompted(aContext, Globals.SURVEY, System.currentTimeMillis());
+		AppInfo.SetLastTimePrompted(aContext, Globals.SURVEY, now);
 		
 		Intent i = new Intent(aContext, SurveyActivity.class);
 		long lastTimeCompleted = AppInfo.GetLastTimeCompleted(aContext, Globals.SURVEY);
-		long currentTime = System.currentTimeMillis();
 		int classType = 0;
-		String surveyName = null;
-		int counter;
+		String surveyClassName = null;
+		int counter = 0;
 		
 		switch (aKey) {
 		case KEY_CS_EMA:
@@ -270,16 +260,16 @@ public class USCTeensArbitrater extends Arbitrater {
 				DataStorage.SetValue(aContext, KEY_CS_PROMPT_COUNTER, ++counter);
 			}
 			promptEvent.AddSurveySpecifiedRecord("CS_NUM", counter + "");
-			if (currentTime - lastTimeCompleted < 4 * 60 * ONE_MINUTE) {
+			if (now - lastTimeCompleted < 4 * 60 * ONE_MINUTE) {
 				classType = CSTeensSurvey.CS_EMA_DEFAULT;
 				promptEvent.AddSurveySpecifiedRecord("CS_SPAN", "1");
 			} else {
 				classType = CSTeensSurvey.CS_EMA_OPTIONAL;
 				promptEvent.AddSurveySpecifiedRecord("CS_SPAN", "2");
 			}
-			surveyName = CSTeensSurvey.class.getCanonicalName();
+			surveyClassName = CSTeensSurvey.class.getCanonicalName();
 			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, true, PhonePrompter.CHIMES_NAMBOKU1, PhoneVibrator.VIBRATE_INTENSE);						
-			promptEvent.setPromptType("Teen Activity");
+			promptEvent.setPromptType("CS");
 			Labeler.addLabel(new Date(), "CS Survey");
 			break;
 		case KEY_RANDOM_EMA:
@@ -288,14 +278,14 @@ public class USCTeensArbitrater extends Arbitrater {
 				DataStorage.SetValue(aContext, KEY_RANDOM_PROMPT_COUNTER, ++counter);
 			}
 			promptEvent.AddSurveySpecifiedRecord("RAN_NUM", counter + "");
-			if ((currentTime - lastTimeCompleted) < 4 * 60 * ONE_MINUTE) {
+			if (now - lastTimeCompleted < 4 * 60 * ONE_MINUTE) {
 				classType = RandomTeensSurvey.RANDOM_EMA_DEFAULT;
 				promptEvent.AddSurveySpecifiedRecord("RAN_SPAN", "1");
 			} else {
 				classType = RandomTeensSurvey.RANDOM_EMA_OPTIONAL;
 				promptEvent.AddSurveySpecifiedRecord("RAN_SPAN", "2");
 			}
-			surveyName = RandomTeensSurvey.class.getCanonicalName();
+			surveyClassName = RandomTeensSurvey.class.getCanonicalName();
 			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, isAudible, PhonePrompter.CHIMES_HIKARI, PhoneVibrator.VIBRATE_INTENSE);
 			promptEvent.setPromptType("Random");
 			long[] schedule = DataStorage.getPromptTimesKey(aContext, KEY_SCHEDULE);
@@ -314,7 +304,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		promptEvent.setReprompt(isReprompt);
 		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1, new Object[] { classType }));
-		i.putExtra("className", surveyName);
+		i.putExtra("className", surveyClassName);
 		i.putExtra("promptEvent", promptEvent);
 		if (!isReprompt && SurveyActivity.self != null)
 			SurveyActivity.self.finish();
@@ -323,58 +313,46 @@ public class USCTeensArbitrater extends Arbitrater {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		aContext.startActivity(i);
-		// aContext.startActivity(appIntentToRun);		
-		// appIntentToRun = null;
-		msg += " Is reprompt: " + isReprompt;
-		// Give the audio or vibration time to work
-		// I think a code change in Bluetoothsensorservice makes this not
-		// necessary.
-		// try {
-		// Thread.sleep(4000);
-		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }		
+		aContext.startActivity(i);				
 	}
 
 	public void getAndPrintPromptingSchedule() {
-		if (Globals.IS_DEBUG) {
-			long[] promptTimes = DataStorage.getPromptTimesKey(sContext, KEY_RANDOM_PROMPT);
-			if (promptTimes != null) {
-				for (int i = 0; i < promptTimes.length; i++) {
-					Log.d(TAG, "Scheduled prompt: " + DateHelper.getDate(promptTimes[i]));
-				}
-			} else {
-				Log.d(TAG, "No Scheduled prompt times");
-			}
-			promptTimes = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
-			if (promptTimes != null) {
-				for (int i = 0; i < promptTimes.length; i++) {
-					Log.d(TAG, "Triggered prompt: " + DateHelper.getDate(promptTimes[i]));
-				}
-			} else {
-				Log.d(TAG, "No Triggered prompt times");
-			}
-
+		if (!Globals.IS_DEBUG) {
+			return;
 		}
+		
+		long[] promptTimes = DataStorage.getPromptTimesKey(sContext, KEY_RANDOM_PROMPT);
+		if (promptTimes != null) {
+			for (int i = 0; i < promptTimes.length; i++) {
+				Log.d(TAG, "Scheduled prompt: " + DateHelper.getDate(promptTimes[i]));
+			}
+		} else {
+			Log.d(TAG, "No Scheduled prompt times");
+		}
+		promptTimes = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
+		if (promptTimes != null) {
+			for (int i = 0; i < promptTimes.length; i++) {
+				Log.d(TAG, "Triggered prompt: " + DateHelper.getDate(promptTimes[i]));
+			}
+		} else {
+			Log.d(TAG, "No Triggered prompt times");
+		}		
 	}
 
-	private boolean setActivityTriggeredSchedule(long activityTriggeredTime) {
-		activityTriggeredTime += PROMPT_OFFSET;
-		long[] somePromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
-		if (somePromptTimes == null) {
-			long[] finalPromptTimes = new long[] { activityTriggeredTime };
-			DataStorage.setPromptTimesKey(sContext, finalPromptTimes, KEY_CS_PROMPT);
+	private boolean setContextSensitivePrompt(long promptTime) {
+		promptTime += PROMPT_OFFSET;
+		long[] savedPromptTime = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
+		if (savedPromptTime == null) {
+			DataStorage.setPromptTimesKey(sContext, new long[] { promptTime }, KEY_CS_PROMPT);
 			return true;
 		}
-		long latestPromptTime = somePromptTimes[somePromptTimes.length - 1];
-		if ((activityTriggeredTime - latestPromptTime) > Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS) {
-			long[] finalPromptTimes = new long[somePromptTimes.length + 1];
-			for (int i = 0; i < somePromptTimes.length; i++) {
-				finalPromptTimes[i] = somePromptTimes[i];
+		long latestPromptTime = savedPromptTime[savedPromptTime.length - 1];
+		if (promptTime - latestPromptTime > Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS) {
+			long[] finalPromptTimes = new long[savedPromptTime.length + 1];
+			for (int i = 0; i < savedPromptTime.length; i++) {
+				finalPromptTimes[i] = savedPromptTime[i];
 			}
-			finalPromptTimes[somePromptTimes.length] = activityTriggeredTime;
+			finalPromptTimes[savedPromptTime.length] = promptTime;
 			DataStorage.setPromptTimesKey(sContext, finalPromptTimes, KEY_CS_PROMPT);
 			return true;
 		}
@@ -382,29 +360,32 @@ public class USCTeensArbitrater extends Arbitrater {
 	}
 
 	private void resetSchedule() {
-		long[] randomPromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_RANDOM_PROMPT);
-		long[] csPromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
-		PriorityQueue<Long> prompTimes = new PriorityQueue<Long>(csPromptTimes.length);
-		for (int i = 0; i < csPromptTimes.length; i++) {
-			prompTimes.add(csPromptTimes[i]);
+		long[] randomPromptTime = DataStorage.getPromptTimesKey(sContext, KEY_RANDOM_PROMPT);
+		long[] csPromptTime = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
+		PriorityQueue<Long> promptTimeQueue = new PriorityQueue<Long>(csPromptTime.length);
+		for (int i = 0; i < csPromptTime.length; i++) {
+			promptTimeQueue.add(csPromptTime[i]);
 		}
-		if (randomPromptTimes != null) {
+		if (randomPromptTime != null) {
 			boolean isExcluded = false;
-			for (int j = 0; j < randomPromptTimes.length; j++) {
+			for (int j = 0; j < randomPromptTime.length; ++j) {
 				isExcluded = false;
-//				for (int i = 0; i < csPromptTimes.length; i++) {
-//					if (Math.abs((csPromptTimes[i] - randomPromptTimes[j])) < Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS)
-//						isExcluded = true;
-//				}
-				if (!isExcluded)
-					prompTimes.add(randomPromptTimes[j]);
+				for (int i = 0; i < csPromptTime.length; ++i) {
+					if (Math.abs(csPromptTime[i] - randomPromptTime[j]) < Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS) {
+						isExcluded = true;
+						break;
+					}
+				}
+				if (!isExcluded) {
+					promptTimeQueue.add(randomPromptTime[j]);
+				}
 			}
 		}
-		long[] finalPromptTime = new long[prompTimes.size()];
-		for (int j = 0; j < finalPromptTime.length; j++) {
-			finalPromptTime[j] = prompTimes.poll();
+		long[] allPromptTime = new long[promptTimeQueue.size()];
+		for (int j = 0; j < allPromptTime.length; j++) {
+			allPromptTime[j] = promptTimeQueue.poll();
 		}
-		DataStorage.setPromptTimesKey(sContext, finalPromptTime, KEY_ALL_PROMPT);
+		DataStorage.setPromptTimesKey(sContext, allPromptTime, KEY_ALL_PROMPT);
 	}
 
 	private void setAndSavePromptingSchedule(int promptsPerDay, double startTimeHour, double endTimeHour) {
@@ -445,10 +426,10 @@ public class USCTeensArbitrater extends Arbitrater {
 
 		ServerLogger.sendNote(sContext, promptSchedule.toString(), Globals.NO_PLOT);
 
-		// reset prompt schedule for the day
-		DataStorage.setPromptTimesKey(sContext, promptTimes, KEY_RANDOM_PROMPT);
+		// reset prompt schedule for the day		
 		PromptRecorder.writePromptSchedule(sContext, System.currentTimeMillis(), KEY_RANDOM_PROMPT, promptsPerDay, startTimeHour, endTimeHour);
 		DataStorage.setPromptTimesKey(sContext, new long[] { promptsPerDay, startIntervalTimeMS, intervalIncMS }, KEY_SCHEDULE);
+		DataStorage.setPromptTimesKey(sContext, promptTimes, KEY_RANDOM_PROMPT);
 		DataStorage.setPromptTimesKey(sContext, new long[] {}, KEY_CS_PROMPT);
 		DataStorage.setPromptTimesKey(sContext, promptTimes, KEY_ALL_PROMPT);
 	}
@@ -461,7 +442,7 @@ public class USCTeensArbitrater extends Arbitrater {
 	 * @param aContext
 	 */
 	protected void GatherPendingTasks(Context aContext) {
-		someTasks.clear();
+		mSomeTasks.clear();
 
 		String aKey = Globals.SURVEY;
 		long currentTime = System.currentTimeMillis();
@@ -470,7 +451,7 @@ public class USCTeensArbitrater extends Arbitrater {
 			AppInfo.SetLastTimeCompleted(aContext, aKey, currentTime);
 		}
 		long lastTimePrompted = AppInfo.GetLastTimePrompted(aContext, aKey);
-		if (lastTimeCompleted > currentTime) {
+		if (lastTimeCompleted > currentTime) { // !!!!!
 			AppInfo.SetLastTimePrompted(aContext, aKey, currentTime);
 		}
 		long timeSinceCompleted = currentTime - lastTimeCompleted;
@@ -478,20 +459,24 @@ public class USCTeensArbitrater extends Arbitrater {
 		long[] somePromptTimes = DataStorage.getPromptTimesKey(aContext, KEY_ALL_PROMPT);
 		// Will be 0 if none
 		long lastScheduledPromptTime = getLastScheduledPromptTime(currentTime, somePromptTimes);
+		long timeSinceScheduledPrompt = currentTime - lastScheduledPromptTime;
 		Log.i(TAG, "LastScheduledPromptTime: " + DateHelper.getDate(lastScheduledPromptTime));
 
 		// If no scheduled prompt, just return
-		if (lastScheduledPromptTime == 0)
+		if (lastScheduledPromptTime == 0) {
 			return;
+		}
 
-		if (lastTimeCompleted == 0)
+		if (lastTimeCompleted == 0) {
 			Log.i(TAG, "LastTimeCompleted: never");
-		else
+		} else {
 			Log.i(TAG, "LastTimeCompleted: " + DateHelper.getDate(lastTimeCompleted));
+		}
 
 		// If completed after the last scheduled prompt time, then just return
-		if (lastTimeCompleted > lastScheduledPromptTime)
+		if (lastTimeCompleted > lastScheduledPromptTime) {
 			return;
+		}
 
 		if (Globals.IS_DEBUG) {
 			Log.d(TAG, "Time from scheduled prompt (min): " + ((currentTime - lastScheduledPromptTime) / 1000 / 60));
@@ -499,29 +484,30 @@ public class USCTeensArbitrater extends Arbitrater {
 			Log.d(TAG, "Time since prompted (min): " + (timeSincePrompted / 1000 / 60));
 		}
 
-		// Check if time to prompt
-		if (((currentTime - lastScheduledPromptTime) < (Globals.REPROMPT_TIMES * Globals.REPROMPT_DELAY_MS + Globals.MINUTES_1) && (timeSincePrompted > Globals.REPROMPT_DELAY_MS))) {
-			Log.i(TAG, "Prompt!");
-			if (isActivityPrompt(lastScheduledPromptTime))
-				someTasks.add(KEY_CS_EMA);
-			else
-				someTasks.add(KEY_RANDOM_EMA);
+		// Check if time to prompt		
+		if (timeSinceScheduledPrompt < Globals.REPROMPT_TIMES * Globals.REPROMPT_DELAY_MS + Globals.MINUTES_1 && 
+				timeSincePrompted > Globals.REPROMPT_DELAY_MS) {
+			Log.i(TAG, "Prompt!");			
+			mSomeTasks.add(isContextSensitivePrompt(lastScheduledPromptTime) ? KEY_CS_EMA : KEY_RANDOM_EMA);			
 		}
-		if ((currentTime - lastScheduledPromptTime) < ((Globals.REPROMPT_TIMES + 1) * Globals.REPROMPT_DELAY_MS + Globals.MINUTES_10_IN_MS)
-				&& timeSincePrompted > ((Globals.REPROMPT_TIMES + 1) * Globals.REPROMPT_DELAY_MS)) {
-			NotificationManager notificationManger = (NotificationManager) aContext.getSystemService(Context.NOTIFICATION_SERVICE);
-			notificationManger.cancel(Globals.SURVEY_NOTIFICATION_ID);
+		if (timeSinceScheduledPrompt < (Globals.REPROMPT_TIMES + 1) * Globals.REPROMPT_DELAY_MS + Globals.MINUTES_10_IN_MS
+				&& timeSincePrompted > (Globals.REPROMPT_TIMES + 1) * Globals.REPROMPT_DELAY_MS) {
+			NotificationManager nm = (NotificationManager) aContext.getSystemService(Context.NOTIFICATION_SERVICE);
+			nm.cancel(Globals.SURVEY_NOTIFICATION_ID);
 		}
 	}
 
-	private boolean isActivityPrompt(long lastScheduledPromptTime) {
-		long[] somePromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
-		if (somePromptTimes == null)
+	private boolean isContextSensitivePrompt(long lastScheduledPromptTime) {
+		long[] csPromptTime = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
+		
+		if (csPromptTime == null) {
 			return false;
-		for (int i = 0; i < somePromptTimes.length; i++) {
-			if (somePromptTimes[i] == lastScheduledPromptTime)
+		}		
+		for (int i = 0; i < csPromptTime.length; i++) {
+			if (csPromptTime[i] == lastScheduledPromptTime)
 				return true;
 		}
+		
 		return false;
 	}
 
@@ -529,15 +515,18 @@ public class USCTeensArbitrater extends Arbitrater {
 	private long getLastScheduledPromptTime(long currentTime, long[] somePromptTimes) {
 		long lastTime = 0;
 
-		if (somePromptTimes == null)
+		if (somePromptTimes == null) {
 			return lastTime;
-
-		for (int i = 0; i < somePromptTimes.length; i++) {
-			if (somePromptTimes[i] > currentTime && !isSameMinute(somePromptTimes[i], currentTime))
-				return lastTime;
-			else
-				lastTime = somePromptTimes[i];
 		}
+
+		for (int i = 0; i < somePromptTimes.length; ++i) {
+			if (somePromptTimes[i] > currentTime && !isSameMinute(somePromptTimes[i], currentTime)) {
+				return lastTime;
+			} else {
+				lastTime = somePromptTimes[i];
+			}
+		}
+		
 		return lastTime;
 	}
 
@@ -547,13 +536,10 @@ public class USCTeensArbitrater extends Arbitrater {
 		return (Math.abs(timeA - timeB) < 60) && dateA.getMinutes() == dateB.getMinutes();
 	}
 
-	/**
-	 * Set which apps are available based on intervention schedule based on days
-	 * into the study
-     *
-	 */
-	protected void SetAppActivityUsingSchedule(long lastArbitrationTime, boolean isNewSoftwareVersion) {
+	protected void updateAppPrompt(long lastArbitrationTime, boolean isNewSoftwareVersion) {
+		
 		boolean isForceReset = DataStorage.isForceReset(sContext);
+		
 		if ((!DateHelper.isToday(lastArbitrationTime)) || isNewSoftwareVersion || isForceReset) {
 			// if (Globals.IS_DEBUG)
 			if (isNewSoftwareVersion)
@@ -581,8 +567,8 @@ public class USCTeensArbitrater extends Arbitrater {
 			double startTimeHour = Globals.DEFAULT_START_HOUR;
 			double endTimeHour   = Globals.DEFAULT_END_HOUR;
 
-			Calendar today = Calendar.getInstance();
-			if (today.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && today.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+			int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+			if (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {
 				promptsPerDay = 3;
 				startTimeHour = 15;
 				endTimeHour   = 21;
@@ -614,7 +600,7 @@ public class USCTeensArbitrater extends Arbitrater {
 				if (css.getState() != ContextSensitiveState.DATA_STATE_ERROR && 
 					css.getState() != ContextSensitiveState.DATA_STATE_NORMAL) {
 					Log.i(TAG, "Resetting because activity is detected or missed");														
-					if (setActivityTriggeredSchedule(now)) {
+					if (setContextSensitivePrompt(now)) {
 						resetSchedule();
 						CSTeensSurvey.setLatestPromptTime(css.getStartTime(), css.getEndTime());
 					}
@@ -672,13 +658,17 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	public void doArbitrate(boolean isNewSoftwareVersion) {
 
+		if (Globals.IS_DEBUG) {
+			Log.d(TAG, "Begin arbitrate");
+		}
+		
 		// Only for testing purpose
 		saveRecordsInLogcat(false);
 		
 		if (sIsFirstRun) {
 			sIsFirstRun = false;			
 		} else {
-			writePhoneAccelDataToInternalDirectory();
+			writeAccelDataToInternalDirectory();
 		}
 		
 		// wait for the internal AC sensor to get enough data for the entire 20s
@@ -699,43 +689,28 @@ public class USCTeensArbitrater extends Arbitrater {
 		 */
 		// Mark that arbitration taking place
 		long lastArbitrationTime = DataStorage.getLastTimeArbitrate(sContext, 0);
-		DataStorage.setLastTimeArbitrate(sContext, System.currentTimeMillis());
-		//int studyDay = DataStorage.getDayNumber(sContext, true);
+		DataStorage.setLastTimeArbitrate(sContext, System.currentTimeMillis());		
 		
 		// Set which apps are available based on the day of the study
-		SetAppActivityUsingSchedule(lastArbitrationTime, isNewSoftwareVersion);
-
-		getAndPrintPromptingSchedule();
-
-		isOkAudioPrompt = isOkAudioPrompt();
-
-		// if (Globals.IS_DEBUG)
-		// Log.e(TAG, "IS OK TO AUDIO PROMPT: " + isOkAudioPrompt);
-		// // Log.h(TAG, aDataStore.GetSummaryString(getApplicationContext()));
-		// if (Globals.IS_DEBUG)
-		// Log.e(TAG, "STUDY DAY: " +
-		// DataStorage.getDayNumber(getApplicationContext(), true));
-		// if (Globals.IS_DEBUG)
-		// Log.e(TAG, AppInfo.AllAppStatus(getApplicationContext()));
+		updateAppPrompt(lastArbitrationTime, isNewSoftwareVersion);
+		getAndPrintPromptingSchedule();		
 
 		// Determine which apps are in the task list as needing to run
 		// Sets the postponed app info as well
 		GatherPendingTasks(sContext);
 
-		int aKey = 0;
-
 		// Now just check tasks
-		if (someTasks.size() > 0) {
-			aKey = someTasks.get(0);
-			PromptApp(sContext, aKey, isOkAudioPrompt, false);
+		if (mSomeTasks.size() > 0) {		
+			PromptApp(sContext, mSomeTasks.get(0), isOkAudioPrompt(), false);
 		}
 
 		// move the data from internal memory to external memory hourly
 		// TODO SSI Remove to make testing simpler 
 		uploadDataAndLogToServer(sContext);
 
-		if (Globals.IS_DEBUG) 
+		if (Globals.IS_DEBUG) {
 			Log.d(TAG, "End arbitrate");
+		}
 	}
 
 	private static final String KEY_MOVE_LOG_TO_EXTERNAL = "_KEY_MOVETOEXTERNAL";
@@ -743,7 +718,7 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	// TODO make sure this is correct and working
 	private void uploadDataAndLogToServer(Context aContext) {
-		long lastUploadJSONToServer = DataStorage.GetValueLong(aContext, KEY_UPLOAD_JSON, -1);
+		long lastUploadJSONToServer  = DataStorage.GetValueLong(aContext, KEY_UPLOAD_JSON, -1);
 		long lastMoveLogExternalTime = DataStorage.GetValueLong(aContext, KEY_MOVE_LOG_TO_EXTERNAL, -1);
 
 		long currentTime = System.currentTimeMillis();

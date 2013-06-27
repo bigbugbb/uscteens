@@ -5,22 +5,25 @@ import java.util.Arrays;
 
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 
-public class ChunkingAlgorithm {
+final public class ChunkingAlgorithm {
 
 	// thresholds for generating chunks 	
 	private final static int CHUNKING_MIN_MEAN_AVG_DIFF = (int) (USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.1f);
 	private final static int CHUNKING_MAX_MEAN_AVG_DIFF = (int) (USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.3f);
-	private final static int CHUNKING_MEAN_AVG_DISTANCE = 60;
-	private final static int CHUNKING_TINY_VALUE		  = 50;
-	private final static int CHUNKING_LOW_VALUE		  = (int) (USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.1f);
+	private final static int CHUNKING_MEAN_AVG_DISTANCE = 60;	// 1 minute
+	private final static int CHUNKING_TINY_VALUE		= 50;
+	private final static int CHUNKING_LOW_VALUE		    = (int) (USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.1f);
 	private final static int CHUNKING_SENSITIVITY       = (int) (USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.3f);
-	private final static int CHUNKING_MIN_DISTANCE 	  = 120;	// 2 minutes
+	private final static int CHUNKING_MIN_DISTANCE 	    = 120;	// 2 minutes
 	
 	// value for no data period
 	private final static int NO_SENSOR_DATA = -1;
 	
-	public ChunkingAlgorithm() {
-		
+	// singleton
+	private static ChunkingAlgorithm sAlgorithm = new ChunkingAlgorithm();
+	
+	public static ChunkingAlgorithm getInstance() {
+		return sAlgorithm;
 	}
 	
 	/**

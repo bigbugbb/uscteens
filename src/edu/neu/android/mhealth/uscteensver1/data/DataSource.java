@@ -56,8 +56,6 @@ public class DataSource {
 	protected static Context sContext = null;
 	// boolean to indicate whether the loading should be cancelled
 	protected static boolean sCancelled = false;
-	// chunking algorithm
-	protected static ChunkingAlgorithm sAlgorithm = new ChunkingAlgorithm();
 	// raw chunk data
 	protected static RawChunksWrap sRawChksWrap = new RawChunksWrap();
 	// raw accelerometer sensor data
@@ -539,7 +537,7 @@ public class DataSource {
 	}
 
 	private static int createRawChunkData(int startSecond, int stopSecond, ArrayList<RawChunk> rawChunks) {
-		ArrayList<Integer> chunkPos = sAlgorithm.doChunking(
+		ArrayList<Integer> chunkPos = ChunkingAlgorithm.getInstance().doChunking(
 			startSecond, stopSecond, sAccelDataWrap.getDrawableData()
 		);
 		
