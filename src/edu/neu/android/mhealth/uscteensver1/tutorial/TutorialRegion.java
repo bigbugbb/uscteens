@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.tutorial;
 
 import java.io.Serializable;
+
 import android.graphics.RectF;
 
 /*
