@@ -500,7 +500,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		}
 
 		// Check if time to prompt
-		if (((currentTime - lastScheduledPromptTime) < (Globals.REPROMPT_TIMES * Globals.REPROMPT_DELAY_MS + Globals.MINUTES_1) && (timeSincePrompted > Globals.REPROMPT_DELAY_MS))) {
+		if (((currentTime - lastScheduledPromptTime) < (Globals.REPROMPT_TIMES * Globals.REPROMPT_DELAY_MS + Globals.MINUTES_1_IN_MS) && (timeSincePrompted > Globals.REPROMPT_DELAY_MS))) {
 			Log.i(TAG, "Prompt!");
 			if (isActivityPrompt(lastScheduledPromptTime))
 				someTasks.add(KEY_CS_EMA);
@@ -730,59 +730,8 @@ public class USCTeensArbitrater extends Arbitrater {
 			PromptApp(sContext, aKey, isOkAudioPrompt, false);
 		}
 
-		// move the data from internal memory to external memory hourly
-		// TODO SSI Remove to make testing simpler 
-		uploadDataAndLogToServer(sContext);
-
 		if (Globals.IS_DEBUG) 
 			Log.d(TAG, "End arbitrate");
-	}
-
-	private static final String KEY_MOVE_LOG_TO_EXTERNAL = "_KEY_MOVETOEXTERNAL";
-	private static final String KEY_UPLOAD_JSON = "_KEY_UPLOAD_JSON";
-
-	// TODO make sure this is correct and working
-	private void uploadDataAndLogToServer(Context aContext) {
-		long lastUploadJSONToServer = DataStorage.GetValueLong(aContext, KEY_UPLOAD_JSON, -1);
-		long lastMoveLogExternalTime = DataStorage.GetValueLong(aContext, KEY_MOVE_LOG_TO_EXTERNAL, -1);
-
-		long currentTime = System.currentTimeMillis();
-		if ((currentTime - lastUploadJSONToServer) > 60 * 60 * 1000) {
-			// send JSON file
-			String msg = "Starting 1-hour file upload";
-			// Move JSON to external upload folder
-			DataSender.sendInternalUploadDataToExternalUploadDir(aContext, false, true);
-
-			if ((currentTime - lastMoveLogExternalTime) > 24 * 60 * 60 * 1000) {
-				// send logs
-				msg += " and 24-hour log and survey files upload";
-				// Move Standard Log files to external upload folder (compress and do not include today)
-				DataSender.sendLogsToExternalUploadDir(aContext, true, false);
-				
-				// TODO check where these files are saved 
-				// Move Survey Log files to upload folder
-				DataSender.sendExternalSurveyLogsToExternalUploadDir(aContext, true, false);
-
-				// Move Data Log files to upload folder 
-				DataSender.sendExternalDataLogsToExternalUploadDir(aContext, true, false);
-
-				DataStorage.SetValue(aContext, KEY_MOVE_LOG_TO_EXTERNAL, currentTime);
-			}
-			Log.i(TAG, msg);
-			ServerLogger.transmitOrQueueNote(aContext, msg, true);
-			// Upload JSON files and remove (currently backup)
-            // TODO change to not backup after robust testing
-			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(aContext, true, true, true, true, .85, false);
-			// Upload Log and SurveyLog files, backup and remove
-			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(aContext, false, true, true, true, .85, false);
-
-			msg = "Completed file upload after " + String.format("%.1f", ((System.currentTimeMillis() - currentTime) / 1000.0 / 60.0))
-					+ " minutes. Files remaining to upload: " + filesRemaining;
-			ServerLogger.sendNote(aContext, msg, true);
-			Log.i(TAG, msg);
-
-			DataStorage.SetValue(aContext, KEY_UPLOAD_JSON, currentTime);
-		}
 	}
 
 	public static void saveRecordsInLogcat(boolean isClear) {
