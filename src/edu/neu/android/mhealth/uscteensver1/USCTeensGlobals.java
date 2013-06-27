@@ -86,7 +86,10 @@ public class USCTeensGlobals {
 		Globals.DEFAULT_MAIL_PASSWORD = "W0CKET$mtp";
 		Globals.DEFAULT_PING_ADDRESS  = "http://wockets.ccs.neu.edu/ping.php";	//TODO change to wockets server
 		Globals.DEFAULT_SAMPLING_RATE = 40;
-		
+
+        // Send the status information once per hour
+        Globals.JSON_DATA_UPLOAD_INTERVAL = Globals.MINUTES_60_IN_MS;
+
 //		public static String serverAddress = "http://wockets.ccs.neu.edu:8080/Wockets/android/getWocketsDetail.html";
 //		public static String serverAddress = "http://wockets.ccs.neu.edu:9080/Wockets/android/getWocketsDetail.html";
 		Globals.DEFAULT_SERVER_ADDR = "http://wockets.ccs.neu.edu:8080/";
