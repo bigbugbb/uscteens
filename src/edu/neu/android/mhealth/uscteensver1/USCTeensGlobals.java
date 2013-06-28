@@ -90,6 +90,12 @@ public class USCTeensGlobals {
         // Send the status information once per hour
         Globals.JSON_DATA_UPLOAD_INTERVAL = Globals.MINUTES_60_IN_MS;
 
+        // Backup all uploads to the sd card backups uploads directory (for testing)
+        Globals.BACKUP_UPLOADS_EXTERNAL = true;
+
+        // Percentage of uploads that must be successful to keep trying in a single session
+        Globals.UPLOAD_SUCCESS_PERCENTAGE = .85f;
+
 //		public static String serverAddress = "http://wockets.ccs.neu.edu:8080/Wockets/android/getWocketsDetail.html";
 //		public static String serverAddress = "http://wockets.ccs.neu.edu:9080/Wockets/android/getWocketsDetail.html";
 		Globals.DEFAULT_SERVER_ADDR = "http://wockets.ccs.neu.edu:8080/";

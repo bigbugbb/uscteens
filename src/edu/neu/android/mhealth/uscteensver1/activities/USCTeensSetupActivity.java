@@ -59,7 +59,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 			// send JSON file
 			long currentTime = System.currentTimeMillis();
-			String msg = "Finish study- Starting data and log files upload";
+			String msg = "Finish study pressed. Starting data and log files upload";
 			//Transmit Note first
 			ServerLogger.transmitOrQueueNote(USCTeensSetupActivity.this, msg, true);
 
@@ -87,19 +87,22 @@ public class USCTeensSetupActivity extends BaseActivity {
 //			DataManager.listFilesInternalStorage();
 //			DataManager.listFilesExternalStorage();
 
+            int numFilesStart = RawUploader.countFilesExternalUploadDir() +
+                                RawUploader.countFilesInternalUploadDir();
+
 			//Upload JSON files and remove
 			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
-					true, true, true, true, .85, false);
+					true, true, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
 
 			//Upload Log and SurveyLog files, backup and remove
 			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
-					false, true, true, true, .85, false);
+					false, true, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
 
 			//Upload possible remaining files in the internal memory
 			filesRemaining = RawUploader.uploadDataFromInternalDir(USCTeensSetupActivity.this,
-					false, true, true, true, .85, false);
+					false, true, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
 
-			msg = "Completed user-initiated file upload after "
+			msg = "Completed user-initiated file upload attempt of " + numFilesStart + " files after "
 					+ String.format(
 							"%.1f",
 							((System.currentTimeMillis() - currentTime) / 1000.0 / 60.0))
