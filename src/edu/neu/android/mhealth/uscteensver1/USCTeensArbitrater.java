@@ -427,9 +427,9 @@ public class USCTeensArbitrater extends Arbitrater {
 		ServerLogger.sendNote(sContext, promptSchedule.toString(), Globals.NO_PLOT);
 
 		// reset prompt schedule for the day		
-		PromptRecorder.writePromptSchedule(sContext, System.currentTimeMillis(), KEY_RANDOM_PROMPT, promptsPerDay, startTimeHour, endTimeHour);
-		DataStorage.setPromptTimesKey(sContext, new long[] { promptsPerDay, startIntervalTimeMS, intervalIncMS }, KEY_SCHEDULE);
 		DataStorage.setPromptTimesKey(sContext, promptTimes, KEY_RANDOM_PROMPT);
+		PromptRecorder.writePromptSchedule(sContext, System.currentTimeMillis(), KEY_RANDOM_PROMPT, promptsPerDay, startTimeHour, endTimeHour);
+		DataStorage.setPromptTimesKey(sContext, new long[] { promptsPerDay, startIntervalTimeMS, intervalIncMS }, KEY_SCHEDULE);		
 		DataStorage.setPromptTimesKey(sContext, new long[] {}, KEY_CS_PROMPT);
 		DataStorage.setPromptTimesKey(sContext, promptTimes, KEY_ALL_PROMPT);
 	}

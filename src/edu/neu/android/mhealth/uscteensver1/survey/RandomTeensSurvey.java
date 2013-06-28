@@ -17,7 +17,7 @@ public class RandomTeensSurvey extends QuestionSet {
 	private static final long serialVersionUID = 1L;
 	
 	public static final double VERSION = 1;
-	private ArrayList<SurveyQuestion> defaultQuestionSet;
+	private ArrayList<SurveyQuestion> mDefaultQuestionSet;
 	private String contextUpperCase = null;
 	public static final String optionalContextUpperCase = "In the past four hours";
 	public static final String defaultContextUpperCase  = "For the past hour/Since the last survey you answered";
@@ -49,17 +49,17 @@ public class RandomTeensSurvey extends QuestionSet {
 	
 	@Override
 	public int getQuestionNum() {
-		return defaultQuestionSet.size();
+		return mDefaultQuestionSet.size();
 	}
 	
 	@Override
 	public ArrayList<SurveyQuestion> getDefaultQuestionSet() {
-		return defaultQuestionSet;
+		return mDefaultQuestionSet;
 	}
 
 	@Override
 	protected void setQuestions(){
-		defaultQuestionSet = new ArrayList<SurveyQuestion>();
+		mDefaultQuestionSet = new ArrayList<SurveyQuestion>();
 		
 		/************ Initialize questions and answers *********/
 		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity","What have you been DOING " + contextLowerCase + "?\n(Choose all that apply)", TYPE.MULTI_CHOICE);
@@ -72,7 +72,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet1[5] = new SurveyAnswer(5, "Hanging out");
 		answerSet1[6] = new SurveyAnswer(6, "Other");		
 		Q1_MainActivity.setDefault(SurveyQuestion.NO_DATA, answerSet1);
-		defaultQuestionSet.add(Q1_MainActivity);
+		mDefaultQuestionSet.add(Q1_MainActivity);
 
 		SurveyQuestion Q1_a_UsingTech = new SurveyQuestion("Q1_a_UsingTech","While using technology (TV, phone), were you:", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet1a = new SurveyAnswer[6];
@@ -83,12 +83,12 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet1a[4] = new SurveyAnswer(4, "Watching shows/movies");
 		answerSet1a[5] = new SurveyAnswer(5, "Other");		
 		Q1_a_UsingTech.setDefault("Q1_MainActivity", answerSet1a);
-		defaultQuestionSet.add(Q1_a_UsingTech);
+		mDefaultQuestionSet.add(Q1_a_UsingTech);
 
 		SurveyQuestion Q2_a_HowLong = new SurveyQuestion("Q2_a_HowLong","Approximately how many minutes did you spend " + mainActivity+"?", TYPE.MINUTES_PICKER);
 		SurveyAnswer[] answerSet2a = new SurveyAnswer[1];
 		Q2_a_HowLong.setDefault("Q1_MainActivity", answerSet2a);
-		defaultQuestionSet.add(Q2_a_HowLong);
+		mDefaultQuestionSet.add(Q2_a_HowLong);
 
 		SurveyQuestion Q2_b_a_WereYou = new SurveyQuestion("Q2_b_a_WereYou", "While " + mainActivity + ", were you:", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2ba = new SurveyAnswer[5];
@@ -98,7 +98,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet2ba[3] = new SurveyAnswer(3, "Walking");
 		answerSet2ba[4] = new SurveyAnswer(4, "Jogging/Running");
 		Q2_b_a_WereYou.setDefault("Q1_MainActivity", answerSet2ba);
-		defaultQuestionSet.add(Q2_b_a_WereYou);
+		mDefaultQuestionSet.add(Q2_b_a_WereYou);
 
 		SurveyQuestion Q2_b_b_WereYou = new SurveyQuestion("Q2_b_b_WereYou", "While going somewhere, were you:", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2bb = new SurveyAnswer[6];
@@ -109,7 +109,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet2bb[4] = new SurveyAnswer(4, "Riding in a car/taxi");
 		answerSet2bb[5] = new SurveyAnswer(5, "Other (skateboarding, etc.)");
 		Q2_b_b_WereYou.setDefault("Q1_MainActivity", answerSet2bb);
-		defaultQuestionSet.add(Q2_b_b_WereYou);
+		mDefaultQuestionSet.add(Q2_b_b_WereYou);
 		
 		SurveyQuestion Q2_c_WherePhone = new SurveyQuestion("Q2_c_WherePhone", "How did you have the PHONE while " + mainActivity + "?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2c = new SurveyAnswer[6];
@@ -120,7 +120,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet2c[4] = new SurveyAnswer(4, "Within reach, but not on me");
 		answerSet2c[5] = new SurveyAnswer(5, "Not with me");/**/
 		Q2_c_WherePhone.setDefault("Q1_MainActivity", answerSet2c);
-		defaultQuestionSet.add(Q2_c_WherePhone);
+		mDefaultQuestionSet.add(Q2_c_WherePhone);
 
 		SurveyQuestion Q2_d_YNotCarrying = new SurveyQuestion("Q2_d_YNotCarrying", "Please indicate your reason for not carrying your phone while " + mainActivity + "?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2d = new SurveyAnswer[7];
@@ -132,7 +132,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet2d[5] = new SurveyAnswer(5, "Embarrassed to carry it");
 		answerSet2d[6] = new SurveyAnswer(6, "Not allowed to carry it");
 		Q2_d_YNotCarrying.setDefault("Q2_c_WherePhone", answerSet2d);
-		defaultQuestionSet.add(Q2_d_YNotCarrying);
+		mDefaultQuestionSet.add(Q2_d_YNotCarrying);
 
 		SurveyQuestion Q2_e_a_MainPurpose = new SurveyQuestion("Q2_e_a_MainPurpose", "What was the MAIN PURPOSE of " + mainActivity, TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2ea = new SurveyAnswer[6];
@@ -143,14 +143,14 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet2ea[4] = new SurveyAnswer(4, "For work, homework, or housework");
 		answerSet2ea[5] = new SurveyAnswer(5, "Other");
 		Q2_e_a_MainPurpose.setDefault("Q1_MainActivity", answerSet2ea);
-		defaultQuestionSet.add(Q2_e_a_MainPurpose);
+		mDefaultQuestionSet.add(Q2_e_a_MainPurpose);
 
 		SurveyQuestion Q2_e_b_MainPurpose = new SurveyQuestion("Q2_e_b_MainPurpose", "Was this eating or drinking a meal or a snack?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2eb = new SurveyAnswer[2];
 		answerSet2eb[0] = new SurveyAnswer(0, "Meal");
 		answerSet2eb[1] = new SurveyAnswer(1, "Snack");
 		Q2_e_b_MainPurpose.setDefault("Q1_MainActivity", answerSet2eb);
-		defaultQuestionSet.add(Q2_e_b_MainPurpose);
+		mDefaultQuestionSet.add(Q2_e_b_MainPurpose);
 
 		SurveyQuestion Q2_f_HowEnjoyable = new SurveyQuestion("Q2_f_HowEnjoyable", "How ENJOYABLE was " + mainActivity, TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2f = new SurveyAnswer[5];
@@ -160,42 +160,42 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet2f[3] = new SurveyAnswer(3, "Quite a bit");
 		answerSet2f[4] = new SurveyAnswer(4, "Extremely");
 		Q2_f_HowEnjoyable.setDefault("Q1_MainActivity", answerSet2f);
-		defaultQuestionSet.add(Q2_f_HowEnjoyable);
+		mDefaultQuestionSet.add(Q2_f_HowEnjoyable);
 
 		SurveyQuestion Q2_g_SelfMotivated = new SurveyQuestion("Q2_g_SelfMotivated", "Were you " + mainActivity + " because YOU want to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2g = new SurveyAnswer[2];
 		answerSet2g[0] = new SurveyAnswer(0, "Yes");
 		answerSet2g[1] = new SurveyAnswer(1, "No");
 		Q2_g_SelfMotivated.setDefault("Q1_MainActivity",  answerSet2g);
-		defaultQuestionSet.add(Q2_g_SelfMotivated);
+		mDefaultQuestionSet.add(Q2_g_SelfMotivated);
 
 		SurveyQuestion Q2_h_ParentsMotivated = new SurveyQuestion("Q2_h_ParentsMotivated", "Were you " + mainActivity + " because YOUR PARENTS want you do do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2h = new SurveyAnswer[2];
 		answerSet2h[0] = new SurveyAnswer(0, "Yes");
 		answerSet2h[1] = new SurveyAnswer(1, "No");
 		Q2_h_ParentsMotivated.setDefault("Q2_g_SelfMotivated", answerSet2h);
-		defaultQuestionSet.add(Q2_h_ParentsMotivated);
+		mDefaultQuestionSet.add(Q2_h_ParentsMotivated);
 
 		SurveyQuestion Q2_i_FriendsMotivated = new SurveyQuestion("Q2_i_FriendsMotivated", "Were you " + mainActivity + " because YOUR FRIENDS want you to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2i = new SurveyAnswer[2];
 		answerSet2i[0] = new SurveyAnswer(0, "Yes");
 		answerSet2i[1] = new SurveyAnswer(1, "No");
 		Q2_i_FriendsMotivated.setDefault("Q2_g_SelfMotivated",  answerSet2i);
-		defaultQuestionSet.add(Q2_i_FriendsMotivated);
+		mDefaultQuestionSet.add(Q2_i_FriendsMotivated);
 
 		SurveyQuestion Q2_j_TeacherMotivated = new SurveyQuestion("Q2_j_TeacherMotivated", "Were you " + mainActivity + " because YOUR TEACHERS want you to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2j = new SurveyAnswer[2];
 		answerSet2j[0] = new SurveyAnswer(0, "Yes");
 		answerSet2j[1] = new SurveyAnswer(1, "No");
 		Q2_j_TeacherMotivated.setDefault("Q2_g_SelfMotivated",answerSet2j);
-		defaultQuestionSet.add(Q2_j_TeacherMotivated);
+		mDefaultQuestionSet.add(Q2_j_TeacherMotivated);
 
 		SurveyQuestion Q2_k_Alone = new SurveyQuestion("Q2_k_Alone", "Were you " + mainActivity + " ALONE?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2k = new SurveyAnswer[2];
 		answerSet2k[0] = new SurveyAnswer(0, "Yes");
 		answerSet2k[1] = new SurveyAnswer(1, "No");
 		Q2_k_Alone.setDefault("Q1_MainActivity",  answerSet2k);
-		defaultQuestionSet.add(Q2_k_Alone);
+		mDefaultQuestionSet.add(Q2_k_Alone);
 
 		SurveyQuestion Q2_l_Accompanies = new SurveyQuestion("Q2_l_Accompanies", "While " + mainActivity + ", were you with:\n(Choose all that apply)", TYPE.MULTI_CHOICE);
 		SurveyAnswer[] answerSet2l = new SurveyAnswer[5];
@@ -205,7 +205,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet2l[3] = new SurveyAnswer(3, "Teammates/Classmates");
 		answerSet2l[4] = new SurveyAnswer(4, "People You Don\'t Know");
 		Q2_l_Accompanies.setDefault("Q2_k_Alone", answerSet2l);
-		defaultQuestionSet.add(Q2_l_Accompanies);
+		mDefaultQuestionSet.add(Q2_l_Accompanies);
 
 		SurveyQuestion Q3_a_Type = new SurveyQuestion("Q3_a_Type", "What type of sports or exercise activity?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3a = new SurveyAnswer[8];
@@ -218,12 +218,12 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3a[6] = new SurveyAnswer(6, "Swimming");
 		answerSet3a[7] = new SurveyAnswer(7, "Other (Baseball, skateboarding, etc.)");
 		Q3_a_Type.setDefault("Q1_MainActivity", answerSet3a);
-		defaultQuestionSet.add(Q3_a_Type);
+		mDefaultQuestionSet.add(Q3_a_Type);
 
 		SurveyQuestion Q3_b_HowManyMins = new SurveyQuestion("Q3_b_HowManyMins", "Approximately how many MINUTES did you spend participating in this sport or exercise activity?", TYPE.MINUTES_PICKER);
 		SurveyAnswer[] answerSet3b = new SurveyAnswer[1];
 		Q3_b_HowManyMins.setDefault("Q1_MainActivity", answerSet3b);
-		defaultQuestionSet.add(Q3_b_HowManyMins);
+		mDefaultQuestionSet.add(Q3_b_HowManyMins);
 
 		SurveyQuestion Q3_c_WhatInvolve = new SurveyQuestion("Q3_c_WhatInvolve", "Did the sport or exercise activity involve:\n(Choose all that apply)", TYPE.MULTI_CHOICE);
 		SurveyAnswer[] answerSet3c = new SurveyAnswer[5];
@@ -233,7 +233,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3c[3] = new SurveyAnswer(3, "Endurance");
 		answerSet3c[4] = new SurveyAnswer(4, "None");
 		Q3_c_WhatInvolve.setDefault("Q1_MainActivity", answerSet3c);
-		defaultQuestionSet.add(Q3_c_WhatInvolve);
+		mDefaultQuestionSet.add(Q3_c_WhatInvolve);
 
 		SurveyQuestion Q3_d_ExtraWeight = new SurveyQuestion("Q3_d_ExtraWeight", "How much extra weight were you carrying during the sport or exercise activity?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3d = new SurveyAnswer[5];
@@ -243,7 +243,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3d[3] = new SurveyAnswer(3, "10-20 lbs");
 		answerSet3d[4] = new SurveyAnswer(4, "More than 20lbs");
 		Q3_d_ExtraWeight.setDefault("Q1_MainActivity", answerSet3d);
-		defaultQuestionSet.add(Q3_d_ExtraWeight);
+		mDefaultQuestionSet.add(Q3_d_ExtraWeight);
 
 		SurveyQuestion Q3_e_UpOrDown = new SurveyQuestion("Q3_e_UpOrDown", "Did the sport or exercise activity involve:", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3e = new SurveyAnswer[4];
@@ -252,7 +252,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3e[2] = new SurveyAnswer(2, "Going both uphill and downhill");
 		answerSet3e[3] = new SurveyAnswer(3, "Mainly staying on flat ground");
 		Q3_e_UpOrDown.setDefault("Q1_MainActivity", answerSet3e);
-		defaultQuestionSet.add(Q3_e_UpOrDown);
+		mDefaultQuestionSet.add(Q3_e_UpOrDown);
 
 		SurveyQuestion Q3_f_HowSoreness = new SurveyQuestion("Q3_f_HowSoreness", "How much PAIN/SORENESS did you feel during the sport or exercise activity?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3f = new SurveyAnswer[5];
@@ -262,7 +262,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3f[3] = new SurveyAnswer(3, "Quite a bit");
 		answerSet3f[4] = new SurveyAnswer(4, "A lot");
 		Q3_f_HowSoreness.setDefault("Q1_MainActivity", answerSet3f);
-		defaultQuestionSet.add(Q3_f_HowSoreness);
+		mDefaultQuestionSet.add(Q3_f_HowSoreness);
 
 		SurveyQuestion Q3_g_MainPurpose = new SurveyQuestion("Q3_g_MainPurpose", "What was the MAIN PURPOSE of participating in the sport or exercise activity?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3g = new SurveyAnswer[6];
@@ -273,7 +273,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3g[4] = new SurveyAnswer(4, "For work, homework, or housework");
 		answerSet3g[5] = new SurveyAnswer(5, "Other");
 		Q3_g_MainPurpose.setDefault("Q1_MainActivity", answerSet3g);
-		defaultQuestionSet.add(Q3_g_MainPurpose);
+		mDefaultQuestionSet.add(Q3_g_MainPurpose);
 
 		SurveyQuestion Q3_h_HowEnjoyable = new SurveyQuestion("Q3_h_HowEnjoyable", "How ENJOYABLE was participating in the sport or exercise activity?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3h = new SurveyAnswer[5];
@@ -283,35 +283,35 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3h[3] = new SurveyAnswer(3, "Quite a bit");
 		answerSet3h[4] = new SurveyAnswer(4, "Extremely");
 		Q3_h_HowEnjoyable.setDefault("Q1_MainActivity", answerSet3h);
-		defaultQuestionSet.add(Q3_h_HowEnjoyable);
+		mDefaultQuestionSet.add(Q3_h_HowEnjoyable);
 
 		SurveyQuestion Q3_i_SelfMotivated = new SurveyQuestion("Q3_i_SelfMotivated", "Did you participate in the sport or exercise activity because YOU want to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3i = new SurveyAnswer[2];
 		answerSet3i[0] = new SurveyAnswer(0, "Yes");
 		answerSet3i[1] = new SurveyAnswer(1, "No");
 		Q3_i_SelfMotivated.setDefault("Q1_MainActivity", answerSet3i);
-		defaultQuestionSet.add(Q3_i_SelfMotivated);
+		mDefaultQuestionSet.add(Q3_i_SelfMotivated);
 
 		SurveyQuestion Q3_j_ParentsMotivated = new SurveyQuestion("Q3_j_ParentsMotivated", "Did you participate in the sport or exercise activity because YOUR PARENTS want you to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3j = new SurveyAnswer[2];
 		answerSet3j[0] = new SurveyAnswer(0, "Yes");
 		answerSet3j[1] = new SurveyAnswer(1, "No");
 		Q3_j_ParentsMotivated.setDefault("Q3_i_SelfMotivated", answerSet3j);
-		defaultQuestionSet.add(Q3_j_ParentsMotivated);
+		mDefaultQuestionSet.add(Q3_j_ParentsMotivated);
 
 		SurveyQuestion Q3_k_FriendsMotivated = new SurveyQuestion("Q3_k_FriendsMotivated", "Did participate in the sport or exercise activity because YOUR FRIENDS want you to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3k = new SurveyAnswer[2];
 		answerSet3k[0] = new SurveyAnswer(0, "Yes");
 		answerSet3k[1] = new SurveyAnswer(1, "No");
 		Q3_k_FriendsMotivated.setDefault("Q3_i_SelfMotivated", answerSet3k);
-		defaultQuestionSet.add(Q3_k_FriendsMotivated);
+		mDefaultQuestionSet.add(Q3_k_FriendsMotivated);
 
 		SurveyQuestion Q3_l_TeacherMotivated = new SurveyQuestion("Q3_l_TeacherMotivated", "Did participate in the sport or exercise activity because YOUR TEACHERS want you to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3l = new SurveyAnswer[2];
 		answerSet3l[0] = new SurveyAnswer(0, "Yes");
 		answerSet3l[1] = new SurveyAnswer(1, "No");
 		Q3_l_TeacherMotivated.setDefault("Q3_i_SelfMotivated", answerSet3l);
-		defaultQuestionSet.add(Q3_l_TeacherMotivated);
+		mDefaultQuestionSet.add(Q3_l_TeacherMotivated);
 
 		SurveyQuestion Q3_m_Where = new SurveyQuestion("Q3_m_Where", "Where did you participate in the sport or exercise activity?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3m = new SurveyAnswer[4];
@@ -320,7 +320,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3m[2] = new SurveyAnswer(2, "School");
 		answerSet3m[3] = new SurveyAnswer(3, "Other");
 		Q3_m_Where.setDefault("Q1_MainActivity",  answerSet3m);
-		defaultQuestionSet.add(Q3_m_Where);
+		mDefaultQuestionSet.add(Q3_m_Where);
 
 		SurveyQuestion Q3_n_WhereOther = new SurveyQuestion("Q3_n_WhereOther", "WHERE was this OTHER place?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3n = new SurveyAnswer[5];
@@ -330,21 +330,21 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3n[3] = new SurveyAnswer(3, "Park/Trail");
 		answerSet3n[4] = new SurveyAnswer(4, "Someplace else");
 		Q3_n_WhereOther.setDefault("Q3_m_Where", answerSet3n);
-		defaultQuestionSet.add(Q3_n_WhereOther);
+		mDefaultQuestionSet.add(Q3_n_WhereOther);
 
 		SurveyQuestion Q3_o_Outdoors = new SurveyQuestion("Q3_o_Outdoors", "Did you participate in the sport or exercise activity OUTDOORS?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3o = new SurveyAnswer[2];
 		answerSet3o[0] = new SurveyAnswer(0, "Yes");
 		answerSet3o[1] = new SurveyAnswer(1, "No");
 		Q3_o_Outdoors.setDefault("Q1_MainActivity", answerSet3o);
-		defaultQuestionSet.add(Q3_o_Outdoors);
+		mDefaultQuestionSet.add(Q3_o_Outdoors);
 
 		SurveyQuestion Q3_p_Alone = new SurveyQuestion("Q3_p_Alone", "Did you participate in the sport or exercise activity ALONE?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3p = new SurveyAnswer[2];
 		answerSet3p[0] = new SurveyAnswer(0, "Yes");
 		answerSet3p[1] = new SurveyAnswer(1, "No");
 		Q3_p_Alone.setDefault("Q1_MainActivity", answerSet3p);
-		defaultQuestionSet.add(Q3_p_Alone);
+		mDefaultQuestionSet.add(Q3_p_Alone);
 
 		SurveyQuestion Q3_q_Accompanies = new SurveyQuestion("Q3_q_Accompanies", "While participating in the sport or exercise activity, were you with:\n(Choose all that apply)", TYPE.MULTI_CHOICE);
 		SurveyAnswer[] answerSet3q = new SurveyAnswer[5];
@@ -354,7 +354,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3q[3] = new SurveyAnswer(3, "Teammates/Classmates");
 		answerSet3q[4] = new SurveyAnswer(4, "People You Don\'t Know");
 		Q3_q_Accompanies.setDefault("Q3_p_Alone", answerSet3q);
-		defaultQuestionSet.add(Q3_q_Accompanies);
+		mDefaultQuestionSet.add(Q3_q_Accompanies);
 
 		SurveyQuestion Q3_r_WherePhone = new SurveyQuestion("Q3_r_WherePhone", "How did you have the PHONE while participating in the sport or exercise activity?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3r = new SurveyAnswer[5];
@@ -364,7 +364,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3r[3] = new SurveyAnswer(3, "Holding in my hand");
 		answerSet3r[4] = new SurveyAnswer(4, "Not with me");
 		Q3_r_WherePhone.setDefault("Q1_MainActivity", answerSet3r);
-		defaultQuestionSet.add(Q3_r_WherePhone);
+		mDefaultQuestionSet.add(Q3_r_WherePhone);
 
 		SurveyQuestion Q3_s_YNotCarrying = new SurveyQuestion("Q3_s_YNotCarrying", "Please indicate your reason for not carrying your phone while participating in the sport or exercise activity:", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet3s = new SurveyAnswer[7];
@@ -376,7 +376,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet3s[5] = new SurveyAnswer(5, "Embarrassed to carry it");
 		answerSet3s[6] = new SurveyAnswer(6, "Not allowed to carry  it");
 		Q3_s_YNotCarrying.setDefault("Q3_r_WherePhone", answerSet3s);
-		defaultQuestionSet.add(Q3_s_YNotCarrying);
+		mDefaultQuestionSet.add(Q3_s_YNotCarrying);
 
 		SurveyQuestion Q4_a_WhatOther = new SurveyQuestion("Q4_a_WhatOther", "What was this other activity?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet4a = new SurveyAnswer[12];
@@ -393,12 +393,12 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet4a[10] = new SurveyAnswer(10, "Waiting");
 		answerSet4a[11] = new SurveyAnswer(11, "Doing something else");
 		Q4_a_WhatOther.setDefault("Q1_MainActivity", answerSet4a);
-		defaultQuestionSet.add(Q4_a_WhatOther);
+		mDefaultQuestionSet.add(Q4_a_WhatOther);
 
 		SurveyQuestion Q4_b_HowManyMins = new SurveyQuestion("Q4_b_HowManyMins", "Approximately how many minutes did you spend " + mainActivity + "?", TYPE.MINUTES_PICKER);
 		SurveyAnswer[] answerSet4b = new SurveyAnswer[1];
 		Q4_b_HowManyMins.setDefault("Q1_MainActivity", answerSet4b);
-		defaultQuestionSet.add(Q4_b_HowManyMins);
+		mDefaultQuestionSet.add(Q4_b_HowManyMins);
 
 		SurveyQuestion Q4_c_WereYou = new SurveyQuestion("Q4_c_WereYou","When " + mainActivity + ", were you:", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet4c = new SurveyAnswer[5];
@@ -408,7 +408,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet4c[3] = new SurveyAnswer(3, "Walking");
 		answerSet4c[4] = new SurveyAnswer(4, "Jogging/Running");
 		Q4_c_WereYou.setDefault("Q4_a_WhatOther", answerSet4c);
-		defaultQuestionSet.add(Q4_c_WereYou);
+		mDefaultQuestionSet.add(Q4_c_WereYou);
 
 		SurveyQuestion Q4_d_WherePhone = new SurveyQuestion("Q4_d_WherePhone", "How did you have the PHONE while " + mainActivity + "?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet4d = new SurveyAnswer[5];
@@ -418,7 +418,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet4d[3] = new SurveyAnswer(3, "Holding in my hand");
 		answerSet4d[4] = new SurveyAnswer(4, "Not with me");
 		Q4_d_WherePhone.setDefault("Q1_MainActivity", answerSet4d);
-		defaultQuestionSet.add(Q4_d_WherePhone);
+		mDefaultQuestionSet.add(Q4_d_WherePhone);
 
 		SurveyQuestion Q4_e_YNotCarrying = new SurveyQuestion("Q4_e_YNotCarrying", "Please indicate your reason for not carrying your phone while " + mainActivity + ":", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet4e = new SurveyAnswer[7];
@@ -430,7 +430,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet4e[5] = new SurveyAnswer(5, "Embarrassed to carry it");
 		answerSet4e[6] = new SurveyAnswer(6, "Not allowed to carry  it");
 		Q4_e_YNotCarrying.setDefault("Q4_d_WherePhone", answerSet4e);
-		defaultQuestionSet.add(Q4_e_YNotCarrying);
+		mDefaultQuestionSet.add(Q4_e_YNotCarrying);
 
 		SurveyQuestion Q4_f_MainPurpose = new SurveyQuestion("Q4_f_MainPurpose", "What was the MAIN PURPOSE of " + mainActivity, TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet4f = new SurveyAnswer[6];
@@ -441,7 +441,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet4f[4] = new SurveyAnswer(4, "For work, homework, or housework");
 		answerSet4f[5] = new SurveyAnswer(5, "Other");
 		Q4_f_MainPurpose.setDefault("Q4_a_WhatOther", answerSet4f);
-		defaultQuestionSet.add(Q4_f_MainPurpose);
+		mDefaultQuestionSet.add(Q4_f_MainPurpose);
 
 		SurveyQuestion Q4_g_HowEnjoyable = new SurveyQuestion("Q4_g_HowEnjoyable", "How ENJOYABLE was " + mainActivity, TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet4g = new SurveyAnswer[5];
@@ -451,42 +451,42 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet4g[3] = new SurveyAnswer(3, "Quite a bit");
 		answerSet4g[4] = new SurveyAnswer(4, "Extremely");
 		Q4_g_HowEnjoyable.setDefault("Q4_a_WhatOther", answerSet4g);
-		defaultQuestionSet.add(Q4_g_HowEnjoyable);
+		mDefaultQuestionSet.add(Q4_g_HowEnjoyable);
 
 		SurveyQuestion Q4_h_SelfMotivated = new SurveyQuestion("Q4_h_SelfMotivated", "Were you " + mainActivity + " because YOU want to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet4h = new SurveyAnswer[2];
 		answerSet4h[0] = new SurveyAnswer(0, "Yes");
 		answerSet4h[1] = new SurveyAnswer(1, "No");
 		Q4_h_SelfMotivated.setDefault("Q4_a_WhatOther",answerSet4h);
-		defaultQuestionSet.add(Q4_h_SelfMotivated);
+		mDefaultQuestionSet.add(Q4_h_SelfMotivated);
 
 		SurveyQuestion Q4_i_ParentsMotivated = new SurveyQuestion("Q4_i_ParentsMotivated", "Were you " + mainActivity + " because YOUR PARENTS want you do do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet4i = new SurveyAnswer[2];
 		answerSet4i[0] = new SurveyAnswer(0, "Yes");
 		answerSet4i[1] = new SurveyAnswer(1, "No");
 		Q4_i_ParentsMotivated.setDefault("Q4_h_SelfMotivated", answerSet4i);
-		defaultQuestionSet.add(Q4_i_ParentsMotivated);
+		mDefaultQuestionSet.add(Q4_i_ParentsMotivated);
 
 		SurveyQuestion Q4_j_FriendsMotivated = new SurveyQuestion("Q4_j_FriendsMotivated", "Were you " + mainActivity + " because YOUR FRIENDS want you to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet4j = new SurveyAnswer[2];
 		answerSet4j[0] = new SurveyAnswer(0, "Yes");
 		answerSet4j[1] = new SurveyAnswer(1, "No");
 		Q4_j_FriendsMotivated.setDefault("Q4_h_SelfMotivated", answerSet4j);
-		defaultQuestionSet.add(Q4_j_FriendsMotivated);
+		mDefaultQuestionSet.add(Q4_j_FriendsMotivated);
 
 		SurveyQuestion Q4_k_TeacherMotivated = new SurveyQuestion("Q4_k_TeacherMotivated", "Were you " + mainActivity + " because YOUR TEACHERS want you to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet4k = new SurveyAnswer[2];
 		answerSet4k[0] = new SurveyAnswer(0, "Yes");
 		answerSet4k[1] = new SurveyAnswer(1, "No");
 		Q4_k_TeacherMotivated.setDefault("Q4_h_SelfMotivated", answerSet4k);
-		defaultQuestionSet.add(Q4_k_TeacherMotivated);
+		mDefaultQuestionSet.add(Q4_k_TeacherMotivated);
 
 		SurveyQuestion Q4_l_Alone = new SurveyQuestion("Q4_l_Alone", "Were you " + mainActivity + " ALONE?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet4l = new SurveyAnswer[2];
 		answerSet4l[0] = new SurveyAnswer(0, "Yes");
 		answerSet4l[1] = new SurveyAnswer(1, "No");
 		Q4_l_Alone.setDefault("Q4_a_WhatOther", answerSet4l);/**/
-		defaultQuestionSet.add(Q4_l_Alone);
+		mDefaultQuestionSet.add(Q4_l_Alone);
 
 		SurveyQuestion Q4_m_Accompanies = new SurveyQuestion("Q4_m_Accompanies", "While " + mainActivity + ", were you with:\n(Choose all that apply)", TYPE.MULTI_CHOICE);
 		SurveyAnswer[] answerSet4m = new SurveyAnswer[5];
@@ -496,17 +496,17 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet4m[3] = new SurveyAnswer(3, "Teammates/Classmates");
 		answerSet4m[4] = new SurveyAnswer(4, "People You Don\'t Know");
 		Q4_m_Accompanies.setDefault("Q4_l_Alone", answerSet4m);
-		defaultQuestionSet.add(Q4_m_Accompanies);
+		mDefaultQuestionSet.add(Q4_m_Accompanies);
 
 		SurveyQuestion Q5_a_SomethingElse = new SurveyQuestion("Q5_a_SomethingElse", "Can you tell us what you were doing for the past 30 minutes that you answered as something else?", TYPE.FREE_FORM_TEXT);
 		SurveyAnswer[] answerSet5a = new SurveyAnswer[1];
 		Q5_a_SomethingElse.setDefault("Q4_a_WhatOther", answerSet5a);
-		defaultQuestionSet.add(Q5_a_SomethingElse);
+		mDefaultQuestionSet.add(Q5_a_SomethingElse);
 
 		SurveyQuestion Q5_b_HowManyMins = new SurveyQuestion("Q5_b_HowManyMins", "Approximately how many minutes did you spend doing this activity:", TYPE.MINUTES_PICKER);
 		SurveyAnswer[] answerSet5b = new SurveyAnswer[1];
 		Q5_b_HowManyMins.setDefault("Q4_a_WhatOther", answerSet5b);
-		defaultQuestionSet.add(Q5_b_HowManyMins);
+		mDefaultQuestionSet.add(Q5_b_HowManyMins);
 
 		SurveyQuestion Q5_c_WereYou = new SurveyQuestion("Q5_c_WereYou", "For this activity, were you:", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet5c = new SurveyAnswer[5];
@@ -516,7 +516,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet5c[3] = new SurveyAnswer(3, "Walking");
 		answerSet5c[4] = new SurveyAnswer(4, "Jogging/Running");
 		Q5_c_WereYou.setDefault("Q4_a_WhatOther", answerSet5c);
-		defaultQuestionSet.add(Q5_c_WereYou);
+		mDefaultQuestionSet.add(Q5_c_WereYou);
 
 		SurveyQuestion Q5_d_WherePhone = new SurveyQuestion("Q5_d_WherePhone", "How did you have the PHONE while doing this activity?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet5d = new SurveyAnswer[5];
@@ -526,7 +526,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet5d[3] = new SurveyAnswer(3, "Holding in my hand");
 		answerSet5d[4] = new SurveyAnswer(4, "Not with me");
 		Q5_d_WherePhone.setDefault("Q4_a_WhatOther", answerSet5d);
-		defaultQuestionSet.add(Q5_d_WherePhone);
+		mDefaultQuestionSet.add(Q5_d_WherePhone);
 
 		SurveyQuestion Q5_e_YNotCarrying = new SurveyQuestion("Q5_e_YNotCarrying", "Please indicate your reason for not carrying your phone while doing this activity:", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet5e = new SurveyAnswer[7];
@@ -538,7 +538,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet5e[5] = new SurveyAnswer(5, "Embarrassed to carry it");
 		answerSet5e[6] = new SurveyAnswer(6, "Not allowed to carry  it");
 		Q5_e_YNotCarrying.setDefault("Q5_d_WherePhone", answerSet5e);
-		defaultQuestionSet.add(Q5_e_YNotCarrying);
+		mDefaultQuestionSet.add(Q5_e_YNotCarrying);
 
 		SurveyQuestion Q5_f_MainPurpose = new SurveyQuestion("Q5_f_MainPurpose", "What was the MAIN PURPOSE of " + mainActivity, TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet5f = new SurveyAnswer[6];
@@ -549,7 +549,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet5f[4] = new SurveyAnswer(4, "For work, homework, or housework");
 		answerSet5f[5] = new SurveyAnswer(5, "Other");
 		Q5_f_MainPurpose.setDefault("Q4_a_WhatOther", answerSet5f);
-		defaultQuestionSet.add(Q5_f_MainPurpose);
+		mDefaultQuestionSet.add(Q5_f_MainPurpose);
 
 		SurveyQuestion Q5_g_HowEnjoyable = new SurveyQuestion("Q5_g_HowEnjoyable", "How ENJOYABLE was " + mainActivity, TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet5g = new SurveyAnswer[5];
@@ -559,42 +559,42 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet5g[3] = new SurveyAnswer(3, "Quite a bit");
 		answerSet5g[4] = new SurveyAnswer(4, "Extremely");
 		Q5_g_HowEnjoyable.setDefault("Q4_a_WhatOther", answerSet5g);
-		defaultQuestionSet.add(Q5_g_HowEnjoyable);
+		mDefaultQuestionSet.add(Q5_g_HowEnjoyable);
 
 		SurveyQuestion Q5_h_SelfMotivated = new SurveyQuestion("Q5_h_SelfMotivated", "Were you " + mainActivity + " because YOU want to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet5h = new SurveyAnswer[2];
 		answerSet5h[0] = new SurveyAnswer(0, "Yes");
 		answerSet5h[1] = new SurveyAnswer(1, "No");
 		Q5_h_SelfMotivated.setDefault("Q4_a_WhatOther", answerSet5h);
-		defaultQuestionSet.add(Q5_h_SelfMotivated);
+		mDefaultQuestionSet.add(Q5_h_SelfMotivated);
 
 		SurveyQuestion Q5_i_ParentsMotivated = new SurveyQuestion("Q5_i_ParentsMotivated", "Were you " + mainActivity + " because YOUR PARENTS want you do do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet5i = new SurveyAnswer[2];
 		answerSet5i[0] = new SurveyAnswer(0, "Yes");
 		answerSet5i[1] = new SurveyAnswer(1, "No");
 		Q5_i_ParentsMotivated.setDefault("Q5_h_SelfMotivated", answerSet5i);
-		defaultQuestionSet.add(Q5_i_ParentsMotivated);
+		mDefaultQuestionSet.add(Q5_i_ParentsMotivated);
 
 		SurveyQuestion Q5_j_FriendsMotivated = new SurveyQuestion("Q5_j_FriendsMotivated", "Were you " + mainActivity + " because YOUR FRIENDS want you to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet5j = new SurveyAnswer[2];
 		answerSet5j[0] = new SurveyAnswer(0, "Yes");
 		answerSet5j[1] = new SurveyAnswer(1, "No");
 		Q5_j_FriendsMotivated.setDefault("Q5_h_SelfMotivated", answerSet5j);
-		defaultQuestionSet.add(Q5_j_FriendsMotivated);
+		mDefaultQuestionSet.add(Q5_j_FriendsMotivated);
 
 		SurveyQuestion Q5_k_TeacherMotivated = new SurveyQuestion("Q5_k_TeacherMotivated", "Were you " + mainActivity + " because YOUR TEACHERS want you to do it?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet5k = new SurveyAnswer[2];
 		answerSet5k[0] = new SurveyAnswer(0, "Yes");
 		answerSet5k[1] = new SurveyAnswer(1, "No");
 		Q5_k_TeacherMotivated.setDefault("Q5_h_SelfMotivated", answerSet5k);
-		defaultQuestionSet.add(Q5_k_TeacherMotivated);
+		mDefaultQuestionSet.add(Q5_k_TeacherMotivated);
 
 		SurveyQuestion Q5_l_Alone = new SurveyQuestion("Q5_l_Alone", "Were you " + mainActivity + " ALONE?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet5l = new SurveyAnswer[2];
 		answerSet5l[0] = new SurveyAnswer(0, "Yes");
 		answerSet5l[1] = new SurveyAnswer(1, "No");
 		Q5_l_Alone.setDefault("Q4_a_WhatOther", answerSet5l);
-		defaultQuestionSet.add(Q5_l_Alone);
+		mDefaultQuestionSet.add(Q5_l_Alone);
 
 		SurveyQuestion Q5_m_Accompanies = new SurveyQuestion("Q5_m_Accompanies", "While " + mainActivity + ", were you with:\n(Choose all that apply)", TYPE.MULTI_CHOICE);
 		SurveyAnswer[] answerSet5m = new SurveyAnswer[5];
@@ -604,7 +604,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		answerSet5m[3] = new SurveyAnswer(3, "Teammates/Classmates");
 		answerSet5m[4] = new SurveyAnswer(4, "People You Don\'t Know");
 		Q5_m_Accompanies.setDefault("Q5_l_Alone", answerSet5m);
-		defaultQuestionSet.add(Q5_m_Accompanies);
+		mDefaultQuestionSet.add(Q5_m_Accompanies);
 		
 		/*************** Set up rules *******************/
 		//set up main activity which can not be skipped
@@ -877,9 +877,9 @@ public class RandomTeensSurvey extends QuestionSet {
 	@Override
 	public String[] getAllQuesIDs() {
 		// TODO Auto-generated method stub
-		String[] IDs = new String[defaultQuestionSet.size()];
+		String[] IDs = new String[mDefaultQuestionSet.size()];
 		for (int i = 0; i < IDs.length; i++) {
-			IDs[i] = defaultQuestionSet.get(i).getAliasID();
+			IDs[i] = mDefaultQuestionSet.get(i).getAliasID();
 		}
 		return IDs;
 	}			
