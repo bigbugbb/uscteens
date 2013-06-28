@@ -485,7 +485,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		}
 
 		// Check if time to prompt		
-		if (timeSinceScheduledPrompt < Globals.REPROMPT_TIMES * Globals.REPROMPT_DELAY_MS + Globals.MINUTES_1 && 
+		if (timeSinceScheduledPrompt < Globals.REPROMPT_TIMES * Globals.REPROMPT_DELAY_MS + Globals.MINUTES_1_IN_MS &&
 				timeSincePrompted > Globals.REPROMPT_DELAY_MS) {
 			Log.i(TAG, "Prompt!");			
 			mSomeTasks.add(isContextSensitivePrompt(lastScheduledPromptTime) ? KEY_CS_EMA : KEY_RANDOM_EMA);			
