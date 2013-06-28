@@ -118,7 +118,8 @@ public class USCTeensGlobals {
 		Globals.AUDIO_PROMPT_START_HOUR = 7;
 		Globals.AUDIO_PROMPT_END_HOUR   = 23; 
 		Globals.REPROMPT_DELAY_MS = 5 * 60 * 1000; 
-		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = 30 * 60 * 1000; // 30 minutes 
+		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = 10 * 60 * 1000; // 10 minutes 
+		Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS = 5 * 60 * 1000; // 5 minutes
 
 		// Only apps that are prompted 
 		Globals.ALL_APP_KEYS_PROMPTED = new String[1];
