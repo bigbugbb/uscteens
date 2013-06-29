@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Random;
 
@@ -629,6 +628,8 @@ public class USCTeensArbitrater extends Arbitrater {
 			Log.d(TAG, "Begin arbitrate");
 		}
 		
+		long lastTime = System.currentTimeMillis();
+		
 		// For testing purpose only
 		saveRecordsInLogcat(false);
 		
@@ -656,7 +657,8 @@ public class USCTeensArbitrater extends Arbitrater {
 		try {
 			synchronized (this) {				
 				if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor for 20s"); }
-				wait(USCTeensGlobals.TIME_FOR_WAITING_INTERNAL_ACCELEROMETER + 1000);
+				long timeCost = System.currentTimeMillis() - lastTime;
+				wait(Math.max(0, USCTeensGlobals.TIME_WAITING_SENSOR_DATA_IN_MS - timeCost));
 				if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor finished"); }				
 			}			
 		} catch (InterruptedException e) {			
