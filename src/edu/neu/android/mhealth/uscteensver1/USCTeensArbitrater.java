@@ -57,8 +57,6 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static final String KEY_ALL_PROMPT = "_KEY_ALL_PROMPT";
 	private static final String KEY_SCHEDULE = "_KEY_SCHEDULE";		
 
-	private static final long PROMPT_OFFSET = 1 * 60 * 1000;
-
 	private static final int KEY_CS_EMA     = 1;
 	private static final int KEY_RANDOM_EMA = 0;	
 	private static final String KEY_RANDOM_PROMPT_COUNTER = "_KEY_RANDOM_PROMPT_COUNTER";
@@ -66,7 +64,7 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	private static final String NEWLINE = "\n";	
 	private static final String KEY_FIRST_CHECK_TIME  = "_KEY_FIRST_CHECK_TIME";
-	private static final String KEY_LATEST_CHECK_TIME = "_KEY_LATEST_CHECK_TIME";	
+	private static final String KEY_LAST_CHECK_TIME = "_KEY_LAST_CHECK_TIME";	
 	
 	private static boolean sIsFirstRun = true;
 	private static Context sContext = null;
@@ -335,8 +333,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		}		
 	}
 
-	private boolean setContextSensitivePrompt(long promptTime) {
-		promptTime += PROMPT_OFFSET;
+	private boolean setCSPrompt(long promptTime) {
 		long[] savedPromptTime = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
 		if (savedPromptTime == null) {
 			DataStorage.setPromptTimesKey(sContext, new long[] { promptTime }, KEY_CS_PROMPT);
@@ -544,16 +541,6 @@ public class USCTeensArbitrater extends Arbitrater {
 		int promptsPerDay    = Globals.DEFAULT_PROMPTS_PER_DAY;
 		double startTimeHour = Globals.DEFAULT_START_HOUR;
 		double endTimeHour   = Globals.DEFAULT_END_HOUR;
-		int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-		if (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {
-			promptsPerDay = 3;
-			startTimeHour = 15;
-			endTimeHour   = 21;
-		} else {
-			promptsPerDay = 7;
-			startTimeHour = 8;
-			endTimeHour   = 22;
-		}
 		setAndSavePromptingSchedule(promptsPerDay, startTimeHour, endTimeHour);
 		
 		return true;
@@ -569,30 +556,29 @@ public class USCTeensArbitrater extends Arbitrater {
 		
 		// Check the previous 30+ minutes accelerometer data state every 10 minutes
 		// to determine whether the context sensitive schedule should be reset
-		long now  = System.currentTimeMillis();
-		long to   = now - Globals.MINUTES_1_IN_MS;
-		long from = to - 45 * Globals.MINUTES_1_IN_MS;
+		long now  = System.currentTimeMillis();		
 		long firstCheckTime  = DataStorage.GetValueLong(sContext, KEY_FIRST_CHECK_TIME, 0);
-		long latestCheckTime = DataStorage.GetValueLong(sContext, KEY_LATEST_CHECK_TIME, 0);
-		if (firstCheckTime == 0) { // the first time trying to check
+		long lastCheckTime = DataStorage.GetValueLong(sContext, KEY_LAST_CHECK_TIME, 0);		
+		if (firstCheckTime == 0 || firstCheckTime > now || lastCheckTime > now) { // the first time trying to check
+			firstCheckTime = lastCheckTime = now;
 			DataStorage.SetValue(sContext, KEY_FIRST_CHECK_TIME, now);
-			DataStorage.SetValue(sContext, KEY_LATEST_CHECK_TIME, now);	
-			firstCheckTime = latestCheckTime = now;
-		}		
-		// make sure we have enough data (more than 30 minutes) to analyze
-		if (now - firstCheckTime >= Globals.MINUTES_30_IN_MS && now - latestCheckTime >= Globals.MINUTES_10_IN_MS) {
+			DataStorage.SetValue(sContext, KEY_LAST_CHECK_TIME, now);				
+		}				
+		
+		// Make sure that we have at least data for 30 minutes to analyze
+		if (now - firstCheckTime >= Globals.MINUTES_30_IN_MS && now - lastCheckTime >= Globals.MINUTES_30_IN_MS) {
 			if (isOkActivityPrompt()) {	
-				ContextSensitiveState css = AccelDataChecker.checkDataState(from, to);
+				ContextSensitiveState css = AccelDataChecker.checkDataState();
 				if (css.getState() != ContextSensitiveState.DATA_STATE_ERROR && 
 					css.getState() != ContextSensitiveState.DATA_STATE_NORMAL) {
 					Log.i(TAG, "Resetting because activity is detected or missed");														
-					if (setContextSensitivePrompt(now)) {
+					if (setCSPrompt(now)) {
 						resetSchedule();
-						CSTeensSurvey.setLatestPromptTime(css.getStartTime(), css.getEndTime());
+						CSTeensSurvey.setLatestPromptTime(css.getStartTime(), css.getStopTime());
 					}
 				}
 			}
-			DataStorage.SetValue(sContext, KEY_LATEST_CHECK_TIME, now);
+			DataStorage.SetValue(sContext, KEY_LAST_CHECK_TIME, now);
 		}
 
 		// Always unset this in case program was updated at awkward time
@@ -602,21 +588,11 @@ public class USCTeensArbitrater extends Arbitrater {
 													// to an odd crash
 	}
 	
-	private static boolean isOkActivityPrompt() {
-		boolean isOkPrompt = false;
-		Date cur = new Date();
-		int hour = cur.getHours();
-		int min  = cur.getMinutes();
-		Calendar today = Calendar.getInstance();
-		
-		int dayOfWeek = today.get(Calendar.DAY_OF_WEEK);
-		if (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {			
-			isOkPrompt = (hour >= 15 && hour < 20) || (hour == 20 && min < 30);
-		} else {			
-			isOkPrompt = (hour >= 8 && hour < 22);			
-		}
-		
-		return isOkPrompt;
+	private static boolean isOkActivityPrompt() {		
+		Date today = new Date();
+		int hour = today.getHours();
+		int min  = today.getMinutes();			
+		return (hour > 8 && hour < 20) || (hour == 21 && min < 30);
 	}
 
 	public static boolean isOkAudioPrompt() {

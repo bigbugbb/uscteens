@@ -2,6 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.algorithm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 
@@ -28,8 +29,25 @@ final public class ChunkingAlgorithm {
 	
 	/**
 	 * Create chunks according to the variation of the input data and time period 
-	 * @param startSecond	The start position of the data to be chunked
-	 * @param stopSecond    The stop position of the data to be chunked
+	 * @param startTimeInMS	The start time in millisecond
+	 * @param stopTimeInMS  The stop time in millisecond
+	 * @param dataToChunk   The input data to chunk (accelerometer data in this app)
+	 * @return the array stores all chunks' positions from start second to stop second
+	 */
+	public ArrayList<Integer> doChunking(long startTimeInMS, long stopTimeInMS, final int[] dataToChunk) {
+		Date dateStart = new Date(startTimeInMS);
+		Date dateStop  = new Date(stopTimeInMS);
+		// Convert to second
+		int secStop  = dateStop.getHours() * 3600 + dateStop.getMinutes() * 60 + dateStop.getSeconds();
+		int secStart = dateStart.getHours() * 3600 + dateStart.getMinutes() * 60 + dateStart.getSeconds();
+		
+		return doChunking(secStart, secStop, dataToChunk);
+	}
+	
+	/**
+	 * Create chunks according to the variation of the input data and time period 
+	 * @param startSecond	The start time in second
+	 * @param stopSecond    The stop time in second
 	 * @param dataToChunk   The input data to chunk (accelerometer data in this app)
 	 * @return the array stores all chunks' positions from start second to stop second
 	 */

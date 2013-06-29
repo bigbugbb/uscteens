@@ -15,12 +15,12 @@ public class ContextSensitiveState implements Serializable {
 	
 	private int  mState;
 	private Date mStartTime;
-	private Date mEndTime;		
+	private Date mStopTime;		
 	
-	public ContextSensitiveState(int state, Date startTime, Date endTime) {
+	public ContextSensitiveState(int state, Date startTime, Date stopTime) {
 		mState     = state;
 		mStartTime = startTime;
-		mEndTime   = endTime;
+		mStopTime  = stopTime;
 	}
 	
 	public int getState() {
@@ -39,12 +39,12 @@ public class ContextSensitiveState implements Serializable {
 		return time;
 	}
 	
-	public String getEndTime() {
-		if (mEndTime == null) {
+	public String getStopTime() {
+		if (mStopTime == null) {
 			return "undefined";
 		}
-		int hour   = mEndTime.getHours();
-		int minute = mEndTime.getMinutes();
+		int hour   = mStopTime.getHours();
+		int minute = mStopTime.getMinutes();
 		String postfix = hour >= 12 ? " PM" : " AM";
 		hour = hour > 12 ? hour - 12 : hour;
 		String time = hour + ":" + (minute < 10 ? "0" + minute : minute) + postfix;
