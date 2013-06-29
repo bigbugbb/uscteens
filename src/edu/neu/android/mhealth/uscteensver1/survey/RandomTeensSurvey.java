@@ -19,10 +19,10 @@ public class RandomTeensSurvey extends QuestionSet {
 	public static final double VERSION = 1;
 	private ArrayList<SurveyQuestion> mDefaultQuestionSet;
 	private String contextUpperCase = null;
-	public static final String optionalContextUpperCase = "In the past four hours";
+	public static final String optionalContextUpperCase = "In the past hour";
 	public static final String defaultContextUpperCase  = "For the past hour/Since the last survey you answered";
 	private String contextLowerCase = null;
-	public static final String optionalContextLowerCase = "in the past four hours";
+	public static final String optionalContextLowerCase = "in the past hour";
 	public static final String defaultContextLowerCase  = "for the past hour/since the last survey you answered";
 
 	public static final int RANDOM_EMA_DEFAULT = 0;
