@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.algorithm.ChunkingAlgorithm;
 import edu.neu.android.wocketslib.Globals;
@@ -105,8 +106,9 @@ public class AccelDataChecker {
 		// Convert Date to second
 		int secTo   = stopTime.getHours() * 3600 + stopTime.getMinutes() * 60 + stopTime.getSeconds();
 		int secFrom = startTime.getHours() * 3600 + startTime.getMinutes() * 60 + startTime.getSeconds();
+		long midnight = DateHelper.getDailyTime(0, 0);
 		
-		// Create the position to mean value hash
+		// Create the position-to-mean hash
 		HashMap<Integer, Float> ctmHash = new HashMap<Integer, Float>();
 		for (int i = 0; i < chunkPos.size() - 1; ++i) {
 			int curPos = chunkPos.get(i);
@@ -128,9 +130,9 @@ public class AccelDataChecker {
 			Float mean = ctmHash.get(curPos);
 			if (mean != null && Math.abs(mean - NO_SENSOR_DATA) < 0.1f) {
 				if (nxtPos - curPos > Globals.MINUTES_30_IN_MS) {
-					sStartTime = DateHelper.getDailyTime(0, 0) + nxtPos * 1000;
-					Date dateFrom = new Date(DateHelper.getDailyTime(0, 0) + curPos * 1000);
-					Date dateTo   = new Date(DateHelper.getDailyTime(0, 0) + nxtPos * 1000);
+					sStartTime = midnight + nxtPos * 1000;
+					Date dateFrom = new Date(midnight + curPos * 1000);
+					Date dateTo   = new Date(midnight + nxtPos * 1000);
 					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_MISSING, dateFrom, dateTo);
 				}
 			}
@@ -164,16 +166,23 @@ public class AccelDataChecker {
 			if (mean != null && mean > INTENSITY_THRESHOLD) {
 				// The duration of this chunk should not be too short				
 				if (nxtPos - curPos > DURATION_THRESHOLD) {			
-					sStartTime = DateHelper.getDailyTime(0, 0) + nxtPos * 1000;
-					Date dateFrom = new Date(DateHelper.getDailyTime(0, 0) + curPos * 1000);
-					Date dateTo   = new Date(DateHelper.getDailyTime(0, 0) + nxtPos * 1000);
+					sStartTime = midnight + nxtPos * 1000;
+					Date dateFrom = new Date(midnight + curPos * 1000);
+					Date dateTo   = new Date(midnight + nxtPos * 1000);
 					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_HIGH_INTENSITY, dateFrom, dateTo);
 				}
 			}
 		}
 		
-		// Remember to update start time for the next check
-		sStartTime = to;
+		// Update startign time for the next check If the last chunk has real data inside
+		assert(chunkPos.size() >= 2);
+		int lastPos = chunkPos.get(chunkPos.size() - 2); // -2 because the last is actually a dummy chunk
+		Float mean = ctmHash.get(lastPos);
+		if (mean != null && Math.abs(mean - NO_SENSOR_DATA) < 0.1f) {
+			Log.i(TAG, "The last chunk has no sensor data");
+		} else {
+			sStartTime = to;
+		}
 				
 		return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
 	}

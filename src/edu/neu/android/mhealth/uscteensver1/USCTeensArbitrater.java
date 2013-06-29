@@ -68,6 +68,7 @@ public class USCTeensArbitrater extends Arbitrater {
 	
 	private static boolean sIsFirstRun = true;
 	private static Context sContext = null;
+	private static final long PROMPT_OFFSET = 2 * Globals.MINUTES_1_IN_MS;
 
 	// Status info
 	private ArrayList<Integer> mSomeTasks = new ArrayList<Integer>();
@@ -234,7 +235,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		long[] allPromptTime = DataStorage.getPromptTimesKey(aContext, KEY_ALL_PROMPT);		
 		long now = System.currentTimeMillis();
 		long lastScheduledPromptTime = getLastScheduledPromptTime(now, allPromptTime); // would be 0 if none				
-		boolean isReprompt = now - lastScheduledPromptTime > Globals.REPROMPT_DELAY_MS;
+		boolean isReprompt = now - lastScheduledPromptTime > Globals.REPROMPT_DELAY_MS - Globals.MINUTES_1_IN_MS;
 		SurveyPromptEvent promptEvent = new SurveyPromptEvent(lastScheduledPromptTime, now);
 		String msg = "";
 		
@@ -334,6 +335,8 @@ public class USCTeensArbitrater extends Arbitrater {
 	}
 
 	private boolean setCSPrompt(long promptTime) {
+		promptTime += PROMPT_OFFSET;
+		
 		long[] savedPromptTime = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
 		if (savedPromptTime == null) {
 			DataStorage.setPromptTimesKey(sContext, new long[] { promptTime }, KEY_CS_PROMPT);
