@@ -296,7 +296,7 @@ public class MotionGraph extends AppObject {
 		mCanvasHeight = height;
 		// get the region size
 		mWidth  = width;
-		mHeight = height - (int)(width * mAspectRatio);		
+		mHeight = height - (int) (width * mAspectRatio);		
 		
 		// for drawing lines
 		mPTS = new float[width * 4];

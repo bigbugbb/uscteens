@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Random;
 
@@ -69,6 +70,8 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static boolean sIsFirstRun = true;
 	private static Context sContext = null;
 	private static final long PROMPT_OFFSET = 2 * Globals.MINUTES_1_IN_MS;
+	
+	private static HashMap<Long, Boolean> sRepromtHash = new HashMap<Long, Boolean>();
 
 	// Status info
 	private ArrayList<Integer> mSomeTasks = new ArrayList<Integer>();
@@ -235,9 +238,11 @@ public class USCTeensArbitrater extends Arbitrater {
 		long[] allPromptTime = DataStorage.getPromptTimesKey(aContext, KEY_ALL_PROMPT);		
 		long now = System.currentTimeMillis();
 		long lastScheduledPromptTime = getLastScheduledPromptTime(now, allPromptTime); // would be 0 if none				
-		boolean isReprompt = now - lastScheduledPromptTime > Globals.REPROMPT_DELAY_MS;
+		boolean isReprompt = sRepromtHash.get(lastScheduledPromptTime) != null;
 		SurveyPromptEvent promptEvent = new SurveyPromptEvent(lastScheduledPromptTime, now);
 		String msg = "";
+		
+		sRepromtHash.put(lastScheduledPromptTime, true);
 		
 		// Indicate that this particular app was prompted
 		AppInfo.SetLastTimePrompted(aContext, Globals.SURVEY, now);
@@ -308,7 +313,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		aContext.startActivity(i);				
+		aContext.startActivity(i);		
 	}
 
 	public void printPromptingSchedule() {
@@ -545,6 +550,8 @@ public class USCTeensArbitrater extends Arbitrater {
 		double startTimeHour = Globals.DEFAULT_START_HOUR;
 		double endTimeHour   = Globals.DEFAULT_END_HOUR;
 		setAndSavePromptingSchedule(promptsPerDay, startTimeHour, endTimeHour);
+		
+		sRepromtHash.clear();
 		
 		return true;
 	}
