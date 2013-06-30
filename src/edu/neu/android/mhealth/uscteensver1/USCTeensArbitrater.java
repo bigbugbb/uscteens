@@ -235,7 +235,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		long[] allPromptTime = DataStorage.getPromptTimesKey(aContext, KEY_ALL_PROMPT);		
 		long now = System.currentTimeMillis();
 		long lastScheduledPromptTime = getLastScheduledPromptTime(now, allPromptTime); // would be 0 if none				
-		boolean isReprompt = now - lastScheduledPromptTime > Globals.REPROMPT_DELAY_MS - Globals.MINUTES_1_IN_MS;
+		boolean isReprompt = now - lastScheduledPromptTime > Globals.REPROMPT_DELAY_MS;
 		SurveyPromptEvent promptEvent = new SurveyPromptEvent(lastScheduledPromptTime, now);
 		String msg = "";
 		
@@ -520,7 +520,7 @@ public class USCTeensArbitrater extends Arbitrater {
 	private boolean isSameMinute(long timeA, long timeB) {
 		Date dateA = new Date(timeA);
 		Date dateB = new Date(timeB);
-		return (Math.abs(timeA - timeB) < 60) && dateA.getMinutes() == dateB.getMinutes();
+		return Math.abs(timeA - timeB) < Globals.MINUTES_1_IN_MS && dateA.getMinutes() == dateB.getMinutes();
 	}
 	
 	private boolean resetPromptingSchedule(boolean isNewSoftwareVersion) {	
