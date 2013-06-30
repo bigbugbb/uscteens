@@ -38,7 +38,7 @@ public class USCTeensGlobals {
 	public final static String LABELS_FOLDER = "/Labels/";
 	public final static String SENSOR_TYPE = "InternalAccel";
 	public final static String ANNOTATION_SET = "Activities";
-	public final static int TIME_FOR_WAITING_INTERNAL_ACCELEROMETER = 20 * 1000;
+	public final static int TIME_WAITING_SENSOR_DATA_IN_MS = 21 * 1000;
 	
 	public static int SENSOR_DATA_SCALING_FACTOR = 3500;
 	
@@ -115,11 +115,15 @@ public class USCTeensGlobals {
 //		Globals.PW_SYNC_PASSWORD = "sync";
 
 		// Survey prompting parameters 
-		Globals.AUDIO_PROMPT_START_HOUR = 7;
-		Globals.AUDIO_PROMPT_END_HOUR   = 23; 
-		Globals.REPROMPT_DELAY_MS = 5 * 60 * 1000; 
-		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = 10 * 60 * 1000; // 10 minutes 
-		Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS = 5 * 60 * 1000; // 5 minutes
+		Globals.AUDIO_PROMPT_START_HOUR = 8;
+		Globals.AUDIO_PROMPT_END_HOUR   = 22;
+		Globals.DEFAULT_PROMPTS_PER_DAY = 7;
+		Globals.DEFAULT_START_HOUR      = 8;
+		Globals.DEFAULT_END_HOUR        = 22;
+		Globals.REPROMPT_DELAY_MS = 5 * Globals.MINUTES_1_IN_MS;
+		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = Globals.MINUTES_30_IN_MS;
+		Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS = 5 * Globals.MINUTES_1_IN_MS;
+		Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS = 5 * Globals.MINUTES_1_IN_MS / 2;
 
 		// Only apps that are prompted 
 		Globals.ALL_APP_KEYS_PROMPTED = new String[1];

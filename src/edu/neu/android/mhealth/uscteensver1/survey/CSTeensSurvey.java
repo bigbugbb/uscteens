@@ -19,7 +19,7 @@ public class CSTeensSurvey extends QuestionSet {
 	
 	private ArrayList<SurveyQuestion> mDefaultQuestionSet;
 	private String context = null;
-	public static final String optionalContext = "In the past four hours";
+	public static final String optionalContext = "In the past hour";
 	public static final String defaultContext  = "Since the last survey you answered";
 	public static final int CS_EMA_DEFAULT  = 0;
 	public static final int CS_EMA_OPTIONAL = 1;

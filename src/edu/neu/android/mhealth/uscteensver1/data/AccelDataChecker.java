@@ -3,9 +3,12 @@ package edu.neu.android.mhealth.uscteensver1.data;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.algorithm.ChunkingAlgorithm;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
@@ -13,30 +16,37 @@ import edu.neu.android.wocketslib.utils.FileHelper;
 public class AccelDataChecker {
 	public final static String TAG = "AccelDataChecker";
 	
-	private final static float LOW_INTENSITY_THRESHOLD  = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR / 8f;
-	private final static float HIGH_INTENSITY_THRESHOLD = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR / 2f;
-	
-	private final static int ONE_MINUTE = 60 * 1000;
-	private final static int MIN_TIME_INTERVAL = 45 * 60 * 1000; // 45 minutes
+	private final static int NO_SENSOR_DATA = -1;
+	private final static int DURATION_THRESHOLD = 5 * 60;
+	private final static float MERGING_THRESHOLD  = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.15f;
+	private final static float INTENSITY_THRESHOLD = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.2f;	
 
-	public static ContextSensitiveState checkDataState(long from, long to) {
+	private static long sStartTime = 0; 
+	
+	public static ContextSensitiveState checkDataState() {
+		// Get the start/end time
 		long now = System.currentTimeMillis();
-		long oneMinAgo = now - ONE_MINUTE;			
 		
-		// check the input parameters
-		if (to > oneMinAgo || from > to - MIN_TIME_INTERVAL) {
-			Log.d(TAG, "Input time is not acceptable for checking data state!");
-			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_ERROR, null, null);
+		// Reset the start time if necessary
+		if (sStartTime > now || now - sStartTime > Globals.HOURS4_MS) {
+			sStartTime = now - Globals.MINUTES_10_IN_MS;			
 		}
 		
-		// Get data first		
-		int[] sensorData = getData(from, to);	
+		// Get data first
+		long from = sStartTime, to = now - Globals.MINUTES_1_IN_MS;
+		int[] sensorData = getData(from, to);
 		if (sensorData == null) {
+			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_ERROR, null, null);
+		}
+				
+		// Chunk the data just got		
+		ArrayList<Integer> chunkPos = ChunkingAlgorithm.getInstance().doChunking(from, to, sensorData);
+		if (chunkPos == null) {
 			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_ERROR, null, null);
 		}
 		
 		// Analyze data to get the state for context sensitive prompt
-		return analyzeData(sensorData, from, to);
+		return analyzeData(sensorData, chunkPos, from, to);
 	}
 	
 	private static int[] getData(long from, long to) {
@@ -78,7 +88,6 @@ public class AccelDataChecker {
 				accelDataWrap.add(hourlyAccelData);
 			} catch (Exception e) {
 				e.printStackTrace();
-				return null;
 			}			
 		}		
 		accelDataWrap.updateDrawableData();
@@ -90,60 +99,92 @@ public class AccelDataChecker {
 	/*
 	 *  analyze the data of the previous 30+ minutes 
 	 */
-	private static ContextSensitiveState analyzeData(int[] sensorData, long from, long to) {
-		Date dateFrom = new Date(from);
-		Date dateTo   = new Date(to);
-		// convert Date to seconds
-//		int secFrom = dateFrom.getHours() * 3600 + dateFrom.getMinutes() * 60 + dateFrom.getSeconds();
-		int secTo   = dateTo.getHours() * 3600 + dateTo.getMinutes() * 60 + dateTo.getSeconds();
-		if (secTo < 40 * 60) { // at least 40 minutes of data is needed to analyze
-			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_ERROR, null, null);					
-		}
+	@SuppressLint("UseSparseArrays")
+	private static ContextSensitiveState analyzeData(int[] sensorData, ArrayList<Integer> chunkPos, long from, long to) {
+		Date startTime = new Date(from);
+		Date stopTime  = new Date(to);
+		// Convert Date to second
+		int secTo   = stopTime.getHours() * 3600 + stopTime.getMinutes() * 60 + stopTime.getSeconds();
+		int secFrom = startTime.getHours() * 3600 + startTime.getMinutes() * 60 + startTime.getSeconds();
+		long midnight = DateHelper.getDailyTime(0, 0);
 		
-		// first, check 30+ minutes of high intensity data (use a global threshold)
-		// followed by 10 minutes of low intensity data
-		float sum = 0;
-		for (int i = secTo - 40 * 60; i < secTo - 10 * 60; ++i) {
-			sum += sensorData[i];
-		}		
-		if (sum / (30 * 60) > HIGH_INTENSITY_THRESHOLD) {
-			sum = 0;
-			for (int i = secTo - 10 * 60; i < secTo; ++i) {
-				sum += sensorData[i];
+		// Create the position-to-mean hash
+		HashMap<Integer, Float> ctmHash = new HashMap<Integer, Float>();
+		for (int i = 0; i < chunkPos.size() - 1; ++i) {
+			int curPos = chunkPos.get(i);
+			int nxtPos = chunkPos.get(i + 1);
+			// Get mean value from the current chunk position to the next
+			float sum = 0;
+			for (int j = curPos; j < nxtPos; ++j) {
+				sum += sensorData[j];
 			}
-			if (sum / (10 * 60) < LOW_INTENSITY_THRESHOLD) {
-				return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_HIGH_INTENSITY,
-						new Date(to - 40 * ONE_MINUTE), dateTo);
+			if (nxtPos - curPos > 0) {
+				ctmHash.put(curPos, sum / (nxtPos - curPos));
 			}
 		}
 		
-		// then, check 30+ minutes of missing data  (based on each rule we will define
-		// how to get the start/end time used when printing the first question.
-		boolean isMissing = true;
-		for (int i = secTo - 30 * 60; i < secTo; ++i) {
-			if (sensorData[i] != AccelDataWrap.NO_SENSOR_DATA) {
-				isMissing = false;
-				break;
-			}
-		}		
-		if (isMissing) {
-			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_MISSING, 
-					new Date(to - 30 * ONE_MINUTE), dateTo);
-		}
-		
-		// finally, check 30+ minutes of low-intensity data
-		boolean isLowIntensity = true;
-		for (int i = secTo - 30 * 60; i < secTo; ++i) {
-			if (sensorData[i] > LOW_INTENSITY_THRESHOLD) {
-				isLowIntensity = false;
+		// Check whether there is some period with no data at all
+		for (int i = 0; i < chunkPos.size() - 1; ++i) {
+			int curPos = chunkPos.get(i);
+			int nxtPos = chunkPos.get(i + 1);
+			Float mean = ctmHash.get(curPos);
+			if (mean != null && Math.abs(mean - NO_SENSOR_DATA) < 0.1f) {
+				if (nxtPos - curPos > Globals.MINUTES_30_IN_MS) {
+					sStartTime = midnight + nxtPos * 1000;
+					Date dateFrom = new Date(midnight + curPos * 1000);
+					Date dateTo   = new Date(midnight + nxtPos * 1000);
+					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_MISSING, dateFrom, dateTo);
+				}
 			}
 		}
-		if (isLowIntensity) {
-			return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_LOW_INTENSITY, 
-					new Date(to - 30 * ONE_MINUTE), dateTo);
+		
+		// Merge the some chunks if their means are relatively the same
+		ArrayList<Integer> merged = new ArrayList<Integer>();
+		for (int i = chunkPos.size() - 1; i > 1; --i) {
+			int curPos = chunkPos.get(i);
+			int prvPos = chunkPos.get(i - 1);
+			// Merge them if necessary
+			Float curMean = ctmHash.get(curPos);
+			Float prvMean = ctmHash.get(prvPos);
+			if (curMean != null && prvMean != null && Math.abs(curMean - prvMean) < MERGING_THRESHOLD) {
+				ctmHash.put(curPos, null);
+				merged.add(curPos);
+			}
+		}
+		chunkPos.removeAll(merged);
+		
+		// Look for valuable chunk from secFrom to secTo based on mean value and duration
+		for (int i = 0; i < chunkPos.size() - 1; ++i) {			
+			int curPos = chunkPos.get(i);
+			int nxtPos = chunkPos.get(i + 1);
+			// Jump the period before the starting time 
+			if (secFrom > curPos) { 
+				continue; 
+			}
+			// Get the chunk whose mean is larger than the intensity threshold
+			Float mean = ctmHash.get(curPos);
+			if (mean != null && mean > INTENSITY_THRESHOLD) {
+				// The duration of this chunk should not be too short				
+				if (nxtPos - curPos > DURATION_THRESHOLD) {			
+					sStartTime = midnight + nxtPos * 1000;
+					Date dateFrom = new Date(midnight + curPos * 1000);
+					Date dateTo   = new Date(midnight + nxtPos * 1000);
+					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_HIGH_INTENSITY, dateFrom, dateTo);
+				}
+			}
 		}
 		
-		return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, dateFrom, dateTo);
+		// Update startign time for the next check If the last chunk has real data inside
+		assert(chunkPos.size() >= 2);
+		int lastPos = chunkPos.get(chunkPos.size() - 2); // -2 because the last is actually a dummy chunk
+		Float mean = ctmHash.get(lastPos);
+		if (mean != null && Math.abs(mean - NO_SENSOR_DATA) < 0.1f) {
+			Log.i(TAG, "The last chunk has no sensor data");
+		} else {
+			sStartTime = to;
+		}
+				
+		return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
 	}
 		
 }
