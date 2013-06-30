@@ -63,22 +63,28 @@ public class USCTeensSetupActivity extends BaseActivity {
 			//Transmit Note first
 			ServerLogger.transmitOrQueueNote(USCTeensSetupActivity.this, msg, true);
 
-			//Move standard log files to internal upload folder
-			DataSender.sendLogsToInternalUploadDir(USCTeensSetupActivity.this, true, false); 
+			//Move standard log files to internal upload folder (do not include today)
+			DataSender.sendLogsToInternalUploadDir(USCTeensSetupActivity.this, true, false);
+
+            //Copy standard log files to internal upload folder (include today)
+            DataSender.copyLogsToInternalUploadDir(USCTeensSetupActivity.this, true, true);
 
 //			//Move survey log files to internal upload folder
 //			DataSender.sendInternalSurveyLogsToInternalUploadDir(SetupInhalerActivity.this, true, false); 
 
 			//Move survey log files to internal upload folder
-			DataSender.sendExternalSurveyLogsToExternalUploadDir(USCTeensSetupActivity.this, true, false); 
+			DataSender.copyExternalSurveyLogsToExternalUploadDir(USCTeensSetupActivity.this, true, false);
 
 			//Move survey log files to internal upload folder
-			DataSender.sendInternalDataLogsToInternalUploadDir(USCTeensSetupActivity.this, true, false); 
+			DataSender.copyInternalDataLogsToInternalUploadDir(USCTeensSetupActivity.this, true, false);
 			
 //			//Move Survey Log files to upload folder
-//			DataSender.sendSurveyLogsToExternalUploadDir(SetupInhalerActivity.this, true);
-			
-			//Move all data in the internal upload queue to the external upload queue and zip if needed 
+//			DataSender.copySurveyLogsToExternalUploadDir(SetupInhalerActivity.this, true);
+
+            // Move Data files to external upload folder
+            DataSender.copyExternalDataLogsToExternalUploadDir(USCTeensSetupActivity.this, true, false);
+
+            //Move all data in the internal upload queue to the external upload queue and zip if needed
 			if (Globals.IS_DEBUG)
 				Log.i(TAG, "Move and zip internal upload dir data to external upload directory");
 			DataSender.sendInternalUploadDataToExternalUploadDir(USCTeensSetupActivity.this, false, true);
