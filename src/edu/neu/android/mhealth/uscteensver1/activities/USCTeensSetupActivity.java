@@ -87,20 +87,24 @@ public class USCTeensSetupActivity extends BaseActivity {
 //			DataManager.listFilesInternalStorage();
 //			DataManager.listFilesExternalStorage();
 
-            int numFilesStart = RawUploader.countFilesExternalUploadDir() +
-                                RawUploader.countFilesInternalUploadDir();
+            // Zip the JSON zips so fewer uploads are required
+            DataManager.zipJSONSExternalUploads(USCTeensSetupActivity.this);
+            DataManager.zipJSONSInternalUploads(USCTeensSetupActivity.this);
+
+            int numFilesStart = DataManager.countFilesExtUploadDir() +
+                                DataManager.countFilesIntUploadDir();
 
 			//Upload JSON files and remove
-			int filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
-					true, true, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
+			int filesRemaining = RawUploader.uploadDataFromExtUploadDir(USCTeensSetupActivity.this,
+                    true, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
 
 			//Upload Log and SurveyLog files, backup and remove
-			filesRemaining = RawUploader.uploadDataFromExternalUploadDir(USCTeensSetupActivity.this,
-					false, true, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
+			filesRemaining = RawUploader.uploadDataFromExtUploadDir(USCTeensSetupActivity.this,
+                    false, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
 
 			//Upload possible remaining files in the internal memory
-			filesRemaining = RawUploader.uploadDataFromInternalDir(USCTeensSetupActivity.this,
-					false, true, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
+			filesRemaining = RawUploader.uploadDataFromIntUploadDir(USCTeensSetupActivity.this,
+                    false, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
 
 			msg = "Completed user-initiated file upload attempt of " + numFilesStart + " files after "
 					+ String.format(
