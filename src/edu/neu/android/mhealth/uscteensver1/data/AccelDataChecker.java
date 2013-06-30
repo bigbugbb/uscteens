@@ -17,9 +17,11 @@ public class AccelDataChecker {
 	public final static String TAG = "AccelDataChecker";
 	
 	private final static int NO_SENSOR_DATA = -1;
-	private final static int DURATION_THRESHOLD = 5 * 60;
-	private final static float MERGING_THRESHOLD  = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.15f;
-	private final static float INTENSITY_THRESHOLD = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.2f;	
+	private final static int ACTIVITY_DURATION_THRESHOLD = 5 * 60;
+	private final static int DURATION_AFTER_ACTIVITY_THRESHOLD = 5 * 60;
+	private final static float MERGING_THRESHOLD  = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.5f;
+	private final static float LOW_INTENSITY_THRESHOLD  = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.1f;
+	private final static float HIGH_INTENSITY_THRESHOLD = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.2f;	
 
 	private static long sStartTime = 0; 
 	
@@ -104,12 +106,14 @@ public class AccelDataChecker {
 		Date startTime = new Date(from);
 		Date stopTime  = new Date(to);
 		// Convert Date to second
+		long midnight = DateHelper.getDailyTime(0, 0);
 		int secTo   = stopTime.getHours() * 3600 + stopTime.getMinutes() * 60 + stopTime.getSeconds();
 		int secFrom = startTime.getHours() * 3600 + startTime.getMinutes() * 60 + startTime.getSeconds();
-		long midnight = DateHelper.getDailyTime(0, 0);
-		
-		// Create the position-to-mean hash
-		HashMap<Integer, Float> ctmHash = new HashMap<Integer, Float>();
+		int secNow  = (int) ((System.currentTimeMillis() - midnight) / 1000);
+				
+		// Create the position-to-mean hash and position-to-duration hash
+		HashMap<Integer, Float>   ptmHash = new HashMap<Integer, Float>();
+		HashMap<Integer, Integer> ptdHash = new HashMap<Integer, Integer>(); 
 		for (int i = 0; i < chunkPos.size() - 1; ++i) {
 			int curPos = chunkPos.get(i);
 			int nxtPos = chunkPos.get(i + 1);
@@ -118,16 +122,49 @@ public class AccelDataChecker {
 			for (int j = curPos; j < nxtPos; ++j) {
 				sum += sensorData[j];
 			}
-			if (nxtPos - curPos > 0) {
-				ctmHash.put(curPos, sum / (nxtPos - curPos));
+			int duration = Math.abs(nxtPos - curPos);
+			if (duration != 0) {
+				ptmHash.put(curPos, sum / duration);
+				ptdHash.put(curPos, duration);
 			}
 		}
 		
-		// Check whether there is some period with no data at all
+		// Merge some chunks if their means are relatively the same
+		ArrayList<Integer> merged = new ArrayList<Integer>();
+		for (int i = chunkPos.size() - 2; i > 1; --i) {
+			int curPos = chunkPos.get(i);
+			int prvPos = chunkPos.get(i - 1);
+			// Merge them if necessary
+			Float curMean = ptmHash.get(curPos);
+			Float prvMean = ptmHash.get(prvPos);
+			if (curMean == null || prvMean == null) {
+				continue;				
+			}
+			if (curMean > LOW_INTENSITY_THRESHOLD && prvMean > LOW_INTENSITY_THRESHOLD &&
+					Math.abs(curMean - prvMean) < MERGING_THRESHOLD) {					
+				// Calculate and update the mean of the chunk after merging
+				Integer prvDuration = ptdHash.get(prvPos) == null ? 0 : ptdHash.get(prvPos);
+				Integer curDuration = ptdHash.get(curPos) == null ? 0 : ptdHash.get(curPos);
+				Integer sumDuration = prvDuration + curDuration;
+				if (sumDuration > 0) {
+					Float meanAfterMerging = (curMean * curDuration + prvMean * prvDuration) / sumDuration;
+					ptmHash.put(prvPos, meanAfterMerging);
+					ptdHash.put(prvPos, sumDuration);
+				}
+				// Clear the chunk that has been merged					
+				ptmHash.put(curPos, null);
+				ptdHash.put(curPos, null);
+				merged.add(curPos);
+			}
+		}
+		chunkPos.removeAll(merged);
+		
+		// Check whether there is some period of time without any data
 		for (int i = 0; i < chunkPos.size() - 1; ++i) {
 			int curPos = chunkPos.get(i);
 			int nxtPos = chunkPos.get(i + 1);
-			Float mean = ctmHash.get(curPos);
+			Float mean = ptmHash.get(curPos);
+			// It's better not to compare two float values directly
 			if (mean != null && Math.abs(mean - NO_SENSOR_DATA) < 0.1f) {
 				if (nxtPos - curPos > Globals.MINUTES_30_IN_MS) {
 					sStartTime = midnight + nxtPos * 1000;
@@ -138,21 +175,6 @@ public class AccelDataChecker {
 			}
 		}
 		
-		// Merge the some chunks if their means are relatively the same
-		ArrayList<Integer> merged = new ArrayList<Integer>();
-		for (int i = chunkPos.size() - 1; i > 1; --i) {
-			int curPos = chunkPos.get(i);
-			int prvPos = chunkPos.get(i - 1);
-			// Merge them if necessary
-			Float curMean = ctmHash.get(curPos);
-			Float prvMean = ctmHash.get(prvPos);
-			if (curMean != null && prvMean != null && Math.abs(curMean - prvMean) < MERGING_THRESHOLD) {
-				ctmHash.put(curPos, null);
-				merged.add(curPos);
-			}
-		}
-		chunkPos.removeAll(merged);
-		
 		// Look for valuable chunk from secFrom to secTo based on mean value and duration
 		for (int i = 0; i < chunkPos.size() - 1; ++i) {			
 			int curPos = chunkPos.get(i);
@@ -162,10 +184,10 @@ public class AccelDataChecker {
 				continue; 
 			}
 			// Get the chunk whose mean is larger than the intensity threshold
-			Float mean = ctmHash.get(curPos);
-			if (mean != null && mean > INTENSITY_THRESHOLD) {
-				// The duration of this chunk should not be too short				
-				if (nxtPos - curPos > DURATION_THRESHOLD) {			
+			Float mean = ptmHash.get(curPos);
+			// The duration of this chunk should not be too short	
+			if (mean != null && mean >= HIGH_INTENSITY_THRESHOLD && nxtPos - curPos >= ACTIVITY_DURATION_THRESHOLD) {
+				if (Math.abs(nxtPos - secNow) >= DURATION_AFTER_ACTIVITY_THRESHOLD) {
 					sStartTime = midnight + nxtPos * 1000;
 					Date dateFrom = new Date(midnight + curPos * 1000);
 					Date dateTo   = new Date(midnight + nxtPos * 1000);
@@ -174,17 +196,27 @@ public class AccelDataChecker {
 			}
 		}
 		
-		// Update startign time for the next check If the last chunk has real data inside
+		// Update starting time for the next check If the last chunk has real data inside
 		assert(chunkPos.size() >= 2);
-		int lastPos = chunkPos.get(chunkPos.size() - 2); // -2 because the last is actually a dummy chunk
-		Float mean = ctmHash.get(lastPos);
-		if (mean != null && Math.abs(mean - NO_SENSOR_DATA) < 0.1f) {
-			Log.i(TAG, "The last chunk has no sensor data");
+		int lastPos = chunkPos.get(chunkPos.size() - 1);
+		int lastPrevPos = chunkPos.get(chunkPos.size() - 2); // -2 because the last is actually a dummy chunk
+		Float mean = ptmHash.get(lastPrevPos);
+		// Skip the update of starting time in some cases because we want to check them later
+		if (mean == null) {
+			Log.i(TAG, "The last mean equals to null, something bad might happen");
+			sStartTime = to;
+		} else if (Math.abs(mean - NO_SENSOR_DATA) < 0.1f) {
+			Log.i(TAG, "The last chunk has no sensor data, but its duration is not long enough");
+		} else if (mean > HIGH_INTENSITY_THRESHOLD) {
+			if (lastPos - lastPrevPos < ACTIVITY_DURATION_THRESHOLD) {
+				Log.i(TAG, "The last activity duration is not long enough");
+			} else if (Math.abs(lastPos - secNow) < DURATION_AFTER_ACTIVITY_THRESHOLD) {
+				Log.i(TAG, "The time after the last activity is not long enough");
+			}
 		} else {
 			sStartTime = to;
 		}
 				
 		return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
 	}
-		
 }
