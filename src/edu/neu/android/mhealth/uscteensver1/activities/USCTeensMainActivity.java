@@ -129,7 +129,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		DataStorage.setVersion(context, newVersion);
 		USCTeensGlobals.sUpdateConfig = !newVersion.equals(oldVersion);
 		if (USCTeensGlobals.sUpdateConfig) {
-			String dirPath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.ACTIVITY_FOLDER;
+			String dirPath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.ICON_FOLDER;
 			FileHelper.deleteDir(dirPath);		
 		}
 	}
