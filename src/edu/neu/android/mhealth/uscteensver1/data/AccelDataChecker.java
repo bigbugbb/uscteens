@@ -17,11 +17,12 @@ public class AccelDataChecker {
 	public final static String TAG = "AccelDataChecker";
 	
 	private final static int NO_SENSOR_DATA = -1;
-	private final static int ACTIVITY_DURATION_THRESHOLD = 5 * 60;
-	private final static int DURATION_AFTER_ACTIVITY_THRESHOLD = 5 * 60;
-	private final static float MERGING_THRESHOLD  = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.5f;
-	private final static float LOW_INTENSITY_THRESHOLD  = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.1f;
-	private final static float HIGH_INTENSITY_THRESHOLD = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.2f;	
+	private final static int NO_DATA_DURATION_THRESHOLD        = 30 * 60; // in second
+	private final static int NO_DATA_TOLERATION_THRESHOLD      = 2 * 60;  // in second
+	private final static int ACTIVITY_DURATION_THRESHOLD       = 5 * 60;  // in second
+	private final static int DURATION_AFTER_ACTIVITY_THRESHOLD = 5 * 60;  // in second
+	private final static float MERGING_THRESHOLD  = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.45f;
+	private final static float DATA_INTENSITY_THRESHOLD = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.2f;	
 
 	private static long sStartTime = 0; 
 	
@@ -140,7 +141,7 @@ public class AccelDataChecker {
 			if (curMean == null || prvMean == null) {
 				continue;				
 			}
-			if (curMean > LOW_INTENSITY_THRESHOLD && prvMean > LOW_INTENSITY_THRESHOLD &&
+			if (curMean > DATA_INTENSITY_THRESHOLD && prvMean > DATA_INTENSITY_THRESHOLD &&
 					Math.abs(curMean - prvMean) < MERGING_THRESHOLD) {					
 				// Calculate and update the mean of the chunk after merging
 				Integer prvDuration = ptdHash.get(prvPos) == null ? 0 : ptdHash.get(prvPos);
@@ -166,8 +167,16 @@ public class AccelDataChecker {
 			Float mean = ptmHash.get(curPos);
 			// It's better not to compare two float values directly
 			if (mean != null && Math.abs(mean - NO_SENSOR_DATA) < 0.1f) {
-				if (nxtPos - curPos > Globals.MINUTES_30_IN_MS) {
-					sStartTime = midnight + nxtPos * 1000;
+				if (nxtPos - curPos > NO_DATA_DURATION_THRESHOLD) {
+					// If nxtPos is the last chunk position and its value is very close to the current time in second,
+					// update the starting time using the beginning position of the last chunk to make sure that
+					// this position will have the chance to be checked again in the near future
+					if (i + 1 == chunkPos.size() - 1 && secNow - nxtPos < NO_DATA_TOLERATION_THRESHOLD) {
+						sStartTime = midnight + curPos * 1000;
+						return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
+					} else {
+						sStartTime = midnight + nxtPos * 1000;
+					}
 					Date dateFrom = new Date(midnight + curPos * 1000);
 					Date dateTo   = new Date(midnight + nxtPos * 1000);
 					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_MISSING, dateFrom, dateTo);
@@ -180,13 +189,12 @@ public class AccelDataChecker {
 			int curPos = chunkPos.get(i);
 			int nxtPos = chunkPos.get(i + 1);
 			// Jump the period before the starting time 
-			if (secFrom > curPos) { 
-				continue; 
-			}
-			// Get the chunk whose mean is larger than the intensity threshold
+			if (secFrom > curPos) { continue; }
+			// Get the chunk whose mean is valuable if it's larger than the intensity threshold
 			Float mean = ptmHash.get(curPos);
+			if (mean == null) { continue; }
 			// The duration of this chunk should not be too short	
-			if (mean != null && mean >= HIGH_INTENSITY_THRESHOLD && nxtPos - curPos >= ACTIVITY_DURATION_THRESHOLD) {
+			if (mean >= DATA_INTENSITY_THRESHOLD && nxtPos - curPos >= ACTIVITY_DURATION_THRESHOLD) {
 				if (Math.abs(nxtPos - secNow) >= DURATION_AFTER_ACTIVITY_THRESHOLD) {
 					sStartTime = midnight + nxtPos * 1000;
 					Date dateFrom = new Date(midnight + curPos * 1000);
@@ -207,7 +215,7 @@ public class AccelDataChecker {
 			sStartTime = to;
 		} else if (Math.abs(mean - NO_SENSOR_DATA) < 0.1f) {
 			Log.i(TAG, "The last chunk has no sensor data, but its duration is not long enough");
-		} else if (mean > HIGH_INTENSITY_THRESHOLD) {
+		} else if (mean > DATA_INTENSITY_THRESHOLD) {
 			if (lastPos - lastPrevPos < ACTIVITY_DURATION_THRESHOLD) {
 				Log.i(TAG, "The last activity duration is not long enough");
 			} else if (Math.abs(lastPos - secNow) < DURATION_AFTER_ACTIVITY_THRESHOLD) {

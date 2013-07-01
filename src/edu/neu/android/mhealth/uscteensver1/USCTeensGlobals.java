@@ -66,7 +66,7 @@ public class USCTeensGlobals {
 		Globals.INTERNAL_DIRECTORY_PATH = aContext.getFilesDir().getAbsolutePath();
 		Globals.EXTERNAL_DIRECTORY_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
 		
-		DIRECTORY_PATH = Globals.INTERNAL_DIRECTORY_PATH;
+		DIRECTORY_PATH = Globals.EXTERNAL_DIRECTORY_PATH;
 
 		Globals.STUDY_NAME = "USCTeens"; // "Teens Study"; 
 		Globals.STUDY_SERVER_NAME = "USCTeens";
