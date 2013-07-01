@@ -33,7 +33,7 @@ public class AccelDataChecker {
 		
 		// Reset the start time if necessary
 		if (sStartTime > now || now - sStartTime > Globals.HOURS4_MS) {
-			sStartTime = now - Globals.MINUTES_10_IN_MS;			
+			sStartTime = now - (long) (2.5f * Globals.MINUTES_10_IN_MS);			
 		}
 		
 		// Get data first
