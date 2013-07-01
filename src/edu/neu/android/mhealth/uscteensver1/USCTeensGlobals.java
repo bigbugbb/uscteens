@@ -34,7 +34,7 @@ public class USCTeensGlobals {
 	public final static String SENSOR_FOLDER     = "/Sensor/";	
 	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String LABELS_FOLDER = "/Labels/";
-	public final static String ICON_FOLDER   = "/Icon/";
+	public final static String ICON_FOLDER   = "/Icons/";
 	public final static String REWARD_FOLDER = "/Reward/";	
 	public final static String SENSOR_TYPE = "InternalAccel";
 	public final static String ANNOTATION_SET = "Activities";
