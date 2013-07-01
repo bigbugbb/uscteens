@@ -56,8 +56,7 @@ public class RewardManager {
 		// first clear the action container
 		sRewardWrap.clear();
 		
-		String dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
+		String dirPath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
 		String[] rewardDir = FileHelper.getFilePathsDir(dirPath);
 		if (rewardDir == null || rewardDir.length == 0 || (USCTeensGlobals.sUpdateConfig && !sCopied)) {
 			sCopied = true;
@@ -176,8 +175,7 @@ public class RewardManager {
 	}
 	
 	private static void copyRewardFromAssets() {
-		String outfilePath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
+		String outfilePath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
 		// create new directory if doesn't exist
 		try {
 			FileHelper.createDir(outfilePath);

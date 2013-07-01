@@ -22,7 +22,7 @@ public class USCTeensGlobals {
 	public final static int    PIXEL_PER_DATA = 2;	
 	public final static int    MAX_WIDTH_IN_PIXEL = 3600 * 24 * PIXEL_PER_DATA;
 	public final static int    UPDATING_TIME_THRESHOLD = 60 * 1000; // in ms
-	public final static int	   MAX_AVAILABLE_LABELING_DAYS = 2;	
+	public final static int	   MAX_AVAILABLE_LABELING_DAYS = 2;		
 	public final static String DATA_LOADING_RESULT = "DATA_LOADING_RESULT";
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
 	public final static String MERGE_SELECTION = "MERGE_SELECTION";
@@ -31,10 +31,10 @@ public class USCTeensGlobals {
 	public final static String CURRENT_SELECTED_DATE = "CURRENT_SELECTED_DATE";
 	public final static String LAST_SELECTED_CHUNK = "LAST_SELECTED_CHUNK";
 	public final static String LAST_DISPLAY_OFFSET_X = "LAST_DISPLAY_OFFSET_X";
-	public final static String SENSOR_FOLDER     = "/Sensor/";
+	public final static String SENSOR_FOLDER     = "/Sensor/";	
+	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String ACTIVITY_FOLDER   = "/Activity/";
 	public final static String REWARD_FOLDER     = "/Reward/";
-	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String LABELS_FOLDER = "/Labels/";
 	public final static String SENSOR_TYPE = "InternalAccel";
 	public final static String ANNOTATION_SET = "Activities";
@@ -50,6 +50,8 @@ public class USCTeensGlobals {
 	public static final String UNLABELLED_GUID = "03F9A375-C162-4B24-AB74-BF23CD07B358";
 	public static final String UNLABELLED_STRING = "Unlabelled";
 	
+	public static String DIRECTORY_PATH = "";
+	
 	public static void initGlobals(Context aContext) {
 		// By default the logging will go to the apps internal storage, not the external directory
 		Globals.IS_DEBUG = false;
@@ -57,11 +59,14 @@ public class USCTeensGlobals {
 		Globals.APP_DIRECTORY = "uscteens";
 		Globals.LOG_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "logs";
 		Globals.DATA_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "data";
-		Globals.INTERNAL_DIRECTORY_PATH = aContext.getFilesDir().getAbsolutePath();
-		Globals.EXTERNAL_DIRECTORY_PATH = Environment.getExternalStorageDirectory().getAbsolutePath(); 
+		Globals.APP_DATA_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "appdata";
 		Globals.SURVEY_LOG_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "survey";
 		Globals.UPLOADS_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "uploads";
-		Globals.BACKUP_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "backup";
+		Globals.BACKUP_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "backup";		
+		Globals.INTERNAL_DIRECTORY_PATH = aContext.getFilesDir().getAbsolutePath();
+		Globals.EXTERNAL_DIRECTORY_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+		
+		DIRECTORY_PATH = Globals.INTERNAL_DIRECTORY_PATH;
 
 		Globals.STUDY_NAME = "USCTeens"; // "Teens Study"; 
 		Globals.STUDY_SERVER_NAME = "USCTeens";

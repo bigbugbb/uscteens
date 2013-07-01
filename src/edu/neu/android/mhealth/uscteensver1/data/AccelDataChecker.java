@@ -57,8 +57,8 @@ public class AccelDataChecker {
 		// read the whole piece of data according to the input time
 		String date = DateHelper.getServerDateString(new Date());
 		String[] hourDirs = FileHelper.getFilePathsDir(
-				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);	
+			USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date
+		);	
 		if (hourDirs == null) {
 			// no data to get
 			return null;

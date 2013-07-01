@@ -125,9 +125,9 @@ public class USCTeensArbitrater extends Arbitrater {
 		String[] filePathNames = new String[2];
 		String dateDir = new SimpleDateFormat("yyyy-MM-dd/HH/").format(new Date());
 		
-		filePathNames[0] = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
+		filePathNames[0] = USCTeensGlobals.DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir + fileNames[0];
-		filePathNames[1] = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
+		filePathNames[1] = USCTeensGlobals.DIRECTORY_PATH + File.separator + 
 				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir + fileNames[1];
 		
 		return filePathNames;
@@ -225,11 +225,7 @@ public class USCTeensArbitrater extends Arbitrater {
 				e.printStackTrace();
 			}
 		}
-		
-//		if (!isSaved) {
-//			Log.e(TAG, "Error. Could not save internal acceleromter data to internal storage." + fileName);
-//		}
-		
+	
 		return result;
 	}
 
@@ -401,7 +397,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		promptSchedule.append("Scheduled prompts today: " + promptsPerDay + NEWLINE);
 		promptSchedule.append("Start hour: " + startTimeHour + NEWLINE);
 		promptSchedule.append("End hour: " + endTimeHour + NEWLINE);
-
+		
 		for (int i = 0; i < promptsPerDay; i++) {
 			// Add a random number of MS to the first start time block
 			promptTimes[i] = startDayTime + startIntervalTimeMS + i * intervalIncMS + r.nextInt((int) intervalIncMS);
@@ -414,6 +410,19 @@ public class USCTeensArbitrater extends Arbitrater {
 				}
 			}
 		}
+		
+		/*
+		 * Generate a time which is very close to the current time in millisecond
+		 * Comment it if not for test		 
+		 */
+//		long testTime = System.currentTimeMillis() + 60000;
+//		for (int i = 0; i < promptsPerDay; ++i) {
+//			if (promptTimes[i] < testTime) {
+//				continue;
+//			}
+//			promptTimes[i] = testTime;
+//			break;
+//		}
 		
 		for (int i = 0; i < promptsPerDay; i++) {
 			promptSchedule.append("Prompt: " + DateHelper.getDate(promptTimes[i]) + NEWLINE);
@@ -642,9 +651,12 @@ public class USCTeensArbitrater extends Arbitrater {
 		// wait for the internal AC sensor to get data for at least 20s 
 		try {
 			synchronized (this) {				
-				if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor for 20s"); }
+				if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor for at most 20s"); }
 				long timeCost = System.currentTimeMillis() - lastTime;
-				wait(Math.max(0, USCTeensGlobals.TIME_WAITING_SENSOR_DATA_IN_MS - timeCost));
+				long timeToWait = USCTeensGlobals.TIME_WAITING_SENSOR_DATA_IN_MS - timeCost;
+				if (timeToWait > 0) {
+					wait(timeToWait);
+				}
 				if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor finished"); }				
 			}			
 		} catch (InterruptedException e) {			

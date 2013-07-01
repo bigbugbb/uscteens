@@ -132,8 +132,7 @@ public class ActionManager {
 		// first clear the action container
 		sActionWrap.clear();
 		
-		String dirPath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.ACTIVITY_FOLDER;
+		String dirPath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.ACTIVITY_FOLDER;
 		String[] actionDir = FileHelper.getFilePathsDir(dirPath);
 		if (actionDir == null || actionDir.length == 0 || (USCTeensGlobals.sUpdateConfig && !sCopied)) {
 			sCopied = true;
@@ -284,8 +283,7 @@ public class ActionManager {
 	// do that, the whole Activity folder will be copied from the assets to the data
 	// directory which locates in the external storage
 	private static void copyActionsFromAssets() {
-		String outfilePath = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.ACTIVITY_FOLDER;
+		String outfilePath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.ACTIVITY_FOLDER;
 		// create new directory if doesn't exist
 		try {
 			FileHelper.createDir(outfilePath);

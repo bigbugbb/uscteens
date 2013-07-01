@@ -312,8 +312,8 @@ public class DataSource {
 	
 	private static int loadRawAccelData(String date) {
 		String[] hourDirs = FileHelper.getFilePathsDir(
-				Globals.EXTERNAL_DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date);		
+			USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date
+		);		
 		
 		try {
 			// load the daily data from .bin files hour by hour		
@@ -362,8 +362,7 @@ public class DataSource {
 	 * @return
 	 */
 	private static boolean loadRawChunkData(String date) {
-		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				USCTeensGlobals.ANNOTATION_FOLDER + date;
+		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + USCTeensGlobals.ANNOTATION_FOLDER + date;
 		
 		String[] chunkFilePaths = FileHelper.getFilePathsDir(path);
 		if (chunkFilePaths == null || chunkFilePaths.length == 0) {			
@@ -427,8 +426,7 @@ public class DataSource {
 	 * @return true if the raw label wrap has label data, otherwise false
 	 */
 	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap) {		
-		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				USCTeensGlobals.LABELS_FOLDER + date;
+		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.LABELS_FOLDER + date;
 		
 		// first clear the data container		
 		rawLabelWrap.clear();
@@ -497,8 +495,7 @@ public class DataSource {
 	 * @return true if succeed, otherwise false
 	 */
 	public static boolean saveLabelData(String date, RawLabelWrap rawLabelWrap) {						
-		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				USCTeensGlobals.LABELS_FOLDER + date;
+		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.LABELS_FOLDER + date;
 		
 		// build the file path name
 		String filePathName = ""; 
@@ -561,9 +558,8 @@ public class DataSource {
 	}
 	
 	public static boolean areAllChunksLabelled(String date) {
-		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				USCTeensGlobals.ANNOTATION_FOLDER + date + File.separator + USCTeensGlobals.ANNOTATION_SET + "." + 
-				/*PhoneInfo.getID(mContext) + "." + */date + ".annotation.xml";
+		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
+			USCTeensGlobals.ANNOTATION_FOLDER + date + File.separator + USCTeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";
 		
 		File file = new File(path);		
 		if (!file.exists()) {			
@@ -599,9 +595,8 @@ public class DataSource {
 		boolean result = false;		
 		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
 		assert(date.compareTo("") != 0);
-		String path = Globals.EXTERNAL_DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				USCTeensGlobals.ANNOTATION_FOLDER + date + File.separator + USCTeensGlobals.ANNOTATION_SET +
-				"." + date + ".annotation.xml";			
+		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
+			USCTeensGlobals.ANNOTATION_FOLDER + date + File.separator + USCTeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";			
 
 		sRawChksWrap.clear();
 		for (int i = 0; i < chunks.size(); ++i) {
