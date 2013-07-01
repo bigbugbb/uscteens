@@ -586,7 +586,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		}				
 		
 		// Make sure that we have at least data for 30 minutes to analyze
-		if (now - firstCheckTime >= Globals.MINUTES_30_IN_MS && now - lastCheckTime >= Globals.MINUTES_30_IN_MS) {
+		if (now - firstCheckTime >= Globals.MINUTES_30_IN_MS && now - lastCheckTime >= 15 * Globals.MINUTES_1_IN_MS) {
 			if (isOkActivityPrompt()) {	
 				ContextSensitiveState css = AccelDataChecker.checkDataState();
 				if (css.getState() != ContextSensitiveState.DATA_STATE_ERROR && 
