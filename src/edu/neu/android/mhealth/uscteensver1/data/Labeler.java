@@ -1,11 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import android.content.Context;
-import edu.neu.android.wocketslib.support.DataStorage;
 
 /*
  * This class gives you the ability to update the label file directly
