@@ -312,7 +312,7 @@ public class DataSource {
 	
 	private static int loadRawAccelData(String date) {
 		String[] hourDirs = FileHelper.getFilePathsDir(
-			USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + date
+			USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.SENSOR_FOLDER 
 		);		
 		
 		try {
@@ -362,7 +362,7 @@ public class DataSource {
 	 * @return
 	 */
 	private static boolean loadRawChunkData(String date) {
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + USCTeensGlobals.ANNOTATION_FOLDER + date;
+		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.ANNOTATION_FOLDER;
 		
 		String[] chunkFilePaths = FileHelper.getFilePathsDir(path);
 		if (chunkFilePaths == null || chunkFilePaths.length == 0) {			
@@ -558,8 +558,8 @@ public class DataSource {
 	}
 	
 	public static boolean areAllChunksLabelled(String date) {
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-			USCTeensGlobals.ANNOTATION_FOLDER + date + File.separator + USCTeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";
+		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + 
+			date + USCTeensGlobals.ANNOTATION_FOLDER + USCTeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";
 		
 		File file = new File(path);		
 		if (!file.exists()) {			
@@ -595,8 +595,8 @@ public class DataSource {
 		boolean result = false;		
 		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
 		assert(date.compareTo("") != 0);
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-			USCTeensGlobals.ANNOTATION_FOLDER + date + File.separator + USCTeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";			
+		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator
+			 + date + USCTeensGlobals.ANNOTATION_FOLDER + USCTeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";			
 
 		sRawChksWrap.clear();
 		for (int i = 0; i < chunks.size(); ++i) {

@@ -123,12 +123,13 @@ public class USCTeensArbitrater extends Arbitrater {
 	
 	private String[] getFilePathNamesForSavingInternalAccelData(String[] fileNames) {
 		String[] filePathNames = new String[2];
-		String dateDir = new SimpleDateFormat("yyyy-MM-dd/HH/").format(new Date());
+		String dateDir = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String hourDir = new SimpleDateFormat("/HH/").format(new Date());
 		
 		filePathNames[0] = USCTeensGlobals.DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir + fileNames[0];
+			Globals.DATA_DIRECTORY + File.separator + dateDir + USCTeensGlobals.SENSOR_FOLDER + hourDir + fileNames[0];
 		filePathNames[1] = USCTeensGlobals.DIRECTORY_PATH + File.separator + 
-				Globals.DATA_DIRECTORY + USCTeensGlobals.SENSOR_FOLDER + dateDir + fileNames[1];
+			Globals.DATA_DIRECTORY + File.separator + dateDir + USCTeensGlobals.SENSOR_FOLDER + hourDir + fileNames[1];
 		
 		return filePathNames;
 	}
