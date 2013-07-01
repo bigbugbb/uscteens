@@ -426,7 +426,7 @@ public class DataSource {
 	 * @return true if the raw label wrap has label data, otherwise false
 	 */
 	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap) {		
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.LABELS_FOLDER + date;
+		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.LABELS_FOLDER;
 		
 		// first clear the data container		
 		rawLabelWrap.clear();
@@ -495,7 +495,7 @@ public class DataSource {
 	 * @return true if succeed, otherwise false
 	 */
 	public static boolean saveLabelData(String date, RawLabelWrap rawLabelWrap) {						
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.LABELS_FOLDER + date;
+		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.LABELS_FOLDER;
 		
 		// build the file path name
 		String filePathName = ""; 
