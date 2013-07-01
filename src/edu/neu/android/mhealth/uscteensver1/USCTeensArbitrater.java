@@ -698,7 +698,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		}
 		Date promptTime = new Date(System.currentTimeMillis());
 		SimpleDateFormat folderFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String folderPath = Globals.SURVEY_LOG_DIRECTORY + File.separator + "SurveyRecord_" + folderFormat.format(promptTime);
+		String folderPath = Globals.SURVEY_LOG_DIRECTORY + File.separator + folderFormat.format(promptTime);
 		File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + folderPath);
 		folder.mkdirs();
 
