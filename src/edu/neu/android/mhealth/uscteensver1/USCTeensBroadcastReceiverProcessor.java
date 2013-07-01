@@ -18,9 +18,7 @@ public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcess
 	}
 	
 	@Override
-	public void setContext(Context context) {
-		Labeler.initialize(context);
-	}
+	public void setContext(Context context) {}
 	
 	//TODO change all the methods below to use addLabel with sending a date (vs a string of a date). Will clean up code. 
 	@Override

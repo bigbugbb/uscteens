@@ -18,14 +18,9 @@ public class Labeler {
 	private static SimpleDateFormat sDateFormat     = new SimpleDateFormat("yyyy-MM-dd");
 	private static SimpleDateFormat sDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
 	
-	private static Context sContext;
 	private static final long TWO_MINUTE = 120 * 1000;
-	private static final String KEY_LAST_LABEL_NAME = "_KEY_LAST_LABEL_NAME";
-	private static final String KEY_LAST_LABEL_TIME = "_KEY_LAST_LABEL_TIME";
-	
-	public static void initialize(Context context) {
-		sContext = context;
-	}
+	private static long   sLastLabelTime = 0;
+	private static String sLastLabelName = "";	
 	
 	/**
 	 * add a new label
@@ -35,20 +30,13 @@ public class Labeler {
 	 */
 	public static boolean addLabel(String dateTime, String name) {
 		boolean result = false;
-				
-		try {
-			long currentLabelTime = sDateTimeFormat.parse(dateTime).getTime();
-			long lastLabelTime = DataStorage.GetValueLong(sContext, KEY_LAST_LABEL_TIME, 0);
-			String lastLabelName = DataStorage.GetValueString(sContext, KEY_LAST_LABEL_NAME, ":-)");
-			if (Math.abs(lastLabelTime - currentLabelTime) < TWO_MINUTE && name.equals(lastLabelName)) {
-				return false; // skip this label because it's too frequent
-			} else {
-				DataStorage.SetValue(sContext, KEY_LAST_LABEL_NAME, name);		
-				DataStorage.SetValue(sContext, KEY_LAST_LABEL_TIME, currentLabelTime);
-			}
-		} catch (ParseException e1) {			
-			e1.printStackTrace();
-		}
+										
+		if (Math.abs(sLastLabelTime - System.currentTimeMillis()) < TWO_MINUTE && name.equals(sLastLabelName)) {
+			return false; // skip this label because it's too frequent
+		} else {
+			sLastLabelTime = System.currentTimeMillis();
+			sLastLabelName = name;
+		}		
 		
 		String date = dateTime.split(" ")[0];
 		DataSource.loadLabelData(date, sRawLabels);
