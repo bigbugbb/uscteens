@@ -18,7 +18,8 @@ public class AccelDataChecker {
 	
 	private final static int NO_SENSOR_DATA = -1;
 	private final static int NO_DATA_DURATION_THRESHOLD        = 30 * 60; // in second
-	private final static int NO_DATA_TOLERATION_THRESHOLD      = 2 * 60;  // in second
+	private final static int NO_DATA_TOLERATION_THRESHOLD      = 3 * 60;  // in second
+	private final static int ACTIVITY_TOLERATION_THRESHOLD     = 3 * 60;  // in second
 	private final static int ACTIVITY_DURATION_THRESHOLD       = 5 * 60;  // in second
 	private final static int DURATION_AFTER_ACTIVITY_THRESHOLD = 5 * 60;  // in second
 	private final static float MERGING_THRESHOLD  = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.45f;
@@ -171,8 +172,8 @@ public class AccelDataChecker {
 					// If nxtPos is the last chunk position and its value is very close to the current time in second,
 					// update the starting time using the beginning position of the last chunk to make sure that
 					// this position will have the chance to be checked again in the near future
-					if (i + 1 == chunkPos.size() - 1 && secNow - nxtPos < NO_DATA_TOLERATION_THRESHOLD) {
-						sStartTime = midnight + curPos * 1000;
+					if (i == chunkPos.size() - 2 && secNow - nxtPos < NO_DATA_TOLERATION_THRESHOLD) {
+						sStartTime = midnight + curPos * 1000; // update for the next check
 						return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
 					} else {
 						sStartTime = midnight + nxtPos * 1000;
@@ -180,6 +181,9 @@ public class AccelDataChecker {
 					Date dateFrom = new Date(midnight + curPos * 1000);
 					Date dateTo   = new Date(midnight + nxtPos * 1000);
 					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_MISSING, dateFrom, dateTo);
+				} else if (i == chunkPos.size() - 2 && secNow - nxtPos < NO_DATA_TOLERATION_THRESHOLD) {
+					sStartTime = midnight + curPos * 1000; // update for the next check
+					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);					
 				}
 			}
 		}
@@ -191,39 +195,27 @@ public class AccelDataChecker {
 			// Jump the period before the starting time 
 			if (secFrom > curPos) { continue; }
 			// Get the chunk whose mean is valuable if it's larger than the intensity threshold
-			Float mean = ptmHash.get(curPos);
-			if (mean == null) { continue; }
+			Float mean = ptmHash.get(curPos);					
+			if (mean == null || mean < DATA_INTENSITY_THRESHOLD) { continue; }
 			// The duration of this chunk should not be too short	
-			if (mean >= DATA_INTENSITY_THRESHOLD && nxtPos - curPos >= ACTIVITY_DURATION_THRESHOLD) {
+			if (nxtPos - curPos >= ACTIVITY_DURATION_THRESHOLD) {
 				if (Math.abs(nxtPos - secNow) >= DURATION_AFTER_ACTIVITY_THRESHOLD) {
 					sStartTime = midnight + nxtPos * 1000;
 					Date dateFrom = new Date(midnight + curPos * 1000);
 					Date dateTo   = new Date(midnight + nxtPos * 1000);
 					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_HIGH_INTENSITY, dateFrom, dateTo);
+				} else {
+					sStartTime = midnight + curPos * 1000;
+					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
 				}
+			} else if (i == chunkPos.size() - 2 && secNow - nxtPos < ACTIVITY_TOLERATION_THRESHOLD) {
+				sStartTime = midnight + curPos * 1000;
+				return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
 			}
 		}
-		
-		// Update starting time for the next check If the last chunk has real data inside
-		assert(chunkPos.size() >= 2);
-		int lastPos = chunkPos.get(chunkPos.size() - 1);
-		int lastPrevPos = chunkPos.get(chunkPos.size() - 2); // -2 because the last is actually a dummy chunk
-		Float mean = ptmHash.get(lastPrevPos);
-		// Skip the update of starting time in some cases because we want to check them later
-		if (mean == null) {
-			Log.i(TAG, "The last mean equals to null, something bad might happen");
-			sStartTime = to;
-		} else if (Math.abs(mean - NO_SENSOR_DATA) < 0.1f) {
-			Log.i(TAG, "The last chunk has no sensor data, but its duration is not long enough");
-		} else if (mean > DATA_INTENSITY_THRESHOLD) {
-			if (lastPos - lastPrevPos < ACTIVITY_DURATION_THRESHOLD) {
-				Log.i(TAG, "The last activity duration is not long enough");
-			} else if (Math.abs(lastPos - secNow) < DURATION_AFTER_ACTIVITY_THRESHOLD) {
-				Log.i(TAG, "The time after the last activity is not long enough");
-			}
-		} else {
-			sStartTime = to;
-		}
+
+		// Update of starting time for the next check
+		sStartTime = to;
 				
 		return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
 	}
