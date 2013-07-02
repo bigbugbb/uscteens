@@ -19,8 +19,8 @@ public class CSDetectingAlgorithm {
 	private final static int NO_DATA_MAX_TOLERATION_THRESHOLD = 4 * 3600; // in second
 	private final static int ACTIVITY_DURATION_THRESHOLD      = 30 * 60;  // in second
 	private final static int ACTIVITY_TOLERATION_THRESHOLD    = 10 * 60;  // in second
-	private final static int NO_ACTIVITY_DURATION_THRESHOLD   = 60 * 60;  // in second
-	private final static int NO_ACTIVITY_TOLERATION_THRESHOLD = 5 * 60;   // in second
+	private final static int NO_ACTIVITY_DURATION_THRESHOLD   = 30 * 60;  // in second
+	private final static int NO_ACTIVITY_TOLERATION_THRESHOLD = 2 * 60;   // in second
 	private final static float MOTION_INTENSITY_THRESHOLD = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.2f;
 	
 	private final static String KEY_DETECTING_START_TIME = "KEY_DETECTING_START_TIME";
