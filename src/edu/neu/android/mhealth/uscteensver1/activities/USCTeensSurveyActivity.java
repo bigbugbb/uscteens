@@ -1,15 +1,19 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyAnswer;
+import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion;
 
 public class USCTeensSurveyActivity extends SurveyActivity {
 	
 	protected void onExit() {
+		ArrayList<SurveyQuestion> poppedQuestions = getPoppedQuestions();
+		
 		for (SurveyQuestion question : poppedQuestions) {
 			String id = question.getQuestionId(); 
 			id = id.substring(0, id.lastIndexOf('_'));
@@ -21,11 +25,20 @@ public class USCTeensSurveyActivity extends SurveyActivity {
 		}
 	}
 	
-	private void labelSelectedAnswer(SurveyQuestion question) {
+	private void labelSelectedAnswer(SurveyQuestion question) {		
 		SurveyAnswer[] answers = question.getAnswers();
+		SurveyPromptEvent promptEvent = getSurveyPromptEvent();
+		
 		for (SurveyAnswer answer : answers) {
-			if (answer.isSelected()) {
+			if (!answer.isSelected()) {
+				continue;				
+			}
+			
+			if (promptEvent == null) {
 				Labeler.addLabel(new Date(), answer.getAnswerText());
+			} else {
+				long time = promptEvent.getScheduledPromptTime(); // the time is actually not accurate
+				Labeler.addLabel(new Date(time), answer.getAnswerText());
 			}
 		}
 	}

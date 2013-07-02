@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.utils.FileHelper;
