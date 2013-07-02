@@ -38,6 +38,7 @@ public class USCTeensGlobals {
 	public final static String LABELS_FOLDER = "/Labels/";
 	public final static String SENSOR_TYPE = "InternalAccel";
 	public final static String ANNOTATION_SET = "Activities";
+
 	public final static int TIME_WAITING_SENSOR_DATA_IN_MS = 21 * 1000;
 	
 	public static int SENSOR_DATA_SCALING_FACTOR = 3500;
@@ -55,13 +56,7 @@ public class USCTeensGlobals {
 		Globals.IS_DEBUG = false;
 		Globals.IS_LOG_EXTERNAL = false;
 		Globals.APP_DIRECTORY = "uscteens";
-		Globals.LOG_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "logs";
-		Globals.DATA_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "data";
-		Globals.INTERNAL_DIRECTORY_PATH = aContext.getFilesDir().getAbsolutePath();
-		Globals.EXTERNAL_DIRECTORY_PATH = Environment.getExternalStorageDirectory().getAbsolutePath(); 
-		Globals.SURVEY_LOG_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "survey";
-		Globals.UPLOADS_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "uploads";
-		Globals.BACKUP_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "backup";
+        Globals.initDataDirectories(aContext);
 
 		Globals.STUDY_NAME = "USCTeens"; // "Teens Study"; 
 		Globals.STUDY_SERVER_NAME = "USCTeens";

@@ -53,7 +53,9 @@ public class USCTeensSetupActivity extends BaseActivity {
 	 * is or is not at the latest version on the Android Market. 
 	 */
 	private class SendAllFilesToServerTask extends AsyncTask<Void, Void, Boolean> 
-	{ 
+	{
+        //TODO get this into the main library because reused by multiple projects
+
 		@Override
 		protected Boolean doInBackground(Void... params) {
 
