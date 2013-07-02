@@ -54,8 +54,6 @@ public class VideoActivity extends BaseActivity {
 		super.onCreate(savedInstanceState, TAG);
 		// initializing
 		isConnected = NetworkDetector.isServerAvailable();
-		//lastnum = getMovieLatestNum();
-		//lastnum = ContentAppUtil.getMovieAvailableForRewardPosition(getMovieLatestNum());
 		lastnum = 5;
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		setContentView(R.layout.movie_list_activity);
@@ -98,18 +96,6 @@ public class VideoActivity extends BaseActivity {
 
 	public void onResume() {
 		super.onResume();
-
-		// android.os.Debug.waitForDebugger();
-//		AuthorizationChecker
-//				.DoAuthorization(this.getApplicationContext(), this);
-//		try {
-//			for (String s : ContentAppUtil.MOVIE_LIST) {
-//				MoviePlayerHelper.saveMovieList(s);
-//			}
-//		} catch (CITYException e) {
-//			// 
-//			e.printStackTrace();
-//		}
 
 		movieUrl = getUrl(lastnum);
 
