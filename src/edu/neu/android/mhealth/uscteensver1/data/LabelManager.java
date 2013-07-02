@@ -25,7 +25,6 @@ public class LabelManager {
 	public static void initialize(Context context) {
 		sContext   = context;	
 		sResources = context.getResources();				
-		Labeler.initialize(context);
 	}		
 	
 	public static void start() {
