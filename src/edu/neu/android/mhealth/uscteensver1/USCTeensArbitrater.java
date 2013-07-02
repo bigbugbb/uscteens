@@ -22,7 +22,7 @@ import android.os.Environment;
 import edu.neu.android.mhealth.uscteensver1.data.AccelData;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataChecker;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataOutputStream;
-import edu.neu.android.mhealth.uscteensver1.data.ContextSensitiveState;
+import edu.neu.android.mhealth.uscteensver1.data.CSState;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.mhealth.uscteensver1.survey.CSTeensSurvey;
@@ -578,19 +578,17 @@ public class USCTeensArbitrater extends Arbitrater {
 		// to determine whether the context sensitive schedule should be reset
 		long now  = System.currentTimeMillis();		
 		long firstCheckTime  = DataStorage.GetValueLong(sContext, KEY_FIRST_CHECK_TIME, 0);
-		long lastCheckTime = DataStorage.GetValueLong(sContext, KEY_LAST_CHECK_TIME, 0);		
-		if (firstCheckTime == 0 || firstCheckTime > now || lastCheckTime > now) { // the first time trying to check
-			firstCheckTime = lastCheckTime = now;
+		if (firstCheckTime == 0 || firstCheckTime > now) { // the first time trying to check
+			firstCheckTime = now;
 			DataStorage.SetValue(sContext, KEY_FIRST_CHECK_TIME, now);
-			DataStorage.SetValue(sContext, KEY_LAST_CHECK_TIME, now);				
 		}				
 		
 		// Make sure that we have at least data for 30 minutes to analyze
-		if (now - firstCheckTime >= Globals.MINUTES_30_IN_MS && now - lastCheckTime >= 15 * Globals.MINUTES_1_IN_MS) {
+		if (now - firstCheckTime >= Globals.MINUTES_30_IN_MS) {
 			if (isOkActivityPrompt()) {	
-				ContextSensitiveState css = AccelDataChecker.checkDataState();
-				if (css.getState() != ContextSensitiveState.DATA_STATE_ERROR && 
-					css.getState() != ContextSensitiveState.DATA_STATE_NORMAL) {
+				CSState css = AccelDataChecker.checkDataState(sContext);
+				if (css.getState() != CSState.DATA_STATE_ERROR && 
+					css.getState() != CSState.DATA_STATE_NORMAL) {
 					Log.i(TAG, "Resetting because activity is detected or missed");														
 					if (setCSPrompt(now)) {
 						resetSchedule();
@@ -598,7 +596,6 @@ public class USCTeensArbitrater extends Arbitrater {
 					}
 				}
 			}
-			DataStorage.SetValue(sContext, KEY_LAST_CHECK_TIME, now);
 		}
 
 		// Always unset this in case program was updated at awkward time

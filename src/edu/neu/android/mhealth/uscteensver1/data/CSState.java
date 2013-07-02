@@ -3,7 +3,7 @@ package edu.neu.android.mhealth.uscteensver1.data;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ContextSensitiveState implements Serializable {
+public class CSState implements Serializable {
 	
 	private static final long serialVersionUID = -987466237866182313L;
 	
@@ -17,7 +17,7 @@ public class ContextSensitiveState implements Serializable {
 	private Date mStartTime;
 	private Date mStopTime;		
 	
-	public ContextSensitiveState(int state, Date startTime, Date stopTime) {
+	public CSState(int state, Date startTime, Date stopTime) {
 		mState     = state;
 		mStartTime = startTime;
 		mStopTime  = stopTime;

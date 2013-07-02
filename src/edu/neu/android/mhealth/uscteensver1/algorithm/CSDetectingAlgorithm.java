@@ -5,36 +5,48 @@ import java.util.Date;
 import java.util.HashMap;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.data.ContextSensitiveState;
+import edu.neu.android.mhealth.uscteensver1.data.CSState;
+import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.DateHelper;
 
 public class CSDetectingAlgorithm {
 
 	private final static int NO_SENSOR_DATA = -1;
-	private final static int NO_DATA_DURATION_THRESHOLD        = 30 * 60; // in second
-	private final static int NO_DATA_TOLERATION_THRESHOLD      = 3 * 60;  // in second
-	private final static int ACTIVITY_TOLERATION_THRESHOLD     = 3 * 60;  // in second
-	private final static int ACTIVITY_DURATION_THRESHOLD       = 5 * 60;  // in second
-	private final static int DURATION_AFTER_ACTIVITY_THRESHOLD = 5 * 60;  // in second
-	private final static float MERGING_THRESHOLD  = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.45f;
-	private final static float DATA_INTENSITY_THRESHOLD = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.2f;	
+	private final static int NO_DATA_DURATION_THRESHOLD       = 10 * 60;  // in second
+	private final static int NO_DATA_TOLERATION_THRESHOLD     = 2 * 60;   // in second
+	private final static int NO_DATA_MAX_TOLERATION_THRESHOLD = 4 * 3600; // in second
+	private final static int ACTIVITY_DURATION_THRESHOLD      = 30 * 60;  // in second
+	private final static int ACTIVITY_TOLERATION_THRESHOLD    = 10 * 60;  // in second
+	private final static int NO_ACTIVITY_DURATION_THRESHOLD   = 60 * 60;  // in second
+	private final static int NO_ACTIVITY_TOLERATION_THRESHOLD = 5 * 60;   // in second
+	private final static float MOTION_INTENSITY_THRESHOLD = USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR * 0.2f;
+	
+	private final static String KEY_DETECTING_START_TIME = "KEY_DETECTING_START_TIME";
 
-	private long mStartTime = 0;
+	private Context mContext;
 	
 	// singleton
-	private static CSDetectingAlgorithm sAlgorithm = new CSDetectingAlgorithm();
+	private static CSDetectingAlgorithm sAlgorithm;
 	
-	public static CSDetectingAlgorithm getInstance() {
+	public static CSDetectingAlgorithm getInstance(Context context) {
+		if (sAlgorithm == null) {
+			sAlgorithm = new CSDetectingAlgorithm(context);
+		}
 		return sAlgorithm;
 	}
 	
+	private CSDetectingAlgorithm(Context context) {
+		mContext = context;
+	}
+
 	public long getStartTime() {
-		return mStartTime;
+		return DataStorage.GetValueLong(mContext, KEY_DETECTING_START_TIME, DateHelper.getDailyTime(8, 0));
 	}
 	
-	public void setStartTime(long startTime) {
-		mStartTime = startTime;
+	protected void setStartTime(long startTime) {	
+		DataStorage.SetValue(mContext, KEY_DETECTING_START_TIME, startTime);
 	}
 	
 	/**
@@ -46,12 +58,12 @@ public class CSDetectingAlgorithm {
 	 * @return the array stores all chunks' positions from start second to stop second
 	 */
 	@SuppressLint("UseSparseArrays")
-	public ContextSensitiveState doCSDetecting(int[] sensorData, ArrayList<Integer> chunkPos, long from, long to) {
+	public CSState doCSDetecting(int[] sensorData, ArrayList<Integer> chunkPos, long from, long to) {
 		Date startTime = new Date(from);
 		Date stopTime  = new Date(to);
+		
 		// Convert Date to second
 		long midnight = DateHelper.getDailyTime(0, 0);
-		int secTo   = stopTime.getHours() * 3600 + stopTime.getMinutes() * 60 + stopTime.getSeconds();
 		int secFrom = startTime.getHours() * 3600 + startTime.getMinutes() * 60 + startTime.getSeconds();
 		int secNow  = (int) ((System.currentTimeMillis() - midnight) / 1000);
 				
@@ -77,22 +89,24 @@ public class CSDetectingAlgorithm {
 		ArrayList<Integer> merged = new ArrayList<Integer>();
 		for (int i = chunkPos.size() - 2; i > 1; --i) {
 			int curPos = chunkPos.get(i);
-			int prvPos = chunkPos.get(i - 1);
-			// Merge them if necessary
-			Float curMean = ptmHash.get(curPos);
-			Float prvMean = ptmHash.get(prvPos);
-			if (curMean == null || prvMean == null) {
-				continue;				
+			int prvPos = chunkPos.get(i - 1);			
+			float curMean = ptmHash.get(curPos);
+			float prvMean = ptmHash.get(prvPos);
+			
+			// Skip chunks without any data at all
+			if (Math.abs(curMean - NO_SENSOR_DATA) < 0.1f || Math.abs(prvMean - NO_SENSOR_DATA) < 0.1f) {
+				continue;
 			}
-			if (curMean > DATA_INTENSITY_THRESHOLD && prvMean > DATA_INTENSITY_THRESHOLD &&
-					Math.abs(curMean - prvMean) < MERGING_THRESHOLD) {					
+			
+			// Merge the current chunk with the next one if both of them have high or low mean value
+			if ((curMean >= MOTION_INTENSITY_THRESHOLD && prvMean >= MOTION_INTENSITY_THRESHOLD) ||
+				(curMean < MOTION_INTENSITY_THRESHOLD && prvMean < MOTION_INTENSITY_THRESHOLD)) {					
 				// Calculate and update the mean of the chunk after merging
-				Integer prvDuration = ptdHash.get(prvPos) == null ? 0 : ptdHash.get(prvPos);
-				Integer curDuration = ptdHash.get(curPos) == null ? 0 : ptdHash.get(curPos);
-				Integer sumDuration = prvDuration + curDuration;
+				int prvDuration = ptdHash.get(prvPos);
+				int curDuration = ptdHash.get(curPos);
+				int sumDuration = prvDuration + curDuration;
 				if (sumDuration > 0) {
-					Float meanAfterMerging = (curMean * curDuration + prvMean * prvDuration) / sumDuration;
-					ptmHash.put(prvPos, meanAfterMerging);
+					ptmHash.put(prvPos, (curMean * curDuration + prvMean * prvDuration) / sumDuration);
 					ptdHash.put(prvPos, sumDuration);
 				}
 				// Clear the chunk that has been merged					
@@ -103,62 +117,72 @@ public class CSDetectingAlgorithm {
 		}
 		chunkPos.removeAll(merged);
 		
-		// Check whether there is some period of time without any data
+		// Check whether there is some periods of time without any motion data
 		for (int i = 0; i < chunkPos.size() - 1; ++i) {
 			int curPos = chunkPos.get(i);
 			int nxtPos = chunkPos.get(i + 1);
-			Float mean = ptmHash.get(curPos);
+			float curMean = ptmHash.get(curPos);
 			// It's better not to compare two float values directly
-			if (mean != null && Math.abs(mean - NO_SENSOR_DATA) < 0.1f) {
-				if (nxtPos - curPos > NO_DATA_DURATION_THRESHOLD) {
+			if (Math.abs(curMean - NO_SENSOR_DATA) < 0.1f) {
+				if (nxtPos - curPos >= NO_DATA_DURATION_THRESHOLD) {
 					// If nxtPos is the last chunk position and its value is very close to the current time in second,
 					// update the starting time using the beginning position of the last chunk to make sure that
 					// this position will have the chance to be checked again in the near future
-					if (i == chunkPos.size() - 2 && secNow - nxtPos < NO_DATA_TOLERATION_THRESHOLD) {
-						mStartTime = midnight + curPos * 1000; // update for the next check
-						return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
+					if (i == chunkPos.size() - 2 && secNow - nxtPos < NO_DATA_TOLERATION_THRESHOLD &&
+							nxtPos - curPos < NO_DATA_MAX_TOLERATION_THRESHOLD) 
+					{						
+						setStartTime(midnight + curPos * 1000); // update for the next check
+						return new CSState(CSState.DATA_STATE_NORMAL, startTime, stopTime);						
 					} else {
-						mStartTime = midnight + nxtPos * 1000;
+						setStartTime(midnight + nxtPos * 1000);
 					}
 					Date dateFrom = new Date(midnight + curPos * 1000);
 					Date dateTo   = new Date(midnight + nxtPos * 1000);
-					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_MISSING, dateFrom, dateTo);
+					return new CSState(CSState.DATA_STATE_MISSING, dateFrom, dateTo);
 				} else if (i == chunkPos.size() - 2 && secNow - nxtPos < NO_DATA_TOLERATION_THRESHOLD) {
-					mStartTime = midnight + curPos * 1000; // update for the next check
-					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);					
+					setStartTime(midnight + curPos * 1000); // update for the next check
+					return new CSState(CSState.DATA_STATE_NORMAL, startTime, stopTime);					
 				}
 			}
 		}
 		
-		// Look for valuable chunk from secFrom to secTo based on mean value and duration
-		for (int i = 0; i < chunkPos.size() - 1; ++i) {			
+		// Analyze chunks with motion data from secFrom to secTo based on their mean value and duration
+		for (int i = 0; i < chunkPos.size() - 2; ++i) {			
 			int curPos = chunkPos.get(i);
 			int nxtPos = chunkPos.get(i + 1);
+			int lstPos = chunkPos.get(i + 2);
+			
 			// Jump the period before the starting time 
 			if (secFrom > curPos) { continue; }
-			// Get the chunk whose mean is valuable if it's larger than the intensity threshold
-			Float mean = ptmHash.get(curPos);					
-			if (mean == null || mean < DATA_INTENSITY_THRESHOLD) { continue; }
-			// The duration of this chunk should not be too short	
-			if (nxtPos - curPos >= ACTIVITY_DURATION_THRESHOLD) {
-				if (Math.abs(nxtPos - secNow) >= DURATION_AFTER_ACTIVITY_THRESHOLD) {
-					mStartTime = midnight + nxtPos * 1000;
+			
+			int curDuration = ptdHash.get(curPos);
+			int nxtDuration = ptdHash.get(nxtPos);			
+			float curMean = ptmHash.get(curPos);
+			float nxtMean = ptmHash.get(nxtPos);						
+							
+			// First figure out the chunk with small mean followed by another one with big mean
+			if (curMean < MOTION_INTENSITY_THRESHOLD && nxtMean >= MOTION_INTENSITY_THRESHOLD) {
+				if (curDuration >= NO_ACTIVITY_DURATION_THRESHOLD && nxtDuration >= NO_ACTIVITY_TOLERATION_THRESHOLD) {
+					setStartTime(midnight + nxtPos * 1000);
 					Date dateFrom = new Date(midnight + curPos * 1000);
 					Date dateTo   = new Date(midnight + nxtPos * 1000);
-					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_HIGH_INTENSITY, dateFrom, dateTo);
-				} else {
-					mStartTime = midnight + curPos * 1000;
-					return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
+					return new CSState(CSState.DATA_STATE_LOW_INTENSITY, dateFrom, dateTo);
 				}
-			} else if (i == chunkPos.size() - 2 && secNow - nxtPos < ACTIVITY_TOLERATION_THRESHOLD) {
-				mStartTime = midnight + curPos * 1000;
-				return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
+			} else if (curMean >= MOTION_INTENSITY_THRESHOLD && nxtMean < MOTION_INTENSITY_THRESHOLD) {				
+				if (curDuration >= ACTIVITY_DURATION_THRESHOLD && nxtDuration >= ACTIVITY_TOLERATION_THRESHOLD) {
+					setStartTime(midnight + lstPos * 1000);
+					Date dateFrom = new Date(midnight + curPos * 1000);
+					Date dateTo   = new Date(midnight + nxtPos * 1000);
+					return new CSState(CSState.DATA_STATE_HIGH_INTENSITY, dateFrom, dateTo);
+				}
 			}
 		}
 
-		// Update of starting time for the next check
-		mStartTime = to;
+		// Update starting time for the next check
+		if (chunkPos.size() >= 3) {
+			setStartTime(midnight + chunkPos.get(chunkPos.size() - 3) * 1000);
+		}
 				
-		return new ContextSensitiveState(ContextSensitiveState.DATA_STATE_NORMAL, startTime, stopTime);
+		return new CSState(CSState.DATA_STATE_NORMAL, startTime, stopTime);
 	}
 }
