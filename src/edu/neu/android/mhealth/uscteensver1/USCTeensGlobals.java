@@ -19,10 +19,12 @@ public class USCTeensGlobals {
 	private static final String TAG = "USCTeensGlobals";	
 
 	public static String VERSION_NAME = "";
+	
 	public final static int    PIXEL_PER_DATA = 2;	
 	public final static int    MAX_WIDTH_IN_PIXEL = 3600 * 24 * PIXEL_PER_DATA;
 	public final static int    UPDATING_TIME_THRESHOLD = 60 * 1000; // in ms
 	public final static int	   MAX_AVAILABLE_LABELING_DAYS = 2;		
+	
 	public final static String DATA_LOADING_RESULT = "DATA_LOADING_RESULT";
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
 	public final static String MERGE_SELECTION = "MERGE_SELECTION";
@@ -38,6 +40,7 @@ public class USCTeensGlobals {
 	public final static String REWARD_FOLDER = "/Rewards/";	
 	public final static String SENSOR_TYPE = "InternalAccel";
 	public final static String ANNOTATION_SET = "Activities";
+	
 	public final static int TIME_WAITING_SENSOR_DATA_IN_MS = 21 * 1000;
 	
 	public static int SENSOR_DATA_SCALING_FACTOR = 3500;
@@ -56,15 +59,10 @@ public class USCTeensGlobals {
 		// By default the logging will go to the apps internal storage, not the external directory
 		Globals.IS_DEBUG = false;
 		Globals.IS_LOG_EXTERNAL = false;
-		Globals.APP_DIRECTORY = "uscteens";
-		Globals.LOG_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "logs";
-		Globals.DATA_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "data";
+		Globals.APP_DIRECTORY = "uscteens";		
 		Globals.APP_DATA_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "appdata";
-		Globals.SURVEY_LOG_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "survey";
-		Globals.UPLOADS_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "uploads";
-		Globals.BACKUP_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "backup";		
-		Globals.INTERNAL_DIRECTORY_PATH = aContext.getFilesDir().getAbsolutePath();
-		Globals.EXTERNAL_DIRECTORY_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+		
+		Globals.initDataDirectories(aContext);
 		
 		DIRECTORY_PATH = Globals.EXTERNAL_DIRECTORY_PATH;
 

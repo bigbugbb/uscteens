@@ -54,7 +54,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 	 */
 	private class SendAllFilesToServerTask extends AsyncTask<Void, Void, Boolean> 
 	{
-        //TODO get this into the main library because reused by multiple projects
+		//TODO get this into the main library because reused by multiple projects
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
