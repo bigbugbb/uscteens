@@ -264,7 +264,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		promptEvent.setReprompt(isReprompt);
 		
 		// Get CSState from JSON string
-		String aJSONString = DataStorage.GetValueString(sContext, KEY_ALL_PROMPT_STATE, null);
+		String aJSONString = DataStorage.GetValueString(sContext, KEY_ALL_PROMPT_STATE + lastScheduledPromptTime, null);
 		CSState css = null;
 		if (aJSONString != null) {
 			css = new Gson().fromJson(aJSONString, CSState.class); 
@@ -283,19 +283,20 @@ public class USCTeensArbitrater extends Arbitrater {
 
 	private boolean addCSPrompt(CSState css) {		
 		long promptTime = System.currentTimeMillis();
-		long[] savedPromptTime = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);
-		
-		// Save the CSState
-        DataStorage.SetValue(sContext, KEY_ALL_PROMPT_STATE, new Gson().toJson(css));
+		long[] savedPromptTime = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);				
         
 		if (savedPromptTime == null) {
 			DataStorage.setPromptTimesKey(sContext, new long[] { promptTime }, KEY_CS_PROMPT);
+			// Save the CSState
+	        DataStorage.SetValue(sContext, KEY_ALL_PROMPT_STATE + promptTime, new Gson().toJson(css));
 			return true;
 		}
 				
 		long latestPromptTime = savedPromptTime[savedPromptTime.length - 1];		
 		if (promptTime - latestPromptTime < Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS) {
 			promptTime = latestPromptTime + (long) (Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS * 1.1f);
+			// Save the CSState
+			DataStorage.SetValue(sContext, KEY_ALL_PROMPT_STATE + promptTime, new Gson().toJson(css));
 		}		
 		long[] finalPromptTime = Arrays.copyOf(savedPromptTime, savedPromptTime.length + 1);
 		finalPromptTime[savedPromptTime.length] = promptTime;
