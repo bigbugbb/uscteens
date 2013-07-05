@@ -43,9 +43,9 @@ public class CSDetectingAlgorithm {
 		// update start time if necessary
 		long startTime   = sAlgorithm.getStartTime();
 		long defaultTime = DateHelper.getDailyTime(8, 0);
-		//if (startTime < defaultTime || startTime > System.currentTimeMillis()) {
+		if (startTime < defaultTime || startTime > System.currentTimeMillis()) {
 			sAlgorithm.setStartTime(defaultTime);
-		//}
+		}
 		
 		return sAlgorithm;
 	}
