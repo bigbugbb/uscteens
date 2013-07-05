@@ -3,6 +3,7 @@ package edu.neu.android.mhealth.uscteensver1.survey;
 import java.util.ArrayList;
 import java.util.Date;
 
+import edu.neu.android.mhealth.uscteensver1.data.CSState;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyAnswer;
@@ -12,43 +13,28 @@ import edu.neu.android.wocketslib.emasurvey.rule.QuesAsSequence;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesFromAns;
 
 public class CSTeensSurvey extends QuestionSet {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private ArrayList<SurveyQuestion> mDefaultQuestionSet;
-	private String context = null;
-	public static final String optionalContext = "In the past hour";
-	public static final String defaultContext  = "Since the last survey you answered";
-	public static final int CS_EMA_DEFAULT  = 0;
-	public static final int CS_EMA_OPTIONAL = 1;
-	
-	private static String sLatestStartTime;
-	private static String sLatestEndTime;
+
+	private ArrayList<SurveyQuestion> mDefaultQuestionSet;	
+	private String mStartTime;
+	private String mStopTime;
 	
 	public CSTeensSurvey(QuestionSetParamHandler param) {
 		super();
-		if (param.getParamNum() != 1)
-			return;
-		int type = (Integer) param.getParams()[0];
-		
-		switch (type) {
-		case CS_EMA_DEFAULT:
-			context = defaultContext;
-			break;
-		case CS_EMA_OPTIONAL:
-			context = optionalContext;
-			break;
+
+		CSState css = (CSState) param.getParams()[0];
+		if (css != null) {
+			mStartTime = css.getStartTime();
+			mStopTime  = css.getStopTime();
+		} else { 
+			Date startDate = new Date(System.currentTimeMillis() - 30 * 60 * 1000);
+			Date stopDate  = new Date();		
+			mStartTime = getStringTime(startDate);
+			mStopTime  = getStringTime(stopDate);			
 		}
+		
 		setQuestions();
 	}
-	
-	public static void setLatestPromptTime(String startTime, String endTime) {
-		sLatestStartTime = startTime;
-		sLatestEndTime   = endTime;
-	}
-	
+
 	@Override
 	public int getQuestionNum() {
 		return mDefaultQuestionSet.size();
@@ -73,16 +59,9 @@ public class CSTeensSurvey extends QuestionSet {
 	@Override
 	protected void setQuestions() {
 		mDefaultQuestionSet = new ArrayList<SurveyQuestion>();
-		
-		if (sLatestStartTime == null || sLatestEndTime == null) {
-			Date endDate = new Date();
-			Date startDate = new Date(System.currentTimeMillis() - 30 * 60 * 1000);
-			sLatestEndTime   = getStringTime(endDate);
-			sLatestStartTime = getStringTime(startDate);
-		}
-		
+
 		/************ Initialize questions and answers *********/
-		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity", "What have you been DOING between " + sLatestStartTime + " and " + sLatestEndTime + "?\n(Choose all that apply)", TYPE.MULTI_CHOICE);
+		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity", "What have you been DOING between " + mStartTime + " and " + mStopTime + "?\n(Choose all that apply)", TYPE.MULTI_CHOICE);
 		SurveyAnswer[] answerSet1 = new SurveyAnswer[7];
 		answerSet1[0] = new SurveyAnswer(0, "Reading or doing homework");
 		answerSet1[1] = new SurveyAnswer(1, "Using technology (TV, phone)");
@@ -895,7 +874,7 @@ public class CSTeensSurvey extends QuestionSet {
 	}
 	
 	@Override
-	public String[] getAllQuesIDs() {
+	public String[] getAllQuestionIDs() {
 		// TODO Auto-generated method stub
 		String[] IDs = new String[mDefaultQuestionSet.size()];
 		for (int i = 0; i < IDs.length; i++) {

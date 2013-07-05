@@ -65,7 +65,7 @@ final public class ChunkingAlgorithm {
 		ArrayList<Integer> chunkPos = new ArrayList<Integer>();
 		//int[] sensorData = sAccelDataWrap.getDrawableData();
 		
-		// convolution to the accelerometer data
+		// convolution of the accelerometer data
 		int[] convolution = Arrays.copyOf(dataToChunk, size);
 		for (int i = 1; i < size - 1; ++i) { // [-2 0 2]
 			convolution[i] = Math.abs(dataToChunk[i + 1] - dataToChunk[i - 1]) << 1;
@@ -207,6 +207,16 @@ final public class ChunkingAlgorithm {
 			}			
 		}
 		chunkPos.add(stopSecond);
+		
+		// Remove all chunk position which is earlier than the start second or later than the stop second
+		ArrayList<Integer> removedPos = new ArrayList<Integer>();
+		for (int i = 0; i < chunkPos.size(); ++i) {
+			int pos = chunkPos.get(i);
+			if (pos < startSecond || pos > stopSecond) {
+				removedPos.add(pos);
+			}
+		}
+		chunkPos.removeAll(removedPos);
 		
 		return chunkPos;
 	}

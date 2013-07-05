@@ -214,8 +214,6 @@ public class DataSource {
 	}
 	
 	public static int getMaxDrawableDataValue() {
-		int max = sAccelDataWrap.getMaxDrawableDataValue();
-		//return max < USCTeensGlobals.sAccelDataScalingFactor ? USCTeensGlobals.sAccelDataScalingFactor : max;
 		return USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR;
 	}
 	

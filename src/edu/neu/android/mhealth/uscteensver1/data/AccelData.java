@@ -13,9 +13,7 @@ public class AccelData implements Serializable {
 	public int mAccelAverage;
 	public int mAccelSamples;
 	
-	public AccelData() {
-		
-	}
+	public AccelData() {}
 	
 	public AccelData(int hour, int minute, int second, int milliSecond, 
 				     int accelAverage, int accelSamples) {
@@ -34,7 +32,7 @@ public class AccelData implements Serializable {
 	}
 	
 	public AccelData(String hour, String minute, String second, String milliSecond,
-			 int accelAverage, int accelSamples) {
+			 		 int accelAverage, int accelSamples) {
 		mHour         = Integer.parseInt(hour);
 		mMinute       = Integer.parseInt(minute);
 		mSecond       = Integer.parseInt(second);
@@ -45,7 +43,7 @@ public class AccelData implements Serializable {
 	}
 	
 	public void updateData(int hour, int minute, int second, int milliSecond, 
-				     int accelAverage, int accelSamples) {
+				     	   int accelAverage, int accelSamples) {
 		mHour         = hour;
 		mMinute       = minute;
 		mSecond       = second;

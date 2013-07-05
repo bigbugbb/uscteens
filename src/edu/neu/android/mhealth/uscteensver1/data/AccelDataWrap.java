@@ -7,7 +7,6 @@ import android.util.Pair;
 
 class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {	
 	private static final long serialVersionUID = -80693842157700147L;
-	protected int   mMaxAccelAvgValue;
 	protected int[] mDrawableData = new int[SECONDS_IN_DAY];
 	protected ArrayList<Pair<Integer, Integer>> mNoDataTime = new ArrayList<Pair<Integer, Integer>>();
 	protected final static int DATA_VALUE_FOR_FILLING = 0;	
@@ -22,7 +21,6 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 	}	
 	
 	public void clear() {		
-		mMaxAccelAvgValue = NO_SENSOR_DATA - 1;
 		mNoDataTime.clear();
 		Arrays.fill(mDrawableData, NO_SENSOR_DATA);
 		super.clear();
@@ -40,17 +38,12 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 		return mDrawableData.length;
 	}
 	
-	public int getMaxDrawableDataValue() {			
-		return mMaxAccelAvgValue;
-	}
-	
 	public boolean updateDrawableData() {
 		// if no data is found for the selected date
 		if (size() == 0) { 
 			Arrays.fill(mDrawableData, NO_SENSOR_DATA);
 			assert(mNoDataTime.size() == 0);
 			mNoDataTime.add(Pair.create(0, mDrawableData.length));
-			mMaxAccelAvgValue = NO_SENSOR_DATA;
 			return true;
 		}
 		
@@ -67,10 +60,9 @@ class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
 
 		// update daily data		
 		for (ArrayList<AccelData> hourlyData : this) {
-			for (AccelData aData : hourlyData) {				
-				mDrawableData[aData.mTimeInSec] = aData.mAccelAverage;
-				if (mMaxAccelAvgValue < aData.mAccelAverage) {
-					mMaxAccelAvgValue = aData.mAccelAverage;
+			for (AccelData aData : hourlyData) {
+				if (aData.mTimeInSec >= 0 && aData.mTimeInSec < mDrawableData.length) {
+					mDrawableData[aData.mTimeInSec] = aData.mAccelAverage;					
 				}
 			}
 		}

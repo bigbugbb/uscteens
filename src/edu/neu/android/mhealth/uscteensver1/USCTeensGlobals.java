@@ -56,7 +56,7 @@ public class USCTeensGlobals {
 	
 	public static void initGlobals(Context aContext) {
 		// By default the logging will go to the apps internal storage, not the external directory
-		Globals.IS_DEBUG = false;
+		Globals.IS_DEBUG = true;
 		Globals.IS_LOG_EXTERNAL = false;
 		Globals.APP_DIRECTORY = "uscteens";		
 		Globals.APP_DATA_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "appdata";

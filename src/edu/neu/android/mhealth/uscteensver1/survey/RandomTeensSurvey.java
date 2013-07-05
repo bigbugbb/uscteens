@@ -11,39 +11,12 @@ import edu.neu.android.wocketslib.emasurvey.rule.QuesAsSequence;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesFromAns;
 
 public class RandomTeensSurvey extends QuestionSet {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
+
 	public static final double VERSION = 1;
 	private ArrayList<SurveyQuestion> mDefaultQuestionSet;
-	private String contextUpperCase = null;
-	public static final String optionalContextUpperCase = "In the past hour";
-	public static final String defaultContextUpperCase  = "For the past hour/Since the last survey you answered";
-	private String contextLowerCase = null;
-	public static final String optionalContextLowerCase = "in the past hour";
-	public static final String defaultContextLowerCase  = "for the past hour/since the last survey you answered";
-
-	public static final int RANDOM_EMA_DEFAULT = 0;
-	public static final int RANDOM_EMA_OPTIONAL = 1;
 	
 	public RandomTeensSurvey(QuestionSetParamHandler param) {
 		super();
-		if (param.getParamNum() != 1)
-			return;
-		int type = (Integer) param.getParams()[0];
-		
-		switch (type) {
-		case RANDOM_EMA_DEFAULT:
-			contextUpperCase = defaultContextUpperCase;
-			contextLowerCase = defaultContextLowerCase;
-			break;
-		case RANDOM_EMA_OPTIONAL:
-			contextUpperCase = optionalContextUpperCase;
-			contextLowerCase = optionalContextLowerCase;
-			break;
-		}
 		setQuestions();
 	}
 	
@@ -62,7 +35,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		mDefaultQuestionSet = new ArrayList<SurveyQuestion>();
 		
 		/************ Initialize questions and answers *********/
-		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity","What have you been DOING " + contextLowerCase + "?\n(Choose all that apply)", TYPE.MULTI_CHOICE);
+		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity","What have you been DOING in the last hour?\n(Choose all that apply)", TYPE.MULTI_CHOICE);
 		SurveyAnswer[] answerSet1 = new SurveyAnswer[7];
 		answerSet1[0] = new SurveyAnswer(0, "Reading or doing homework");
 		answerSet1[1] = new SurveyAnswer(1, "Using technology (TV, phone)");
@@ -875,7 +848,7 @@ public class RandomTeensSurvey extends QuestionSet {
 	}
 	
 	@Override
-	public String[] getAllQuesIDs() {
+	public String[] getAllQuestionIDs() {
 		// TODO Auto-generated method stub
 		String[] IDs = new String[mDefaultQuestionSet.size()];
 		for (int i = 0; i < IDs.length; i++) {

@@ -2,6 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.activities;
 
 import java.util.Date;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,11 +24,15 @@ import edu.neu.android.wocketslib.dataupload.RawUploader;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
+import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
+import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent.PROMPT_AUDIO;
 import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
+import edu.neu.android.wocketslib.utils.PhonePrompter;
+import edu.neu.android.wocketslib.utils.PhoneVibrator;
 
 
 public class USCTeensSetupActivity extends BaseActivity {
@@ -202,24 +207,21 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				AppInfo.SetStartManualTime(getApplicationContext(),
-						Globals.SURVEY, System.currentTimeMillis());
+				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, System.currentTimeMillis());
 				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
-				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
-						USCTeensSetupActivity.this, Globals.SURVEY);
-				long currentTime = System.currentTimeMillis();
-				int classType = 0;
-				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-					classType = RandomTeensSurvey.RANDOM_EMA_DEFAULT;
-				} else {
-					classType = RandomTeensSurvey.RANDOM_EMA_OPTIONAL;
-				}
-				i.putExtra("className", RandomTeensSurvey.class.getCanonicalName());
-				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1, new Object[] { classType }));
-				startActivity(i);
-				// add new label
-				Labeler.addLabel(new Date(), "Random Survey");
+				long now = System.currentTimeMillis();
+				
+				// Construct survey prompt event
+				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
+				promptEvent.setPromptType("Random-Test");				
+				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
+				promptEvent.setReprompt(USCTeensSurveyActivity.self != null);
+				
+				i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);
+				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
+					RandomTeensSurvey.class.getCanonicalName(), 1, new Object[] { 0 }
+				));
+				startActivity(i);				
 			}
 		});
 		
@@ -227,24 +229,21 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				AppInfo.SetStartManualTime(getApplicationContext(),
-						Globals.SURVEY, System.currentTimeMillis());
+				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, System.currentTimeMillis());
 				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
-				long lastTimeCompleted = AppInfo.GetLastTimeCompleted(
-						USCTeensSetupActivity.this, Globals.SURVEY);
-				long currentTime = System.currentTimeMillis();
-				int classType = 0;
-				if ((currentTime - lastTimeCompleted) < 4 * 60 * 60 * 1000) {
-					classType = CSTeensSurvey.CS_EMA_DEFAULT;
-				} else {
-					classType = CSTeensSurvey.CS_EMA_OPTIONAL;
-				}
-				i.putExtra("className", CSTeensSurvey.class.getCanonicalName());
-				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(1, new Object[] { classType }));
-				startActivity(i);
-				// add new label
-				Labeler.addLabel(new Date(), "CS Survey");
+				long now = System.currentTimeMillis();
+				
+				// Construct survey prompt event
+				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
+				promptEvent.setPromptType("CS-Test");				
+				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
+				promptEvent.setReprompt(USCTeensSurveyActivity.self != null);
+				
+				i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);
+				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
+					CSTeensSurvey.class.getCanonicalName(), 1, new Object[] { 0 }
+				));
+				startActivity(i);					
 			}
 		});
 		
