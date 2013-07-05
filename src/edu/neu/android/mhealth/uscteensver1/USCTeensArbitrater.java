@@ -569,7 +569,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		Date today = new Date();
 		int hour = today.getHours();
 		int min  = today.getMinutes();			
-		return (hour > 8 && hour < 20) || (hour == 21 && min < 45);
+		return (hour >= 8 && hour < 20) || (hour == 21 && min < 45);
 	}
 
 	public static boolean isOkAudioPrompt() {
