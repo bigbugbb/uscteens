@@ -14,8 +14,10 @@ public class USCTeensSurveyActivity extends SurveyActivity {
 	@Override
 	public void onStop() {
 		if (isResponse()) {
-			String promptType = getSurveyPromptEvent().getPromptType();						
-			Labeler.addLabel(new Date(), "Answer " + promptType);
+			SurveyPromptEvent promptEvent = getSurveyPromptEvent();
+			if (promptEvent != null) {
+				Labeler.addLabel(new Date(), "Answer " + promptEvent.getPromptType());
+			}
 		}
 		
 		super.onStop();
@@ -25,13 +27,15 @@ public class USCTeensSurveyActivity extends SurveyActivity {
 	public void onDestroy() {				
 		ArrayList<SurveyQuestion> poppedQuestions = getPoppedQuestions();
 		
-		for (SurveyQuestion question : poppedQuestions) {
-			String id = question.getQuestionId(); 
-			id = id.substring(0, id.lastIndexOf('_'));
-			if (isLocationQuestion(id)) { // location
-				labelSelectedAnswer(question);
-			} else if (isWhoAreYouWithQuestion(id)) {
-				labelSelectedAnswer(question);
+		if (poppedQuestions != null) {
+			for (SurveyQuestion question : poppedQuestions) {
+				String id = question.getQuestionId(); 
+				id = id.substring(0, id.lastIndexOf('_'));
+				if (isLocationQuestion(id)) { // location
+					labelSelectedAnswer(question);
+				} else if (isWhoAreYouWithQuestion(id)) {
+					labelSelectedAnswer(question);
+				}
 			}
 		}
 		
