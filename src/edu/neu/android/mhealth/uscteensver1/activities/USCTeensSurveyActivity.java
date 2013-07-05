@@ -11,7 +11,18 @@ import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion;
 
 public class USCTeensSurveyActivity extends SurveyActivity {
 	
-	protected void onExit() {
+	@Override
+	public void onStop() {
+		if (isResponse()) {
+			String promptType = getSurveyPromptEvent().getPromptType();						
+			Labeler.addLabel(new Date(), "Answer " + promptType);
+		}
+		
+		super.onStop();
+	}
+	
+	@Override
+	public void onDestroy() {				
 		ArrayList<SurveyQuestion> poppedQuestions = getPoppedQuestions();
 		
 		for (SurveyQuestion question : poppedQuestions) {
@@ -23,6 +34,8 @@ public class USCTeensSurveyActivity extends SurveyActivity {
 				labelSelectedAnswer(question);
 			}
 		}
+		
+		super.onDestroy();
 	}
 	
 	private void labelSelectedAnswer(SurveyQuestion question) {		

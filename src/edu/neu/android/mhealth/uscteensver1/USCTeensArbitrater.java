@@ -278,7 +278,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		aContext.startActivity(i);
 		
 		// add new label
-		Labeler.addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Survey" : "Random Survey");
+		Labeler.addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Prompt" : "Random Prompt");
 	}
 
 	private boolean addCSPrompt(CSState css) {		
