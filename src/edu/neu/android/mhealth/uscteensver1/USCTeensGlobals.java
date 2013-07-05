@@ -112,9 +112,6 @@ public class USCTeensGlobals {
 		
 		Globals.PW_STAFF_PASSWORD = "uscteen";
 		Globals.PW_SUBJECT_PASSWORD = "setup";
-//		Globals.PW_STATDOWN_PASSWORD = "statdb";
-//		Globals.PW_STATDOWN_PASSWORD1 = "stattest";
-//		Globals.PW_SYNC_PASSWORD = "sync";
 
 		// Survey prompting parameters 
 		Globals.AUDIO_PROMPT_START_HOUR = 8;

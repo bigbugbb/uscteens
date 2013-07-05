@@ -243,7 +243,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		case KEY_CS_EMA:
 			surveyClassName = CSTeensSurvey.class.getCanonicalName();
 			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, true, PhonePrompter.CHIMES_NAMBOKU1, PhoneVibrator.VIBRATE_INTENSE);						
-			promptEvent.setPromptType("CS");			
+			promptEvent.setPromptType("CS");
 			break;
 		case KEY_RANDOM_EMA:
 			surveyClassName = RandomTeensSurvey.class.getCanonicalName();
@@ -436,7 +436,6 @@ public class USCTeensArbitrater extends Arbitrater {
 
 		// Check if it is the time to prompt the task		
 		if (timeSinceScheduledPrompt < Globals.REPROMPT_TIMES * Globals.REPROMPT_DELAY_MS &&
-			timeSinceCompleted > Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS && 
 			timeSincePrompted > Globals.REPROMPT_DELAY_MS) 
 		{
 			mSomeTasks.add(isCSPrompt(lastScheduledPromptTime) ? KEY_CS_EMA : KEY_RANDOM_EMA);			
@@ -568,8 +567,12 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static boolean isInPromptTime() {		
 		Date today = new Date();
 		int hour = today.getHours();
-		int min  = today.getMinutes();			
-		return (hour >= 8 && hour < 20) || (hour == 21 && min < 45);
+		int min  = today.getMinutes();	
+		
+		int startHour = Globals.DEFAULT_START_HOUR;
+		int endHour   = Globals.DEFAULT_END_HOUR;
+		
+		return (hour >= startHour && hour < endHour - 1) || (hour == endHour - 1 && min < 30);
 	}
 
 	public static boolean isOkAudioPrompt() {

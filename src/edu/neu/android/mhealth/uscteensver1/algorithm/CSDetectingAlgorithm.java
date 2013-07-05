@@ -19,9 +19,9 @@ public class CSDetectingAlgorithm {
 	private final static int NO_SENSOR_DATA = -1;
 	private final static int MAX_SECOND_IN_DAY = 86400;
 	
-	private final static int NO_DATA_DURATION_THRESHOLD       = 15 * 60;  // in second
+	private final static int NO_DATA_DURATION_THRESHOLD       = 10 * 60;  // in second
 	private final static int NO_DATA_TOLERATION_THRESHOLD     = 2 * 60;   // in second
-	private final static int NO_DATA_MAX_TOLERATION_THRESHOLD = 2 * 3600; // in second
+	private final static int NO_DATA_MAX_TOLERATION_THRESHOLD = 1 * 3600; // in second
 	private final static int ACTIVITY_DURATION_THRESHOLD      = 30 * 60;  // in second
 	private final static int ACTIVITY_TOLERATION_THRESHOLD    = 10 * 60;  // in second
 	private final static int NO_ACTIVITY_DURATION_THRESHOLD   = 30 * 60;  // in second
