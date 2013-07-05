@@ -17,6 +17,8 @@ public class CSState implements Serializable {
 	private Date mStartTime;
 	private Date mStopTime;		
 	
+	public CSState() {}
+	
 	public CSState(int state, Date startTime, Date stopTime) {
 		mState     = state;
 		mStartTime = startTime;
