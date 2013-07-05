@@ -504,9 +504,11 @@ public class USCTeensArbitrater extends Arbitrater {
 		
 		// clear the prompt history
 		long[] somePromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_ALL_PROMPT);
-		for (int i = 0; i < somePromptTimes.length; ++i) {
-			DataStorage.SetValue(sContext, KEY_ALL_REPROMPT + somePromptTimes[i], false);
-			DataStorage.SetValue(sContext, KEY_ALL_PROMPT_STATE + somePromptTimes[i], null);
+		if (somePromptTimes != null) {
+			for (int i = 0; i < somePromptTimes.length; ++i) {
+				DataStorage.SetValue(sContext, KEY_ALL_REPROMPT + somePromptTimes[i], false);
+				DataStorage.SetValue(sContext, KEY_ALL_PROMPT_STATE + somePromptTimes[i], null);
+			}
 		}
 				
 		PackageChecker.installedPackageLogging(TAG, sContext);		

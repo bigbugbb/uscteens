@@ -207,9 +207,9 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, System.currentTimeMillis());
-				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
 				long now = System.currentTimeMillis();
+				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, now);
+				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
 				
 				// Construct survey prompt event
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
@@ -229,9 +229,9 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, System.currentTimeMillis());
-				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
 				long now = System.currentTimeMillis();
+				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, now);
+				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
 				
 				// Construct survey prompt event
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
@@ -241,7 +241,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 				
 				i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
-					CSTeensSurvey.class.getCanonicalName(), 1, new Object[] { 0 }
+					CSTeensSurvey.class.getCanonicalName(), 1, new Object[] { null }
 				));
 				startActivity(i);					
 			}
