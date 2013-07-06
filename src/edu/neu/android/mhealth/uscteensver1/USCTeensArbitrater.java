@@ -221,12 +221,14 @@ public class USCTeensArbitrater extends Arbitrater {
 				
 		if (isReprompt) {
 			if (SurveyActivity.self == null) {
+				Log.i(TAG, "self == null");
 				return; // The survey is canceled or completed by the user, so there won't be any reprompt
 			} else {
 				Log.i(TAG, "do reprompt");
 			}
 		} else {
-			if (SurveyActivity.self != null) {				
+			if (SurveyActivity.self != null) {
+				Log.i(TAG,  "self != null");
 				return;
 			}
 			DataStorage.SetValue(aContext, KEY_ALL_REPROMPT + lastScheduledPromptTime, true);
@@ -276,6 +278,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(surveyClassName, 1, new Object[] { css }));
 		i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);	
 		aContext.startActivity(i);
+		Log.i(TAG, "prompted survey");
 		
 		// add new label
 		Labeler.addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Prompt" : "Random Prompt");
