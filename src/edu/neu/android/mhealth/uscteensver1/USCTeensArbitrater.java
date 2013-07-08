@@ -11,16 +11,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Random;
-
-import com.google.gson.Gson;
 
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
+
+import com.google.gson.Gson;
+
 import edu.neu.android.mhealth.uscteensver1.activities.USCTeensSurveyActivity;
 import edu.neu.android.mhealth.uscteensver1.data.AccelData;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataChecker;
@@ -38,7 +38,6 @@ import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent.PROMPT_AUDIO;
 import edu.neu.android.wocketslib.sensormonitor.Arbitrater;
-import edu.neu.android.wocketslib.sensormonitor.WocketSensorDataStorer;
 import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.support.ServerLogger;
@@ -60,7 +59,7 @@ public class USCTeensArbitrater extends Arbitrater {
 	private static final String KEY_RANDOM_PROMPT = "_KEY_RANDOM_PROMPT";
 	private static final String KEY_CS_PROMPT = "_KEY_CS_PROMPT";
 	private static final String KEY_ALL_PROMPT = "_KEY_ALL_PROMPT";
-	private static final String KEY_ALL_REPROMPT = "_KEY_ALL_REPROMPT";
+	private static final String KEY_ALL_PROMPT_COUNT = "_KEY_ALL_PROMPT_COUNT";
 	private static final String KEY_ALL_PROMPT_STATE = "_KEY_ALL_PROMPT_STATE";
 	private static final String KEY_SCHEDULE = "_KEY_SCHEDULE";		
 
@@ -210,73 +209,6 @@ public class USCTeensArbitrater extends Arbitrater {
 		}
 	
 		return result;
-	}
-
-	private void promptTask(Context aContext, int aKey, boolean isAudible, boolean isPostponed) {
-		Log.i(TAG, "prompt: " + aKey + ",audible: " + isAudible + ",postponed: " + isPostponed);							
-		long now = System.currentTimeMillis();
-		long[] allPromptTime = DataStorage.getPromptTimesKey(aContext, KEY_ALL_PROMPT);	
-		long lastScheduledPromptTime = getLastScheduledPromptTime(now, allPromptTime); // would be 0 if none				
-		boolean isReprompt = DataStorage.GetValueBoolean(aContext, KEY_ALL_REPROMPT + lastScheduledPromptTime, false);								
-				
-		if (isReprompt) {
-			Log.i(TAG, "do reprompt");		
-		} else {
-			if (SurveyActivity.self != null) {
-				Log.i(TAG,  "self != null");
-				return;
-			}
-			DataStorage.SetValue(aContext, KEY_ALL_REPROMPT + lastScheduledPromptTime, true);
-		}			
-		
-		// Indicate that this particular app was prompted
-		AppInfo.SetLastTimePrompted(aContext, Globals.SURVEY, now);
-				
-		String surveyClassName = null;
-		// Construct survey prompt event
-		SurveyPromptEvent promptEvent = new SurveyPromptEvent(lastScheduledPromptTime, now);
-		String msg = "";
-		switch (aKey) {
-		case KEY_CS_EMA:
-			surveyClassName = CSTeensSurvey.class.getCanonicalName();
-			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, true, PhonePrompter.CHIMES_NAMBOKU1, PhoneVibrator.VIBRATE_INTENSE);						
-			promptEvent.setPromptType("CS");
-			break;
-		case KEY_RANDOM_EMA:
-			surveyClassName = RandomTeensSurvey.class.getCanonicalName();
-			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, isAudible, PhonePrompter.CHIMES_HIKARI, PhoneVibrator.VIBRATE_INTENSE);
-			promptEvent.setPromptType("Random");
-			long[] schedule = DataStorage.getPromptTimesKey(aContext, KEY_SCHEDULE);
-			if (schedule != null && schedule.length >= 3)
-				promptEvent.setPromptSchedule(lastScheduledPromptTime, (int) schedule[0], (int) schedule[1], schedule[2]);			
-			break;
-		} // switch end		
-		if (msg.toLowerCase().contains("silence")) {
-			promptEvent.setPromptAudio(PROMPT_AUDIO.NONE);
-		} else if (msg.toLowerCase().contains("normal")) {
-			promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-		} else if (msg.toLowerCase().contains("vibrate")) {
-			promptEvent.setPromptAudio(PROMPT_AUDIO.VIBRATION);
-		}
-		promptEvent.setReprompt(isReprompt);
-		
-		// Get CSState from JSON string
-		String aJSONString = DataStorage.GetValueString(sContext, KEY_ALL_PROMPT_STATE + lastScheduledPromptTime, null);
-		CSState css = null;
-		if (aJSONString != null) {
-			css = new Gson().fromJson(aJSONString, CSState.class); 
-		}
-		
-		// Construct intent and start survey activity
-		Intent i = new Intent(aContext, USCTeensSurveyActivity.class);
-		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(surveyClassName, 1, new Object[] { css }));
-		i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);	
-		aContext.startActivity(i);
-		Log.i(TAG, "prompted survey");
-		
-		// add new label
-		Labeler.addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Prompt" : "Random Prompt");
 	}
 
 	private boolean addCSPrompt(CSState css) {		
@@ -436,13 +368,95 @@ public class USCTeensArbitrater extends Arbitrater {
 		if (timeSinceScheduledPrompt < Globals.REPROMPT_TIMES * Globals.REPROMPT_DELAY_MS &&
 			timeSincePrompted > Globals.REPROMPT_DELAY_MS) 
 		{
-			mSomeTasks.add(isCSPrompt(lastScheduledPromptTime) ? KEY_CS_EMA : KEY_RANDOM_EMA);			
+			mSomeTasks.add(isCSPrompt(lastScheduledPromptTime) ? KEY_CS_EMA : KEY_RANDOM_EMA);
 		}
 		if (timeSinceScheduledPrompt < (Globals.REPROMPT_TIMES + 1) * Globals.REPROMPT_DELAY_MS + Globals.MINUTES_10_IN_MS
 				&& timeSincePrompted > (Globals.REPROMPT_TIMES + 1) * Globals.REPROMPT_DELAY_MS) {
 			NotificationManager nm = (NotificationManager) sContext.getSystemService(Context.NOTIFICATION_SERVICE);
 			nm.cancel(Globals.SURVEY_NOTIFICATION_ID);
 		}
+		
+		return true;
+	}
+	
+	private void promptTask(Context aContext, int aKey, boolean isAudible, boolean isPostponed) {
+		Log.i(TAG, "prompt: " + aKey + ",audible: " + isAudible + ",postponed: " + isPostponed);							
+		long now = System.currentTimeMillis();
+		long[] allPromptTime = DataStorage.getPromptTimesKey(aContext, KEY_ALL_PROMPT);	
+		long lastScheduledPromptTime = getLastScheduledPromptTime(now, allPromptTime); // would be 0 if none	
+		long promptCount = DataStorage.GetValueLong(aContext, KEY_ALL_PROMPT_COUNT + lastScheduledPromptTime, 0);
+				
+		if (isPromptAccepted(promptCount)) {			
+			DataStorage.SetValue(aContext, KEY_ALL_PROMPT_COUNT + lastScheduledPromptTime, promptCount + 1);
+		} else {
+			Log.i(TAG, "prompt hasn't been accepted");
+			return;
+		}
+
+		String surveyClassName = null;
+		// Construct survey prompt event
+		SurveyPromptEvent promptEvent = new SurveyPromptEvent(lastScheduledPromptTime, now);
+		String msg = "";
+		switch (aKey) {
+		case KEY_CS_EMA:
+			surveyClassName = CSTeensSurvey.class.getCanonicalName();
+			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, true, PhonePrompter.CHIMES_NAMBOKU1, PhoneVibrator.VIBRATE_INTENSE);						
+			promptEvent.setPromptType("CS");
+			break;
+		case KEY_RANDOM_EMA:
+			surveyClassName = RandomTeensSurvey.class.getCanonicalName();
+			msg = PhonePrompter.StartPhoneAlert(TAG, aContext, isAudible, PhonePrompter.CHIMES_HIKARI, PhoneVibrator.VIBRATE_INTENSE);
+			promptEvent.setPromptType("Random");
+			long[] schedule = DataStorage.getPromptTimesKey(aContext, KEY_SCHEDULE);
+			if (schedule != null && schedule.length >= 3)
+				promptEvent.setPromptSchedule(lastScheduledPromptTime, (int) schedule[0], (int) schedule[1], schedule[2]);			
+			break;
+		} // switch end		
+		if (msg.toLowerCase().contains("silence")) {
+			promptEvent.setPromptAudio(PROMPT_AUDIO.NONE);
+		} else if (msg.toLowerCase().contains("normal")) {
+			promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
+		} else if (msg.toLowerCase().contains("vibrate")) {
+			promptEvent.setPromptAudio(PROMPT_AUDIO.VIBRATION);
+		}
+		promptEvent.setReprompt(promptCount > 0);
+		
+		// Get CSState from JSON string
+		String aJSONString = DataStorage.GetValueString(sContext, KEY_ALL_PROMPT_STATE + lastScheduledPromptTime, null);
+		CSState css = null;
+		if (aJSONString != null) {
+			css = new Gson().fromJson(aJSONString, CSState.class); 
+		}
+		
+		// Construct intent and start survey activity
+		Intent i = new Intent(aContext, USCTeensSurveyActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(surveyClassName, 1, new Object[] { css }));
+		i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);	
+		aContext.startActivity(i);
+		Log.i(TAG, "prompted survey");
+		
+		// add new label
+		Labeler.addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Prompt" : "Random Prompt");
+	}
+	
+	private boolean isPromptAccepted(long promptCount) {
+		
+		if (promptCount == 0) { // first time the survey prompted
+			if (SurveyActivity.isWorking()) {
+				Log.i(TAG, "The previous survey is still waiting to be answered");
+				return false;
+			}
+		} else { // promptCount > 0
+			if (SurveyActivity.isWorking()) {
+				if (!SurveyActivity.getSelf().isRepromptAccepted(promptCount)) {
+					Log.i(TAG, "Reprompt request hasn't been accepted");
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}	
 		
 		return true;
 	}
@@ -504,7 +518,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		long[] somePromptTimes = DataStorage.getPromptTimesKey(sContext, KEY_ALL_PROMPT);
 		if (somePromptTimes != null) {
 			for (int i = 0; i < somePromptTimes.length; ++i) {
-				DataStorage.SetValue(sContext, KEY_ALL_REPROMPT + somePromptTimes[i], false);
+				DataStorage.SetValue(sContext, KEY_ALL_PROMPT_COUNT + somePromptTimes[i], null);
 				DataStorage.SetValue(sContext, KEY_ALL_PROMPT_STATE + somePromptTimes[i], null);
 			}
 		}

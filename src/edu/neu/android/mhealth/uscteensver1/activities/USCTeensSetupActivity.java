@@ -215,7 +215,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
 				promptEvent.setPromptType("Random-Test");				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				promptEvent.setReprompt(USCTeensSurveyActivity.self != null);
+				promptEvent.setReprompt(USCTeensSurveyActivity.isWorking());
 				
 				i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
@@ -237,7 +237,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
 				promptEvent.setPromptType("CS-Test");				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				promptEvent.setReprompt(USCTeensSurveyActivity.self != null);
+				promptEvent.setReprompt(USCTeensSurveyActivity.isWorking());
 				
 				i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
