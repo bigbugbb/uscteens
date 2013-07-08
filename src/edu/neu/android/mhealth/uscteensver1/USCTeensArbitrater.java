@@ -220,12 +220,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		boolean isReprompt = DataStorage.GetValueBoolean(aContext, KEY_ALL_REPROMPT + lastScheduledPromptTime, false);								
 				
 		if (isReprompt) {
-			if (SurveyActivity.self == null) {
-				Log.i(TAG, "self == null");
-				return; // The survey is canceled or completed by the user, so there won't be any reprompt
-			} else {
-				Log.i(TAG, "do reprompt");
-			}
+			Log.i(TAG, "do reprompt");		
 		} else {
 			if (SurveyActivity.self != null) {
 				Log.i(TAG,  "self != null");
