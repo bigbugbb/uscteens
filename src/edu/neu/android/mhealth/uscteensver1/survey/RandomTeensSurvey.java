@@ -35,7 +35,7 @@ public class RandomTeensSurvey extends QuestionSet {
 		mDefaultQuestionSet = new ArrayList<SurveyQuestion>();
 		
 		/************ Initialize questions and answers *********/
-		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity","What have you been DOING in the last hour?\n(Choose all that apply)", TYPE.MULTI_CHOICE);
+		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity","What have you been DOING in the last hour?\n (Choose all that apply)", TYPE.MULTI_CHOICE);
 		SurveyAnswer[] answerSet1 = new SurveyAnswer[7];
 		answerSet1[0] = new SurveyAnswer(0, "Reading or doing homework");
 		answerSet1[1] = new SurveyAnswer(1, "Using technology (TV, phone)");

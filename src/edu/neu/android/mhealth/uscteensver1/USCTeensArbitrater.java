@@ -419,20 +419,21 @@ public class USCTeensArbitrater extends Arbitrater {
 		} else if (msg.toLowerCase().contains("vibrate")) {
 			promptEvent.setPromptAudio(PROMPT_AUDIO.VIBRATION);
 		}
-		promptEvent.setReprompt(promptCount > 1);
+		promptEvent.setReprompt(promptCount > 1);		
 		
 		// Get CSState from JSON string
 		String aJSONString = DataStorage.GetValueString(sContext, KEY_ALL_PROMPT_STATE + lastScheduledPromptTime, null);
 		CSState css = null;
 		if (aJSONString != null) {
-			css = new Gson().fromJson(aJSONString, CSState.class); 
+			css = new Gson().fromJson(aJSONString, CSState.class);		
 		}
+		promptEvent.setPromptReason(css != null ? getPromptReason(css.getState()) : "");
 		
 		// Construct intent and start survey activity
 		Intent i = new Intent(aContext, USCTeensSurveyActivity.class);
 		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(surveyClassName, 1, new Object[] { css }));
-		i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);	
+		i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);
 		aContext.startActivity(i);
 		Log.i(TAG, "prompted survey");
 		
@@ -459,6 +460,24 @@ public class USCTeensArbitrater extends Arbitrater {
 		}	
 		
 		return true;
+	}
+	
+	private String getPromptReason(int state) {
+		String reason = "unknown";
+		
+		switch (state) {
+		case CSState.DATA_STATE_MISSING:
+			reason = "10minNoData";
+			break;
+		case CSState.DATA_STATE_HIGH_INTENSITY:
+			reason = "30minActivityThen10minLowActivity";
+			break;
+		case CSState.DATA_STATE_LOW_INTENSITY:
+			reason = "60minLowActivity";
+			break;
+		}
+		
+		return reason;
 	}
 
 	private boolean isCSPrompt(long promptTime) {
