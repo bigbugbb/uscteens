@@ -384,7 +384,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		long now = System.currentTimeMillis();
 		long[] allPromptTime = DataStorage.getPromptTimesKey(aContext, KEY_ALL_PROMPT);	
 		long lastScheduledPromptTime = getLastScheduledPromptTime(now, allPromptTime); // would be 0 if none	
-		long promptCount = DataStorage.GetValueLong(aContext, KEY_ALL_PROMPT_COUNT + lastScheduledPromptTime, 0);
+		long promptCount = DataStorage.GetValueLong(aContext, KEY_ALL_PROMPT_COUNT + lastScheduledPromptTime, 1);
 				
 		if (isPromptAccepted(promptCount)) {			
 			DataStorage.SetValue(aContext, KEY_ALL_PROMPT_COUNT + lastScheduledPromptTime, promptCount + 1);
@@ -419,7 +419,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		} else if (msg.toLowerCase().contains("vibrate")) {
 			promptEvent.setPromptAudio(PROMPT_AUDIO.VIBRATION);
 		}
-		promptEvent.setReprompt(promptCount > 0);
+		promptEvent.setReprompt(promptCount > 1);
 		
 		// Get CSState from JSON string
 		String aJSONString = DataStorage.GetValueString(sContext, KEY_ALL_PROMPT_STATE + lastScheduledPromptTime, null);
@@ -442,12 +442,12 @@ public class USCTeensArbitrater extends Arbitrater {
 	
 	private boolean isPromptAccepted(long promptCount) {
 		
-		if (promptCount == 0) { // first time the survey prompted
+		if (promptCount == 1) { // first time the survey prompted
 			if (SurveyActivity.isWorking()) {
 				Log.i(TAG, "The previous survey is still waiting to be answered");
 				return false;
 			}
-		} else { // promptCount > 0
+		} else { // promptCount > 1
 			if (SurveyActivity.isWorking()) {
 				if (!SurveyActivity.getSelf().isRepromptAccepted(promptCount)) {
 					Log.i(TAG, "Reprompt request hasn't been accepted");
