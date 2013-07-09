@@ -304,6 +304,7 @@
         <activity android:name="edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog"
 			android:screenOrientation="landscape"
 			android:launchMode="singleInstance"
+			android:excludeFromRecents="true"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/DialogTheme">
 		</activity>
@@ -311,6 +312,7 @@
         <activity android:name="edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog"
 			android:screenOrientation="landscape"		    
 			android:launchMode="singleInstance"
+			android:excludeFromRecents="true"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/DialogTheme">
 		</activity>
