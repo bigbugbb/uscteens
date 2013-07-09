@@ -438,7 +438,11 @@ public class USCTeensArbitrater extends Arbitrater {
 		Log.i(TAG, "prompted survey");
 		
 		// add new label
-		Labeler.addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Prompt" : "Random Prompt");
+		if (promptCount == 1) {
+			Labeler.addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Prompt" : "Random Prompt");
+		} else {
+			Labeler.addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Reprompts" : "Random Reprompts");
+		}
 	}
 	
 	private boolean isPromptAccepted(long promptCount) {
