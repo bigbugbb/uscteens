@@ -36,6 +36,7 @@
 		<activity android:name="edu.neu.android.wocketslib.support.AuthorizationCheckerActivity"
 		    android:label="Setup" 
 		    android:excludeFromRecents="true"
+		    android:launchMode="singleTop"
 			android:screenOrientation="portrait" android:theme="@android:style/Theme.Dialog"/>
 						
 		<!-- Setup -->
