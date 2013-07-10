@@ -44,7 +44,7 @@ public class ChunkManager {
 	public static void initialize(Context context) {
 		sResources = context.getResources();
 		sContext = context;	
-		PADDING_OFFSET = AppScale.doScaleW(60);
+		PADDING_OFFSET = AppScale.doScaleW(180);
 	}	
 	
 	public static void start() {
