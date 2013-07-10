@@ -145,7 +145,6 @@ public class GraphPage extends AppPage implements OnClickListener,
 				LabelManager.setDisplayOffset(-offsetX, 0);
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -175,7 +174,6 @@ public class GraphPage extends AppPage implements OnClickListener,
 	// scroll the clock button to the boundary of the screen
 	Runnable mScaleLeft = new Runnable() {				
 		public void run() {			
-
 			synchronized (this) {				
 				ChunkManager.scaleChunkToBoundary(-2);				
 			}
@@ -190,7 +188,6 @@ public class GraphPage extends AppPage implements OnClickListener,
 	
 	Runnable mScaleRight = new Runnable() {				
 		public void run() {	
-
 			synchronized (this) {				
 				ChunkManager.scaleChunkToBoundary(2);
 			}
@@ -205,13 +202,11 @@ public class GraphPage extends AppPage implements OnClickListener,
 
 	@Override
 	public void onAppEvent(AppEvent e) {
-		// TODO Auto-generated method stub
 		super.onAppEvent(e);
 	}
 
 	@Override
 	public void onSizeChanged(int width, int height) {
-		// TODO Auto-generated method stub
 		super.onSizeChanged(width, height);		
 	}
 
@@ -316,7 +311,8 @@ public class GraphPage extends AppPage implements OnClickListener,
 	private void tryToBack(BackButton back) {
 		Chunk prevUnmarked = ChunkManager.getPreviousUnmarkedChunk();
 		if (prevUnmarked != null) {
-			mMotionGraph.moveGraph(prevUnmarked.mStart, 0);				
+			float offset = ChunkManager.PADDING_OFFSET;
+			mMotionGraph.moveGraph(prevUnmarked.mStart > offset ? prevUnmarked.mStart - offset : prevUnmarked.mStart, 0);				
 			float progress = (float) prevUnmarked.mStart / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
 		}
@@ -334,7 +330,8 @@ public class GraphPage extends AppPage implements OnClickListener,
 	private void tryToNext(NextButton next) {
 		Chunk nextUnmarked = ChunkManager.getNextUnmarkedChunk();
 		if (nextUnmarked != null) {
-			mMotionGraph.moveGraph(nextUnmarked.mStart, 0);			
+			float offset = ChunkManager.PADDING_OFFSET;
+			mMotionGraph.moveGraph(nextUnmarked.mStart > offset ? nextUnmarked.mStart - offset : nextUnmarked.mStart, 0);			
 			float progress = (float) nextUnmarked.mStart / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
 		}

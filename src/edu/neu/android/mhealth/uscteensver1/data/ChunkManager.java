@@ -36,12 +36,15 @@ public class ChunkManager {
 	protected static float sViewHeight   = 0;
 	protected static float sCanvasWidth  = 0;
 	protected static float sCanvasHeight = 0;
+	
+	public static float PADDING_OFFSET = 0;
 		
 	protected static Context sContext = null;
 
 	public static void initialize(Context context) {
 		sResources = context.getResources();
-		sContext = context;		
+		sContext = context;	
+		PADDING_OFFSET = AppScale.doScaleW(60);
 	}	
 	
 	public static void start() {
@@ -283,7 +286,7 @@ public class ChunkManager {
 	
 	public static Chunk getPreviousUnmarkedChunk() {
 		Chunk prev = null;
-		float current = -sDispOffsetX - 1;
+		float current = -sDispOffsetX - PADDING_OFFSET - 1;
 
 		for (int i = sChunks.size() - 1; i >= 0; --i) {
 			Chunk c = sChunks.get(i);
@@ -300,7 +303,7 @@ public class ChunkManager {
 	
 	public static Chunk getNextUnmarkedChunk() {
 		Chunk next = null;
-		float current = -sDispOffsetX + 1;		
+		float current = -sDispOffsetX + PADDING_OFFSET + 1;		
 		
 		for (int i = 0; i < sChunks.size(); ++i) {
 			Chunk c = sChunks.get(i);
