@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.content.Context;
-
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.algorithm.CSDetectingAlgorithm;
 import edu.neu.android.mhealth.uscteensver1.algorithm.ChunkingAlgorithm;

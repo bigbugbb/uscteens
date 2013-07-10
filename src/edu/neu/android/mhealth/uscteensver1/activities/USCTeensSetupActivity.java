@@ -1,8 +1,5 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
-import java.util.Date;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,7 +9,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.mhealth.uscteensver1.survey.CSTeensSurvey;
 import edu.neu.android.mhealth.uscteensver1.survey.RandomTeensSurvey;
 import edu.neu.android.mhealth.uscteensver1.video.VideoActivity;
@@ -31,8 +27,6 @@ import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
-import edu.neu.android.wocketslib.utils.PhonePrompter;
-import edu.neu.android.wocketslib.utils.PhoneVibrator;
 
 
 public class USCTeensSetupActivity extends BaseActivity {
