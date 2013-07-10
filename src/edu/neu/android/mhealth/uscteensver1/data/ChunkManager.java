@@ -286,7 +286,7 @@ public class ChunkManager {
 	
 	public static Chunk getPreviousUnmarkedChunk() {
 		Chunk prev = null;
-		float current = -sDispOffsetX - PADDING_OFFSET - 1;
+		float current = -sDispOffsetX - 1;
 
 		for (int i = sChunks.size() - 1; i >= 0; --i) {
 			Chunk c = sChunks.get(i);

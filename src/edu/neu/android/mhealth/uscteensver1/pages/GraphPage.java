@@ -315,6 +315,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 			mMotionGraph.moveGraph(prevUnmarked.mStart > offset ? prevUnmarked.mStart - offset : prevUnmarked.mStart, 0);				
 			float progress = (float) prevUnmarked.mStart / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
+			ChunkManager.selectChunk(prevUnmarked);
 		}
 		
 		if (ChunkManager.areAllChunksLabelled()) {
@@ -334,6 +335,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 			mMotionGraph.moveGraph(nextUnmarked.mStart > offset ? nextUnmarked.mStart - offset : nextUnmarked.mStart, 0);			
 			float progress = (float) nextUnmarked.mStart / mMotionGraph.getRightBound();
 			mSlideBar.moveSliderBarToProgress(progress);
+			ChunkManager.selectChunk(nextUnmarked);
 		}
 		
 		if (ChunkManager.areAllChunksLabelled()) {
