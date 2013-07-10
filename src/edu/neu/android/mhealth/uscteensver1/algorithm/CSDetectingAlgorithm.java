@@ -10,7 +10,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.CSState;
-import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.DateHelper;
 
@@ -119,7 +118,8 @@ public class CSDetectingAlgorithm {
 			
 			// Merge the current chunk with the next one if both of them have high or low mean value
 			if ((curMean >= MOTION_INTENSITY_THRESHOLD && prvMean >= MOTION_INTENSITY_THRESHOLD) ||
-				(curMean < MOTION_INTENSITY_THRESHOLD && prvMean < MOTION_INTENSITY_THRESHOLD)) {					
+				(curMean < MOTION_INTENSITY_THRESHOLD && prvMean < MOTION_INTENSITY_THRESHOLD &&
+				 Math.abs(curMean - prvMean) < Math.max(curMean, prvMean) / 2)) {					
 				// Calculate and update the mean of the chunk after merging
 				Integer prvDuration = ptdHash.get(prvPos);
 				Integer curDuration = ptdHash.get(curPos);

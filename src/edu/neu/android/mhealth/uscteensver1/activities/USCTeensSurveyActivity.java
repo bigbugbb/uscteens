@@ -13,7 +13,7 @@ public class USCTeensSurveyActivity extends SurveyActivity {
 	
 	@Override
 	public void onStop() {
-		if (isResponse()) {
+		if (isResponded()) {
 			SurveyPromptEvent promptEvent = getSurveyPromptEvent();
 			if (promptEvent != null) {
 				Labeler.addLabel(new Date(), "Answer " + promptEvent.getPromptType());
