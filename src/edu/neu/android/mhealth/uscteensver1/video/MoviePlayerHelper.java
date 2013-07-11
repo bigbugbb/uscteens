@@ -255,18 +255,17 @@ public class MoviePlayerHelper {
 					iconLink = iconLink.substring(5) + ".jpg";
 					String[] movieInfo = new String[]{title, duration, iconLink};
 					return movieInfo;
-				}
-				else 
+				} else { 
 					return null;
-			}
-			else{
+				}
+			} else {
 				Log.i(TAG, "No response from server");
 				return null;
 			}
-		}catch (ClientProtocolException e){   
+		} catch (ClientProtocolException e){   
 			Log.i(TAG, "Json ClientProtocolException");
 			e.printStackTrace();  
-		}catch (IOException e){   
+		} catch (IOException e){   
 			Log.i(TAG, "IOException");
 			e.printStackTrace();  
 		}   

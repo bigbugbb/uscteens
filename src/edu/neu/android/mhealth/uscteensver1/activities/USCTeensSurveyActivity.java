@@ -47,7 +47,7 @@ public class USCTeensSurveyActivity extends SurveyActivity {
 		SurveyPromptEvent promptEvent = getSurveyPromptEvent();
 		
 		for (SurveyAnswer answer : answers) {
-			if (!answer.isSelected()) {
+			if (answer == null || !answer.isSelected()) {
 				continue;				
 			}
 			

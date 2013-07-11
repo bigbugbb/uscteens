@@ -1,5 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastRece
 import edu.neu.android.wocketslib.dataupload.DataManager;
 import edu.neu.android.wocketslib.dataupload.DataSender;
 import edu.neu.android.wocketslib.dataupload.RawUploader;
+import edu.neu.android.wocketslib.dataupload.SendAllFilesToServerTask;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
@@ -51,79 +53,15 @@ public class USCTeensSetupActivity extends BaseActivity {
 	 * Set the update button on/off depending on if the code detects that the software
 	 * is or is not at the latest version on the Android Market. 
 	 */
-	private class SendAllFilesToServerTask extends AsyncTask<Void, Void, Boolean> 
-	{
-		//TODO get this into the main library because reused by multiple projects
+	private class MySendAllFilesToServerTask extends SendAllFilesToServerTask {
 
-		@Override
-		protected Boolean doInBackground(Void... params) {
-
-			// send JSON file
-			long currentTime = System.currentTimeMillis();
-			String msg = "Finish study pressed. Starting data and log files upload";
-			//Transmit Note first
-			ServerLogger.transmitOrQueueNote(USCTeensSetupActivity.this, msg, true);
-
-			//Move standard log files to internal upload folder (do not include today)
-			DataSender.sendLogsToInternalUploadDir(USCTeensSetupActivity.this, true, false);
-
-            //Copy standard log files to internal upload folder (include today)
-            DataSender.copyLogsToInternalUploadDir(USCTeensSetupActivity.this, true, true);
-
-//			//Move survey log files to internal upload folder
-//			DataSender.sendInternalSurveyLogsToInternalUploadDir(SetupInhalerActivity.this, true, false); 
-
-			//Move survey log files to internal upload folder
-			DataSender.copyExternalSurveyLogsToExternalUploadDir(USCTeensSetupActivity.this, true, false);
-
-			//Move survey log files to internal upload folder
-			DataSender.copyInternalDataLogsToInternalUploadDir(USCTeensSetupActivity.this, true, false);
-			
-//			//Move Survey Log files to upload folder
-//			DataSender.copySurveyLogsToExternalUploadDir(SetupInhalerActivity.this, true);
-
-            // Move Data files to external upload folder
-            DataSender.copyExternalDataLogsToExternalUploadDir(USCTeensSetupActivity.this, true, false);
-
-            //Move all data in the internal upload queue to the external upload queue and zip if needed
-			if (Globals.IS_DEBUG)
-				Log.i(TAG, "Move and zip internal upload dir data to external upload directory");
-			DataSender.sendInternalUploadDataToExternalUploadDir(USCTeensSetupActivity.this, false, true);
-
-//			Log.d(TAG, "WHATS LEFT ----------------------------------------------------------");
-//			DataManager.listFilesInternalStorage();
-//			DataManager.listFilesExternalStorage();
-
-            // Zip the JSON zips so fewer uploads are required
-            DataManager.zipJSONSExternalUploads(USCTeensSetupActivity.this);
-            DataManager.zipJSONSInternalUploads(USCTeensSetupActivity.this);
-
-            int numFilesStart = DataManager.countFilesExtUploadDir() +
-                                DataManager.countFilesIntUploadDir();
-
-			//Upload JSON files and remove
-			int filesRemaining = RawUploader.uploadDataFromExtUploadDir(USCTeensSetupActivity.this,
-                    true, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
-
-			//Upload Log and SurveyLog files, backup and remove
-			filesRemaining = RawUploader.uploadDataFromExtUploadDir(USCTeensSetupActivity.this,
-                    false, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
-
-			//Upload possible remaining files in the internal memory
-			filesRemaining = RawUploader.uploadDataFromIntUploadDir(USCTeensSetupActivity.this,
-                    false, true, true, Globals.UPLOAD_SUCCESS_PERCENTAGE, false);
-
-			msg = "Completed user-initiated file upload attempt of " + numFilesStart + " files after "
-					+ String.format(
-							"%.1f",
-							((System.currentTimeMillis() - currentTime) / 1000.0 / 60.0))
-					+ " minutes. Files remaining to upload: " + filesRemaining;
-			ServerLogger.sendNote(USCTeensSetupActivity.this, msg, true);
-			return true;
+		public MySendAllFilesToServerTask(Context context) {
+			super(context);
+			// TODO Auto-generated constructor stub
 		}
 
 		protected void onPostExecute(Boolean isNeedUpdate) {
-			displayToastMessage("Transmission complete.");
+			super.onPostExecute(isNeedUpdate);
 			finishStudy.setEnabled(true);
 		}
 	}
@@ -193,7 +131,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 				Log.o(TAG, Log.USER_ACTION, "Send all data and log files");
 				displayToastMessage("Request to finish this study, sending all data to the server now.");
 				finishStudy.setEnabled(false);
-				new SendAllFilesToServerTask().execute();
+				new MySendAllFilesToServerTask(getApplicationContext()).execute();
 			}
 		});
 		
