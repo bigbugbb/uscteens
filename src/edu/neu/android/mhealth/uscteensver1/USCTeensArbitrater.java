@@ -211,14 +211,13 @@ public class USCTeensArbitrater extends Arbitrater {
 		return result;
 	}
 
-	private boolean addCSPrompt(CSState css) {		
-		long promptTime = System.currentTimeMillis();
+	private boolean addCSPrompt(String cssJSON, long promptTime) {				
 		long[] savedPromptTime = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);				
         
 		if (savedPromptTime == null) {
 			DataStorage.setPromptTimesKey(sContext, new long[] { promptTime }, KEY_CS_PROMPT);
 			// Save the CSState
-	        DataStorage.SetValue(sContext, KEY_ALL_PROMPT_STATE + promptTime, new Gson().toJson(css));
+	        DataStorage.SetValue(sContext, KEY_ALL_PROMPT_STATE + promptTime, cssJSON);
 			return true;
 		}
 				
@@ -226,13 +225,45 @@ public class USCTeensArbitrater extends Arbitrater {
 		if (promptTime - latestPromptTime < Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS) {
 			promptTime = latestPromptTime + (long) (Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS * 1.1f);
 			// Save the CSState
-			DataStorage.SetValue(sContext, KEY_ALL_PROMPT_STATE + promptTime, new Gson().toJson(css));
+			DataStorage.SetValue(sContext, KEY_ALL_PROMPT_STATE + promptTime, cssJSON);
 		}		
 		long[] finalPromptTime = Arrays.copyOf(savedPromptTime, savedPromptTime.length + 1);
 		finalPromptTime[savedPromptTime.length] = promptTime;
 		DataStorage.setPromptTimesKey(sContext, finalPromptTime, KEY_CS_PROMPT);
 		
 		return true;				
+	}
+	
+	private boolean removeCSPrompt(long promptTime) {
+		long[] savedPromptTime = DataStorage.getPromptTimesKey(sContext, KEY_CS_PROMPT);				
+        
+		if (savedPromptTime == null) {
+			Log.i(TAG, "No CS prompt to remove");
+			return false;
+		}
+		
+		boolean removed = false;
+		ArrayList<Long> promptTimes = new ArrayList<Long>();
+		for (long time : savedPromptTime) {
+			if (time != promptTime) {
+				promptTimes.add(time);
+			} else {
+				removed = true;
+				DataStorage.SetValue(sContext, KEY_ALL_PROMPT_STATE + promptTime, null);
+			}
+		}
+		if (!removed) {
+			Log.i(TAG, "Can't find this prompt time to remove");
+			return false;
+		}
+				
+		long[] finalPromptTime = new long[promptTimes.size()];
+		for (int i = 0; i < promptTimes.size(); ++i) {
+			finalPromptTime[i] = promptTimes.get(i);
+		}
+		DataStorage.setPromptTimesKey(sContext, finalPromptTime, KEY_CS_PROMPT);
+		
+		return true;
 	}
 
 	private void resetSchedule() {
@@ -380,16 +411,27 @@ public class USCTeensArbitrater extends Arbitrater {
 	}
 	
 	private void promptTask(Context aContext, int aKey, boolean isAudible, boolean isPostponed) {
-		Log.i(TAG, "prompt: " + aKey + ",audible: " + isAudible + ",postponed: " + isPostponed);							
+		Log.i(TAG, "prompt: " + aKey + ", audible: " + isAudible + ", postponed: " + isPostponed);							
 		long now = System.currentTimeMillis();
 		long[] allPromptTime = DataStorage.getPromptTimesKey(aContext, KEY_ALL_PROMPT);	
 		long lastScheduledPromptTime = getLastScheduledPromptTime(now, allPromptTime); // would be 0 if none	
 		long promptCount = DataStorage.GetValueLong(aContext, KEY_ALL_PROMPT_COUNT + lastScheduledPromptTime, 1);
 				
-		if (isPromptAccepted(promptCount)) {			
+		// Request the prompt and get the request state
+		int requestState = requestPrompt(promptCount);
+		switch (requestState) {
+		case PROMPT_ACCEPTED:
 			DataStorage.SetValue(aContext, KEY_ALL_PROMPT_COUNT + lastScheduledPromptTime, promptCount + 1);
-		} else {
+			break;
+		case PROMPT_RESCHEDULE:
+			Log.i(TAG, "prompt will be rescheduled");
+			reschedulePrompt(lastScheduledPromptTime);
+			return;
+		case PROMPT_NOT_ACCEPTED:
 			Log.i(TAG, "prompt hasn't been accepted");
+			return;
+		case PROMPT_COMPLETED:
+			Log.i(TAG, "prompt hasn't been completed");
 			return;
 		}
 
@@ -445,25 +487,30 @@ public class USCTeensArbitrater extends Arbitrater {
 		}
 	}
 	
-	private boolean isPromptAccepted(long promptCount) {
+	private final static int PROMPT_ACCEPTED     = 0;
+	private final static int PROMPT_NOT_ACCEPTED = 1;
+	private final static int PROMPT_COMPLETED    = 2;
+	private final static int PROMPT_RESCHEDULE   = 3;
+	
+	private int requestPrompt(long promptCount) {
 		
 		if (promptCount == 1) { // first time the survey prompted
 			if (SurveyActivity.isWorking()) {
 				Log.i(TAG, "The previous survey is still waiting to be answered");
-				return false;
+				return PROMPT_RESCHEDULE;
 			}
 		} else { // promptCount > 1
 			if (SurveyActivity.isWorking()) {
 				if (!SurveyActivity.getSelf().isRepromptAccepted(promptCount)) {
 					Log.i(TAG, "Reprompt request hasn't been accepted");
-					return false;
+					return PROMPT_NOT_ACCEPTED;
 				}
 			} else {
-				return false;
+				return PROMPT_COMPLETED;
 			}
 		}	
 		
-		return true;
+		return PROMPT_ACCEPTED;
 	}
 	
 	private String getPromptReason(int state) {
@@ -521,6 +568,16 @@ public class USCTeensArbitrater extends Arbitrater {
 		return Math.abs(timeA - timeB) < Globals.MINUTES_1_IN_MS && dateA.getMinutes() == dateB.getMinutes();
 	}
 	
+	private void reschedulePrompt(long promptTime) {		
+		if (isCSPrompt(promptTime)) {
+			String aJSONString = DataStorage.GetValueString(sContext, KEY_ALL_PROMPT_STATE + promptTime, null);
+			removeCSPrompt(promptTime);
+			if (addCSPrompt(aJSONString, promptTime + 20 * Globals.MINUTES_1_IN_MS)) {
+				resetSchedule();
+			}
+		}
+	}
+	
 	private boolean resetPromptingSchedule(boolean isNewSoftwareVersion) {	
 		
 		boolean isForceReset = DataStorage.isForceReset(sContext);
@@ -570,7 +627,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		if (isInPromptTime()) {				
 			CSState css = AccelDataChecker.checkDataState(sContext, -1, -1);
 			if (css.getState() != CSState.DATA_STATE_ERROR && css.getState() != CSState.DATA_STATE_NORMAL) {				
-				addCSPrompt(css);	
+				addCSPrompt(new Gson().toJson(css), System.currentTimeMillis());	
 				resetSchedule();				
 			}
 		}

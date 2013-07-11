@@ -18,7 +18,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
-import edu.neu.android.mhealth.uscteensver1.openyoutubeplayer.OpenYouTubePlayerActivity;
+import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
 
 public class ContentAppUtil {
 	private static final double TEST_RATE = 0.0;
