@@ -29,11 +29,11 @@ import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.openyoutubeplayer.OpenYouTubePlayerActivity;
 import edu.neu.android.mhealth.uscteensver1.support.ContentAppUtil;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.NetworkDetector;
+import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
 
 public class VideoActivity extends BaseActivity {
 	private Button btnPlayLatestVideo;
@@ -111,9 +111,9 @@ public class VideoActivity extends BaseActivity {
 				@Override
 				public void onClick(View v) {
 					
-					Intent lVideoIntent = new Intent(null, Uri.parse("ytv://"
-							+ movieUrl), VideoActivity.this,
-							OpenYouTubePlayerActivity.class);
+					Intent lVideoIntent = new Intent(
+						null, Uri.parse("ytv://" + movieUrl), VideoActivity.this, OpenYouTubePlayerActivity.class
+					);
 					startActivity(lVideoIntent);
 				}
 			});
@@ -159,9 +159,9 @@ public class VideoActivity extends BaseActivity {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					String url = (String) list.get(position).get("id");
-					Intent lVideoIntent = new Intent(null, Uri.parse("ytv://"
-							+ url), VideoActivity.this,
-							OpenYouTubePlayerActivity.class);
+					Intent lVideoIntent = new Intent(
+						null, Uri.parse("ytv://" + url), VideoActivity.this, OpenYouTubePlayerActivity.class
+					);
 					Log.i(TAG, "Picked Video " + id);
 					Log.i(TAG, "Showed Video " + id);
 					ContentAppUtil.logViewedToDatabase(VideoActivity.this, TAG,

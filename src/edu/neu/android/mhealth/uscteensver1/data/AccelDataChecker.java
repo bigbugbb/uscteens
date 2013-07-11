@@ -7,8 +7,8 @@ import java.util.Date;
 import android.content.Context;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.algorithm.CSDetectingAlgorithm;
-import edu.neu.android.mhealth.uscteensver1.algorithm.ChunkingAlgorithm;
 import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
 

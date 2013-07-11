@@ -2,7 +2,6 @@ package edu.neu.android.mhealth.uscteensver1.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -16,8 +15,6 @@ import edu.neu.android.mhealth.uscteensver1.video.VideoActivity;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import edu.neu.android.wocketslib.dataupload.DataManager;
-import edu.neu.android.wocketslib.dataupload.DataSender;
-import edu.neu.android.wocketslib.dataupload.RawUploader;
 import edu.neu.android.wocketslib.dataupload.SendAllFilesToServerTask;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
@@ -26,7 +23,6 @@ import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent.PROMPT_AUDIO;
 import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
-import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
 
