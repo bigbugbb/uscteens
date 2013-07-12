@@ -59,8 +59,7 @@ public class USCTeensGlobals {
 		Globals.IS_DEBUG = false;
 		Globals.IS_LOG_EXTERNAL = false;
 		Globals.APP_DIRECTORY = "uscteens";		
-		Globals.APP_DATA_DIRECTORY = Globals.APP_DIRECTORY + File.separator + "appdata";
-		
+
 		Globals.initDataDirectories(aContext);
 		
 		DIRECTORY_PATH = Globals.EXTERNAL_DIRECTORY_PATH;
