@@ -41,7 +41,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
 import edu.neu.android.mhealth.uscteensver1.pages.RewardPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
-import edu.neu.android.mhealth.uscteensver1.views.DummyView;
+import edu.neu.android.wocketslib.views.DummyView;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 import edu.neu.android.wocketslib.Globals;
@@ -255,7 +255,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		Log.d("USCTeensMainActivity", "onResume in");
 		super.onResume();
 				
-		mDummyView.setVisibility(isAuthorized() ? View.GONE : View.VISIBLE);
+		mDummyView.setVisibility(AuthorizationChecker.isAuthorized(USCTeensMainActivity.this) ? View.GONE : View.VISIBLE);
 				
 		mGraphView.onResume();
 		mCurPage.resume();		
@@ -287,21 +287,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		Log.d("USCTeensMainActivity", "onStop out");
 	}	
 	
-	private boolean isAuthorized() {
-		AuthorizationChecker.isAuthorized24hrs(this);
-		
-		String subjectID = DataStorage.GetValueString(this, 
-				DataStorage.KEY_SUBJECT_ID, AuthorizationChecker.SUBJECT_ID_UNDEFINED);
-		String subjectLastName = DataStorage.GetValueString(this, 
-				DataStorage.KEY_LAST_NAME, AuthorizationChecker.SUBJECT_LAST_NAME_UNDEFINED);
-		long dob = DataStorage.GetValueLong(this, 
-				DataStorage.KEY_DATE_OF_BIRTH, AuthorizationChecker.SUBJECT_DATE_OF_BIRTH_UNDEFINED);
-		
-		return subjectID != AuthorizationChecker.SUBJECT_ID_UNDEFINED &&
-			subjectLastName != AuthorizationChecker.SUBJECT_LAST_NAME_UNDEFINED &&
-			dob != AuthorizationChecker.SUBJECT_DATE_OF_BIRTH_UNDEFINED;
-	}
-	
+
 	// use main looper as the default
 	protected final Handler mHandler = new Handler() {	
 		@SuppressWarnings("unchecked")

@@ -15,7 +15,8 @@
 		android:label="USCMOBILE Content Provider" android:description="@string/permdesc_content_provider"
 		android:protectionLevel="normal" />
 
-	<!-- APPLICATION -->
+
+    <!-- APPLICATION -->
 <!-- <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -38,8 +39,8 @@
 		    android:excludeFromRecents="true"
 		    android:launchMode="singleTop"
 			android:screenOrientation="portrait" android:theme="@android:style/Theme.Dialog"/>
-						
-		<!-- Setup -->
+
+        <!-- Setup -->
 		<activity android:name=".uscmobileapp.SetupInhalerActivity"
 		    android:label="Setup" 
 		    android:excludeFromRecents="true"

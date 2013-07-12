@@ -14,17 +14,17 @@
 		android:layout_height="210dip"
 		android:layout_gravity="center" 		
 		android:padding="1dp" />
-    
-    <edu.neu.android.mhealth.uscteensver1.views.DummyView
-    	android:id="@+id/view_dummy"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:visibility="gone"
-		android:background="@color/white" />
-    
-<!--     <edu.neu.android.mhealth.uscteensver1.views.ProgressView
-	    android:id="@+id/view_progress"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent" /> -->
+
+    <edu.neu.android.wocketslib.views.DummyView
+            android:id="@+id/view_dummy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="@color/white" />
+
+    <!--     <edu.neu.android.mhealth.uscteensver1.views.ProgressView
+            android:id="@+id/view_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" /> -->
 	
 </FrameLayout>
