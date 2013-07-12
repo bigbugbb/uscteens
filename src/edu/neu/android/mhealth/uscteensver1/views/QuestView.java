@@ -62,7 +62,6 @@ public class QuestView extends ImageView implements OnGestureListener,
 	protected Handler mHandler = null;
 	protected int mWidth  = 0;
 	protected int mHeight = 0;
-	
 	protected int mExpectedWidth = 0;	
 	
 	// gesture detector
@@ -199,7 +198,7 @@ public class QuestView extends ImageView implements OnGestureListener,
 	
 	public int getExpectedWidth() {
 		return mExpectedWidth;
-	}	
+	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {		
@@ -375,19 +374,8 @@ public class QuestView extends ImageView implements OnGestureListener,
 		// update the most recent selected activity
 		ActionManager.setMostRecentAction(action);
 		
-		// automatically label "Labeling activity"
-//		long lastLabelingTime = DataStorage.GetValueLong(
-//			getContext(), USCTeensGlobals.LAST_LABELING_TIME, 0
-//		);	
-//		long currentTime = System.currentTimeMillis();
-//		if (currentTime - lastLabelingTime > 5 * 60 * 1000) { // 5 minutes
-			// add the label "Labeling activity"			
-			Labeler.getInstance().addLabel(new Date(), "Labeling");
-			// update the last labeling time
-//			DataStorage.SetValue(
-//				getContext(), USCTeensGlobals.LAST_LABELING_TIME, currentTime
-//			);
-//		}
+		// add labeling
+		Labeler.getInstance().addLabel(new Date(), "Labeling");
 	}
 
 	@Override

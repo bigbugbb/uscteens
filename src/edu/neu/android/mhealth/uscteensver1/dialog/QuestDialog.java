@@ -19,7 +19,7 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 	
 	static public String CHUNK_START_TIME = "CHUNK_START_TIME";
 	static public String CHUNK_STOP_TIME  = "CHUNK_STOP_TIME";
-	protected QuestView mActionsView = null;	
+	protected QuestView mView = null;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +61,13 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 	}
 	
 	private void setupViews() {
-		mActionsView = (QuestView) findViewById(R.id.view_quest);	
-		mActionsView.setOnBackClickedListener(this);
-		mActionsView.setHandler(mHandler);
+		mView = (QuestView) findViewById(R.id.view_quest);	
+		mView.setOnBackClickedListener(this);
+		mView.setHandler(mHandler);
 		
 		int start = getIntent().getIntExtra(CHUNK_START_TIME, 0);
 		int stop  = getIntent().getIntExtra(CHUNK_STOP_TIME, 0);
-		mActionsView.setTime(start, stop);
+		mView.setTime(start, stop);
 	}
 	
 	private void adjustLayout() {
@@ -77,10 +77,10 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
       
         // adjust the layout according to the screen resolution				   
 		LayoutParams laParams = null;
-		laParams = mActionsView.getLayoutParams();
-		laParams.width  = mActionsView.getExpectedWidth();
+		laParams = mView.getLayoutParams();
+		laParams.width  = mView.getExpectedWidth();
 		laParams.height = dm.heightPixels;
-		mActionsView.setLayoutParams(laParams);
+		mView.setLayoutParams(laParams);
 	}	
 
 	public void onBackClicked() {
@@ -89,8 +89,8 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (mActionsView != null) {
-    		return mActionsView.onTouchEvent(event);
+		if (mView != null) {
+    		return mView.onTouchEvent(event);
     	}
 		return false;
 	} 

@@ -480,20 +480,5 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		
 		return super.onKeyDown(keyCode, event);
 	}
-    
-//
-//  It seems that onActivityResult can't work if USCTeensMainActivity
-//  has been set into singleInstance in AndroidManifest.xml.
-//    
-//	@Override
-//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		if (resultCode == RESULT_CANCELED) {
-//    		return;
-//    	} else if (requestCode == AppCmd.QUEST) {    
-//        	      	        	
-//        } else if (requestCode == AppCmd.MERGE) {        	
-//        	        	
-//        }
-//    } 
 
 }

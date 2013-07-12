@@ -41,6 +41,7 @@ public class MergeView extends View {
 	protected PointF mBackTxtPt = new PointF();
 	protected int mWidth  = 0;
 	protected int mHeight = 0;
+	protected int mExpectedWidth = 0;
 	
 	public MergeView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -130,6 +131,12 @@ public class MergeView extends View {
 	        	mImages.add(origin);
 	        }
         }
+        
+        mExpectedWidth = (int) (mImages.get(0).getWidth());
+	}
+
+	public int getExpectedWidth() {
+		return mExpectedWidth;
 	}
 
 	@Override
