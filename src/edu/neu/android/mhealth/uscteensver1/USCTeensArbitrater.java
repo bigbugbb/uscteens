@@ -481,9 +481,9 @@ public class USCTeensArbitrater extends Arbitrater {
 		
 		// add new label
 		if (promptCount == 1) {
-			Labeler.addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Prompt" : "Random Prompt");
+			Labeler.getInstance().addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Prompt" : "Random Prompt");
 		} else {
-			Labeler.addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Reprompt" : "Random Reprompt");
+			Labeler.getInstance().addLabel(new Date(), aKey == KEY_CS_EMA ? "CS Reprompt" : "Random Reprompt");
 		}
 	}
 	

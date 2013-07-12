@@ -268,7 +268,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 				
 		// the initial page is not graph page, so it's ok here
 		if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {	
-			DataSource.updateRawData();		
+			DataSource.updateRawData();
 		}
 		
 		mCurPage.start();

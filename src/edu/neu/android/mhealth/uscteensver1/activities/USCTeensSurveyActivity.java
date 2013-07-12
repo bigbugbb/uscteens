@@ -16,7 +16,7 @@ public class USCTeensSurveyActivity extends SurveyActivity {
 		if (isResponded()) {
 			SurveyPromptEvent promptEvent = getSurveyPromptEvent();
 			if (promptEvent != null) {
-				Labeler.addLabel(new Date(), "Answer " + promptEvent.getPromptType());
+				Labeler.getInstance().addLabel(new Date(), "Answer " + promptEvent.getPromptType());
 			}
 		}
 		
@@ -52,10 +52,10 @@ public class USCTeensSurveyActivity extends SurveyActivity {
 			}
 			
 			if (promptEvent == null) {
-				Labeler.addLabel(new Date(), answer.getAnswerText());
+				Labeler.getInstance().addLabel(new Date(), answer.getAnswerText());
 			} else {
 				long time = promptEvent.getScheduledPromptTime(); // the time is actually not accurate
-				Labeler.addLabel(new Date(time), answer.getAnswerText());
+				Labeler.getInstance().addLabel(new Date(time), answer.getAnswerText());
 			}
 		}
 	}

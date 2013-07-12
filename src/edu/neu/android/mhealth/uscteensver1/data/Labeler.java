@@ -10,13 +10,22 @@ import java.util.Date;
 public class Labeler {
 	private static final String TAG = "Labeler";
 	
-	private static RawLabelWrap sRawLabels = new RawLabelWrap();
-	private static SimpleDateFormat sDateFormat     = new SimpleDateFormat("yyyy-MM-dd");
-	private static SimpleDateFormat sDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+	private RawLabelWrap mRawLabels = new RawLabelWrap();
+	private SimpleDateFormat mDateFormat     = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat mDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
 	
 	private static final long TWO_MINUTE = 120 * 1000;
-	private static long   sLastLabelTime = 0;
-	private static String sLastLabelName = "";	
+	private long   mLastLabelTime = 0;
+	private String mLastLabelName = "";
+	
+	private static Labeler sLabeler;
+	
+	public static Labeler getInstance() {
+		if (sLabeler == null) {
+			sLabeler = new Labeler();			
+		}
+		return sLabeler;
+	}
 	
 	/**
 	 * add a new label
@@ -24,19 +33,19 @@ public class Labeler {
 	 * @param name	    the label name
 	 * @return true if the label is added, otherwise false
 	 */
-	public static boolean addLabel(String dateTime, String name) {
+	public boolean addLabel(String dateTime, String name) {
 		boolean result = false;
 										
-		if (Math.abs(sLastLabelTime - System.currentTimeMillis()) < TWO_MINUTE && name.equals(sLastLabelName)) {
+		if (Math.abs(mLastLabelTime - System.currentTimeMillis()) < TWO_MINUTE && name.equals(mLastLabelName)) {
 			return false; // skip this label because it's too frequent
 		} else {
-			sLastLabelTime = System.currentTimeMillis();
-			sLastLabelName = name;
+			mLastLabelTime = System.currentTimeMillis();
+			mLastLabelName = name;
 		}		
 		
 		String date = dateTime.split(" ")[0];
-		DataSource.loadLabelData(date, sRawLabels);
-		if (sRawLabels.add(dateTime, name)) {
+		DataSource.loadLabelData(date, mRawLabels);
+		if (mRawLabels.add(dateTime, name)) {
 			result = commitChanges(date);
 		}		
 
@@ -49,8 +58,8 @@ public class Labeler {
 	 * @param name	    the label name
 	 * @return true if the label is added, otherwise false
 	 */
-	public static boolean addLabel(Date aDate, String name) {
-		String dateTime = sDateTimeFormat.format(aDate);
+	public boolean addLabel(Date aDate, String name) {
+		String dateTime = mDateTimeFormat.format(aDate);
 		return addLabel(dateTime, name);
 	}
 	
@@ -61,10 +70,10 @@ public class Labeler {
 	 * @param name		  the label name
 	 * @return true if the label is removed, otherwise false
 	 */
-	public static boolean removeLabel(String dateTime, String name) {
+	public boolean removeLabel(String dateTime, String name) {
 		String date = dateTime.split(" ")[0];
-		DataSource.loadLabelData(date, sRawLabels);
-		boolean result = sRawLabels.remove(dateTime, name);
+		DataSource.loadLabelData(date, mRawLabels);
+		boolean result = mRawLabels.remove(dateTime, name);
 		
 		if (result) {
 			result = commitChanges(date);
@@ -80,8 +89,8 @@ public class Labeler {
 	 * @param name		  the label name to remove
 	 * @return true if the label is removed, otherwise false
 	 */
-	public static boolean removeLabel(Date aDate, String name) {
-		String dateTime = sDateTimeFormat.format(aDate);
+	public boolean removeLabel(Date aDate, String name) {
+		String dateTime = mDateTimeFormat.format(aDate);
 		return removeLabel(dateTime, name);
 	}
 	
@@ -91,9 +100,9 @@ public class Labeler {
 	 * @param name		the label name to remove
 	 * @return
 	 */
-	public static boolean removeAllLabelsNamed(String date, String name) {
-		DataSource.loadLabelData(date, sRawLabels);
-		boolean result = sRawLabels.removeAll(name);	
+	public boolean removeAllLabelsNamed(String date, String name) {
+		DataSource.loadLabelData(date, mRawLabels);
+		boolean result = mRawLabels.removeAll(name);	
 		
 		if (result) {
 			result = commitChanges(date);
@@ -108,8 +117,8 @@ public class Labeler {
 	 * @param name	    the label name to remove 
 	 * @return
 	 */
-	public static boolean removeAllLabelsNamed(Date aDate, String name) {
-		String date = sDateFormat.format(aDate);			
+	public boolean removeAllLabelsNamed(Date aDate, String name) {
+		String date = mDateFormat.format(aDate);			
 		return removeAllLabelsNamed(date, name);
 	}
 	
@@ -118,8 +127,8 @@ public class Labeler {
 	 * @param date 	    the date to clear, should be the format: yyyy-MM-dd
 	 * @return true if all labels are cleared, otherwise false
 	 */
-	public static boolean clearAllLabels(String date) {						
-		sRawLabels.clear();		
+	public boolean clearAllLabels(String date) {						
+		mRawLabels.clear();		
 		return commitChanges(date);
 	}
 	
@@ -128,8 +137,8 @@ public class Labeler {
 	 * @param aDate 	the date to clear
 	 * @return true if all labels are cleared, otherwise false
 	 */
-	public static boolean clearAllLabels(Date aDate) {		
-		String date = sDateFormat.format(aDate);
+	public boolean clearAllLabels(Date aDate) {		
+		String date = mDateFormat.format(aDate);
 		return clearAllLabels(date);
 	}
 	
@@ -138,8 +147,8 @@ public class Labeler {
 	 * @param date    the date to commit, should be the format: yyyy-MM-dd
 	 * @return true if the commit is successful, otherwise false
 	 */
-	public static boolean commitChanges(Date aDate) {
-		String date = sDateFormat.format(aDate);
+	public boolean commitChanges(Date aDate) {
+		String date = mDateFormat.format(aDate);
 		return commitChanges(date);
 	}
 	
@@ -148,24 +157,7 @@ public class Labeler {
 	 * @param date    the date to commit, should be the format: yyyy-MM-dd
 	 * @return true if the commit is successful, otherwise false
 	 */
-	public static boolean commitChanges(String date) {
-		return DataSource.saveLabelData(date, sRawLabels);
-	}
-	
-	/**
-	 * reload the labels of the specified date from the file
-	 * @param date    the date to load, should be the format: yyyy-MM-dd
-	 */
-	public static void peekLabels(String date) {
-		DataSource.loadLabelData(date, sRawLabels);
-	}
-	
-	/**
-	 * reload the labels of the specified date from the file
-	 * @param date    the date to load
-	 */
-	public static void peekLabels(Date aDate) {
-		String date = sDateFormat.format(aDate);
-		DataSource.loadLabelData(date, sRawLabels);
+	public boolean commitChanges(String date) {
+		return DataSource.saveLabelData(date, mRawLabels);
 	}
 }
