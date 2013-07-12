@@ -1,6 +1,5 @@
  package edu.neu.android.mhealth.uscteensver1;
 
-import java.io.File;
 import java.util.HashMap;
 
 import android.content.Context;

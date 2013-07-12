@@ -41,7 +41,6 @@ import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
 import edu.neu.android.mhealth.uscteensver1.pages.RewardPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
-import edu.neu.android.wocketslib.views.DummyView;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 import edu.neu.android.wocketslib.Globals;
@@ -51,6 +50,7 @@ import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.AppUsageLogger;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
+import edu.neu.android.wocketslib.views.DummyView;
 
 public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouchListener {
 	
