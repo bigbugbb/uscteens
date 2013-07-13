@@ -3,10 +3,10 @@ package edu.neu.android.mhealth.uscteensver1.survey;
 import java.util.ArrayList;
 import java.util.Date;
 
-import edu.neu.android.mhealth.uscteensver1.data.CSState;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyAnswer;
+import edu.neu.android.wocketslib.emasurvey.model.SurveyExtraInfo;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion.TYPE;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesAsSequence;
@@ -21,10 +21,10 @@ public class CSTeensSurvey extends QuestionSet {
 	public CSTeensSurvey(QuestionSetParamHandler param) {
 		super();
 
-		CSState css = (CSState) param.getParams()[0];
-		if (css != null) {
-			mStartTime = css.getStartTime();
-			mStopTime  = css.getStopTime();
+		SurveyExtraInfo extraInfo = (SurveyExtraInfo) param.getParams()[0];
+		if (extraInfo != null) {
+			mStartTime = extraInfo.getStartTime();
+			mStopTime  = extraInfo.getStopTime();
 		} else { 
 			Date startDate = new Date(System.currentTimeMillis() - 30 * 60 * 1000);
 			Date stopDate  = new Date();		

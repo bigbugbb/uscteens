@@ -45,7 +45,7 @@ public class Labeler {
 		
 		String date = dateTime.split(" ")[0];
 		DataSource.loadLabelData(date, mRawLabels);
-		if (mRawLabels.add(dateTime, name)) {
+		if (mRawLabels.add(dateTime, name)) {			
 			result = commitChanges(date);
 		}		
 

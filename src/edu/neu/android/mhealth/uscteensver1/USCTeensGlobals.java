@@ -14,8 +14,6 @@ import edu.neu.android.wocketslib.utils.FileHelper;
  *
  */
 public class USCTeensGlobals {
-	private static final String TAG = "USCTeensGlobals";	
-
 	public static String VERSION_NAME = "";
 	
 	public final static int    PIXEL_PER_DATA = 2;	

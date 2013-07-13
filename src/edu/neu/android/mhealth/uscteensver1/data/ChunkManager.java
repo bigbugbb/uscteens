@@ -194,7 +194,7 @@ public class ChunkManager {
 		
 		Chunk curr = sChunks.get(i);
 		Chunk prev = (i == 0) ? null : sChunks.get(i - 1);
-		Chunk next = (i == sChunks.size() - 1) ? null : sChunks.get(i + 1);
+//		Chunk next = (i == sChunks.size() - 1) ? null : sChunks.get(i + 1);
 		
 		// scale the chunk
 		boolean success = false;
@@ -226,7 +226,7 @@ public class ChunkManager {
 		
 		Chunk curr = sChunks.get(i);
 		Chunk prev = (i == 0) ? null : sChunks.get(i - 1);
-		Chunk next = (i == sChunks.size() - 1) ? null : sChunks.get(i + 1);
+//		Chunk next = (i == sChunks.size() - 1) ? null : sChunks.get(i + 1);
 		
 		// scale the chunk
 		boolean success = false;
@@ -524,7 +524,7 @@ public class ChunkManager {
 	}
 	
 	public static Chunk getSelectedChunk() {
-		Chunk c;
+		Chunk c = null;
 		
 		try {
 			c = sChunks.get(sSelected);
@@ -533,7 +533,7 @@ public class ChunkManager {
 			c = null;
 		}
 		
-		return null;
+		return c;
 	}
 	
 	public static RectF getSelectedArea() {
