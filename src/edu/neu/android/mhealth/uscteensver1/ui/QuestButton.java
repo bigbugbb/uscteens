@@ -31,7 +31,9 @@ public class QuestButton extends ChunkButton {
 	
 	public void setAnswer(Action newAction) {	
 		Action oldAction = getHost().getAction();
-		
+		if (oldAction == null) {
+			return;
+		}		
 		if (!newAction.getActionID().equals(oldAction.getActionID())) {
 			getHost().setAction(newAction);			
 		}
