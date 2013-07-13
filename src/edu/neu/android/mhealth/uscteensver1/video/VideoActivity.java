@@ -36,6 +36,7 @@ import edu.neu.android.wocketslib.utils.NetworkDetector;
 import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
 
 public class VideoActivity extends BaseActivity {
+	
 	private Button btnPlayLatestVideo;
 	static final String TAG = "Video";
 	public static final String LAST_MOVIE = "Last_Movie";

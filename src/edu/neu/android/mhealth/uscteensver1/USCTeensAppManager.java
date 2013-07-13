@@ -31,24 +31,24 @@ public class USCTeensAppManager extends ApplicationManager {
 		edu.neu.android.wocketslib.Globals.myBroadcastReceiverProcessor = aBRP;
     }
     
-    private ArrayList<Activity> activityList = new ArrayList<Activity>();
+    private ArrayList<Activity> mActivityList = new ArrayList<Activity>();
 
 	public void addActivity(Activity activity) {		
-		activityList.add(activity);
+		mActivityList.add(activity);
 	}
 
 	public void killActivity(Activity activity) {
 		activity.finish();
-		activityList.remove(activity);
+		mActivityList.remove(activity);
 	}
 
 	public void removeActivity(Activity activity) {
-		activityList.remove(activity);
+		mActivityList.remove(activity);
 	}
 
 	public void killAllActivities() {
-		for (int i = 0; i < activityList.size(); i++)
-			activityList.get(i).finish();
-		activityList.clear();
+		for (int i = 0; i < mActivityList.size(); i++)
+			mActivityList.get(i).finish();
+		mActivityList.clear();
 	}
 }

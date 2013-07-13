@@ -6,42 +6,43 @@ import java.util.Date;
 
 import android.content.Context;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
-import edu.neu.android.mhealth.uscteensver1.algorithm.CSDetectingAlgorithm;
 import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.algorithm.ActivityDetectAlgorithm;
 import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
+import edu.neu.android.wocketslib.emasurvey.model.SurveyExtraInfo;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
 
 public class AccelDataChecker {
 	public final static String TAG = "AccelDataChecker";
 	
-	public static CSState checkDataState(Context context, long startTime, long stopTime) {
+	public static SurveyExtraInfo checkDataState(Context context, long startTime, long stopTime) {
 		
 		// Get start/stop time
 		if (startTime == -1) {
-			startTime = CSDetectingAlgorithm.getInstance(context).getStartTime();
+			startTime = ActivityDetectAlgorithm.getInstance(context).getStartTime();
 		}		
 		if (stopTime == -1) {
 			stopTime = System.currentTimeMillis() - 120000; // make sure we have the data to analyze
 		}
 		if (startTime >= stopTime || Math.abs(startTime - stopTime) > 24 * 3600 * 1000) {
-			return new CSState(CSState.DATA_STATE_ERROR, null, null);
+			return new SurveyExtraInfo("error", null, null);
 		}
 		
 		// Get data first
 		int[] sensorData = getData(startTime, stopTime);
 		if (sensorData == null) {
-			return new CSState(CSState.DATA_STATE_ERROR, null, null);
+			return new SurveyExtraInfo("error", null, null);
 		}
 				
 		// Chunk the data just got		
 		ArrayList<Integer> chunkPos = ChunkingAlgorithm.getInstance().doChunking(startTime, stopTime, sensorData);
 		if (chunkPos == null) {
-			return new CSState(CSState.DATA_STATE_ERROR, null, null);
+			return new SurveyExtraInfo("error", null, null);
 		}
 		
 		// Analyze data to get the state for context sensitive prompt
-		return CSDetectingAlgorithm.getInstance(context).doCSDetecting(sensorData, chunkPos, startTime, stopTime);
+		return ActivityDetectAlgorithm.getInstance(context).doCSDetecting(sensorData, chunkPos, startTime, stopTime);
 	}
 	
 	private static int[] getData(long from, long to) {
