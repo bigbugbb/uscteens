@@ -151,15 +151,17 @@ public class MergeView extends View {
 		for (int i = 0; i < mAreas.size(); ++i) {
 			canvas.drawBitmap(mImages.get(2 + (mSelection == i ? 1 : 0)), left, 
 				(AppScale.doScaleH(100) - mImages.get(2).getHeight()) / 2 + mAreas.get(i).top, mPaintText1);
-			int slashIndex = mActions.get(i).indexOf('|');
+			
+			String action = mActions.get(i);				
+			int slashIndex = action.indexOf('|');
 			if (slashIndex != -1) {
-				String actName = mActions.get(i).substring(0, slashIndex);
-				String subName = mActions.get(i).substring(slashIndex + 1, mActions.get(i).length());
+				String actName = action.substring(0, slashIndex);
+				String subName = action.substring(slashIndex + 1, action.length());
 				canvas.drawText(actName, left + AppScale.doScaleW(100), 
 					mAreas.get(i).top + AppScale.doScaleH(64), mPaintText2);
 				canvas.drawText(subName, getWidth() * 0.55f, mAreas.get(i).top + AppScale.doScaleH(100), mPaintText3);
 			} else {
-				canvas.drawText(mActions.get(i), left + AppScale.doScaleW(100), 
+				canvas.drawText(action, left + AppScale.doScaleW(100), 
 					mAreas.get(i).top + AppScale.doScaleH(64), mPaintText2);
 			}
 		}				
@@ -173,6 +175,7 @@ public class MergeView extends View {
 		mWidth  = w;
 		mHeight = h;
 		
+		mAreas.clear();
 		for (int i = 0; i < mActions.size(); ++i) {
 			int top = h / 2;
 			mAreas.add(new RectF(0, top + i * AppScale.doScaleH(100), 

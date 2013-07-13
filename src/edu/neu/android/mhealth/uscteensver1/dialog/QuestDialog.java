@@ -32,6 +32,12 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 	}
 	
 	@Override
+	protected void onRestart() {
+		super.onRestart();
+		finish();
+	}
+	
+	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();

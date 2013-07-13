@@ -313,12 +313,14 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         	case AppCmd.QUEST:
         		i = new Intent(USCTeensMainActivity.this, QuestDialog.class);           		
         		i.putExtra(QuestDialog.CHUNK_START_TIME, msg.arg1);
-        		i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);        		
+        		i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);   
+        		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         		startActivityForResult(i, AppCmd.QUEST);
         		break;
         	case AppCmd.MERGE:
         		i = new Intent(USCTeensMainActivity.this, MergeDialog.class);
     			i.putStringArrayListExtra(MergeDialog.KEY, (ArrayList<String>) msg.obj);
+    			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     			startActivity(i);
         		break;
         	case AppCmd.QUEST_FINISHING:        	

@@ -3,65 +3,87 @@ package edu.neu.android.mhealth.uscteensver1.dialog;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
-import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.views.MergeView;
 import edu.neu.android.mhealth.uscteensver1.views.MergeView.OnBackClickedListener;
 import edu.neu.android.mhealth.uscteensver1.views.MergeView.OnItemClickListener;
 import edu.neu.android.wocketslib.support.DataStorage;
 
 public class MergeDialog extends Activity implements OnItemClickListener, OnBackClickedListener {
-	
+	private static final String TAG = "MergeDialog";
 	public static final String KEY = "ACTIONS_TO_MERGE";	
 	protected MergeView mView = null;
 	protected ArrayList<String> mActions = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.i(TAG, "onCreate");
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_merge);
 		
 		mActions = getIntent().getStringArrayListExtra(KEY);
-
-		setupViews();
-		adjustLayout();
+		if (mActions != null) {
+			setupViews();
+			adjustLayout();
+		} else {
+			finish();
+		}
+	}
+	
+	@Override
+	protected void onRestart() {
+		Log.i(TAG, "onRestart");
+		super.onRestart();
+		finish();
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		Log.i(TAG, "onNewIntent");
 	}
 	
 	@Override
 	protected void onStart() {
+		Log.i(TAG, "onStart");
 		// TODO Auto-generated method stub
 		super.onStart();
 	}
 
 	@Override
 	protected void onResume() {
+		Log.i(TAG, "onResume");
 		// TODO Auto-generated method stub
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
+		Log.i(TAG, "onPause");
 		// TODO Auto-generated method stub
 		super.onPause();
 	}
 
 	@Override
 	protected void onStop() {
+		Log.i(TAG, "onStop");
 		// TODO Auto-generated method stub
 		super.onStop();
 	}
 
 	@Override
-	protected void onDestroy() {		
+	protected void onDestroy() {	
+		Log.i(TAG, "onDestroy");
 		super.onDestroy();
 	}
 	
