@@ -28,21 +28,21 @@ import edu.neu.android.wocketslib.utils.Log;
 
 
 public class USCTeensSetupActivity extends BaseActivity {
-	private static final String TAG = "SetupTeenGameActivity"; 
-	public static final String KEY_RESCUE_INHALER = "_KEY_RESCUE_INHALER";
-	private Button startService;
-	private Button setStartDate;
-	private Button randomEMA;
-	private Button csEMA;
-	private Button rewards;
-	private Button tutorial;
-	private Button finishStudy;
-	private Button setupdone;
+	private static final String TAG = "USCTeensSetupActivity"; 
+	
+	private Button mBtnStartService;
+	private Button mBtnSetStartDate;
+	private Button mBtnRandomEMA;
+	private Button mBtnCSEMA;
+	private Button mBtnRewards;
+	private Button mBtnTutorial;
+	private Button mBtnFinishStudy;
+	private Button mBtnSetupDone;
 
 	private void displayToastMessage(String aMsg) {
-		Toast aToast = Toast.makeText(getApplicationContext(),aMsg, Toast.LENGTH_LONG);
-		aToast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		aToast.show();	
+		Toast toast = Toast.makeText(getApplicationContext(),aMsg, Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.show();	
 	}
 	
 	/**
@@ -53,48 +53,29 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 		public MySendAllFilesToServerTask(Context context) {
 			super(context);
-			// TODO Auto-generated constructor stub
 		}
 
 		protected void onPostExecute(Boolean isNeedUpdate) {
 			super.onPostExecute(isNeedUpdate);
-			finishStudy.setEnabled(true);
+			mBtnFinishStudy.setEnabled(true);
 		}
 	}
 
-	/**
-	 * Set the update button on/off depending on if the code detects that the software
-	 * is or is not at the latest version on the Android Market. 
-	 */
-//	private class SendLogFilesTask extends AsyncTask<Void, Void, Boolean> 
-//	{ 
-//		@Override
-//		protected Boolean doInBackground(Void... params) {
-//
-//			return true; 
-//		}
-//
-//		protected void onPostExecute(Boolean isNeedUpdate) {
-//			displayToastMessage("Transmission complete.");
-//			finishStudy.setEnabled(true);
-//		}
-//	}
-
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setup);
-		setStartDate = (Button) findViewById(R.id.setstartdate);
-		startService = (Button) findViewById(R.id.startservice);		
-		csEMA        = (Button) findViewById(R.id.csema);		
-		randomEMA    = (Button) findViewById(R.id.randomema);
-		tutorial 	 = (Button) findViewById(R.id.tutorial);
-		rewards      = (Button) findViewById(R.id.rewards);
-		finishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
-		setupdone    = (Button) findViewById(R.id.setupdone);
+		
+		mBtnSetStartDate = (Button) findViewById(R.id.setstartdate);
+		mBtnStartService = (Button) findViewById(R.id.startservice);		
+		mBtnCSEMA        = (Button) findViewById(R.id.csema);		
+		mBtnRandomEMA    = (Button) findViewById(R.id.randomema);
+		mBtnTutorial 	 = (Button) findViewById(R.id.tutorial);
+		mBtnRewards      = (Button) findViewById(R.id.rewards);
+		mBtnFinishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
+		mBtnSetupDone    = (Button) findViewById(R.id.setupdone);
 
-		setStartDate.setOnClickListener(new OnClickListener() {
+		mBtnSetStartDate.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -103,7 +84,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 			}
 		});
 		
-		startService.setOnClickListener(new OnClickListener() {
+		mBtnStartService.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -117,7 +98,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 			}
 		});
 		
-		finishStudy.setOnClickListener(new OnClickListener() {
+		mBtnFinishStudy.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				
@@ -126,12 +107,12 @@ public class USCTeensSetupActivity extends BaseActivity {
 
 				Log.o(TAG, Log.USER_ACTION, "Send all data and log files");
 				displayToastMessage("Request to finish this study, sending all data to the server now.");
-				finishStudy.setEnabled(false);
+				mBtnFinishStudy.setEnabled(false);
 				new MySendAllFilesToServerTask(getApplicationContext()).execute();
 			}
 		});
 		
-		randomEMA.setOnClickListener(new OnClickListener() {
+		mBtnRandomEMA.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -153,7 +134,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 			}
 		});
 		
-		csEMA.setOnClickListener(new OnClickListener() {
+		mBtnCSEMA.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -175,7 +156,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 			}
 		});
 		
-		tutorial.setOnClickListener(new OnClickListener() {
+		mBtnTutorial.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(getApplicationContext(), VideoActivity.class);
@@ -183,7 +164,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 			}
 		});
 		
-		rewards.setOnClickListener(new OnClickListener() {
+		mBtnRewards.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(getApplicationContext(), RewardsStateActivity.class);
@@ -191,7 +172,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 			}
 		});
 		
-		setupdone.setOnClickListener(new OnClickListener() {
+		mBtnSetupDone.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				finish();				
@@ -204,14 +185,13 @@ public class USCTeensSetupActivity extends BaseActivity {
 		String startDate = DataStorage.getStartDate(getApplicationContext(), "");
 		if (startDate.compareTo("") != 0) {
 			String[] times = startDate.split("-");
-			setStartDate.setText("Change start date (" + times[1] + "/" + times[2] + "/" + times[0] + ")");
+			mBtnSetStartDate.setText("Change start date (" + times[1] + "/" + times[2] + "/" + times[0] + ")");
 		}
 		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 	}
 }

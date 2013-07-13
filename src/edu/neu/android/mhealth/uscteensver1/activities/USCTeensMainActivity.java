@@ -255,7 +255,9 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		Log.d("USCTeensMainActivity", "onResume in");
 		super.onResume();
 				
-		mDummyView.setVisibility(AuthorizationChecker.isAuthorized(USCTeensMainActivity.this) ? View.GONE : View.VISIBLE);
+		mDummyView.setVisibility(
+			AuthorizationChecker.isAuthorized(USCTeensMainActivity.this) ? View.GONE : View.VISIBLE
+		);
 				
 		mGraphView.onResume();
 		mCurPage.resume();		
