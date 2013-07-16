@@ -178,10 +178,6 @@ public class USCTeensArbitrater extends Arbitrater {
 	
 
 	public void doArbitrate(boolean isNewSoftwareVersion) {
-		if (Globals.IS_DEBUG) {
-			Log.d(TAG, "Begin arbitrate");
-		}
-		
 		long startTime = System.currentTimeMillis();
 		
 		// For testing purpose only
@@ -208,10 +204,6 @@ public class USCTeensArbitrater extends Arbitrater {
 		} catch (InterruptedException e) {			
 			e.printStackTrace();
 		}				
-
-		if (Globals.IS_DEBUG) {
-			Log.d(TAG, "End arbitrate");
-		}
 	}
 	
 	public static void saveRecordsInLogcat(boolean isClear) {
