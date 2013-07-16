@@ -190,12 +190,9 @@ public class USCTeensArbitrater extends Arbitrater {
 		// record the accelerometer data of the previous minute
 		writeSensorToFiles();
 
-		// Update the prompt schedule if it is necessary
-		mScheduler.updateSchedule(isNewSoftwareVersion);
-
-		// Try to prompt the next survey if available
-		mScheduler.tryToPromptSurvey();		
-		
+		// Try to prompt the next survey if possible
+		mScheduler.tryToPromptSurvey(isNewSoftwareVersion);		
+				
 		// Mark that arbitration taking place
 		DataStorage.setLastTimeArbitrate(mContext, System.currentTimeMillis());
 				
