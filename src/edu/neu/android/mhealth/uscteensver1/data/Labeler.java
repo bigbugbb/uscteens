@@ -12,7 +12,7 @@ public class Labeler {
 	
 	private RawLabelWrap mRawLabels = new RawLabelWrap();
 	private SimpleDateFormat mDateFormat     = new SimpleDateFormat("yyyy-MM-dd");
-	private SimpleDateFormat mDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+	private SimpleDateFormat mDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	private static final long TWO_MINUTE = 120 * 1000;
 	private long   mLastLabelTime = 0;
@@ -29,7 +29,7 @@ public class Labeler {
 	
 	/**
 	 * add a new label
-	 * @param dateTime  yyyy-MM-dd kk:mm:ss
+	 * @param dateTime  yyyy-MM-dd HH:mm:ss
 	 * @param name	    the label name
 	 * @return true if the label is added, otherwise false
 	 */
@@ -66,7 +66,7 @@ public class Labeler {
 	/**
 	 * remove labels where the time matches. I.e., if there are two labels for "somename"
 	 * at two different times, then it should only remove the label at the given time. 
-	 * @param dateTime    yyyy-MM-dd kk:mm:ss
+	 * @param dateTime    yyyy-MM-dd HH:mm:ss
 	 * @param name		  the label name
 	 * @return true if the label is removed, otherwise false
 	 */

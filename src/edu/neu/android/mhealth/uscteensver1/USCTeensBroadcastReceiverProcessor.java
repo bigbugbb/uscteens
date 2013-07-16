@@ -1,5 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.content.Context;
@@ -12,9 +13,7 @@ public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcess
 	private static final String TAG = "USCTeensBroadcastReceiverProcessor";
 
 	private String getDateString() {
-		Date aDate = new Date(); 
-		String aSDate = DateHelper.serverDateFormatFull.format(aDate); 
-		return aSDate; 
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()); 
 	}
 	
 	@Override
