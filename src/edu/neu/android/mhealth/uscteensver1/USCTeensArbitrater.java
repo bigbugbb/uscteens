@@ -199,13 +199,11 @@ public class USCTeensArbitrater extends Arbitrater {
 		// wait for the internal AC sensor to get data for at least 20s 
 		try {
 			synchronized (this) {				
-				if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor for at most 20s"); }
 				long timeCost = System.currentTimeMillis() - startTime;
 				long timeToWait = USCTeensGlobals.TIME_WAITING_SENSOR_DATA_IN_MS - timeCost;
 				if (timeToWait > 0) { // Caution: wait(0) doesn't work normally, guess it's a bug of android
 					wait(timeToWait);
 				}
-				if (Globals.IS_DEBUG) {	Log.d(TAG, "Wait for internal AC sensor finished"); }				
 			}			
 		} catch (InterruptedException e) {			
 			e.printStackTrace();
