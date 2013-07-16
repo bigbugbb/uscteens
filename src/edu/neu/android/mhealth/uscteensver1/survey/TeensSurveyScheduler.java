@@ -177,7 +177,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		
 		if (promptType.equals("CS")) {
 			return PhonePrompter.CHIMES_NAMBOKU1;
-		} else if (promptType.equals("RANDOM")) {
+		} else if (promptType.equals("Random")) {
 			return PhonePrompter.CHIMES_HIKARI;
 		}
 		
