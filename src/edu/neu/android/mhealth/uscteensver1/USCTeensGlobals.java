@@ -116,7 +116,7 @@ public class USCTeensGlobals {
 		Globals.AUDIO_PROMPT_END_HOUR   = 22;
 		Globals.DEFAULT_PROMPTS_PER_DAY = 7;
 		Globals.DEFAULT_START_HOUR      = 8;
-		Globals.DEFAULT_END_HOUR        = 23;
+		Globals.DEFAULT_END_HOUR        = 22;
 		Globals.REPROMPT_DELAY_MS = 5 * Globals.MINUTES_1_IN_MS;		
 		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = Globals.MINUTES_30_IN_MS;
 		Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS = 5 * Globals.MINUTES_1_IN_MS;

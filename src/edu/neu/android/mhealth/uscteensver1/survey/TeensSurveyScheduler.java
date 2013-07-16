@@ -16,6 +16,7 @@ import edu.neu.android.wocketslib.emasurvey.SurveyScheduler;
 import edu.neu.android.wocketslib.emasurvey.model.PromptRecorder;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyExtraInfo;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
+import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.support.ServerLogger;
 import edu.neu.android.wocketslib.utils.DateHelper;
@@ -70,6 +71,17 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		}
 		
 		return null;
+	}
+	
+	@Override
+	protected boolean isTimeForNextSurvey(long nextPromptTime) {
+		long now = System.currentTimeMillis();
+		long lastTimePrompted  = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY);
+		long timeSincePrompted = now - lastTimePrompted;
+		long timeSinceScheduledPrompt = now - nextPromptTime;
+		
+		return timeSinceScheduledPrompt < (Globals.REPROMPT_TIMES + 3) * Globals.REPROMPT_DELAY_MS &&
+			   timeSincePrompted > Globals.REPROMPT_DELAY_MS;
 	}
 	
 	@Override
