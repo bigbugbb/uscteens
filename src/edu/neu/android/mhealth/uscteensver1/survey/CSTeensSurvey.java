@@ -2,17 +2,21 @@ package edu.neu.android.mhealth.uscteensver1.survey;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyAnswer;
-import edu.neu.android.wocketslib.emasurvey.model.SurveyExtraInfo;
+import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion.TYPE;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesAsSequence;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesFromAns;
 
 public class CSTeensSurvey extends QuestionSet {
+	
+	public static String START_TIME = "START_TIME";
+	public static String STOP_TIME  = "STOP_TIME";
 
 	private ArrayList<SurveyQuestion> mDefaultQuestionSet;	
 	private String mStartTime;
@@ -21,10 +25,11 @@ public class CSTeensSurvey extends QuestionSet {
 	public CSTeensSurvey(QuestionSetParamHandler param) {
 		super();
 
-		SurveyExtraInfo extraInfo = (SurveyExtraInfo) param.getParams()[0];
-		if (extraInfo != null) {
-			mStartTime = extraInfo.getStartTime();
-			mStopTime  = extraInfo.getStopTime();
+		SurveyPromptEvent spe = (SurveyPromptEvent) param.getParams()[0];
+		if (spe != null) {
+			HashMap<String, String> mapTime = spe.getSurveySpecifiedRecord();
+			mStartTime = mapTime.get(START_TIME);
+			mStopTime  = mapTime.get(STOP_TIME);
 		} else { 
 			Date startDate = new Date(System.currentTimeMillis() - 30 * 60 * 1000);
 			Date stopDate  = new Date();		
