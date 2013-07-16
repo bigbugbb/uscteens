@@ -175,10 +175,10 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 	protected int onAudioSelecting(final SurveyPromptEvent spe) {
 		String promptType = spe.getPromptType();
 		
-		if (promptType.equals("Random")) {
+		if (promptType.equals("CS")) {
 			return PhonePrompter.CHIMES_NAMBOKU1;
-		} else if (promptType.equals("CS")) {
-			return PhonePrompter.CHIMES_CHIMES1;
+		} else if (promptType.equals("RANDOM")) {
+			return PhonePrompter.CHIMES_HIKARI;
 		}
 		
 		return PhonePrompter.CHIMES_NONE; // prompts with no audio
