@@ -42,7 +42,7 @@ public class AccelDataChecker {
 		}
 		
 		// Analyze data to get the state for context sensitive prompt
-		return ActivityDetectAlgorithm.getInstance(context).doCSDetecting(sensorData, chunkPos, startTime, stopTime);
+		return ActivityDetectAlgorithm.getInstance(context).doActivityDetection(sensorData, chunkPos, startTime, stopTime);
 	}
 	
 	private static int[] getData(long from, long to) {
