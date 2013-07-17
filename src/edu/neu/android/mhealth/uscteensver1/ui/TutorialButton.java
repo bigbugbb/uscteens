@@ -24,9 +24,8 @@ public class TutorialButton extends CustomButton {
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.LTGRAY);
 		mPaint.setStyle(Style.STROKE);
-		mPaint.setFakeBoldText(true);
 		mPaint.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
-		mPaint.setTextSize(AppScale.doScaleW(30));
+		mPaint.setTextSize(AppScale.doScaleT(30));
 		mPaint.setTextAlign(Paint.Align.LEFT);		
 		
 		mTutorial = "Tutorial";

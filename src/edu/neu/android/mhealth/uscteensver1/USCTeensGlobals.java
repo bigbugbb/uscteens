@@ -121,7 +121,9 @@ public class USCTeensGlobals {
 		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = Globals.MINUTES_30_IN_MS;
 		Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS = 5 * Globals.MINUTES_1_IN_MS;
 		Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS = 5 * Globals.MINUTES_1_IN_MS / 2;
-
+		Globals.IS_POPPING_QUESTION_BACK_ENABLED = true;
+		Globals.TIMING_FOR_POPPING_QUESTION_BACK = 30 * 1000; // the last 30 seconds of the survey question life
+		
 		// Only apps that are prompted 
 		Globals.ALL_APP_KEYS_PROMPTED = new String[1];
 		Globals.ALL_APP_KEYS_PROMPTED[0] = Globals.SURVEY;
