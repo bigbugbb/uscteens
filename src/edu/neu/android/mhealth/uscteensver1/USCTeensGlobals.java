@@ -38,9 +38,7 @@ public class USCTeensGlobals {
 	public final static String ANNOTATION_SET = "Activities";
 	
 	public final static int TIME_WAITING_SENSOR_DATA_IN_MS = 21 * 1000;
-	
-	public static int SENSOR_DATA_SCALING_FACTOR = 3500;
-	
+		
 	public static Context sContext = null;
 	public static Handler sGlobalHandler = null;	
 	public static boolean sUpdateConfig = false;
@@ -121,8 +119,8 @@ public class USCTeensGlobals {
 		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = Globals.MINUTES_30_IN_MS;
 		Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS = 5 * Globals.MINUTES_1_IN_MS;
 		Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS = 5 * Globals.MINUTES_1_IN_MS / 2;
-		Globals.IS_POPPING_QUESTION_BACK_ENABLED = true;
-		Globals.TIMING_FOR_POPPING_QUESTION_BACK = 30 * 1000; // the last 30 seconds of the survey question life
+		Globals.IS_POPPING_SURVEY_BACK_ENABLED = true;
+		Globals.TIMING_FOR_POPPING_SURVEY_BACK = 30 * 1000; // the last 30 seconds of the survey question life
 		
 		// Only apps that are prompted 
 		Globals.ALL_APP_KEYS_PROMPTED = new String[1];

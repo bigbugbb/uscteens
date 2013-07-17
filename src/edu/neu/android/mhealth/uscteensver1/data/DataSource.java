@@ -214,7 +214,7 @@ public class DataSource {
 	}
 	
 	public static int getMaxDrawableDataValue() {
-		return USCTeensGlobals.SENSOR_DATA_SCALING_FACTOR;
+		return Globals.MAX_ACTIVITY_DATA_SCALE;
 	}
 	
 	public static ArrayList<Pair<Integer, Integer>> getNoDataTimePeriods() {
