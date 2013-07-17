@@ -31,13 +31,13 @@ import android.util.Pair;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
-import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.WOCKETSException;
+import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 public class DataSource {
 	private final static String TAG = "DataSource";
@@ -97,8 +97,8 @@ public class DataSource {
 				Date loadDate = new Date(lastLoadingTime);		
 				Date selDate  = new SimpleDateFormat("yyyy-MM-dd").parse(select);		
 
-				if (WeekdayCalculator.isSameDay(selDate, curDate) || 
-						!WeekdayCalculator.isSameDay(loadDate, curDate)) {
+				if (WeekdayHelper.isSameDay(selDate, curDate) || 
+						!WeekdayHelper.isSameDay(loadDate, curDate)) {
 					// the selected date is the same day as the current date, 
 					// OR date crossing case					
 					if (DataSource.loadRawData(select) == DataSource.LOADING_SUCCEEDED) {

@@ -22,8 +22,8 @@ import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnBoundaryListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
-import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 
 public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteensver1.ui.OnClickListener,
@@ -214,7 +214,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 		String[] split = startDate.split("-");
 		Date date = new Date(Integer.parseInt(split[0]) - 1900, 
 				Integer.parseInt(split[1]) - 1, Integer.parseInt(split[2]));
-		String strDate = WeekdayCalculator.afterNDayFrom(date, posn);
+		String strDate = WeekdayHelper.afterNDayFrom(date, posn);
 		
 		Message msg = mHandler.obtainMessage();
 		msg.obj  = strDate;

@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 
-import android.content.Context;
 import edu.neu.android.mhealth.uscteensver1.activities.USCTeensSurveyActivity;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataChecker;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;

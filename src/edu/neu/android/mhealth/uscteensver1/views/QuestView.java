@@ -38,7 +38,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.ListView.ListItem;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnBoundaryListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnItemClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.ListView.OnListViewScrollingListener;
-import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
+import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 public class QuestView extends ImageView implements OnGestureListener, 
 													OnItemClickListener, 
@@ -116,7 +116,7 @@ public class QuestView extends ImageView implements OnGestureListener,
 			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"			
 		};
 		String[] times = date.split("-");
-		String weekday = WeekdayCalculator.getWeekday(date);
+		String weekday = WeekdayHelper.getWeekday(date);
 		String month   = months[Integer.parseInt(times[1]) - 1];
 		String day     = times[2];			
 		

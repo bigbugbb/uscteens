@@ -9,6 +9,7 @@ import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.algorithm.ActivityDetectAlgorithm;
 import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
+import edu.neu.android.wocketslib.algorithm.MotionDetectAlgorithm;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyExtraInfo;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
@@ -20,7 +21,7 @@ public class AccelDataChecker {
 		
 		// Get start/stop time
 		if (startTime == -1) {
-			startTime = ActivityDetectAlgorithm.getInstance(context).getStartTime();
+			startTime = MotionDetectAlgorithm.getInstance(context).getStartTime();
 		}		
 		if (stopTime == -1) {
 			stopTime = System.currentTimeMillis() - 120000; // make sure we have the data to analyze
@@ -42,7 +43,7 @@ public class AccelDataChecker {
 		}
 		
 		// Analyze data to get the state for context sensitive prompt
-		return ActivityDetectAlgorithm.getInstance(context).doActivityDetection(sensorData, chunkPos, startTime, stopTime);
+		return MotionDetectAlgorithm.getInstance(context).doMotionDetection(sensorData, chunkPos, startTime, stopTime);
 	}
 	
 	private static int[] getData(long from, long to) {
