@@ -41,6 +41,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
 import edu.neu.android.mhealth.uscteensver1.pages.RewardPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
+import edu.neu.android.mhealth.uscteensver1.video.VideoActivity;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 import edu.neu.android.wocketslib.Globals;
@@ -50,6 +51,7 @@ import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.AppUsageLogger;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
+import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
 import edu.neu.android.wocketslib.views.DummyView;
 
 public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouchListener {
@@ -299,7 +301,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         	switch (msg.what) {   
         	case AppCmd.BEGIN:                		
         		switchPages(indexOfPage(PageType.DATE_PAGE));
-        		break;
+        		break;        	
         	case AppCmd.BEGIN_LOADING:         		
         		onBeginLoading(msg);
             	break;
@@ -311,6 +313,10 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		break;
         	case AppCmd.NEXT:
         		switchPages(indexOfPage(PageType.REWARD_PAGE));        		
+        		break;
+        	case AppCmd.TUTOR:
+        		i = new Intent(USCTeensMainActivity.this, VideoActivity.class);
+				startActivity(i);
         		break;
         	case AppCmd.QUEST:
         		i = new Intent(USCTeensMainActivity.this, QuestDialog.class);           		

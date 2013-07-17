@@ -158,7 +158,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		for (int i = 0; i < promptsPerDay; i++) {
 			promptSchedule.append("Prompt: " + DateHelper.getDate(promptTimes[i]) + NEWLINE);
 			// Create the corresponding prompt event for the random prompts
-			SurveyPromptEvent spe = new SurveyPromptEvent(System.currentTimeMillis(), 0);					
+			SurveyPromptEvent spe = new SurveyPromptEvent(promptTimes[i], 0);					
 			spe.setPromptType("Random");
 			DataStorage.SetValue(mContext, KEY_ALL_PROMPT_EVENT + promptTimes[i], new Gson().toJson(spe));
 		}

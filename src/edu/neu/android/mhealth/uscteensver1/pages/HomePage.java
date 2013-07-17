@@ -11,18 +11,21 @@ import edu.neu.android.mhealth.uscteensver1.ui.HomeBackground;
 import edu.neu.android.mhealth.uscteensver1.ui.HomeTitle;
 import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.SetupTextView;
+import edu.neu.android.mhealth.uscteensver1.ui.TutorialButton;
 import edu.neu.android.wocketslib.support.DataStorage;
 
 public class HomePage extends AppPage implements OnClickListener {
 	
-	protected HomeTitle		 mTitle      = null;
-	protected HomeBackground mBackground = null;
-	protected BeginButton	 mBtnBegin   = null;
-	protected SetupTextView  mTextView   = null;
+	protected HomeTitle		 mTitle       = null;
+	protected HomeBackground mBackground  = null;
+	protected BeginButton	 mBtnBegin    = null;
+	protected TutorialButton mBtnTutorial = null;
+	protected SetupTextView  mTextView    = null;
 	protected final static int TITLE = 0;
 	protected final static int BKGND = 1;
 	protected final static int BEGIN = 2;
-	protected final static int SETUP = 3;
+	protected final static int TUTOR = 3;
+	protected final static int SETUP = 4;
 	
 	protected View mView = null;
 
@@ -48,6 +51,12 @@ public class HomePage extends AppPage implements OnClickListener {
 			mObjects.add(mBtnBegin);
 			mBtnBegin.setID(BEGIN);
 			mBtnBegin.setOnClickListener(this);
+		}
+		if (mBtnTutorial == null) {
+			mBtnTutorial = new TutorialButton(mContext.getResources());
+			mObjects.add(mBtnTutorial);
+			mBtnTutorial.setID(TUTOR);
+			mBtnTutorial.setOnClickListener(this);
 		}
 		if (mTextView == null) {
 			mTextView = new SetupTextView(mContext.getResources());
@@ -102,6 +111,11 @@ public class HomePage extends AppPage implements OnClickListener {
 			msg = mHandler.obtainMessage();     	
 	        msg.what = AppCmd.BEGIN;
 	        mHandler.sendMessage(msg);
+			break;
+		case TUTOR:
+			msg = mHandler.obtainMessage();
+			msg.what = AppCmd.TUTOR;
+			mHandler.sendMessage(msg);
 			break;
 		default:
 			break;
