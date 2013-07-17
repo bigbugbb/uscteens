@@ -352,8 +352,7 @@
         <activity
             android:name="edu.neu.android.mhealth.uscteensver1.video.VideoActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:process=":video">
+            android:screenOrientation="portrait">
         </activity>    	 
          
 	</application>	

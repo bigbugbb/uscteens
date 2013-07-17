@@ -315,7 +315,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		switchPages(indexOfPage(PageType.REWARD_PAGE));        		
         		break;
         	case AppCmd.TUTOR:
-        		i = new Intent(USCTeensMainActivity.this, VideoActivity.class);
+        		i = new Intent(null, Uri.parse("ytv://TNQESL12M9g"), USCTeensMainActivity.this, OpenYouTubePlayerActivity.class);
 				startActivity(i);
         		break;
         	case AppCmd.QUEST:
