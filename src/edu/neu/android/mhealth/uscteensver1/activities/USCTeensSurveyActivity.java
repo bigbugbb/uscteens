@@ -3,6 +3,8 @@ package edu.neu.android.mhealth.uscteensver1.activities;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.util.Log;
+import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyAnswer;
@@ -40,6 +42,27 @@ public class USCTeensSurveyActivity extends SurveyActivity {
 		}
 		
 		super.onDestroy();
+	}
+	
+	@Override
+	public void onQuestionLifeExpired(int whichQuestion) {
+		Log.i(TAG, "onQuestionLifeExpired");
+		switch (whichQuestion) {
+		case 1:
+			if (getSurveyPromptEvent().isReprompt()) {
+				finish();
+				Toast.makeText(mContext, "Survey timed out!", Toast.LENGTH_SHORT).show();
+				Log.i(TAG, "first question life expired");
+			} else {				
+				moveTaskToBack(false);
+				Log.i(TAG, "move task to back");
+			}
+			break;
+		default:
+			finish();
+			Toast.makeText(mContext, "Survey timed out!", Toast.LENGTH_SHORT).show();
+			break;	
+		}
 	}
 	
 	private void labelSelectedAnswer(SurveyQuestion question) {		
