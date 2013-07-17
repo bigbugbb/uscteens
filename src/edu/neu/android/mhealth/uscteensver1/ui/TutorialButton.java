@@ -28,7 +28,7 @@ public class TutorialButton extends CustomButton {
 		mPaint.setTextSize(AppScale.doScaleT(30));
 		mPaint.setTextAlign(Paint.Align.LEFT);		
 		
-		mTutorial = "Tutorial";
+		mTutorial = "Play tutorial";
 		mRect = new Rect();
 		mPaint.getTextBounds(mTutorial, 0, mTutorial.length(), mRect);
 	}
@@ -66,5 +66,10 @@ public class TutorialButton extends CustomButton {
 	@Override
 	public void onCancelSelection(MotionEvent e) {
 		mPaint.setColor(Color.LTGRAY);
+	}
+	
+	@Override
+	public boolean contains(float x, float y) {
+		return (mX < x && x <= mX + mWidth) && (mY - mHeight < y && y <= mY + mHeight * 2);
 	}
 }

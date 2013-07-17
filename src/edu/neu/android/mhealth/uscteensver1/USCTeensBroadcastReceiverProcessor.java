@@ -6,7 +6,6 @@ import java.util.Date;
 import android.content.Context;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.wocketslib.broadcastreceivers.BroadcastReceiverProcessor;
-import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.Log;
 
 public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcessor {

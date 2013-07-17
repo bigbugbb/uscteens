@@ -20,9 +20,9 @@ import edu.neu.android.mhealth.uscteensver1.ui.FixButton;
 import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 import edu.neu.android.mhealth.uscteensver1.ui.RewardBackground;
 import edu.neu.android.mhealth.uscteensver1.ui.RewardButton;
-import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 public class RewardPage extends AppPage implements OnClickListener {
 	
@@ -102,7 +102,7 @@ public class RewardPage extends AppPage implements OnClickListener {
 		}
 		int daysAfterStarting = 0;		
 		while (daysAfterStarting < 14) {
-			String date = WeekdayCalculator.afterNDayFrom(aStartDate, daysAfterStarting);
+			String date = WeekdayHelper.afterNDayFrom(aStartDate, daysAfterStarting);
 			if (date.compareToIgnoreCase(selectedDate) == 0) {
 				break;
 			}

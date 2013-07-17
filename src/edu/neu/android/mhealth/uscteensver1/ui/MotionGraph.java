@@ -22,7 +22,7 @@ import edu.neu.android.mhealth.uscteensver1.data.Label;
 import edu.neu.android.mhealth.uscteensver1.data.LabelManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
-import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
+import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 
 public class MotionGraph extends AppObject {
@@ -136,7 +136,7 @@ public class MotionGraph extends AppObject {
 		};
 		
 		String[] times = date.split("-");
-		String weekday = WeekdayCalculator.getWeekday(date);
+		String weekday = WeekdayHelper.getWeekday(date);
 		String month   = MONTHS[Integer.parseInt(times[1]) - 1];
 		String day     = times[2];		
 		String formatted = weekday.toUpperCase() + "  " + month + "  " + day;

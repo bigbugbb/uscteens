@@ -14,8 +14,8 @@ import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
-import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.utils.DateHelper;
+import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 
 public class DateListView extends ListView {
@@ -57,7 +57,7 @@ public class DateListView extends ListView {
 		// start date is less than or equal to the current date
 		int daysAfterStarting = 0;		
 		while (daysAfterStarting < 14) {
-			String date = WeekdayCalculator.afterNDayFrom(aStartDate, daysAfterStarting);
+			String date = WeekdayHelper.afterNDayFrom(aStartDate, daysAfterStarting);
 			if (date.compareToIgnoreCase(curDate) == 0) {
 				break;
 			}
@@ -66,11 +66,11 @@ public class DateListView extends ListView {
 		// put all date to the list as Strings YYYY-MM-dd
 		ArrayList<String> dates = new ArrayList<String>();
 		for (int i = 0; i < 14; ++i) {
-			String date = WeekdayCalculator.afterNDayFrom(aStartDate, i);
+			String date = WeekdayHelper.afterNDayFrom(aStartDate, i);
 			dates.add(date);
 		}	
 		// fill each item
-		int startWeekday = WeekdayCalculator.getWeekdayInNumber(startDate) - 1; // 0 - 6
+		int startWeekday = WeekdayHelper.getWeekdayInNumber(startDate) - 1; // 0 - 6
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + daysAfterStarting) {
@@ -129,7 +129,7 @@ public class DateListView extends ListView {
 		// start date is less than or equal to the current date
 		int daysAfterStarting = 0;		
 		while (daysAfterStarting < 14) {
-			String date = WeekdayCalculator.afterNDayFrom(aStartDate, daysAfterStarting);
+			String date = WeekdayHelper.afterNDayFrom(aStartDate, daysAfterStarting);
 			if (date.compareToIgnoreCase(curDate) == 0) {
 				break;
 			}
@@ -138,11 +138,11 @@ public class DateListView extends ListView {
 		// put all date to the list as Strings YYYY-MM-dd
 		ArrayList<String> dates = new ArrayList<String>();
 		for (int i = 0; i < 14; ++i) {
-			String date = WeekdayCalculator.afterNDayFrom(aStartDate, i);
+			String date = WeekdayHelper.afterNDayFrom(aStartDate, i);
 			dates.add(date);
 		}	
 		// fill each item
-		int startWeekday = WeekdayCalculator.getWeekdayInNumber(startDate) - 1; // 0 - 6
+		int startWeekday = WeekdayHelper.getWeekdayInNumber(startDate) - 1; // 0 - 6
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + daysAfterStarting) {

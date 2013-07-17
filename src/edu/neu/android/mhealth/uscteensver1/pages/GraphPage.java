@@ -35,8 +35,8 @@ import edu.neu.android.mhealth.uscteensver1.ui.SlideBar;
 import edu.neu.android.mhealth.uscteensver1.ui.SlideBar.OnSlideBarChangeListener;
 import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
 import edu.neu.android.mhealth.uscteensver1.ui.UIID;
-import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 
 public class GraphPage extends AppPage implements OnClickListener,
@@ -132,7 +132,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 			return;
 		}
 		try {
-			int diff = WeekdayCalculator.daysBetween(startDate, selDate);
+			int diff = WeekdayHelper.daysBetween(startDate, selDate);
 			int index   = (int) DataStorage.GetValueLong(mContext, USCTeensGlobals.LAST_SELECTED_CHUNK + diff, 0);
 			int offsetX = (int) DataStorage.GetValueLong(mContext, USCTeensGlobals.LAST_DISPLAY_OFFSET_X + diff, 0);
 			// recover last position when user quit

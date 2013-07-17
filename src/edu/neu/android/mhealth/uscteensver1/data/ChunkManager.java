@@ -12,8 +12,8 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ClockButton;
 import edu.neu.android.mhealth.uscteensver1.ui.MergeButton;
 import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
-import edu.neu.android.mhealth.uscteensver1.utils.WeekdayCalculator;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 
 public class ChunkManager {
@@ -97,7 +97,7 @@ public class ChunkManager {
 		String startDate = DataStorage.getStartDate(sContext, "");
 		// start date is less than or equal to the current date			
 		try {
-			int diff = WeekdayCalculator.daysBetween(startDate, selDate);
+			int diff = WeekdayHelper.daysBetween(startDate, selDate);
 			DataStorage.SetValue(sContext, USCTeensGlobals.LAST_SELECTED_CHUNK + diff, sSelected);
 			DataStorage.SetValue(sContext, USCTeensGlobals.LAST_DISPLAY_OFFSET_X + diff, Math.abs((long) sDispOffsetX));
 		} catch (ParseException e) {
