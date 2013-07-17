@@ -37,8 +37,8 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 				private static final long serialVersionUID = 1L;
 
 				{ 
-					put("CS", CSTeensSurvey.class); 
-					put("Random", RandomTeensSurvey.class); 
+					put("CS", TeensCSSurvey.class); 
+					put("Random", TeensRandomSurvey.class); 
 				} 
 			}
 		);
@@ -65,8 +65,8 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 			SurveyPromptEvent spe = new SurveyPromptEvent(System.currentTimeMillis(), 0);
 			spe.setPromptReason(reason);			
 			spe.setPromptType("CS");
-			spe.AddSurveySpecifiedRecord(CSTeensSurvey.START_TIME, extInfo.getStartTime());
-			spe.AddSurveySpecifiedRecord(CSTeensSurvey.STOP_TIME, extInfo.getStopTime());
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.START_TIME, extInfo.getStartTime());
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.STOP_TIME, extInfo.getStopTime());
 			return spe;
 		}
 		

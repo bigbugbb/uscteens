@@ -22,7 +22,8 @@ public class USCTeensAppManager extends ApplicationManager {
     	Globals.setArbitrater(arbitrater);   
     	
     	try {
-			USCTeensGlobals.VERSION_NAME = "Ver. " + getPackageManager().getPackageInfo(getPackageName(), 0).versionName;					
+    		String packageName = getPackageName();
+			USCTeensGlobals.VERSION_NAME = "Ver. " + getPackageManager().getPackageInfo(packageName, 0).versionName;					
 		} catch (NameNotFoundException e) {		
 			e.printStackTrace();
 		}

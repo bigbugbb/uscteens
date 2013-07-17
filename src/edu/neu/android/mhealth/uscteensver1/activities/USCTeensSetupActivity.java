@@ -9,8 +9,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.survey.CSTeensSurvey;
-import edu.neu.android.mhealth.uscteensver1.survey.RandomTeensSurvey;
+import edu.neu.android.mhealth.uscteensver1.survey.TeensCSSurvey;
+import edu.neu.android.mhealth.uscteensver1.survey.TeensRandomSurvey;
 import edu.neu.android.mhealth.uscteensver1.video.VideoActivity;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
@@ -126,9 +126,9 @@ public class USCTeensSetupActivity extends BaseActivity {
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
 				promptEvent.setReprompt(USCTeensSurveyActivity.isWorking());
 				
-				i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);
+				i.putExtra(USCTeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
-					RandomTeensSurvey.class.getCanonicalName(), 1, new Object[] { 0 }
+					TeensRandomSurvey.class.getCanonicalName(), 1, new Object[] { 0 }
 				));
 				startActivity(i);				
 			}
@@ -148,9 +148,9 @@ public class USCTeensSetupActivity extends BaseActivity {
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
 				promptEvent.setReprompt(USCTeensSurveyActivity.isWorking());
 				
-				i.putExtra(USCTeensSurveyActivity.PROMPT_EVENT, promptEvent);
+				i.putExtra(USCTeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
-					CSTeensSurvey.class.getCanonicalName(), 1, new Object[] { null }
+					TeensCSSurvey.class.getCanonicalName(), 1, new Object[] { null }
 				));
 				startActivity(i);					
 			}

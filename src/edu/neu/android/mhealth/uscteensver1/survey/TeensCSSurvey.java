@@ -13,7 +13,7 @@ import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion.TYPE;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesAsSequence;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesFromAns;
 
-public class CSTeensSurvey extends QuestionSet {
+public class TeensCSSurvey extends QuestionSet {
 	
 	public static String START_TIME = "START_TIME";
 	public static String STOP_TIME  = "STOP_TIME";
@@ -22,7 +22,7 @@ public class CSTeensSurvey extends QuestionSet {
 	private String mStartTime;
 	private String mStopTime;
 	
-	public CSTeensSurvey(QuestionSetParamHandler param) {
+	public TeensCSSurvey(QuestionSetParamHandler param) {
 		super();
 
 		SurveyPromptEvent spe = (SurveyPromptEvent) param.getParams()[0];

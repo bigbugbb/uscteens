@@ -10,12 +10,12 @@ import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion.TYPE;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesAsSequence;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesFromAns;
 
-public class RandomTeensSurvey extends QuestionSet {
+public class TeensRandomSurvey extends QuestionSet {
 
 	public static final double VERSION = 1;
 	private ArrayList<SurveyQuestion> mDefaultQuestionSet;
 	
-	public RandomTeensSurvey(QuestionSetParamHandler param) {
+	public TeensRandomSurvey(QuestionSetParamHandler param) {
 		super();
 		setQuestions();
 	}
