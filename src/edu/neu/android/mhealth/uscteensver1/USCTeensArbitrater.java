@@ -190,20 +190,7 @@ public class USCTeensArbitrater extends Arbitrater {
 		mScheduler.tryToPromptSurvey(isNewSoftwareVersion);		
 				
 		// Mark that arbitration taking place
-		DataStorage.setLastTimeArbitrate(mContext, System.currentTimeMillis());
-				
-		// wait for the internal AC sensor to get data for at least 20s 
-		try {
-			synchronized (this) {				
-				long timeCost = System.currentTimeMillis() - startTime;
-				long timeToWait = USCTeensGlobals.TIME_WAITING_SENSOR_DATA_IN_MS - timeCost;
-				if (timeToWait > 0) { // Caution: wait(0) doesn't work normally, guess it's a bug of android
-					wait(timeToWait);
-				}
-			}			
-		} catch (InterruptedException e) {			
-			e.printStackTrace();
-		}				
+		DataStorage.setLastTimeArbitrate(mContext, System.currentTimeMillis());			
 	}
 	
 	public static void saveRecordsInLogcat(boolean isClear) {
