@@ -29,7 +29,7 @@ public class USCTeensGlobals {
 	public final static String CURRENT_SELECTED_DATE = "CURRENT_SELECTED_DATE";
 	public final static String LAST_SELECTED_CHUNK = "LAST_SELECTED_CHUNK";
 	public final static String LAST_DISPLAY_OFFSET_X = "LAST_DISPLAY_OFFSET_X";
-	public final static String SENSOR_FOLDER     = "/Sensor/";	
+	public final static String SENSOR_FOLDER     = "/" + Globals.SENSOR_TYPE_PHONE_ACCELEROMETER + "/";	
 	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String LABELS_FOLDER = "/Labels/";
 	public final static String ICON_FOLDER   = "/Icons/";
@@ -58,6 +58,7 @@ public class USCTeensGlobals {
 		Globals.initDataDirectories(aContext);
 		
 		DIRECTORY_PATH = Globals.EXTERNAL_DIRECTORY_PATH;
+		Globals.IS_RECORDING_PHONE_ACCEL_ENABLED = true;
 
 		Globals.STUDY_NAME = "USCTeens"; // "Teens Study"; 
 		Globals.STUDY_SERVER_NAME = "USCTeens";
