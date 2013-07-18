@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -28,6 +30,7 @@ import org.dom4j.io.XMLWriter;
 
 import android.content.Context;
 import android.util.Pair;
+import au.com.bytecode.opencsv.CSVReader;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
@@ -261,47 +264,26 @@ public class DataSource {
 				}
 			}
 		} else if (extName.equals(".csv")) { // load from .csv file if .bin does not exist		
-			FileInputStream fis = null;
-			BufferedReader br = null;
-			File csvFile = new File(filePath);
-			try {
-				fis = new FileInputStream(csvFile);
-				InputStreamReader in = new InputStreamReader(fis);
-				br = new BufferedReader(in);			
-				try {
-					// skip the first line
-					String result = br.readLine();
-					while ((result = br.readLine()) != null) {
-						if (sCancelled && cancelable) {
-							return ERR_CANCELLED;
-						}
-						// parse the line
-						String[] split = result.split("[ :.,]");
-						AccelData data = new AccelData(split[1], split[2], split[3], split[5], split[7], split[9]);
-						hourlyAccelData.add(data);
-					}
-				} catch (IOException e) {
-					Log.e(TAG, "readStringInternal: problem reading: " + csvFile.getAbsolutePath());
-					e.printStackTrace();
+			CSVReader csvReader = null;
+			try {								
+				csvReader = new CSVReader(new FileReader(filePath));
+				String[] row = csvReader.readNext();
+				while ((row = csvReader.readNext()) != null) {
+					String[] split = row[0].split("[ :.]");
+					AccelData data = new AccelData(split[1], split[2], split[3], split[4], row[1], row[2]);
+					hourlyAccelData.add(data);
 				}
-			} catch (FileNotFoundException e) {
-				Log.e(TAG, "readStringInternal: cannot find: " + csvFile.getAbsolutePath());
+			} catch (IOException e) {				
 				e.printStackTrace();
 			} finally {
-				if (br != null)
-					try {
-						br.close();
-					} catch (IOException e) {
-						Log.e(TAG, "readStringInternal: cannot close: " + csvFile.getAbsolutePath());
-						e.printStackTrace();
+				try {
+					if (csvReader != null) {
+						csvReader.close();
 					}
-				if (fis != null)
-					try {
-						fis.close();
-					} catch (IOException e) {
-						Log.e(TAG, "readStringInternal: cannot close: " + csvFile.getAbsolutePath());
-						e.printStackTrace();
-					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		
@@ -317,14 +299,22 @@ public class DataSource {
 			// load the daily data from .bin files hour by hour		
 			for (int i = 0; i < hourDirs.length; ++i) {
 				// each hour corresponds to one .bin file
-				String[] filePaths = FileHelper.getFilePathsDir(hourDirs[i]);
-				String filePath = filePaths[0]; // set a default value
-				for (String path : filePaths) {
-					String extName = path.substring(path.lastIndexOf("."), path.length());
-					if (extName.equals(".bin")) {
-						filePath = path;
+//				String[] filePaths = FileHelper.getFilePathsDir(hourDirs[i]);
+//				String filePath = filePaths[0]; // set a default value
+//				for (String path : filePaths) {
+//					String extName = path.substring(path.lastIndexOf("."), path.length());
+//					if (extName.equals(".bin")) {
+//						filePath = path;
+//					}
+//				}
+//				
+				String[] fileNames = new File(hourDirs[i]).list(new FilenameFilter() {
+					@Override
+					public boolean accept(File dir, String filename) {
+						return filename.endsWith(".csv");
 					}
-				}
+				});
+				String filePath = hourDirs[i] + File.separator + fileNames[0];
 				// load the hourly data from .bin file
 				ArrayList<AccelData> hourlyAccelData = new ArrayList<AccelData>();						
 				int result = loadHourlyRawAccelData(filePath, hourlyAccelData, true);	
