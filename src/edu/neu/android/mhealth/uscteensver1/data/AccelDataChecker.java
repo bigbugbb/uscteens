@@ -7,7 +7,7 @@ import java.util.Date;
 import android.content.Context;
 import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
 import edu.neu.android.wocketslib.Globals;
-import edu.neu.android.wocketslib.algorithm.ActivityDetectAlgorithm;
+import edu.neu.android.wocketslib.algorithm.MotionDetectAlgorithm;
 import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
 import edu.neu.android.wocketslib.algorithm.MotionDetectAlgorithm;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyExtraInfo;
