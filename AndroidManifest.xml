@@ -23,7 +23,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" android:debuggable="false">
          -->
-	<application android:name="edu.neu.android.mhealth.uscteensver1.USCTeensAppManager"
+	<application android:name="edu.neu.android.mhealth.uscteensver1.TeensAppManager"
 		android:icon="@drawable/ic_launcher" android:label="@string/app_name"
 		android:theme="@style/AppTheme" android:debuggable="false">
 	    
@@ -299,7 +299,7 @@
 		</activity>
 		
 		<activity
-            android:name="edu.neu.android.mhealth.uscteensver1.activities.USCTeensMainActivity"
+            android:name="edu.neu.android.mhealth.uscteensver1.activities.TeensMainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"            
             android:launchMode="singleTask"
@@ -325,7 +325,7 @@
             android:theme="@style/DialogTheme">
 		</activity>
 		
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.USCTeensSetupActivity"			
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.TeensSetupActivity"			
 		    android:launchMode="singleInstance"
             android:excludeFromRecents="true"
 			android:screenOrientation="portrait">
@@ -343,7 +343,7 @@
 			android:screenOrientation="portrait">
 		</activity>
 		
-        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.USCTeensSurveyActivity"
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.TeensSurveyActivity"
             android:excludeFromRecents="true"
 		    android:launchMode="singleInstance"
 			android:screenOrientation="portrait">

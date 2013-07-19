@@ -8,7 +8,7 @@ import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.wocketslib.broadcastreceivers.BroadcastReceiverProcessor;
 import edu.neu.android.wocketslib.utils.Log;
 
-public class USCTeensBroadcastReceiverProcessor extends BroadcastReceiverProcessor {
+public class TeensBroadcastReceiverProcessor extends BroadcastReceiverProcessor {
 	private static final String TAG = "USCTeensBroadcastReceiverProcessor";
 
 	private String getDateString() {

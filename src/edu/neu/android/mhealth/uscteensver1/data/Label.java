@@ -13,7 +13,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
@@ -43,7 +43,7 @@ public class Label extends AppObject {
 			sPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 			sPaint.setColor(Color.argb(255, 255, 102, 0));
 			sPaint.setStyle(Style.STROKE);
-			sPaint.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
+			sPaint.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf"));
 			sPaint.setTextSize(AppScale.doScaleT(28));
 			sPaintCreated = true;
 		}
@@ -146,7 +146,7 @@ public class Label extends AppObject {
 			return;
 		}
 		
-		float delta = mX + sImgWidth - USCTeensGlobals.MAX_WIDTH_IN_PIXEL;
+		float delta = mX + sImgWidth - TeensGlobals.MAX_WIDTH_IN_PIXEL;
 		delta = delta > 0 ? -delta : 0;	
 		x += delta;
 		

@@ -22,7 +22,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.database.DatabaseHandler;
@@ -53,7 +53,7 @@ import edu.neu.android.wocketslib.utils.PasswordChecker;
 import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
 import edu.neu.android.wocketslib.views.DummyView;
 
-public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouchListener {
+public class TeensMainActivity extends TeensBaseActivity implements OnTouchListener {
 	
 	// the view for drawing anything
 	protected GraphView mGraphView = null;
@@ -119,8 +119,8 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 	
 	private void setupGlobal() {
 		Context context = getApplicationContext();
-		USCTeensGlobals.sContext = context;
-		USCTeensGlobals.sGlobalHandler = mHandler;
+		TeensGlobals.sContext = context;
+		TeensGlobals.sGlobalHandler = mHandler;
 		DataSource.initialize(getApplicationContext());	
 		
 		// update flag indicating whether we should 
@@ -128,9 +128,9 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		String oldVersion = DataStorage.getVersion(context, "");	
 		String newVersion = AppUsageLogger.getVersion(context, "USCTeens");
 		DataStorage.setVersion(context, newVersion);
-		USCTeensGlobals.sUpdateConfig = !newVersion.equals(oldVersion);
-		if (USCTeensGlobals.sUpdateConfig) {
-			String dirPath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.ICON_FOLDER;
+		TeensGlobals.sUpdateConfig = !newVersion.equals(oldVersion);
+		if (TeensGlobals.sUpdateConfig) {
+			String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.ICON_FOLDER;
 			FileHelper.deleteDir(dirPath);		
 		}
 	}
@@ -257,7 +257,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 		super.onResume();
 				
 		mDummyView.setVisibility(
-			AuthorizationChecker.isAuthorized(USCTeensMainActivity.this) ? View.GONE : View.VISIBLE
+			AuthorizationChecker.isAuthorized(TeensMainActivity.this) ? View.GONE : View.VISIBLE
 		);
 				
 		mGraphView.onResume();
@@ -314,30 +314,30 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
         		switchPages(indexOfPage(PageType.REWARD_PAGE));        		
         		break;
         	case AppCmd.TUTOR:
-        		i = new Intent(null, Uri.parse("ytv://TNQESL12M9g"), USCTeensMainActivity.this, OpenYouTubePlayerActivity.class);
+        		i = new Intent(null, Uri.parse("ytv://TNQESL12M9g"), TeensMainActivity.this, OpenYouTubePlayerActivity.class);
 				startActivity(i);
         		break;
         	case AppCmd.QUEST:
-        		i = new Intent(USCTeensMainActivity.this, QuestDialog.class);           		
+        		i = new Intent(TeensMainActivity.this, QuestDialog.class);           		
         		i.putExtra(QuestDialog.CHUNK_START_TIME, msg.arg1);
         		i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);   
         		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         		startActivityForResult(i, AppCmd.QUEST);
         		break;
         	case AppCmd.MERGE:
-        		i = new Intent(USCTeensMainActivity.this, MergeDialog.class);
+        		i = new Intent(TeensMainActivity.this, MergeDialog.class);
     			i.putStringArrayListExtra(MergeDialog.KEY, (ArrayList<String>) msg.obj);
     			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     			startActivity(i);
         		break;
         	case AppCmd.QUEST_FINISHING:        	
         		((GraphPage) mCurPage).finishQuest(
-        			DataStorage.GetValueString(getApplicationContext(), USCTeensGlobals.QUEST_SELECTION, "")
+        			DataStorage.GetValueString(getApplicationContext(), TeensGlobals.QUEST_SELECTION, "")
         		); 
             	break;
         	case AppCmd.MERGE_FINISHING:        		
         		((GraphPage) mCurPage).finishMerge(
-        			DataStorage.GetValueString(getApplicationContext(), USCTeensGlobals.MERGE_SELECTION, "")
+        			DataStorage.GetValueString(getApplicationContext(), TeensGlobals.MERGE_SELECTION, "")
         		);
         		break;
         	case AppCmd.DONE:
@@ -405,7 +405,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
     	// Reading all states
     	boolean isContained = false;
     	String select = DataStorage.GetValueString(
-			getApplicationContext(), USCTeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
+			getApplicationContext(), TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
 		);
         Log.d("Reading: ", "Reading all states..");
         List<RewardState> states = db.getAllRewardStates();       
@@ -478,7 +478,7 @@ public class USCTeensMainActivity extends USCTeensBaseActivity implements OnTouc
 			startActivity(i);
 		} else if (mPwdSubject.isMatch(keyCode)) {			
 			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-			Intent i = new Intent(this, USCTeensSetupActivity.class);
+			Intent i = new Intent(this, TeensSetupActivity.class);
 			startActivity(i);
 		} else if (mPwdUninstall.isMatch(keyCode)) {
 			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);

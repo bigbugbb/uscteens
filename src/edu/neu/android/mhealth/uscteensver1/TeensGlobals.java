@@ -13,7 +13,7 @@ import edu.neu.android.wocketslib.utils.FileHelper;
  * @author SSI
  *
  */
-public class USCTeensGlobals {
+public class TeensGlobals {
 	public static String VERSION_NAME = "";
 	
 	public final static int    PIXEL_PER_DATA = 2;	

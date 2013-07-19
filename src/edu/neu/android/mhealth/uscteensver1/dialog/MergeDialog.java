@@ -12,7 +12,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.views.MergeView;
 import edu.neu.android.mhealth.uscteensver1.views.MergeView.OnBackClickedListener;
@@ -111,10 +111,10 @@ public class MergeDialog extends Activity implements OnItemClickListener, OnBack
 //		Intent i = new Intent();
 //		i.putExtra(SELECTION, mActions.get(pos));
 //		setResult(pos + 1, i);
-		DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.MERGE_SELECTION, mActions.get(pos));
-		Message msg = USCTeensGlobals.sGlobalHandler.obtainMessage();				
+		DataStorage.SetValue(getApplicationContext(), TeensGlobals.MERGE_SELECTION, mActions.get(pos));
+		Message msg = TeensGlobals.sGlobalHandler.obtainMessage();				
 		msg.what = AppCmd.MERGE_FINISHING;
-		USCTeensGlobals.sGlobalHandler.sendMessage(msg);
+		TeensGlobals.sGlobalHandler.sendMessage(msg);
 		finish();
 	}
 

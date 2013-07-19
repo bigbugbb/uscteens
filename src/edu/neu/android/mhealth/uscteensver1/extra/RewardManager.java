@@ -13,7 +13,7 @@ import java.io.OutputStream;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.WOCKETSException;
@@ -56,9 +56,9 @@ public class RewardManager {
 		// first clear the action container
 		sRewardWrap.clear();
 		
-		String dirPath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
+		String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.REWARD_FOLDER;
 		String[] rewardDir = FileHelper.getFilePathsDir(dirPath);
-		if (rewardDir == null || rewardDir.length == 0 || (USCTeensGlobals.sUpdateConfig && !sCopied)) {
+		if (rewardDir == null || rewardDir.length == 0 || (TeensGlobals.sUpdateConfig && !sCopied)) {
 			sCopied = true;
 			copyRewardFromAssets();
 			rewardDir = FileHelper.getFilePathsDir(dirPath);
@@ -175,7 +175,7 @@ public class RewardManager {
 	}
 	
 	private static void copyRewardFromAssets() {
-		String outfilePath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
+		String outfilePath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.REWARD_FOLDER;
 		// create new directory if doesn't exist
 		try {
 			FileHelper.createDir(outfilePath);

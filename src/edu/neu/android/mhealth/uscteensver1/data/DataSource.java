@@ -31,7 +31,7 @@ import org.dom4j.io.XMLWriter;
 import android.content.Context;
 import android.util.Pair;
 import au.com.bytecode.opencsv.CSVReader;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.wocketslib.Globals;
@@ -78,7 +78,7 @@ public class DataSource {
 	
 	public static long getLastLoadingTime() {
 		long lastLoadingTime = 
-				DataStorage.GetValueLong(sContext, USCTeensGlobals.LAST_DATA_LOADING_TIME, 0);	
+				DataStorage.GetValueLong(sContext, TeensGlobals.LAST_DATA_LOADING_TIME, 0);	
 		return lastLoadingTime;
 	}
 	
@@ -91,10 +91,10 @@ public class DataSource {
 		long currentTime = System.currentTimeMillis();
 		long lastLoadingTime = DataSource.getLastLoadingTime();		
 		
-		if (currentTime - lastLoadingTime > USCTeensGlobals.UPDATING_TIME_THRESHOLD) {			
+		if (currentTime - lastLoadingTime > TeensGlobals.UPDATING_TIME_THRESHOLD) {			
 			try {				
 				String select = DataStorage.GetValueString(
-					sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
+					sContext, TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
 				);
 				Date curDate  = new Date(currentTime);
 				Date loadDate = new Date(lastLoadingTime);		
@@ -122,7 +122,7 @@ public class DataSource {
 	 * @return
 	 */
 	public static int loadRawData(String date) {
-		DataStorage.SetValue(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, date);
+		DataStorage.SetValue(sContext, TeensGlobals.CURRENT_SELECTED_DATE, date);
 		
 		sCancelled = false;
 		
@@ -186,7 +186,7 @@ public class DataSource {
 		// the data should be reloaded after the user has switched to another program
 		// and go back here after a while.
 		DataStorage.SetValue(sContext, 
-				USCTeensGlobals.LAST_DATA_LOADING_TIME, System.currentTimeMillis());
+				TeensGlobals.LAST_DATA_LOADING_TIME, System.currentTimeMillis());
 			
 		return result;
 	}
@@ -204,7 +204,7 @@ public class DataSource {
 //	}
 	
 	public static String getCurrentSelectedDate() {
-		return DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+		return DataStorage.GetValueString(sContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
 	}
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -213,7 +213,7 @@ public class DataSource {
 	}
 	
 	public static int getDrawableDataLengthInPixel() {
-		return sAccelDataWrap.getDrawableDataLength() * USCTeensGlobals.PIXEL_PER_DATA;
+		return sAccelDataWrap.getDrawableDataLength() * TeensGlobals.PIXEL_PER_DATA;
 	}
 	
 	public static int getMaxDrawableDataValue() {
@@ -292,7 +292,7 @@ public class DataSource {
 	
 	private static int loadRawAccelData(String date) {
 		String[] hourDirs = FileHelper.getFilePathsDir(
-			USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.SENSOR_FOLDER 
+			TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + TeensGlobals.SENSOR_FOLDER 
 		);		
 		
 		try {
@@ -350,7 +350,7 @@ public class DataSource {
 	 * @return
 	 */
 	private static boolean loadRawChunkData(String date) {
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.ANNOTATION_FOLDER;
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + TeensGlobals.ANNOTATION_FOLDER;
 		
 		String[] chunkFilePaths = FileHelper.getFilePathsDir(path);
 		if (chunkFilePaths == null || chunkFilePaths.length == 0) {			
@@ -414,7 +414,7 @@ public class DataSource {
 	 * @return true if the raw label wrap has label data, otherwise false
 	 */
 	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap) {		
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.LABELS_FOLDER;
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + TeensGlobals.LABELS_FOLDER;
 		
 		// first clear the data container		
 		rawLabelWrap.clear();
@@ -483,7 +483,7 @@ public class DataSource {
 	 * @return true if succeed, otherwise false
 	 */
 	public static boolean saveLabelData(String date, RawLabelWrap rawLabelWrap) {						
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.LABELS_FOLDER;
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + TeensGlobals.LABELS_FOLDER;
 		
 		// build the file path name
 		String filePathName = ""; 
@@ -546,8 +546,8 @@ public class DataSource {
 	}
 	
 	public static boolean areAllChunksLabelled(String date) {
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + 
-			date + USCTeensGlobals.ANNOTATION_FOLDER + USCTeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + 
+			date + TeensGlobals.ANNOTATION_FOLDER + TeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";
 		
 		File file = new File(path);		
 		if (!file.exists()) {			
@@ -581,10 +581,10 @@ public class DataSource {
 
 	public static boolean saveChunkData(final ArrayList<Chunk> chunks) {
 		boolean result = false;		
-		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+		String date = DataStorage.GetValueString(sContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
 		assert(date.compareTo("") != 0);
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator
-			 + date + USCTeensGlobals.ANNOTATION_FOLDER + USCTeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";			
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator
+			 + date + TeensGlobals.ANNOTATION_FOLDER + TeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";			
 
 		sRawChksWrap.clear();
 		for (int i = 0; i < chunks.size(); ++i) {
@@ -612,7 +612,7 @@ public class DataSource {
         	Action action = rawChunk.getAction();
 	        // ANNOTATION
 	        Element annotation = annotations.addElement("ANNOTATION")
-	        	.addAttribute("GUID", USCTeensGlobals.ANNOTATION_GUID);
+	        	.addAttribute("GUID", TeensGlobals.ANNOTATION_GUID);
 	        // LABEL
 	        Element label = annotation.addElement("LABEL")
 		        .addAttribute("GUID", action.getActionID())

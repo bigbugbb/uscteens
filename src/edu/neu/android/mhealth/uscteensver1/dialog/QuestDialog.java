@@ -9,7 +9,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.views.QuestView;
 import edu.neu.android.mhealth.uscteensver1.views.QuestView.OnBackClickedListener;
@@ -102,10 +102,10 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 	} 
 	
 	protected void setResultAndExit(String actionID) {
-		DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.QUEST_SELECTION, actionID);
-		Message msg = USCTeensGlobals.sGlobalHandler.obtainMessage();		
+		DataStorage.SetValue(getApplicationContext(), TeensGlobals.QUEST_SELECTION, actionID);
+		Message msg = TeensGlobals.sGlobalHandler.obtainMessage();		
 		msg.what = AppCmd.QUEST_FINISHING;
-		USCTeensGlobals.sGlobalHandler.sendMessage(msg);
+		TeensGlobals.sGlobalHandler.sendMessage(msg);
 		finish();
 	}
 	

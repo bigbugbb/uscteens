@@ -12,7 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Reward;
 import edu.neu.android.mhealth.uscteensver1.extra.RewardManager;
 import edu.neu.android.mhealth.uscteensver1.ui.DoneButton;
@@ -93,7 +93,7 @@ public class RewardPage extends AppPage implements OnClickListener {
 		
 		// get days between the start date and the selected date 
 		String startDate    = DataStorage.getStartDate(mContext, "");
-		String selectedDate = DataStorage.GetValueString(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01");			
+		String selectedDate = DataStorage.GetValueString(mContext, TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01");			
 	    Date aStartDate = null;
 		try {
 			aStartDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
@@ -159,7 +159,7 @@ public class RewardPage extends AppPage implements OnClickListener {
 			break;
 		case FIX:						
 			msg.what = AppCmd.BEGIN_LOADING;
-			msg.obj  = DataStorage.GetValueString(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+			msg.obj  = DataStorage.GetValueString(mContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
 			mHandler.sendMessage(msg);
 			break;
 		case REWARD:

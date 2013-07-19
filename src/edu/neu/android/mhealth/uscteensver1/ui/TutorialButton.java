@@ -8,7 +8,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class TutorialButton extends CustomButton {
@@ -24,7 +24,7 @@ public class TutorialButton extends CustomButton {
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.LTGRAY);
 		mPaint.setStyle(Style.STROKE);
-		mPaint.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
+		mPaint.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf"));
 		mPaint.setTextSize(AppScale.doScaleT(30));
 		mPaint.setTextAlign(Paint.Align.LEFT);		
 		

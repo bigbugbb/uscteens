@@ -11,7 +11,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -102,14 +102,14 @@ public class ActionListView extends ListView {
 		
 		// add the most recent selections first
 		for (Action action : recents) {
-			if (!action.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID)) {
+			if (!action.getActionID().equals(TeensGlobals.UNLABELLED_GUID)) {
 		    	addItem(action);
 		    }		
 		}
 		
 		// then add the other activities
 		for (Action action : actions) {		
-		    if (!action.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID)) {
+		    if (!action.getActionID().equals(TeensGlobals.UNLABELLED_GUID)) {
 		    	addItem(action);
 		    }		    
 		}						

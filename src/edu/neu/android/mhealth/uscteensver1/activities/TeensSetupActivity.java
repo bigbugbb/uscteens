@@ -27,7 +27,7 @@ import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
 
 
-public class USCTeensSetupActivity extends BaseActivity {
+public class TeensSetupActivity extends BaseActivity {
 	private static final String TAG = "USCTeensSetupActivity"; 
 	
 	private Button mBtnStartService;
@@ -118,15 +118,15 @@ public class USCTeensSetupActivity extends BaseActivity {
 			public void onClick(View v) {
 				long now = System.currentTimeMillis();
 				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, now);
-				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
+				Intent i = new Intent(TeensSetupActivity.this, SurveyActivity.class);
 				
 				// Construct survey prompt event
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
 				promptEvent.setPromptType("Random-Test");				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				promptEvent.setReprompt(USCTeensSurveyActivity.isWorking());
+				promptEvent.setReprompt(TeensSurveyActivity.isWorking());
 				
-				i.putExtra(USCTeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
+				i.putExtra(TeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
 					TeensRandomSurvey.class.getCanonicalName(), 1, new Object[] { 0 }
 				));
@@ -140,15 +140,15 @@ public class USCTeensSetupActivity extends BaseActivity {
 			public void onClick(View v) {
 				long now = System.currentTimeMillis();
 				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, now);
-				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
+				Intent i = new Intent(TeensSetupActivity.this, SurveyActivity.class);
 				
 				// Construct survey prompt event
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
 				promptEvent.setPromptType("CS-Test");				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				promptEvent.setReprompt(USCTeensSurveyActivity.isWorking());
+				promptEvent.setReprompt(TeensSurveyActivity.isWorking());
 				
-				i.putExtra(USCTeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
+				i.putExtra(TeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
 					TeensCSSurvey.class.getCanonicalName(), 1, new Object[] { null }
 				));

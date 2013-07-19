@@ -8,7 +8,7 @@ import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.Globals;
 
 
-public class USCTeensAppManager extends ApplicationManager {
+public class TeensAppManager extends ApplicationManager {
 
 	public static final String TAG = "USCTeens";
 	
@@ -16,19 +16,19 @@ public class USCTeensAppManager extends ApplicationManager {
     public void onCreate() {
     	super.onCreate();
     	
-    	USCTeensGlobals.initGlobals(getAppContext());
+    	TeensGlobals.initGlobals(getAppContext());
 
-    	USCTeensArbitrater arbitrater = new USCTeensArbitrater(getAppContext()); 
+    	TeensArbitrater arbitrater = new TeensArbitrater(getAppContext()); 
     	Globals.setArbitrater(arbitrater);   
     	
     	try {
     		String packageName = getPackageName();
-			USCTeensGlobals.VERSION_NAME = "Ver. " + getPackageManager().getPackageInfo(packageName, 0).versionName;					
+			TeensGlobals.VERSION_NAME = "Ver. " + getPackageManager().getPackageInfo(packageName, 0).versionName;					
 		} catch (NameNotFoundException e) {		
 			e.printStackTrace();
 		}
     	
-		USCTeensBroadcastReceiverProcessor aBRP = new USCTeensBroadcastReceiverProcessor();
+		TeensBroadcastReceiverProcessor aBRP = new TeensBroadcastReceiverProcessor();
 		edu.neu.android.wocketslib.Globals.myBroadcastReceiverProcessor = aBRP;
     }
     

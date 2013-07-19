@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
@@ -132,9 +132,9 @@ public class ActionManager {
 		// first clear the action container
 		sActionWrap.clear();
 		
-		String dirPath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.ICON_FOLDER;
+		String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.ICON_FOLDER;
 		String[] actionDir = FileHelper.getFilePathsDir(dirPath);
-		if (actionDir == null || actionDir.length == 0 || (USCTeensGlobals.sUpdateConfig && !sCopied)) {
+		if (actionDir == null || actionDir.length == 0 || (TeensGlobals.sUpdateConfig && !sCopied)) {
 			sCopied = true;
 			copyActionsFromAssets();
 			actionDir = FileHelper.getFilePathsDir(dirPath);
@@ -145,7 +145,7 @@ public class ActionManager {
 			
 		// load all activities
 		Action action = Action.createUnlabelledAction();
-		sActionWrap.put(USCTeensGlobals.UNLABELLED_GUID, action);
+		sActionWrap.put(TeensGlobals.UNLABELLED_GUID, action);
 		try {
 			File aMappingFile = getMappingFile(dirPath);			
 			FileInputStream fis = null;
@@ -283,7 +283,7 @@ public class ActionManager {
 	// do that, the whole Activity folder will be copied from the assets to the data
 	// directory which locates in the external storage
 	private static void copyActionsFromAssets() {
-		String outfilePath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.ICON_FOLDER;
+		String outfilePath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.ICON_FOLDER;
 		// create new directory if doesn't exist
 		try {
 			FileHelper.createDir(outfilePath);

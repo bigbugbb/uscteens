@@ -23,7 +23,7 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
@@ -86,7 +86,7 @@ public class QuestView extends ImageView implements OnGestureListener,
 			R.drawable.popup_win_background, R.drawable.back_blue  
 		});
 				
-		Typeface tf = Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf");
+		Typeface tf = Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf");
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText.setColor(Color.WHITE);
 		mPaintText.setStyle(Style.STROKE);
@@ -98,7 +98,7 @@ public class QuestView extends ImageView implements OnGestureListener,
 		mPaintDate.setColor(Color.WHITE);
 		mPaintDate.setStyle(Style.FILL);
 		mPaintDate.setTextSize(AppScale.doScaleW(45));
-		mPaintDate.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial_bold.ttf"));
+		mPaintDate.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial_bold.ttf"));
 		mPaintDate.setTextAlign(Align.CENTER);		
 		
 		mPaintTime = new Paint(Paint.ANTI_ALIAS_FLAG);

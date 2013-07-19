@@ -9,7 +9,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
-import edu.neu.android.mhealth.uscteensver1.activities.USCTeensSurveyActivity;
+import edu.neu.android.mhealth.uscteensver1.activities.TeensSurveyActivity;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataChecker;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.wocketslib.Globals;
@@ -29,7 +29,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 	private final static String KEY_RANDOM_PROMPT = "_KEY_RANDOM_PROMPT";
 	
 	public TeensSurveyScheduler(Context context) {
-		super(context, USCTeensSurveyActivity.class, 
+		super(context, TeensSurveyActivity.class, 
 			new HashMap<String, Class<?>>() // prompt type to question set class 
 			{ 
 				/**

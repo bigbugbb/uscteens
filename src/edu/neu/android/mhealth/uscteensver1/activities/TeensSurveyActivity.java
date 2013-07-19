@@ -11,7 +11,7 @@ import edu.neu.android.wocketslib.emasurvey.model.SurveyAnswer;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion;
 
-public class USCTeensSurveyActivity extends SurveyActivity {
+public class TeensSurveyActivity extends SurveyActivity {
 	
 	@Override
 	public void onStop() {

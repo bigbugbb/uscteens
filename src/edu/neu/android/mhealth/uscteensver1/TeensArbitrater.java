@@ -18,7 +18,7 @@ import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.Log;
 //import org.omg.PortableInterceptor.INACTIVE;
 
-public class USCTeensArbitrater extends Arbitrater {
+public class TeensArbitrater extends Arbitrater {
 	private static final String TAG = "USCTeensArbitrater";
 //	private static final String KEY_LAST_FILE_NAME = "KEY_LAST_FILE_NAME";
 //	private static final String KEY_LAST_FILE_CREATE_TIME = "KEY_FILE_CREATE_TIME";		
@@ -26,7 +26,7 @@ public class USCTeensArbitrater extends Arbitrater {
 	private Context mContext;
 	private TeensSurveyScheduler mScheduler;
 	
-	public USCTeensArbitrater(Context context) {
+	public TeensArbitrater(Context context) {
 		mContext = context;
 		mScheduler = new TeensSurveyScheduler(context);
 	}

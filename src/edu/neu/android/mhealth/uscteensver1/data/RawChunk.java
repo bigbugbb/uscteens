@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 
 // chunk data from XML in direct
@@ -42,7 +42,7 @@ class RawChunk implements Serializable {
 		if (mAction == null) {
 			return false;
 		}
-		return !mAction.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID);
+		return !mAction.getActionID().equals(TeensGlobals.UNLABELLED_GUID);
 	}
 	
 	public boolean isModified() {
