@@ -180,7 +180,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		if (!promptEvent.isReprompt()) {
 			Labeler.getInstance().addLabel(new Date(), promptType.equals("CS") ? "CS Prompt" : "Random Prompt");
 		} else {
-			Labeler.getInstance().addLabel(new Date(), promptType.equals("Random") ? "CS Reprompt" : "Random Reprompt");
+			Labeler.getInstance().addLabel(new Date(), promptType.equals("CS") ? "CS Reprompt" : "Random Reprompt");
 		}
 	}
 
