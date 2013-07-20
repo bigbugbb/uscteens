@@ -16,24 +16,12 @@ public class RewardView extends WebView {
         getSettings().setJavaScriptEnabled(true);
         setScrollBarStyle(0);
 
-        new Thread() {
-        	public void run() {        		
-        		loadUrl(DEFAULT_URL);
-        	}
-	    }.start();
+       	loadUrl(DEFAULT_URL);        
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
 		return super.onTouchEvent(event);
-	}
-
-	public void loadRewardUrl(final String rewardUrl) {
-		new Thread() {
-        	public void run(){        		
-        		loadUrl(rewardUrl);
-        	}
-	    }.start();
 	}
 }

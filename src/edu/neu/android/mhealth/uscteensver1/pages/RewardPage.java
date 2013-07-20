@@ -115,7 +115,7 @@ public class RewardPage extends AppPage implements OnClickListener {
 			mBtnDone.setX(mWidth * 0.2f);
 			mBtnFix.setX(mWidth * 0.8f - mBtnFix.getWidth());
 		} else {
-			mRewardView.loadRewardUrl(mReward.getHtml());
+			mRewardView.loadUrl(mReward.getHtml());
 		}
 	}
 	
