@@ -3,23 +3,23 @@ package edu.neu.android.mhealth.uscteensver1;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.telephony.TelephonyManager;
 import edu.neu.android.wocketslib.ApplicationManager;
-import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.support.AuthorizationChecker;
+import edu.neu.android.wocketslib.support.DataStorage;
 
 
 public class TeensAppManager extends ApplicationManager {
 
-	public static final String TAG = "USCTeens";
+	public static final String TAG = "TeensAppManager";
 	
     @Override 
     public void onCreate() {
     	super.onCreate();
     	
-    	TeensGlobals.initGlobals(getAppContext());
-
-    	TeensArbitrater arbitrater = new TeensArbitrater(getAppContext()); 
-    	Globals.setArbitrater(arbitrater);   
+    	TeensGlobals.initGlobals(getAppContext());   
     	
     	try {
     		String packageName = getPackageName();
@@ -31,6 +31,17 @@ public class TeensAppManager extends ApplicationManager {
 		TeensBroadcastReceiverProcessor aBRP = new TeensBroadcastReceiverProcessor();
 		edu.neu.android.wocketslib.Globals.myBroadcastReceiverProcessor = aBRP;
     }
+    
+    public static String getParticipantId(Context c) {
+		String subjectID = DataStorage.GetValueString(c,
+				edu.neu.android.wocketslib.support.DataStorage.KEY_SUBJECT_ID,
+				AuthorizationChecker.SUBJECT_ID_UNDEFINED);
+		if (!subjectID.equals(AuthorizationChecker.SUBJECT_ID_UNDEFINED)) {
+			return subjectID;
+		}
+		TelephonyManager tm = (TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE);
+		return tm.getDeviceId();
+	}
     
     private ArrayList<Activity> mActivityList = new ArrayList<Activity>();
 

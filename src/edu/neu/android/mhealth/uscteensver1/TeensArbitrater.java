@@ -12,6 +12,7 @@ import java.util.Date;
 import android.content.Context;
 import android.os.Environment;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensSurveyScheduler;
+import edu.neu.android.mhealth.uscteensver1.utils.FileGrabberUtils;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.sensormonitor.Arbitrater;
 import edu.neu.android.wocketslib.support.DataStorage;
@@ -19,7 +20,7 @@ import edu.neu.android.wocketslib.utils.Log;
 //import org.omg.PortableInterceptor.INACTIVE;
 
 public class TeensArbitrater extends Arbitrater {
-	private static final String TAG = "USCTeensArbitrater";
+	private static final String TAG = "TeensArbitrater";
 	
 	private Context mContext;
 	private TeensSurveyScheduler mScheduler;
@@ -34,10 +35,26 @@ public class TeensArbitrater extends Arbitrater {
 		saveRecordsInLogcat(false);
 
 		// Try to prompt the next survey if possible
-		mScheduler.tryToPromptSurvey(isNewSoftwareVersion);		
+		mScheduler.tryToPromptSurvey(isNewSoftwareVersion);	
+		
+		// Try to update reward file from sftp server
+		tryToUpdateRewardFile();
 				
 		// Mark that arbitration taking place
 		DataStorage.setLastTimeArbitrate(mContext, System.currentTimeMillis());			
+	}
+	
+	private static long sLastUpdateRewardTime;
+	
+	public boolean tryToUpdateRewardFile() {
+		long now = System.currentTimeMillis();
+		
+		if (Math.abs(now - sLastUpdateRewardTime) > Globals.HOURS24_MS / 2) {
+			sLastUpdateRewardTime = now;
+			return FileGrabberUtils.downloadServerDataFilesWithResult(mContext, TeensAppManager.getParticipantId(mContext));
+		} 
+		
+		return false;
 	}
 	
 	public static void saveRecordsInLogcat(boolean isClear) {

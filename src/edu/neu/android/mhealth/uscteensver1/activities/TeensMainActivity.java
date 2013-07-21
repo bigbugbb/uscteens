@@ -101,7 +101,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 		for (AppPage page : mPages) {
 			try {
 				page.release();				
-			} catch (NullPointerException e) {
+			} catch (NullPointerException e) { // not good, remove in the future
 				e.printStackTrace();
 			}
 		}		
@@ -289,7 +289,6 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 		super.onStop();
 		Log.d("USCTeensMainActivity", "onStop out");
 	}	
-	
 
 	// use main looper as the default
 	protected final Handler mHandler = new Handler() {	

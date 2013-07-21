@@ -2,6 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -9,9 +10,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensCSSurvey;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensRandomSurvey;
-import edu.neu.android.mhealth.uscteensver1.video.VideoActivity;
+import edu.neu.android.mhealth.uscteensver1.utils.FileGrabberUtils;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import edu.neu.android.wocketslib.dataupload.DataManager;
@@ -35,7 +37,7 @@ public class TeensSetupActivity extends BaseActivity {
 	private Button mBtnRandomEMA;
 	private Button mBtnCSEMA;
 	private Button mBtnRewards;
-	private Button mBtnTutorial;
+	private Button mBtnUpdateConfig;
 	private Button mBtnFinishStudy;
 	private Button mBtnSetupDone;
 
@@ -46,8 +48,7 @@ public class TeensSetupActivity extends BaseActivity {
 	}
 	
 	/**
-	 * Set the update button on/off depending on if the code detects that the software
-	 * is or is not at the latest version on the Android Market. 
+	 * Set the update button on/off depending on whether the task is completed. 
 	 */
 	private class MySendAllFilesToServerTask extends SendAllFilesToServerTask {
 
@@ -60,6 +61,33 @@ public class TeensSetupActivity extends BaseActivity {
 			mBtnFinishStudy.setEnabled(true);
 		}
 	}
+	
+	/**
+	 * Set the update button on/off depending on whether the task is completed.  
+	 */
+	public class UpdateConfigurationTask extends AsyncTask<Void, Void, Boolean> {
+		private final static String TAG = "UpdateConfigurationTask";
+		
+		private Context mContext;
+
+		public UpdateConfigurationTask(Context context) {
+			mContext = context;
+		}
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			return FileGrabberUtils.downloadServerDataFilesWithResult(mContext, 
+					TeensAppManager.getParticipantId(mContext));
+		}
+
+		protected void onPostExecute(Boolean isSuccessful) {
+			String msg = isSuccessful ? "Update complete." : "Fail to update, please try it later.";
+			Toast toast = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+			toast.show();	
+			mBtnUpdateConfig.setEnabled(true);
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +98,7 @@ public class TeensSetupActivity extends BaseActivity {
 		mBtnStartService = (Button) findViewById(R.id.startservice);		
 		mBtnCSEMA        = (Button) findViewById(R.id.csema);		
 		mBtnRandomEMA    = (Button) findViewById(R.id.randomema);
-		mBtnTutorial 	 = (Button) findViewById(R.id.tutorial);
+		mBtnUpdateConfig = (Button) findViewById(R.id.updateconfig);
 		mBtnRewards      = (Button) findViewById(R.id.rewards);
 		mBtnFinishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
 		mBtnSetupDone    = (Button) findViewById(R.id.setupdone);
@@ -156,11 +184,11 @@ public class TeensSetupActivity extends BaseActivity {
 			}
 		});
 		
-		mBtnTutorial.setOnClickListener(new OnClickListener() {
+		mBtnUpdateConfig.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(getApplicationContext(), VideoActivity.class);
-				startActivity(i);
+			public void onClick(View v) {				
+				mBtnUpdateConfig.setEnabled(false);
+				new UpdateConfigurationTask(getApplicationContext()).execute();
 			}
 		});
 		
