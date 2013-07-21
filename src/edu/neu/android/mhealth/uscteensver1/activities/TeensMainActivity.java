@@ -289,7 +289,6 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 		super.onStop();
 		Log.d("USCTeensMainActivity", "onStop out");
 	}	
-	
 
 	// use main looper as the default
 	protected final Handler mHandler = new Handler() {	

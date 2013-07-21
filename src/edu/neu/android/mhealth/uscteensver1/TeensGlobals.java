@@ -55,6 +55,7 @@ public class TeensGlobals {
 		Globals.IS_LOG_EXTERNAL = false;
 		Globals.APP_DIRECTORY = "uscteens";		
 
+		Globals.setArbitrater(new TeensArbitrater(aContext));
 		Globals.initDataDirectories(aContext);
 		
 		DIRECTORY_PATH = Globals.EXTERNAL_DIRECTORY_PATH;

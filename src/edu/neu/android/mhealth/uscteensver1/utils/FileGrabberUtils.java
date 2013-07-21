@@ -23,13 +23,14 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 import com.jcraft.jsch.UserInfo;
 
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.utils.Log;
 
 public class FileGrabberUtils {
 	private static final String TAG = "FileGrabberUtils";
 
-	private static final String SRV_UPLOADS  = "/srv/USCTeens/";
+	private static final String SRV_UPLOADS  = "/home/sftpdownload/USCTeensDownloads/";
 	private static final String FTP_USERNAME = "sftpdownload";
 	private static final String FTP_PASSWORD = "$parRow1ark";
 	private static final String FTP_SERVER   = "wockets.ccs.neu.edu";
@@ -224,22 +225,24 @@ public class FileGrabberUtils {
 			"data/level3meat/Level3-Meat.log.csv",
 			"data/level2weight/Level2-WeightTracking.log.csv", "ds", };
 
-	public static File getInternalCityFile(Context c, String fileName) {
-		return new File(c.getDir(".citym", Context.MODE_PRIVATE) + File.pathSeparator + fileName);
+	public static File getAppInternalFile(Context c, String fileName) {
+		return new File(c.getDir(Globals.APP_DIRECTORY, Context.MODE_PRIVATE) + File.pathSeparator + fileName);
 	}
 
 	public static String getCurrentPhoneServerDirectory(Context c, String s) {
-		String result = SRV_UPLOADS + s + "/" + "Raw";
+		String result = SRV_UPLOADS + s + "/";// + "uscteens";
 		return result;
 	}
 
-	final public static String[] FLAT_FILE_LOCATIONS = new String[] { "HealthyMealTracker.csv",
-			"Level2-WeightTracking.log.csv", "ds", };
+	final public static String[] FLAT_FILE_LOCATIONS = new String[] { "test.txt" /*"Reward.csv"*/ };
 
 	final public static String[] OPTIONAL_FILES = new String[] { "Countdown.log.csv", };
 
 	public static String getCurrentPhoneLocalInternalDirectory(Context c) {
-		return c.getDir(".citym", Context.MODE_PRIVATE).toString();
+		//return c.getDir(Globals.APP_DIRECTORY, Context.MODE_PRIVATE).toString();
+		String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + 
+				Globals.APP_DATA_DIRECTORY + File.separator + "Rewards";
+		return dirPath;
 	}
 
 	public static boolean downloadServerDataFilesWithResult(Context c, String pid) {
@@ -261,7 +264,7 @@ public class FileGrabberUtils {
 		ArrayList<String> result = new ArrayList<String>();
 		for (String f : FLAT_FILE_LOCATIONS) {
 			String s = simpleDownloadSftp(currentPhoneServerDirectory + "/" + f,
-					currentPhoneLocalDirectory + File.pathSeparator + f, c);
+					currentPhoneLocalDirectory + File.separator + f, c);
 
 			if (!s.equals("")) {
 				result.add(s);
@@ -299,7 +302,7 @@ public class FileGrabberUtils {
 			 * FTP_SERVER="cityproject.media.mit.edu";
 			 */
 			session = jsch.getSession(FTP_USERNAME, FTP_SERVER, 22);
-			UserInfo ui = new AppUserInfo();
+			UserInfo ui = new MyUserInfo();
 			session.setUserInfo(ui);
 			session.setConfig("StrictHostKeyChecking", "no");
 			session.setConfig("UserKnownHostsFile", "/dev/null");
@@ -345,7 +348,7 @@ public class FileGrabberUtils {
 		return result;
 	}
 
-	private static class AppUserInfo implements UserInfo {
+	private static class MyUserInfo implements UserInfo {
 		public String getPassphrase() {
 			return null;
 		}

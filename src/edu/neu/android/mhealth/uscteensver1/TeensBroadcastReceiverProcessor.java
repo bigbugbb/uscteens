@@ -9,7 +9,7 @@ import edu.neu.android.wocketslib.broadcastreceivers.BroadcastReceiverProcessor;
 import edu.neu.android.wocketslib.utils.Log;
 
 public class TeensBroadcastReceiverProcessor extends BroadcastReceiverProcessor {
-	private static final String TAG = "USCTeensBroadcastReceiverProcessor";
+	private static final String TAG = "TeensBroadcastReceiverProcessor";
 
 	private String getDateString() {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()); 
