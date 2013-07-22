@@ -53,8 +53,7 @@ public class FileGrabberUtils {
 				String aStr = new String(buf, 0, size);
 				try {
 					result = Long.parseLong(aStr);
-				}
-				catch (NumberFormatException e) {
+				} catch (NumberFormatException e) {
 					// If we have a number format exception, it probably means
 					// the file is corrupt.
 					// We'll return 0 to redownload the file and create a new
@@ -66,8 +65,7 @@ public class FileGrabberUtils {
 				}
 			}
 			f.close();
-		}
-		catch (IOException e1) {
+		} catch (IOException e1) {
 			// do something if an IOException occurs, which can happen
 			// freqeuntly because file not existing
 			// Log.e(TAG, "Error reading file: " + aFilePath +
@@ -89,8 +87,7 @@ public class FileGrabberUtils {
 			f.write(String.valueOf(aUnixTime));
 			f.flush();
 			f.close();
-		}
-		catch (IOException e1) {
+		} catch (IOException e1) {
 			// do something if an IOException occurs.
 			Log.e(TAG, "Error writing file: " + aFilePath + ".timestamp\n" + e1.toString());
 		}
@@ -108,8 +105,7 @@ public class FileGrabberUtils {
 			f.write("Update");
 			f.flush();
 			f.close();
-		}
-		catch (IOException e1) {
+		} catch (IOException e1) {
 			// do something if an IOException occurs.
 			Log.e(TAG, "Error writing file: " + aFilePath + ".updated\n" + e1.toString());
 		}

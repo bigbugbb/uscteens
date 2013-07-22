@@ -37,7 +37,7 @@ public class TeensSetupActivity extends BaseActivity {
 	private Button mBtnRandomEMA;
 	private Button mBtnCSEMA;
 	private Button mBtnRewards;
-	private Button mBtnUpdateConfig;
+	private Button mBtnUpdateInfo;
 	private Button mBtnFinishStudy;
 	private Button mBtnSetupDone;
 
@@ -85,7 +85,7 @@ public class TeensSetupActivity extends BaseActivity {
 			Toast toast = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
 			toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 			toast.show();	
-			mBtnUpdateConfig.setEnabled(true);
+			mBtnUpdateInfo.setEnabled(true);
 		}
 	}
 
@@ -98,7 +98,7 @@ public class TeensSetupActivity extends BaseActivity {
 		mBtnStartService = (Button) findViewById(R.id.startservice);		
 		mBtnCSEMA        = (Button) findViewById(R.id.csema);		
 		mBtnRandomEMA    = (Button) findViewById(R.id.randomema);
-		mBtnUpdateConfig = (Button) findViewById(R.id.updateconfig);
+		mBtnUpdateInfo   = (Button) findViewById(R.id.updateinfo);
 		mBtnRewards      = (Button) findViewById(R.id.rewards);
 		mBtnFinishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
 		mBtnSetupDone    = (Button) findViewById(R.id.setupdone);
@@ -184,10 +184,12 @@ public class TeensSetupActivity extends BaseActivity {
 			}
 		});
 		
-		mBtnUpdateConfig.setOnClickListener(new OnClickListener() {
+		mBtnUpdateInfo.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {				
-				mBtnUpdateConfig.setEnabled(false);
+			public void onClick(View v) {
+				Log.o(TAG, Log.USER_ACTION, "Get udpate info");
+				displayToastMessage("Request to get update info, receiving all data from the server now.");
+				mBtnUpdateInfo.setEnabled(false);
 				new UpdateConfigurationTask(getApplicationContext()).execute();
 			}
 		});
