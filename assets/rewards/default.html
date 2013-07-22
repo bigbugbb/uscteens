@@ -31,6 +31,7 @@
 	
 	window.onresize = window.onload = function() {
 		var w, h;
+        
 		if (!!(window.attachEvent && !window.opera)) {
 			h = document.documentElement.clientHeight;
 			w = document.documentElement.clientWidth;
@@ -40,20 +41,24 @@
 		}		
 		
 		var img = new Image();
-		img.src = "win_background.png";		
+		img.src = "background.png";		
 		var aspect_ratio = img.width / img.height;
-				
+			
+        document.getElementById("1stLine").innerHTML =
+            "You have completed Day " + JSInterface.getCountOfDayFromStartDate();
 		//document.body.background.width  = (h - 5) * aspect_radio;
-		//document.body.background.height = (h - 5);													
+		//document.body.background.height = (h - 5);
 	}
+    
 </script>
 
 </head>
 
 <body>
 	<div id="div1"><img src="background.png" /></div>
-	<h2>Congratulations. You have completed a day of labeling within the time limit. Keep this up and you'll earn some money to use on Amazon.</h2>
-	<h2>Happy labeling!</h2>
+	<h2 id="1stLine">You have completed Day ?</h2>
+	<h2>of the Teen Activity Game in time</h2>
+	<h2>to receive a reward.</h2>
 </body>
 
 </html>
