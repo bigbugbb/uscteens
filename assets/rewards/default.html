@@ -4,61 +4,54 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Teen Activity Game Reward</title>
-<link href="reward.css" rel="stylesheet" type="text/css" media="screen"/>
-
-<script>
-	function getStyle(sname) { 
-		for (var i = 0; i < document.styleSheets.length; ++i) { 
-			var rules; 
-			if (document.styleSheets[i].cssRules) { 
-				rules = document.styleSheets[i].cssRules; 
-			} else { 
-				rules = document.styleSheets[i].rules; 
-			} 
-			for (var j = 0; j < rules.length; ++j) { 
-				if (rules[j].selectorText == sname) { 				
-					return rules[j].style; 
-				}
-			}
-		}
-	}
-	
-	function getClientSize() {		
-		var h = document.documentElement.clientHeight;
-		var w = document.documentElement.clientWidth;
-		document.write('w='+w+' h='+h);
-	}
-	
-	window.onresize = window.onload = function() {
-		var w, h;
-        
-		if (!!(window.attachEvent && !window.opera)) {
-			h = document.documentElement.clientHeight;
-			w = document.documentElement.clientWidth;
-		} else {
-			h =	window.innerHeight;
-			w = window.innerWidth;
-		}		
-		
-		var img = new Image();
-		img.src = "background.png";		
-		var aspect_ratio = img.width / img.height;
-			
-        document.getElementById("1stLine").innerHTML =
-            "You have completed Day " + JSInterface.getCountOfDayFromStartDate();
-		//document.body.background.width  = (h - 5) * aspect_radio;
-		//document.body.background.height = (h - 5);
-	}
+<style>
     
+    html, body {
+        margin: 0; padding: 0;
+        height: 100%;
+    }
+    
+    body {
+        background: url("background.png");
+        background-size: 80% 100%;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+    }
+    
+    #msg {
+        color: red;
+        text-align: center;
+        font-size: 18pt;
+        font-family: "arial";
+    }
+    
+    #floater {
+        float: left;
+        height: 50%; margin-bottom:-12%;
+    }
+    
+    #centered {
+        clear: both;
+        text-align: center;
+    }
+</style>
+
+<script>	
+	window.onresize = window.onload = function() {	
+        document.getElementById("msg").innerHTML =
+            "You have completed Day " + JSInterface.getCountOfDayFromStartDate() + "<br><br>" +
+            "of the Teen Activity Game in time<br><br>" +
+            "to receive a reward.";
+	}
 </script>
 
 </head>
 
 <body>
-	<div id="div1"><img src="background.png" /></div>
-	<h2 id="1stLine">You have completed Day ?</h2>
-	<h2>of the Teen Activity Game in time</h2>
-	<h2>to receive a reward.</h2>
+	<!--<div id="div1"><img src="background.png" /></div>-->
+    <div id="floater"></div>
+    <div id="centered">
+        <h2 id="msg">???</h2>
+    </div>
 </body>
-
 </html>
