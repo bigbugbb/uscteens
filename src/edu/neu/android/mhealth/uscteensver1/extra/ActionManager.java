@@ -1,19 +1,17 @@
 package edu.neu.android.mhealth.uscteensver1.extra;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
+import au.com.bytecode.opencsv.CSVReader;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
@@ -26,6 +24,7 @@ public class ActionManager {
 	public final static int LOADING_SUCCEEDED  = 0;
 	public final static int ERR_CANCELLED      = -1;
 	public final static int ERR_NO_ACTION_DATA = -2;
+	public final static int ERR_IO_EXCEPTION   = -3;
 	
 	public final static int MOST_RECENT_ACTIONS_COUNT = 3;
 	public final static String MOST_RECENT_ACTION_ID = "MOST_RECENT_ACTION_ID";
@@ -143,101 +142,57 @@ public class ActionManager {
 			}
 		}
 			
-		// load all activities
-		Action action = Action.createUnlabelledAction();
-		sActionWrap.put(TeensGlobals.UNLABELLED_GUID, action);
-		try {
-			File aMappingFile = getMappingFile(dirPath);			
-			FileInputStream fis = null;
-			BufferedReader br = null;
-			try {
-				fis = new FileInputStream(aMappingFile);
-				InputStreamReader in = new InputStreamReader(fis);
-				br = new BufferedReader(in);
-				try {
-					// skip the first line
-					String result = br.readLine();
-					while ((result = br.readLine()) != null) {						
-						// parse the line
-						String[] split = result.split("[,]");
-						action = new Action(split[0].trim(), split[1].trim(), split[2].trim(),
-									dirPath + split[2].trim());
-						sActionWrap.put(split[0].trim(), action); // key = actID, value = Action
-					}										
-				} catch (IOException e) {
-					Log.e(TAG, "readStringInternal: problem reading: " + aMappingFile.getAbsolutePath());
-					e.printStackTrace();
-				}
-			} catch (FileNotFoundException e) {
-				Log.e(TAG, "readStringInternal: cannot find: " + aMappingFile.getAbsolutePath());
-				e.printStackTrace();
-			} finally {
-				if (br != null)
-					try {
-						br.close();
-					} catch (IOException e) {
-						Log.e(TAG, "readStringInternal: cannot close: " + aMappingFile.getAbsolutePath());
-						e.printStackTrace();
-					}
-				if (fis != null)
-					try {
-						fis.close();
-					} catch (IOException e) {
-						Log.e(TAG, "readStringInternal: cannot close: " + aMappingFile.getAbsolutePath());
-						e.printStackTrace();
-					}
+		/**
+		 *  load all activities
+		 */
+		sActionWrap.put(TeensGlobals.UNLABELLED_GUID, Action.createUnlabelledAction());
+		
+		File aMappingFile = getMappingFile(dirPath);			
+		CSVReader csvReader = null;
+		try {								
+			csvReader = new CSVReader(new FileReader(aMappingFile));
+			String[] row = csvReader.readNext();
+			while ((row = csvReader.readNext()) != null) {
+				Action action = new Action(row[0].trim(), row[1].trim(), row[2].trim(), dirPath + row[2].trim());
+				sActionWrap.put(row[0].trim(), action); // key = actID, value = Action
 			}
-		} catch (Exception e) {
-			e.printStackTrace();			
-		}		
+		} catch (Exception e) {				
+			e.printStackTrace();
+		} finally {
+			try {
+				if (csvReader != null) {
+					csvReader.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
 		
 		// load the activated activities		
-		try {
-			File aActivatedFile = getUsingFile(dirPath);		
-			FileInputStream fis = null;
-			BufferedReader br = null;
-			try {
-				fis = new FileInputStream(aActivatedFile);
-				InputStreamReader in = new InputStreamReader(fis);
-				br = new BufferedReader(in);
-				try {
-					// skip the first line
-					String result = br.readLine();
-					while ((result = br.readLine()) != null) {																
-						// parse the line
-						String key = result.split("[,]")[0].trim();	
-						Action value = getActions().get(key);						
-						if (value != null) {
-							value.loadIcon();
-							sActivatedActions.add(value);
-						}
-					}										
-				} catch (IOException e) {
-					Log.e(TAG, "readStringInternal: problem reading: " + aActivatedFile.getAbsolutePath());
-					e.printStackTrace();
+		File aActivatedFile = getActivatedFile(dirPath);	
+		try {								
+			csvReader = new CSVReader(new FileReader(aActivatedFile));
+			String[] row = csvReader.readNext();
+			while ((row = csvReader.readNext()) != null) {
+				Action action = getActions().get(row[0].trim());						
+				if (action != null) {
+					action.loadIcon();
+					sActivatedActions.add(action);
 				}
-			} catch (FileNotFoundException e) {
-				Log.e(TAG, "readStringInternal: cannot find: " + aActivatedFile.getAbsolutePath());
-				e.printStackTrace();
-			} finally {
-				if (br != null)
-					try {
-						br.close();
-					} catch (IOException e) {
-						Log.e(TAG, "readStringInternal: cannot close: " + aActivatedFile.getAbsolutePath());
-						e.printStackTrace();
-					}
-				if (fis != null)
-					try {
-						fis.close();
-					} catch (IOException e) {
-						Log.e(TAG, "readStringInternal: cannot close: " + aActivatedFile.getAbsolutePath());
-						e.printStackTrace();
-					}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();			
-		}
+		} catch (Exception e) {				
+			e.printStackTrace();
+		} finally {
+			try {
+				if (csvReader != null) {
+					csvReader.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}			
 		
 		return LOADING_SUCCEEDED;
 	}
@@ -264,7 +219,7 @@ public class ActionManager {
 		return new File(filePath);
 	}
 	
-	private static File getUsingFile(String dirPath) {
+	private static File getActivatedFile(String dirPath) {
 		String[] filePaths = FileHelper.getFilePathsDir(dirPath);
 		String filePath = filePaths[0]; // set a default value
 		

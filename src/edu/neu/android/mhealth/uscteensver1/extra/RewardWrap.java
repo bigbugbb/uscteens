@@ -23,6 +23,6 @@ public class RewardWrap extends HashMap<String, Reward> {
 	
 	@Override
 	public Reward put(String key, Reward value) {		
-		return super.put(key.trim(), value);
+		return super.put(key, value);
 	}
 }
