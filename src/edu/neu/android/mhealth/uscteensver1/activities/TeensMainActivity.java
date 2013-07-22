@@ -242,18 +242,18 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 	
 	@Override
 	public void onPause() {
-		Log.d("USCTeensMainActivity", "onPause in");
+		Log.d("TeensMainActivity", "onPause in");
 		DataSource.cancelLoading();
 		
 		mCurPage.pause();
 		mGraphView.onPause();
 		super.onPause();	
-		Log.d("USCTeensMainActivity", "onPause out");
+		Log.d("TeensMainActivity", "onPause out");
 	}
 
 	@Override
 	public void onResume() {
-		Log.d("USCTeensMainActivity", "onResume in");
+		Log.d("TeensMainActivity", "onResume in");
 		super.onResume();
 				
 		mDummyView.setVisibility(
@@ -262,12 +262,12 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 				
 		mGraphView.onResume();
 		mCurPage.resume();		
-		Log.d("USCTeensMainActivity", "onResume out");
+		Log.d("TeensMainActivity", "onResume out");
 	}
 
 	@Override
 	public void onStart() {
-		Log.d("USCTeensMainActivity", "onStart in");		
+		Log.d("TeensMainActivity", "onStart in");		
 				
 		// the initial page is not graph page, so it's ok here
 		if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {	
@@ -277,17 +277,17 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 		mCurPage.start();
 		mGraphView.onStart(mCurPage);
 		super.onStart();
-		Log.d("USCTeensMainActivity", "onStart out");
+		Log.d("TeensMainActivity", "onStart out");
 	}
 
 	@Override
 	public void onStop() {	
-		Log.d("USCTeensMainActivity", "onStop in");		
+		Log.d("TeensMainActivity", "onStop in");		
 		mGraphView.onStop();
 		mCurPage.stop();				
 		
 		super.onStop();
-		Log.d("USCTeensMainActivity", "onStop out");
+		Log.d("TeensMainActivity", "onStop out");
 	}	
 
 	// use main looper as the default
