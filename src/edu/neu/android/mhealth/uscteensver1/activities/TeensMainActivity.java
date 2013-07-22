@@ -131,7 +131,9 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 		TeensGlobals.sUpdateConfig = !newVersion.equals(oldVersion);
 		if (TeensGlobals.sUpdateConfig) {
 			String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.ICON_FOLDER;
-			FileHelper.deleteDir(dirPath);		
+			FileHelper.deleteDir(dirPath);	
+			dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.REWARD_FOLDER;
+			FileHelper.deleteDir(dirPath);
 		}
 	}
 
