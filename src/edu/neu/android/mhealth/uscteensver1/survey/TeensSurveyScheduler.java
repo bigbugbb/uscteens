@@ -66,8 +66,15 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 			SurveyPromptEvent spe = new SurveyPromptEvent(System.currentTimeMillis(), 0);
 			spe.setPromptReason(reason);			
 			spe.setPromptType("CS");
-			spe.AddSurveySpecifiedRecord(TeensCSSurvey.START_TIME, extInfo.getStartTime());
-			spe.AddSurveySpecifiedRecord(TeensCSSurvey.STOP_TIME, extInfo.getStopTime());
+			
+			boolean isReprompted = isLastScheduledSurveyReprompted();
+			long lastPromptTime = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY) - (isReprompted ? Globals.REPROMPT_DELAY_MS : 0);
+			long internalLength = (extInfo.getStopTimeInMS() - extInfo.getStartTimeInMS()) / 60000;
+			long adjustedLength = Math.min(internalLength, (extInfo.getStopTimeInMS() - lastPromptTime) / 60000);
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_START_TIME, extInfo.getStartTime());
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_STOP_TIME, extInfo.getStopTime());
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_LENGTH, "" + internalLength);
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.ADJUSTED_INTERVAL_LENGTH, "" + adjustedLength);
 			return spe;
 		}
 		
@@ -159,8 +166,12 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		for (int i = 0; i < promptsPerDay; i++) {
 			promptSchedule.append("Prompt: " + DateHelper.getDate(promptTimes[i]) + NEWLINE);
 			// Create the corresponding prompt event for the random prompts
-			SurveyPromptEvent spe = new SurveyPromptEvent(promptTimes[i], 0);					
+			SurveyPromptEvent spe = new SurveyPromptEvent(promptTimes[i], 0);				
 			spe.setPromptType("Random");
+			long internalLength = Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS / 60000;
+			long adjustedLength = Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS / 60000;
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_LENGTH, "" + internalLength);
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.ADJUSTED_INTERVAL_LENGTH, "" + adjustedLength);
 			DataStorage.SetValue(mContext, KEY_ALL_PROMPT_EVENT + promptTimes[i], new Gson().toJson(spe));
 		}
 		ServerLogger.sendNote(mContext, promptSchedule.toString(), Globals.NO_PLOT);

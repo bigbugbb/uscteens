@@ -17,7 +17,6 @@ import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.sensormonitor.Arbitrater;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.Log;
-//import org.omg.PortableInterceptor.INACTIVE;
 
 public class TeensArbitrater extends Arbitrater {
 	private static final String TAG = "TeensArbitrater";
