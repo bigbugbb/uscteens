@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.RectF;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.ui.ClockButton;
@@ -73,8 +73,8 @@ public class ChunkManager {
 				timeOffset = rawChunk.getStartTime();
 			}
 			// load each chunk
-			int start = (rawChunk.getStartTime() - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;
-			int stop  = (rawChunk.getStopTime()  - timeOffset) * USCTeensGlobals.PIXEL_PER_DATA;			
+			int start = (rawChunk.getStartTime() - timeOffset) * TeensGlobals.PIXEL_PER_DATA;
+			int stop  = (rawChunk.getStopTime()  - timeOffset) * TeensGlobals.PIXEL_PER_DATA;			
 			String createTime = rawChunk.getCreateTime();
 			String modifyTime = rawChunk.getModifyTime();
 			chunk.load(start, stop, timeOffset, createTime, modifyTime);						
@@ -93,13 +93,13 @@ public class ChunkManager {
 	}
 	
 	protected static void saveChunks() {
-		String selDate = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+		String selDate = DataStorage.GetValueString(sContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
 		String startDate = DataStorage.getStartDate(sContext, "");
 		// start date is less than or equal to the current date			
 		try {
 			int diff = WeekdayHelper.daysBetween(startDate, selDate);
-			DataStorage.SetValue(sContext, USCTeensGlobals.LAST_SELECTED_CHUNK + diff, sSelected);
-			DataStorage.SetValue(sContext, USCTeensGlobals.LAST_DISPLAY_OFFSET_X + diff, Math.abs((long) sDispOffsetX));
+			DataStorage.SetValue(sContext, TeensGlobals.LAST_SELECTED_CHUNK + diff, sSelected);
+			DataStorage.SetValue(sContext, TeensGlobals.LAST_DISPLAY_OFFSET_X + diff, Math.abs((long) sDispOffsetX));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

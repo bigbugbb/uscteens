@@ -12,7 +12,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
@@ -180,7 +180,7 @@ public class ListView extends AppObject {
 	public ListView(Resources res) {
 		super(res);	
 		
-		mTypeface = Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf");
+		mTypeface = Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf");
 		mOffsetSpeedY = AppScale.doScaleH(16f);
 		//mOffestAccSpeedY = sAppScale.doScaleH(3f);
 	}

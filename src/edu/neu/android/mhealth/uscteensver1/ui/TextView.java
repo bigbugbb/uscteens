@@ -7,7 +7,7 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
@@ -39,7 +39,7 @@ public class TextView extends AppObject {
 		mPaintTxt.setColor(Color.BLACK);
 		mPaintTxt.setStyle(Style.FILL);
 		mPaintTxt.setTextSize(AppScale.doScaleT(45));
-		mPaintTxt.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
+		mPaintTxt.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf"));
 		mPaintTxt.setFakeBoldText(true);
 	}
 

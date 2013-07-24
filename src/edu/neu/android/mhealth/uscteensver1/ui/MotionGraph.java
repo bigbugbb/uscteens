@@ -14,7 +14,7 @@ import android.graphics.Typeface;
 import android.util.Pair;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
@@ -100,13 +100,13 @@ public class MotionGraph extends AppObject {
 		mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintTxt.setColor(Color.BLACK);
 		mPaintTxt.setStyle(Style.STROKE);
-		mPaintTxt.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial_bold.ttf"));
+		mPaintTxt.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial_bold.ttf"));
 		mPaintTxt.setTextSize(AppScale.doScaleT(36));
 		
 		mPaintDate = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintDate.setColor(Color.BLACK);
 		mPaintDate.setStyle(Style.STROKE);
-		mPaintDate.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
+		mPaintDate.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf"));
 		mPaintDate.setTextSize(AppScale.doScaleT(38));
 		mPaintDate.setFakeBoldText(false);
 		
@@ -212,13 +212,13 @@ public class MotionGraph extends AppObject {
 		 *  draw the motion data
 		 */
 		int count = 0;			
-		for (int i = mStart; i < mEnd - USCTeensGlobals.PIXEL_PER_DATA; ++i) {
-			int sec = i / USCTeensGlobals.PIXEL_PER_DATA;
+		for (int i = mStart; i < mEnd - TeensGlobals.PIXEL_PER_DATA; ++i) {
+			int sec = i / TeensGlobals.PIXEL_PER_DATA;
 			if (mScaledData[sec] >= 0 && mScaledData[sec + 1] >= 0) {	
 				// get all points' positions for drawing the data with lines
 				mPTS[(count << 2) + 0] = i - mStart;
 				mPTS[(count << 2) + 1] = mHeight - mScaledData[sec];
-				mPTS[(count << 2) + 2] = i - mStart + USCTeensGlobals.PIXEL_PER_DATA;
+				mPTS[(count << 2) + 2] = i - mStart + TeensGlobals.PIXEL_PER_DATA;
 				mPTS[(count << 2) + 3] = mHeight - mScaledData[sec + 1];															
 				++count;
 			} else if (mScaledData[sec] < 0) {
@@ -226,14 +226,14 @@ public class MotionGraph extends AppObject {
 				// find the period that should be drawn
 				for (Pair<Integer, Integer> pair : DataSource.getNoDataTimePeriods()) {
 					if ((Integer) pair.first <= sec && sec < (Integer) pair.second) {						
-						start = (Integer) pair.first  * USCTeensGlobals.PIXEL_PER_DATA;
-						stop  = (Integer) pair.second * USCTeensGlobals.PIXEL_PER_DATA;		
+						start = (Integer) pair.first  * TeensGlobals.PIXEL_PER_DATA;
+						stop  = (Integer) pair.second * TeensGlobals.PIXEL_PER_DATA;		
 						delta = stop - start;
 					}
 				}
 				// draw slashes with 45 degree for periods without data
 				float slashX1 = start - mStart;
-				float slashX2 = stop - mStart - USCTeensGlobals.PIXEL_PER_DATA;
+				float slashX2 = stop - mStart - TeensGlobals.PIXEL_PER_DATA;
 				int step = (int) AppScale.doScaleH(12.0f);
 				// draw slashes from top to bottom
 				for (int m = (int) mHeight; m > 0; m -= step) {
@@ -275,8 +275,8 @@ public class MotionGraph extends AppObject {
 	}
 
 	private String toStringTimeFromPosition(int position) {
-		int hour   = position / 3600 / USCTeensGlobals.PIXEL_PER_DATA;
-		int minute = (position - hour * 3600 * USCTeensGlobals.PIXEL_PER_DATA) / 60 / USCTeensGlobals.PIXEL_PER_DATA;
+		int hour   = position / 3600 / TeensGlobals.PIXEL_PER_DATA;
+		int minute = (position - hour * 3600 * TeensGlobals.PIXEL_PER_DATA) / 60 / TeensGlobals.PIXEL_PER_DATA;
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(hour > 12 ? hour - 12 : hour == 0 ? 12 : hour);

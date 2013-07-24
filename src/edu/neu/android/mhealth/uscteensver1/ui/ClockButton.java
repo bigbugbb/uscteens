@@ -14,7 +14,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
@@ -41,7 +41,7 @@ public class ClockButton extends ChunkButton {
 		sTimePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		sTimePaint.setColor(Color.BLACK);
 		sTimePaint.setStyle(Style.STROKE);
-		sTimePaint.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial_bold.ttf"));
+		sTimePaint.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial_bold.ttf"));
 		sTimePaint.setTextSize(AppScale.doScaleT(36));
 	}
 	

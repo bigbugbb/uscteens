@@ -1,14 +1,11 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
-import java.io.BufferedReader;
-import java.io.EOFException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,14 +25,15 @@ import org.dom4j.io.XMLWriter;
 
 import android.content.Context;
 import android.util.Pair;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import au.com.bytecode.opencsv.CSVReader;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
-import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.WOCKETSException;
 import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
@@ -48,8 +46,6 @@ public class DataSource {
 	public final static int ERR_NO_CHUNK_DATA  		= -3;	
 	public final static int ERR_WAITING_SENSOR_DATA = -4;		
 	
-	public final static String INTERNAL_ACCEL_DATA_CSVFILEHEADER = 
-			"DateTime, Milliseconds, InternalAccelAverage, InternalAccelSamples\n";
 	public final static String INTERNAL_LABEL_DATA_CSVFILEHEADER = 
 			"DateTime, Text\n";
 	
@@ -75,7 +71,7 @@ public class DataSource {
 	
 	public static long getLastLoadingTime() {
 		long lastLoadingTime = 
-				DataStorage.GetValueLong(sContext, USCTeensGlobals.LAST_DATA_LOADING_TIME, 0);	
+				DataStorage.GetValueLong(sContext, TeensGlobals.LAST_DATA_LOADING_TIME, 0);	
 		return lastLoadingTime;
 	}
 	
@@ -88,10 +84,10 @@ public class DataSource {
 		long currentTime = System.currentTimeMillis();
 		long lastLoadingTime = DataSource.getLastLoadingTime();		
 		
-		if (currentTime - lastLoadingTime > USCTeensGlobals.UPDATING_TIME_THRESHOLD) {			
+		if (currentTime - lastLoadingTime > TeensGlobals.UPDATING_TIME_THRESHOLD) {			
 			try {				
 				String select = DataStorage.GetValueString(
-					sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
+					sContext, TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
 				);
 				Date curDate  = new Date(currentTime);
 				Date loadDate = new Date(lastLoadingTime);		
@@ -119,7 +115,7 @@ public class DataSource {
 	 * @return
 	 */
 	public static int loadRawData(String date) {
-		DataStorage.SetValue(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, date);
+		DataStorage.SetValue(sContext, TeensGlobals.CURRENT_SELECTED_DATE, date);
 		
 		sCancelled = false;
 		
@@ -183,7 +179,7 @@ public class DataSource {
 		// the data should be reloaded after the user has switched to another program
 		// and go back here after a while.
 		DataStorage.SetValue(sContext, 
-				USCTeensGlobals.LAST_DATA_LOADING_TIME, System.currentTimeMillis());
+				TeensGlobals.LAST_DATA_LOADING_TIME, System.currentTimeMillis());
 			
 		return result;
 	}
@@ -201,7 +197,7 @@ public class DataSource {
 //	}
 	
 	public static String getCurrentSelectedDate() {
-		return DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+		return DataStorage.GetValueString(sContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
 	}
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -210,7 +206,7 @@ public class DataSource {
 	}
 	
 	public static int getDrawableDataLengthInPixel() {
-		return sAccelDataWrap.getDrawableDataLength() * USCTeensGlobals.PIXEL_PER_DATA;
+		return sAccelDataWrap.getDrawableDataLength() * TeensGlobals.PIXEL_PER_DATA;
 	}
 	
 	public static int getMaxDrawableDataValue() {
@@ -231,77 +227,26 @@ public class DataSource {
 	}
 	
 	public static int loadHourlyRawAccelData(String filePath, ArrayList<AccelData> hourlyAccelData, boolean cancelable) {
-		// get extension name indicating which type of file we should read from
-		String extName = filePath.substring(filePath.lastIndexOf("."), filePath.length());
 		
-		// load the daily data from .bin file (it's faster)	
-		if (extName.equals(".bin")) {
-			File binFile = new File(filePath);	
-			ObjectInputStream ois = null;
-			try { 
-				ois = new ObjectInputStream(new FileInputStream(binFile));
-				AccelData data = (AccelData) ois.readObject();
-				while (data != null) {		
-					if (sCancelled && cancelable) {
-						return ERR_CANCELLED;
-					}													
-					hourlyAccelData.add(data); 								
-					data = (AccelData) ois.readObject();
-				}
-			} catch (EOFException e) {
-				;//e.printStackTrace();
-			} catch (Exception e) { 
-				e.printStackTrace();
-			} finally {
-				try {
-					ois.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		CSVReader csvReader = null;
+		try {								
+			csvReader = new CSVReader(new FileReader(filePath));
+			String[] row = csvReader.readNext();
+			while ((row = csvReader.readNext()) != null) {
+				String[] split = row[0].split("[ :.]");
+				AccelData data = new AccelData(split[1], split[2], split[3], split[4], row[1], row[2]);
+				hourlyAccelData.add(data);
 			}
-		} else if (extName.equals(".csv")) { // load from .csv file if .bin does not exist		
-			FileInputStream fis = null;
-			BufferedReader br = null;
-			File csvFile = new File(filePath);
+		} catch (IOException e) {				
+			e.printStackTrace();
+		} finally {
 			try {
-				fis = new FileInputStream(csvFile);
-				InputStreamReader in = new InputStreamReader(fis);
-				br = new BufferedReader(in);			
-				try {
-					// skip the first line
-					String result = br.readLine();
-					while ((result = br.readLine()) != null) {
-						if (sCancelled && cancelable) {
-							return ERR_CANCELLED;
-						}
-						// parse the line
-						String[] split = result.split("[ :.,]");
-						AccelData data = new AccelData(split[1], split[2], split[3], split[5], split[7], split[9]);
-						hourlyAccelData.add(data);
-					}
-				} catch (IOException e) {
-					Log.e(TAG, "readStringInternal: problem reading: " + csvFile.getAbsolutePath());
-					e.printStackTrace();
+				if (csvReader != null) {
+					csvReader.close();
 				}
-			} catch (FileNotFoundException e) {
-				Log.e(TAG, "readStringInternal: cannot find: " + csvFile.getAbsolutePath());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} finally {
-				if (br != null)
-					try {
-						br.close();
-					} catch (IOException e) {
-						Log.e(TAG, "readStringInternal: cannot close: " + csvFile.getAbsolutePath());
-						e.printStackTrace();
-					}
-				if (fis != null)
-					try {
-						fis.close();
-					} catch (IOException e) {
-						Log.e(TAG, "readStringInternal: cannot close: " + csvFile.getAbsolutePath());
-						e.printStackTrace();
-					}
 			}
 		}
 		
@@ -310,21 +255,19 @@ public class DataSource {
 	
 	private static int loadRawAccelData(String date) {
 		String[] hourDirs = FileHelper.getFilePathsDir(
-			USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.SENSOR_FOLDER 
-		);		
+			TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + TeensGlobals.SENSOR_FOLDER + date
+		);
 		
 		try {
-			// load the daily data from .bin files hour by hour		
+			// load the daily data from csv files hour by hour		
 			for (int i = 0; i < hourDirs.length; ++i) {
-				// each hour corresponds to one .bin file
-				String[] filePaths = FileHelper.getFilePathsDir(hourDirs[i]);
-				String filePath = filePaths[0]; // set a default value
-				for (String path : filePaths) {
-					String extName = path.substring(path.lastIndexOf("."), path.length());
-					if (extName.equals(".bin")) {
-						filePath = path;
+				String[] fileNames = new File(hourDirs[i]).list(new FilenameFilter() {
+					@Override
+					public boolean accept(File dir, String filename) {
+						return filename.endsWith(".csv");
 					}
-				}
+				});
+				String filePath = hourDirs[i] + File.separator + fileNames[0];
 				// load the hourly data from .bin file
 				ArrayList<AccelData> hourlyAccelData = new ArrayList<AccelData>();						
 				int result = loadHourlyRawAccelData(filePath, hourlyAccelData, true);	
@@ -343,7 +286,7 @@ public class DataSource {
 		sAccelDataWrap.updateDrawableData();
 		
 		if (sAccelDataWrap.size() == 0) {
-			String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+			String today = DateHelper.serverDateFormat.format(new Date());
 			if (date.compareTo(today) == 0) {
 				return ERR_WAITING_SENSOR_DATA;
 			} else {
@@ -360,7 +303,7 @@ public class DataSource {
 	 * @return
 	 */
 	private static boolean loadRawChunkData(String date) {
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.ANNOTATION_FOLDER;
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + TeensGlobals.ANNOTATION_FOLDER;
 		
 		String[] chunkFilePaths = FileHelper.getFilePathsDir(path);
 		if (chunkFilePaths == null || chunkFilePaths.length == 0) {			
@@ -423,60 +366,43 @@ public class DataSource {
 	 * @param rawLabelWrap
 	 * @return true if the raw label wrap has label data, otherwise false
 	 */
-	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap) {		
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.LABELS_FOLDER;
+	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap) {
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + TeensGlobals.LABELS_FOLDER;
 		
 		// first clear the data container		
 		rawLabelWrap.clear();
 		rawLabelWrap.setDate(date);
-		
-		if (!FileHelper.isFileExists(path)) {
+					
+		// get the csv file path
+		String[] fileNames = new File(path).list(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String filename) {
+				return filename.endsWith(".csv");
+			}
+		});
+		if (fileNames == null || fileNames.length == 0) {
 			return false;
 		}
-		String[] labelFilePaths = FileHelper.getFilePathsDir(path);
-		if (labelFilePaths == null || labelFilePaths.length == 0) {			
-			return false;
-		}					
+		String filePath = path + fileNames[0];
 		
-		// load the daily data from the csv file
-		String result = null;
-		File labelFile = new File(labelFilePaths[0]);
-		FileInputStream fis = null;
-		BufferedReader br = null;
-		try {
-			fis = new FileInputStream(labelFile);
-			InputStreamReader in = new InputStreamReader(fis);
-			br = new BufferedReader(in);			
-			try {
-				// skip the first line
-				result = br.readLine();
-				while ((result = br.readLine()) != null) {
-					// parse the line
-					String[] split = result.split("[,]");
-					rawLabelWrap.add(split[0].trim(), split[1].trim());
-				}				
-			} catch (IOException e) {
-				Log.e(TAG, "readStringInternal: problem reading: " + labelFile.getAbsolutePath());
-				e.printStackTrace();
+		CSVReader csvReader = null;
+		try {								
+			csvReader = new CSVReader(new FileReader(filePath));
+			String[] row = csvReader.readNext();
+			while ((row = csvReader.readNext()) != null) {				
+				rawLabelWrap.add(row[0].trim(), row[1].trim());
 			}
-		} catch (FileNotFoundException e) {
-			Log.e(TAG, "readStringInternal: cannot find: " + labelFile.getAbsolutePath());
+		} catch (IOException e) {				
 			e.printStackTrace();
 		} finally {
-			if (br != null)
-				try {
-					br.close();
-				} catch (IOException e) {
-					Log.e(TAG, "readStringInternal: cannot close: " + labelFile.getAbsolutePath());
-					e.printStackTrace();
+			try {
+				if (csvReader != null) {
+					csvReader.close();
 				}
-			if (fis != null)
-				try {
-					fis.close();
-				} catch (IOException e) {
-					Log.e(TAG, "readStringInternal: cannot close: " + labelFile.getAbsolutePath());
-					e.printStackTrace();
-				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		return rawLabelWrap.size() > 0;
@@ -493,7 +419,7 @@ public class DataSource {
 	 * @return true if succeed, otherwise false
 	 */
 	public static boolean saveLabelData(String date, RawLabelWrap rawLabelWrap) {						
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + USCTeensGlobals.LABELS_FOLDER;
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + TeensGlobals.LABELS_FOLDER;
 		
 		// build the file path name
 		String filePathName = ""; 
@@ -503,7 +429,7 @@ public class DataSource {
 			sb.append(path);
 			sb.append(File.separator);
 			sb.append("Activities.");
-			sb.append(new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(new Date()));
+			sb.append(Globals.mHealthTimestampFormat.format(new Date()));
 			sb.append(".labels.csv");
 			filePathName = sb.toString();
 		} else {
@@ -556,8 +482,8 @@ public class DataSource {
 	}
 	
 	public static boolean areAllChunksLabelled(String date) {
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + 
-			date + USCTeensGlobals.ANNOTATION_FOLDER + USCTeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + 
+			date + TeensGlobals.ANNOTATION_FOLDER + TeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";
 		
 		File file = new File(path);		
 		if (!file.exists()) {			
@@ -591,10 +517,10 @@ public class DataSource {
 
 	public static boolean saveChunkData(final ArrayList<Chunk> chunks) {
 		boolean result = false;		
-		String date = DataStorage.GetValueString(sContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+		String date = DataStorage.GetValueString(sContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
 		assert(date.compareTo("") != 0);
-		String path = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator
-			 + date + USCTeensGlobals.ANNOTATION_FOLDER + USCTeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";			
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator
+			 + date + TeensGlobals.ANNOTATION_FOLDER + TeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";			
 
 		sRawChksWrap.clear();
 		for (int i = 0; i < chunks.size(); ++i) {
@@ -622,7 +548,7 @@ public class DataSource {
         	Action action = rawChunk.getAction();
 	        // ANNOTATION
 	        Element annotation = annotations.addElement("ANNOTATION")
-	        	.addAttribute("GUID", USCTeensGlobals.ANNOTATION_GUID);
+	        	.addAttribute("GUID", TeensGlobals.ANNOTATION_GUID);
 	        // LABEL
 	        Element label = annotation.addElement("LABEL")
 		        .addAttribute("GUID", action.getActionID())

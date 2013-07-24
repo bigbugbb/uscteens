@@ -13,7 +13,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager.OnBoundaryScaleListener;
@@ -119,7 +119,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 		}
 		
 		// recover the chunk selection state when user quit the screen last time
-		String selDate = DataStorage.GetValueString(mContext, USCTeensGlobals.CURRENT_SELECTED_DATE, "");
+		String selDate = DataStorage.GetValueString(mContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
 		String startDate = DataStorage.getStartDate(mContext, "");
 		// initialize
 		ChunkManager.selectChunk(0);
@@ -127,14 +127,14 @@ public class GraphPage extends AppPage implements OnClickListener,
 		mSlideBar.moveSliderBarToProgress(0);
 		// try to recover from the record data	
 		long loadingResult = DataStorage.GetValueLong(
-				mContext, USCTeensGlobals.DATA_LOADING_RESULT, DataSource.LOADING_SUCCEEDED);
+				mContext, TeensGlobals.DATA_LOADING_RESULT, DataSource.LOADING_SUCCEEDED);
 		if (loadingResult == DataSource.ERR_NO_SENSOR_DATA) {
 			return;
 		}
 		try {
 			int diff = WeekdayHelper.daysBetween(startDate, selDate);
-			int index   = (int) DataStorage.GetValueLong(mContext, USCTeensGlobals.LAST_SELECTED_CHUNK + diff, 0);
-			int offsetX = (int) DataStorage.GetValueLong(mContext, USCTeensGlobals.LAST_DISPLAY_OFFSET_X + diff, 0);
+			int index   = (int) DataStorage.GetValueLong(mContext, TeensGlobals.LAST_SELECTED_CHUNK + diff, 0);
+			int offsetX = (int) DataStorage.GetValueLong(mContext, TeensGlobals.LAST_DISPLAY_OFFSET_X + diff, 0);
 			// recover last position when user quit
 			Chunk c = ChunkManager.selectChunk(index);
 			if (c != null) {
@@ -370,10 +370,10 @@ public class GraphPage extends AppPage implements OnClickListener,
 		String actionL = mChunksToMerge.get(0).mQuest.getStringAnswer();
 		String actionR = mChunksToMerge.get(1).mQuest.getStringAnswer();
 		ArrayList<String> actions = new ArrayList<String>();
-		if (!actionL.equals(USCTeensGlobals.UNLABELLED_STRING)) {
+		if (!actionL.equals(TeensGlobals.UNLABELLED_STRING)) {
 			actions.add(actionL);
 		}
-		if (!actionR.equals(USCTeensGlobals.UNLABELLED_STRING)) {
+		if (!actionR.equals(TeensGlobals.UNLABELLED_STRING)) {
 			actions.add(actionR);
 		}
 		// the left and right chunks are both unlabelled or are the same, merge them directly
@@ -436,7 +436,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 			maintain = mChunksToMerge.get(1);
 		} else { // "None"
 			maintain = mChunksToMerge.get(0);
-			Action action = ActionManager.getActions().get(USCTeensGlobals.UNLABELLED_GUID);
+			Action action = ActionManager.getActions().get(TeensGlobals.UNLABELLED_GUID);
 			maintain.mQuest.setAnswer(action);
 		}    		
 		// it's not called from AppPage.onTouch, so explicit synchronized is necessary

@@ -2,6 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -9,9 +10,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensCSSurvey;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensRandomSurvey;
-import edu.neu.android.mhealth.uscteensver1.video.VideoActivity;
+import edu.neu.android.mhealth.uscteensver1.utils.FileGrabberUtils;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import edu.neu.android.wocketslib.dataupload.DataManager;
@@ -27,7 +29,7 @@ import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
 
 
-public class USCTeensSetupActivity extends BaseActivity {
+public class TeensSetupActivity extends BaseActivity {
 	private static final String TAG = "USCTeensSetupActivity"; 
 	
 	private Button mBtnStartService;
@@ -35,7 +37,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 	private Button mBtnRandomEMA;
 	private Button mBtnCSEMA;
 	private Button mBtnRewards;
-	private Button mBtnTutorial;
+	private Button mBtnUpdateInfo;
 	private Button mBtnFinishStudy;
 	private Button mBtnSetupDone;
 
@@ -46,8 +48,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 	}
 	
 	/**
-	 * Set the update button on/off depending on if the code detects that the software
-	 * is or is not at the latest version on the Android Market. 
+	 * Set the update button on/off depending on whether the task is completed. 
 	 */
 	private class MySendAllFilesToServerTask extends SendAllFilesToServerTask {
 
@@ -60,6 +61,33 @@ public class USCTeensSetupActivity extends BaseActivity {
 			mBtnFinishStudy.setEnabled(true);
 		}
 	}
+	
+	/**
+	 * Set the update button on/off depending on whether the task is completed.  
+	 */
+	public class UpdateConfigurationTask extends AsyncTask<Void, Void, Boolean> {
+		private final static String TAG = "UpdateConfigurationTask";
+		
+		private Context mContext;
+
+		public UpdateConfigurationTask(Context context) {
+			mContext = context;
+		}
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			return FileGrabberUtils.downloadServerDataFilesWithResult(mContext, 
+					TeensAppManager.getParticipantId(mContext));
+		}
+
+		protected void onPostExecute(Boolean isSuccessful) {
+			String msg = isSuccessful ? "Update complete." : "Fail to update, please try it later.";
+			Toast toast = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+			toast.show();	
+			mBtnUpdateInfo.setEnabled(true);
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +98,7 @@ public class USCTeensSetupActivity extends BaseActivity {
 		mBtnStartService = (Button) findViewById(R.id.startservice);		
 		mBtnCSEMA        = (Button) findViewById(R.id.csema);		
 		mBtnRandomEMA    = (Button) findViewById(R.id.randomema);
-		mBtnTutorial 	 = (Button) findViewById(R.id.tutorial);
+		mBtnUpdateInfo   = (Button) findViewById(R.id.updateinfo);
 		mBtnRewards      = (Button) findViewById(R.id.rewards);
 		mBtnFinishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
 		mBtnSetupDone    = (Button) findViewById(R.id.setupdone);
@@ -118,15 +146,15 @@ public class USCTeensSetupActivity extends BaseActivity {
 			public void onClick(View v) {
 				long now = System.currentTimeMillis();
 				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, now);
-				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
+				Intent i = new Intent(TeensSetupActivity.this, SurveyActivity.class);
 				
 				// Construct survey prompt event
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
 				promptEvent.setPromptType("Random-Test");				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				promptEvent.setReprompt(USCTeensSurveyActivity.isWorking());
+				promptEvent.setReprompt(TeensSurveyActivity.isWorking());
 				
-				i.putExtra(USCTeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
+				i.putExtra(TeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
 					TeensRandomSurvey.class.getCanonicalName(), 1, new Object[] { 0 }
 				));
@@ -140,15 +168,15 @@ public class USCTeensSetupActivity extends BaseActivity {
 			public void onClick(View v) {
 				long now = System.currentTimeMillis();
 				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, now);
-				Intent i = new Intent(USCTeensSetupActivity.this, SurveyActivity.class);
+				Intent i = new Intent(TeensSetupActivity.this, SurveyActivity.class);
 				
 				// Construct survey prompt event
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
 				promptEvent.setPromptType("CS-Test");				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				promptEvent.setReprompt(USCTeensSurveyActivity.isWorking());
+				promptEvent.setReprompt(TeensSurveyActivity.isWorking());
 				
-				i.putExtra(USCTeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
+				i.putExtra(TeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
 					TeensCSSurvey.class.getCanonicalName(), 1, new Object[] { null }
 				));
@@ -156,11 +184,13 @@ public class USCTeensSetupActivity extends BaseActivity {
 			}
 		});
 		
-		mBtnTutorial.setOnClickListener(new OnClickListener() {
+		mBtnUpdateInfo.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(getApplicationContext(), VideoActivity.class);
-				startActivity(i);
+				Log.o(TAG, Log.USER_ACTION, "Get udpate info");
+				displayToastMessage("Request to get update info, receiving all data from the server now.");
+				mBtnUpdateInfo.setEnabled(false);
+				new UpdateConfigurationTask(getApplicationContext()).execute();
 			}
 		});
 		

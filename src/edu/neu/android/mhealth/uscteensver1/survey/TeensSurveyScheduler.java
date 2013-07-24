@@ -9,7 +9,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
-import edu.neu.android.mhealth.uscteensver1.activities.USCTeensSurveyActivity;
+import edu.neu.android.mhealth.uscteensver1.activities.TeensSurveyActivity;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataChecker;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.wocketslib.Globals;
@@ -29,7 +29,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 	private final static String KEY_RANDOM_PROMPT = "_KEY_RANDOM_PROMPT";
 	
 	public TeensSurveyScheduler(Context context) {
-		super(context, USCTeensSurveyActivity.class, 
+		super(context, TeensSurveyActivity.class, 
 			new HashMap<String, Class<?>>() // prompt type to question set class 
 			{ 
 				/**
@@ -54,7 +54,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		int startHour = Globals.DEFAULT_START_HOUR;
 		int endHour   = Globals.DEFAULT_END_HOUR;
 		
-		return (hour >= startHour && hour < endHour - 1) || (hour == endHour - 1 && min < 30);
+		return (hour >= startHour && hour < endHour - 1) || (hour == endHour - 1 && min < 45);
 	}
 	
 	@Override 
@@ -66,8 +66,15 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 			SurveyPromptEvent spe = new SurveyPromptEvent(System.currentTimeMillis(), 0);
 			spe.setPromptReason(reason);			
 			spe.setPromptType("CS");
-			spe.AddSurveySpecifiedRecord(TeensCSSurvey.START_TIME, extInfo.getStartTime());
-			spe.AddSurveySpecifiedRecord(TeensCSSurvey.STOP_TIME, extInfo.getStopTime());
+			
+			boolean isReprompted = isLastScheduledSurveyReprompted();
+			long lastPromptTime = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY) - (isReprompted ? Globals.REPROMPT_DELAY_MS : 0);
+			long internalLength = (extInfo.getStopTimeInMS() - extInfo.getStartTimeInMS()) / 60000;
+			long adjustedLength = Math.min(internalLength, (extInfo.getStopTimeInMS() - lastPromptTime) / 60000);
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_START_TIME, extInfo.getStartTime());
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_STOP_TIME, extInfo.getStopTime());
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_LENGTH, "" + internalLength);
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.ADJUSTED_INTERVAL_LENGTH, "" + adjustedLength);
 			return spe;
 		}
 		
@@ -159,8 +166,12 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		for (int i = 0; i < promptsPerDay; i++) {
 			promptSchedule.append("Prompt: " + DateHelper.getDate(promptTimes[i]) + NEWLINE);
 			// Create the corresponding prompt event for the random prompts
-			SurveyPromptEvent spe = new SurveyPromptEvent(promptTimes[i], 0);					
+			SurveyPromptEvent spe = new SurveyPromptEvent(promptTimes[i], 0);				
 			spe.setPromptType("Random");
+			long internalLength = Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS / 60000;
+			long adjustedLength = Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS / 60000;
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_LENGTH, "" + internalLength);
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.ADJUSTED_INTERVAL_LENGTH, "" + adjustedLength);
 			DataStorage.SetValue(mContext, KEY_ALL_PROMPT_EVENT + promptTimes[i], new Gson().toJson(spe));
 		}
 		ServerLogger.sendNote(mContext, promptSchedule.toString(), Globals.NO_PLOT);
@@ -180,7 +191,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		if (!promptEvent.isReprompt()) {
 			Labeler.getInstance().addLabel(new Date(), promptType.equals("CS") ? "CS Prompt" : "Random Prompt");
 		} else {
-			Labeler.getInstance().addLabel(new Date(), promptType.equals("Random") ? "CS Reprompt" : "Random Reprompt");
+			Labeler.getInstance().addLabel(new Date(), promptType.equals("CS") ? "CS Reprompt" : "Random Reprompt");
 		}
 	}
 

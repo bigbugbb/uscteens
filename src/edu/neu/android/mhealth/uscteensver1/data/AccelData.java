@@ -30,18 +30,7 @@ public class AccelData implements Serializable {
 		mAccelAverage = Integer.parseInt(accelAverage);
 		mAccelSamples = Integer.parseInt(accelSamples);
 	}
-	
-	public AccelData(String hour, String minute, String second, String milliSecond,
-			 		 int accelAverage, int accelSamples) {
-		mHour         = Integer.parseInt(hour);
-		mMinute       = Integer.parseInt(minute);
-		mSecond       = Integer.parseInt(second);
-		mMilliSecond  = Integer.parseInt(milliSecond);
-		mTimeInSec    = mHour * 3600 + mMinute * 60 + mSecond;
-		mAccelAverage = accelAverage;
-		mAccelSamples = accelSamples;
-	}
-	
+
 	public void updateData(int hour, int minute, int second, int milliSecond, 
 				     	   int accelAverage, int accelSamples) {
 		mHour         = hour;

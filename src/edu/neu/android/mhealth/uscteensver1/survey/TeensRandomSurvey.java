@@ -1,10 +1,12 @@
 package edu.neu.android.mhealth.uscteensver1.survey;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSet;
 import edu.neu.android.wocketslib.emasurvey.model.QuestionSetParamHandler;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyAnswer;
+import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion.TYPE;
 import edu.neu.android.wocketslib.emasurvey.rule.QuesAsSequence;
@@ -13,10 +15,23 @@ import edu.neu.android.wocketslib.emasurvey.rule.QuesFromAns;
 public class TeensRandomSurvey extends QuestionSet {
 
 	public static final double VERSION = 1;
+	public static String INTERNAL_LENGTH = "INTERNAL_LENGTH";
+	public static String ADJUSTED_INTERVAL_LENGTH = "ADJUSTED_INTERVAL_LENGTH";
+	
 	private ArrayList<SurveyQuestion> mDefaultQuestionSet;
+	private int mMinutes; 
 	
 	public TeensRandomSurvey(QuestionSetParamHandler param) {
 		super();
+		
+		SurveyPromptEvent spe = (SurveyPromptEvent) param.getParams()[0];
+		if (spe != null) {
+			HashMap<String, String> mapTime = spe.getSurveySpecifiedRecord();
+			mMinutes = Integer.parseInt(mapTime.get(ADJUSTED_INTERVAL_LENGTH));
+		} else {
+			mMinutes = 30;
+		}
+		
 		setQuestions();
 	}
 	
@@ -35,7 +50,7 @@ public class TeensRandomSurvey extends QuestionSet {
 		mDefaultQuestionSet = new ArrayList<SurveyQuestion>();
 		
 		/************ Initialize questions and answers *********/
-		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity","What have you been DOING in the last hour?\n (Choose all that apply)", TYPE.MULTI_CHOICE);
+		SurveyQuestion Q1_MainActivity = new SurveyQuestion("Q1_MainActivity","What have you been DOING in the last " + mMinutes + " minutes?\n (Choose all that apply)", TYPE.MULTI_CHOICE);
 		SurveyAnswer[] answerSet1 = new SurveyAnswer[7];
 		answerSet1[0] = new SurveyAnswer(0, "Reading or doing homework");
 		answerSet1[1] = new SurveyAnswer(1, "Using technology (TV, phone)");

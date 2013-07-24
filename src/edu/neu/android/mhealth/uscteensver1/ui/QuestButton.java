@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 
@@ -26,7 +26,7 @@ public class QuestButton extends ChunkButton {
 	
 	public boolean isAnswered() {
 		Action action = getHost().getAction();
-		return !action.getActionID().equals(USCTeensGlobals.UNLABELLED_GUID);
+		return !action.getActionID().equals(TeensGlobals.UNLABELLED_GUID);
 	}
 	
 	public void setAnswer(Action newAction) {	

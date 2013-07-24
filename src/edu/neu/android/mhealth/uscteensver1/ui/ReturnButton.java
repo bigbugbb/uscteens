@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class ReturnButton extends CustomButton {
@@ -19,7 +19,7 @@ public class ReturnButton extends CustomButton {
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText.setColor(Color.WHITE);
 		mPaintText.setStyle(Style.FILL);
-		mPaintText.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
+		mPaintText.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf"));
 		mPaintText.setFakeBoldText(false);
 		mPaintText.setTextSize(AppScale.doScaleH(36));
 		mPaintText.setTextAlign(Paint.Align.CENTER);

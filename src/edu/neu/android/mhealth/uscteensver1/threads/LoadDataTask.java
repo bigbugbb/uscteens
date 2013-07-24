@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.LoadingDialog;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
@@ -74,7 +74,7 @@ public class LoadDataTask extends AsyncTask<String, Void, Void> {
 			msg.what = AppCmd.END_LOADING;
 		}
 		
-		DataStorage.SetValue(mContext, USCTeensGlobals.DATA_LOADING_RESULT, mResult);
+		DataStorage.SetValue(mContext, TeensGlobals.DATA_LOADING_RESULT, mResult);
 		
 		mHandler.sendMessage(msg);
 		mLoadingDialog.dismiss();

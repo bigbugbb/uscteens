@@ -3,7 +3,6 @@ package edu.neu.android.mhealth.uscteensver1.extra;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +12,7 @@ import java.io.OutputStream;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.WOCKETSException;
@@ -56,9 +55,9 @@ public class RewardManager {
 		// first clear the action container
 		sRewardWrap.clear();
 		
-		String dirPath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
+		String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.REWARD_FOLDER;
 		String[] rewardDir = FileHelper.getFilePathsDir(dirPath);
-		if (rewardDir == null || rewardDir.length == 0 || (USCTeensGlobals.sUpdateConfig && !sCopied)) {
+		if (rewardDir == null || rewardDir.length == 0 || (TeensGlobals.sUpdateConfig && !sCopied)) {
 			sCopied = true;
 			copyRewardFromAssets();
 			rewardDir = FileHelper.getFilePathsDir(dirPath);
@@ -75,35 +74,44 @@ public class RewardManager {
 	    } catch (IOException e) {
 	        Log.e(TAG, "Failed to get asset file list.", e);
 	    }
-	    for (String filename : files) {
-	    	String extName = filename.substring(filename.lastIndexOf("."), filename.length());
-			if (!extName.equals(".csv")) {
+	    for (String filename : files) {	    	
+			if (!filename.endsWith(".csv")) {
 				continue;
 			}
 	        InputStream in = null;
-	        InputStreamReader isr = null;
 			BufferedReader br = null;
 	        try {
 	        	String filePath = ASSETS_DIR + File.separator + filename;
-				in = assetManager.open(filePath);			
-				isr = new InputStreamReader(in); 
-                br = new BufferedReader(isr);
+				in = assetManager.open(filePath);
+                br = new BufferedReader(new InputStreamReader(in));
                 String result = br.readLine();
 				while ((result = br.readLine()) != null) {						
 					// parse the line
 					String[] split = result.split("[,]");
-					Reward reward = new Reward(split[0].trim(), 
-							"file:///android_asset/rewards/" + split[1].trim(), 
+					Reward reward = new Reward(split[0].trim(), "file:///android_asset/rewards/" + split[1].trim(), 
 							split.length == 3 ? split[2].trim() : "");
 					sRewardWrap.put(split[0].trim(), reward);
-				}	
-				in.close();
+				}					
 	        } catch (IOException e) {
 	            Log.e(TAG, "Failed to copy asset file: " + filename, e);
-	        }       
+	        } finally {
+	        	if (br != null)
+					try {
+						br.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+	        	if (in != null) {
+	        		try {
+						in.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+	        	}
+	        }
 	    }
 			
-		// then load the other configuration that might be modified by user from external storage
+		// then load the other configuration that might be modified by user from external storage/uploading
 		try {
 			File aMappingFile = getMappingFile(dirPath);
 			if (aMappingFile == null) {
@@ -113,23 +121,17 @@ public class RewardManager {
 			BufferedReader br = null;
 			try {
 				fis = new FileInputStream(aMappingFile);				
-				InputStreamReader in = new InputStreamReader(fis);
-				br = new BufferedReader(in);
-				try {
-					// skip the first line
-					String result = br.readLine();
-					while ((result = br.readLine()) != null) {						
-						// parse the line
-						String[] split = result.split("[,]");
-						Reward reward = new Reward(split[0].trim(), "file:///" + dirPath + split[1].trim(), 
-								split.length == 3 ? split[2].trim() : "");
-						sRewardWrap.put(split[0].trim(), reward);
-					}										
-				} catch (IOException e) {
-					Log.e(TAG, "readStringInternal: problem reading: " + aMappingFile.getAbsolutePath());
-					e.printStackTrace();
-				}
-			} catch (FileNotFoundException e) {
+				br = new BufferedReader(new InputStreamReader(fis));
+				// skip the first line
+				String result = br.readLine();
+				while ((result = br.readLine()) != null) {						
+					// parse the line
+					String[] split = result.split("[,]");
+					Reward reward = new Reward(split[0].trim(), "file:///" + dirPath + split[1].trim(), 
+							split.length == 3 ? split[2].trim() : "");
+					sRewardWrap.put(split[0].trim(), reward);
+				}														
+			} catch (IOException e) {
 				Log.e(TAG, "readStringInternal: cannot find: " + aMappingFile.getAbsolutePath());
 				e.printStackTrace();
 			} finally {
@@ -163,9 +165,8 @@ public class RewardManager {
 		String[] filePaths = FileHelper.getFilePathsDir(dirPath);
 		String filePath = null;
 		
-		for (String path : filePaths) {
-			String extName = path.substring(path.lastIndexOf("."), path.length());
-			if (extName.equals(".csv")) {
+		for (String path : filePaths) {			
+			if (path.endsWith(".csv")) {
 				filePath = path;
 				break;
 			}
@@ -175,7 +176,7 @@ public class RewardManager {
 	}
 	
 	private static void copyRewardFromAssets() {
-		String outfilePath = USCTeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + USCTeensGlobals.REWARD_FOLDER;
+		String outfilePath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.REWARD_FOLDER;
 		// create new directory if doesn't exist
 		try {
 			FileHelper.createDir(outfilePath);

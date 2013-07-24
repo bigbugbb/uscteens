@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 /*
@@ -156,6 +156,6 @@ public class Action implements Serializable {
         	image = origin;
         } 	   		
     	
-    	return new Action(USCTeensGlobals.UNLABELLED_GUID, "Unlabelled", "question_btn.png", image);
+    	return new Action(TeensGlobals.UNLABELLED_GUID, "Unlabelled", "question_btn.png", image);
 	}
 }

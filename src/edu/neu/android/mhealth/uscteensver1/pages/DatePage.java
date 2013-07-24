@@ -13,7 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.ui.ArrowButton;
 import edu.neu.android.mhealth.uscteensver1.ui.DateBackground;
 import edu.neu.android.mhealth.uscteensver1.ui.DateListView;
@@ -197,7 +197,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 		}
 		if (li.getItemImage() == R.drawable.not_available) {
 			String text = "You can no longer label this day. Try to label within " +
-					USCTeensGlobals.MAX_AVAILABLE_LABELING_DAYS + " days of the actual day.";
+					TeensGlobals.MAX_AVAILABLE_LABELING_DAYS + " days of the actual day.";
 			Toast.makeText(mContext, text, Toast.LENGTH_LONG).show();
 			return;
 		}

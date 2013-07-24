@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class SetupTextView extends TextView {
@@ -13,7 +13,7 @@ public class SetupTextView extends TextView {
 	public SetupTextView(Resources res) {
 		super(res);
 		mPaintTxt.setColor(Color.RED);
-		mPaintTxt.setTypeface(Typeface.createFromAsset(USCTeensGlobals.sContext.getAssets(), "font/arial.ttf"));
+		mPaintTxt.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf"));
 		mPaintTxt.setTextAlign(Align.CENTER);
 		mPaintBoard.setStrokeWidth(3);
 		setVisible(false);

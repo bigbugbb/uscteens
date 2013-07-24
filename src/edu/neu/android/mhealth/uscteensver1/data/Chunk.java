@@ -9,7 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -77,8 +77,8 @@ public class Chunk extends AppObject {
 	}
 	
 	public RawChunk toRawChunk() {		
-		String startDate = toDateTime(mStart / USCTeensGlobals.PIXEL_PER_DATA + mOffset);
-		String stopDate  = toDateTime(mStop  / USCTeensGlobals.PIXEL_PER_DATA + mOffset);					                  
+		String startDate = toDateTime(mStart / TeensGlobals.PIXEL_PER_DATA + mOffset);
+		String stopDate  = toDateTime(mStop  / TeensGlobals.PIXEL_PER_DATA + mOffset);					                  
 		RawChunk rawChunk = new RawChunk(
 				startDate, stopDate, mAction, mCreateTime, mModifyTime);
 		
@@ -108,12 +108,12 @@ public class Chunk extends AppObject {
 	
 	public boolean isLastChunkOfToday() {
 		String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		String startDate = toDateTime(mStart / USCTeensGlobals.PIXEL_PER_DATA).substring(0, 10);
+		String startDate = toDateTime(mStart / TeensGlobals.PIXEL_PER_DATA).substring(0, 10);
 		
 		// is today
 		if (curDate.compareTo(startDate) == 0) {
 			// is the last chunk
-			if (Math.abs(mStop - 3600 * 24 * USCTeensGlobals.PIXEL_PER_DATA) < USCTeensGlobals.PIXEL_PER_DATA) {
+			if (Math.abs(mStop - 3600 * 24 * TeensGlobals.PIXEL_PER_DATA) < TeensGlobals.PIXEL_PER_DATA) {
 				return true;
 			}
 		}
@@ -136,15 +136,15 @@ public class Chunk extends AppObject {
 	}
 	
 	public int getChunkRealStartTime() {
-		return mStart / USCTeensGlobals.PIXEL_PER_DATA + mOffset;
+		return mStart / TeensGlobals.PIXEL_PER_DATA + mOffset;
 	}
 	
 	public int getChunkRealStopTime() {
-		return mStop / USCTeensGlobals.PIXEL_PER_DATA + mOffset;
+		return mStop / TeensGlobals.PIXEL_PER_DATA + mOffset;
 	}
 	
 	public String getChunkRealStartTimeInString() {
-		int time   = mStart / USCTeensGlobals.PIXEL_PER_DATA + mOffset;
+		int time   = mStart / TeensGlobals.PIXEL_PER_DATA + mOffset;
 		int hour   = time / 3600;
 		int minute = (time - 3600 * hour) / 60;
 		

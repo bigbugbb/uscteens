@@ -9,11 +9,12 @@ import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.utils.FileHelper;
 
 /**
- * Globals that are in the Wockets library that are redefined by the calling application
- * @author SSI
+ * The place for redefining/reset some global variables in the WocketsLib.
+ * 
+ * @author bigbug
  *
  */
-public class USCTeensGlobals {
+public class TeensGlobals {
 	public static String VERSION_NAME = "";
 	
 	public final static int    PIXEL_PER_DATA = 2;	
@@ -29,7 +30,7 @@ public class USCTeensGlobals {
 	public final static String CURRENT_SELECTED_DATE = "CURRENT_SELECTED_DATE";
 	public final static String LAST_SELECTED_CHUNK = "LAST_SELECTED_CHUNK";
 	public final static String LAST_DISPLAY_OFFSET_X = "LAST_DISPLAY_OFFSET_X";
-	public final static String SENSOR_FOLDER     = "/Sensor/";	
+	public final static String SENSOR_FOLDER     = "/mHealth/Sensors/";	
 	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String LABELS_FOLDER = "/Labels/";
 	public final static String ICON_FOLDER   = "/Icons/";
@@ -51,13 +52,15 @@ public class USCTeensGlobals {
 	
 	public static void initGlobals(Context aContext) {
 		// By default the logging will go to the apps internal storage, not the external directory
-		Globals.IS_DEBUG = true;
+		Globals.IS_DEBUG = false;
 		Globals.IS_LOG_EXTERNAL = false;
 		Globals.APP_DIRECTORY = "uscteens";		
 
+		Globals.setArbitrater(new TeensArbitrater(aContext));
 		Globals.initDataDirectories(aContext);
 		
 		DIRECTORY_PATH = Globals.EXTERNAL_DIRECTORY_PATH;
+		Globals.IS_RECORDING_PHONE_ACCEL_ENABLED = true;
 
 		Globals.STUDY_NAME = "USCTeens"; // "Teens Study"; 
 		Globals.STUDY_SERVER_NAME = "USCTeens";

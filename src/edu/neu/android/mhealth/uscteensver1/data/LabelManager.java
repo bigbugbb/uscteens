@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.res.Resources;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class LabelManager {
@@ -47,7 +47,7 @@ public class LabelManager {
 		for (RawLabel rawLabel : rawLabels) {
 			Label label = insertLabel();			    				
 			String name = rawLabel.getName();			
-			int x = rawLabel.getTimeInSec() * USCTeensGlobals.PIXEL_PER_DATA;
+			int x = rawLabel.getTimeInSec() * TeensGlobals.PIXEL_PER_DATA;
 			int y = (int) AppScale.doScaleH(65);
 			// load each label				
 			label.load(x, y, name);			

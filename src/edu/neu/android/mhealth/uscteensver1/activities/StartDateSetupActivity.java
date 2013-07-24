@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.USCTeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.DateHelper;
@@ -99,8 +99,8 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 	
 	private void savePreferences() {	
 		for (int i = 0; i < TOTAL_DAYS; ++i) {
-			DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.LAST_SELECTED_CHUNK + i, 0);
-			DataStorage.SetValue(getApplicationContext(), USCTeensGlobals.LAST_DISPLAY_OFFSET_X + i, 0);
+			DataStorage.SetValue(getApplicationContext(), TeensGlobals.LAST_SELECTED_CHUNK + i, 0);
+			DataStorage.SetValue(getApplicationContext(), TeensGlobals.LAST_DISPLAY_OFFSET_X + i, 0);
 		}
 		DataStorage.SetValue(getApplicationContext(), DataStorage.KEY_START_DATE, mStartDate);				
 	}
