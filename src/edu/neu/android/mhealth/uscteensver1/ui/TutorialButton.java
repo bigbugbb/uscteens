@@ -67,4 +67,9 @@ public class TutorialButton extends CustomButton {
 	public void onCancelSelection(MotionEvent e) {
 		mPaint.setColor(Color.LTGRAY);
 	}
+	
+	@Override
+	public boolean contains(float x, float y) {
+		return (mX < x && x <= mX + mWidth) && (mY - mHeight < y && y <= mY + mHeight * 2);
+	}
 }

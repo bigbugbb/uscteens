@@ -83,8 +83,6 @@ public class USCTeensGlobals {
 		Globals.DEFAULT_PING_ADDRESS  = "http://wockets.ccs.neu.edu/ping.php";	//TODO change to wockets server
 		Globals.DEFAULT_SAMPLING_RATE = 40;
 		
-		//Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 21000;  // 21s
-
         // Send the status information once per hour
         Globals.JSON_DATA_UPLOAD_INTERVAL = Globals.MINUTES_60_IN_MS;
 
@@ -135,7 +133,7 @@ public class USCTeensGlobals {
 		Globals.ALL_APP_KEYS[0] = Globals.GETHELP;
 		Globals.ALL_APP_KEYS[1] = Globals.SURVEY;
 
-		Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 0;
+		Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 21000;
 	}
 	
 }
