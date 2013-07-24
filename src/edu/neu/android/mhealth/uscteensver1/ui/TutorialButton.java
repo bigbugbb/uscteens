@@ -28,7 +28,7 @@ public class TutorialButton extends CustomButton {
 		mPaint.setTextSize(AppScale.doScaleT(30));
 		mPaint.setTextAlign(Paint.Align.LEFT);		
 		
-		mTutorial = "Tutorial";
+		mTutorial = "Play tutorial";
 		mRect = new Rect();
 		mPaint.getTextBounds(mTutorial, 0, mTutorial.length(), mRect);
 	}
