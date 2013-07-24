@@ -29,7 +29,7 @@ public class TeensGlobals {
 	public final static String CURRENT_SELECTED_DATE = "CURRENT_SELECTED_DATE";
 	public final static String LAST_SELECTED_CHUNK = "LAST_SELECTED_CHUNK";
 	public final static String LAST_DISPLAY_OFFSET_X = "LAST_DISPLAY_OFFSET_X";
-	public final static String SENSOR_FOLDER     = "/" + Globals.SENSOR_TYPE_PHONE_ACCELEROMETER + "/";	
+	public final static String SENSOR_FOLDER     = "/mHealth/Sensors/";	
 	public final static String ANNOTATION_FOLDER = "/Annotation/";
 	public final static String LABELS_FOLDER = "/Labels/";
 	public final static String ICON_FOLDER   = "/Icons/";
