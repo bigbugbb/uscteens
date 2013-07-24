@@ -18,6 +18,13 @@ import edu.neu.android.wocketslib.sensormonitor.Arbitrater;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.Log;
 
+/**
+ * This class is used as a callback which has been invoked from
+ * BluetoothSensorService in WocketsLib.
+ * 
+ * @author bigbug
+ *
+ */
 public class TeensArbitrater extends Arbitrater {
 	private static final String TAG = "TeensArbitrater";
 	

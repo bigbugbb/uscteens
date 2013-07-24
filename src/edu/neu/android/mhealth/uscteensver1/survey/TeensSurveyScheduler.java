@@ -54,7 +54,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		int startHour = Globals.DEFAULT_START_HOUR;
 		int endHour   = Globals.DEFAULT_END_HOUR;
 		
-		return (hour >= startHour && hour < endHour - 1) || (hour == endHour - 1 && min < 30);
+		return (hour >= startHour && hour < endHour - 1) || (hour == endHour - 1 && min < 45);
 	}
 	
 	@Override 

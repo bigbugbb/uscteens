@@ -10,7 +10,12 @@ import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
 
-
+/**
+ * The entry of the whole application.
+ * 
+ * @author bigbug
+ *
+ */
 public class TeensAppManager extends ApplicationManager {
 
 	public static final String TAG = "TeensAppManager";

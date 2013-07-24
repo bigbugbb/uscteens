@@ -9,8 +9,9 @@ import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.utils.FileHelper;
 
 /**
- * Globals that are in the Wockets library that are redefined by the calling application
- * @author SSI
+ * The place for redefining/reset some global variables in the WocketsLib.
+ * 
+ * @author bigbug
  *
  */
 public class TeensGlobals {
