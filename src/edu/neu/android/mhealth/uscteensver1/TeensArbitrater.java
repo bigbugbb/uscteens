@@ -16,6 +16,8 @@ import edu.neu.android.mhealth.uscteensver1.utils.FileGrabberUtils;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.sensormonitor.Arbitrater;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.support.ServerLogger;
+import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.Log;
 
 /**
@@ -39,6 +41,11 @@ public class TeensArbitrater extends Arbitrater {
 	public void doArbitrate(boolean isNewSoftwareVersion) {		
 		// For testing purpose only
 		saveRecordsInLogcat(false);
+		
+		// Send the version information to the server at the beginning of a day
+		if (isBeginningOfDay()) {					
+			ServerLogger.sendNote(mContext, TeensGlobals.VERSION_NAME, Globals.NO_PLOT);
+		}
 
 		// Try to prompt the next survey if possible
 		mScheduler.tryToPromptSurvey(isNewSoftwareVersion);	
@@ -48,6 +55,14 @@ public class TeensArbitrater extends Arbitrater {
 				
 		// Mark that arbitration taking place
 		DataStorage.setLastTimeArbitrate(mContext, System.currentTimeMillis());			
+	}
+	
+	private boolean isBeginningOfDay() {
+		long midnight = DateHelper.getDailyTime(0, 0);
+		if (System.currentTimeMillis() - midnight < Globals.MINUTES_1_IN_MS) {
+			return true;
+		}
+		return false;
 	}
 	
 	private static long sLastUpdateRewardTime;
