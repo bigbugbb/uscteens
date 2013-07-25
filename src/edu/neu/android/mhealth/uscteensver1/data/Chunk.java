@@ -18,6 +18,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.ClockButton;
 import edu.neu.android.mhealth.uscteensver1.ui.MergeButton;
 import edu.neu.android.mhealth.uscteensver1.ui.QuestButton;
 import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
+import edu.neu.android.wocketslib.Globals;
 
 // chunk data mapping to the motion graph
 public class Chunk extends AppObject {
@@ -66,6 +67,8 @@ public class Chunk extends AppObject {
 		mClock = new ClockButton(res, this, mParent);
 		mMerge = new MergeButton(res, this, mParent);
 		mSplit = new SplitButton(res, this, mParent);
+		
+		mCreateTime = Globals.mHealthTimestampFormat.format(new Date());
 				
 		List<AppObject> objects = mParent.getObjectList();
 		objects.add(mQuest);
