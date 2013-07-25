@@ -2,6 +2,8 @@ package edu.neu.android.mhealth.uscteensver1.pages;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -22,6 +24,8 @@ import edu.neu.android.mhealth.uscteensver1.data.LabelManager;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionWrap;
+import edu.neu.android.mhealth.uscteensver1.extra.Reward;
+import edu.neu.android.mhealth.uscteensver1.extra.RewardManager;
 import edu.neu.android.mhealth.uscteensver1.ui.BackButton;
 import edu.neu.android.mhealth.uscteensver1.ui.ChunkButton;
 import edu.neu.android.mhealth.uscteensver1.ui.GraphBackground;
@@ -36,6 +40,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.SlideBar.OnSlideBarChangeListener
 import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
 import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 
@@ -319,8 +324,9 @@ public class GraphPage extends AppPage implements OnClickListener,
 		}
 		
 		if (ChunkManager.areAllChunksLabelled()) {
+			Reward reward = RewardManager.getReward(getCountOfDayFromStartDate());			
 			Message msg = mHandler.obtainMessage();			
-			msg.what = AppCmd.BACK;
+			msg.what = reward != null ? AppCmd.BACK : AppCmd.DONE;
 			mHandler.sendMessage(msg);
 		}
 
@@ -339,8 +345,9 @@ public class GraphPage extends AppPage implements OnClickListener,
 		}
 		
 		if (ChunkManager.areAllChunksLabelled()) {
+			Reward reward = RewardManager.getReward(getCountOfDayFromStartDate());			
 			Message msg = mHandler.obtainMessage();			
-			msg.what = AppCmd.NEXT;
+			msg.what = reward != null ? AppCmd.NEXT : AppCmd.DONE;
 			mHandler.sendMessage(msg);
 		}
 		
@@ -451,4 +458,26 @@ public class GraphPage extends AppPage implements OnClickListener,
 	public void onBoundaryScale(float x, float scaleDistance) {
 		mMotionGraph.moveGraph(x, 0);	
 	}
+	
+	private int getCountOfDayFromStartDate() {
+    	String startDate = DataStorage.getStartDate(getContext(), "");
+    	String selectedDate = DataStorage.GetValueString(getContext(), TeensGlobals.CURRENT_SELECTED_DATE, "");
+    	
+    	for (int i = 1; i <= 14; ++i) {
+    		try {
+    			Date start = DateHelper.serverDateFormat.parse(startDate);
+				Calendar c = Calendar.getInstance();   			  
+			    c.setTime(start);   
+			    c.add(Calendar.DATE, i - 1);   
+			    // compare the date 
+			    if (DateHelper.serverDateFormat.format(c.getTime()).equals(selectedDate)) {
+			    	return i;
+			    }
+    		} catch (ParseException e) {
+    			e.printStackTrace();
+    		}
+    	}
+    	
+    	return -1;
+    }
 }
