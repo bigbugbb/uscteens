@@ -1,12 +1,9 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,11 +14,8 @@ import java.util.Map;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 
 import android.content.Context;
 import android.util.Pair;
@@ -31,10 +25,10 @@ import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
+import edu.neu.android.wocketslib.mhealth.sensordata.AnnotationSaver;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
-import edu.neu.android.wocketslib.utils.WOCKETSException;
 import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 public class DataSource {
@@ -303,54 +297,52 @@ public class DataSource {
 	 * @return
 	 */
 	private static boolean loadRawChunkData(String date) {
-		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + TeensGlobals.ANNOTATION_FOLDER;
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
+				TeensGlobals.SENSOR_FOLDER + date + File.separator + "Teens.bigbug.annotation.xml";
 		
 		String[] chunkFilePaths = FileHelper.getFilePathsDir(path);
 		if (chunkFilePaths == null || chunkFilePaths.length == 0) {			
 			return false;
-		}	
+		}
 				
 		SAXReader saxReader = new SAXReader();				
 		try {
 			Document document = saxReader.read(new File(chunkFilePaths[0]));				
-			Element root = document.getRootElement();
-
-		    for (Iterator i = root.elementIterator(); i.hasNext();) {
-		       Element annotations = (Element) i.next();
-		       for (Iterator j = annotations.elementIterator(); j.hasNext();) {
-		    	   Element annotation = (Element) j.next();
-		    	   for (Iterator k = annotation.elementIterator(); k.hasNext();) {
-			    	   Element label = (Element) k.next();
-			    	   Element start = (Element) k.next();
-			    	   Element stop  = (Element) k.next();
-			    	   Element prop  = (Element) k.next();			    	
-			    	   
-			    	   String guid = "";
-			    	   for (Iterator n = label.attributeIterator(); n.hasNext();) {
-			    	       Attribute attribute = (Attribute) n.next();			    	       
-			    	       if (attribute.getName().compareTo("GUID") == 0) {
-			    	    	   guid = attribute.getText();
-			    	       } 
-			    	   }
-			    	   
-			    	   String modify = "";
-			    	   String create = "";			    	   
-			    	   for (Iterator n = prop.attributeIterator(); n.hasNext();) {
-			    	       Attribute attribute = (Attribute) n.next();			    	       
-			    	       if (attribute.getName().compareTo("LAST_MODIFIED") == 0) {
-			    	    	   modify = attribute.getText();
-			    	       } else if (attribute.getName().compareTo("DATE_CREATED") == 0) {
-			    	    	   create = attribute.getText(); 	    	   
-			    	       }
-			    	   }			    	   
-			    	   Action action = ActionManager.getAction(guid);			    	   
-			    	   RawChunk rawchunk = new RawChunk(
-			    			   start.getText(), stop.getText(), action, create, modify);
-			    	   sRawChksWrap.add(rawchunk);
-			       }
-		        
+			Element annotations = document.getRootElement();
+		   
+	        for (Iterator i = annotations.elementIterator(); i.hasNext();) {
+	    	    Element annotation = (Element) i.next();
+	    	    for (Iterator j = annotation.elementIterator(); j.hasNext();) {
+		    	    Element label = (Element) j.next();
+		    	    Element start = (Element) j.next();
+		    	    Element stop  = (Element) j.next();
+		    	    Element prop  = (Element) j.next();			    	
+		    	   
+		    	    String guid = "";
+		    	    for (Iterator n = label.attributeIterator(); n.hasNext();) {
+		    	        Attribute attribute = (Attribute) n.next();			    	       
+		    	        if (attribute.getName().compareTo("GUID") == 0) {
+		    	    	    guid = attribute.getText();
+		    	        } 
+		    	    }
+		    	   
+		    	    String modify = "";
+		    	    String create = "";			    	   
+		    	    for (Iterator n = prop.attributeIterator(); n.hasNext();) {
+		    	        Attribute attribute = (Attribute) n.next();			    	       
+		    	        if (attribute.getName().compareTo("LAST_MODIFIED") == 0) {
+		    	    	    modify = attribute.getText();
+		    	        } else if (attribute.getName().compareTo("DATE_CREATED") == 0) {
+		    	    	    create = attribute.getText(); 	    	   
+		    	        }
+		    	    }			    	   
+		    	    Action action = ActionManager.getAction(guid);			    	   
+		    	    RawChunk rawchunk = new RawChunk(start.getText(), stop.getText(), action, create, modify);
+		    	    sRawChksWrap.add(rawchunk);
 		       }
-		    }
+	        
+	        }
+		
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -367,7 +359,7 @@ public class DataSource {
 	 * @return true if the raw label wrap has label data, otherwise false
 	 */
 	public static boolean loadLabelData(String date, RawLabelWrap rawLabelWrap) {
-		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + TeensGlobals.LABELS_FOLDER;
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.LABELS_FOLDER + date + File.separator;
 		
 		// first clear the data container		
 		rawLabelWrap.clear();
@@ -419,7 +411,7 @@ public class DataSource {
 	 * @return true if succeed, otherwise false
 	 */
 	public static boolean saveLabelData(String date, RawLabelWrap rawLabelWrap) {						
-		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + TeensGlobals.LABELS_FOLDER;
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.LABELS_FOLDER + date + File.separator;
 		
 		// build the file path name
 		String filePathName = ""; 
@@ -482,31 +474,34 @@ public class DataSource {
 	}
 	
 	public static boolean areAllChunksLabelled(String date) {
-		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + 
-			date + TeensGlobals.ANNOTATION_FOLDER + TeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
+				TeensGlobals.SENSOR_FOLDER + date + File.separator + "Teens.bigbug.annotation.xml";
 		
 		File file = new File(path);		
 		if (!file.exists()) {			
 			return false;
 		}
 		
-		boolean isAllLabelled = false;
+		boolean isAllLabelled = true;
 		SAXReader saxReader = new SAXReader();		
 		try {
 			Document document = saxReader.read(new File(path));								
 			Element root = document.getRootElement();
-
-		    for (Iterator i = root.elementIterator(); i.hasNext();) {
-		       Element annotations = (Element) i.next();		       
-	    	   for (Iterator n = annotations.attributeIterator(); n.hasNext();) {
-	    	       Attribute attribute = (Attribute) n.next();
-	    	       
-	    	       if (attribute.getName().compareTo("ALL_LABELLED") == 0) {
-	    	    	   String text = attribute.getText();
-	    	    	   isAllLabelled = text.compareToIgnoreCase("yes") == 0;
-	    	       } 
-	    	    }	    	
-		    }
+			for (Iterator i = root.elementIterator(); i.hasNext();) {
+				Element annotation = (Element) i.next();
+				for (Iterator j = annotation.elementIterator(); j.hasNext();) {
+				    Element label = (Element) j.next();
+				    for (Iterator k = label.attributeIterator(); k.hasNext();) {
+				    	Attribute attribute = (Attribute) k.next();			    	       
+				    	if (attribute.getName().equals("GUID")) {
+				    		String guid = attribute.getText();
+				    		if (guid.equals(TeensGlobals.UNLABELLED_GUID)) {
+				    			isAllLabelled = false;
+				    		}
+				    	} 
+				    }
+				}
+			}
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();			
@@ -518,9 +513,7 @@ public class DataSource {
 	public static boolean saveChunkData(final ArrayList<Chunk> chunks) {
 		boolean result = false;		
 		String date = DataStorage.GetValueString(sContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
-		assert(date.compareTo("") != 0);
-		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator
-			 + date + TeensGlobals.ANNOTATION_FOLDER + TeensGlobals.ANNOTATION_SET + "." + date + ".annotation.xml";			
+		assert(date.compareTo("") != 0);			
 
 		sRawChksWrap.clear();
 		for (int i = 0; i < chunks.size(); ++i) {
@@ -529,70 +522,31 @@ public class DataSource {
 			sRawChksWrap.add(rawChunk);
 		}
 		
-		Document document = DocumentHelper.createDocument();
-        
-		// ACTIVITYDATA
-        Element root = document.addElement("ACTIVITYDATA");
-        root.addAttribute("xmlns", "urn:mites-schema");
-        // ANNOTATIONS
-        Element annotations = root.addElement("ANNOTATIONS")
-	        .addAttribute("DATASET", "USCTeens")
-	        .addAttribute("ANNOTATOR", "bigbug")
-	        .addAttribute("EMAIL", "bigbugbb@gmail.com")
-	        .addAttribute("DESCRIPTION", "teen activities")
-	        .addAttribute("METHOD", "based on convolution & pre-defined thresholds")
-	        .addAttribute("NOTES", "")
-	        .addAttribute("ALL_LABELLED", sRawChksWrap.areAllChunksLabelled() ? "yes" : "no");
-
+		// Add all the annotations
+		AnnotationSaver annotationSaver = new AnnotationSaver(true, "Teens", "bigbug", "bigbugbb@gmail.com",
+				"teen activities", "based on convolution & pre-defined thresholds", "");
         for (RawChunk rawChunk : sRawChksWrap) {
         	Action action = rawChunk.getAction();
-	        // ANNOTATION
-	        Element annotation = annotations.addElement("ANNOTATION")
-	        	.addAttribute("GUID", TeensGlobals.ANNOTATION_GUID);
-	        // LABEL
-	        Element label = annotation.addElement("LABEL")
-		        .addAttribute("GUID", action.getActionID())
-		        .addText(action.getActionName());
-	        // START_DT
-	        Element start_dt = annotation.addElement("START_DT")
-	        	.addText(rawChunk.mStartDate);
-	        // STOP_DT
-	        Element stop_dt = annotation.addElement("STOP_DT")
-	        	.addText(rawChunk.mStopDate);
-	        // PROPERTIES
-	        Element properties = annotation.addElement("PROPERTIES")
-		        .addAttribute("ANNOTATION_SET", "Teen activity study")		       
-		        .addAttribute("LAST_MODIFIED", rawChunk.mModifyTime)
-		        .addAttribute("DATE_CREATED",  rawChunk.mCreateTime);
-        }
-                
-        XMLWriter writer;
-		try {
-			File aFile = new File(path);							
-			FileHelper.createDirsIfDontExist(aFile);
-			// Create the file if it does not exist
-			if (!aFile.exists()) {					
-				aFile.createNewFile();
+        	try {
+				annotationSaver.addAnnotation(
+					TeensGlobals.ANNOTATION_GUID, 
+					action.getActionID(), 
+					action.getActionName(), 
+					Globals.mHealthTimestampFormat.parse(rawChunk.mStartDate), 
+					Globals.mHealthTimestampFormat.parse(rawChunk.mStopDate), 
+					TeensGlobals.ANNOTATION_SET, 
+					Globals.mHealthTimestampFormat.parse(rawChunk.mModifyTime), 
+					Globals.mHealthTimestampFormat.parse(rawChunk.mCreateTime)
+				);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			// The file will be truncated if it exists, and created if it doesn't exist.			
-			writer = new XMLWriter(new FileOutputStream(path), new OutputFormat("    ", true));			
-			writer.write(document);
-	        writer.close();
-	        result = true;
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (WOCKETSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}                   
-		
+        }
+        
+        // Save the changes into the file
+        annotationSaver.commitToFile();
+
 		return result;
 	}
 	
