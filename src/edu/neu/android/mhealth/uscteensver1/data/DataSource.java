@@ -18,6 +18,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.Pair;
 import au.com.bytecode.opencsv.CSVReader;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
@@ -505,11 +506,10 @@ public class DataSource {
 		return isAllLabelled;
 	}
 
-	public static boolean saveChunkData(final ArrayList<Chunk> chunks) {
-		boolean result = false;		
+	public static boolean saveChunkData(final ArrayList<Chunk> chunks) {	
 		String date = DataStorage.GetValueString(sContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
-		assert(date.compareTo("") != 0);			
-
+		assert(date.compareTo("") != 0);
+		
 		sRawChksWrap.clear();
 		for (int i = 0; i < chunks.size(); ++i) {
 			Chunk chunk = chunks.get(i);
@@ -517,9 +517,18 @@ public class DataSource {
 			sRawChksWrap.add(rawChunk);
 		}
 		
+		Date selDate;
+		try {
+			selDate = Globals.mHealthDateDirFormat.parse(date);
+		} catch (ParseException e1) {
+			Log.d(TAG, "Failed to parse selected date");
+			return false;
+		}
+		
 		// Add all the annotations
 		AnnotationSaver annotationSaver = new AnnotationSaver(true, "Teens", "bigbug", "bigbugbb@gmail.com",
 				"teen activities", "based on convolution & pre-defined thresholds", "");
+		annotationSaver.setDate(selDate);
         for (RawChunk rawChunk : sRawChksWrap) {
         	Action action = rawChunk.getAction();
         	try {
@@ -540,7 +549,7 @@ public class DataSource {
         }
         
         // Save the changes into the file
-        annotationSaver.commitToFile();
+        boolean result = annotationSaver.commitToFile();
 
 		return result;
 	}
