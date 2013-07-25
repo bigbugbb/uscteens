@@ -262,6 +262,9 @@ public class DataSource {
 						return filename.endsWith(".csv");
 					}
 				});
+				if (fileNames == null || fileNames.length == 0) {
+					continue;
+				}
 				String filePath = hourDirs[i] + File.separator + fileNames[0];
 				// load the hourly data from .bin file
 				ArrayList<AccelData> hourlyAccelData = new ArrayList<AccelData>();						
