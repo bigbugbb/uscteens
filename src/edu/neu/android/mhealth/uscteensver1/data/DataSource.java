@@ -300,14 +300,9 @@ public class DataSource {
 		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
 				TeensGlobals.SENSOR_FOLDER + date + File.separator + "Teens.bigbug.annotation.xml";
 		
-		String[] chunkFilePaths = FileHelper.getFilePathsDir(path);
-		if (chunkFilePaths == null || chunkFilePaths.length == 0) {			
-			return false;
-		}
-				
 		SAXReader saxReader = new SAXReader();				
 		try {
-			Document document = saxReader.read(new File(chunkFilePaths[0]));				
+			Document document = saxReader.read(new File(path));				
 			Element annotations = document.getRootElement();
 		   
 	        for (Iterator i = annotations.elementIterator(); i.hasNext();) {
@@ -321,7 +316,7 @@ public class DataSource {
 		    	    String guid = "";
 		    	    for (Iterator n = label.attributeIterator(); n.hasNext();) {
 		    	        Attribute attribute = (Attribute) n.next();			    	       
-		    	        if (attribute.getName().compareTo("GUID") == 0) {
+		    	        if (attribute.getName().equals("GUID")) {
 		    	    	    guid = attribute.getText();
 		    	        } 
 		    	    }
