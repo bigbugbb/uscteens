@@ -13,12 +13,13 @@ public class RewardWrap extends HashMap<String, Reward> {
 	
 	@Override
 	public void clear() {
-		Iterator iter = entrySet().iterator(); 
-		while (iter.hasNext()) { 
-		    Map.Entry entry = (Map.Entry) iter.next(); 	
-		    Reward reward = (Reward) entry.getValue();
+//		Iterator iter = entrySet().iterator(); 
+//		while (iter.hasNext()) { 
+//		    Map.Entry entry = (Map.Entry) iter.next(); 	
+//		    Reward reward = (Reward) entry.getValue();
 //		    reward.clear();
-		}
+//		}
+		super.clear();
 	}
 	
 	@Override

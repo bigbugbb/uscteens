@@ -107,9 +107,9 @@ public class RewardPage extends AppPage implements OnClickListener {
 				break;
 			}
 			daysAfterStarting++;			
-		}
+		} // 0-13
 		
-		mReward = RewardManager.getReward(daysAfterStarting);
+		mReward = RewardManager.getReward(daysAfterStarting + 1); // from 1-14
 		if (mReward == null || mReward.getLink().equals("")) {			
 			mBtnReward.setVisible(false);
 			mBtnDone.setX(mWidth * 0.2f);

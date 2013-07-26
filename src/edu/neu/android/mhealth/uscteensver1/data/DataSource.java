@@ -529,8 +529,8 @@ public class DataSource {
 		}
 		
 		// Add all the annotations
-		AnnotationSaver annotationSaver = new AnnotationSaver(true, "Teens", "bigbug", "bigbugbb@gmail.com",
-				"teen activities", "based on convolution & pre-defined thresholds", "");
+		AnnotationSaver annotationSaver = new AnnotationSaver(true, "chunks", "uscteens", "bigbugbb@gmail.com",
+				"chunks of activities", "based on convolution & pre-defined thresholds", "");
 		annotationSaver.setDate(selDate);
         for (RawChunk rawChunk : sRawChksWrap) {
         	Action action = rawChunk.getAction();

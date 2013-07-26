@@ -69,7 +69,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 	// special password for secret behaviors
 	private PasswordChecker mPwdStaff     = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
 	private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
-	private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
+	private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");	
 	// data loader
 	private LoadDataTask mDataLoader = null;
 	
@@ -314,7 +314,8 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         		switchPages(indexOfPage(PageType.REWARD_PAGE));        		
         		break;
         	case AppCmd.TUTOR:
-        		i = new Intent(null, Uri.parse("ytv://TNQESL12M9g"), TeensMainActivity.this, OpenYouTubePlayerActivity.class);
+        		i = new Intent(null, Uri.parse(TeensGlobals.TUTORIAL_VIDEO_URI), 
+        					TeensMainActivity.this, OpenYouTubePlayerActivity.class);
 				startActivity(i);
         		break;
         	case AppCmd.QUEST:

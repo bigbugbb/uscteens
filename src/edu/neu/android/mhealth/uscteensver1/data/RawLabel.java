@@ -20,7 +20,7 @@ class RawLabel implements Serializable, Comparable<RawLabel> {
 	
 	public RawLabel(String dateTime, String name) {
 		Date date = null;
-	    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+	    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 	    try {
 			date = df.parse(dateTime);
 		} catch (ParseException e) {	

@@ -44,7 +44,7 @@ public class RewardManager {
 	}
 	
 	public static Reward getReward(int daysAfterStarting) {
-		return sRewardWrap.get("" + (daysAfterStarting + 1));
+		return sRewardWrap.get("" + daysAfterStarting);
 	}
 	
 	public static RewardWrap getRewards() {
@@ -67,49 +67,49 @@ public class RewardManager {
 		}	
 		
 		// load reward configuration from assets
-		AssetManager assetManager = sContext.getAssets();
-	    String[] files = null;
-	    try {
-	        files = assetManager.list(ASSETS_DIR);
-	    } catch (IOException e) {
-	        Log.e(TAG, "Failed to get asset file list.", e);
-	    }
-	    for (String filename : files) {	    	
-			if (!filename.endsWith(".csv")) {
-				continue;
-			}
-	        InputStream in = null;
-			BufferedReader br = null;
-	        try {
-	        	String filePath = ASSETS_DIR + File.separator + filename;
-				in = assetManager.open(filePath);
-                br = new BufferedReader(new InputStreamReader(in));
-                String result = br.readLine();
-				while ((result = br.readLine()) != null) {						
-					// parse the line
-					String[] split = result.split("[,]");
-					Reward reward = new Reward(split[0].trim(), "file:///android_asset/rewards/" + split[1].trim(), 
-							split.length == 3 ? split[2].trim() : "");
-					sRewardWrap.put(split[0].trim(), reward);
-				}					
-	        } catch (IOException e) {
-	            Log.e(TAG, "Failed to copy asset file: " + filename, e);
-	        } finally {
-	        	if (br != null)
-					try {
-						br.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-	        	if (in != null) {
-	        		try {
-						in.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-	        	}
-	        }
-	    }
+//		AssetManager assetManager = sContext.getAssets();
+//	    String[] files = null;
+//	    try {
+//	        files = assetManager.list(ASSETS_DIR);
+//	    } catch (IOException e) {
+//	        Log.e(TAG, "Failed to get asset file list.", e);
+//	    }
+//	    for (String filename : files) {	    	
+//			if (!filename.endsWith(".csv")) {
+//				continue;
+//			}
+//	        InputStream in = null;
+//			BufferedReader br = null;
+//	        try {
+//	        	String filePath = ASSETS_DIR + File.separator + filename;
+//				in = assetManager.open(filePath);
+//                br = new BufferedReader(new InputStreamReader(in));
+//                String result = br.readLine();
+//				while ((result = br.readLine()) != null) {						
+//					// parse the line
+//					String[] split = result.split("[,]");
+//					Reward reward = new Reward(split[0].trim(), "file:///android_asset/rewards/" + split[1].trim(), 
+//							split.length == 3 ? split[2].trim() : "");
+//					sRewardWrap.put(split[0].trim(), reward);
+//				}					
+//	        } catch (IOException e) {
+//	            Log.e(TAG, "Failed to copy asset file: " + filename, e);
+//	        } finally {
+//	        	if (br != null)
+//					try {
+//						br.close();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//	        	if (in != null) {
+//	        		try {
+//						in.close();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//	        	}
+//	        }
+//	    }
 			
 		// then load the other configuration that might be modified by user from external storage/uploading
 		try {
