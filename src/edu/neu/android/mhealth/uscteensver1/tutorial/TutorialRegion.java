@@ -1,4 +1,4 @@
-package edu.neu.android.mhealth.uscteensver1.Tutorial;
+package edu.neu.android.mhealth.uscteensver1.tutorial;
 
 import java.io.Serializable;
 
