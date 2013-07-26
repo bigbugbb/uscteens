@@ -30,9 +30,10 @@ import edu.neu.android.wocketslib.utils.Log;
 public class FileGrabberUtils {
 	private static final String TAG = "FileGrabberUtils";
 
-	private static final String SRV_UPLOADS  = "/home/sftpdownload/USCTeensDownloads/";
-	private static final String FTP_USERNAME = "sftpdownload";
-	private static final String FTP_PASSWORD = "$parRow1ark";
+	private static final String SRV_UPLOADS  = "/home/bigBug/";
+	private static final String SRV_GRABBING = "download";
+	private static final String FTP_USERNAME = "bigBug";
+	private static final String FTP_PASSWORD = "@wazsj@";
 	private static final String FTP_SERVER   = "wockets.ccs.neu.edu";
 	
 	public static final String FILE_NOT_FOUND = "No such file";
@@ -226,18 +227,20 @@ public class FileGrabberUtils {
 	}
 
 	public static String getCurrentPhoneServerDirectory(Context c, String s) {
-		String result = SRV_UPLOADS + s + "/";// + "uscteens";
+		String result = SRV_UPLOADS + s + File.separator + SRV_GRABBING;
 		return result;
 	}
 
-	final public static String[] FLAT_FILE_LOCATIONS = new String[] { "test.txt" /*"Reward.csv"*/ };
+	final public static String[] FLAT_FILE_LOCATIONS = new String[] { 
+		"background.png", "reward.csv", "test.html" 
+	};
 
 	final public static String[] OPTIONAL_FILES = new String[] { "Countdown.log.csv", };
 
 	public static String getCurrentPhoneLocalInternalDirectory(Context c) {
 		//return c.getDir(Globals.APP_DIRECTORY, Context.MODE_PRIVATE).toString();
 		String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + 
-				Globals.APP_DATA_DIRECTORY + File.separator + "Rewards";
+				Globals.APP_DATA_DIRECTORY + File.separator + "rewards";
 		return dirPath;
 	}
 
@@ -259,7 +262,7 @@ public class FileGrabberUtils {
 		}
 		ArrayList<String> result = new ArrayList<String>();
 		for (String f : FLAT_FILE_LOCATIONS) {
-			String s = simpleDownloadSftp(currentPhoneServerDirectory + "/" + f,
+			String s = simpleDownloadSftp(currentPhoneServerDirectory + File.separator + f,
 					currentPhoneLocalDirectory + File.separator + f, c);
 
 			if (!s.equals("")) {
@@ -291,14 +294,9 @@ public class FileGrabberUtils {
 
 		try {
 			f.createNewFile();
-			/*
-			 * String FTP_SERVER=null;
-			 * if(ControllerServiceUtils.getIsTester(context))
-			 * FTP_SERVER="phi-city.ccs.neu.edu"; else
-			 * FTP_SERVER="cityproject.media.mit.edu";
-			 */
+			
 			session = jsch.getSession(FTP_USERNAME, FTP_SERVER, 22);
-			UserInfo ui = new MyUserInfo();
+			UserInfo ui = new SFTPUserInfo();
 			session.setUserInfo(ui);
 			session.setConfig("StrictHostKeyChecking", "no");
 			session.setConfig("UserKnownHostsFile", "/dev/null");
@@ -309,7 +307,7 @@ public class FileGrabberUtils {
 			ChannelSftp sftpChannel = (ChannelSftp) session.openChannel("sftp");
 			sftpChannel.connect();
 
-			try {
+			try {				
 				sftpChannel.get(webFile, phoneFile);
 			} catch (SftpException e) {
 				Log.e(TAG, "SftpException error downloading file: " + webFile + " with exception: "
@@ -343,8 +341,86 @@ public class FileGrabberUtils {
 
 		return result;
 	}
+//
+//	public static String[] downloadServerDataDir(Context c, String pid) {
+//		return downloadServerDataFiles(c, getCurrentPhoneServerDirectory(c, pid),
+//				getCurrentPhoneLocalInternalDirectory(c));
+//	}
+//
+//	public static String[] downloadServerDataDir(Context c, String currentPhoneServerDirectory,
+//			String currentPhoneLocalDirectory) {
+//		if (currentPhoneLocalDirectory == null) {
+//			String message = "Can't download data files to local storage";
+//			Log.e(TAG, message);
+//			return new String[] {};
+//		}
+//		String[] files = simpleDownloadSftpDir(currentPhoneServerDirectory, currentPhoneLocalDirectory, c);
+//		return files;
+//	}
+//	
+//	public static String[] simpleDownloadSftpDir(String webDir, String phoneDir, Context context) {
+//
+//		File f = new File(phoneDir);
+//
+//		f.mkdirs();
+//		if (!f.isDirectory()) {
+//			return null;
+//		}
+//
+//		JSch jsch = new JSch();
+//
+//		Session session = null;
+//		boolean success = true;
+//
+//		try {
+//			session = jsch.getSession(FTP_USERNAME, FTP_SERVER, 22);
+//			UserInfo ui = new SFTPUserInfo();
+//			session.setUserInfo(ui);
+//			session.setConfig("StrictHostKeyChecking", "no");
+//			session.setConfig("UserKnownHostsFile", "/dev/null");
+//			session.setPassword(ui.getPassword());
+//			session.setTimeout(20000);
+//			session.connect();
+//
+//			ChannelSftp sftpChannel = (ChannelSftp) session.openChannel("sftp");
+//			sftpChannel.connect();
+//
+//			try {				
+//				sftpChannel.get(webFile, phoneFile);
+//			} catch (SftpException e) {
+//				Log.e(TAG, "SftpException error downloading file: " + webFile + " with exception: "
+//						+ e.getMessage());
+//				String temp = e.getMessage();
+//				if (temp.equals(FILE_NOT_FOUND)) /* file not in server */
+//				{
+//					result = FILE_NOT_FOUND;
+//				}
+//				success = false;
+//			}
+//		} catch (IOException e) {
+//			Log.e(TAG,
+//					"IO error downloading file: " + webFile + " with exception: " + e.getMessage());
+//			success = false;
+//		} catch (JSchException e) {
+//			Log.e(TAG,
+//					"jsch error downloading file: " + webFile + " with exception: "
+//							+ e.getMessage());
+//			success = false;
+//		}
+//
+//		if (!success) {
+//			if (f != null) {
+//				f.delete();
+//			}
+//		} else {
+//			Log.i(TAG, "Success restoring: " + webFile + " from: " + webFile);
+//			result = phoneFile;
+//		}
+//
+//		return result;
+//	}
 
-	private static class MyUserInfo implements UserInfo {
+	private static class SFTPUserInfo implements UserInfo {
 		public String getPassphrase() {
 			return null;
 		}
