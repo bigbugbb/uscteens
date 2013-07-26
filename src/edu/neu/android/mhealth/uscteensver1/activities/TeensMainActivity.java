@@ -314,7 +314,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         		switchPages(indexOfPage(PageType.REWARD_PAGE));        		
         		break;
         	case AppCmd.TUTOR:
-        		i = new Intent(null, Uri.parse("ytv://TNQESL12M9g"), TeensMainActivity.this, OpenYouTubePlayerActivity.class);
+        		i = new Intent(null, Uri.parse("ytv://eXs3YeyIZTo"), TeensMainActivity.this, OpenYouTubePlayerActivity.class);
 				startActivity(i);
         		break;
         	case AppCmd.QUEST:
