@@ -9,14 +9,14 @@ import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
 import edu.neu.android.wocketslib.algorithm.MotionDetectAlgorithm;
-import edu.neu.android.wocketslib.emasurvey.model.SurveyExtraInfo;
+import edu.neu.android.wocketslib.algorithm.MotionInfo;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
 
 public class AccelDataChecker {
 	public final static String TAG = "AccelDataChecker";
 	
-	public static SurveyExtraInfo checkDataState(Context context, long startTime, long stopTime) {
+	public static MotionInfo checkDataState(Context context, long startTime, long stopTime) {
 		
 		// Get start/stop time
 		if (startTime == -1) {
@@ -26,19 +26,19 @@ public class AccelDataChecker {
 			stopTime = System.currentTimeMillis() - 120000; // make sure we have the data to analyze
 		}
 		if (startTime >= stopTime || Math.abs(startTime - stopTime) > 24 * 3600 * 1000) {
-			return new SurveyExtraInfo("error", null, null);
+			return new MotionInfo(MotionInfo.ERROR, null, null);
 		}
 		
 		// Get data first
 		int[] sensorData = getData(startTime, stopTime);
 		if (sensorData == null) {
-			return new SurveyExtraInfo("error", null, null);
+			return new MotionInfo(MotionInfo.ERROR, null, null);
 		}
 				
 		// Chunk the data just got		
 		ArrayList<Integer> chunkPos = ChunkingAlgorithm.getInstance().doChunking(startTime, stopTime, sensorData);
 		if (chunkPos == null) {
-			return new SurveyExtraInfo("error", null, null);
+			return new MotionInfo(MotionInfo.ERROR, null, null);
 		}
 		
 		// Analyze data to get the state for context sensitive prompt

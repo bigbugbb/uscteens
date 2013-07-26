@@ -13,9 +13,9 @@ import edu.neu.android.mhealth.uscteensver1.activities.TeensSurveyActivity;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataChecker;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.algorithm.MotionInfo;
 import edu.neu.android.wocketslib.emasurvey.SurveyScheduler;
 import edu.neu.android.wocketslib.emasurvey.model.PromptRecorder;
-import edu.neu.android.wocketslib.emasurvey.model.SurveyExtraInfo;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
 import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
@@ -31,10 +31,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 	public TeensSurveyScheduler(Context context) {
 		super(context, TeensSurveyActivity.class, 
 			new HashMap<String, Class<?>>() // prompt type to question set class 
-			{ 
-				/**
-				 * 
-				 */
+			{ 		
 				private static final long serialVersionUID = 1L;
 
 				{ 
@@ -59,20 +56,20 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 	
 	@Override 
 	protected SurveyPromptEvent detectNewPrompt() {
-		SurveyExtraInfo extInfo = AccelDataChecker.checkDataState(mContext, -1, -1);
-		String reason = extInfo.getReason();
+		MotionInfo motionInfo = AccelDataChecker.checkDataState(mContext, -1, -1);
+		int code = motionInfo.getMotionCode();
 		
-		if (!reason.equals("error") && !reason.equals("normal")) {
+		if (code != MotionInfo.ERROR && code != MotionInfo.NO_INTEREST) {
 			SurveyPromptEvent spe = new SurveyPromptEvent(System.currentTimeMillis(), 0);
-			spe.setPromptReason(reason);			
+			spe.setPromptReason(motionInfo.getDetail());			
 			spe.setPromptType("CS");
 			
 			boolean isReprompted = isLastScheduledSurveyReprompted();
 			long lastPromptTime = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY) - (isReprompted ? Globals.REPROMPT_DELAY_MS : 0);
-			long internalLength = (extInfo.getStopTimeInMS() - extInfo.getStartTimeInMS()) / 60000;
-			long adjustedLength = Math.min(internalLength, (extInfo.getStopTimeInMS() - lastPromptTime) / 60000);
-			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_START_TIME, extInfo.getStartTime());
-			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_STOP_TIME, extInfo.getStopTime());
+			long internalLength = (motionInfo.getStopTimeInMS() - motionInfo.getStartTimeInMS()) / 60000;
+			long adjustedLength = Math.min(internalLength, (motionInfo.getStopTimeInMS() - lastPromptTime) / 60000);
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_START_TIME, motionInfo.getStartTime());
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_STOP_TIME, motionInfo.getStopTime());
 			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_LENGTH, "" + internalLength);
 			spe.AddSurveySpecifiedRecord(TeensCSSurvey.ADJUSTED_INTERVAL_LENGTH, "" + adjustedLength);
 			return spe;
