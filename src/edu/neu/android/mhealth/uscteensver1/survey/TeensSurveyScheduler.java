@@ -60,7 +60,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		int code = motionInfo.getMotionCode();
 		
 		if (code != MotionInfo.ERROR && code != MotionInfo.NO_INTEREST) {
-			SurveyPromptEvent spe = new SurveyPromptEvent(System.currentTimeMillis(), 0);
+			SurveyPromptEvent spe = new SurveyPromptEvent(System.currentTimeMillis());
 			spe.setPromptReason(motionInfo.getDetail());			
 			spe.setPromptType("CS");
 			
@@ -163,7 +163,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		for (int i = 0; i < promptsPerDay; i++) {
 			promptSchedule.append("Prompt: " + DateHelper.getDate(promptTimes[i]) + NEWLINE);
 			// Create the corresponding prompt event for the random prompts
-			SurveyPromptEvent spe = new SurveyPromptEvent(promptTimes[i], 0);				
+			SurveyPromptEvent spe = new SurveyPromptEvent(promptTimes[i]);				
 			spe.setPromptType("Random");
 			long internalLength = Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS / 60000;
 			long adjustedLength = Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS / 60000;

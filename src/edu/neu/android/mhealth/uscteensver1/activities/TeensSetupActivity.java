@@ -156,7 +156,7 @@ public class TeensSetupActivity extends BaseActivity {
 				
 				i.putExtra(TeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
-					TeensRandomSurvey.class.getCanonicalName(), 1, new Object[] { 0 }
+					TeensRandomSurvey.class.getCanonicalName(), new Object[] { null }
 				));
 				startActivity(i);				
 			}
@@ -178,7 +178,7 @@ public class TeensSetupActivity extends BaseActivity {
 				
 				i.putExtra(TeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
-					TeensCSSurvey.class.getCanonicalName(), 1, new Object[] { null }
+					TeensCSSurvey.class.getCanonicalName(), new Object[] { null }
 				));
 				startActivity(i);					
 			}
