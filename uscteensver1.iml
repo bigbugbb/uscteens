@@ -13,8 +13,8 @@
     </content>
     <orderEntry type="jdk" jdkName="Android 4.2.2" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="libs" level="project" />
     <orderEntry type="module" module-name="wocketslib" />
+    <orderEntry type="library" name="libs" level="project" />
   </component>
 </module>
 
