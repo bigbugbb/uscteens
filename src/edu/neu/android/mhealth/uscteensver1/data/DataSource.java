@@ -305,13 +305,18 @@ public class DataSource {
 			}
 		});
 		
-		if (fileNames == null || fileNames.length == 0 || !new File(fileNames[0]).exists()) {			
+		if (fileNames == null || fileNames.length == 0) {		
+			return false;
+		}
+		
+		String filePath = path + File.separator + fileNames[0];
+		if (!new File(filePath).exists()) {	
 			return false;
 		}
 		
 		SAXReader saxReader = new SAXReader();				
 		try {
-			Document document = saxReader.read(new File(fileNames[0]));				
+			Document document = saxReader.read(new File(filePath));				
 			Element annotations = document.getRootElement();
 		   
 	        for (Iterator i = annotations.elementIterator(); i.hasNext();) {
