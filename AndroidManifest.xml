@@ -349,6 +349,12 @@
 			android:screenOrientation="portrait">
     	</activity>
     	
+        <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.TeensSurveyTestActivity"
+            android:excludeFromRecents="true"
+		    android:launchMode="singleInstance"
+			android:screenOrientation="portrait">
+    	</activity>
+    	
         <activity
             android:name="edu.neu.android.mhealth.uscteensver1.video.VideoActivity"
             android:launchMode="singleInstance"
