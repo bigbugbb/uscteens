@@ -2,6 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.activities;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -48,6 +49,7 @@ import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.AppUsageLogger;
+import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
@@ -131,6 +133,9 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 			String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY;
 			FileHelper.deleteDir(dirPath + TeensGlobals.ICON_FOLDER);	
 			FileHelper.deleteDir(dirPath + TeensGlobals.REWARD_FOLDER);
+			FileHelper.deleteFile(TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
+				TeensGlobals.SENSOR_FOLDER + DateHelper.serverDateFormat.format(new Date()) + File.separator + 
+				"Teens.bigbug.annotation.xml");
 		}
 	}
 

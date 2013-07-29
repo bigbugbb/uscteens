@@ -297,12 +297,21 @@ public class DataSource {
 	 * @return
 	 */
 	private static boolean loadRawChunkData(String date) {
-		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				TeensGlobals.SENSOR_FOLDER + date + File.separator + DATASET + "." + ANNOTATOR + ".annotation.xml";
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + TeensGlobals.SENSOR_FOLDER + date;
+		String[] fileNames = new File(path).list(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String filename) {
+				return filename.endsWith(".annotation.xml");
+			}
+		});
+		
+		if (fileNames == null || !new File(fileNames[0]).exists()) {			
+			return false;
+		}
 		
 		SAXReader saxReader = new SAXReader();				
 		try {
-			Document document = saxReader.read(new File(path));				
+			Document document = saxReader.read(new File(fileNames[0]));				
 			Element annotations = document.getRootElement();
 		   
 	        for (Iterator i = annotations.elementIterator(); i.hasNext();) {
@@ -472,17 +481,22 @@ public class DataSource {
 	public static final String ANNOTATOR = "uscteens";
 	
 	public static boolean areAllChunksLabelled(String date) {
-		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				TeensGlobals.SENSOR_FOLDER + date + File.separator + DATASET + "." + ANNOTATOR + ".annotation.xml";
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + TeensGlobals.SENSOR_FOLDER + date;
+		String[] fileNames = new File(path).list(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String filename) {
+				return filename.endsWith(".annotation.xml");
+			}
+		});
 		
-		if (!new File(path).exists()) {			
+		if (fileNames == null || !new File(fileNames[0]).exists()) {			
 			return false;
 		}
 		
 		boolean isAllLabelled = true;
-		SAXReader saxReader = new SAXReader();		
+		SAXReader saxReader = new SAXReader();
 		try {
-			Document document = saxReader.read(new File(path));								
+			Document document = saxReader.read(new File(fileNames[0]));								
 			Element root = document.getRootElement();
 			for (Iterator i = root.elementIterator(); i.hasNext();) {
 				Element annotation = (Element) i.next();
