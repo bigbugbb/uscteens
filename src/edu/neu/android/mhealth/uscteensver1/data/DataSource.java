@@ -17,10 +17,10 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import android.content.Context;
 import android.util.Log;
 import android.util.Pair;
 import au.com.bytecode.opencsv.CSVReader;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
@@ -41,10 +41,8 @@ public class DataSource {
 	public final static int ERR_NO_CHUNK_DATA  		= -3;	
 	public final static int ERR_WAITING_SENSOR_DATA = -4;		
 	
-	public final static String INTERNAL_LABEL_DATA_CSVFILEHEADER = 
-			"DateTime, Text\n";
+	public final static String INTERNAL_LABEL_DATA_CSVFILEHEADER = "DateTime, Text\n";
 	
-	protected static Context sContext = null;
 	// boolean to indicate whether the loading should be cancelled
 	protected static boolean sCancelled = false;
 	// raw chunk data
@@ -60,13 +58,9 @@ public class DataSource {
 //		System.loadLibrary("datasrc");
 //	}		
 	
-	public static void initialize(Context context) {
-		sContext = context;		
-	}
-	
 	public static long getLastLoadingTime() {
 		long lastLoadingTime = 
-				DataStorage.GetValueLong(sContext, TeensGlobals.LAST_DATA_LOADING_TIME, 0);	
+				DataStorage.GetValueLong(TeensAppManager.getAppContext(), TeensGlobals.LAST_DATA_LOADING_TIME, 0);	
 		return lastLoadingTime;
 	}
 	
@@ -82,7 +76,7 @@ public class DataSource {
 		if (currentTime - lastLoadingTime > TeensGlobals.UPDATING_TIME_THRESHOLD) {			
 			try {				
 				String select = DataStorage.GetValueString(
-					sContext, TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
+					TeensAppManager.getAppContext(), TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
 				);
 				Date curDate  = new Date(currentTime);
 				Date loadDate = new Date(lastLoadingTime);		
@@ -110,7 +104,7 @@ public class DataSource {
 	 * @return
 	 */
 	public static int loadRawData(String date) {
-		DataStorage.SetValue(sContext, TeensGlobals.CURRENT_SELECTED_DATE, date);
+		DataStorage.SetValue(TeensAppManager.getAppContext(), TeensGlobals.CURRENT_SELECTED_DATE, date);
 		
 		sCancelled = false;
 		
@@ -127,7 +121,7 @@ public class DataSource {
 		 * then load the corresponding chunk data.
 		 * if no chunk data, create the chunk data from sensor data
 		 */
-		String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String curDate = DateHelper.serverDateFormat.format(new Date());
 		if (date.compareTo(curDate) != 0) {
 			// the previous day's data are all available, just read it.
 			// if the chunking file has not been generated, create it.
@@ -170,10 +164,12 @@ public class DataSource {
 		 */
 		loadLabelData(date);
 		
-		// note the last time for loading data, used to indicate whether
-		// the data should be reloaded after the user has switched to another program
-		// and go back here after a while.
-		DataStorage.SetValue(sContext, 
+		/* 
+		 * note the last time for loading data, used to indicate whether
+		 * the data should be reloaded after the user has switched to another program
+		 * and go back here after a while.
+		 */
+		DataStorage.SetValue(TeensAppManager.getAppContext(), 
 				TeensGlobals.LAST_DATA_LOADING_TIME, System.currentTimeMillis());
 			
 		return result;
@@ -192,7 +188,7 @@ public class DataSource {
 //	}
 	
 	public static String getCurrentSelectedDate() {
-		return DataStorage.GetValueString(sContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
+		return DataStorage.GetValueString(TeensAppManager.getAppContext(), TeensGlobals.CURRENT_SELECTED_DATE, "");
 	}
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -510,7 +506,7 @@ public class DataSource {
 	}
 
 	public static boolean saveChunkData(final ArrayList<Chunk> chunks) {	
-		String date = DataStorage.GetValueString(sContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
+		String date = getCurrentSelectedDate();
 		assert(date.compareTo("") != 0);
 		
 		sRawChksWrap.clear();

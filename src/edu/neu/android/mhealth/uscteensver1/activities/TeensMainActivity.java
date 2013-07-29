@@ -119,9 +119,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 	
 	private void setupGlobal() {
 		Context context = getApplicationContext();
-		TeensGlobals.sContext = context;
 		TeensGlobals.sGlobalHandler = mHandler;
-		DataSource.initialize(getApplicationContext());	
 		
 		// update flag indicating whether we should 
 		// copy folders from assets to external storage
@@ -178,12 +176,9 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 	}
 	
 	private void loadExtra() {
-		Context context = getApplicationContext();		
 		// load activities for activity selection list
-		ActionManager.initialize(context);
 		ActionManager.start();
 		// load rewards for the reward view
-		RewardManager.initialize(context);
 		RewardManager.start();
 	}
 	
@@ -405,9 +400,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         // Inserting the reward state which is not contained in the table
     	// Reading all states
     	boolean isContained = false;
-    	String select = DataStorage.GetValueString(
-			getApplicationContext(), TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
-		);
+    	String select = DataSource.getCurrentSelectedDate();
         Log.d("Reading: ", "Reading all states..");
         List<RewardState> states = db.getAllRewardStates();       
         for (RewardState s : states) {

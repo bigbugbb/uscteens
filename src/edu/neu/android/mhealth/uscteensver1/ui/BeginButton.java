@@ -8,7 +8,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class BeginButton extends CustomButton {
@@ -25,7 +25,7 @@ public class BeginButton extends CustomButton {
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText.setColor(Color.WHITE);
 		mPaintText.setStyle(Style.FILL);
-		mPaintText.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf"));
+		mPaintText.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf"));
 		mPaintText.setFakeBoldText(true);
 		mPaintText.setTextSize(AppScale.doScaleW(46));
 		mPaintText.setTextAlign(Paint.Align.CENTER);

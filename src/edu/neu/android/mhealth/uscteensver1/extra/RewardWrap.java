@@ -1,8 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.extra;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 // date -> action
 public class RewardWrap extends HashMap<String, Reward> {

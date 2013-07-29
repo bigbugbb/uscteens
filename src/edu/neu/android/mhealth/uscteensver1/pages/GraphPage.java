@@ -62,11 +62,8 @@ public class GraphPage extends AppPage implements OnClickListener,
 	public GraphPage(Context context, View view, Handler handler) {
 		super(context, handler);				
 		mView = view;
-		ChunkManager.initialize(context);
 		ChunkManager.setUserData(this);
-		ChunkManager.setOnBoundaryScaleListener(this);
-		
-		LabelManager.initialize(context);				
+		ChunkManager.setOnBoundaryScaleListener(this);		
 	}
 
 	public MotionGraph getMotionGraph() {
@@ -461,7 +458,7 @@ public class GraphPage extends AppPage implements OnClickListener,
 	
 	private int getCountOfDayFromStartDate() {
     	String startDate = DataStorage.getStartDate(getContext(), "");
-    	String selectedDate = DataStorage.GetValueString(getContext(), TeensGlobals.CURRENT_SELECTED_DATE, "");
+    	String selectedDate = DataSource.getCurrentSelectedDate();
     	
     	for (int i = 1; i <= 14; ++i) {
     		try {

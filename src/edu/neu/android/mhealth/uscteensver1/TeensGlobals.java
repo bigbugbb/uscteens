@@ -3,9 +3,12 @@
 import java.util.HashMap;
 
 import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Handler;
 import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.activities.helpcomment.GetHelpActivity;
+import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.utils.FileHelper;
 
 /**
@@ -17,10 +20,10 @@ import edu.neu.android.wocketslib.utils.FileHelper;
 public class TeensGlobals {
 	public static String VERSION_NAME = "";
 	
-	public final static int    PIXEL_PER_DATA = 2;	
-	public final static int    MAX_WIDTH_IN_PIXEL = 3600 * 24 * PIXEL_PER_DATA;
-	public final static int    UPDATING_TIME_THRESHOLD = 60 * 1000; // in ms
-	public final static int	   MAX_AVAILABLE_LABELING_DAYS = 2;		
+	public final static int PIXEL_PER_DATA = 2;	
+	public final static int MAX_WIDTH_IN_PIXEL = 3600 * 24 * PIXEL_PER_DATA;
+	public final static int UPDATING_TIME_THRESHOLD = 60 * 1000; // in ms
+	public final static int	MAX_AVAILABLE_LABELING_DAYS = 2;		
 	
 	public final static String DATA_LOADING_RESULT = "DATA_LOADING_RESULT";
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
@@ -39,7 +42,6 @@ public class TeensGlobals {
 	
 	public final static int TIME_WAITING_SENSOR_DATA_IN_MS = 21 * 1000;
 		
-	public static Context sContext = null;
 	public static Handler sGlobalHandler = null;	
 	public static boolean sUpdateConfig = false;
 	
@@ -52,14 +54,14 @@ public class TeensGlobals {
 	
 	public static String DIRECTORY_PATH = "";
 	
-	public static void initGlobals(Context aContext) {
+	public static void initGlobals(Context context) {
 		// By default the logging will go to the apps internal storage, not the external directory
 		Globals.IS_DEBUG = false;
 		Globals.IS_LOG_EXTERNAL = false;
 		Globals.APP_DIRECTORY = "uscteens";		
 
-		Globals.setArbitrater(new TeensArbitrater(aContext));
-		Globals.initDataDirectories(aContext);
+		Globals.setArbitrater(new TeensArbitrater(context));
+		Globals.initDataDirectories(context);
 		
 		DIRECTORY_PATH = Globals.EXTERNAL_DIRECTORY_PATH;
 		Globals.IS_RECORDING_PHONE_ACCEL_ENABLED = true;
@@ -68,7 +70,7 @@ public class TeensGlobals {
 		Globals.STUDY_SERVER_NAME = "USCTeens";
 		Globals.UNIQUE_LOG_STRING = "TESTTeens";
 
-		FileHelper.testFunction(aContext);
+		FileHelper.testFunction(context);
 		
 		Globals.WOCKETS_SP_URI = Uri.parse("content://edu.neu.android.mhealth.uscteensver1.provider");
 		Globals.PACKAGE_NAME = "edu.neu.android.mhealth.uscteensver1";
@@ -111,6 +113,10 @@ public class TeensGlobals {
 		
 		Globals.PW_STAFF_PASSWORD = "uscteen";
 		Globals.PW_SUBJECT_PASSWORD = "setup";
+		
+		Globals.SFTP_SERVER_USER_NAME = "sftpdownload";
+		Globals.SFTP_SERVER_PASSWORD  = "$parRow1ark";
+		Globals.SFTP_SERVER_URL       = "wockets.ccs.neu.edu";
 
 		// Survey prompting parameters 
 		Globals.AUDIO_PROMPT_START_HOUR = 8;
@@ -130,8 +136,8 @@ public class TeensGlobals {
 		Globals.ALL_APP_KEYS_PROMPTED[0] = Globals.SURVEY;
 		
 		Globals.classFromKey = new HashMap<String, Class<?>>();
-		Globals.classFromKey.put(Globals.GETHELP, edu.neu.android.wocketslib.activities.helpcomment.GetHelpActivity.class);
-		Globals.classFromKey.put(Globals.SURVEY, edu.neu.android.wocketslib.emasurvey.SurveyActivity.class);
+		Globals.classFromKey.put(Globals.GETHELP, GetHelpActivity.class);
+		Globals.classFromKey.put(Globals.SURVEY, SurveyActivity.class);
 
 		// Appinfo order of preference in main menu
 		Globals.ALL_APP_KEYS = new String[2];
@@ -139,6 +145,16 @@ public class TeensGlobals {
 		Globals.ALL_APP_KEYS[1] = Globals.SURVEY;
 
 		Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 21000;
+		
+		try {
+    		String packageName = context.getPackageName();
+			TeensGlobals.VERSION_NAME = "Ver. " + 
+					context.getPackageManager().getPackageInfo(packageName, 0).versionName;					
+		} catch (NameNotFoundException e) {		
+			e.printStackTrace();
+		}
+		
+		Globals.myBroadcastReceiverProcessor = new TeensBroadcastReceiverProcessor();
 	}
 	
 }

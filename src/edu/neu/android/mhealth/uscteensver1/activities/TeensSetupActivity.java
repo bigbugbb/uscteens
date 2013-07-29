@@ -2,7 +2,6 @@ package edu.neu.android.mhealth.uscteensver1.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -10,10 +9,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensCSSurvey;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensRandomSurvey;
-import edu.neu.android.mhealth.uscteensver1.utils.FileGrabberUtils;
+import edu.neu.android.mhealth.uscteensver1.threads.UpdateAppDataTask;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import edu.neu.android.wocketslib.dataupload.DataManager;
@@ -62,29 +60,14 @@ public class TeensSetupActivity extends BaseActivity {
 		}
 	}
 	
-	/**
-	 * Set the update button on/off depending on whether the task is completed.  
-	 */
-	public class UpdateConfigurationTask extends AsyncTask<Void, Void, Boolean> {
-		private final static String TAG = "UpdateConfigurationTask";
+	private class MyUpdateAppDataTask extends UpdateAppDataTask {
 		
-		private Context mContext;
-
-		public UpdateConfigurationTask(Context context) {
-			mContext = context;
-		}
-		
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			return FileGrabberUtils.downloadServerDataFilesWithResult(mContext, 
-					TeensAppManager.getParticipantId(mContext));
+		public MyUpdateAppDataTask(Context context) {
+			super(context);
 		}
 
-		protected void onPostExecute(Boolean isSuccessful) {
-			String msg = isSuccessful ? "Update complete." : "Fail to update, please try it later.";
-			Toast toast = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
-			toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-			toast.show();	
+		protected void onPostExecute(Boolean isNeedUpdate) {
+			super.onPostExecute(isNeedUpdate);
 			mBtnUpdateInfo.setEnabled(true);
 		}
 	}
@@ -190,7 +173,7 @@ public class TeensSetupActivity extends BaseActivity {
 				Log.o(TAG, Log.USER_ACTION, "Get udpate info");
 				displayToastMessage("Request to get update info, receiving all data from the server now.");
 				mBtnUpdateInfo.setEnabled(false);
-				new UpdateConfigurationTask(getApplicationContext()).execute();
+				new MyUpdateAppDataTask(getApplicationContext()).execute();
 			}
 		});
 		

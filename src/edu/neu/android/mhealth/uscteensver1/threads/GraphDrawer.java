@@ -20,7 +20,7 @@ public class GraphDrawer extends BaseThread {
 	// for pause synchronization
 	protected boolean mPaused = false;	
 	// idle time after each drawing
-	protected int mIdleTime = 10;
+	protected int mIdleTime = DEFAULT_IDLE_TIME;
 	
 	public GraphDrawer(GraphView view, AppPage page, Handler handler) {
 		mView   = view;

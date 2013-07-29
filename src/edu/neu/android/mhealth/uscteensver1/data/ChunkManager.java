@@ -4,8 +4,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.RectF;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -18,7 +18,6 @@ import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 public class ChunkManager {
 	
-	protected static Resources sResources = null;
 	protected static Object sUserData = null;			
 	protected static ArrayList<Chunk> sChunks = null;
 	
@@ -37,15 +36,7 @@ public class ChunkManager {
 	protected static float sCanvasWidth  = 0;
 	protected static float sCanvasHeight = 0;
 	
-	public static float PADDING_OFFSET = 0;
-		
-	protected static Context sContext = null;
-
-	public static void initialize(Context context) {
-		sResources = context.getResources();
-		sContext = context;	
-		PADDING_OFFSET = AppScale.doScaleW(180);
-	}	
+	public static float PADDING_OFFSET = AppScale.doScaleW(180);		
 	
 	public static void start() {
 		loadChunks();
@@ -93,13 +84,14 @@ public class ChunkManager {
 	}
 	
 	protected static void saveChunks() {
-		String selDate = DataStorage.GetValueString(sContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
-		String startDate = DataStorage.getStartDate(sContext, "");
+		Context context = TeensAppManager.getAppContext();
+		String selDate = DataSource.getCurrentSelectedDate();
+		String startDate = DataStorage.getStartDate(context, "");
 		// start date is less than or equal to the current date			
 		try {
 			int diff = WeekdayHelper.daysBetween(startDate, selDate);
-			DataStorage.SetValue(sContext, TeensGlobals.LAST_SELECTED_CHUNK + diff, sSelected);
-			DataStorage.SetValue(sContext, TeensGlobals.LAST_DISPLAY_OFFSET_X + diff, Math.abs((long) sDispOffsetX));
+			DataStorage.SetValue(context, TeensGlobals.LAST_SELECTED_CHUNK + diff, sSelected);
+			DataStorage.SetValue(context, TeensGlobals.LAST_DISPLAY_OFFSET_X + diff, Math.abs((long) sDispOffsetX));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -170,7 +162,7 @@ public class ChunkManager {
 	}
 
 	public static Chunk insertChunk(int index, Action action) {		
-		Chunk chunk = new Chunk(sResources, action);			
+		Chunk chunk = new Chunk(TeensAppManager.getAppResources(), action);			
 		sChunks.add(index, chunk);
 		return chunk;
 	}		

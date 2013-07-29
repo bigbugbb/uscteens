@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
-import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.DateHelper;
 
@@ -39,7 +39,7 @@ public class RewardView extends WebView {
 	    
 	    public String getCountOfDayFromStartDate() {
 	    	String startDate = DataStorage.getStartDate(getContext(), "");
-	    	String selectedDate = DataStorage.GetValueString(getContext(), TeensGlobals.CURRENT_SELECTED_DATE, "");
+	    	String selectedDate = DataSource.getCurrentSelectedDate();
 	    	
 	    	for (int i = 1; i <= 14; ++i) {
 	    		try {

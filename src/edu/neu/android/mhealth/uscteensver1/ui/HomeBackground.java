@@ -8,6 +8,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
@@ -24,7 +25,7 @@ public class HomeBackground extends Background {
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.LTGRAY);
 		mPaint.setStyle(Style.STROKE);
-		mPaint.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf"));
+		mPaint.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf"));
 		mPaint.setTextSize(AppScale.doScaleT(30));
 		
 		mVersion = TeensGlobals.VERSION_NAME;

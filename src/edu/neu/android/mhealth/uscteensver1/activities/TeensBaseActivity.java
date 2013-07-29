@@ -87,10 +87,10 @@ public class TeensBaseActivity extends FragmentActivity {
 		// 600);
 
 		// Logs once only
-		AppUsageLogger.logVersion(TAG, this.getApplicationInfo().packageName, this.getApplicationContext());
+		AppUsageLogger.logVersion(TAG, getApplicationInfo().packageName, getApplicationContext());
 
 		// Logs for every activity
-		AppUsageLogger.logSubjectID(TAG, DataStorage.GetSubjectID(this.getApplicationContext()));
+		AppUsageLogger.logSubjectID(TAG, DataStorage.GetSubjectID(getApplicationContext()));
 		AppUsageLogger.logActivities(TAG);		
 
 		// AppUsageLogger.onCreate(TAG, getClass().getName(),

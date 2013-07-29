@@ -16,43 +16,43 @@ public class RewardState {
 	}
 	// constructor
 	public RewardState(int id, String date, String state){
-		this.mID = id;
-		this.mDate = date;
-		this.mState = state;
+		mID    = id;
+		mDate  = date;
+		mState = state;
 	}
 	
 	// constructor
 	public RewardState(String date, String state){
-		this.mDate = date;
-		this.mState = state;
+		mDate  = date;
+		mState = state;
 	}
 	// getting ID
 	public int getID(){
-		return this.mID;
+		return mID;
 	}
 	
 	// setting id
 	public void setID(int id){
-		this.mID = id;
+		mID = id;
 	}
 	
 	// getting name
 	public String getDate(){
-		return this.mDate;
+		return mDate;
 	}
 	
 	// setting name
 	public void setDate(String date){
-		this.mDate = date;
+		mDate = date;
 	}
 	
 	// getting phone number
 	public String getState(){
-		return this.mState;
+		return mState;
 	}
 	
 	// setting phone number
 	public void setState(String state){
-		this.mState = state;
+		mState = state;
 	}
 }

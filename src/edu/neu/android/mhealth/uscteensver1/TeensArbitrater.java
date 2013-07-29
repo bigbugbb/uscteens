@@ -6,13 +6,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.content.Context;
 import android.os.Environment;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensSurveyScheduler;
-import edu.neu.android.mhealth.uscteensver1.utils.FileGrabberUtils;
+import edu.neu.android.mhealth.uscteensver1.threads.UpdateAppDataTask;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.sensormonitor.Arbitrater;
 import edu.neu.android.wocketslib.support.DataStorage;
@@ -51,7 +50,7 @@ public class TeensArbitrater extends Arbitrater {
 		mScheduler.tryToPromptSurvey(isNewSoftwareVersion);	
 		
 		// Try to update reward file from sftp server
-		tryToUpdateRewardFile();
+		tryToUpdateAppData();
 				
 		// Mark that arbitration taking place
 		DataStorage.setLastTimeArbitrate(mContext, System.currentTimeMillis());			
@@ -65,14 +64,13 @@ public class TeensArbitrater extends Arbitrater {
 		return false;
 	}
 	
-	private static long sLastUpdateRewardTime;
-	
-	public boolean tryToUpdateRewardFile() {
-		long now = System.currentTimeMillis();
+	public boolean tryToUpdateAppData() {
+		final String KEY = "LAST_REWARD_DATA_UPDATE_TIME";
+		long lastUpdateTime = DataStorage.GetValueLong(mContext, KEY, 0);
 		
-		if (Math.abs(now - sLastUpdateRewardTime) > Globals.HOURS24_MS / 2) {
-			sLastUpdateRewardTime = now;
-			return FileGrabberUtils.downloadServerDataFilesWithResult(mContext, TeensAppManager.getParticipantId(mContext));
+		if (Math.abs(System.currentTimeMillis() - lastUpdateTime) > Globals.HOURS24_MS) {
+			new UpdateAppDataTask(mContext).execute();
+			DataStorage.SetValue(mContext, KEY, System.currentTimeMillis());
 		} 
 		
 		return false;
@@ -90,11 +88,12 @@ public class TeensArbitrater extends Arbitrater {
 					log.append(line + "\r\n");
 				}
 			}
-			if (log.length() > 0)
+			if (log.length() > 0) {
 				saveLogCatRecord(log.toString());
-			if (isClear)
+			}
+			if (isClear) {
 				process = Runtime.getRuntime().exec("logcat -c");
-
+			}
 		} catch (IOException e) {
 			Log.e(TAG, "Could not read or clear logcat.");
 		}
@@ -105,17 +104,16 @@ public class TeensArbitrater extends Arbitrater {
 		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 			return;
 		}
-		Date promptTime = new Date(System.currentTimeMillis());
-		SimpleDateFormat folderFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String folderPath = Globals.SURVEY_LOG_DIRECTORY + File.separator + folderFormat.format(promptTime);
+		String folderPath = Globals.SURVEY_LOG_DIRECTORY + 
+				File.separator + DateHelper.serverDateFormat.format(new Date());
 		File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + folderPath);
 		folder.mkdirs();
 
 		File logFile = new File(folder, "logCatRecord.txt");
 		try {
-			if (!logFile.exists())
+			if (!logFile.exists()) {
 				logFile.createNewFile();
-
+			}
 			BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true));
 			writer.append(log);
 			writer.flush();

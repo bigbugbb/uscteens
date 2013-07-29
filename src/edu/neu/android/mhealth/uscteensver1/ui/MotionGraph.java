@@ -14,6 +14,7 @@ import android.graphics.Typeface;
 import android.util.Pair;
 import android.view.MotionEvent;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
@@ -100,13 +101,13 @@ public class MotionGraph extends AppObject {
 		mPaintTxt = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintTxt.setColor(Color.BLACK);
 		mPaintTxt.setStyle(Style.STROKE);
-		mPaintTxt.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial_bold.ttf"));
+		mPaintTxt.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial_bold.ttf"));
 		mPaintTxt.setTextSize(AppScale.doScaleT(36));
 		
 		mPaintDate = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintDate.setColor(Color.BLACK);
 		mPaintDate.setStyle(Style.STROKE);
-		mPaintDate.setTypeface(Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf"));
+		mPaintDate.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf"));
 		mPaintDate.setTextSize(AppScale.doScaleT(38));
 		mPaintDate.setFakeBoldText(false);
 		

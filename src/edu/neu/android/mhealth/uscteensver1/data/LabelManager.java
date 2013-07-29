@@ -2,14 +2,11 @@ package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.util.ArrayList;
 
-import android.content.Context;
-import android.content.res.Resources;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class LabelManager {
-	protected static Context   sContext   = null;
-	protected static Resources sResources = null;			
 	protected static ArrayList<Label> sLabels = null;
 	
 	protected static float sDispOffsetX  = 0;
@@ -22,11 +19,6 @@ public class LabelManager {
 	// used for adjusting the label's y coordinate
 	protected static ArrayList<Integer> sPrevXs = new ArrayList<Integer>();
 
-	public static void initialize(Context context) {
-		sContext   = context;	
-		sResources = context.getResources();				
-	}		
-	
 	public static void start() {
 		loadLabels();
 	}
@@ -97,13 +89,13 @@ public class LabelManager {
 	}
 	
 	public static Label insertLabel(int index) {		
-		Label label = new Label(sResources);			
+		Label label = new Label(TeensAppManager.getAppResources());			
 		sLabels.add(index, label);
 		return label;
 	}		
 	
 	public static Label insertLabel() {
-		Label label = new Label(sResources);
+		Label label = new Label(TeensAppManager.getAppResources());
 		sLabels.add(label);
 		return label;
 	}

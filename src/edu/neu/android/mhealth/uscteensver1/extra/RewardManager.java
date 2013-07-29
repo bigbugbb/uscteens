@@ -9,9 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-import android.content.Context;
-import android.content.res.AssetManager;
 import android.util.Log;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.utils.FileHelper;
@@ -27,13 +26,8 @@ public class RewardManager {
 	
 	private final static String ASSETS_DIR = "rewards";
 	
-	protected static Context sContext = null;
 	protected static boolean sCopied = false;
 	protected static RewardWrap sRewardWrap = new RewardWrap();
-	
-	public static void initialize(Context context) {
-		sContext = context;		
-	}
 	
 	public static void start() {
 		loadRewards();
@@ -67,10 +61,9 @@ public class RewardManager {
 		}	
 		
 		// load reward configuration from assets
-//		AssetManager assetManager = sContext.getAssets();
 //	    String[] files = null;
 //	    try {
-//	        files = assetManager.list(ASSETS_DIR);
+//	        files = TeensAppManager.getAppAssets().list(ASSETS_DIR);
 //	    } catch (IOException e) {
 //	        Log.e(TAG, "Failed to get asset file list.", e);
 //	    }
@@ -82,7 +75,7 @@ public class RewardManager {
 //			BufferedReader br = null;
 //	        try {
 //	        	String filePath = ASSETS_DIR + File.separator + filename;
-//				in = assetManager.open(filePath);
+//				in = TeensAppManager.getAppAssets().open(filePath);
 //                br = new BufferedReader(new InputStreamReader(in));
 //                String result = br.readLine();
 //				while ((result = br.readLine()) != null) {						
@@ -185,10 +178,9 @@ public class RewardManager {
 			e1.printStackTrace();
 		}
 		// get all file names needed 
-	    AssetManager assetManager = sContext.getAssets();
 	    String[] files = null;
 	    try {
-	        files = assetManager.list(ASSETS_DIR);
+	        files = TeensAppManager.getAppAssets().list(ASSETS_DIR);
 	    } catch (IOException e) {
 	        Log.e(TAG, "Failed to get asset file list.", e);
 	    }
@@ -197,7 +189,7 @@ public class RewardManager {
 	        InputStream in = null;
 	        OutputStream out = null;
 	        try {
-				in  = assetManager.open(ASSETS_DIR + File.separator + filename);
+				in  = TeensAppManager.getAppAssets().open(ASSETS_DIR + File.separator + filename);
 				out = new FileOutputStream(outfilePath + filename);
 				copyFile(in, out);
 				in.close();				

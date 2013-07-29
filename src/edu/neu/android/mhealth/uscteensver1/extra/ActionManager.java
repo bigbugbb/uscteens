@@ -9,9 +9,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.util.Log;
 import au.com.bytecode.opencsv.CSVReader;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
@@ -31,16 +31,10 @@ public class ActionManager {
 	
 	private final static String ASSETS_DIR = "activities";
 	
-	protected static Context sContext = null;
 	protected static boolean sCopied = false;
 	protected static ActionWrap sActionWrap = new ActionWrap();
 	protected static ArrayList<Action> sActivatedActions  = new ArrayList<Action>();
 	protected static ArrayList<Action> sMostRecentActions = new ArrayList<Action>(); 
-	
-	public static void initialize(Context context) {
-		sContext = context;
-		Action.initialize(context);
-	}
 	
 	public static void start() {
 		loadActions();
@@ -68,7 +62,7 @@ public class ActionManager {
 		
 		// try to get the most recent actions as much as possible
 		for (int i = 0; i < MOST_RECENT_ACTIONS_COUNT; ++i) {
-			String actID = DataStorage.GetValueString(sContext, MOST_RECENT_ACTION_ID + i, null);
+			String actID = DataStorage.GetValueString(TeensAppManager.getAppContext(), MOST_RECENT_ACTION_ID + i, null);
 			if (actID != null) {
 				for (Action action : activated) {
 					if (action.getActionID().equals(actID)) {								
@@ -103,16 +97,18 @@ public class ActionManager {
 		// make sure all the action id are stored
 		for (int i = 0; i < sMostRecentActions.size(); ++i) {
 			Action action = sMostRecentActions.get(i);
-			DataStorage.SetValue(sContext, MOST_RECENT_ACTION_ID + i, action.getActionID());
+			DataStorage.SetValue(TeensAppManager.getAppContext(), MOST_RECENT_ACTION_ID + i, action.getActionID());
 		}
 		
 		return sMostRecentActions;
 	}
 	
 	public static void setMostRecentAction(Action action) {	
+		Context context = TeensAppManager.getAppContext();
+		
 		int i = 0;				
 		for (i = 0; i < MOST_RECENT_ACTIONS_COUNT; ++i) {
-			String actID = DataStorage.GetValueString(sContext, MOST_RECENT_ACTION_ID + i, null);
+			String actID = DataStorage.GetValueString(context, MOST_RECENT_ACTION_ID + i, null);
 			if (actID.equals(action.getActionID())) { // the activity is currently in the most recent list
 				++i;
 				break;
@@ -121,10 +117,10 @@ public class ActionManager {
 		
 		for (int j = i - 2; j >= 0 ; --j) {
 			int next = j + 1;
-			String actID = DataStorage.GetValueString(sContext, MOST_RECENT_ACTION_ID + j, null);
-			DataStorage.SetValue(sContext, MOST_RECENT_ACTION_ID + next, actID);
+			String actID = DataStorage.GetValueString(context, MOST_RECENT_ACTION_ID + j, null);
+			DataStorage.SetValue(context, MOST_RECENT_ACTION_ID + next, actID);
 		}
-		DataStorage.SetValue(sContext, MOST_RECENT_ACTION_ID + 0, action.getActionID());
+		DataStorage.SetValue(context, MOST_RECENT_ACTION_ID + 0, action.getActionID());
 	}
 	
 	public static int loadActions() {
@@ -247,10 +243,9 @@ public class ActionManager {
 			e1.printStackTrace();
 		}
 		// get all file names needed 
-	    AssetManager assetManager = sContext.getAssets();
 	    String[] files = null;
 	    try {
-	        files = assetManager.list(ASSETS_DIR);
+	        files = TeensAppManager.getAppAssets().list(ASSETS_DIR);
 	    } catch (IOException e) {
 	        Log.e(TAG, "Failed to get asset file list.", e);
 	    }
@@ -259,7 +254,7 @@ public class ActionManager {
 	        InputStream in = null;
 	        OutputStream out = null;
 	        try {
-				in  = assetManager.open(ASSETS_DIR + File.separator + filename);
+				in  = TeensAppManager.getAppAssets().open(ASSETS_DIR + File.separator + filename);
 				out = new FileOutputStream(outfilePath + filename);
 				copyFile(in, out);
 				in.close();				

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.telephony.TelephonyManager;
 import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
@@ -24,22 +25,19 @@ public class TeensAppManager extends ApplicationManager {
     public void onCreate() {
     	super.onCreate();
     	
-    	TeensGlobals.initGlobals(getAppContext());   
-    	
-    	try {
-    		String packageName = getPackageName();
-			TeensGlobals.VERSION_NAME = "Ver. " + getPackageManager().getPackageInfo(packageName, 0).versionName;					
-		} catch (NameNotFoundException e) {		
-			e.printStackTrace();
-		}
-    	
-		TeensBroadcastReceiverProcessor aBRP = new TeensBroadcastReceiverProcessor();
-		edu.neu.android.wocketslib.Globals.myBroadcastReceiverProcessor = aBRP;
+    	TeensGlobals.initGlobals(getAppContext());       	    	    							
+    }
+    
+    public static AssetManager getAppAssets() {
+    	return getAppContext().getAssets();
+    }
+    
+    public static Resources getAppResources() {
+    	return getAppContext().getResources();
     }
     
     public static String getParticipantId(Context c) {
-		String subjectID = DataStorage.GetValueString(c,
-				edu.neu.android.wocketslib.support.DataStorage.KEY_SUBJECT_ID,
+		String subjectID = DataStorage.GetValueString(c, DataStorage.KEY_SUBJECT_ID, 
 				AuthorizationChecker.SUBJECT_ID_UNDEFINED);
 		if (!subjectID.equals(AuthorizationChecker.SUBJECT_ID_UNDEFINED)) {
 			return subjectID;
@@ -49,7 +47,7 @@ public class TeensAppManager extends ApplicationManager {
 	}
     
     private ArrayList<Activity> mActivityList = new ArrayList<Activity>();
-
+    
 	public void addActivity(Activity activity) {		
 		mActivityList.add(activity);
 	}

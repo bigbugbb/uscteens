@@ -19,7 +19,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 
@@ -50,7 +50,7 @@ public class MergeView extends View {
 		loadImages(new int[]{ R.drawable.warning_back, R.drawable.arrow_warning, 
 				R.drawable.selection, R.drawable.selection_circle });	
 		
-		Typeface tf = Typeface.createFromAsset(TeensGlobals.sContext.getAssets(), "font/arial.ttf");
+		Typeface tf = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
 		mPaintText0 = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText0.setColor(Color.WHITE);
 		mPaintText0.setStyle(Style.STROKE);
