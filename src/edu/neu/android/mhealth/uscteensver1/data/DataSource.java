@@ -298,7 +298,7 @@ public class DataSource {
 	 */
 	private static boolean loadRawChunkData(String date) {
 		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				TeensGlobals.SENSOR_FOLDER + date + File.separator + DATA_SET + "." + ANNOTATOR + ".annotation.xml";
+				TeensGlobals.SENSOR_FOLDER + date + File.separator + DATASET + "." + ANNOTATOR + ".annotation.xml";
 		
 		SAXReader saxReader = new SAXReader();				
 		try {
@@ -453,7 +453,7 @@ public class DataSource {
 			return 0;
 		}
 		// current selected date		
-		String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());		
+		String today = DateHelper.serverDateFormat.format(new Date());		
 		// create raw chunk data for each chunking position	
 		rawChunks.clear();
 		for (int i = 0; i < chunkPos.size() - 1; ++i) {						
@@ -468,12 +468,12 @@ public class DataSource {
 		sAccelDataWrap.clear();		
 	}
 	
-	public static final String DATA_SET  = "chunks";
+	public static final String DATASET   = "chunks";
 	public static final String ANNOTATOR = "uscteens";
 	
 	public static boolean areAllChunksLabelled(String date) {
 		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				TeensGlobals.SENSOR_FOLDER + date + File.separator + DATA_SET + "." + ANNOTATOR + ".annotation.xml";
+				TeensGlobals.SENSOR_FOLDER + date + File.separator + DATASET + "." + ANNOTATOR + ".annotation.xml";
 		
 		if (!new File(path).exists()) {			
 			return false;
@@ -527,7 +527,7 @@ public class DataSource {
 		}
 		
 		// Add all the annotations
-		AnnotationSaver annotationSaver = new AnnotationSaver(true, DATA_SET, ANNOTATOR, "bigbugbb@gmail.com",
+		AnnotationSaver annotationSaver = new AnnotationSaver(true, DATASET, ANNOTATOR, "bigbugbb@gmail.com",
 				"chunks of activities", "based on convolution & pre-defined thresholds", "");
 		annotationSaver.setDate(selDate);
         for (RawChunk rawChunk : sRawChksWrap) {
