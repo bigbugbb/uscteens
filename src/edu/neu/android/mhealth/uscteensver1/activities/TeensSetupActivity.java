@@ -38,6 +38,9 @@ public class TeensSetupActivity extends BaseActivity {
 	private Button mBtnUpdateInfo;
 	private Button mBtnFinishStudy;
 	private Button mBtnSetupDone;
+	
+	private final static String PROMPT_TYPE_CS_TEST     = "CS-Test";
+	private final static String PROMPT_TYPE_RANDOM_TEST = "Random-Test";
 
 	private void displayToastMessage(String aMsg) {
 		Toast toast = Toast.makeText(getApplicationContext(),aMsg, Toast.LENGTH_LONG);
@@ -129,18 +132,29 @@ public class TeensSetupActivity extends BaseActivity {
 			public void onClick(View v) {
 				long now = System.currentTimeMillis();
 				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, now);
-				Intent i = new Intent(TeensSetupActivity.this, SurveyActivity.class);
+				Intent i = new Intent(TeensSetupActivity.this, TeensSurveyTestActivity.class);
 				
 				// Construct survey prompt event
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
-				promptEvent.setPromptType("Random-Test");				
+				promptEvent.setPromptType(PROMPT_TYPE_RANDOM_TEST);				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				promptEvent.setReprompt(TeensSurveyActivity.isWorking());
+				promptEvent.setReprompt(TeensSurveyTestActivity.isWorking(TeensSurveyTestActivity.class));
 				
-				i.putExtra(TeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
+				i.putExtra(TeensSurveyTestActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
 					TeensRandomSurvey.class.getCanonicalName(), new Object[] { null }
 				));
+				
+				// Destroy the existent survey if it's not for "Random-Test";
+				SurveyActivity activity = SurveyActivity.getSelf(TeensSurveyTestActivity.class);
+				if (activity != null) {
+					final SurveyPromptEvent oldPromptEvent = activity.getSurveyPromptEvent();
+					assert(oldPromptEvent != null);
+					if (!oldPromptEvent.getPromptType().equals(PROMPT_TYPE_RANDOM_TEST)) {
+						activity.finish();
+					}
+				}
+				
 				startActivity(i);				
 			}
 		});
@@ -151,18 +165,29 @@ public class TeensSetupActivity extends BaseActivity {
 			public void onClick(View v) {
 				long now = System.currentTimeMillis();
 				AppInfo.SetStartManualTime(getApplicationContext(), Globals.SURVEY, now);
-				Intent i = new Intent(TeensSetupActivity.this, SurveyActivity.class);
+				Intent i = new Intent(TeensSetupActivity.this, TeensSurveyTestActivity.class);
 				
 				// Construct survey prompt event
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
-				promptEvent.setPromptType("CS-Test");				
+				promptEvent.setPromptType(PROMPT_TYPE_CS_TEST);				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				promptEvent.setReprompt(TeensSurveyActivity.isWorking());
+				promptEvent.setReprompt(TeensSurveyTestActivity.isWorking(TeensSurveyTestActivity.class));
 				
-				i.putExtra(TeensSurveyActivity.SURVEY_PROMPT_EVENT, promptEvent);
+				i.putExtra(TeensSurveyTestActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
 					TeensCSSurvey.class.getCanonicalName(), new Object[] { null }
 				));
+				
+				// Destroy the existent survey if it's not for "CS-Test";
+				SurveyActivity activity = SurveyActivity.getSelf(TeensSurveyTestActivity.class);
+				if (activity != null) {
+					final SurveyPromptEvent oldPromptEvent = activity.getSurveyPromptEvent();
+					assert(oldPromptEvent != null);
+					if (!oldPromptEvent.getPromptType().equals(PROMPT_TYPE_CS_TEST)) {
+						activity.finish();
+					}
+				}
+				
 				startActivity(i);					
 			}
 		});
