@@ -298,7 +298,7 @@ public class DataSource {
 	 */
 	private static boolean loadRawChunkData(String date) {
 		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				TeensGlobals.SENSOR_FOLDER + date + File.separator + "Teens.bigbug.annotation.xml";
+				TeensGlobals.SENSOR_FOLDER + date + File.separator + DATA_SET + "." + ANNOTATOR + ".annotation.xml";
 		
 		SAXReader saxReader = new SAXReader();				
 		try {
@@ -468,12 +468,14 @@ public class DataSource {
 		sAccelDataWrap.clear();		
 	}
 	
+	public static final String DATA_SET  = "chunks";
+	public static final String ANNOTATOR = "uscteens";
+	
 	public static boolean areAllChunksLabelled(String date) {
 		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				TeensGlobals.SENSOR_FOLDER + date + File.separator + "Teens.bigbug.annotation.xml";
+				TeensGlobals.SENSOR_FOLDER + date + File.separator + DATA_SET + "." + ANNOTATOR + ".annotation.xml";
 		
-		File file = new File(path);		
-		if (!file.exists()) {			
+		if (!new File(path).exists()) {			
 			return false;
 		}
 		
@@ -525,7 +527,7 @@ public class DataSource {
 		}
 		
 		// Add all the annotations
-		AnnotationSaver annotationSaver = new AnnotationSaver(true, "chunks", "uscteens", "bigbugbb@gmail.com",
+		AnnotationSaver annotationSaver = new AnnotationSaver(true, DATA_SET, ANNOTATOR, "bigbugbb@gmail.com",
 				"chunks of activities", "based on convolution & pre-defined thresholds", "");
 		annotationSaver.setDate(selDate);
         for (RawChunk rawChunk : sRawChksWrap) {
