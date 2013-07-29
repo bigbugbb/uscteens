@@ -305,7 +305,7 @@ public class DataSource {
 			}
 		});
 		
-		if (fileNames == null || !new File(fileNames[0]).exists()) {			
+		if (fileNames == null || fileNames[0] == null || !new File(fileNames[0]).exists()) {			
 			return false;
 		}
 		
@@ -489,7 +489,7 @@ public class DataSource {
 			}
 		});
 		
-		if (fileNames == null || !new File(fileNames[0]).exists()) {			
+		if (fileNames == null || fileNames[0] == null || !new File(fileNames[0]).exists()) {			
 			return false;
 		}
 		
