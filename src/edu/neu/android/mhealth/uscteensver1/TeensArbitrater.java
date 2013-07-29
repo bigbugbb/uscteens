@@ -41,10 +41,8 @@ public class TeensArbitrater extends Arbitrater {
 		// For testing purpose only
 		saveRecordsInLogcat(false);
 		
-		// Send the version information to the server at the beginning of a day
-		if (isBeginningOfDay()) {					
-			ServerLogger.sendNote(mContext, TeensGlobals.VERSION_NAME, Globals.NO_PLOT);
-		}
+		// Send application version information to server at midnight
+		sendAppVersionAtMidnight();
 
 		// Try to prompt the next survey if possible
 		mScheduler.tryToPromptSurvey(isNewSoftwareVersion);	
@@ -56,15 +54,15 @@ public class TeensArbitrater extends Arbitrater {
 		DataStorage.setLastTimeArbitrate(mContext, System.currentTimeMillis());			
 	}
 	
-	private boolean isBeginningOfDay() {
+	private void sendAppVersionAtMidnight() {
 		long midnight = DateHelper.getDailyTime(0, 0);
+		
 		if (System.currentTimeMillis() - midnight < Globals.MINUTES_1_IN_MS) {
-			return true;
+			ServerLogger.sendNote(mContext, TeensGlobals.VERSION_NAME, Globals.NO_PLOT);
 		}
-		return false;
 	}
 	
-	public boolean tryToUpdateAppData() {
+	private boolean tryToUpdateAppData() {
 		final String KEY = "LAST_REWARD_DATA_UPDATE_TIME";
 		long lastUpdateTime = DataStorage.GetValueLong(mContext, KEY, 0);
 		
