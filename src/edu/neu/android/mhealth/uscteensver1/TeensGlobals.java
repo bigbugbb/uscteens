@@ -63,8 +63,7 @@ public class TeensGlobals {
 		Globals.setArbitrater(new TeensArbitrater(context));
 		Globals.initDataDirectories(context);
 		
-		DIRECTORY_PATH = Globals.EXTERNAL_DIRECTORY_PATH;
-		Globals.IS_RECORDING_PHONE_ACCEL_ENABLED = true;
+		DIRECTORY_PATH = Globals.EXTERNAL_DIRECTORY_PATH;		
 
 		Globals.STUDY_NAME = "USCTeens"; // "Teens Study"; 
 		Globals.STUDY_SERVER_NAME = "USCTeens";
@@ -84,6 +83,8 @@ public class TeensGlobals {
 		Globals.IS_BLUETOOTH_ENABLED = false; 
 		Globals.IS_LOCATION_ENABLED = false; 
 		Globals.IS_READING_SENSOR_ENABLED = true; // true for debug
+		Globals.IS_LOG_PHONE_BATTERY_ENABLED = true;
+		Globals.IS_RECORDING_PHONE_ACCEL_ENABLED = true;
 
 		Globals.DEFAULT_MAIL_USERNAME = "wocketssmtp@gmail.com";
 		Globals.DEFAULT_MAIL_PASSWORD = "W0CKET$mtp";
