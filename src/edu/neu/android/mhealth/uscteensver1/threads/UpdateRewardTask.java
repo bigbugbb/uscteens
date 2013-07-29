@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.view.Gravity;
 import android.widget.Toast;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.utils.FileGrabber;
@@ -24,8 +25,8 @@ public class UpdateRewardTask extends AsyncTask<Void, Void, Boolean> {
 	public UpdateRewardTask(Context context) {
 		mContext = context;
 		mLocalDirPath  = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.REWARD_FOLDER;
-		//mRemoteDirPath = "/home/sftpdownload/USCTeensDownloads/" + TeensAppManager.getParticipantId(context) + File.separator + "download";
-		mRemoteDirPath = "/home/bigBug/100012/download/";
+		mRemoteDirPath = "/home/sftpdownload/USCTeensDownloads/" + TeensAppManager.getParticipantId(context) + File.separator + "download";
+		//mRemoteDirPath = "/home/bigBug/100012/download/";
 	}
 	
 	@Override
