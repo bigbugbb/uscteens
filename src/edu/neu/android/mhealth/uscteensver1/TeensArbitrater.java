@@ -11,7 +11,7 @@ import java.util.Date;
 import android.content.Context;
 import android.os.Environment;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensSurveyScheduler;
-import edu.neu.android.mhealth.uscteensver1.threads.UpdateAppDataTask;
+import edu.neu.android.mhealth.uscteensver1.threads.UpdateRewardTask;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.sensormonitor.Arbitrater;
 import edu.neu.android.wocketslib.support.DataStorage;
@@ -69,7 +69,7 @@ public class TeensArbitrater extends Arbitrater {
 		long lastUpdateTime = DataStorage.GetValueLong(mContext, KEY, 0);
 		
 		if (Math.abs(System.currentTimeMillis() - lastUpdateTime) > Globals.HOURS24_MS) {
-			new UpdateAppDataTask(mContext).execute();
+			new UpdateRewardTask(mContext).execute();
 			DataStorage.SetValue(mContext, KEY, System.currentTimeMillis());
 		} 
 		

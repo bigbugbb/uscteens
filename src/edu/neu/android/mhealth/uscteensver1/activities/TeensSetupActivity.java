@@ -11,7 +11,7 @@ import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensCSSurvey;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensRandomSurvey;
-import edu.neu.android.mhealth.uscteensver1.threads.UpdateAppDataTask;
+import edu.neu.android.mhealth.uscteensver1.threads.UpdateRewardTask;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.broadcastreceivers.MonitorServiceBroadcastReceiver;
 import edu.neu.android.wocketslib.dataupload.DataManager;
@@ -60,9 +60,9 @@ public class TeensSetupActivity extends BaseActivity {
 		}
 	}
 	
-	private class MyUpdateAppDataTask extends UpdateAppDataTask {
+	private class MyUpdateRewardTask extends UpdateRewardTask {
 		
-		public MyUpdateAppDataTask(Context context) {
+		public MyUpdateRewardTask(Context context) {
 			super(context);
 		}
 
@@ -173,7 +173,7 @@ public class TeensSetupActivity extends BaseActivity {
 				Log.o(TAG, Log.USER_ACTION, "Get udpate info");
 				displayToastMessage("Request to get update info, receiving all data from the server now.");
 				mBtnUpdateInfo.setEnabled(false);
-				new MyUpdateAppDataTask(getApplicationContext()).execute();
+				new MyUpdateRewardTask(getApplicationContext()).execute();
 			}
 		});
 		

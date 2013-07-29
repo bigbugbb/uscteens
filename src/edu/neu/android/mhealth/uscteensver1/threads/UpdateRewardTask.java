@@ -14,14 +14,14 @@ import edu.neu.android.wocketslib.utils.SftpFileGrabber;
 /**
  * Set the update button on/off depending on whether the task is completed.  
  */
-public class UpdateAppDataTask extends AsyncTask<Void, Void, Boolean> {
+public class UpdateRewardTask extends AsyncTask<Void, Void, Boolean> {
 	private final static String TAG = "UpdateAppDataTask";
 	
 	private Context mContext;
 	private String  mLocalDirPath;
 	private String  mRemoteDirPath;
 	
-	public UpdateAppDataTask(Context context) {
+	public UpdateRewardTask(Context context) {
 		mContext = context;
 		mLocalDirPath  = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.REWARD_FOLDER;
 		//mRemoteDirPath = "/home/sftpdownload/USCTeensDownloads/" + TeensAppManager.getParticipantId(context) + File.separator + "download";
