@@ -62,7 +62,7 @@ public class TeensArbitrater extends Arbitrater {
 		}
 	}
 	
-	private boolean tryToUpdateAppData() {
+	private void tryToUpdateAppData() {
 		final String KEY = "LAST_REWARD_DATA_UPDATE_TIME";
 		long lastUpdateTime = DataStorage.GetValueLong(mContext, KEY, 0);
 		
@@ -70,8 +70,6 @@ public class TeensArbitrater extends Arbitrater {
 			new UpdateRewardTask(mContext).execute();
 			DataStorage.SetValue(mContext, KEY, System.currentTimeMillis());
 		} 
-		
-		return false;
 	}
 	
 	public static void saveRecordsInLogcat(boolean isClear) {
