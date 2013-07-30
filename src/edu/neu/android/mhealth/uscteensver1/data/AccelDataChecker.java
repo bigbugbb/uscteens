@@ -6,6 +6,7 @@ import java.util.Date;
 
 import android.content.Context;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
+import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
 import edu.neu.android.wocketslib.algorithm.MotionDetectAlgorithm;
@@ -16,7 +17,8 @@ import edu.neu.android.wocketslib.utils.FileHelper;
 public class AccelDataChecker {
 	public final static String TAG = "AccelDataChecker";
 	
-	public static MotionInfo checkDataState(Context context, long startTime, long stopTime) {
+	public static MotionInfo checkDataState(long startTime, long stopTime) {
+		Context context = ApplicationManager.getAppContext();
 		
 		// Get start/stop time
 		if (startTime == -1) {
@@ -51,7 +53,7 @@ public class AccelDataChecker {
 		// read the whole piece of data according to the input time
 		String date = DateHelper.getServerDateString(new Date());
 		String[] hourDirs = FileHelper.getFilePathsDir(
-			TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + date + TeensGlobals.SENSOR_FOLDER
+			TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + TeensGlobals.SENSOR_FOLDER + date
 		);	
 		if (hourDirs == null) {
 			// no data to get

@@ -56,7 +56,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 	
 	@Override 
 	protected SurveyPromptEvent detectNewPrompt() {
-		MotionInfo motionInfo = AccelDataChecker.checkDataState(mContext, -1, -1);
+		MotionInfo motionInfo = AccelDataChecker.checkDataState(-1, -1);
 		int code = motionInfo.getMotionCode();
 		
 		if (code != MotionInfo.ERROR && code != MotionInfo.NO_INTEREST) {
