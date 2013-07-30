@@ -221,11 +221,16 @@ public class DataSource {
 		
 		CSVReader csvReader = null;
 		try {								
-			csvReader = new CSVReader(new FileReader(filePath));
+			csvReader = new CSVReader(new FileReader(filePath));			
 			String[] row = csvReader.readNext();
 			while ((row = csvReader.readNext()) != null) {
-				String[] split = row[0].split("[ :.]");
-				AccelData data = new AccelData(split[1], split[2], split[3], split[4], row[1], row[2]);
+				// hack the split position
+				AccelData data = new AccelData(
+						row[0].substring(11, 13), 
+						row[0].substring(14, 16), 
+						row[0].substring(17, 19), 
+						row[0].substring(20),
+						row[1], row[2]);
 				hourlyAccelData.add(data);
 			}
 		} catch (IOException e) {				
@@ -243,7 +248,7 @@ public class DataSource {
 		
 		return hourlyAccelData.size();
 	}
-	
+
 	private static int loadRawAccelData(String date) {
 		String[] hourDirs = FileHelper.getFilePathsDir(
 			TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + TeensGlobals.SENSOR_FOLDER + date
@@ -519,7 +524,7 @@ public class DataSource {
 				    		if (guid.equals(TeensGlobals.UNLABELLED_GUID)) {
 				    			isAllLabelled = false;
 				    		}
-				    	} 
+				    	}
 				    }
 				}
 			}

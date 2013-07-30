@@ -95,9 +95,9 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 		// create app pages and all the UIs in the pages
 		initPages();
 		// load extra data
-		loadExtra();
+		loadExtra();    
 	}
-	
+
 	@Override
 	public void onDestroy() {		
 		for (AppPage page : mPages) {
