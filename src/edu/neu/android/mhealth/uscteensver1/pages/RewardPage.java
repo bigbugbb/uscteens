@@ -13,6 +13,7 @@ import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.extra.Reward;
 import edu.neu.android.mhealth.uscteensver1.extra.RewardManager;
 import edu.neu.android.mhealth.uscteensver1.ui.DoneButton;
@@ -22,6 +23,7 @@ import edu.neu.android.mhealth.uscteensver1.ui.RewardBackground;
 import edu.neu.android.mhealth.uscteensver1.ui.RewardButton;
 import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 public class RewardPage extends AppPage implements OnClickListener {
@@ -96,7 +98,7 @@ public class RewardPage extends AppPage implements OnClickListener {
 		String selectedDate = DataStorage.GetValueString(mContext, TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01");			
 	    Date aStartDate = null;
 		try {
-			aStartDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
+			aStartDate = DateHelper.serverDateFormat.parse(startDate);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -159,7 +161,7 @@ public class RewardPage extends AppPage implements OnClickListener {
 			break;
 		case FIX:						
 			msg.what = AppCmd.BEGIN_LOADING;
-			msg.obj  = DataStorage.GetValueString(mContext, TeensGlobals.CURRENT_SELECTED_DATE, "");
+			msg.obj  = DataSource.getCurrentSelectedDate();
 			mHandler.sendMessage(msg);
 			break;
 		case REWARD:

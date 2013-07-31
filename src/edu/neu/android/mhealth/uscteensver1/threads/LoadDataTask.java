@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Process;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.dialog.LoadingDialog;
@@ -81,7 +82,9 @@ public class LoadDataTask extends AsyncTask<String, Void, Void> {
 	}
 
 	@Override
-	protected Void doInBackground(String[] params) {
+	protected Void doInBackground(String[] params) {		
+		android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND + 
+				Process.THREAD_PRIORITY_MORE_FAVORABLE);
 		synchronized (sLock) {			
 			mResult = DataSource.loadRawData(params[0]);
 		}
