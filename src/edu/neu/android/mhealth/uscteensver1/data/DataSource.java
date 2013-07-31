@@ -125,7 +125,7 @@ public class DataSource {
 		if (date.compareTo(curDate) != 0) {
 			// the previous day's data are all available, just read it.
 			// if the chunking file has not been generated, create it.
-			if (!loadRawChunkData(date) && createRawChunkData(0, 3600 * 24, sRawChksWrap) <= 0) {
+			if (!loadRawChunkData(date) && createRawChunkData(0, 3600 * 24 - 1, sRawChksWrap) <= 0) {
 				return ERR_NO_CHUNK_DATA;			
 			}
 		} else {
@@ -138,7 +138,7 @@ public class DataSource {
 				
 				int startTime = updateFromLastPrev ? 
 						lastPrevRawChunk.getStartTime() : lastRawChunk.getStartTime();
-				int endTime = 3600 * 24;
+				int endTime = 3600 * 24 - 1;
 				ArrayList<RawChunk> rawChunks = new ArrayList<RawChunk>();				
 				createRawChunkData(startTime, endTime, rawChunks);	
 				if (rawChunks.size() > 0) {
@@ -152,7 +152,7 @@ public class DataSource {
 					sRawChksWrap.addAll(rawChunks);
 				}
 			} else {
-				if (createRawChunkData(0, 3600 * 24, sRawChksWrap) <= 0) {
+				if (createRawChunkData(0, 3600 * 24 - 1, sRawChksWrap) <= 0) {
 					return ERR_NO_CHUNK_DATA;			
 				}
 			}
@@ -353,6 +353,7 @@ public class DataSource {
 		    	    Action action = ActionManager.getAction(guid);			    	   
 		    	    RawChunk rawchunk = new RawChunk(start.getText(), stop.getText(), action, create, modify);
 		    	    sRawChksWrap.add(rawchunk);
+		    	    Log.d(TAG, "read\t" + rawchunk.getStartTimeInString() + "\t" + rawchunk.getStopTimeInString());
 		       }
 	        
 	        }
@@ -572,6 +573,7 @@ public class DataSource {
 					Globals.mHealthTimestampFormat.parse(rawChunk.mModifyTime), 
 					Globals.mHealthTimestampFormat.parse(rawChunk.mCreateTime)
 				);
+				Log.d(TAG, rawChunk.mStartDate + "\t" + rawChunk.mStopDate);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

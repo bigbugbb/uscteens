@@ -85,7 +85,7 @@ public class LoadDataTask extends AsyncTask<String, Void, Void> {
 	protected Void doInBackground(String[] params) {		
 		android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND + 
 				Process.THREAD_PRIORITY_MORE_FAVORABLE);
-		synchronized (sLock) {			
+		synchronized (sLock) {
 			mResult = DataSource.loadRawData(params[0]);
 		}
 		return null;
