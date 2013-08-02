@@ -53,12 +53,13 @@ public class TeensGlobals {
 	public static final String TUTORIAL_VIDEO_URI = "ytv://eXs3YeyIZTo";
 	
 	public static String DIRECTORY_PATH = "";
+	public static boolean IS_ANNOTATION_EXTERNAL = true;
 	
 	public static void initGlobals(Context context) {
 		// By default the logging will go to the apps internal storage, not the external directory
 		Globals.IS_DEBUG = false;
 		Globals.IS_LOG_EXTERNAL = false;
-		Globals.APP_DIRECTORY = "uscteens";		
+		Globals.APP_DIRECTORY = "uscteens";
 
 		Globals.setArbitrater(new TeensArbitrater(context));
 		Globals.initDataDirectories(context);

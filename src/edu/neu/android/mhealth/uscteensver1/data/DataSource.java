@@ -15,6 +15,7 @@ import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 
 import android.util.Log;
@@ -557,7 +558,8 @@ public class DataSource {
 		}
 		
 		// Add all the annotations
-		AnnotationSaver annotationSaver = new AnnotationSaver(true, DATASET, ANNOTATOR, "bigbugbb@gmail.com",
+		AnnotationSaver annotationSaver = new AnnotationSaver();
+		annotationSaver.initialize(DATASET, ANNOTATOR, "bigbugbb@gmail.com",
 				"chunks of activities", "based on convolution & pre-defined thresholds", "");
 		annotationSaver.setDate(selDate);
         for (RawChunk rawChunk : sRawChksWrap) {
@@ -581,7 +583,7 @@ public class DataSource {
         }
         
         // Save the changes into the file
-        boolean result = annotationSaver.commitToFile();
+        boolean result = annotationSaver.commitToFile(new OutputFormat("    ", true));
 
 		return result;
 	}

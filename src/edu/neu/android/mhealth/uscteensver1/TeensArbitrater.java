@@ -51,7 +51,7 @@ public class TeensArbitrater extends Arbitrater {
 		tryToUpdateAppData();
 				
 		// Mark that arbitration taking place
-		DataStorage.setLastTimeArbitrate(mContext, System.currentTimeMillis());			
+		DataStorage.setLastTimeArbitrate(mContext, System.currentTimeMillis());
 	}
 	
 	private void sendAppVersionAtMidnight() {
