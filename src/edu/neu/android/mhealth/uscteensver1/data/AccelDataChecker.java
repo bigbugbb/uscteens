@@ -5,9 +5,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Date;
 
-import android.content.Context;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
-import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
 import edu.neu.android.wocketslib.algorithm.MotionDetectAlgorithm;
