@@ -72,11 +72,12 @@ public class AccelDataChecker {
 			}
 			
 			try {
-				// each hour corresponds to one .bin file
+				// each hour corresponds to one .csv file
 				String[] fileNames = new File(hourDirs[i]).list(new FilenameFilter() {
 					@Override
 					public boolean accept(File dir, String filename) {
-						return filename.endsWith(".csv");
+						return filename.endsWith(".csv") && 
+								filename.startsWith(Globals.SENSOR_TYPE_PHONE_ACCELEROMETER);
 					}
 				});
 				if (fileNames == null || fileNames.length == 0) {

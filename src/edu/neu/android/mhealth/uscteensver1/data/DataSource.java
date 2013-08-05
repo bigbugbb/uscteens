@@ -261,7 +261,8 @@ public class DataSource {
 				String[] fileNames = new File(hourDirs[i]).list(new FilenameFilter() {
 					@Override
 					public boolean accept(File dir, String filename) {
-						return filename.endsWith(".csv");
+						return filename.endsWith(".csv") && 
+								filename.startsWith(Globals.SENSOR_TYPE_PHONE_ACCELEROMETER);
 					}
 				});
 				if (fileNames == null || fileNames.length == 0) {
@@ -307,7 +308,7 @@ public class DataSource {
 		String[] fileNames = new File(path).list(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String filename) {
-				return filename.endsWith(".annotation.xml");
+				return filename.startsWith(DATASET) && filename.endsWith(".annotation.xml");
 			}
 		});
 		
@@ -497,7 +498,7 @@ public class DataSource {
 		String[] fileNames = new File(path).list(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String filename) {
-				return filename.endsWith(".annotation.xml");
+				return filename.startsWith(DATASET) && filename.endsWith(".annotation.xml");
 			}
 		});
 		
