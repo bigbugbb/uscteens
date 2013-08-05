@@ -53,7 +53,6 @@ public class TeensGlobals {
 	public static final String TUTORIAL_VIDEO_URI = "ytv://eXs3YeyIZTo";
 	
 	public static String DIRECTORY_PATH = "";
-	public static boolean IS_ANNOTATION_EXTERNAL = true;
 	
 	public static void initGlobals(Context context) {
 		// By default the logging will go to the apps internal storage, not the external directory
@@ -82,10 +81,13 @@ public class TeensGlobals {
 		
 		Globals.IS_WOCKETS_ENABLED = false;
 		Globals.IS_BLUETOOTH_ENABLED = false; 
-		Globals.IS_LOCATION_ENABLED = false; 
+		Globals.IS_LOCATION_ENABLED = true; 
 		Globals.IS_READING_SENSOR_ENABLED = true; // true for debug
 		Globals.IS_LOG_PHONE_BATTERY_ENABLED = true;
 		Globals.IS_RECORDING_PHONE_ACCEL_ENABLED = true;
+		
+		Globals.IS_ANNOTATION_EXTERNAL  = true;
+		Globals.IS_SENSOR_DATA_EXTERNAL = true;
 
 		Globals.DEFAULT_MAIL_USERNAME = "wocketssmtp@gmail.com";
 		Globals.DEFAULT_MAIL_PASSWORD = "W0CKET$mtp";
