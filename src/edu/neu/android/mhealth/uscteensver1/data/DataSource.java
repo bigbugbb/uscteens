@@ -584,7 +584,7 @@ public class DataSource {
         }
         
         // Save the changes into the file
-        boolean result = annotationSaver.commitToFile(new OutputFormat("    ", true));
+        boolean result = annotationSaver.commitToFile();
 
 		return result;
 	}
