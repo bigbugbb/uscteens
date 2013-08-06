@@ -25,7 +25,7 @@ public class AccelDataChecker {
 		if (stopTime == -1) {
 			stopTime = System.currentTimeMillis() - 120000; // make sure we have the data to analyze
 		}
-		if (startTime >= stopTime || Math.abs(startTime - stopTime) > 24 * 3600 * 1000) {
+		if (startTime >= stopTime || Math.abs(startTime - stopTime) > Globals.HOURS24_MS) {
 			return new MotionInfo(MotionInfo.ERROR, null, null);
 		}
 		

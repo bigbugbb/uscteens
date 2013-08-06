@@ -15,7 +15,6 @@ import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 
 import android.util.Log;
@@ -123,25 +122,24 @@ public class DataSource {
 		 * if no chunk data, create the chunk data from sensor data
 		 */
 		String curDate = DateHelper.serverDateFormat.format(new Date());
-		if (date.compareTo(curDate) != 0) {
+		if (!date.equals(curDate)) {
 			// the previous day's data are all available, just read it.
-			// if the chunking file has not been generated, create it.
-			if (!loadRawChunkData(date) && createRawChunkData(0, 3600 * 24 - 1, sRawChksWrap) <= 0) {
+			// create the annotation file if it does not exist.
+			if (!loadRawChunkData(date) && 
+					createRawChunkData(0, TeensGlobals.DAILY_LAST_SECOND, sRawChksWrap) <= 0) {
 				return ERR_NO_CHUNK_DATA;			
 			}
 		} else {
 			if (loadRawChunkData(date)) {
 				assert(sRawChksWrap.size() > 0);
 				RawChunk lastRawChunk = sRawChksWrap.get(sRawChksWrap.size() - 1);
-				RawChunk lastPrevRawChunk = sRawChksWrap.size() > 1 ?
-						sRawChksWrap.get(sRawChksWrap.size() - 2) : null;		
+				RawChunk lastPrevRawChunk = sRawChksWrap.size() > 1 ? sRawChksWrap.get(sRawChksWrap.size() - 2) : null;		
 				boolean updateFromLastPrev = lastPrevRawChunk != null && !lastPrevRawChunk.isLabelled();
 				
-				int startTime = updateFromLastPrev ? 
-						lastPrevRawChunk.getStartTime() : lastRawChunk.getStartTime();
-				int endTime = 3600 * 24 - 1;
+				int startTime = updateFromLastPrev ? lastPrevRawChunk.getStartTime() : lastRawChunk.getStartTime();
+				int stopTime  = TeensGlobals.DAILY_LAST_SECOND;
 				ArrayList<RawChunk> rawChunks = new ArrayList<RawChunk>();				
-				createRawChunkData(startTime, endTime, rawChunks);	
+				createRawChunkData(startTime, stopTime, rawChunks);	
 				if (rawChunks.size() > 0) {
 					assert(rawChunks.get(0).getStartTime() == startTime);
 					// remove the last 
@@ -153,7 +151,7 @@ public class DataSource {
 					sRawChksWrap.addAll(rawChunks);
 				}
 			} else {
-				if (createRawChunkData(0, 3600 * 24 - 1, sRawChksWrap) <= 0) {
+				if (createRawChunkData(0, TeensGlobals.DAILY_LAST_SECOND, sRawChksWrap) <= 0) {
 					return ERR_NO_CHUNK_DATA;			
 				}
 			}
@@ -356,10 +354,8 @@ public class DataSource {
 		    	    RawChunk rawchunk = new RawChunk(start.getText(), stop.getText(), action, create, modify);
 		    	    sRawChksWrap.add(rawchunk);
 		    	    Log.d(TAG, "read\t" + rawchunk.getStartTimeInString() + "\t" + rawchunk.getStopTimeInString());
-		       }
-	        
-	        }
-		
+		       }	        
+	        }		
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -469,17 +465,18 @@ public class DataSource {
 	private static int createRawChunkData(int startSecond, int stopSecond, ArrayList<RawChunk> rawChunks) {
 		ArrayList<Integer> chunkPos = ChunkingAlgorithm.getInstance().doChunking(
 			startSecond, stopSecond, sAccelDataWrap.getDrawableData()
-		);
+		);				
 		
 		if (chunkPos == null) {
 			return 0;
 		}
+
 		// current selected date		
-		String today = DateHelper.serverDateFormat.format(new Date());		
+		String date = getCurrentSelectedDate();		
 		// create raw chunk data for each chunking position	
 		rawChunks.clear();
 		for (int i = 0; i < chunkPos.size() - 1; ++i) {						
-			rawChunks.add(new RawChunk(today, chunkPos.get(i), chunkPos.get(i + 1)));
+			rawChunks.add(new RawChunk(date, chunkPos.get(i), chunkPos.get(i + 1)));
 		}
 						
 		return rawChunks.size();

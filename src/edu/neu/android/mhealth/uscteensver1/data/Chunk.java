@@ -114,9 +114,10 @@ public class Chunk extends AppObject {
 		String startDate = toDateTime(mStart / TeensGlobals.PIXEL_PER_DATA).substring(0, 10);
 		
 		// is today
-		if (curDate.compareTo(startDate) == 0) {
+		if (curDate.equals(startDate)) {
 			// is the last chunk
-			if (Math.abs(mStop - 3600 * 24 * TeensGlobals.PIXEL_PER_DATA) < TeensGlobals.PIXEL_PER_DATA) {
+			if (Math.abs(mStop - TeensGlobals.DAILY_LAST_SECOND * TeensGlobals.PIXEL_PER_DATA) < 
+					TeensGlobals.PIXEL_PER_DATA) {
 				return true;
 			}
 		}

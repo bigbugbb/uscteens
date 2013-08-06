@@ -50,9 +50,8 @@ public class ChunkManager {
 	protected static void loadChunks() {
 		RawChunksWrap rawChunks = DataSource.getRawChunks();
 		
-		if (sChunks == null) {
-			sChunks = new ArrayList<Chunk>();
-		}
+		release();
+		sChunks = new ArrayList<Chunk>();		
 		
 		int timeOffset = 0;
 		for (int i = 0; i < rawChunks.size(); ++i) {
