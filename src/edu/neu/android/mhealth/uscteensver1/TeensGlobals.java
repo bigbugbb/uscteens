@@ -39,8 +39,6 @@ public class TeensGlobals {
 	public final static String REWARD_FOLDER = "/rewards/";	
 	public final static String SENSOR_TYPE = "InternalAccel";
 	public final static String ANNOTATION_SET = "TeensActivities";
-	
-	public final static int TIME_WAITING_SENSOR_DATA_IN_MS = 21 * 1000;
 		
 	public static Handler sGlobalHandler = null;	
 	public static boolean sUpdateConfig = false;

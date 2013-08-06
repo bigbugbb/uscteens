@@ -1,5 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.dialog;
 
+import java.util.Date;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,10 +11,13 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
+import edu.neu.android.mhealth.uscteensver1.utils.NoteSender;
 import edu.neu.android.mhealth.uscteensver1.views.QuestView;
 import edu.neu.android.mhealth.uscteensver1.views.QuestView.OnBackClickedListener;
+import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
 
 public class QuestDialog extends Activity implements OnBackClickedListener {
@@ -91,6 +96,10 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 
 	public void onBackClicked() {
 		finish();
+		// Send note to server graph
+		NoteSender noteSender = new NoteSender(TeensAppManager.getAppContext());
+		noteSender.addNote(new Date(), "Cancel labeling", Globals.NO_PLOT);
+		noteSender.send();
 	}
 
 	@Override

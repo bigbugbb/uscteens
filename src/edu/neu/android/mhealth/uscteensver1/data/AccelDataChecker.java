@@ -67,7 +67,7 @@ public class AccelDataChecker {
 			if (file.isFile()) { continue; }
 			String hour = hourDirs[i].substring(hourDirs[i].lastIndexOf('/') + 1);
 			int targetHour = Integer.valueOf(hour);
-			if (targetHour < hourFrom || targetHour > hourTo) { // 12AM can not be handled here!!!
+			if (targetHour < hourFrom || targetHour > hourTo) {
 				continue;
 			}
 			

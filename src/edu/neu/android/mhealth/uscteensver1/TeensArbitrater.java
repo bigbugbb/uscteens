@@ -73,7 +73,9 @@ public class TeensArbitrater extends Arbitrater {
 	}
 	
 	public static void saveRecordsInLogcat(boolean isClear) {
+		
 		StringBuilder log = new StringBuilder();
+		
 		try {
 			Process process = Runtime.getRuntime().exec("logcat -d -v time");
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -97,9 +99,11 @@ public class TeensArbitrater extends Arbitrater {
 	}
 
 	private static void saveLogCatRecord(String log) {
+		
 		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 			return;
 		}
+		
 		String folderPath = Globals.SURVEY_LOG_DIRECTORY + 
 				File.separator + DateHelper.serverDateFormat.format(new Date());
 		File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + folderPath);
