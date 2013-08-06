@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
@@ -39,6 +40,9 @@ import edu.neu.android.mhealth.uscteensver1.ui.SlideBar;
 import edu.neu.android.mhealth.uscteensver1.ui.SlideBar.OnSlideBarChangeListener;
 import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
 import edu.neu.android.mhealth.uscteensver1.ui.UIID;
+import edu.neu.android.mhealth.uscteensver1.utils.NoteSender;
+import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.json.model.Note;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.WeekdayHelper;
@@ -353,11 +357,16 @@ public class GraphPage extends AppPage implements OnClickListener,
 	}
 	
 	private void tryToQuest(QuestButton quest) {
+		
 		Message msg = mHandler.obtainMessage();
 		msg.arg1 = quest.getHost().getChunkRealStartTime();
 		msg.arg2 = quest.getHost().getChunkRealStopTime();		
 		msg.what = AppCmd.QUEST;
-		mHandler.sendMessage(msg);				
+		mHandler.sendMessage(msg);		
+		
+		NoteSender noteSender = new NoteSender(TeensAppManager.getAppContext());
+		noteSender.addNote(new Date(), "Start labeling", Globals.NO_PLOT);
+		noteSender.send();
 	}
 	
 	private void tryToSplit(SplitButton split) {		
@@ -412,7 +421,11 @@ public class GraphPage extends AppPage implements OnClickListener,
 		quest.setAnswer(action);
 		synchronized (this) {
 			mSlideBar.updateUnmarkedRange();
-		}		
+		}			
+		
+		NoteSender noteSender = new NoteSender(TeensAppManager.getAppContext());
+		noteSender.addNote(new Date(), "Stop labeling", Globals.NO_PLOT);
+		noteSender.send();
 	}		
 	
 	public void finishMerge(Object... params) {

@@ -45,6 +45,15 @@ public class TeensSurveyActivity extends SurveyActivity {
 	}
 	
 	@Override
+	protected void onSurveyNotCompleted() {
+		mPromptSender.addPromptEvent( 
+			"Q" + mQuestIndex + " was not answered in " + 
+			(mQuestIndex == 1 ? MINUTES_FOR_FIRST_QUESTION : MINUTES_FOR_OTHER_QUESTION) + " min" + (mQuestIndex == 1 ? "s" : ""),
+			new Date(mPromptEvent.getPromptTime()), mPromptEvent.getPromptType(), new Date()				
+		);
+	}
+	
+	@Override
 	public void onQuestionLifeExpired(int whichQuestion) {
 		Log.i(TAG, "onQuestionLifeExpired");
 		switch (whichQuestion) {
