@@ -293,6 +293,7 @@
 			android:label="@string/app_name_uscstudy"
 		    android:excludeFromRecents="true"
 		    android:launchMode="singleInstance"
+		    android:alwaysRetainTaskState="true"
 			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -347,12 +348,14 @@
         <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.TeensSurveyActivity"
             android:excludeFromRecents="true"
 		    android:launchMode="singleInstance"
+		    android:alwaysRetainTaskState="true"
 			android:screenOrientation="portrait">
     	</activity>
     	
         <activity android:name="edu.neu.android.mhealth.uscteensver1.activities.TeensSurveyTestActivity"
             android:excludeFromRecents="true"
 		    android:launchMode="singleInstance"
+		    android:alwaysRetainTaskState="true"
 			android:screenOrientation="portrait">
     	</activity>
     	
