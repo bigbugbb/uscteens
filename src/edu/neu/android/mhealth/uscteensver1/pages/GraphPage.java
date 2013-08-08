@@ -42,7 +42,6 @@ import edu.neu.android.mhealth.uscteensver1.ui.SplitButton;
 import edu.neu.android.mhealth.uscteensver1.ui.UIID;
 import edu.neu.android.mhealth.uscteensver1.utils.NoteSender;
 import edu.neu.android.wocketslib.Globals;
-import edu.neu.android.wocketslib.json.model.Note;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.WeekdayHelper;

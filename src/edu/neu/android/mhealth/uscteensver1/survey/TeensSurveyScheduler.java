@@ -80,13 +80,8 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 	
 	@Override
 	protected boolean isTimeForNextSurvey(long nextPromptTime) {
-		long now = System.currentTimeMillis();
-		long lastTimePrompted  = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY);
-		long timeSincePrompted = now - lastTimePrompted;
-		long timeSinceScheduledPrompt = now - nextPromptTime;
-		
-		return timeSinceScheduledPrompt < (Globals.REPROMPT_TIMES + 3) * Globals.REPROMPT_DELAY_MS &&
-			   timeSincePrompted > Globals.REPROMPT_DELAY_MS;
+		long lastTimePrompted = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY);		
+		return System.currentTimeMillis() - lastTimePrompted > Globals.REPROMPT_DELAY_MS;
 	}
 	
 	@Override

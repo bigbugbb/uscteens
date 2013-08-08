@@ -73,7 +73,7 @@ public class DataSource {
 		long currentTime = System.currentTimeMillis();
 		long lastLoadingTime = DataSource.getLastLoadingTime();		
 		
-		if (currentTime - lastLoadingTime > TeensGlobals.UPDATING_TIME_THRESHOLD) {			
+		if (currentTime - lastLoadingTime > TeensGlobals.REFRESH_DATA_TIME_THRESHOLD) {			
 			try {				
 				String select = DataStorage.GetValueString(
 					TeensAppManager.getAppContext(), TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"

@@ -21,10 +21,10 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 public class Label extends AppObject {
 
 	public final static int MAXIMUM_LABEL_WIDTH = 300;
-	public final static int MAXIMUM_TEXT_WIDTH = 250;
+	public final static int MAXIMUM_TEXT_WIDTH  = 250;
 	
-	public int mX;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
-	public int mY;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
+	public int mX;
+	public int mY;
 	public Rect mRect = new Rect();
 	public String mText;
 
@@ -147,7 +147,7 @@ public class Label extends AppObject {
 			return;
 		}
 		
-		float delta = mX + sImgWidth - TeensGlobals.MAX_WIDTH_IN_PIXEL;
+		float delta = mX + sImgWidth - TeensGlobals.MAXIMUM_WIDTH_IN_PIXEL;
 		delta = delta > 0 ? -delta : 0;	
 		x += delta;
 		

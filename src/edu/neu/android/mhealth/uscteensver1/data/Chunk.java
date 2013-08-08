@@ -252,6 +252,15 @@ public class Chunk extends AppObject {
 		if (mStart + mDispOffsetX < 0 || mStart + mDispOffsetX > ChunkManager.getViewWidth()) {
 			return;
 		}
-		c.drawLine(mStart + mDispOffsetX, 0, mStart + mDispOffsetX, mHeight, sPaint);		
+		c.drawLine(mStart + mDispOffsetX, 0, mStart + mDispOffsetX, mHeight, sPaint);
+		
+		if (TeensGlobals.IS_CALIBRATION_ENABLED) {
+			float space = mHeight / 10;
+			float h = space;
+			for (int i = 1; i < 10; ++i) {
+				c.drawLine(mStart + mDispOffsetX, h, mStart + mDispOffsetX + space / 4, h, sPaint);
+				h += space;
+			}
+		}
 	}
 }
