@@ -43,7 +43,7 @@ public class TeensGlobals {
 	public static Handler sGlobalHandler = null;	
 	public static boolean sUpdateConfig = false;
 	
-	public static final boolean IS_CALIBRATION_ENABLED = true;
+	public static final boolean IS_CALIBRATION_ENABLED = false;
 	
 	public static final String ANNOTATION_GUID = "2F996145-7EB0-4E25-935C-10D53B15012D";
 	public static final String UNLABELLED_GUID = "03F9A375-C162-4B24-AB74-BF23CD07B358";
@@ -58,7 +58,7 @@ public class TeensGlobals {
 	
 	public static void initGlobals(Context context) {
 		// By default the logging will go to the apps internal storage, not the external directory
-		Globals.IS_DEBUG = false;
+		Globals.IS_DEBUG = true;
 		Globals.IS_LOG_EXTERNAL = false;
 		Globals.APP_DIRECTORY = "uscteens";
 

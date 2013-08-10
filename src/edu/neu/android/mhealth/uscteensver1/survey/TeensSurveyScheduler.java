@@ -78,15 +78,20 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		return null;
 	}
 	
-	@Override
-	protected boolean isTimeForNextSurvey(long nextPromptTime) {
-		long lastTimePrompted = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY);		
-		return System.currentTimeMillis() - lastTimePrompted > Globals.REPROMPT_DELAY_MS;
+	protected boolean isLastScheduledSurveyReprompted() {
+		long lastScheduledPromptTime = getLastScheduledPromptTime(System.currentTimeMillis());
+		if (lastScheduledPromptTime == 0) {
+			return false;
+		}
+		SurveyPromptEvent spe = getEventByScheduledTime(lastScheduledPromptTime);
+		return getPromptTimes(spe.getID()) > 1;
 	}
 	
 	@Override
-	protected boolean isSurveyPostponable(SurveyPromptEvent spe) {
-		return spe.getPromptType().equals("CS");
+	protected boolean isTimeForNextSurvey(long nextPromptTime) {
+		long lastTimePrompted = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY);	
+		long timeSinceLastPrompt = System.currentTimeMillis() - lastTimePrompted;
+		return timeSinceLastPrompt > Globals.REPROMPT_DELAY_MS;
 	}
 	
 	@Override
@@ -116,7 +121,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 			}
 		}
 		
-		long[] allPromptTime = new long[promptTimeQueue.size()];
+		long[] allPromptTime = promptTimeQueue.size() > 0 ? new long[promptTimeQueue.size()] : new long[] {};
 		for (int i = 0; i < allPromptTime.length; ++i) {
 			allPromptTime[i] = promptTimeQueue.poll();
 		}
@@ -132,7 +137,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 		
 		long totalPromptingWindowMS = (long) (endTimeHour - startTimeHour) * Globals.MINUTES_60_IN_MS;
 		long intervalIncMS = (long) (totalPromptingWindowMS / (double) promptsPerDay);
-		long promptTimes[] = new long[promptsPerDay];
+		long promptTimes[] = promptsPerDay > 0 ? new long[promptsPerDay] : new long[] {};
 		int startIntervalTimeMS = (int) (startTimeHour * Globals.MINUTES_60_IN_MS);
 		long startDayTime = DateHelper.getDailyTime(0, 0); // Midnight
 
