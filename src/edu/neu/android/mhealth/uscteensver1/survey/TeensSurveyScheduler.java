@@ -64,14 +64,13 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 			spe.setPromptReason(motionInfo.getDetail());			
 			spe.setPromptType("CS");
 			
-			boolean isReprompted = isLastScheduledSurveyReprompted();
-			long lastPromptTime = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY) - (isReprompted ? Globals.REPROMPT_DELAY_MS : 0);
-			long internalLength = (motionInfo.getStopTimeInMS() - motionInfo.getStartTimeInMS()) / 60000;
-			long adjustedLength = Math.min(internalLength, (motionInfo.getStopTimeInMS() - lastPromptTime) / 60000);
+			long lastPromptTime = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY);
+			long internalLength = motionInfo.getStopTimeInMS() - motionInfo.getStartTimeInMS();
+			long adjustedLength = Math.min(internalLength, (motionInfo.getStopTimeInMS() - lastPromptTime));
 			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_START_TIME, motionInfo.getStartTime());
 			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_STOP_TIME, motionInfo.getStopTime());
-			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_LENGTH, "" + internalLength);
-			spe.AddSurveySpecifiedRecord(TeensCSSurvey.ADJUSTED_INTERVAL_LENGTH, "" + adjustedLength);
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.INTERNAL_LENGTH, "" + internalLength / 60000);
+			spe.AddSurveySpecifiedRecord(TeensCSSurvey.ADJUSTED_INTERVAL_LENGTH, "" + adjustedLength / 60000);
 			return spe;
 		}
 		

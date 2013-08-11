@@ -23,7 +23,7 @@ public class AccelDataChecker {
 			startTime = MotionDetectAlgorithm.getInstance().getStartTime();
 		}		
 		if (stopTime == -1) {
-			stopTime = System.currentTimeMillis() - 120000; // make sure we have the data to analyze
+			stopTime = System.currentTimeMillis() - 60000; // make sure we have the data to analyze
 		}
 		if (startTime >= stopTime || Math.abs(startTime - stopTime) > Globals.HOURS24_MS) {
 			return new MotionInfo(MotionInfo.ERROR, null, null);

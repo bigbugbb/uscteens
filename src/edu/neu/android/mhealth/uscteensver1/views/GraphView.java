@@ -9,7 +9,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
-import edu.neu.android.wocketslib.utils.WOCKETSException;
 
 public class GraphView extends SurfaceView implements SurfaceHolder.Callback {
 
