@@ -17,7 +17,8 @@ public class TeensCSSurvey extends QuestionSet {
 	
 	public static String INTERNAL_START_TIME = "INTERNAL_START_TIME";
 	public static String INTERNAL_STOP_TIME  = "INTERNAL_STOP_TIME";
-	public static String INTERNAL_LENGTH = "INTERNAL_LENGTH";
+	
+	public static String INTERNAL_LENGTH          = "INTERNAL_LENGTH";
 	public static String ADJUSTED_INTERVAL_LENGTH = "ADJUSTED_INTERVAL_LENGTH";
 
 	private ArrayList<SurveyQuestion> mDefaultQuestionSet;	
@@ -29,16 +30,12 @@ public class TeensCSSurvey extends QuestionSet {
 
 		SurveyPromptEvent spe = (SurveyPromptEvent) param.getParams()[0];
 		if (spe != null) {
-			HashMap<String, String> mapTime = spe.getSurveySpecifiedRecord();			
-			mStopTime  = mapTime.get(INTERNAL_STOP_TIME);
-			// Get rid of the overlapped time period
-			int internalLength = Integer.parseInt(mapTime.get(INTERNAL_LENGTH));
-			int adjustedLength = Integer.parseInt(mapTime.get(ADJUSTED_INTERVAL_LENGTH));
-			if (adjustedLength < internalLength) {				
-				mStartTime = calculateAdjustedStartTime(mStopTime, adjustedLength);
-			} else {
-				mStartTime = mapTime.get(INTERNAL_START_TIME);
-			}
+			HashMap<String, String> mapTime = spe.getSurveySpecifiedRecord();	
+			mStartTime = mapTime.get(INTERNAL_START_TIME);
+			mStopTime  = mapTime.get(INTERNAL_STOP_TIME);			
+			// Get rid of the overlapped time period			
+			long internalLength = Long.parseLong(mapTime.get(INTERNAL_LENGTH));
+			long adjustedLength = Long.parseLong(mapTime.get(ADJUSTED_INTERVAL_LENGTH));
 		} else { 
 			Date startDate = new Date(System.currentTimeMillis() - 30 * 60 * 1000);
 			Date stopDate  = new Date();		
@@ -47,25 +44,6 @@ public class TeensCSSurvey extends QuestionSet {
 		}
 		
 		setQuestions();
-	}
-	
-	private String calculateAdjustedStartTime(String stopTime, int adjustedLength) {
-		String times[] = stopTime.split("[: ]");
-		assert(times.length == 3); // example: 12:30 PM
-		int hour   = Integer.parseInt(times[0]);
-		int minute = Integer.parseInt(times[1]);
-
-		if (times[2].equals("PM")) {
-			hour = hour + (hour < 12 ? 12 : 0);
-		}
-		
-		int startTime = hour * 60 + minute - adjustedLength;
-		hour   = startTime / 60;
-		minute = startTime % 60;
-		String postfix = hour >= 12 ? " PM" : " AM";
-		hour = hour > 12 ? hour - 12 : hour;
-		
-		return hour + ":" + (minute < 10 ? "0" + minute : minute) + postfix;
 	}
 
 	@Override
