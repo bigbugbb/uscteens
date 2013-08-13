@@ -345,12 +345,13 @@ public class TeensRandomSurvey extends QuestionSet {
 		mDefaultQuestionSet.add(Q3_q_Accompanies);
 
 		SurveyQuestion Q3_r_WherePhone = new SurveyQuestion("Q3_r_WherePhone", "How did you have the PHONE while participating in the sport or exercise activity?", TYPE.SINGLE_CHOICE);
-		SurveyAnswer[] answerSet3r = new SurveyAnswer[5];
+		SurveyAnswer[] answerSet3r = new SurveyAnswer[6];
 		answerSet3r[0] = new SurveyAnswer(0, "On my belt");
 		answerSet3r[1] = new SurveyAnswer(1, "In my pocket");
 		answerSet3r[2] = new SurveyAnswer(2, "In my handbag/purse/backpack");
 		answerSet3r[3] = new SurveyAnswer(3, "Holding in my hand");
-		answerSet3r[4] = new SurveyAnswer(4, "Not with me");
+		answerSet3r[4] = new SurveyAnswer(4, "Within reach, but not on me");
+		answerSet3r[5] = new SurveyAnswer(5, "Not with me");
 		Q3_r_WherePhone.setDefault("Q1_MainActivity", answerSet3r);
 		mDefaultQuestionSet.add(Q3_r_WherePhone);
 
@@ -399,12 +400,13 @@ public class TeensRandomSurvey extends QuestionSet {
 		mDefaultQuestionSet.add(Q4_c_WereYou);
 
 		SurveyQuestion Q4_d_WherePhone = new SurveyQuestion("Q4_d_WherePhone", "How did you have the PHONE while " + mainActivity + "?", TYPE.SINGLE_CHOICE);
-		SurveyAnswer[] answerSet4d = new SurveyAnswer[5];
+		SurveyAnswer[] answerSet4d = new SurveyAnswer[6];
 		answerSet4d[0] = new SurveyAnswer(0, "On my belt");
 		answerSet4d[1] = new SurveyAnswer(1, "In my pocket");
 		answerSet4d[2] = new SurveyAnswer(2, "In my handbag/purse/backpack");
 		answerSet4d[3] = new SurveyAnswer(3, "Holding in my hand");
-		answerSet4d[4] = new SurveyAnswer(4, "Not with me");
+		answerSet4d[4] = new SurveyAnswer(4, "Within reach, but not on me");
+		answerSet4d[5] = new SurveyAnswer(5, "Not with me");
 		Q4_d_WherePhone.setDefault("Q1_MainActivity", answerSet4d);
 		mDefaultQuestionSet.add(Q4_d_WherePhone);
 
@@ -507,12 +509,13 @@ public class TeensRandomSurvey extends QuestionSet {
 		mDefaultQuestionSet.add(Q5_c_WereYou);
 
 		SurveyQuestion Q5_d_WherePhone = new SurveyQuestion("Q5_d_WherePhone", "How did you have the PHONE while doing this activity?", TYPE.SINGLE_CHOICE);
-		SurveyAnswer[] answerSet5d = new SurveyAnswer[5];
+		SurveyAnswer[] answerSet5d = new SurveyAnswer[6];
 		answerSet5d[0] = new SurveyAnswer(0, "On my belt");
 		answerSet5d[1] = new SurveyAnswer(1, "In my pocket");
 		answerSet5d[2] = new SurveyAnswer(2, "In my handbag/purse/backpack");
 		answerSet5d[3] = new SurveyAnswer(3, "Holding in my hand");
-		answerSet5d[4] = new SurveyAnswer(4, "Not with me");
+		answerSet5d[4] = new SurveyAnswer(4, "Within reach, but not on me");
+		answerSet5d[5] = new SurveyAnswer(5, "Not with me");
 		Q5_d_WherePhone.setDefault("Q4_a_WhatOther", answerSet5d);
 		mDefaultQuestionSet.add(Q5_d_WherePhone);
 

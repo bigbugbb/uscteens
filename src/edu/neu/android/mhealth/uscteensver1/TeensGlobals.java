@@ -125,10 +125,10 @@ public class TeensGlobals {
 		Globals.SFTP_SERVER_URL       = "wockets.ccs.neu.edu";
 
 		// Survey prompting parameters 
-		Globals.AUDIO_PROMPT_START_HOUR = 8;
+		Globals.AUDIO_PROMPT_START_HOUR = 15;
 		Globals.AUDIO_PROMPT_END_HOUR   = 22;
 		Globals.DEFAULT_PROMPTS_PER_DAY = 7;
-		Globals.DEFAULT_START_HOUR      = 8;
+		Globals.DEFAULT_START_HOUR      = 15;
 		Globals.DEFAULT_END_HOUR        = 22;
 		Globals.REPROMPT_DELAY_MS = 5 * Globals.MINUTES_1_IN_MS;		
 		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = Globals.MINUTES_30_IN_MS;

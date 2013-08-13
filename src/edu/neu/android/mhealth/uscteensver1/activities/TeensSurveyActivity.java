@@ -74,6 +74,11 @@ public class TeensSurveyActivity extends SurveyActivity {
 		}
 	}
 	
+	@Override
+	public boolean isRepromptAccepted(long promptCount) {
+		return mQuestIndex == 1 && promptCount <= 3;
+	}
+	
 	private void labelSelectedAnswer(SurveyQuestion question) {		
 		SurveyAnswer[] answers = question.getAnswers();
 		SurveyPromptEvent promptEvent = getSurveyPromptEvent();
