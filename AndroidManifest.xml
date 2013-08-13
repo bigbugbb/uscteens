@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="edu.neu.android.mhealth.uscteensver1"
     android:sharedUserId="edu.neu.android.mhealth.uscteensver1"
-    android:versionCode="1476"
-    android:versionName="1.476" xmlns:android="http://schemas.android.com/apk/res/android">
+    android:versionCode="1478"
+    android:versionName="1.478" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk
-        android:minSdkVersion="9" />
+        android:minSdkVersion="8" />
     
 	<permission android:name="android.permission.permRead"
 		android:label="USCMOBILE Content Provider" android:description="@string/permdesc_content_provider"

@@ -2,6 +2,7 @@ package edu.neu.android.mhealth.uscteensver1.data;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.ParseException;
@@ -17,16 +18,20 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import android.os.Environment;
 import android.util.Log;
 import android.util.Pair;
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
+import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
 import edu.neu.android.wocketslib.mhealthformat.AnnotationSaver;
+import edu.neu.android.wocketslib.mhealthformat.LowSamplingRateDataSaver;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
@@ -258,7 +263,7 @@ public class DataSource {
 			for (int i = 0; i < hourDirs.length; ++i) {
 				String[] fileNames = new File(hourDirs[i]).list(new FilenameFilter() {
 					@Override
-					public boolean accept(File dir, String filename) {
+					public boolean accept(File dir, String filename) {	
 						return filename.endsWith(".csv") && 
 								filename.startsWith(Globals.SENSOR_TYPE_PHONE_ACCELEROMETER);
 					}
@@ -555,7 +560,10 @@ public class DataSource {
 			return false;
 		}
 		
-		// Add all the annotations
+		// Add all the chunks to the csv file
+		saveChunkDataToCSV(date);
+		
+		// Add all the annotations to the xml file
 		AnnotationSaver annotationSaver = new AnnotationSaver();
 		annotationSaver.initialize(DATASET, ANNOTATOR, "bigbugbb@gmail.com",
 				"chunks of activities", "based on convolution & pre-defined thresholds", "");
@@ -580,13 +588,36 @@ public class DataSource {
 			}
         }
         
-        // Save the changes into the file
+        // Save the changes into the xml file
         boolean result = annotationSaver.commitToFile();
 
 		return result;
 	}
 	
-//	private static native int loadHourlyAccelSensorData(String filePath);
-//	private static native int[] createDailyRawChunkData(int startTime, int stopTime, int[] sensorData);
-//	private static native int loadDailyLabelData(String filePath);
+	private static void saveChunkDataToCSV(String date) {	
+		File dir = new File(
+			TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_MHEALTH_SENSORS_DIRECTORY + File.separator + date
+		);
+		dir.mkdirs();
+
+		File chunkFile = new File(dir, DATASET + "." + ANNOTATOR + ".csv");				
+		try {
+			if (!chunkFile.exists()) {
+				chunkFile.createNewFile();
+			}
+			String[] header = { "START_TIME", "STOP_TIME", "LABEL" };							
+			CSVWriter writer = new CSVWriter(new FileWriter(chunkFile, false), ',', CSVWriter.NO_QUOTE_CHARACTER);			
+			writer.writeNext(header);
+		
+			for (RawChunk rawChunk : sRawChksWrap) {
+	        	Action action = rawChunk.getAction();
+	        	String[] content = { rawChunk.mStartDate, rawChunk.mStopDate, action.getActionName() };
+				writer.writeNext(content);				
+	        }
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
