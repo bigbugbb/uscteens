@@ -197,7 +197,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
 		}
 		if (li.getItemImage() == R.drawable.not_available) {
 			String text = "You can no longer label this day. Try to label within " +
-					TeensGlobals.MAX_AVAILABLE_LABELING_DAYS + " days of the actual day.";
+					TeensGlobals.MAX_LABEL_WINDOW + " days of the actual day.";
 			Toast.makeText(mContext, text, Toast.LENGTH_LONG).show();
 			return;
 		}

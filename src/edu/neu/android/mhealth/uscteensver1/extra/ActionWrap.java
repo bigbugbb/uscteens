@@ -11,6 +11,7 @@ public class ActionWrap extends HashMap<String, Action> {
 
 	public ActionWrap() {}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void clear() {
 		Iterator iter = entrySet().iterator(); 

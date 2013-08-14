@@ -177,23 +177,23 @@ public class VideoActivity extends BaseActivity {
 		return ContentAppUtil.MOVIE_LIST[last_num - 1];
 	}
 
-	private int getMovieLatestNum() {
-		int ls = this.getSharedPreferences(ContentAppUtil.VIDEO_DATA,
-				MODE_PRIVATE).getInt(ContentAppUtil.REWARDPOSITION, 0);
-		// ls = 40;
-		if (ls > ContentAppUtil.MOVIE_LIST.length) {
-			ls = ContentAppUtil.MOVIE_LIST.length;
-			AlertDialog.Builder alertbox1 = new AlertDialog.Builder(this);
-			alertbox1
-					.setMessage(ContentAppUtil.NOT_AVAILABLE_ON_SERVER_MESSAGE);
-			alertbox1.setPositiveButton("OK",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-						}
-					}).show();
-		}
-		return ls;
-	}
+//	private int getMovieLatestNum() {
+//		int ls = this.getSharedPreferences(ContentAppUtil.VIDEO_DATA,
+//				MODE_PRIVATE).getInt(ContentAppUtil.REWARDPOSITION, 0);
+//		// ls = 40;
+//		if (ls > ContentAppUtil.MOVIE_LIST.length) {
+//			ls = ContentAppUtil.MOVIE_LIST.length;
+//			AlertDialog.Builder alertbox1 = new AlertDialog.Builder(this);
+//			alertbox1
+//					.setMessage(ContentAppUtil.NOT_AVAILABLE_ON_SERVER_MESSAGE);
+//			alertbox1.setPositiveButton("OK",
+//					new DialogInterface.OnClickListener() {
+//						public void onClick(DialogInterface arg0, int arg1) {
+//						}
+//					}).show();
+//		}
+//		return ls;
+//	}
 
 	public Bitmap getImgFromServer(String address) {
 		try {
