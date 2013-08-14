@@ -6,6 +6,7 @@ import java.util.Date;
 import android.util.Log;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
+import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyAnswer;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
@@ -92,7 +93,7 @@ public class TeensSurveyActivity extends SurveyActivity {
 				Labeler.getInstance().addLabel(new Date(), answer.getAnswerText());
 			} else {
 				long time = promptEvent.getScheduledPromptTime(); // the time is actually not accurate
-				Labeler.getInstance().addLabel(new Date(time), answer.getAnswerText());
+				Labeler.getInstance().addLabel(new Date(time - Globals.MINUTES_15_IN_MS), answer.getAnswerText());
 			}
 		}
 	}
