@@ -1,7 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -29,20 +28,18 @@ public class DateListView extends ListView {
 		
 		assert(week == 1 || week == 2);
                      
-		String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		String curDate = DateHelper.serverDateFormat.format(new Date());
 							
 		initializeItems(week, startDate, curDate);
 	}
 	
 	private void initializeItems(int week, String startDate, String curDate) {						
 		// get Date objects for start date and current date
-		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");	
 		Date aStartDate = null, aCurDate = null;
 		try {
-			aStartDate = fmt.parse(startDate);
-			aCurDate   = fmt.parse(curDate);
+			aStartDate = DateHelper.serverDateFormat.parse(startDate);
+			aCurDate   = DateHelper.serverDateFormat.parse(curDate);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}			
 		
@@ -74,7 +71,7 @@ public class DateListView extends ListView {
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + daysAfterStarting) {
-					if (i <= startWeekday + daysAfterStarting - TeensGlobals.MAX_AVAILABLE_LABELING_DAYS) {
+					if (i <= startWeekday + daysAfterStarting - TeensGlobals.MAX_LABEL_WINDOW) {
 						addItem(sWeekdays[i % 7], R.drawable.not_available);
 					} else {
 						if (DataSource.areAllChunksLabelled(dates.get(i - startWeekday))) {
@@ -91,7 +88,7 @@ public class DateListView extends ListView {
 			daysAfterStarting -= 7;
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + daysAfterStarting) {
-					if (i <= startWeekday + daysAfterStarting - TeensGlobals.MAX_AVAILABLE_LABELING_DAYS) {
+					if (i <= startWeekday + daysAfterStarting - TeensGlobals.MAX_LABEL_WINDOW) {
 						addItem(sWeekdays[i % 7], R.drawable.not_available);
 					} else {
 						if (DataSource.areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
@@ -146,7 +143,7 @@ public class DateListView extends ListView {
 		if (week == 1) { // left list view
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + daysAfterStarting) {
-					if (i <= startWeekday + daysAfterStarting - TeensGlobals.MAX_AVAILABLE_LABELING_DAYS) {
+					if (i <= startWeekday + daysAfterStarting - TeensGlobals.MAX_LABEL_WINDOW) {
 						getItem(i - startWeekday).setItemImage(R.drawable.not_available);
 					} else {
 						if (DataSource.areAllChunksLabelled(dates.get(i - startWeekday))) {
@@ -164,7 +161,7 @@ public class DateListView extends ListView {
 			startWeekday += 7;
 			for (int i = startWeekday; i < startWeekday + 7; ++i) {
 				if (i <= startWeekday + daysAfterStarting) {
-					if (i <= startWeekday + daysAfterStarting - TeensGlobals.MAX_AVAILABLE_LABELING_DAYS) {
+					if (i <= startWeekday + daysAfterStarting - TeensGlobals.MAX_LABEL_WINDOW) {
 						getItem(i - startWeekday).setItemImage(R.drawable.not_available);
 					} else {
 						if (DataSource.areAllChunksLabelled(dates.get(i + 7 - startWeekday))) {
@@ -176,7 +173,7 @@ public class DateListView extends ListView {
 				} else {
 					getItem(i - startWeekday).setItemImage(R.drawable.lock);
 				}
-			} 
+			}
 		}
 		
 		// scroll to the current day if possible				

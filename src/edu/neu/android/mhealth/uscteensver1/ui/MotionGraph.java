@@ -1,8 +1,8 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
+import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -133,6 +133,7 @@ public class MotionGraph extends AppObject {
 		mImages.clear();
 	}
 	
+	@SuppressLint("DefaultLocale")
 	private String convertDateToDisplayFormat(String date) {
 		String[] MONTHS = {
 			"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"			
@@ -354,7 +355,6 @@ public class MotionGraph extends AppObject {
 
 	@Override
 	public boolean onUp(MotionEvent e) {
-		// TODO Auto-generated method stub
 		return super.onUp(e);
 	}
 

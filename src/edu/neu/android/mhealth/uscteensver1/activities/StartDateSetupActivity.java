@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
+import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.BaseActivity;
@@ -32,10 +33,12 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 	private Spinner  mSpinnerYears;      
     private Spinner  mSpinnerMonths;   
     private Spinner  mSpinnerDays;
+    private Spinner  mSpinnerWindows;
 	// years, months and days
     private String[] mYears  = { "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023" };		
 	private String[] mMonths = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" };
 	private String[] mDays   = {};
+	private String[] mLabelWindows = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14" };
 	// adapter for days
 	ArrayAdapter<String> mAdapterDays = null;
 	// today
@@ -85,6 +88,12 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 				mSpinnerDays.setSelection(i);
 			}
 		}
+		for (int i = 0; i < mLabelWindows.length; ++i) {
+			String window = mLabelWindows[i];
+			if (window.compareTo(TeensGlobals.MAX_LABEL_WINDOW + "") == 0) {
+				mSpinnerWindows.setSelection(i);
+			}
+		}
 		super.onResume();
 	}
 	
@@ -112,28 +121,35 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 		mBtnSet.setOnClickListener(this);
 		mBtnCancel.setOnClickListener(this);
 		// get spinners
-		mSpinnerYears  = (Spinner) findViewById(R.id.spinner_years);
-		mSpinnerMonths = (Spinner) findViewById(R.id.spinner_months);
-		mSpinnerDays   = (Spinner) findViewById(R.id.spinner_days);
+		mSpinnerYears   = (Spinner) findViewById(R.id.spinner_years);
+		mSpinnerMonths  = (Spinner) findViewById(R.id.spinner_months);
+		mSpinnerDays    = (Spinner) findViewById(R.id.spinner_days);
+		mSpinnerWindows = (Spinner) findViewById(R.id.spinner_labeling_windows);
 		// set years
 		ArrayAdapter<String> mAdapterYears = 
-	        	new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, mYears);
+	        	new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mYears);
 		mAdapterYears.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
 		mSpinnerYears.setAdapter(mAdapterYears);
 		mSpinnerYears.setOnItemSelectedListener(new SpinnerSelectedListener());
 		mSpinnerYears.setVisibility(View.VISIBLE);
 		// set months
 		ArrayAdapter<String> mAdapterMonths = 
-	        	new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, mMonths);
+	        	new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mMonths);
 		mAdapterMonths.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
 		mSpinnerMonths.setAdapter(mAdapterMonths);
 		mSpinnerMonths.setOnItemSelectedListener(new SpinnerSelectedListener());
 		mSpinnerMonths.setVisibility(View.VISIBLE);
 		// set days
-		mAdapterDays = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, mDays);
+		mAdapterDays = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mDays);
 		mAdapterDays.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
 		mSpinnerDays.setAdapter(mAdapterDays);
 		mSpinnerDays.setOnItemSelectedListener(new SpinnerSelectedListener());
+		// set labeling windows
+		ArrayAdapter<String> mAdapterWindows = 
+				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mLabelWindows);
+		mAdapterWindows.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);	
+		mSpinnerWindows.setAdapter(mAdapterWindows);
+		mSpinnerWindows.setOnItemSelectedListener(new SpinnerSelectedListener());
 		//mSpinnerDays.setEnabled(false);
 		mSpinnerDays.setVisibility(View.VISIBLE);
 	}
@@ -197,7 +213,11 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
         		resetSpinnerDays();
         	} else if (parent == mSpinnerDays) {
         		mDateSplit[2] = (String) parent.getSelectedItem(); 
-        	}      
+        	} else if (parent == mSpinnerWindows) {
+        		String labelWindow = (String) parent.getSelectedItem();
+        		TeensGlobals.MAX_LABEL_WINDOW = Integer.parseInt(labelWindow);
+        		DataStorage.SetValue(TeensAppManager.getAppContext(), "KEY_LABEL_WINDOW", TeensGlobals.MAX_LABEL_WINDOW);
+        	}
         	
         	mStartDate = mDateSplit[0] + "-" + mDateSplit[1] + "-" + mDateSplit[2];        	        	     	        	       
         }  

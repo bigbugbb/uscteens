@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -55,7 +57,7 @@ import edu.neu.android.wocketslib.utils.PasswordChecker;
 import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
 import edu.neu.android.wocketslib.views.DummyView;
 
-public class TeensMainActivity extends TeensBaseActivity implements OnTouchListener {
+public class TeensMainActivity extends TeensBaseActivity implements OnTouchListener, TextToSpeech.OnInitListener {
 	
 	// the view for drawing anything
 	protected GraphView mGraphView = null;
@@ -64,14 +66,10 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 	// the view covering the screen if not authorized 
 	protected DummyView mDummyView = null;
 	// the view for display loading progress
-	//protected ProgressView mProgressView = null;
+	//protected ProgressView mProgressView = null;	
 	// all of the pages
 	protected AppPage mCurPage = null;
-	protected List<AppPage> mPages = new ArrayList<AppPage>();
-	// special password for secret behaviors
-	private PasswordChecker mPwdStaff     = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
-	private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
-	private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");	
+	protected List<AppPage> mPages = new ArrayList<AppPage>();	
 	// data loader
 	private LoadDataTask mDataLoader = null;
 	
@@ -122,6 +120,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 	private void setupGlobal() {
 		Context context = getApplicationContext();
 		TeensGlobals.sGlobalHandler = mHandler;
+		TeensGlobals.MAX_LABEL_WINDOW = (int) DataStorage.GetValueLong(context, "KEY_LABEL_WINDOW", 2);
 		
 		// update flag indicating whether we should 
 		// copy folders from assets to external storage
@@ -185,9 +184,15 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 		ActionManager.start();
 		// load rewards for the reward view
 		RewardManager.start();
+		
+		mTTS = new TextToSpeech(this, this);
 	}
 	
 	private void releaseExtra() {
+		if (mTTS != null) {
+			mTTS.stop();
+			mTTS.shutdown();
+		}
 		ActionManager.stop();
 		RewardManager.stop();
 	}
@@ -433,6 +438,14 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 		return false;
 	}
     
+ // special password for secret behaviors
+ 	private PasswordChecker mPwdStaff     = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
+ 	private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
+ 	private PasswordChecker mPwdTeens     = new PasswordChecker("teens");
+ 	private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
+ 	
+ 	private TextToSpeech mTTS;
+    
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 //    	if (mProgressView.getVisibility() == View.VISIBLE) {
@@ -482,11 +495,33 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 		} else if (mPwdUninstall.isMatch(keyCode)) {
 			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 			Uri packageUri = Uri.parse("package:" + Globals.PACKAGE_NAME);
-			Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageUri);
-			startActivity(uninstallIntent);
+			Intent i = new Intent(Intent.ACTION_DELETE, packageUri);
+			startActivity(i);
+		} else if (mPwdTeens.isMatch(keyCode)) {
+			mTTS.speak("Welcome to use teens activity game!", TextToSpeech.QUEUE_FLUSH, null);
 		}
 		
 		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public void onInit(int status) {
+		if (status == TextToSpeech.SUCCESS) {
+
+			int result = mTTS.setLanguage(Locale.US);
+
+			// tts.setPitch(5); // set pitch level
+
+			// tts.setSpeechRate(2); // set speech speed rate
+
+			if (result == TextToSpeech.LANG_MISSING_DATA
+					|| result == TextToSpeech.LANG_NOT_SUPPORTED) {
+				Log.e("TTS", "Language is not supported");
+			}
+
+		} else {
+			Log.e("TTS", "Initilization Failed");
+		}
 	}
 
 }

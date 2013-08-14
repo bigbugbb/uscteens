@@ -132,6 +132,35 @@
 						android:layout_marginRight="32dp" /> 
 	            </TableRow>
 	            
+	            <TableRow
+	                android:id="@+id/tableRow4"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:baselineAligned="false"
+	                android:gravity="center" >
+	
+	                <TextView
+	                    style="@style/test"
+	                    android:layout_width="70dp"
+	                    android:layout_height="50dp"
+	                    android:layout_margin="2pt"
+	                    android:paddingLeft="16dp"
+	                    android:layout_weight="1"
+	                    android:gravity="center"
+	                    android:shadowDx="1"
+	                    android:shadowDy="-1"
+	                    android:shadowRadius="1.5"
+	                    android:text="Labeling window "
+	                    android:textColor="@color/black"
+	                    android:textSize="18dp" />
+	                <Spinner 
+					    android:id="@+id/spinner_labeling_windows"   
+						android:layout_width="fill_parent"  
+						android:layout_height="50dp"
+						android:layout_weight="2"
+						android:layout_marginRight="32dp" /> 
+	            </TableRow>
+	            
 	        </TableLayout>
 	        <!-- The buttons at the bottom of the screen. -->        
 

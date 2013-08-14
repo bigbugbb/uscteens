@@ -22,8 +22,7 @@ public class TeensGlobals {
 	
 	public final static int PIXEL_PER_DATA = 2;	
 	public final static int MAXIMUM_WIDTH_IN_PIXEL = 3600 * 24 * PIXEL_PER_DATA;
-	public final static int REFRESH_DATA_TIME_THRESHOLD = 60 * 1000; // in ms
-	public final static int	MAX_AVAILABLE_LABELING_DAYS = 2;		
+	public final static int REFRESH_DATA_TIME_THRESHOLD = 60 * 1000; // in ms		
 	
 	public final static String DATA_LOADING_RESULT = "DATA_LOADING_RESULT";
 	public final static String QUEST_SELECTION = "QUEST_SELECTION";
@@ -42,6 +41,7 @@ public class TeensGlobals {
 		
 	public static Handler sGlobalHandler = null;	
 	public static boolean sUpdateConfig = false;
+	public static int MAX_LABEL_WINDOW = 2;
 	
 	public static final boolean IS_CALIBRATION_ENABLED = false;
 	
@@ -158,7 +158,7 @@ public class TeensGlobals {
 					context.getPackageManager().getPackageInfo(packageName, 0).versionName;					
 		} catch (NameNotFoundException e) {		
 			e.printStackTrace();
-		}
+		}		
 		
 		Globals.myBroadcastReceiverProcessor = new TeensBroadcastReceiverProcessor();
 	}
