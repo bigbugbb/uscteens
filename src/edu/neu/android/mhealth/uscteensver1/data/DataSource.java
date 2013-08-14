@@ -18,7 +18,6 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import android.os.Environment;
 import android.util.Log;
 import android.util.Pair;
 import au.com.bytecode.opencsv.CSVReader;
@@ -29,9 +28,7 @@ import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.algorithm.ChunkingAlgorithm;
-import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
 import edu.neu.android.wocketslib.mhealthformat.AnnotationSaver;
-import edu.neu.android.wocketslib.mhealthformat.LowSamplingRateDataSaver;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.DateHelper;
 import edu.neu.android.wocketslib.utils.FileHelper;
@@ -162,6 +159,10 @@ public class DataSource {
 			}
 		}
 		
+		if (sCancelled) {
+			return ERR_CANCELLED;
+		}
+		
 		/*
 		 * finally load the label data if it exists, we use it to draw text 
 		 * hints on the graph for helping user remember what he/she did before
@@ -260,7 +261,7 @@ public class DataSource {
 		
 		try {
 			// load the daily data from csv files hour by hour		
-			for (int i = 0; i < hourDirs.length; ++i) {
+			for (int i = 0; i < hourDirs.length; ++i) {				
 				String[] fileNames = new File(hourDirs[i]).list(new FilenameFilter() {
 					@Override
 					public boolean accept(File dir, String filename) {	
@@ -274,8 +275,8 @@ public class DataSource {
 				String filePath = hourDirs[i] + File.separator + fileNames[0];
 				// load the hourly data from .bin file
 				ArrayList<AccelData> hourlyAccelData = new ArrayList<AccelData>();						
-				int result = loadHourlyRawAccelData(filePath, hourlyAccelData, true);	
-				if (result == ERR_CANCELLED) {
+				loadHourlyRawAccelData(filePath, hourlyAccelData, true);	
+				if (sCancelled) {
 					return ERR_CANCELLED;
 				}
 				// add the houly data the data wrap
