@@ -133,12 +133,12 @@ public class TeensRandomSurvey extends QuestionSet {
 		Q2_e_a_MainPurpose.setDefault("Q1_MainActivity", answerSet2ea);
 		mDefaultQuestionSet.add(Q2_e_a_MainPurpose);
 
-		SurveyQuestion Q2_e_b_MainPurpose = new SurveyQuestion("Q2_e_b_MainPurpose", "Was this eating or drinking a meal or a snack?", TYPE.SINGLE_CHOICE);
+		SurveyQuestion Q2_e_b_MealSnack = new SurveyQuestion("Q2_e_b_MealSnack", "Was this eating or drinking a meal or a snack?", TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2eb = new SurveyAnswer[2];
 		answerSet2eb[0] = new SurveyAnswer(0, "Meal");
 		answerSet2eb[1] = new SurveyAnswer(1, "Snack");
-		Q2_e_b_MainPurpose.setDefault("Q1_MainActivity", answerSet2eb);
-		mDefaultQuestionSet.add(Q2_e_b_MainPurpose);
+		Q2_e_b_MealSnack.setDefault("Q1_MainActivity", answerSet2eb);
+		mDefaultQuestionSet.add(Q2_e_b_MealSnack);
 
 		SurveyQuestion Q2_f_HowEnjoyable = new SurveyQuestion("Q2_f_HowEnjoyable", "How ENJOYABLE was " + mainActivity, TYPE.SINGLE_CHOICE);
 		SurveyAnswer[] answerSet2f = new SurveyAnswer[5];
@@ -697,7 +697,7 @@ public class TeensRandomSurvey extends QuestionSet {
 		Q1_MainActivity.addRules(new QuesFromAns(new int[]{0,1,4,5}, questionSection_20d, 0.3));
 
 		ArrayList<SurveyQuestion> questionSection_20e = new ArrayList<SurveyQuestion>(1);
-		questionSection_20e.add(Q2_e_b_MainPurpose);// 2e.a
+		questionSection_20e.add(Q2_e_b_MealSnack);// 2e.a
 		Q1_MainActivity.addRules(new QuesFromAns(new int[]{2}, questionSection_20e, 0.3));
 
 		ArrayList<SurveyQuestion> questionSection_2 = new ArrayList<SurveyQuestion>(1);

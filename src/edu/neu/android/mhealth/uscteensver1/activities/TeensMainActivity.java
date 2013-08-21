@@ -441,6 +441,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
  // special password for secret behaviors
  	private PasswordChecker mPwdStaff     = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
  	private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
+ 	private PasswordChecker mPwdSetup     = new PasswordChecker("sss");
  	private PasswordChecker mPwdTeens     = new PasswordChecker("teens");
  	private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
  	
@@ -488,7 +489,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 			Intent i = new Intent(this, StaffSetupActivity.class);
 			startActivity(i);
-		} else if (mPwdSubject.isMatch(keyCode)) {			
+		} else if (mPwdSubject.isMatch(keyCode) || mPwdSetup.isMatch(keyCode)) {			
 			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 			Intent i = new Intent(this, TeensSetupActivity.class);
 			startActivity(i);

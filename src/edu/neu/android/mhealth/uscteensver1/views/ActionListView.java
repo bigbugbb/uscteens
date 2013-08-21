@@ -9,7 +9,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class ActionListView extends ListView {
 	
-	private static final int MAX_Y_OVERSCROLL_DISTANCE = 60;
+	private static final int MAX_Y_OVERSCROLL_DISTANCE = 70;
 	
 	private int mMaxYOverscrollDistance;
 	
@@ -45,7 +45,7 @@ public class ActionListView extends ListView {
 			 int scrollY, int scrollRangeX, int scrollRangeY,
 			 int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
 		// This is where the magic happens, we have replaced the incoming
-		// maxOverScrollY with our own custom variable mMaxYOverscrollDistance;
+		// maxOverScrollY with our own custom variable mMaxYOverscrollDistance;		
 		return super.overScrollBy(deltaX, deltaY, scrollX, scrollY,
 				scrollRangeX, scrollRangeY, maxOverScrollX, mMaxYOverscrollDistance, isTouchEvent);
 	}	
