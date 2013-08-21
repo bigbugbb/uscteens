@@ -138,7 +138,9 @@ public class TeensSetupActivity extends BaseActivity {
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
 				promptEvent.setPromptType(PROMPT_TYPE_RANDOM_TEST);				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				promptEvent.setReprompt(TeensSurveyTestActivity.isWorking(TeensSurveyTestActivity.class));
+				if (TeensSurveyTestActivity.isWorking(TeensSurveyTestActivity.class)) {
+					promptEvent.setRepromptCount(promptEvent.getRepromptCount() + 1);
+				}
 				
 				i.putExtra(TeensSurveyTestActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(
@@ -171,7 +173,9 @@ public class TeensSetupActivity extends BaseActivity {
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
 				promptEvent.setPromptType(PROMPT_TYPE_CS_TEST);				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				promptEvent.setReprompt(TeensSurveyTestActivity.isWorking(TeensSurveyTestActivity.class));
+				if (TeensSurveyTestActivity.isWorking(TeensSurveyTestActivity.class)) {
+					promptEvent.setRepromptCount(promptEvent.getRepromptCount() + 1);
+				}
 				
 				i.putExtra(TeensSurveyTestActivity.SURVEY_PROMPT_EVENT, promptEvent);
 				i.putExtra(QuestionSet.TAG, new QuestionSetParamHandler(

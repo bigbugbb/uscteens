@@ -40,6 +40,8 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 				} 
 			}
 		);
+		
+		TeensSurveyActivity.MINUTES_FOR_FIRST_QUESTION = 3;
 	}
 	
 	@Override
@@ -83,7 +85,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 			return false;
 		}
 		SurveyPromptEvent spe = getEventByScheduledTime(lastScheduledPromptTime);
-		return getPromptTimes(spe.getID()) > 1;
+		return getPromptCount(spe.getID()) > 1;
 	}
 	
 	@Override
