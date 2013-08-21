@@ -57,10 +57,10 @@ public class VideoActivity extends BaseActivity {
 		isConnected = NetworkDetector.isServerAvailable();
 		lastnum = 5;
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
-		setContentView(R.layout.movie_list_activity);
-		btnPlayLatestVideo = (Button) findViewById(R.id.btnPlayTutorial);
+		//setContentView(R.layout.movie_list_activity);
+		//btnPlayLatestVideo = (Button) findViewById(R.id.btnPlayTutorial);
 		btnNeverMind = (Button) findViewById(R.id.btnNeverMind);
-		videoList = (ListView) findViewById(R.id.viewdMoviesList);
+		//videoList = (ListView) findViewById(R.id.viewdMoviesList);
 
 		if (!isConnected) {
 			AlertDialog.Builder dialog = new AlertDialog.Builder(
@@ -133,15 +133,15 @@ public class VideoActivity extends BaseActivity {
 				duration += sec + " seconds ";
 			duration = duration.substring(0, duration.length() - 1) + ")";
 
-			TextView videoRunTime = (TextView) findViewById(R.id.videoRunTime);
-			videoRunTime.setText(duration);
+			//TextView videoRunTime = (TextView) findViewById(R.id.videoRunTime);
+			//videoRunTime.setText(duration);
 		}
 	}
 
 	public void setListView() {
-		listAdapter = new SimpleAdapter(VideoActivity.this, list,
-				R.layout.listview_videoshow, new String[] { "icon", "name" },
-				new int[] { R.id.videoIcon, R.id.videoName });
+//		listAdapter = new SimpleAdapter(VideoActivity.this, list,
+//				R.layout.listview_videoshow, new String[] { "icon", "name" },
+//				new int[] { R.id.videoIcon, R.id.videoName });
 		listAdapter.setViewBinder(new ViewBinder() {
 			@Override
 			public boolean setViewValue(View arg0, Object arg1, String arg2) {

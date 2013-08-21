@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,4 +10,60 @@
         android:layout_height="wrap_content"
         android:background="@color/bk_gray" />
 
+</LinearLayout> -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+   	<edu.neu.android.mhealth.uscteensver1.views.HeaderView
+   	    android:id="@+id/view_quest_header"
+   	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+   	
+   	<ImageView
+   	    android:id="@+id/view_top_arrow"
+   	    android:layout_width="fill_parent"
+        android:layout_height="23dp"
+   	    android:paddingTop="2dp"
+   	    android:paddingBottom="3dp"
+   	    android:background="@color/white" />
+   	    
+   	<View
+   	    android:id="@+id/view_line_top"
+	    android:layout_width="fill_parent"
+	    android:layout_height="1dp"
+	    android:background="@color/bk_gray" />
+
+   	<LinearLayout 
+   	    android:id="@+id/list_wrap"
+   	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" 
+	    android:orientation="vertical"
+	    android:background="@color/bk_gray" >
+	    
+	   	<edu.neu.android.mhealth.uscteensver1.views.ActionListView
+	   	    android:id="@+id/view_action_list"	    
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"        
+	        android:divider="@color/bk_gray"
+	        android:dividerHeight="1dp" />
+	   	
+	</LinearLayout>
+	   	   	
+   	<View
+   	    android:id="@+id/view_line_bottom"
+	    android:layout_width="fill_parent"
+	    android:layout_height="1dp"
+	    android:background="@color/bk_gray" />
+    	    
+   	<ImageView
+   	    android:id="@+id/view_bottom_arrow"
+   	    android:layout_width="fill_parent"
+        android:layout_height="23dp"
+   	    android:paddingTop="3dp"
+   	    android:paddingBottom="2dp"
+   	    android:background="@color/white" />
+   	
 </LinearLayout>

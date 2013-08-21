@@ -93,7 +93,7 @@ public class TeensGlobals {
 
 		Globals.DEFAULT_MAIL_USERNAME = "wocketssmtp@gmail.com";
 		Globals.DEFAULT_MAIL_PASSWORD = "W0CKET$mtp";
-		Globals.DEFAULT_PING_ADDRESS  = "http://wockets.ccs.neu.edu/ping.php";	//TODO change to wockets server
+		Globals.DEFAULT_PING_ADDRESS  = "http://wockets.ccs.neu.edu/ping.php";
 		Globals.DEFAULT_SAMPLING_RATE = 40;
 		
         // Send the status information once per hour
@@ -130,7 +130,7 @@ public class TeensGlobals {
 		Globals.DEFAULT_PROMPTS_PER_DAY = 7;
 		Globals.DEFAULT_START_HOUR      = 15;
 		Globals.DEFAULT_END_HOUR        = 22;
-		Globals.REPROMPT_DELAY_MS = 5 * Globals.MINUTES_1_IN_MS;		
+		Globals.REPROMPT_DELAY_MS = 3 * Globals.MINUTES_1_IN_MS;		
 		Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = Globals.MINUTES_30_IN_MS;
 		Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS = 5 * Globals.MINUTES_1_IN_MS;
 		Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS = 5 * Globals.MINUTES_1_IN_MS / 2;
