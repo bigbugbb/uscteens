@@ -27,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
-import android.widget.TextView;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.support.ContentAppUtil;
 import edu.neu.android.wocketslib.utils.BaseActivity;
