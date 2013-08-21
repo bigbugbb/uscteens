@@ -132,9 +132,6 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 			String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY;
 			FileHelper.deleteDir(dirPath + TeensGlobals.ICON_FOLDER);	
 			FileHelper.deleteDir(dirPath + TeensGlobals.REWARD_FOLDER);
-			FileHelper.deleteFile(TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + 
-				TeensGlobals.SENSOR_FOLDER + DateHelper.serverDateFormat.format(new Date()) + File.separator + 
-				"Teens.bigbug.annotation.xml");
 		}
 	}
 

@@ -138,8 +138,10 @@ public class TeensSetupActivity extends BaseActivity {
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
 				promptEvent.setPromptType(PROMPT_TYPE_RANDOM_TEST);				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				if (TeensSurveyTestActivity.isWorking(TeensSurveyTestActivity.class)) {
-					promptEvent.setRepromptCount(promptEvent.getRepromptCount() + 1);
+				SurveyActivity activity = TeensSurveyTestActivity.getSelf(TeensSurveyTestActivity.class);
+				if (activity != null) {
+					final SurveyPromptEvent oldPromptEvent = activity.getSurveyPromptEvent();
+					promptEvent.setRepromptCount(oldPromptEvent.getRepromptCount() + 1);
 				}
 				
 				i.putExtra(TeensSurveyTestActivity.SURVEY_PROMPT_EVENT, promptEvent);
@@ -148,7 +150,6 @@ public class TeensSetupActivity extends BaseActivity {
 				));
 				
 				// Destroy the existent survey if it's not for "Random-Test";
-				SurveyActivity activity = SurveyActivity.getSelf(TeensSurveyTestActivity.class);
 				if (activity != null) {
 					final SurveyPromptEvent oldPromptEvent = activity.getSurveyPromptEvent();
 					assert(oldPromptEvent != null);
@@ -173,8 +174,10 @@ public class TeensSetupActivity extends BaseActivity {
 				SurveyPromptEvent promptEvent = new SurveyPromptEvent(now, now);				
 				promptEvent.setPromptType(PROMPT_TYPE_CS_TEST);				
 				promptEvent.setPromptAudio(PROMPT_AUDIO.AUDIO);
-				if (TeensSurveyTestActivity.isWorking(TeensSurveyTestActivity.class)) {
-					promptEvent.setRepromptCount(promptEvent.getRepromptCount() + 1);
+				SurveyActivity activity = TeensSurveyTestActivity.getSelf(TeensSurveyTestActivity.class);
+				if (activity != null) {
+					final SurveyPromptEvent oldPromptEvent = activity.getSurveyPromptEvent();
+					promptEvent.setRepromptCount(oldPromptEvent.getRepromptCount() + 1);
 				}
 				
 				i.putExtra(TeensSurveyTestActivity.SURVEY_PROMPT_EVENT, promptEvent);
@@ -183,7 +186,6 @@ public class TeensSetupActivity extends BaseActivity {
 				));
 				
 				// Destroy the existent survey if it's not for "CS-Test";
-				SurveyActivity activity = SurveyActivity.getSelf(TeensSurveyTestActivity.class);
 				if (activity != null) {
 					final SurveyPromptEvent oldPromptEvent = activity.getSurveyPromptEvent();
 					assert(oldPromptEvent != null);
