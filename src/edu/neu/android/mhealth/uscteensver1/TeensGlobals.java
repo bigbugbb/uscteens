@@ -65,7 +65,7 @@ public class TeensGlobals {
 		Globals.setArbitrater(new TeensArbitrater(context));
 		Globals.initDataDirectories(context);
 		
-		DIRECTORY_PATH = Globals.EXTERNAL_DIRECTORY_PATH;		
+		DIRECTORY_PATH = Globals.EXTERNAL_DIRECTORY_PATH;
 
 		Globals.STUDY_NAME = "USCTeens"; // "Teens Study"; 
 		Globals.STUDY_SERVER_NAME = "USCTeens";

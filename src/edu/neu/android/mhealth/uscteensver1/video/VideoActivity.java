@@ -27,9 +27,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
-import android.widget.TextView;
 import edu.neu.android.mhealth.uscteensver1.R;
-import edu.neu.android.mhealth.uscteensver1.support.ContentAppUtil;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.NetworkDetector;
@@ -165,16 +163,17 @@ public class VideoActivity extends BaseActivity {
 					);
 					Log.i(TAG, "Picked Video " + id);
 					Log.i(TAG, "Showed Video " + id);
-					ContentAppUtil.logViewedToDatabase(VideoActivity.this, TAG,
-							(int) id, 10);
+//					ContentAppUtil.logViewedToDatabase(VideoActivity.this, TAG,
+//							(int) id, 10);
 					startActivity(lVideoIntent);
 				}
 			});
 	}
 
 	private String getUrl(int last_num) {
-		last_num = Math.min(ContentAppUtil.MOVIE_LIST.length, last_num);
-		return ContentAppUtil.MOVIE_LIST[last_num - 1];
+//		last_num = Math.min(ContentAppUtil.MOVIE_LIST.length, last_num);
+//		return ContentAppUtil.MOVIE_LIST[last_num - 1];
+		return "";
 	}
 
 //	private int getMovieLatestNum() {

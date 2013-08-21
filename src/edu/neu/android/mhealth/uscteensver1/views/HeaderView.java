@@ -11,8 +11,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
-import android.graphics.PointF;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
@@ -28,9 +26,6 @@ public class HeaderView extends View {
 	protected ArrayList<Bitmap> mImages = new ArrayList<Bitmap>();	
 	protected String  mDate		 = "";
 	protected String  mTime      = "";
-	protected RectF   mBackArea  = new RectF();
-	protected PointF  mBackTxtPt = new PointF();
-	protected Paint   mPaintText = null;	
 	protected Paint   mPaintDate = null;
 	protected Paint   mPaintTime = null;
 	protected int mWidth  = 0;
@@ -46,13 +41,7 @@ public class HeaderView extends View {
 		});
 		
 		Typeface tf = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
-		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mPaintText.setColor(Color.WHITE);
-		mPaintText.setStyle(Style.STROKE);
-		mPaintText.setTextSize(AppScale.doScaleT(34));
-		mPaintText.setTypeface(tf);
-		mPaintText.setFakeBoldText(false);		
-		
+
 		mPaintDate = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintDate.setColor(Color.WHITE);
 		mPaintDate.setStyle(Style.FILL);
@@ -73,8 +62,8 @@ public class HeaderView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawBitmap(mImages.get(0), 0, 0, null);
-		canvas.drawBitmap(mImages.get(1), mBackArea.left, mBackArea.top, null);
-		canvas.drawText("BACK", mBackTxtPt.x, mBackTxtPt.y, mPaintText);
+		//canvas.drawBitmap(mImages.get(1), mBackArea.left, mBackArea.top, null);
+		//canvas.drawText("BACK", mBackTxtPt.x, mBackTxtPt.y, mPaintText);
 		canvas.drawText(mDate, getWidth() / 2, AppScale.doScaleH(65), mPaintDate);
 		mPaintTime.setTextSize(AppScale.doScaleT(35));
 		canvas.drawText(mTime, getWidth() / 2, AppScale.doScaleH(115), mPaintTime);
@@ -111,15 +100,6 @@ public class HeaderView extends View {
         
         mExpectedWidth  = (int) (mImages.get(0).getWidth());  
         mExpectedHeight = (int) (mImages.get(0).getHeight()); 
-        
-        // the area for the back button
-		mBackArea.left   = AppScale.doScaleW(10);
-		mBackArea.right  = mBackArea.left + mImages.get(1).getWidth();
-		mBackArea.top    = AppScale.doScaleH(5);
-		mBackArea.bottom = mBackArea.top + mImages.get(1).getHeight();
-				
-		mBackTxtPt.x = mBackArea.left + AppScale.doScaleW(33);
-		mBackTxtPt.y = mBackArea.bottom - AppScale.doScaleH(52);
 	}
 	
 	public void setTime(int start, int stop) {		

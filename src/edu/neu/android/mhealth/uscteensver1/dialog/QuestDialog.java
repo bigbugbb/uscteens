@@ -2,47 +2,53 @@ package edu.neu.android.mhealth.uscteensver1.dialog;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
+import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
+import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
-import edu.neu.android.mhealth.uscteensver1.ui.ActionListView.ActionItem;
 import edu.neu.android.mhealth.uscteensver1.utils.NoteSender;
-import edu.neu.android.mhealth.uscteensver1.views.ActionAdapter;
 import edu.neu.android.mhealth.uscteensver1.views.HeaderView;
-import edu.neu.android.mhealth.uscteensver1.views.QuestView.OnBackClickedListener;
 import edu.neu.android.wocketslib.Globals;
+import edu.neu.android.wocketslib.support.DataStorage;
 
-public class QuestDialog extends Activity implements OnBackClickedListener {
+public class QuestDialog extends Activity {
 	
 	static public String CHUNK_START_TIME = "CHUNK_START_TIME";
 	static public String CHUNK_STOP_TIME  = "CHUNK_STOP_TIME";
 	
-	protected HeaderView mDialogHeader;
+	protected HeaderView mHeaderView;
+	protected Button	 mBackButton;
 	protected ListView   mListView;
 	protected ImageView  mTopArrow;
 	protected ImageView  mBottomArrow;
@@ -51,6 +57,7 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 	protected ViewGroup  mListWrap;
 	
 	protected ActionAdapter mAdapter;
+	protected HashMap<Integer, Action> mItemData = new HashMap<Integer, Action>();	
 	
 	protected boolean mImageLoaded;
 	protected ArrayList<Bitmap> mImages = new ArrayList<Bitmap>();
@@ -60,7 +67,9 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_quest);
 		
-		loadImages(new int[]{ R.drawable.popup_wind_arrow_ops, R.drawable.popup_wind_arrow });
+		loadImages(new int[]{ 
+			R.drawable.popup_wind_arrow_ops, R.drawable.popup_wind_arrow, R.drawable.back_blue 
+		});
 		
 		setupViews();
 		adjustLayout();
@@ -102,18 +111,25 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 	}
 	
 	private void setupViews() {
-//		mView = (QuestView) findViewById(R.id.view_quest);	
-//		mView.setOnBackClickedListener(this);
-//		mView.setHandler(mHandler);
-		
-		mDialogHeader = (HeaderView) findViewById(R.id.view_quest_header);
+
+		mHeaderView = (HeaderView) findViewById(R.id.view_quest_header);
 		int start = getIntent().getIntExtra(CHUNK_START_TIME, 0);
 		int stop  = getIntent().getIntExtra(CHUNK_STOP_TIME, 0);
-		mDialogHeader.setTime(start, stop);
+		mHeaderView.setTime(start, stop);
+		
+		mBackButton = (Button) findViewById(R.id.button_back);
+		mBackButton.setBackgroundDrawable(new BitmapDrawable(getResources(), mImages.get(2)));
+		mBackButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 		
 		mTopArrow    = (ImageView) findViewById(R.id.view_top_arrow);
 		mTopArrow.setImageBitmap(mImages.get(0));				
-		mBottomArrow = (ImageView) findViewById(R.id.view_bottom_arrow);		
+		mBottomArrow = (ImageView) findViewById(R.id.view_bottom_arrow);	
 		mBottomArrow.setImageBitmap(mImages.get(1));
 		
 		mTopLine    = findViewById(R.id.view_line_top);
@@ -122,27 +138,23 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 		mListWrap = (ViewGroup) findViewById(R.id.list_wrap);
 		
 		mListView = (ListView) findViewById(R.id.view_action_list);
-		// Getting adapter by passing xml data ArrayList
-		mAdapter = new ActionAdapter(this, ActionManager.getActivatedActions());        
+		mAdapter = new ActionAdapter(this);        
 		mListView.setAdapter(mAdapter);        
-        // Click event for single list row
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-//				Action action = ((ActionItem) li).getAction();
-//				
-//				Message msg = mHandler.obtainMessage();
-//				msg.obj  = action.getActionID();
-//				msg.what = 1;
-//				mHandler.sendMessage(msg);
-//				
-//				// update the most recent selected activity
-//				ActionManager.setMostRecentAction(action);
-//				
-//				// add labeling
-//				Labeler.getInstance().addLabel(new Date(), "Labeling");
+				
+				Action action = mItemData.get(position);
+				
+				// update the most recent selected activity
+				ActionManager.setMostRecentAction(action);
+				
+				// add labeling
+				Labeler.getInstance().addLabel(new Date(), "Labeling");
+				
+				setResultAndExit(action.getActionID());
 			}
 		});	
 	}
@@ -155,53 +167,39 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
         
         // adjust the layout according to the screen resolution				   
 		LayoutParams laParams = null;
-		laParams = mDialogHeader.getLayoutParams();
-		laParams.width  = mDialogHeader.getExpectedWidth();
-		laParams.height = mDialogHeader.getExpectedHeight();
-		mDialogHeader.setLayoutParams(laParams);				
+		laParams = mHeaderView.getLayoutParams();
+		laParams.width  = mHeaderView.getExpectedWidth();
+		laParams.height = mHeaderView.getExpectedHeight();
+		mHeaderView.setLayoutParams(laParams);				
 		
 		int h1 = Math.round(AppScale.doScaleT(23 * density));
 		laParams = mTopArrow.getLayoutParams();
-		laParams.width  = mDialogHeader.getExpectedWidth();
+		laParams.width  = mHeaderView.getExpectedWidth();
 		laParams.height = h1;
 		mTopArrow.setLayoutParams(laParams);
 		
 		laParams = mBottomArrow.getLayoutParams();
-		laParams.width  = mDialogHeader.getExpectedWidth();
+		laParams.width  = mHeaderView.getExpectedWidth();
 		laParams.height = h1;
 		mBottomArrow.setLayoutParams(laParams);
 		
 		int h2 = Math.round(AppScale.doScaleH(1 * density));
 		h2 = h2 > 1 ? h2 : 2;
 		laParams = mTopLine.getLayoutParams();
-		laParams.width  = mDialogHeader.getExpectedWidth();
+		laParams.width  = mHeaderView.getExpectedWidth();
 		laParams.height = h2;
 		mTopLine.setLayoutParams(laParams);
 		
 		laParams = mBottomLine.getLayoutParams();
-		laParams.width  = mDialogHeader.getExpectedWidth();
+		laParams.width  = mHeaderView.getExpectedWidth();
 		laParams.height = h2;
 		mBottomLine.setLayoutParams(laParams);
 		
-		int height = (int) (metrics.heightPixels - (h1 + h2) * 2 - mDialogHeader.getExpectedHeight());
+		int height = (int) (metrics.heightPixels - (h1 + h2) * 2 - mHeaderView.getExpectedHeight());
 		laParams = mListWrap.getLayoutParams();
-		laParams.width  = mDialogHeader.getExpectedWidth();
+		laParams.width  = mHeaderView.getExpectedWidth();
 		laParams.height = height;
 		mListWrap.setLayoutParams(laParams);
-		
-		mAdapter.setListItemHeight(height / 4);
-		
-//		
-//		ListAdapter listAdapter = mListView.getAdapter();
-//		int itemHeight = (int) (metrics.heightPixels - (h1 + h2) * 2 - mDialogHeader.getExpectedHeight()) / 4;
-//		int totalHeight = 0;
-//		for (int i = 0; i < listAdapter.getCount(); i++) {
-//			totalHeight += itemHeight;
-//		}
-//		laParams = mListView.getLayoutParams();
-//		laParams.width  = mDialogHeader.getExpectedWidth();
-//		laParams.height = totalHeight;	
-//		mListView.setLayoutParams(laParams);
 	}	
 	
 	public void onBackClicked() {
@@ -242,22 +240,32 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
         }
 	}
 	
-	public class ActionAdapter extends BaseAdapter {
+	protected void setResultAndExit(String actionID) {
+		DataStorage.SetValue(getApplicationContext(), TeensGlobals.QUEST_SELECTION, actionID);
+		Message msg = TeensGlobals.sGlobalHandler.obtainMessage();		
+		msg.what = AppCmd.QUEST_FINISHING;
+		TeensGlobals.sGlobalHandler.sendMessage(msg);
+		finish();
+	}
+	
+	protected class ActionAdapter extends BaseAdapter {
 	    
-	    private ArrayList<Action> mData;
+	    private ArrayList<Action> mActions;
+	    private ArrayList<Action> mRecents; 
 	    private LayoutInflater mInflater;
-	    private Typeface mTypeface;
-	    
-	    private int mHeight;
-	    
-	    public ActionAdapter(Activity activity, ArrayList<Action> data) {
-	    	mData = data;
-	    	mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	    	mTypeface = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
+	    private Typeface  mTypeface;
+	    private Resources mResources;
+	    	        
+	    public ActionAdapter(Activity activity) {
+	    	mResources = activity.getResources();
+	    	mActions   = ActionManager.getActivatedActions();
+	    	mRecents   = ActionManager.getMostRecentActions();	    	
+	    	mInflater  = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    	mTypeface  = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");	    	
 	    }
 
 	    public int getCount() {
-	        return mData.size();
+	        return mActions.size() + mRecents.size();
 	    }
 
 	    public Object getItem(int position) {
@@ -272,11 +280,20 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 	        View view = convertView;
 	        
 	        if (view == null) {
-	        	view = mInflater.inflate(R.layout.action_list_row, null);
-	        }
+	        	view = mInflater.inflate(R.layout.action_list_row, null);	  	        	
+	        }	        
 	        
-	        Action action = mData.get(position);
-
+	        Action action = null;
+	        if (position < ActionManager.MOST_RECENT_ACTIONS_COUNT) {
+	        	action = mRecents.get(position);
+	        	Drawable background = mResources.getDrawable(R.drawable.action_list_highlight_selector); 
+	        	view.setBackgroundDrawable(background);
+	        } else {
+	        	action = mActions.get(position - ActionManager.MOST_RECENT_ACTIONS_COUNT);	 
+	        	Drawable background = mResources.getDrawable(R.drawable.action_list_selector);
+	        	view.setBackgroundDrawable(background);	        	       
+	        }	        
+	        
 	        TextView  name    = (TextView) view.findViewById(R.id.action_name);
 	        TextView  subname = (TextView) view.findViewById(R.id.action_subname);
 	        ImageView image   = (ImageView) view.findViewById(R.id.action_image);
@@ -290,48 +307,20 @@ public class QuestDialog extends Activity implements OnBackClickedListener {
 	        name.setTypeface(mTypeface);
 	        subname.setTypeface(mTypeface);
 	        
+	        // attach the action to the item
+	        mItemData.put(position, action);
+	        
 	        final DisplayMetrics metrics = TeensAppManager.getAppResources().getDisplayMetrics();
-			final float density = metrics.density;
+			final float density = metrics.density;					
 			
-	        LayoutParams laParams = null;
+	        LayoutParams laParams = null;	        
+	        laParams = mListWrap.getLayoutParams();	
+	        int itemHeight = laParams.height >> 2;			
 	        laParams = image.getLayoutParams();
-	        laParams.height = (int) (mHeight - 4 * density);
+	        laParams.height = (int) (itemHeight - 4 * density);
 	        image.setLayoutParams(laParams);
 	        
 	        return view;
 	    }
-	    
-	    public void setListItemHeight(int height) {
-	    	mHeight = height;
-	    }
-	}
-	
-//	@Override
-//	public boolean onTouchEvent(MotionEvent event) {
-//		if (mView != null) {
-//    		return mView.onTouchEvent(event);
-//    	}
-//		return false;
-//	} 
-	
-//	protected void setResultAndExit(String actionID) {
-//		DataStorage.SetValue(getApplicationContext(), TeensGlobals.QUEST_SELECTION, actionID);
-//		Message msg = TeensGlobals.sGlobalHandler.obtainMessage();		
-//		msg.what = AppCmd.QUEST_FINISHING;
-//		TeensGlobals.sGlobalHandler.sendMessage(msg);
-//		finish();
-//	}
-	
-//	protected final Handler mHandler = new Handler() {
-//		public void handleMessage(Message msg) {
-//	    	switch (msg.what) {
-//	    	case 1:
-//	    		setResultAndExit((String) msg.obj);
-//	    		break;
-//	        default:
-//	        	break;
-//	        }
-//        }
-//    };
-	
+	}	
 }

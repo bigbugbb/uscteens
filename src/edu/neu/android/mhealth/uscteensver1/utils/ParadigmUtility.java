@@ -1,6 +1,5 @@
 package edu.neu.android.mhealth.uscteensver1.utils;
 
-import java.util.Arrays;
 
 public class ParadigmUtility {
 	
