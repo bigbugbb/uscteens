@@ -49,7 +49,7 @@ public class MergeButton extends ChunkButton {
 	
 	public MergeButton(Resources res, Chunk host, OnClickListener listener) {
 		super(res, host);
-		loadImages(res, new int[]{ R.drawable.merge_btn });
+		loadImages(res, new int[] { R.drawable.merge_btn });
 		mWidth  = sImages.get(0).getWidth();
 		mHeight = sImages.get(0).getHeight();
 		mID = UIID.MERGE;

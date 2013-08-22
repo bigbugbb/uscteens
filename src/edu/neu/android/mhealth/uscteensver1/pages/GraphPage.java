@@ -425,6 +425,10 @@ public class GraphPage extends AppPage implements OnClickListener,
 		NoteSender noteSender = new NoteSender(TeensAppManager.getAppContext());
 		noteSender.addNote(new Date(), "Stop labeling", Globals.NO_PLOT);
 		noteSender.send();
+		
+		// Write the changes to the csv file
+		Chunk chunk = quest.getHost();		
+		DataSource.saveLabelLogs(chunk);
 	}		
 	
 	public void finishMerge(Object... params) {

@@ -153,4 +153,19 @@ public class Action implements Serializable {
     	
     	return new Action(TeensGlobals.UNLABELLED_GUID, "Unlabelled", "question_btn.png", image);
 	}
+	
+	@Override
+	public String toString() {		
+		String actName    = getActionName();
+		String actSubName = getActionSubName();
+		
+		if (actName == null) {
+			return "";
+		}
+		if (actSubName == null || actSubName.equals("")) {
+			return actName;
+		}		
+		
+		return actName + "|" + actSubName;
+	}
 }

@@ -20,7 +20,7 @@ public class BeginButton extends CustomButton {
 
 	public BeginButton(Resources res) {
 		super(res);
-		loadImages(new int[]{ R.drawable.begin_btn });
+		loadImages(new int[] { R.drawable.begin_btn });
 		
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText.setColor(Color.WHITE);

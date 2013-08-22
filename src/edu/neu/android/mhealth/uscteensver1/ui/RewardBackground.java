@@ -25,9 +25,9 @@ public class RewardBackground extends Background {
 
 	public RewardBackground(Resources res) {
 		super(res);
-		loadImages(new int[]{ 
-			R.drawable.congratulations_bar, R.drawable.win_background
-		});
+		loadImages(
+			new int[] { R.drawable.congratulations_bar, R.drawable.win_background }
+		);
 		
 		mPaintText1 = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText1.setColor(Color.WHITE);

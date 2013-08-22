@@ -20,7 +20,7 @@ public class HomeBackground extends Background {
 
 	public HomeBackground(Resources res) {
 		super(res);		
-		loadImages(new int[]{ R.drawable.background_home });
+		loadImages(new int[] { R.drawable.background_home });
 		
 		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaint.setColor(Color.LTGRAY);

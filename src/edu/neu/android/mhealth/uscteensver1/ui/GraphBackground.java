@@ -12,7 +12,7 @@ public class GraphBackground extends Background {
 
 	public GraphBackground(Resources res) {
 		super(res);		
-		loadImages(new int[]{ R.drawable.menubar_background });
+		loadImages(new int[] { R.drawable.menubar_background });
 	}	
 	
 	@Override

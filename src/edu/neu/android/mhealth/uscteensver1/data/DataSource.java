@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 
 import org.dom4j.Attribute;
@@ -18,6 +20,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import android.os.Environment;
 import android.util.Log;
 import android.util.Pair;
 import au.com.bytecode.opencsv.CSVReader;
@@ -388,7 +391,7 @@ public class DataSource {
 		String[] fileNames = new File(path).list(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String filename) {
-				return filename.endsWith(".csv");
+				return filename.endsWith(".labels.csv");
 			}
 		});
 		if (fileNames == null || fileNames.length == 0) {
@@ -424,14 +427,73 @@ public class DataSource {
 	}
 	
 	/**
-	 * save all the labels to the label file specified by the date
-	 * @param date	          yyyy-MM-dd
-	 * @param rawLabelWrap    labels to be saved
-	 * @return true if succeed, otherwise false
+	 *  current datetime (standard log format), activity label, chunk start time, 
+	 *  chunk end time, % of current day being labeled that is labeled, total number 
+		of current day being labeled chunks labeled, total number of current day being labeled chunks
+	 * @param chunk
+	 * @return true if the label behavior has been logged, otherwise false
 	 */
+	public static boolean saveLabelLogs(Chunk chunk) {
+		
+		Calendar calendar = Calendar.getInstance();
+		String folderPath = String.format("/%04d-%02d-%02d", calendar.get(Calendar.YEAR), 
+				calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));		
+
+//		if (Globals.IS_LOG_EXTERNAL) {
+//			if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+//				Log.w(TAG, "SD card is not available for logging: " + Environment.getExternalStorageState());
+//				return false;
+//			}
+//		}
+		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.LOG_DIRECTORY + folderPath;
+
+		File folder = new File(path);
+		folder.mkdirs();
+
+		File file = new File(folder, String.format("%s.%s.csv", "LabelHistory", "log")); 	
+        CSVWriter writer = null;
+        try {
+            if (!file.exists()) {
+            	file.createNewFile(); 
+                writer = new CSVWriter(new FileWriter(file), ',', CSVWriter.NO_QUOTE_CHARACTER);                
+                writer.writeNext(new String[] { 
+                	"TIMESTAMP", "LABEL", "CHUNK_START_TIME", "CHUNK_STOP_TIME", "LABELED_CHUNKS", "TOTAL_CHUNKS", "LABELED_PERCENTAGE"  
+                });                
+            } else {
+            	writer = new CSVWriter(new FileWriter(file, true), ',', CSVWriter.NO_QUOTE_CHARACTER);
+            }			
+                        
+            Date startTime = new Date(chunk.getChunkRealStartTime() * 1000 + DateHelper.getDailyTime(0, 0));
+            Date stopTime  = new Date(chunk.getChunkRealStopTime() * 1000 + DateHelper.getDailyTime(0, 0));
+            
+			writer.writeNext(new String[] { 
+				new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.US).format(calendar.getTime()),
+				chunk.getAction().toString(),
+				Globals.mHealthTimestampFormat.format(startTime),
+				Globals.mHealthTimestampFormat.format(stopTime),
+				ChunkManager.getLabeledChunkSize() + "",
+				ChunkManager.getChunkSize() + "",
+				String.format("%#.2f", ChunkManager.getLabeledPercentage() * 100) + "" 
+			});
+            
+        } catch (IOException e) {
+	    	Log.e(e.toString(), "IOException while writing in " + file); 
+	    	return false;
+	    } finally {
+	    	if (writer != null) {
+	    		try {
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	    	}
+	    }
+        
+		return true; 
+	}
+
 	public static boolean saveLabelData(String date, RawLabelWrap rawLabelWrap) {						
 		String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.LABELS_FOLDER + date + File.separator;
-		
 		// build the file path name
 		String filePathName = ""; 
 		String[] labelFilePaths = FileHelper.getFilePathsDir(path);		
@@ -467,7 +529,7 @@ public class DataSource {
 		return result;
 	
 	}
-
+	
 	private static int createRawChunkData(int startSecond, int stopSecond, ArrayList<RawChunk> rawChunks) {
 		ArrayList<Integer> chunkPos = ChunkingAlgorithm.getInstance().doChunking(
 			startSecond, stopSecond, sAccelDataWrap.getDrawableData()

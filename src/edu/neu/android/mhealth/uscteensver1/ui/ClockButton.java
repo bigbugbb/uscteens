@@ -80,7 +80,7 @@ public class ClockButton extends ChunkButton {
 	
 	public ClockButton(Resources res, Chunk host, OnClickListener listener) {
 		super(res, host);
-		loadImages(res, new int[]{ R.drawable.clock });
+		loadImages(res, new int[] { R.drawable.clock });
 		mWidth  = sImages.get(0).getWidth();
 		mHeight = sImages.get(0).getHeight();
 		mID = UIID.CLOCK;
