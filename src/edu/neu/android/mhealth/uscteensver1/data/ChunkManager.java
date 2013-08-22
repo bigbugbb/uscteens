@@ -120,6 +120,24 @@ public class ChunkManager {
 		return sChunks.size();
 	}
 	
+	public static int getLabeledChunkSize() {
+		int labeled = 0;
+		
+		for (Chunk c : sChunks) {
+			if (c.mQuest.isAnswered()) {
+				++labeled;
+			}
+		}
+		
+		return labeled;
+	}
+	
+	public static float getLabeledPercentage() {
+		int total   = sChunks.size();
+		int labeled = getLabeledChunkSize();						
+		return labeled / (float) total;
+	}
+	
 	public static void setUserData(Object userData) {
 		sUserData = userData;
 	}

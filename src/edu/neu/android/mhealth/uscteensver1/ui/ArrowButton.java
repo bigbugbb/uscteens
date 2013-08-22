@@ -17,7 +17,7 @@ public class ArrowButton extends CustomButton {
 
 	public ArrowButton(Resources res) {
 		super(res);
-		loadImages(new int[]{ R.drawable.popup_wind_arrow, R.drawable.popup_wind_arrow_ops });
+		loadImages(new int[] { R.drawable.popup_wind_arrow, R.drawable.popup_wind_arrow_ops });
 		setKind(BUTTON);
 		setZOrder(ZOrders.BUTTON);
 		mWidth  = mImages.get(0).getWidth();

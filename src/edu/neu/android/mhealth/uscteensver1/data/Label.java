@@ -88,7 +88,7 @@ public class Label extends AppObject {
 	}
 	
 	static public ArrayList<Bitmap> getLabelImages(Resources res) {
-		loadImages(res, new int[]{ R.drawable.label_marker });
+		loadImages(res, new int[] { R.drawable.label_marker });
 		return sImages;
 	}
 	
@@ -98,7 +98,7 @@ public class Label extends AppObject {
 		mZOrder = ZOrders.LABEL;
  
 		createPaint();
-		loadImages(res, new int[]{ R.drawable.label_marker });
+		loadImages(res, new int[] { R.drawable.label_marker });
 	}
 	
 	public boolean load(int x, int y, String text) {

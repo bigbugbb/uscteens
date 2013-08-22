@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -18,6 +19,7 @@ import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -367,5 +369,15 @@ public class QuestDialog extends Activity {
 	        
 	        return view;
 	    }
-	}	
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if(keyCode == KeyEvent.KEYCODE_BACK) {
+	    	NoteSender noteSender = new NoteSender(TeensAppManager.getAppContext());
+			noteSender.addNote(new Date(), "Cancel labeling", Globals.NO_PLOT);
+			noteSender.send();
+	    } 
+	    return super.onKeyDown(keyCode, event);
+	}
 }

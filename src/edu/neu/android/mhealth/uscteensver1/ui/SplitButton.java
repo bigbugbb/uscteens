@@ -49,7 +49,7 @@ public class SplitButton extends ChunkButton {
 	
 	public SplitButton(Resources res, Chunk host, OnClickListener listener) {
 		super(res, host);
-		loadImages(res, new int[]{ R.drawable.split_btn });
+		loadImages(res, new int[] { R.drawable.split_btn });
 		mWidth  = sImages.get(0).getWidth();
 		mHeight = sImages.get(0).getHeight();
 		mID = UIID.SPLIT;

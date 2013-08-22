@@ -20,7 +20,7 @@ public class RewardButton extends CustomButton {
 
 	public RewardButton(Resources res) {
 		super(res);
-		loadImages(new int[]{ R.drawable.reward_btn, R.drawable.reward_disable_btn });
+		loadImages(new int[] { R.drawable.reward_btn, R.drawable.reward_disable_btn });
 		
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText.setColor(Color.WHITE);

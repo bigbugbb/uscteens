@@ -47,8 +47,9 @@ public class MergeView extends View {
 		super(context, attrs);
 		
 		mRes = context.getResources();
-		loadImages(new int[]{ R.drawable.warning_back, R.drawable.arrow_warning, 
-				R.drawable.selection, R.drawable.selection_circle });	
+		loadImages(new int[] { 
+			R.drawable.warning_back, R.drawable.arrow_warning, R.drawable.selection, R.drawable.selection_circle 
+		});	
 		
 		Typeface tf = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
 		mPaintText0 = new Paint(Paint.ANTI_ALIAS_FLAG);

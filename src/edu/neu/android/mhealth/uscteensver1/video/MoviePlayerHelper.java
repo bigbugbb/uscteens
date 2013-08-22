@@ -253,7 +253,7 @@ public class MoviePlayerHelper {
 					String iconLink = responseStr.substring(responseStr.indexOf("<media:thumbnail"));
 					iconLink = iconLink.substring(iconLink.indexOf("url='"), iconLink.indexOf(".jpg'"));
 					iconLink = iconLink.substring(5) + ".jpg";
-					String[] movieInfo = new String[]{title, duration, iconLink};
+					String[] movieInfo = new String[] { title, duration, iconLink };
 					return movieInfo;
 				} else { 
 					return null;

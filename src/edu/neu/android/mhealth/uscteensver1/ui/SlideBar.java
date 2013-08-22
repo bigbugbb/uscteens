@@ -46,7 +46,7 @@ public class SlideBar extends AppObject {
 	
 	public SlideBar(Resources res) {
 		super(res);
-		loadImages(new int[]{ R.drawable.slidebar_btn });
+		loadImages(new int[] { R.drawable.slidebar_btn });
 		
 		mPaint1.setAntiAlias(true);
 		mPaint1.setARGB(255, 230, 230, 230);                 

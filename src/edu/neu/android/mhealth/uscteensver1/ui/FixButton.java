@@ -20,7 +20,7 @@ public class FixButton extends CustomButton {
 
 	public FixButton(Resources res) {
 		super(res);
-		loadImages(new int[]{ R.drawable.fix_btn });
+		loadImages(new int[] { R.drawable.fix_btn });
 		
 		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mPaintText.setColor(Color.WHITE);

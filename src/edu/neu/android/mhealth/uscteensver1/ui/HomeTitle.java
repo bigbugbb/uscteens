@@ -9,7 +9,7 @@ public class HomeTitle extends AppObject {
 
 	public HomeTitle(Resources res) {
 		super(res);
-		loadImages(new int[]{ R.drawable.title });
+		loadImages(new int[] { R.drawable.title });
 		setKind(TITLE);
 		setZOrder(ZOrders.TITLE);
 	}	

@@ -36,9 +36,7 @@ public class HeaderView extends View {
 	public HeaderView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
-		loadImages(new int[]{ 
-			R.drawable.popup_win_background, R.drawable.back_blue  
-		});
+		loadImages(new int[] { R.drawable.popup_win_background, R.drawable.back_blue });
 		
 		Typeface tf = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
 
