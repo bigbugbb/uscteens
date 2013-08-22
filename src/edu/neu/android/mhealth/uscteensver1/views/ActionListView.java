@@ -4,14 +4,18 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.widget.ImageView;
 import android.widget.ListView;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
+import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 
 public class ActionListView extends ListView {
 	
-	private static final int MAX_Y_OVERSCROLL_DISTANCE = 75;
+	private static final int MAX_Y_OVERSCROLL_DISTANCE = 60;
 	
 	private int mMaxYOverscrollDistance;
+	private OnOverScrolledListener mListener;
 	
 	public ActionListView(Context context) {
 		super(context);		
@@ -39,6 +43,10 @@ public class ActionListView extends ListView {
 		mMaxYOverscrollDistance = (int) (density * AppScale.doScaleH(MAX_Y_OVERSCROLL_DISTANCE));
 	}
 	
+	public void setOnOverScrolledListener(OnOverScrolledListener listener) {
+		mListener = listener;
+	}
+
 	@SuppressLint("NewApi")
 	@Override
 	protected boolean overScrollBy(int deltaX, int deltaY, int scrollX,
@@ -48,5 +56,19 @@ public class ActionListView extends ListView {
 		// maxOverScrollY with our own custom variable mMaxYOverscrollDistance;		
 		return super.overScrollBy(deltaX, deltaY, scrollX, scrollY,
 				scrollRangeX, scrollRangeY, maxOverScrollX, mMaxYOverscrollDistance, isTouchEvent);
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX,
+			boolean clampedY) {		
+		if (mListener != null) {
+			mListener.onOverScrolled(this, scrollX, scrollY, clampedX, clampedY);
+		}
+		super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
 	}	
+	
+	public interface OnOverScrolledListener {
+		void onOverScrolled(ListView view, int scrollX, int scrollY, boolean clampedX, boolean clampedY);
+	}
 }
