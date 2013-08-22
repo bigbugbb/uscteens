@@ -4,11 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.widget.ImageView;
 import android.widget.ListView;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
-import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
 
 public class ActionListView extends ListView {
 	

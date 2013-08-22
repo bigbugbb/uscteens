@@ -450,9 +450,9 @@ public class GraphPage extends AppPage implements OnClickListener,
 		String actionL = mChunksToMerge.get(0).mQuest.getStringAnswer();
 		String actionR = mChunksToMerge.get(1).mQuest.getStringAnswer();
 		
-		if (actionL.compareTo(selection) == 0) {
+		if (actionL.equals(selection)) {
 			maintain = mChunksToMerge.get(0);
-		} else if (actionR.compareTo(selection) == 0){
+		} else if (actionR.equals(selection)) {
 			maintain = mChunksToMerge.get(1);
 		} else { // "None"
 			maintain = mChunksToMerge.get(0);
@@ -465,6 +465,7 @@ public class GraphPage extends AppPage implements OnClickListener,
     		mSlideBar.updateUnmarkedRange();
     	}
     	
+    	DataSource.saveLabelLogs(maintain);
 	}
 
 	@Override

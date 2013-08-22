@@ -20,7 +20,6 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import android.os.Environment;
 import android.util.Log;
 import android.util.Pair;
 import au.com.bytecode.opencsv.CSVReader;
@@ -463,9 +462,17 @@ public class DataSource {
             	writer = new CSVWriter(new FileWriter(file, true), ',', CSVWriter.NO_QUOTE_CHARACTER);
             }			
                         
-            Date startTime = new Date(chunk.getChunkRealStartTime() * 1000 + DateHelper.getDailyTime(0, 0));
-            Date stopTime  = new Date(chunk.getChunkRealStopTime() * 1000 + DateHelper.getDailyTime(0, 0));
-            
+            Date selectedDate = null;
+            try {
+				selectedDate = DateHelper.serverDateFormat.parse(getCurrentSelectedDate());
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return false;
+			}
+            Log.i("bigbug", selectedDate + "");
+            Date startTime = new Date(chunk.getChunkRealStartTime() * 1000 + selectedDate.getTime());
+            Date stopTime  = new Date(chunk.getChunkRealStopTime() * 1000 + selectedDate.getTime());
+            Log.i("bigbug", startTime + " " + stopTime);
 			writer.writeNext(new String[] { 
 				new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.US).format(calendar.getTime()),
 				chunk.getAction().toString(),
