@@ -172,7 +172,7 @@ public class QuestDialog extends Activity {
 		laParams.height = mHeaderView.getExpectedHeight();
 		mHeaderView.setLayoutParams(laParams);				
 		
-		int h1 = Math.round(AppScale.doScaleT(23 * density));
+		int h1 = (int) AppScale.doScaleH(50);
 		laParams = mTopArrow.getLayoutParams();
 		laParams.width  = mHeaderView.getExpectedWidth();
 		laParams.height = h1;

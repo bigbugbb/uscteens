@@ -9,7 +9,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class ActionListView extends ListView {
 	
-	private static final int MAX_Y_OVERSCROLL_DISTANCE = 70;
+	private static final int MAX_Y_OVERSCROLL_DISTANCE = 75;
 	
 	private int mMaxYOverscrollDistance;
 	

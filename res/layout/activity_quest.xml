@@ -32,9 +32,10 @@
 	        android:id="@+id/button_back"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:paddingLeft="14dp"
 	        android:layout_marginLeft="3dp"
 	        android:layout_gravity="center_vertical"
-	        android:gravity="center" 
+	        android:gravity="center" 	        
 	        android:text="BACK"
 	        android:textColor="@color/white"
 			android:textSize="17sp" />			
@@ -44,7 +45,7 @@
    	<ImageView
    	    android:id="@+id/view_top_arrow"
    	    android:layout_width="fill_parent"
-        android:layout_height="23dp"
+        android:layout_height="wrap_content"
    	    android:paddingTop="2dp"
    	    android:paddingBottom="3dp"
    	    android:background="@color/white" />
@@ -80,7 +81,7 @@
    	<ImageView
    	    android:id="@+id/view_bottom_arrow"
    	    android:layout_width="fill_parent"
-        android:layout_height="23dp"
+        android:layout_height="wrap_content"
    	    android:paddingTop="3dp"
    	    android:paddingBottom="2dp"
    	    android:background="@color/white" />
