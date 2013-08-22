@@ -170,7 +170,7 @@ public class QuestDialog extends Activity {
 				Log.d("ActionListView", "firstVisibleItem: " + firstVisibleItem + 
 						"\tvisibleItemCount: " + visibleItemCount + "\ttotalItemCount: " + totalItemCount);
 				// save index and top position
-				int index = mListView.getFirstVisiblePosition();
+				// int index = mListView.getFirstVisiblePosition();
 				View v = mListView.getChildAt(0);
 				int top = (v == null) ? 0 : v.getTop(); 
 				
