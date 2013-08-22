@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -177,7 +176,10 @@ public class QuestDialog extends Activity {
 				int top = (v == null) ? 0 : v.getTop(); 
 				
 				if (mAdapter.getCount() > 4) {
-					mTopArrow.setImageDrawable(top < 0 ? mImages.get(0) : null);
+					Drawable image = mTopArrow.getDrawable();
+					if (top < 0 && image == null) { 
+						mTopArrow.setImageDrawable(mImages.get(0));
+					}
 					mBottomArrow.setImageDrawable(mImages.get(1));
 				} else {
 					mTopArrow.setImageDrawable(null);
