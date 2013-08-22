@@ -15,7 +15,7 @@ public class SetupTextView extends TextView {
 		mPaintTxt.setColor(Color.RED);
 		mPaintTxt.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf"));
 		mPaintTxt.setTextAlign(Align.CENTER);
-		mPaintBoard.setStrokeWidth(3);
+		mPaintBoard.setStrokeWidth(Math.min(2, AppScale.doScaleW(3)));
 		setVisible(false);
 	}
 

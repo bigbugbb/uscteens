@@ -50,7 +50,7 @@ public class SlideBar extends AppObject {
 		
 		mPaint1.setAntiAlias(true);
 		mPaint1.setARGB(255, 230, 230, 230);                 
-		mPaint1.setStrokeWidth(4.0f);
+		mPaint1.setStrokeWidth(Math.max(2f, AppScale.doScaleW(4.0f)));
 		mPaint1.setStyle(Style.STROKE);
 		
 		mPaint2.setAntiAlias(true);		    

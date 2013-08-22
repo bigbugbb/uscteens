@@ -16,12 +16,15 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -38,6 +41,8 @@ import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.utils.NoteSender;
+import edu.neu.android.mhealth.uscteensver1.views.ActionListView;
+import edu.neu.android.mhealth.uscteensver1.views.ActionListView.OnOverScrolledListener;
 import edu.neu.android.mhealth.uscteensver1.views.HeaderView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
@@ -48,25 +53,26 @@ public class QuestDialog extends Activity {
 	static public String CHUNK_STOP_TIME  = "CHUNK_STOP_TIME";
 	
 	protected HeaderView mHeaderView;
-	protected Button	 mBackButton;
-	protected ListView   mListView;
+	protected Button	 mBackButton;	
 	protected ImageView  mTopArrow;
 	protected ImageView  mBottomArrow;
 	protected View       mTopLine;
 	protected View		 mBottomLine;
 	protected ViewGroup  mListWrap;
+	protected ActionListView mListView;
 	
 	protected ActionAdapter mAdapter;
 	protected HashMap<Integer, Action> mItemData = new HashMap<Integer, Action>();	
 	
 	protected boolean mImageLoaded;
-	protected ArrayList<Bitmap> mImages = new ArrayList<Bitmap>();
+	protected ArrayList<Drawable> mImages = new ArrayList<Drawable>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_quest);
 		
+		mAdapter = new ActionAdapter(this);
 		loadImages(new int[]{ 
 			R.drawable.popup_wind_arrow_ops, R.drawable.popup_wind_arrow, R.drawable.back_blue 
 		});
@@ -118,7 +124,7 @@ public class QuestDialog extends Activity {
 		mHeaderView.setTime(start, stop);
 		
 		mBackButton = (Button) findViewById(R.id.button_back);
-		mBackButton.setBackgroundDrawable(new BitmapDrawable(getResources(), mImages.get(2)));
+		mBackButton.setBackgroundDrawable(mImages.get(2));
 		mBackButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -127,19 +133,58 @@ public class QuestDialog extends Activity {
 			}
 		});
 		
-		mTopArrow    = (ImageView) findViewById(R.id.view_top_arrow);
-		mTopArrow.setImageBitmap(mImages.get(0));				
-		mBottomArrow = (ImageView) findViewById(R.id.view_bottom_arrow);	
-		mBottomArrow.setImageBitmap(mImages.get(1));
+		mTopArrow    = (ImageView) findViewById(R.id.view_top_arrow);				
+		mBottomArrow = (ImageView) findViewById(R.id.view_bottom_arrow);			
 		
 		mTopLine    = findViewById(R.id.view_line_top);
 		mBottomLine = findViewById(R.id.view_line_bottom);
 		
 		mListWrap = (ViewGroup) findViewById(R.id.list_wrap);
 		
-		mListView = (ListView) findViewById(R.id.view_action_list);
-		mAdapter = new ActionAdapter(this);        
-		mListView.setAdapter(mAdapter);        
+		mListView = (ActionListView) findViewById(R.id.view_action_list);		       
+		mListView.setAdapter(mAdapter);
+		mListView.setOnOverScrolledListener(new OnOverScrolledListener() {
+
+			@Override
+			public void onOverScrolled(ListView view, int scrollX, int scrollY,
+					boolean clampedX, boolean clampedY) {
+				Log.d("ActionListView", "scrollY: " + scrollY + "\tslampedY: " + clampedY);
+				if (scrollY < 0) {
+					mTopArrow.setImageDrawable(null);
+				} else if (scrollY > 0) {
+					mBottomArrow.setImageDrawable(null);
+				}
+			}
+			
+		});
+		mListView.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				Log.d("ActionListView", "scrollState: " + scrollState);				
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				Log.d("ActionListView", "firstVisibleItem: " + firstVisibleItem + 
+						"\tvisibleItemCount: " + visibleItemCount + "\ttotalItemCount: " + totalItemCount);
+				// save index and top position
+				int index = mListView.getFirstVisiblePosition();
+				View v = mListView.getChildAt(0);
+				int top = (v == null) ? 0 : v.getTop(); 
+				
+				if (mAdapter.getCount() > 4) {
+					mTopArrow.setImageDrawable(top < 0 ? mImages.get(0) : null);
+					mBottomArrow.setImageDrawable(mImages.get(1));
+				} else {
+					mTopArrow.setImageDrawable(null);
+					mBottomArrow.setImageDrawable(null);
+				}
+				// mListView.setSelectionFromTop(index, top);
+			}
+			
+		});
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			
 			@Override
@@ -184,7 +229,7 @@ public class QuestDialog extends Activity {
 		mBottomArrow.setLayoutParams(laParams);
 		
 		int h2 = Math.round(AppScale.doScaleH(1 * density));
-		h2 = h2 > 1 ? h2 : 2;
+		h2 = h2 > 1 ? h2 : 1;
 		laParams = mTopLine.getLayoutParams();
 		laParams.width  = mHeaderView.getExpectedWidth();
 		laParams.height = h2;
@@ -195,7 +240,7 @@ public class QuestDialog extends Activity {
 		laParams.height = h2;
 		mBottomLine.setLayoutParams(laParams);
 		
-		int height = (int) (metrics.heightPixels - (h1 + h2) * 2 - mHeaderView.getExpectedHeight());
+		int height = (int) (metrics.heightPixels - (h1 * 2 + h2) - mHeaderView.getExpectedHeight());
 		laParams = mListWrap.getLayoutParams();
 		laParams.width  = mHeaderView.getExpectedWidth();
 		laParams.height = height;
@@ -233,9 +278,9 @@ public class QuestDialog extends Activity {
     		// add to the image list
         	if (scaled != null) {
 	    		origin.recycle(); // explicit call to avoid out of memory
-	    		mImages.add(scaled);
+	    		mImages.add(new BitmapDrawable(getResources(), scaled));
 	        } else {
-	        	mImages.add(origin);
+	        	mImages.add(new BitmapDrawable(getResources(), origin));
 	        }
         }
 	}
