@@ -15,6 +15,8 @@ bin/
 gen/
 out/
 
+*.gradle
+
 .idea
 
 # Local configuration file (sdk path, etc)

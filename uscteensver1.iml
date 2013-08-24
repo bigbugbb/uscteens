@@ -11,11 +11,10 @@
       <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Android 2.3.3 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="wocketslib" />
+    <orderEntry type="module" module-name="WocketsLib" />
     <orderEntry type="library" name="android-support-v4" level="project" />
-    <orderEntry type="library" name="edu.neu.android.wocketslib" level="project" />
     <orderEntry type="library" name="libs" level="project" />
   </component>
 </module>
