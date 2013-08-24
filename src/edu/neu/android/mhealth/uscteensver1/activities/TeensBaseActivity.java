@@ -17,149 +17,149 @@ import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.UsageCollector;
 
 public class TeensBaseActivity extends FragmentActivity {
-	
-	private String TAG = "UnknownApp";
-	public static final int KEYGUARD_UNKNOWN    = -1;
-	public static final int KEYGUARD_IS_LOCKED  = 1;
-	public static final int KEYGUARD_NOT_LOCKED = 0;
 
-	private void shutdownApp(String msg, boolean isBeep) {
-		if (isBeep)
-			AlertPlayer.beep(getApplicationContext());
-		Log.o(TAG, "BaseActivity", "ShutdownApp");
-		((ApplicationManager) getApplication()).killAllActivities();
-		finish();
-	}
+    private String TAG = "UnknownApp";
+    public static final int KEYGUARD_UNKNOWN = -1;
+    public static final int KEYGUARD_IS_LOCKED = 1;
+    public static final int KEYGUARD_NOT_LOCKED = 0;
 
-	private void timeWarning(String msg) {
-		Toast aToast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
-		aToast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		aToast.show();
-	}
+    private void shutdownApp(String msg, boolean isBeep) {
+        if (isBeep)
+            AlertPlayer.beep(getApplicationContext());
+        Log.o(TAG, "BaseActivity", "ShutdownApp");
+        ((ApplicationManager) getApplication()).killAllActivities();
+        finish();
+    }
 
-	protected void checkTiming(String aKey) {
+    private void timeWarning(String msg) {
+        Toast aToast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
+        aToast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        aToast.show();
+    }
 
-		long lastTimeStartedManual = AppInfo.GetStartManualTime(getApplicationContext(), aKey);
-		long lastTimePrompted = AppInfo.GetLastTimePrompted(getApplicationContext(), aKey);
+    protected void checkTiming(String aKey) {
 
-		if ((lastTimeStartedManual == 0) && (lastTimePrompted == 0)) {
-			// This case of neither time being set shouldn't happen
-			shutdownApp("Error. No time set for survey.", false);
-		} else if (lastTimePrompted > lastTimeStartedManual) {
-			// App started because of a prompt; Check if either running out of
-			// time or not completed
+        long lastTimeStartedManual = AppInfo.GetStartManualTime(getApplicationContext(), aKey);
+        long lastTimePrompted = AppInfo.GetLastTimePrompted(getApplicationContext(), aKey);
 
-			if ((System.currentTimeMillis() - lastTimePrompted) > Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS) {
-				shutdownApp(
-						"Sorry. You must complete the survey within " + Math.floor(Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS / 1000.0 / 60.0)
-								+ " minutes of the prompt.", false);
-			} else if ((Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS - (System.currentTimeMillis() - lastTimePrompted)) < 30000) {
-				// Show warning if less than 30 seconds to go; otherwise do
-				// nothing
-				timeWarning("Hurry. You only have "
-						+ Math.round((Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS - (System.currentTimeMillis() - lastTimePrompted)) / 1000.0)
-						+ " seconds to complete the survey!");
-			}
-		} else {
-			// App started manually; Check if either running out of time or not
-			// completed
+        if ((lastTimeStartedManual == 0) && (lastTimePrompted == 0)) {
+            // This case of neither time being set shouldn't happen
+            shutdownApp("Error. No time set for survey.", false);
+        } else if (lastTimePrompted > lastTimeStartedManual) {
+            // App started because of a prompt; Check if either running out of
+            // time or not completed
 
-			if ((System.currentTimeMillis() - lastTimeStartedManual) > Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS) {
-				shutdownApp(
-						"Sorry. You must complete the survey within "
-								+ Math.floor(Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS / 1000.0 / 60.0) + " minutes of starting it.",
-						false);
-			} else if ((Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS - (System.currentTimeMillis() - lastTimeStartedManual)) < 30000) {
-				// Show warning if less than 30 seconds to go; otherwise do
-				// nothing
-				timeWarning("Hurry. You only have "
-						+ Math.round((Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS - (System.currentTimeMillis() - lastTimeStartedManual)) / 1000.0)
-						+ " seconds to complete the survey!");
-			}
-		}
-	}
+            if ((System.currentTimeMillis() - lastTimePrompted) > Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS) {
+                shutdownApp(
+                        "Sorry. You must complete the survey within " + Math.floor(Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS / 1000.0 / 60.0)
+                                + " minutes of the prompt.", false);
+            } else if ((Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS - (System.currentTimeMillis() - lastTimePrompted)) < 30000) {
+                // Show warning if less than 30 seconds to go; otherwise do
+                // nothing
+                timeWarning("Hurry. You only have "
+                        + Math.round((Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS - (System.currentTimeMillis() - lastTimePrompted)) / 1000.0)
+                        + " seconds to complete the survey!");
+            }
+        } else {
+            // App started manually; Check if either running out of time or not
+            // completed
 
-	public void onCreate(Bundle savedInstanceState, String aTAG) {
-		super.onCreate(savedInstanceState);
-		((ApplicationManager) getApplication()).addActivity(this);
-		this.TAG = aTAG;
-		// IdleTimeKeeper.getInst().init((ApplicationManager) getApplication(),
-		// 600);
+            if ((System.currentTimeMillis() - lastTimeStartedManual) > Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS) {
+                shutdownApp(
+                        "Sorry. You must complete the survey within "
+                                + Math.floor(Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS / 1000.0 / 60.0) + " minutes of starting it.",
+                        false);
+            } else if ((Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS - (System.currentTimeMillis() - lastTimeStartedManual)) < 30000) {
+                // Show warning if less than 30 seconds to go; otherwise do
+                // nothing
+                timeWarning("Hurry. You only have "
+                        + Math.round((Globals.MAX_TIME_ALLOWED_BETWEEN_MANUAL_START_AND_COMPLETION_MS - (System.currentTimeMillis() - lastTimeStartedManual)) / 1000.0)
+                        + " seconds to complete the survey!");
+            }
+        }
+    }
 
-		// Logs once only
-		AppUsageLogger.logVersion(TAG, getApplicationInfo().packageName, getApplicationContext());
+    public void onCreate(Bundle savedInstanceState, String aTAG) {
+        super.onCreate(savedInstanceState);
+        ((ApplicationManager) getApplication()).addActivity(this);
+        this.TAG = aTAG;
+        // IdleTimeKeeper.getInst().init((ApplicationManager) getApplication(),
+        // 600);
 
-		// Logs for every activity
-		AppUsageLogger.logSubjectID(TAG, DataStorage.GetSubjectID(getApplicationContext()));
-		AppUsageLogger.logActivities(TAG);		
+        // Logs once only
+        AppUsageLogger.logVersion(TAG, getApplicationInfo().packageName, getApplicationContext());
 
-		// AppUsageLogger.onCreate(TAG, getClass().getName(),
-		// screenLockStatus());
-	}
+        // Logs for every activity
+        AppUsageLogger.logSubjectID(TAG, DataStorage.GetSubjectID(getApplicationContext()));
+        AppUsageLogger.logActivities(TAG);
 
-	public void onCreate(Bundle savedInstanceState) {
-		onCreate(savedInstanceState, TAG);
-	}
+        // AppUsageLogger.onCreate(TAG, getClass().getName(),
+        // screenLockStatus());
+    }
 
-	private int screenLockStatus() {
-		KeyguardManager km = (KeyguardManager) getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
-		if (km != null)
-			if (km.inKeyguardRestrictedInputMode())
-				return KEYGUARD_IS_LOCKED;
-			else
-				return KEYGUARD_NOT_LOCKED;
-		return KEYGUARD_UNKNOWN;
-	}
+    public void onCreate(Bundle savedInstanceState) {
+        onCreate(savedInstanceState, TAG);
+    }
 
-	public void onStart() {
-		super.onStart();
-		// AppUsageLogger.onStart(TAG, getClass().getName(),
-		// screenLockStatus());
-	}
+    private int screenLockStatus() {
+        KeyguardManager km = (KeyguardManager) getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
+        if (km != null)
+            if (km.inKeyguardRestrictedInputMode())
+                return KEYGUARD_IS_LOCKED;
+            else
+                return KEYGUARD_NOT_LOCKED;
+        return KEYGUARD_UNKNOWN;
+    }
 
-	public void onRestart() {
-		super.onRestart();
-		// AppUsageLogger.onRestart(TAG, getClass().getName(),
-		// screenLockStatus());
-	}
+    public void onStart() {
+        super.onStart();
+        // AppUsageLogger.onStart(TAG, getClass().getName(),
+        // screenLockStatus());
+    }
 
-	public void onResume() {
-		super.onResume();
-		// Log.i(TAG, "PID: " + android.os.Process.myPid());
+    public void onRestart() {
+        super.onRestart();
+        // AppUsageLogger.onRestart(TAG, getClass().getName(),
+        // screenLockStatus());
+    }
 
-		if (screenLockStatus() == KEYGUARD_NOT_LOCKED) {
-			// IdleTimeKeeper.getInst().restartTimer();
-			// AppUsageLogger.onResume(TAG, getClass().getName(),
-			// KEYGUARD_NOT_LOCKED);
-			UsageCollector.getInst().activityResumed(getClass().getName());
-		}
-		// else
-		// AppUsageLogger.onResume(TAG, getClass().getName(),
-		// screenLockStatus());
-	}
+    public void onResume() {
+        super.onResume();
+        // Log.i(TAG, "PID: " + android.os.Process.myPid());
 
-	public void onPause() {
-		super.onPause();
-		// AppUsageLogger.onPause(TAG, getClass().getName(),
-		// screenLockStatus());
-		UsageCollector.getInst().activityPaused(getClass().getName());
-	}
+        if (screenLockStatus() == KEYGUARD_NOT_LOCKED) {
+            // IdleTimeKeeper.getInst().restartTimer();
+            // AppUsageLogger.onResume(TAG, getClass().getName(),
+            // KEYGUARD_NOT_LOCKED);
+            UsageCollector.getInst().activityResumed(getClass().getName());
+        }
+        // else
+        // AppUsageLogger.onResume(TAG, getClass().getName(),
+        // screenLockStatus());
+    }
 
-	public void onDestroy() {
-		super.onDestroy();
-		// AppUsageLogger.onDestroy(TAG, getClass().getName(),
-		// screenLockStatus());
-	}
+    public void onPause() {
+        super.onPause();
+        // AppUsageLogger.onPause(TAG, getClass().getName(),
+        // screenLockStatus());
+        UsageCollector.getInst().activityPaused(getClass().getName());
+    }
 
-	public void onStop() {
-		super.onStop();
-		// AppUsageLogger.onStop(TAG, getClass().getName(), screenLockStatus());
+    public void onDestroy() {
+        super.onDestroy();
+        // AppUsageLogger.onDestroy(TAG, getClass().getName(),
+        // screenLockStatus());
+    }
 
-	}
+    public void onStop() {
+        super.onStop();
+        // AppUsageLogger.onStop(TAG, getClass().getName(), screenLockStatus());
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		// AppUsageLogger.onActivityResult(TAG, getClass().getName(),
-		// requestCode, resultCode, screenLockStatus());
-	}
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // AppUsageLogger.onActivityResult(TAG, getClass().getName(),
+        // requestCode, resultCode, screenLockStatus());
+    }
 }

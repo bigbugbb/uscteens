@@ -34,147 +34,147 @@ import edu.neu.android.wocketslib.utils.NetworkDetector;
 import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
 
 public class VideoActivity extends BaseActivity {
-	
-	private Button btnPlayLatestVideo;
-	static final String TAG = "Video";
-	public static final String LAST_MOVIE = "Last_Movie";
-//	private boolean isCPCondition = true;
-	private Button btnNeverMind;
-	private String movieUrl = null;
-	private ListView videoList;
-	private boolean isConnected;
-	public SimpleAdapter listAdapter;
-	public int lastnum;
 
-	public ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+    private Button btnPlayLatestVideo;
+    static final String TAG = "Video";
+    public static final String LAST_MOVIE = "Last_Movie";
+    //	private boolean isCPCondition = true;
+    private Button btnNeverMind;
+    private String movieUrl = null;
+    private ListView videoList;
+    private boolean isConnected;
+    public SimpleAdapter listAdapter;
+    public int lastnum;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState, TAG);
-		// initializing
-		isConnected = NetworkDetector.isServerAvailable();
-		lastnum = 5;
-		getWindow().setFormat(PixelFormat.TRANSLUCENT);
-		//setContentView(R.layout.movie_list_activity);
-		//btnPlayLatestVideo = (Button) findViewById(R.id.btnPlayTutorial);
-		btnNeverMind = (Button) findViewById(R.id.btnNeverMind);
-		//videoList = (ListView) findViewById(R.id.viewdMoviesList);
+    public ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 
-		if (!isConnected) {
-			AlertDialog.Builder dialog = new AlertDialog.Builder(
-					VideoActivity.this)
-					.setTitle("Argh")
-					.setMessage(
-							"Internet connection error. Please check your internet and try again later.")
-					.setPositiveButton("All right",
-							new DialogInterface.OnClickListener() {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState, TAG);
+        // initializing
+        isConnected = NetworkDetector.isServerAvailable();
+        lastnum = 5;
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
+        //setContentView(R.layout.movie_list_activity);
+        //btnPlayLatestVideo = (Button) findViewById(R.id.btnPlayTutorial);
+        btnNeverMind = (Button) findViewById(R.id.btnNeverMind);
+        //videoList = (ListView) findViewById(R.id.viewdMoviesList);
 
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-								}
-							});
-			dialog.show();
-		}
-		btnNeverMind.setOnClickListener(new OnClickListener() {
+        if (!isConnected) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(
+                    VideoActivity.this)
+                    .setTitle("Argh")
+                    .setMessage(
+                            "Internet connection error. Please check your internet and try again later.")
+                    .setPositiveButton("All right",
+                            new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				VideoActivity.this.finish();
-			}
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                }
+                            });
+            dialog.show();
+        }
+        btnNeverMind.setOnClickListener(new OnClickListener() {
 
-		});
-		setListView();
-		InitTask it = new InitTask();
-		it.execute(this);
-	}
+            @Override
+            public void onClick(View v) {
+                VideoActivity.this.finish();
+            }
 
-	public void noConnection() {
+        });
+        setListView();
+        InitTask it = new InitTask();
+        it.execute(this);
+    }
 
-	}
+    public void noConnection() {
 
-	public void onResume() {
-		super.onResume();
+    }
 
-		movieUrl = getUrl(lastnum);
+    public void onResume() {
+        super.onResume();
 
-		String[] movieInfo = MoviePlayerHelper.getMovieNameLengthIcon(movieUrl);
+        movieUrl = getUrl(lastnum);
 
-		if (movieInfo != null) {
-			String title = movieInfo[0];
-			String length = movieInfo[1];
+        String[] movieInfo = MoviePlayerHelper.getMovieNameLengthIcon(movieUrl);
 
-			btnPlayLatestVideo.setText(title);
-			btnPlayLatestVideo.setOnClickListener(new OnClickListener() {
+        if (movieInfo != null) {
+            String title = movieInfo[0];
+            String length = movieInfo[1];
 
-				@Override
-				public void onClick(View v) {
-					
-					Intent lVideoIntent = new Intent(
-						null, Uri.parse("ytv://" + movieUrl), VideoActivity.this, OpenYouTubePlayerActivity.class
-					);
-					startActivity(lVideoIntent);
-				}
-			});
-			String duration = "";
-			int l = Integer.parseInt(length);
-			int min = l / 60;
-			int sec = l % 60;
-			duration = "(About ";
-			if (min == 1)
-				duration += min + " minute ";
-			else if (min != 0)
-				duration += min + " minutes ";
-			if (sec == 1)
-				duration += sec + " second ";
-			else if (sec != 0)
-				duration += sec + " seconds ";
-			duration = duration.substring(0, duration.length() - 1) + ")";
+            btnPlayLatestVideo.setText(title);
+            btnPlayLatestVideo.setOnClickListener(new OnClickListener() {
 
-			//TextView videoRunTime = (TextView) findViewById(R.id.videoRunTime);
-			//videoRunTime.setText(duration);
-		}
-	}
+                @Override
+                public void onClick(View v) {
 
-	public void setListView() {
+                    Intent lVideoIntent = new Intent(
+                            null, Uri.parse("ytv://" + movieUrl), VideoActivity.this, OpenYouTubePlayerActivity.class
+                    );
+                    startActivity(lVideoIntent);
+                }
+            });
+            String duration = "";
+            int l = Integer.parseInt(length);
+            int min = l / 60;
+            int sec = l % 60;
+            duration = "(About ";
+            if (min == 1)
+                duration += min + " minute ";
+            else if (min != 0)
+                duration += min + " minutes ";
+            if (sec == 1)
+                duration += sec + " second ";
+            else if (sec != 0)
+                duration += sec + " seconds ";
+            duration = duration.substring(0, duration.length() - 1) + ")";
+
+            //TextView videoRunTime = (TextView) findViewById(R.id.videoRunTime);
+            //videoRunTime.setText(duration);
+        }
+    }
+
+    public void setListView() {
 //		listAdapter = new SimpleAdapter(VideoActivity.this, list,
 //				R.layout.listview_videoshow, new String[] { "icon", "name" },
 //				new int[] { R.id.videoIcon, R.id.videoName });
-		listAdapter.setViewBinder(new ViewBinder() {
-			@Override
-			public boolean setViewValue(View arg0, Object arg1, String arg2) {
-				if (arg0 instanceof ImageView && arg1 instanceof Bitmap) {
-					ImageView iv = (ImageView) arg0;
-					iv.setImageBitmap((Bitmap) arg1);
-					return true;
-				}
-				return false;
-			}
-		});
-		videoList.setAdapter(listAdapter);
-		if (isConnected)
-			videoList.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					String url = (String) list.get(position).get("id");
-					Intent lVideoIntent = new Intent(
-						null, Uri.parse("ytv://" + url), VideoActivity.this, OpenYouTubePlayerActivity.class
-					);
-					Log.i(TAG, "Picked Video " + id);
-					Log.i(TAG, "Showed Video " + id);
+        listAdapter.setViewBinder(new ViewBinder() {
+            @Override
+            public boolean setViewValue(View arg0, Object arg1, String arg2) {
+                if (arg0 instanceof ImageView && arg1 instanceof Bitmap) {
+                    ImageView iv = (ImageView) arg0;
+                    iv.setImageBitmap((Bitmap) arg1);
+                    return true;
+                }
+                return false;
+            }
+        });
+        videoList.setAdapter(listAdapter);
+        if (isConnected)
+            videoList.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    String url = (String) list.get(position).get("id");
+                    Intent lVideoIntent = new Intent(
+                            null, Uri.parse("ytv://" + url), VideoActivity.this, OpenYouTubePlayerActivity.class
+                    );
+                    Log.i(TAG, "Picked Video " + id);
+                    Log.i(TAG, "Showed Video " + id);
 //					ContentAppUtil.logViewedToDatabase(VideoActivity.this, TAG,
 //							(int) id, 10);
-					startActivity(lVideoIntent);
-				}
-			});
-	}
+                    startActivity(lVideoIntent);
+                }
+            });
+    }
 
-	private String getUrl(int last_num) {
+    private String getUrl(int last_num) {
 //		last_num = Math.min(ContentAppUtil.MOVIE_LIST.length, last_num);
 //		return ContentAppUtil.MOVIE_LIST[last_num - 1];
-		return "";
-	}
+        return "";
+    }
 
 //	private int getMovieLatestNum() {
 //		int ls = this.getSharedPreferences(ContentAppUtil.VIDEO_DATA,
@@ -194,87 +194,87 @@ public class VideoActivity extends BaseActivity {
 //		return ls;
 //	}
 
-	public Bitmap getImgFromServer(String address) {
-		try {
-			URL aURL = new URL(address);
-			URLConnection con = aURL.openConnection();
-			con.connect();
-			InputStream is = con.getInputStream();
-			BufferedInputStream bis = new BufferedInputStream(is);
-			Bitmap bm = BitmapFactory.decodeStream(bis);
-			bis.close();
-			is.close();
-			return bm;
-		} catch (IOException e) {
-		}
-		InputStream is = this.getResources().openRawResource(R.drawable.noidea);
-		Bitmap bm = BitmapFactory.decodeStream(is);
-		return bm;
-	}
+    public Bitmap getImgFromServer(String address) {
+        try {
+            URL aURL = new URL(address);
+            URLConnection con = aURL.openConnection();
+            con.connect();
+            InputStream is = con.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            Bitmap bm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();
+            return bm;
+        } catch (IOException e) {
+        }
+        InputStream is = this.getResources().openRawResource(R.drawable.noidea);
+        Bitmap bm = BitmapFactory.decodeStream(is);
+        return bm;
+    }
 
-	protected class InitTask extends AsyncTask<Context, String, String> {
+    protected class InitTask extends AsyncTask<Context, String, String> {
 
-		@Override
-		protected String doInBackground(Context... params) {
+        @Override
+        protected String doInBackground(Context... params) {
 
-			addListItem();
-			return "Complete";
+            addListItem();
+            return "Complete";
 
-		}
+        }
 
-		// -- gets called just before thread begins
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-		}
+        // -- gets called just before thread begins
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
 
-		// -- called from the publish progress
-		// -- notice that the datatype of the second param gets passed to this
-		// method
-		@Override
-		protected void onProgressUpdate(String... values) {
-			super.onProgressUpdate(values);
-			// android.os.Debug.waitForDebugger();
+        // -- called from the publish progress
+        // -- notice that the datatype of the second param gets passed to this
+        // method
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            // android.os.Debug.waitForDebugger();
 
-			listAdapter.notifyDataSetChanged();
-		}
+            listAdapter.notifyDataSetChanged();
+        }
 
-		// -- called if the cancel button is pressed
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-		}
+        // -- called if the cancel button is pressed
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
 
-		// -- called as soon as doInBackground method completes
-		// -- notice that the third param gets passed to this method
-		@Override
-		protected void onPostExecute(String result) {
-			super.onPostExecute(result);
-		}
+        // -- called as soon as doInBackground method completes
+        // -- notice that the third param gets passed to this method
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
 
-		private void addListItem() {
-			if (isConnected) {
-				for (int i = lastnum - 1; i > 0; i--) {
-					String[] movieInfo = MoviePlayerHelper
-							.getMovieNameLengthIcon(getUrl(i));
-					HashMap<String, Object> map = new HashMap<String, Object>();
-					try {
-							map.put("icon", getImgFromServer(movieInfo[2]));
-							map.put("name", movieInfo[0]);
-							map.put("id", getUrl(i));
-							list.add(map);
-					} catch (Exception e) {
-						Log.e(TAG, "Video " + i + " is not available");
-					}
-					publishProgress("");
-				}
-			} else {
-				HashMap<String, Object> map = new HashMap<String, Object>();
-				map.put("icon", R.drawable.noidea);
-				map.put("name", "No Internet Connection.");
-				list.add(map);
-			}
-		}
-	}
+        private void addListItem() {
+            if (isConnected) {
+                for (int i = lastnum - 1; i > 0; i--) {
+                    String[] movieInfo = MoviePlayerHelper
+                            .getMovieNameLengthIcon(getUrl(i));
+                    HashMap<String, Object> map = new HashMap<String, Object>();
+                    try {
+                        map.put("icon", getImgFromServer(movieInfo[2]));
+                        map.put("name", movieInfo[0]);
+                        map.put("id", getUrl(i));
+                        list.add(map);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Video " + i + " is not available");
+                    }
+                    publishProgress("");
+                }
+            } else {
+                HashMap<String, Object> map = new HashMap<String, Object>();
+                map.put("icon", R.drawable.noidea);
+                map.put("name", "No Internet Connection.");
+                list.add(map);
+            }
+        }
+    }
 
 }

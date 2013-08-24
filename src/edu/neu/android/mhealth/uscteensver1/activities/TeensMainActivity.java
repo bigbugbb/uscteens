@@ -54,394 +54,394 @@ import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActiv
 import edu.neu.android.wocketslib.views.DummyView;
 
 public class TeensMainActivity extends TeensBaseActivity implements OnTouchListener, TextToSpeech.OnInitListener {
-	
-	// the view for drawing anything
-	protected GraphView mGraphView = null;
-	// the view for displaying reward information
-	protected RewardView mRewardView = null;
-	// the view covering the screen if not authorized 
-	protected DummyView mDummyView = null;
-	// the view for display loading progress
-	//protected ProgressView mProgressView = null;	
-	// all of the pages
-	protected AppPage mCurPage = null;
-	protected List<AppPage> mPages = new ArrayList<AppPage>();	
-	// data loader
-	private LoadDataTask mDataLoader = null;
-	
-	protected enum PageType {  
-		HOME_PAGE, DATE_PAGE, GRAPH_PAGE, REWARD_PAGE
-	}
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState, "MainActivity");
-		setContentView(R.layout.activity_main);					
+    // the view for drawing anything
+    protected GraphView mGraphView = null;
+    // the view for displaying reward information
+    protected RewardView mRewardView = null;
+    // the view covering the screen if not authorized
+    protected DummyView mDummyView = null;
+    // the view for display loading progress
+    //protected ProgressView mProgressView = null;
+    // all of the pages
+    protected AppPage mCurPage = null;
+    protected List<AppPage> mPages = new ArrayList<AppPage>();
+    // data loader
+    private LoadDataTask mDataLoader = null;
 
-		// setup global params
-		setupGlobal();
-		// setup scale param according to the screen resolution
-		setupScale();
-		// get views and set listeners
-		setupViews();
-		// adjust layouts according to the screen resolution
-		adjustLayout();	
-		// create app pages and all the UIs in the pages
-		initPages();
-		// load extra data
-		loadExtra();    
-	}
+    protected enum PageType {
+        HOME_PAGE, DATE_PAGE, GRAPH_PAGE, REWARD_PAGE
+    }
 
-	@Override
-	public void onDestroy() {		
-		for (AppPage page : mPages) {
-			try {
-				page.release();				
-			} catch (NullPointerException e) { // not good, remove in the future
-				e.printStackTrace();
-			}
-		}		
-		releaseExtra();
-		
-		super.onDestroy();
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState, "MainActivity");
+        setContentView(R.layout.activity_main);
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
-	
-	private void setupGlobal() {
-		Context context = getApplicationContext();
-		TeensGlobals.sGlobalHandler = mHandler;
-		TeensGlobals.MAX_LABEL_WINDOW = (int) DataStorage.GetValueLong(context, "KEY_LABEL_WINDOW", 2);
-		
-		// update flag indicating whether we should 
-		// copy folders from assets to external storage
-		String oldVersion = DataStorage.getVersion(context, "");	
-		String newVersion = AppUsageLogger.getVersion(context, "USCTeens");
-		DataStorage.setVersion(context, newVersion);
-		TeensGlobals.sUpdateConfig = !newVersion.equals(oldVersion);
+        // setup global params
+        setupGlobal();
+        // setup scale param according to the screen resolution
+        setupScale();
+        // get views and set listeners
+        setupViews();
+        // adjust layouts according to the screen resolution
+        adjustLayout();
+        // create app pages and all the UIs in the pages
+        initPages();
+        // load extra data
+        loadExtra();
+    }
+
+    @Override
+    public void onDestroy() {
+        for (AppPage page : mPages) {
+            try {
+                page.release();
+            } catch (NullPointerException e) { // not good, remove in the future
+                e.printStackTrace();
+            }
+        }
+        releaseExtra();
+
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+
+    private void setupGlobal() {
+        Context context = getApplicationContext();
+        TeensGlobals.sGlobalHandler = mHandler;
+        TeensGlobals.MAX_LABEL_WINDOW = (int) DataStorage.GetValueLong(context, "KEY_LABEL_WINDOW", 2);
+
+        // update flag indicating whether we should
+        // copy folders from assets to external storage
+        String oldVersion = DataStorage.getVersion(context, "");
+        String newVersion = AppUsageLogger.getVersion(context, "USCTeens");
+        DataStorage.setVersion(context, newVersion);
+        TeensGlobals.sUpdateConfig = !newVersion.equals(oldVersion);
 //		if (TeensGlobals.sUpdateConfig) {
 //			String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY;
 //			FileHelper.deleteDir(dirPath + TeensGlobals.ICON_FOLDER);	
 //			FileHelper.deleteDir(dirPath + TeensGlobals.REWARD_FOLDER);
 //		}
-	}
+    }
 
-	private void setupScale() {
-		DisplayMetrics dm = new DisplayMetrics();  
-        getWindowManager().getDefaultDisplay().getMetrics(dm);	
+    private void setupScale() {
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
         AppScale.calcScale(dm.widthPixels, dm.heightPixels);
-	}
+    }
 
-	private void setupViews() {
-		mGraphView = (GraphView) findViewById(R.id.view_graph);		
-		mGraphView.setOnTouchListener(this);
-		mGraphView.setLongClickable(true);
-		
-		mRewardView = (RewardView) findViewById(R.id.view_reward);		
-		mDummyView = (DummyView) findViewById(R.id.view_dummy);
-		//mProgressView = (ProgressView) findViewById(R.id.view_progress);		
-	}
-	
-	private void adjustLayout() {
-		getWindow().setFlags(
-			WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, 
-			WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-		);  
-		getWindow().setFlags(
-			WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-			WindowManager.LayoutParams.FLAG_FULLSCREEN
-		);
-	}
+    private void setupViews() {
+        mGraphView = (GraphView) findViewById(R.id.view_graph);
+        mGraphView.setOnTouchListener(this);
+        mGraphView.setLongClickable(true);
 
-	private void initPages() {		
-		// only three pages now		
-		Context context = getApplicationContext();
-		mPages.add(new HomePage(context, mGraphView, mHandler));
-		mPages.add(new DatePage(context, mGraphView, mHandler));
-		mPages.add(new GraphPage(context, mGraphView, mHandler));
-		mPages.add(new RewardPage(context, mGraphView, mHandler));
-		mCurPage = mPages.get(indexOfPage(PageType.HOME_PAGE));
-		// bind reward view to reward page
-		((RewardPage) mPages.get(indexOfPage(PageType.REWARD_PAGE))).bindRewardView(mRewardView);
-		// set pages to main view
-		mGraphView.setPages(mPages);		
-	}
-	
-	private void loadExtra() {
-		// load activities for activity selection list
-		ActionManager.start();
-		// load rewards for the reward view
-		RewardManager.start();
-		
-		mTTS = new TextToSpeech(this, this);
-	}
-	
-	private void releaseExtra() {
-		if (mTTS != null) {
-			mTTS.stop();
-			mTTS.shutdown();
-		}
-		ActionManager.stop();
-		RewardManager.stop();
-	}
-	
-	private int indexOfPage(PageType pageType) {
-		int index = 0;
-		
-		switch (pageType) {
-		case HOME_PAGE:
-			index = 0;
-			break;
-		case DATE_PAGE:
-			index = 1;
-			break;
-		case GRAPH_PAGE:
-			index = 2;
-			break;
-		case REWARD_PAGE:
-			index = 3;
-			break;
-		}
-		
-		return index;
-	}
+        mRewardView = (RewardView) findViewById(R.id.view_reward);
+        mDummyView = (DummyView) findViewById(R.id.view_dummy);
+        //mProgressView = (ProgressView) findViewById(R.id.view_progress);
+    }
 
-	public void switchPages(int pageTo) {
-		if (mCurPage == mPages.get(pageTo)) {
-			return;
-		}		
-		
-		GraphDrawer drawer = mGraphView.getDrawer();
-		if (drawer != null) {
-			drawer.pause(true);
-		}
-		
-		// first stop to update the page
-		mCurPage.pause();
-		mCurPage.stop();
-		// reset the current page
-		mCurPage.reset();
-		// get the new app page
-		mCurPage = mPages.get(pageTo);		
-		// finally start the new game mode
-		mCurPage.start();
-		mCurPage.resume();
-		
-		// set the new page to graph drawer
-		if (drawer != null) {
-			drawer.setPage(mCurPage);
-			drawer.pause(false);
-		}
-	}
-	
-	@Override
-	public void onPause() {
-		Log.d("TeensMainActivity", "onPause in");
-		DataSource.cancelLoading();
-		
-		mCurPage.pause();
-		mGraphView.onPause();
-		super.onPause();	
-		Log.d("TeensMainActivity", "onPause out");
-	}
+    private void adjustLayout() {
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        );
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
+    }
 
-	@Override
-	public void onResume() {
-		Log.d("TeensMainActivity", "onResume in");
-		super.onResume();
-				
-		mDummyView.setVisibility(
-			AuthorizationChecker.isAuthorized(TeensMainActivity.this) ? View.GONE : View.VISIBLE
-		);
-				
-		mGraphView.onResume();
-		mCurPage.resume();		
-		Log.d("TeensMainActivity", "onResume out");
-	}
+    private void initPages() {
+        // only three pages now
+        Context context = getApplicationContext();
+        mPages.add(new HomePage(context, mGraphView, mHandler));
+        mPages.add(new DatePage(context, mGraphView, mHandler));
+        mPages.add(new GraphPage(context, mGraphView, mHandler));
+        mPages.add(new RewardPage(context, mGraphView, mHandler));
+        mCurPage = mPages.get(indexOfPage(PageType.HOME_PAGE));
+        // bind reward view to reward page
+        ((RewardPage) mPages.get(indexOfPage(PageType.REWARD_PAGE))).bindRewardView(mRewardView);
+        // set pages to main view
+        mGraphView.setPages(mPages);
+    }
 
-	@Override
-	public void onStart() {
-		Log.d("TeensMainActivity", "onStart in");		
-				
-		// the initial page is not graph page, so it's ok here
-		if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {	
-			DataSource.updateRawData();
-		}
-		
-		mCurPage.start();
-		mGraphView.onStart(mCurPage);
-		super.onStart();
-		Log.d("TeensMainActivity", "onStart out");
-	}
+    private void loadExtra() {
+        // load activities for activity selection list
+        ActionManager.start();
+        // load rewards for the reward view
+        RewardManager.start();
 
-	@Override
-	public void onStop() {	
-		Log.d("TeensMainActivity", "onStop in");		
-		mGraphView.onStop();
-		mCurPage.stop();				
-		
-		super.onStop();
-		Log.d("TeensMainActivity", "onStop out");
-	}	
+        mTTS = new TextToSpeech(this, this);
+    }
 
-	// use main looper as the default
-	protected final Handler mHandler = new Handler() {	
-		@SuppressWarnings("unchecked")
-		public void handleMessage(Message msg) {        					
-			Intent i = null;				
-			
-        	switch (msg.what) {   
-        	case AppCmd.BEGIN:                		
-        		switchPages(indexOfPage(PageType.DATE_PAGE));
-        		break;        	
-        	case AppCmd.BEGIN_LOADING:         		
-        		onBeginLoading(msg);
-            	break;
-        	case AppCmd.END_LOADING:          		
-        		onEndLoading(msg);
-        		break;      
-        	case AppCmd.BACK:
-        		switchPages(indexOfPage(PageType.REWARD_PAGE));        		
-        		break;
-        	case AppCmd.NEXT:
-        		switchPages(indexOfPage(PageType.REWARD_PAGE));        		
-        		break;
-        	case AppCmd.TUTOR:
-        		i = new Intent(null, Uri.parse(TeensGlobals.TUTORIAL_VIDEO_URI), 
-        					TeensMainActivity.this, OpenYouTubePlayerActivity.class);
-				startActivity(i);
-        		break;
-        	case AppCmd.QUEST:
-        		i = new Intent(TeensMainActivity.this, QuestDialog.class);           		
-        		i.putExtra(QuestDialog.CHUNK_START_TIME, msg.arg1);
-        		i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);   
-        		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        		startActivityForResult(i, AppCmd.QUEST);
-        		break;
-        	case AppCmd.MERGE:
-        		i = new Intent(TeensMainActivity.this, MergeDialog.class);
-    			i.putStringArrayListExtra(MergeDialog.KEY, (ArrayList<String>) msg.obj);
-    			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    			startActivity(i);
-        		break;
-        	case AppCmd.QUEST_FINISHING:        	
-        		((GraphPage) mCurPage).finishQuest(
-        			DataStorage.GetValueString(getApplicationContext(), TeensGlobals.QUEST_SELECTION, "")
-        		); 
-            	break;
-        	case AppCmd.MERGE_FINISHING:        		
-        		((GraphPage) mCurPage).finishMerge(
-        			DataStorage.GetValueString(getApplicationContext(), TeensGlobals.MERGE_SELECTION, "")
-        		);
-        		break;
-        	case AppCmd.DONE:
-        		switchPages(indexOfPage(PageType.DATE_PAGE)); 
-        		break;        	
-        	case AppCmd.REWARD:
-        		onReward(msg);
-        		break;
-            default:
-            	break;
-            }            
-        	
-        	Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-			vibrator.vibrate(20);
-        }			
-    };       
-    
+    private void releaseExtra() {
+        if (mTTS != null) {
+            mTTS.stop();
+            mTTS.shutdown();
+        }
+        ActionManager.stop();
+        RewardManager.stop();
+    }
+
+    private int indexOfPage(PageType pageType) {
+        int index = 0;
+
+        switch (pageType) {
+            case HOME_PAGE:
+                index = 0;
+                break;
+            case DATE_PAGE:
+                index = 1;
+                break;
+            case GRAPH_PAGE:
+                index = 2;
+                break;
+            case REWARD_PAGE:
+                index = 3;
+                break;
+        }
+
+        return index;
+    }
+
+    public void switchPages(int pageTo) {
+        if (mCurPage == mPages.get(pageTo)) {
+            return;
+        }
+
+        GraphDrawer drawer = mGraphView.getDrawer();
+        if (drawer != null) {
+            drawer.pause(true);
+        }
+
+        // first stop to update the page
+        mCurPage.pause();
+        mCurPage.stop();
+        // reset the current page
+        mCurPage.reset();
+        // get the new app page
+        mCurPage = mPages.get(pageTo);
+        // finally start the new game mode
+        mCurPage.start();
+        mCurPage.resume();
+
+        // set the new page to graph drawer
+        if (drawer != null) {
+            drawer.setPage(mCurPage);
+            drawer.pause(false);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        Log.d("TeensMainActivity", "onPause in");
+        DataSource.cancelLoading();
+
+        mCurPage.pause();
+        mGraphView.onPause();
+        super.onPause();
+        Log.d("TeensMainActivity", "onPause out");
+    }
+
+    @Override
+    public void onResume() {
+        Log.d("TeensMainActivity", "onResume in");
+        super.onResume();
+
+        mDummyView.setVisibility(
+                AuthorizationChecker.isAuthorized(TeensMainActivity.this) ? View.GONE : View.VISIBLE
+        );
+
+        mGraphView.onResume();
+        mCurPage.resume();
+        Log.d("TeensMainActivity", "onResume out");
+    }
+
+    @Override
+    public void onStart() {
+        Log.d("TeensMainActivity", "onStart in");
+
+        // the initial page is not graph page, so it's ok here
+        if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {
+            DataSource.updateRawData();
+        }
+
+        mCurPage.start();
+        mGraphView.onStart(mCurPage);
+        super.onStart();
+        Log.d("TeensMainActivity", "onStart out");
+    }
+
+    @Override
+    public void onStop() {
+        Log.d("TeensMainActivity", "onStop in");
+        mGraphView.onStop();
+        mCurPage.stop();
+
+        super.onStop();
+        Log.d("TeensMainActivity", "onStop out");
+    }
+
+    // use main looper as the default
+    protected final Handler mHandler = new Handler() {
+        @SuppressWarnings("unchecked")
+        public void handleMessage(Message msg) {
+            Intent i = null;
+
+            switch (msg.what) {
+                case AppCmd.BEGIN:
+                    switchPages(indexOfPage(PageType.DATE_PAGE));
+                    break;
+                case AppCmd.BEGIN_LOADING:
+                    onBeginLoading(msg);
+                    break;
+                case AppCmd.END_LOADING:
+                    onEndLoading(msg);
+                    break;
+                case AppCmd.BACK:
+                    switchPages(indexOfPage(PageType.REWARD_PAGE));
+                    break;
+                case AppCmd.NEXT:
+                    switchPages(indexOfPage(PageType.REWARD_PAGE));
+                    break;
+                case AppCmd.TUTOR:
+                    i = new Intent(null, Uri.parse(TeensGlobals.TUTORIAL_VIDEO_URI),
+                            TeensMainActivity.this, OpenYouTubePlayerActivity.class);
+                    startActivity(i);
+                    break;
+                case AppCmd.QUEST:
+                    i = new Intent(TeensMainActivity.this, QuestDialog.class);
+                    i.putExtra(QuestDialog.CHUNK_START_TIME, msg.arg1);
+                    i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(i, AppCmd.QUEST);
+                    break;
+                case AppCmd.MERGE:
+                    i = new Intent(TeensMainActivity.this, MergeDialog.class);
+                    i.putStringArrayListExtra(MergeDialog.KEY, (ArrayList<String>) msg.obj);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                    break;
+                case AppCmd.QUEST_FINISHING:
+                    ((GraphPage) mCurPage).finishQuest(
+                            DataStorage.GetValueString(getApplicationContext(), TeensGlobals.QUEST_SELECTION, "")
+                    );
+                    break;
+                case AppCmd.MERGE_FINISHING:
+                    ((GraphPage) mCurPage).finishMerge(
+                            DataStorage.GetValueString(getApplicationContext(), TeensGlobals.MERGE_SELECTION, "")
+                    );
+                    break;
+                case AppCmd.DONE:
+                    switchPages(indexOfPage(PageType.DATE_PAGE));
+                    break;
+                case AppCmd.REWARD:
+                    onReward(msg);
+                    break;
+                default:
+                    break;
+            }
+
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(20);
+        }
+    };
+
     private void onBeginLoading(Message msg) {
-    	// avoid multiple loading operations
-    	if (mDataLoader != null) {
-    		return;
-    	}
-    	
-    	// give the loading task more cpu time
-    	GraphDrawer drawer = mGraphView.getDrawer();
-		if (drawer != null) {
-			drawer.pause(true);
-		}
+        // avoid multiple loading operations
+        if (mDataLoader != null) {
+            return;
+        }
 
-		// start the loading thread
-		mDataLoader = (LoadDataTask) new LoadDataTask(this, mHandler).execute((String) msg.obj);		
+        // give the loading task more cpu time
+        GraphDrawer drawer = mGraphView.getDrawer();
+        if (drawer != null) {
+            drawer.pause(true);
+        }
+
+        // start the loading thread
+        mDataLoader = (LoadDataTask) new LoadDataTask(this, mHandler).execute((String) msg.obj);
     }
-    
+
     private void onEndLoading(Message msg) {
-    	// results from loading thread
-    	if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
-			switchPages(indexOfPage(PageType.GRAPH_PAGE));
-		} else if (msg.arg1 == DataSource.ERR_CANCELLED) {
-			;
-		} else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
-			Toast.makeText(this, R.string.no_data, Toast.LENGTH_LONG).show();
-			switchPages(indexOfPage(PageType.GRAPH_PAGE)); // still can be labelled
-		} else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
-			Toast.makeText(this, R.string.chunk_error, Toast.LENGTH_LONG).show();
-		} else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
-			Toast.makeText(this, R.string.wait_data, Toast.LENGTH_LONG).show();
-		}  
-		mDataLoader = null;
-		
-		// make sure the drawer is working again
-		GraphDrawer drawer = mGraphView.getDrawer();
-		if (drawer != null) {
-			drawer.setPage(mCurPage);
-			drawer.pause(false);
-		}
+        // results from loading thread
+        if (msg.arg1 == DataSource.LOADING_SUCCEEDED) {
+            switchPages(indexOfPage(PageType.GRAPH_PAGE));
+        } else if (msg.arg1 == DataSource.ERR_CANCELLED) {
+            // nothing now
+        } else if (msg.arg1 == DataSource.ERR_NO_SENSOR_DATA) {
+            Toast.makeText(this, R.string.no_data, Toast.LENGTH_LONG).show();
+            switchPages(indexOfPage(PageType.GRAPH_PAGE)); // still can be labelled
+        } else if (msg.arg1 == DataSource.ERR_NO_CHUNK_DATA) {
+            Toast.makeText(this, R.string.chunk_error, Toast.LENGTH_LONG).show();
+        } else if (msg.arg1 == DataSource.ERR_WAITING_SENSOR_DATA) {
+            Toast.makeText(this, R.string.wait_data, Toast.LENGTH_LONG).show();
+        }
+        mDataLoader = null;
+
+        // make sure the drawer is working again
+        GraphDrawer drawer = mGraphView.getDrawer();
+        if (drawer != null) {
+            drawer.setPage(mCurPage);
+            drawer.pause(false);
+        }
     }
-    
+
     private void onReward(Message msg) {
-    	DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-        
+        DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+
         /**
          * CRUD Operations
          * */
         // Inserting the reward state which is not contained in the table
-    	// Reading all states
-    	boolean isContained = false;
-    	String select = DataSource.getCurrentSelectedDate();
+        // Reading all states
+        boolean isContained = false;
+        String select = DataSource.getCurrentSelectedDate();
         Log.d("Reading: ", "Reading all states..");
-        List<RewardState> states = db.getAllRewardStates();       
+        List<RewardState> states = db.getAllRewardStates();
         for (RewardState s : states) {
             if (s.getDate().equals(select)) {
-            	isContained = true;
-            	break;
+                isContained = true;
+                break;
             }
         }
         if (!isContained) {
-        	Log.d("Insert: ", "Inserting ..");        
-        	db.addRewardState(new RewardState(select, RewardState.ACHIEVED));
+            Log.d("Insert: ", "Inserting ..");
+            db.addRewardState(new RewardState(select, RewardState.ACHIEVED));
         }
-        
+
         if (msg.obj != null) {
-			Intent i = new Intent("android.intent.action.VIEW", Uri.parse((String) msg.obj));
-			startActivity(i);   
-		}
+            Intent i = new Intent("android.intent.action.VIEW", Uri.parse((String) msg.obj));
+            startActivity(i);
+        }
     }
-    
+
     @Override
-	public boolean onTouch(View v, MotionEvent event) {
-    	if (mCurPage != null) {
-    		return mCurPage.onTouch(event);
-    	}
-		return false;
-	}
-    
- // special password for secret behaviors
- 	private PasswordChecker mPwdStaff     = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
- 	private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
- 	private PasswordChecker mPwdSetup     = new PasswordChecker("sss");
- 	private PasswordChecker mPwdTeens     = new PasswordChecker("teens");
- 	private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
- 	
- 	private TextToSpeech mTTS;
-    
+    public boolean onTouch(View v, MotionEvent event) {
+        if (mCurPage != null) {
+            return mCurPage.onTouch(event);
+        }
+        return false;
+    }
+
+    // special password for secret behaviors
+    private PasswordChecker mPwdStaff = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
+    private PasswordChecker mPwdSubject = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
+    private PasswordChecker mPwdSetup = new PasswordChecker("sss");
+    private PasswordChecker mPwdTeens = new PasswordChecker("teens");
+    private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
+
+    private TextToSpeech mTTS;
+
     @Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
 //    	if (mProgressView.getVisibility() == View.VISIBLE) {
 //    		if (keyCode == KeyEvent.KEYCODE_BACK) {
 //    			DataSource.cancelLoading();
@@ -449,73 +449,73 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 //    		}
 //    		return mProgressView.onKeyDown(keyCode, event);
 //    	}    	
-    	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-    	
-		if (keyCode == KeyEvent.KEYCODE_BACK) {		
-			if (mCurPage == mPages.get(indexOfPage(PageType.HOME_PAGE))) { // home page
-				QuitDialog dialog = new QuitDialog();
-				dialog.show(getSupportFragmentManager(), "HomePageDialog");
-			} else if (mCurPage == mPages.get(indexOfPage(PageType.DATE_PAGE))) {
-				if (mDataLoader != null) {
-					DataSource.cancelLoading();
-				}
-				switchPages(indexOfPage(PageType.HOME_PAGE));				
-			} else if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {
-				if (ChunkManager.areAllChunksLabelled()) {
-					switchPages(indexOfPage(PageType.REWARD_PAGE));
-				} else {
-					switchPages(indexOfPage(PageType.DATE_PAGE));
-				}
-			} else if (mCurPage == mPages.get(indexOfPage(PageType.REWARD_PAGE))) {
-				switchPages(indexOfPage(PageType.DATE_PAGE));
-			}
-			return true;
-		} else if (keyCode == KeyEvent.KEYCODE_MENU) {
-		
-			// pop up the keyboard only in the home page
-			if (mCurPage == mPages.get(indexOfPage(PageType.HOME_PAGE))) {								
-				imm.toggleSoftInput(0, 0);				
-			}
-		}
-		
-		if (mPwdStaff.isMatch(keyCode)) {			
-			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-			Intent i = new Intent(this, StaffSetupActivity.class);
-			startActivity(i);
-		} else if (mPwdSubject.isMatch(keyCode) || mPwdSetup.isMatch(keyCode)) {			
-			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-			Intent i = new Intent(this, TeensSetupActivity.class);
-			startActivity(i);
-		} else if (mPwdUninstall.isMatch(keyCode)) {
-			imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-			Uri packageUri = Uri.parse("package:" + Globals.PACKAGE_NAME);
-			Intent i = new Intent(Intent.ACTION_DELETE, packageUri);
-			startActivity(i);
-		} else if (mPwdTeens.isMatch(keyCode)) {
-			mTTS.speak("Welcome to use teens activity game!", TextToSpeech.QUEUE_FLUSH, null);
-		}
-		
-		return super.onKeyDown(keyCode, event);
-	}
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-	@Override
-	public void onInit(int status) {
-		if (status == TextToSpeech.SUCCESS) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mCurPage == mPages.get(indexOfPage(PageType.HOME_PAGE))) { // home page
+                QuitDialog dialog = new QuitDialog();
+                dialog.show(getSupportFragmentManager(), "HomePageDialog");
+            } else if (mCurPage == mPages.get(indexOfPage(PageType.DATE_PAGE))) {
+                if (mDataLoader != null) {
+                    DataSource.cancelLoading();
+                }
+                switchPages(indexOfPage(PageType.HOME_PAGE));
+            } else if (mCurPage == mPages.get(indexOfPage(PageType.GRAPH_PAGE))) {
+                if (ChunkManager.areAllChunksLabelled()) {
+                    switchPages(indexOfPage(PageType.REWARD_PAGE));
+                } else {
+                    switchPages(indexOfPage(PageType.DATE_PAGE));
+                }
+            } else if (mCurPage == mPages.get(indexOfPage(PageType.REWARD_PAGE))) {
+                switchPages(indexOfPage(PageType.DATE_PAGE));
+            }
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_MENU) {
 
-			int result = mTTS.setLanguage(Locale.US);
+            // pop up the keyboard only in the home page
+            if (mCurPage == mPages.get(indexOfPage(PageType.HOME_PAGE))) {
+                imm.toggleSoftInput(0, 0);
+            }
+        }
 
-			// tts.setPitch(5); // set pitch level
+        if (mPwdStaff.isMatch(keyCode)) {
+            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            Intent i = new Intent(this, StaffSetupActivity.class);
+            startActivity(i);
+        } else if (mPwdSubject.isMatch(keyCode) || mPwdSetup.isMatch(keyCode)) {
+            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            Intent i = new Intent(this, TeensSetupActivity.class);
+            startActivity(i);
+        } else if (mPwdUninstall.isMatch(keyCode)) {
+            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            Uri packageUri = Uri.parse("package:" + Globals.PACKAGE_NAME);
+            Intent i = new Intent(Intent.ACTION_DELETE, packageUri);
+            startActivity(i);
+        } else if (mPwdTeens.isMatch(keyCode)) {
+            mTTS.speak("Welcome to use teens activity game!", TextToSpeech.QUEUE_FLUSH, null);
+        }
 
-			// tts.setSpeechRate(2); // set speech speed rate
+        return super.onKeyDown(keyCode, event);
+    }
 
-			if (result == TextToSpeech.LANG_MISSING_DATA
-					|| result == TextToSpeech.LANG_NOT_SUPPORTED) {
-				Log.e("TTS", "Language is not supported");
-			}
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
 
-		} else {
-			Log.e("TTS", "Initilization Failed");
-		}
-	}
+            int result = mTTS.setLanguage(Locale.US);
+
+            // tts.setPitch(5); // set pitch level
+
+            // tts.setSpeechRate(2); // set speech speed rate
+
+            if (result == TextToSpeech.LANG_MISSING_DATA
+                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "Language is not supported");
+            }
+
+        } else {
+            Log.e("TTS", "Initilization Failed");
+        }
+    }
 
 }

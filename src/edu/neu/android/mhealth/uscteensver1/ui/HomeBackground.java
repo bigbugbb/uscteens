@@ -13,41 +13,41 @@ import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class HomeBackground extends Background {
-	
-	private Paint  mPaint;
-	private String mVersion;
-	private Rect   mRect = new Rect();
 
-	public HomeBackground(Resources res) {
-		super(res);		
-		loadImages(new int[] { R.drawable.background_home });
-		
-		mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mPaint.setColor(Color.LTGRAY);
-		mPaint.setStyle(Style.STROKE);
-		mPaint.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf"));
-		mPaint.setTextSize(AppScale.doScaleT(30));
-		
-		mVersion = TeensGlobals.VERSION_NAME;
-		mPaint.getTextBounds(mVersion, 0, mVersion.length(), mRect);				
-	}	
-	
-	@Override
-	public void onSizeChanged(int width, int height) {
-		mWidth  = mImages.get(0).getWidth();
-		mHeight = mImages.get(0).getHeight();
-		mX = (width  - mWidth)  / 2;
-		mY = (height - mHeight) / 2;
-		
-		mRect.offsetTo(width - mRect.width() - mRect.height(), 
-				height - mRect.height());
-	}
+    private Paint mPaint;
+    private String mVersion;
+    private Rect mRect = new Rect();
 
-	@Override
-	public void onDraw(Canvas c) {
-		c.drawColor(Color.WHITE);
-		c.drawBitmap(mImages.get(0), mX, mY, null);
-		c.drawText(mVersion, mRect.left, mRect.top, mPaint);
-	}
-	
+    public HomeBackground(Resources res) {
+        super(res);
+        loadImages(new int[]{R.drawable.background_home});
+
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setColor(Color.LTGRAY);
+        mPaint.setStyle(Style.STROKE);
+        mPaint.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf"));
+        mPaint.setTextSize(AppScale.doScaleT(30));
+
+        mVersion = TeensGlobals.VERSION_NAME;
+        mPaint.getTextBounds(mVersion, 0, mVersion.length(), mRect);
+    }
+
+    @Override
+    public void onSizeChanged(int width, int height) {
+        mWidth = mImages.get(0).getWidth();
+        mHeight = mImages.get(0).getHeight();
+        mX = (width - mWidth) / 2;
+        mY = (height - mHeight) / 2;
+
+        mRect.offsetTo(width - mRect.width() - mRect.height(),
+                height - mRect.height());
+    }
+
+    @Override
+    public void onDraw(Canvas c) {
+        c.drawColor(Color.WHITE);
+        c.drawBitmap(mImages.get(0), mX, mY, null);
+        c.drawText(mVersion, mRect.left, mRect.top, mPaint);
+    }
+
 }

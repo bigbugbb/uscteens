@@ -10,25 +10,25 @@ import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class ReturnButton extends CustomButton {
-	
-	protected Paint mPaintText = null;
 
-	public ReturnButton(Resources res) {
-		super(res);
-		
-		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mPaintText.setColor(Color.WHITE);
-		mPaintText.setStyle(Style.FILL);
-		mPaintText.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf"));
-		mPaintText.setFakeBoldText(false);
-		mPaintText.setTextSize(AppScale.doScaleH(36));
-		mPaintText.setTextAlign(Paint.Align.CENTER);
-	}
+    protected Paint mPaintText = null;
 
-	@Override
-	public void onDraw(Canvas c) {
-		c.drawBitmap(mImages.get(0), mX, mY, null);
-		c.drawText("BACK", mX, mY + AppScale.doScaleH(10), mPaintText);
-	}
-	
+    public ReturnButton(Resources res) {
+        super(res);
+
+        mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintText.setColor(Color.WHITE);
+        mPaintText.setStyle(Style.FILL);
+        mPaintText.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf"));
+        mPaintText.setFakeBoldText(false);
+        mPaintText.setTextSize(AppScale.doScaleH(36));
+        mPaintText.setTextAlign(Paint.Align.CENTER);
+    }
+
+    @Override
+    public void onDraw(Canvas c) {
+        c.drawBitmap(mImages.get(0), mX, mY, null);
+        c.drawText("BACK", mX, mY + AppScale.doScaleH(10), mPaintText);
+    }
+
 }

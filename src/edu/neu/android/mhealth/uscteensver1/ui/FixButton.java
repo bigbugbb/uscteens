@@ -13,58 +13,58 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class FixButton extends CustomButton {
 
-	protected int   mColor = 0xff0066ff;
-	protected float mTextX = 0;
-	protected float mTextY = 0;	
-	protected Paint mPaintText = null;	
+    protected int mColor = 0xff0066ff;
+    protected float mTextX = 0;
+    protected float mTextY = 0;
+    protected Paint mPaintText = null;
 
-	public FixButton(Resources res) {
-		super(res);
-		loadImages(new int[] { R.drawable.fix_btn });
-		
-		mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mPaintText.setColor(Color.WHITE);
-		mPaintText.setStyle(Style.FILL);
-		mPaintText.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf"));
-		mPaintText.setFakeBoldText(true);
-		mPaintText.setTextSize(AppScale.doScaleT(42));
-		mPaintText.setTextAlign(Paint.Align.CENTER);
-	}
+    public FixButton(Resources res) {
+        super(res);
+        loadImages(new int[]{R.drawable.fix_btn});
 
-	@Override
-	public void onSizeChanged(int width, int height) {		
-		mWidth  = mImages.get(0).getWidth();
-		mHeight = mImages.get(0).getHeight();
-		mX = (width - mWidth) / 2;
-		mY = height * 0.84f;		
-	}
+        mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintText.setColor(Color.WHITE);
+        mPaintText.setStyle(Style.FILL);
+        mPaintText.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf"));
+        mPaintText.setFakeBoldText(true);
+        mPaintText.setTextSize(AppScale.doScaleT(42));
+        mPaintText.setTextAlign(Paint.Align.CENTER);
+    }
 
-	@Override
-	public void onDraw(Canvas c) {
-		mTextX = mX + mWidth / 2;
-		mTextY = mY + mHeight * 0.675f;
-		c.drawBitmap(mImages.get(0), mX, mY, null);
-		c.drawText("Fix", mTextX, mTextY, mPaintText);
-	}
+    @Override
+    public void onSizeChanged(int width, int height) {
+        mWidth = mImages.get(0).getWidth();
+        mHeight = mImages.get(0).getHeight();
+        mX = (width - mWidth) / 2;
+        mY = height * 0.84f;
+    }
 
-	@Override
-	public boolean onDown(MotionEvent e) {
-		mPaintText.setColor(mColor);
-		return true;
-	}
+    @Override
+    public void onDraw(Canvas c) {
+        mTextX = mX + mWidth / 2;
+        mTextY = mY + mHeight * 0.675f;
+        c.drawBitmap(mImages.get(0), mX, mY, null);
+        c.drawText("Fix", mTextX, mTextY, mPaintText);
+    }
 
-	@Override
-	public boolean onUp(MotionEvent e) {
-		if (mListener != null) {
-			mListener.onClick(this);
-		}
-		mPaintText.setColor(Color.WHITE);
-		return true;
-	}
+    @Override
+    public boolean onDown(MotionEvent e) {
+        mPaintText.setColor(mColor);
+        return true;
+    }
 
-	@Override
-	public void onCancelSelection(MotionEvent e) {
-		mPaintText.setColor(Color.WHITE);
-	}
+    @Override
+    public boolean onUp(MotionEvent e) {
+        if (mListener != null) {
+            mListener.onClick(this);
+        }
+        mPaintText.setColor(Color.WHITE);
+        return true;
+    }
+
+    @Override
+    public void onCancelSelection(MotionEvent e) {
+        mPaintText.setColor(Color.WHITE);
+    }
 
 }
