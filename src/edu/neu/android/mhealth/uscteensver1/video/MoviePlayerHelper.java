@@ -1,6 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.video;
 
-import java.io.IOException;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -11,7 +11,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import android.util.Log;
+import java.io.IOException;
+
 import edu.neu.android.mhealth.uscteensver1.support.TeenException;
 
 public class MoviePlayerHelper {

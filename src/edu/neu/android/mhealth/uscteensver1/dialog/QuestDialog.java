@@ -1,9 +1,5 @@
 package edu.neu.android.mhealth.uscteensver1.dialog;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -33,6 +29,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;

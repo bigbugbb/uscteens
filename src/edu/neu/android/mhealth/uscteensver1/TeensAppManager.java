@@ -1,12 +1,13 @@
 package edu.neu.android.mhealth.uscteensver1;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.telephony.TelephonyManager;
+
+import java.util.ArrayList;
+
 import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;

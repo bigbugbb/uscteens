@@ -1,14 +1,15 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;

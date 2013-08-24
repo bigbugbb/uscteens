@@ -1,10 +1,11 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Date;
 
-import android.util.Log;
-import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;

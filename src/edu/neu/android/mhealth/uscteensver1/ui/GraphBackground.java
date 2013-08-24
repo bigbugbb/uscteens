@@ -3,6 +3,7 @@ package edu.neu.android.mhealth.uscteensver1.ui;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+
 import edu.neu.android.mhealth.uscteensver1.R;
 
 public class GraphBackground extends Background {

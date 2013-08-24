@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.widget.ListView;
+
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class ActionListView extends ListView {

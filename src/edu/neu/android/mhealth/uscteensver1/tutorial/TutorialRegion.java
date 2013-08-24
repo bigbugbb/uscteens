@@ -1,8 +1,8 @@
 package edu.neu.android.mhealth.uscteensver1.tutorial;
 
-import java.io.Serializable;
-
 import android.graphics.RectF;
+
+import java.io.Serializable;
 
 /*
  * User can tap the region area to switch to another tutorial card 

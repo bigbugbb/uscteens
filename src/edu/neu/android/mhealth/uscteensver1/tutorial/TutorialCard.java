@@ -1,10 +1,10 @@
 package edu.neu.android.mhealth.uscteensver1.tutorial;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import android.graphics.RectF;
 import android.util.Log;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public class TutorialCard implements Serializable {
 

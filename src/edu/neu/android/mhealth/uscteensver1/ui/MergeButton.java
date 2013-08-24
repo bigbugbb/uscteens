@@ -1,13 +1,14 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import java.util.ArrayList;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
+
+import java.util.ArrayList;
+
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;

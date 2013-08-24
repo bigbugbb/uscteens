@@ -1,10 +1,11 @@
 package edu.neu.android.mhealth.uscteensver1.extra;
 
-import java.io.Serializable;
-
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+
+import java.io.Serializable;
+
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;

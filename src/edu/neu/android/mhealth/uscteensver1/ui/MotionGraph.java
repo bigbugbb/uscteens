@@ -1,7 +1,5 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
-import java.util.ArrayList;
-
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -13,6 +11,9 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.Pair;
 import android.view.MotionEvent;
+
+import java.util.ArrayList;
+
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;

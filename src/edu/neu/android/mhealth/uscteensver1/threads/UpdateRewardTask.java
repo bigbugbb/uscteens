@@ -1,11 +1,12 @@
 package edu.neu.android.mhealth.uscteensver1.threads;
 
-import java.io.File;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.Gravity;
 import android.widget.Toast;
+
+import java.io.File;
+
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.Globals;

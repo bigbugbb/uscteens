@@ -1,12 +1,13 @@
 package edu.neu.android.mhealth.uscteensver1.views;
 
-import java.util.List;
-
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.util.List;
+
 import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 

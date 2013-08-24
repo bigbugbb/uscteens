@@ -1,9 +1,5 @@
 package edu.neu.android.mhealth.uscteensver1.pages;
 
-import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +7,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
+
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.extra.Reward;

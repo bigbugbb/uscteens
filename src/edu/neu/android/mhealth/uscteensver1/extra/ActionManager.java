@@ -1,5 +1,8 @@
 package edu.neu.android.mhealth.uscteensver1.extra;
 
+import android.content.Context;
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -8,8 +11,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-import android.content.Context;
-import android.util.Log;
 import au.com.bytecode.opencsv.CSVReader;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;

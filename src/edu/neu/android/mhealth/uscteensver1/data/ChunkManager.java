@@ -1,10 +1,11 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
+import android.content.Context;
+import android.graphics.RectF;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import android.content.Context;
-import android.graphics.RectF;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;

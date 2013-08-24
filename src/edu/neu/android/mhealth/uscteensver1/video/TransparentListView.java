@@ -1,13 +1,13 @@
 package edu.neu.android.mhealth.uscteensver1.video;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ListView;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 // see http://stackoverflow.com/questions/6209114/list-view-footer-background-on-android-2-3-3
 

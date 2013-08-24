@@ -1,14 +1,15 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;

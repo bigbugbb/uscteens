@@ -1,11 +1,12 @@
 package edu.neu.android.mhealth.uscteensver1;
 
-import java.util.HashMap;
-
 import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Handler;
+
+import java.util.HashMap;
+
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.helpcomment.GetHelpActivity;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;

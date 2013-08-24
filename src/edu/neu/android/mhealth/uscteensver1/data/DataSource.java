@@ -1,5 +1,14 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
+import android.util.Log;
+import android.util.Pair;
+
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -14,14 +23,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-import org.dom4j.Attribute;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
-import android.util.Log;
-import android.util.Pair;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
@@ -53,14 +54,9 @@ public class DataSource {
     protected static RawChunksWrap sRawChksWrap = new RawChunksWrap();
     // raw accelerometer sensor data
     protected static AccelDataWrap sAccelDataWrap = new AccelDataWrap();
-    //	// hourly accelerometer data
-//	protected static ArrayList<AccelData> sHourlyAccelData = null;	
     // floating labels data
     protected static RawLabelWrap sRawLabelsWrap = new RawLabelWrap();
 
-//	static {
-//		System.loadLibrary("datasrc");
-//	}		
 
     public static long getLastLoadingTime() {
         long lastLoadingTime =
@@ -181,18 +177,6 @@ public class DataSource {
         return result;
     }
 
-//	private static void onAddAccelData(int hour, int minute, int second, int milliSecond, 
-//				     			int timeInSec, int accelAverage, int accelSamples) {
-//		AccelData data = new AccelData(hour, minute, second, milliSecond, 
-//				timeInSec, accelAverage, accelSamples);
-//		sHourlyAccelData.add(data);
-//	}
-
-//	private static void onAddLabelData(int hour, int minute, int second, int timeInSec, String text) {
-//		RawLabel data = new RawLabel(hour, minute, second, timeInSec, text);
-//		sRawLabelsWrap.add(data);
-//	}
-
     public static String getCurrentSelectedDate() {
         return DataStorage.GetValueString(TeensAppManager.getAppContext(), TeensGlobals.CURRENT_SELECTED_DATE, "");
     }
@@ -213,7 +197,6 @@ public class DataSource {
     public static ArrayList<Pair<Integer, Integer>> getNoDataTimePeriods() {
         return sAccelDataWrap.getNoDataTimePeriods();
     }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static RawLabelWrap getRawLabels() {
         return sRawLabelsWrap;
@@ -247,7 +230,6 @@ public class DataSource {
                     csvReader.close();
                 }
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -257,7 +239,7 @@ public class DataSource {
 
     private static int loadRawAccelData(String date) {
         String[] hourDirs = FileHelper.getFilePathsDir(
-                TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + TeensGlobals.SENSOR_FOLDER + date
+            TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + TeensGlobals.SENSOR_FOLDER + date
         );
 
         try {
@@ -363,7 +345,6 @@ public class DataSource {
                 }
             }
         } catch (DocumentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return false;
         }
@@ -438,12 +419,6 @@ public class DataSource {
         String folderPath = String.format("/%04d-%02d-%02d", calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
 
-//		if (Globals.IS_LOG_EXTERNAL) {
-//			if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-//				Log.w(TAG, "SD card is not available for logging: " + Environment.getExternalStorageState());
-//				return false;
-//			}
-//		}
         String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.LOG_DIRECTORY + folderPath;
 
         File folder = new File(path);
@@ -473,14 +448,14 @@ public class DataSource {
             Date startTime = new Date(chunk.getChunkRealStartTime() * 1000 + selectedDate.getTime());
             Date stopTime = new Date(chunk.getChunkRealStopTime() * 1000 + selectedDate.getTime());
             Log.i("bigbug", startTime + " " + stopTime);
-            writer.writeNext(new String[]{
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.US).format(calendar.getTime()),
-                    chunk.getAction().toString(),
-                    Globals.mHealthTimestampFormat.format(startTime),
-                    Globals.mHealthTimestampFormat.format(stopTime),
-                    ChunkManager.getLabeledChunkSize() + "",
-                    ChunkManager.getChunkSize() + "",
-                    String.format("%#.2f", ChunkManager.getLabeledPercentage() * 100) + ""
+            writer.writeNext(new String[] {
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.US).format(calendar.getTime()),
+                chunk.getAction().toString(),
+                Globals.mHealthTimestampFormat.format(startTime),
+                Globals.mHealthTimestampFormat.format(stopTime),
+                ChunkManager.getLabeledChunkSize() + "",
+                ChunkManager.getChunkSize() + "",
+                String.format("%#.2f", ChunkManager.getLabeledPercentage() * 100) + ""
             });
 
         } catch (IOException e) {
@@ -555,7 +530,7 @@ public class DataSource {
         sAccelDataWrap.clear();
     }
 
-    public static final String DATASET = "chunks";
+    public static final String DATASET   = "chunks";
     public static final String ANNOTATOR = "uscteens";
 
     public static boolean areAllChunksLabelled(String date) {
@@ -597,7 +572,6 @@ public class DataSource {
                 }
             }
         } catch (DocumentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -633,18 +607,17 @@ public class DataSource {
             Action action = rawChunk.getAction();
             try {
                 annotationSaver.addAnnotation(
-                        TeensGlobals.ANNOTATION_GUID,
-                        action.getActionID(),
-                        action.getActionName(),
-                        Globals.mHealthTimestampFormat.parse(rawChunk.mStartDate),
-                        Globals.mHealthTimestampFormat.parse(rawChunk.mStopDate),
-                        TeensGlobals.ANNOTATION_SET,
-                        Globals.mHealthTimestampFormat.parse(rawChunk.mModifyTime),
-                        Globals.mHealthTimestampFormat.parse(rawChunk.mCreateTime)
+                    TeensGlobals.ANNOTATION_GUID,
+                    action.getActionID(),
+                    action.getActionName(),
+                    Globals.mHealthTimestampFormat.parse(rawChunk.mStartDate),
+                    Globals.mHealthTimestampFormat.parse(rawChunk.mStopDate),
+                    TeensGlobals.ANNOTATION_SET,
+                    Globals.mHealthTimestampFormat.parse(rawChunk.mModifyTime),
+                    Globals.mHealthTimestampFormat.parse(rawChunk.mCreateTime)
                 );
                 Log.d(TAG, rawChunk.mStartDate + "\t" + rawChunk.mStopDate);
             } catch (ParseException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -657,7 +630,7 @@ public class DataSource {
 
     private static void saveChunkDataToCSV(String date) {
         File dir = new File(
-                TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_MHEALTH_SENSORS_DIRECTORY + File.separator + date
+            TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_MHEALTH_SENSORS_DIRECTORY + File.separator + date
         );
         dir.mkdirs();
 

@@ -1,13 +1,13 @@
 package edu.neu.android.mhealth.uscteensver1.survey;
 
+import android.content.Context;
+
+import com.google.gson.Gson;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Random;
-
-import android.content.Context;
-
-import com.google.gson.Gson;
 
 import edu.neu.android.mhealth.uscteensver1.activities.TeensSurveyActivity;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataChecker;
@@ -25,20 +25,20 @@ import edu.neu.android.wocketslib.utils.Log;
 import edu.neu.android.wocketslib.utils.PhonePrompter;
 
 public class TeensSurveyScheduler extends SurveyScheduler {
-    protected final static String TAG = "TeensSurveyScheduler";
+    private final static String TAG = "TeensSurveyScheduler";
     private final static String KEY_RANDOM_PROMPT = "_KEY_RANDOM_PROMPT";
 
     public TeensSurveyScheduler(Context context) {
         super(context, TeensSurveyActivity.class,
-                new HashMap<String, Class<?>>() // prompt type to question set class
-                {
-                    private static final long serialVersionUID = 1L;
+            new HashMap<String, Class<?>>() // prompt type to question set class
+            {
+                private static final long serialVersionUID = 1L;
 
-                    {
-                        put("CS", TeensCSSurvey.class);
-                        put("Random", TeensRandomSurvey.class);
-                    }
+                {
+                    put("CS", TeensCSSurvey.class);
+                    put("Random", TeensRandomSurvey.class);
                 }
+            }
         );
 
         TeensSurveyActivity.MINUTES_FOR_FIRST_QUESTION = 3;

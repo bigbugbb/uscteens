@@ -3,6 +3,7 @@ package edu.neu.android.mhealth.uscteensver1.threads;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.view.SurfaceHolder;
+
 import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 

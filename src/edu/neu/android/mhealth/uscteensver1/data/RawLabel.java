@@ -53,14 +53,11 @@ class RawLabel implements Serializable, Comparable<RawLabel> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(mDate);
-        sb.append(" ");
-        sb.append(mHour < 10 ? "0" : "");
+        sb.append(mHour < 10 ? " 0" : " ");
         sb.append(mHour);
-        sb.append(":");
-        sb.append(mMinute < 10 ? "0" : "");
+        sb.append(mMinute < 10 ? ":0" : ":");
         sb.append(mMinute);
-        sb.append(":");
-        sb.append(mSecond < 10 ? "0" : "");
+        sb.append(mSecond < 10 ? ":0" : ":");
         sb.append(mSecond);
         sb.append(", ");
         sb.append(mName);

@@ -1,10 +1,11 @@
 package edu.neu.android.mhealth.uscteensver1.utils;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
 
-import android.content.Context;
 import edu.neu.android.wocketslib.dataupload.DataSender;
 import edu.neu.android.wocketslib.json.model.Note;
 import edu.neu.android.wocketslib.json.model.WocketInfo;

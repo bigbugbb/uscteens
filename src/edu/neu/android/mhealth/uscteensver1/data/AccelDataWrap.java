@@ -1,9 +1,9 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
+import android.util.Pair;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import android.util.Pair;
 
 class AccelDataWrap extends ArrayList<ArrayList<AccelData>> {
     private static final long serialVersionUID = -80693842157700147L;
