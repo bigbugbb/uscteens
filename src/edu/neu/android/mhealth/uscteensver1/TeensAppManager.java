@@ -13,57 +13,57 @@ import edu.neu.android.wocketslib.support.DataStorage;
 
 /**
  * The entry of the whole application.
- * 
- * @author bigbug
  *
+ * @author bigbug
  */
 public class TeensAppManager extends ApplicationManager {
 
-	public static final String TAG = "TeensAppManager";
-	
-    @Override 
+    public static final String TAG = "TeensAppManager";
+
+    @Override
     public void onCreate() {
-    	super.onCreate();
-    	
-    	TeensGlobals.initGlobals(getAppContext());       	    	    							
+        super.onCreate();
+
+        TeensGlobals.initGlobals(getAppContext());
     }
-    
+
     public static AssetManager getAppAssets() {
-    	return getAppContext().getAssets();
+        return getAppContext().getAssets();
     }
-    
+
     public static Resources getAppResources() {
-    	return getAppContext().getResources();
+        return getAppContext().getResources();
     }
-    
+
     public static String getParticipantId(Context c) {
-		String subjectID = DataStorage.GetValueString(c, DataStorage.KEY_SUBJECT_ID, 
-				AuthorizationChecker.SUBJECT_ID_UNDEFINED);
-		if (!subjectID.equals(AuthorizationChecker.SUBJECT_ID_UNDEFINED)) {
-			return subjectID;
-		}
-		TelephonyManager tm = (TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE);
-		return tm.getDeviceId();
-	}
-    
+        String subjectID = DataStorage.GetValueString(c, DataStorage.KEY_SUBJECT_ID,
+                AuthorizationChecker.SUBJECT_ID_UNDEFINED);
+        if (!subjectID.equals(AuthorizationChecker.SUBJECT_ID_UNDEFINED)) {
+            return subjectID;
+        }
+        TelephonyManager tm = (TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE);
+        return tm.getDeviceId();
+    }
+
     private ArrayList<Activity> mActivityList = new ArrayList<Activity>();
-    
-	public void addActivity(Activity activity) {		
-		mActivityList.add(activity);
-	}
 
-	public void killActivity(Activity activity) {
-		activity.finish();
-		mActivityList.remove(activity);
-	}
+    public void addActivity(Activity activity) {
+        mActivityList.add(activity);
+    }
 
-	public void removeActivity(Activity activity) {
-		mActivityList.remove(activity);
-	}
+    public void killActivity(Activity activity) {
+        activity.finish();
+        mActivityList.remove(activity);
+    }
 
-	public void killAllActivities() {
-		for (int i = 0; i < mActivityList.size(); i++)
-			mActivityList.get(i).finish();
-		mActivityList.clear();
-	}
+    public void removeActivity(Activity activity) {
+        mActivityList.remove(activity);
+    }
+
+    public void killAllActivities() {
+        for (Activity activity : mActivityList) {
+            activity.finish();
+        }
+        mActivityList.clear();
+    }
 }

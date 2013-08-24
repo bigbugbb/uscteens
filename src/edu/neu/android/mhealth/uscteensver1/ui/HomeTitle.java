@@ -7,23 +7,23 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 
 public class HomeTitle extends AppObject {
 
-	public HomeTitle(Resources res) {
-		super(res);
-		loadImages(new int[] { R.drawable.title });
-		setKind(TITLE);
-		setZOrder(ZOrders.TITLE);
-	}	
-	
-	@Override
-	public void onSizeChanged(int width, int height) {		
-		mWidth  = mImages.get(0).getWidth();
-		mHeight = mImages.get(0).getHeight();
-		mX = (width - mWidth) / 2;
-		mY = (height - mHeight) * 0.45f;
-	}
+    public HomeTitle(Resources res) {
+        super(res);
+        loadImages(new int[]{R.drawable.title});
+        setKind(TITLE);
+        setZOrder(ZOrders.TITLE);
+    }
 
-	@Override
-	public void onDraw(Canvas c) {
-		c.drawBitmap(mImages.get(0), mX, mY, null);
-	}
+    @Override
+    public void onSizeChanged(int width, int height) {
+        mWidth = mImages.get(0).getWidth();
+        mHeight = mImages.get(0).getHeight();
+        mX = (width - mWidth) / 2;
+        mY = (height - mHeight) * 0.45f;
+    }
+
+    @Override
+    public void onDraw(Canvas c) {
+        c.drawBitmap(mImages.get(0), mX, mY, null);
+    }
 }
