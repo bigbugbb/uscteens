@@ -22,8 +22,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_REWARD_STATES = "rewardstates";
 
     // RewardState Table Columns names
-    private static final String KEY_ID = "id";
-    private static final String KEY_DATE = "date";
+    private static final String KEY_ID    = "id";
+    private static final String KEY_DATE  = "date";
     private static final String KEY_STATE = "state";
 
     public DatabaseHandler(Context context) {

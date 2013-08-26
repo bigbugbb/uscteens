@@ -34,7 +34,7 @@ public class MotionGraph extends AppObject {
     protected int mCanvasWidth = 0;
     protected int mCanvasHeight = 0;
     protected int mRightBound = 0;
-    protected Paint mBackgroundGray = null;
+    protected Paint mBackgroundGray  = null;
     protected Paint mBackgroundWhite = null;
     protected Paint mPaint = null;
     protected Paint mDataPaint = null;
@@ -52,7 +52,7 @@ public class MotionGraph extends AppObject {
 
     protected float mOffsetSpeedX = 0;
     protected float mOffsetSpeedY = 0;
-    protected float mAspectRatio = 1;
+    protected float mAspectRatio  = 1;
 
     public MotionGraph(Resources res) {
         super(res);
@@ -137,13 +137,13 @@ public class MotionGraph extends AppObject {
     @SuppressLint("DefaultLocale")
     private String convertDateToDisplayFormat(String date) {
         String[] MONTHS = {
-                "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"
+            "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"
         };
 
         String[] times = date.split("-");
         String weekday = WeekdayHelper.getWeekday(date);
-        String month = MONTHS[Integer.parseInt(times[1]) - 1];
-        String day = times[2];
+        String month   = MONTHS[Integer.parseInt(times[1]) - 1];
+        String day     = times[2];
         String formatted = weekday.toUpperCase() + "  " + month + "  " + day;
 
         return formatted;
@@ -324,8 +324,8 @@ public class MotionGraph extends AppObject {
 
         // ....
         mStart = 0;
-        mEnd = mStart + (int) mWidth;
-        mEnd = mEnd > mDataLengthInPixel ? mDataLengthInPixel : mEnd;
+        mEnd   = mStart + (int) mWidth;
+        mEnd   = mEnd > mDataLengthInPixel ? mDataLengthInPixel : mEnd;
         mRightBound = mDataLengthInPixel - (int) mWidth;
 
         ChunkManager.setViewSize(mWidth, mHeight);
@@ -358,7 +358,7 @@ public class MotionGraph extends AppObject {
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                            float velocityY) {
-        mSpeedX = velocityX / AppScale.doScaleW(50);
+        mSpeedX    = velocityX / AppScale.doScaleW(50);
         mAccSpeedX = AppScale.doScaleW(mSpeedX > 0 ? -3 : 3);
         return true;
     }
@@ -375,9 +375,9 @@ public class MotionGraph extends AppObject {
             offset = mRightBound - mStart;
         }
         mStart = mStart + offset;
-        mEnd = mStart + (int) mWidth;
+        mEnd   = mStart + (int) mWidth;
         mStart = (mStart < 0) ? 0 : mStart;
-        mEnd = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
+        mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
         ChunkManager.setDisplayOffset(-mStart, 0);
         LabelManager.setDisplayOffset(-mStart, 0);
 
@@ -393,8 +393,8 @@ public class MotionGraph extends AppObject {
             mSpeedX = 0;
         }
         mStart = (int) ((x > mDataLengthInPixel - mWidth) ? mDataLengthInPixel - mWidth : x);
-        mEnd = mStart + (int) mWidth;
-        mEnd = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
+        mEnd   = mStart + (int) mWidth;
+        mEnd   = (mEnd > mDataLengthInPixel) ? mDataLengthInPixel : mEnd;
 
         ChunkManager.setDisplayOffset(-mStart, 0);
         LabelManager.setDisplayOffset(-mStart, 0);
@@ -416,7 +416,7 @@ public class MotionGraph extends AppObject {
     @Override
     public boolean contains(float x, float y) {
         return (mX < x && x <= mX + mWidth) &&
-                (mY < y && y <= mY + mHeight + mCanvasHeight * 0.25f);
+               (mY < y && y <= mY + mHeight + mCanvasHeight * 0.25f);
     }
 
     protected OnGraphMovedListener mListener = null;

@@ -22,10 +22,10 @@ import edu.neu.android.wocketslib.utils.WOCKETSException;
 public class ActionManager {
     private final static String TAG = "ActionManager";
     // result code
-    public final static int LOADING_SUCCEEDED = 0;
-    public final static int ERR_CANCELLED = -1;
+    public final static int LOADING_SUCCEEDED  = 0;
+    public final static int ERR_CANCELLED      = -1;
     public final static int ERR_NO_ACTION_DATA = -2;
-    public final static int ERR_IO_EXCEPTION = -3;
+    public final static int ERR_IO_EXCEPTION   = -3;
 
     public final static int MOST_RECENT_ACTIONS_COUNT = 3;
     public final static String MOST_RECENT_ACTION_ID = "MOST_RECENT_ACTION_ID";
@@ -34,7 +34,7 @@ public class ActionManager {
 
     protected static boolean sCopied = false;
     protected static ActionWrap sActionWrap = new ActionWrap();
-    protected static ArrayList<Action> sActivatedActions = new ArrayList<Action>();
+    protected static ArrayList<Action> sActivatedActions  = new ArrayList<Action>();
     protected static ArrayList<Action> sMostRecentActions = new ArrayList<Action>();
 
     public static void start() {

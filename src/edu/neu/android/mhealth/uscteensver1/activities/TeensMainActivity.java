@@ -54,7 +54,7 @@ import edu.neu.android.wocketslib.utils.PasswordChecker;
 import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
 import edu.neu.android.wocketslib.views.DummyView;
 
-public class TeensMainActivity extends TeensBaseActivity implements OnTouchListener, TextToSpeech.OnInitListener {
+public class TeensMainActivity extends TeensBaseActivity implements OnTouchListener {
 
     // the view for drawing anything
     protected GraphView mGraphView = null;
@@ -69,6 +69,8 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
     protected List<AppPage> mPages = new ArrayList<AppPage>();
     // data loader
     private LoadDataTask mDataLoader = null;
+    // audio text speech
+    private TextToSpeech mText2Speech;
 
     protected enum PageType {
         HOME_PAGE, DATE_PAGE, GRAPH_PAGE, REWARD_PAGE
@@ -144,18 +146,18 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         mGraphView.setLongClickable(true);
 
         mRewardView = (RewardView) findViewById(R.id.view_reward);
-        mDummyView = (DummyView) findViewById(R.id.view_dummy);
+        mDummyView  = (DummyView) findViewById(R.id.view_dummy);
         //mProgressView = (ProgressView) findViewById(R.id.view_progress);
     }
 
     private void adjustLayout() {
         getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
         );
         getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
     }
 
@@ -179,13 +181,26 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         // load rewards for the reward view
         RewardManager.start();
 
-        mTTS = new TextToSpeech(this, this);
+        mText2Speech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = mText2Speech.setLanguage(Locale.US);
+                    if (result == TextToSpeech.LANG_MISSING_DATA ||
+                            result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.e("TTS", "Language is not supported");
+                    }
+                } else {
+                    Log.e("TTS", "Initilization Failed");
+                }
+            }
+        });
     }
 
     private void releaseExtra() {
-        if (mTTS != null) {
-            mTTS.stop();
-            mTTS.shutdown();
+        if (mText2Speech != null) {
+            mText2Speech.stop();
+            mText2Speech.shutdown();
         }
         ActionManager.stop();
         RewardManager.stop();
@@ -195,18 +210,18 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         int index = 0;
 
         switch (pageType) {
-            case HOME_PAGE:
-                index = 0;
-                break;
-            case DATE_PAGE:
-                index = 1;
-                break;
-            case GRAPH_PAGE:
-                index = 2;
-                break;
-            case REWARD_PAGE:
-                index = 3;
-                break;
+        case HOME_PAGE:
+            index = 0;
+            break;
+        case DATE_PAGE:
+            index = 1;
+            break;
+        case GRAPH_PAGE:
+            index = 2;
+            break;
+        case REWARD_PAGE:
+            index = 3;
+            break;
         }
 
         return index;
@@ -257,7 +272,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         super.onResume();
 
         mDummyView.setVisibility(
-                AuthorizationChecker.isAuthorized(TeensMainActivity.this) ? View.GONE : View.VISIBLE
+            AuthorizationChecker.isAuthorized(TeensMainActivity.this) ? View.GONE : View.VISIBLE
         );
 
         mGraphView.onResume();
@@ -297,57 +312,57 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
             Intent i = null;
 
             switch (msg.what) {
-                case AppCmd.BEGIN:
-                    switchPages(indexOfPage(PageType.DATE_PAGE));
-                    break;
-                case AppCmd.BEGIN_LOADING:
-                    onBeginLoading(msg);
-                    break;
-                case AppCmd.END_LOADING:
-                    onEndLoading(msg);
-                    break;
-                case AppCmd.BACK:
-                    switchPages(indexOfPage(PageType.REWARD_PAGE));
-                    break;
-                case AppCmd.NEXT:
-                    switchPages(indexOfPage(PageType.REWARD_PAGE));
-                    break;
-                case AppCmd.TUTOR:
-                    i = new Intent(null, Uri.parse(TeensGlobals.TUTORIAL_VIDEO_URI),
+            case AppCmd.BEGIN:
+                switchPages(indexOfPage(PageType.DATE_PAGE));
+                break;
+            case AppCmd.BEGIN_LOADING:
+                onBeginLoading(msg);
+                break;
+            case AppCmd.END_LOADING:
+                onEndLoading(msg);
+                break;
+            case AppCmd.BACK:
+                switchPages(indexOfPage(PageType.REWARD_PAGE));
+                break;
+            case AppCmd.NEXT:
+                switchPages(indexOfPage(PageType.REWARD_PAGE));
+                break;
+            case AppCmd.TUTOR:
+                i = new Intent(null, Uri.parse(TeensGlobals.TUTORIAL_VIDEO_URI),
                             TeensMainActivity.this, OpenYouTubePlayerActivity.class);
-                    startActivity(i);
-                    break;
-                case AppCmd.QUEST:
-                    i = new Intent(TeensMainActivity.this, QuestDialog.class);
-                    i.putExtra(QuestDialog.CHUNK_START_TIME, msg.arg1);
-                    i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivityForResult(i, AppCmd.QUEST);
-                    break;
-                case AppCmd.MERGE:
-                    i = new Intent(TeensMainActivity.this, MergeDialog.class);
-                    i.putStringArrayListExtra(MergeDialog.KEY, (ArrayList<String>) msg.obj);
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i);
-                    break;
-                case AppCmd.QUEST_FINISHING:
-                    ((GraphPage) mCurPage).finishQuest(
-                            DataStorage.GetValueString(getApplicationContext(), TeensGlobals.QUEST_SELECTION, "")
-                    );
-                    break;
-                case AppCmd.MERGE_FINISHING:
-                    ((GraphPage) mCurPage).finishMerge(
-                            DataStorage.GetValueString(getApplicationContext(), TeensGlobals.MERGE_SELECTION, "")
-                    );
-                    break;
-                case AppCmd.DONE:
-                    switchPages(indexOfPage(PageType.DATE_PAGE));
-                    break;
-                case AppCmd.REWARD:
-                    onReward(msg);
-                    break;
-                default:
-                    break;
+                startActivity(i);
+                break;
+            case AppCmd.QUEST:
+                i = new Intent(TeensMainActivity.this, QuestDialog.class);
+                i.putExtra(QuestDialog.CHUNK_START_TIME, msg.arg1);
+                i.putExtra(QuestDialog.CHUNK_STOP_TIME, msg.arg2);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(i, AppCmd.QUEST);
+                break;
+            case AppCmd.MERGE:
+                i = new Intent(TeensMainActivity.this, MergeDialog.class);
+                i.putStringArrayListExtra(MergeDialog.KEY, (ArrayList<String>) msg.obj);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                break;
+            case AppCmd.QUEST_FINISHING:
+                ((GraphPage) mCurPage).finishQuest(
+                    DataStorage.GetValueString(getApplicationContext(), TeensGlobals.QUEST_SELECTION, "")
+                );
+                break;
+            case AppCmd.MERGE_FINISHING:
+                ((GraphPage) mCurPage).finishMerge(
+                    DataStorage.GetValueString(getApplicationContext(), TeensGlobals.MERGE_SELECTION, "")
+                );
+                break;
+            case AppCmd.DONE:
+                switchPages(indexOfPage(PageType.DATE_PAGE));
+                break;
+            case AppCmd.REWARD:
+                onReward(msg);
+                break;
+            default:
+                break;
             }
 
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -433,13 +448,11 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
     }
 
     // special password for secret behaviors
-    private PasswordChecker mPwdStaff = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
-    private PasswordChecker mPwdSubject = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
-    private PasswordChecker mPwdSetup = new PasswordChecker("sss");
-    private PasswordChecker mPwdTeens = new PasswordChecker("teens");
+    private PasswordChecker mPwdStaff     = new PasswordChecker(Globals.PW_STAFF_PASSWORD);
+    private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
+    private PasswordChecker mPwdSetup     = new PasswordChecker("sss");
+    private PasswordChecker mPwdTeens     = new PasswordChecker("teens");
     private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
-
-    private TextToSpeech mTTS;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -493,30 +506,9 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
             Intent i = new Intent(Intent.ACTION_DELETE, packageUri);
             startActivity(i);
         } else if (mPwdTeens.isMatch(keyCode)) {
-            mTTS.speak("Welcome to use teens activity game!", TextToSpeech.QUEUE_FLUSH, null);
+            mText2Speech.speak("Welcome to use teens activity game!", TextToSpeech.QUEUE_FLUSH, null);
         }
 
         return super.onKeyDown(keyCode, event);
     }
-
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-
-            int result = mTTS.setLanguage(Locale.US);
-
-            // tts.setPitch(5); // set pitch level
-
-            // tts.setSpeechRate(2); // set speech speed rate
-
-            if (result == TextToSpeech.LANG_MISSING_DATA
-                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.e("TTS", "Language is not supported");
-            }
-
-        } else {
-            Log.e("TTS", "Initilization Failed");
-        }
-    }
-
 }

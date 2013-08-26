@@ -21,22 +21,22 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 public class ListView extends AppObject {
 
     protected int mStart = 0;
-    protected int mEnd = 0;
-    protected int mItemWidth = 0;
+    protected int mEnd   = 0;
+    protected int mItemWidth  = 0;
     protected int mItemHeight = 0;
-    protected int mCanvasWidth = 0;
+    protected int mCanvasWidth  = 0;
     protected int mCanvasHeight = 0;
-    protected int mOffsetY = 0;
-    protected int mLastAction = 0;
+    protected int mOffsetY     = 0;
+    protected int mLastAction  = 0;
     protected int mBorderWidth = 3;
     protected float mOffsetSpeedX = 0;
     protected float mOffsetSpeedY = 0;
     protected float mOffsetAccSpeedX = 0;
     protected float mOffestAccSpeedY = 0;
-    protected Typeface mTypeface = null;
+    protected Typeface mTypeface  = null;
     protected Canvas mInnerCanvas = null;
     protected ArrayList<ListItem> mItems = new ArrayList<ListItem>();
-    protected OnBoundaryListener mOnBoundaryListener = null;
+    protected OnBoundaryListener  mOnBoundaryListener  = null;
     protected OnItemClickListener mOnItemClickListener = null;
     protected OnListViewScrollingListener mOnListViewScrollingListener = null;
 
@@ -45,7 +45,7 @@ public class ListView extends AppObject {
         protected float mY;
         protected float mWidth;
         protected float mHeight;
-        protected int mPosn;
+        protected int   mPosn;
         protected String mText;
         protected Bitmap mImage;
         protected int mDrawable;
@@ -56,9 +56,9 @@ public class ListView extends AppObject {
         protected ListView mParent;
 
         public ListItem(ListView parent, String text, int drawable, Bitmap image) {
-            mText = text;
-            mImage = image;
-            mParent = parent;
+            mText     = text;
+            mImage    = image;
+            mParent   = parent;
             mDrawable = drawable;
 
             mPaintBkg = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -156,10 +156,8 @@ public class ListView extends AppObject {
             Bitmap origin = BitmapFactory.decodeResource(mRes, drawable, options);
             Bitmap scaled = null;
             // scale the image according to the current screen resolution
-            float dstWidth = origin.getWidth(),
-                    dstHeight = origin.getHeight();
-            dstWidth = AppScale.doScaleW(dstWidth);
-            dstHeight = AppScale.doScaleH(dstHeight);
+            float dstWidth  = AppScale.doScaleW(origin.getWidth());
+            float dstHeight = AppScale.doScaleH(origin.getHeight());
             if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
                 scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
             }
@@ -186,16 +184,14 @@ public class ListView extends AppObject {
 
     public void addItem(String text, int drawable) {
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPurgeable = true;
+        options.inPurgeable       = true;
         options.inPreferredConfig = Config.RGB_565;
 
         Bitmap origin = BitmapFactory.decodeResource(mRes, drawable, options);
         Bitmap scaled = null;
         // scale the image according to the current screen resolution
-        float dstWidth = origin.getWidth(),
-                dstHeight = origin.getHeight();
-        dstWidth = AppScale.doScaleW(dstWidth);
-        dstHeight = AppScale.doScaleH(dstHeight);
+        float dstWidth = AppScale.doScaleW(origin.getWidth());
+        float dstHeight = AppScale.doScaleH(origin.getHeight());
         if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
             scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
         }
@@ -267,16 +263,16 @@ public class ListView extends AppObject {
 
     @Override
     public void onSizeChanged(int width, int height) {
-        mWidth = width;
+        mWidth  = width;
         mHeight = height;
-        mItemWidth = (int) mWidth;
+        mItemWidth  = (int) mWidth;
         mItemHeight = (int) mHeight / 10;
 
         for (int i = 0; i < mItems.size(); ++i) {
             ListItem li = mItems.get(i);
             li.mX = mX;
             li.mY = mY + mItemHeight * i;
-            li.mWidth = mItemWidth;
+            li.mWidth  = mItemWidth;
             li.mHeight = mItemHeight;
         }
 

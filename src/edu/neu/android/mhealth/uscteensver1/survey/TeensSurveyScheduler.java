@@ -48,10 +48,10 @@ public class TeensSurveyScheduler extends SurveyScheduler {
     protected boolean isInPromptTime() {
         Date today = new Date();
         int hour = today.getHours();
-        int min = today.getMinutes();
+        int min  = today.getMinutes();
 
         int startHour = Globals.DEFAULT_START_HOUR;
-        int endHour = Globals.DEFAULT_END_HOUR;
+        int endHour   = Globals.DEFAULT_END_HOUR;
 
         return (hour >= startHour && hour < endHour - 1) || (hour == endHour - 1 && min < 45);
     }
@@ -90,7 +90,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
 
     @Override
     protected boolean isTimeForNextSurvey(long nextPromptTime) {
-        long lastTimePrompted = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY);
+        long lastTimePrompted    = AppInfo.GetLastTimePrompted(mContext, Globals.SURVEY);
         long timeSinceLastPrompt = System.currentTimeMillis() - lastTimePrompted;
         return timeSinceLastPrompt > Globals.REPROMPT_DELAY_MS;
     }
@@ -98,7 +98,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
     @Override
     protected void reschedule() {
         long[] randomPromptTime = DataStorage.getPromptTimesKey(mContext, KEY_RANDOM_PROMPT);
-        long[] csPromptTime = DataStorage.getPromptTimesKey(mContext, KEY_CS_PROMPT);
+        long[] csPromptTime     = DataStorage.getPromptTimesKey(mContext, KEY_CS_PROMPT);
         PriorityQueue<Long> promptTimeQueue = new PriorityQueue<Long>(csPromptTime.length);
 
         for (long cst : csPromptTime) {
@@ -134,7 +134,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
     protected void onScheduleReset() {
         int promptsPerDay = Globals.DEFAULT_PROMPTS_PER_DAY;
         int startTimeHour = Globals.DEFAULT_START_HOUR;
-        int endTimeHour = Globals.DEFAULT_END_HOUR;
+        int endTimeHour   = Globals.DEFAULT_END_HOUR;
 
         long totalPromptingWindowMS = (long) (endTimeHour - startTimeHour) * Globals.MINUTES_60_IN_MS;
         long intervalIncMS = (long) (totalPromptingWindowMS / (double) promptsPerDay);

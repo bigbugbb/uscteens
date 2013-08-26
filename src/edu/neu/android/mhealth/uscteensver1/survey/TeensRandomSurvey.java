@@ -15,8 +15,8 @@ import edu.neu.android.wocketslib.emasurvey.rule.QuesFromAns;
 public class TeensRandomSurvey extends QuestionSet {
 
     public static final double VERSION = 1;
-    public static String INTERNAL_LENGTH = "INTERNAL_LENGTH";
-    public static String ADJUSTED_INTERVAL_LENGTH = "ADJUSTED_INTERVAL_LENGTH";
+    public static final String INTERNAL_LENGTH          = "INTERNAL_LENGTH";
+    public static final String ADJUSTED_INTERVAL_LENGTH = "ADJUSTED_INTERVAL_LENGTH";
 
     private ArrayList<SurveyQuestion> mDefaultQuestionSet;
     private int mMinutes;
@@ -869,7 +869,7 @@ public class TeensRandomSurvey extends QuestionSet {
     public String[] getAllQuestionIDs() {
         // TODO Auto-generated method stub
         String[] IDs = new String[mDefaultQuestionSet.size()];
-        for (int i = 0; i < IDs.length; i++) {
+        for (int i = 0; i < IDs.length; ++i) {
             IDs[i] = mDefaultQuestionSet.get(i).getAliasID();
         }
         return IDs;

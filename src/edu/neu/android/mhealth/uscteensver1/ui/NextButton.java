@@ -14,7 +14,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class NextButton extends CustomButton {
 
-    protected int mColor = 0xff0066ff;
+    protected int   mColor = 0xff0066ff;
     protected float mTextX = 0;
     protected float mTextY = 0;
     protected Paint mPaintText = null;

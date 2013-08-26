@@ -28,13 +28,13 @@ public class ChunkManager {
     protected static ClockButton sClockR = null;
     protected static MergeButton sMergeL = null;
     protected static MergeButton sMergeR = null;
-    protected static SplitButton sSplit = null;
+    protected static SplitButton sSplit  = null;
 
-    protected static float sDispOffsetX = 0;
-    protected static float sDispOffsetY = 0; // not really useful here
-    protected static float sViewWidth = 0; // the area to draw the activity data
-    protected static float sViewHeight = 0;
-    protected static float sCanvasWidth = 0;
+    protected static float sDispOffsetX  = 0;
+    protected static float sDispOffsetY  = 0; // not really useful here
+    protected static float sViewWidth    = 0; // the area to draw the activity data
+    protected static float sViewHeight   = 0;
+    protected static float sCanvasWidth  = 0;
     protected static float sCanvasHeight = 0;
 
     public static float PADDING_OFFSET = AppScale.doScaleW(180);

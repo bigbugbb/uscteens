@@ -36,9 +36,9 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
     private Spinner mSpinnerDays;
     private Spinner mSpinnerWindows;
     // years, months and days
-    private String[] mYears = {"2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"};
+    private String[] mYears  = {"2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"};
     private String[] mMonths = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
-    private String[] mDays = {};
+    private String[] mDays   = {};
     private String[] mLabelWindows = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"};
     // adapter for days
     ArrayAdapter<String> mAdapterDays = null;
@@ -53,15 +53,11 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
         setContentView(R.layout.activity_startdate);
 
         loadPreferences();
-        // get today
-        String date = DateHelper.getServerDateString(Calendar.getInstance().getTime());
         // decide the date choice
-        if (mStartDate.compareTo("") == 0) { // haven't set the start date yet
-            mStartDate = date;
-        } else {
-            date = mStartDate;
+        if (mStartDate.equals("")) { // haven't set the start date yet
+            mStartDate = DateHelper.getServerDateString(Calendar.getInstance().getTime());
         }
-        mDateSplit = date.split("-");
+        mDateSplit = mStartDate.split("-");
         mDays = generateMonthDays(mDateSplit[0], mDateSplit[1]);
 
         // get views and set listeners
@@ -117,14 +113,14 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 
     private void setupViews() {
         // get buttons
-        mBtnSet = (Button) findViewById(R.id.setstartdate_set);
+        mBtnSet    = (Button) findViewById(R.id.setstartdate_set);
         mBtnCancel = (Button) findViewById(R.id.setstartdate_cancel);
         mBtnSet.setOnClickListener(this);
         mBtnCancel.setOnClickListener(this);
         // get spinners
-        mSpinnerYears = (Spinner) findViewById(R.id.spinner_years);
-        mSpinnerMonths = (Spinner) findViewById(R.id.spinner_months);
-        mSpinnerDays = (Spinner) findViewById(R.id.spinner_days);
+        mSpinnerYears   = (Spinner) findViewById(R.id.spinner_years);
+        mSpinnerMonths  = (Spinner) findViewById(R.id.spinner_months);
+        mSpinnerDays    = (Spinner) findViewById(R.id.spinner_days);
         mSpinnerWindows = (Spinner) findViewById(R.id.spinner_labeling_windows);
         // set years
         ArrayAdapter<String> mAdapterYears =
@@ -186,12 +182,14 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
 
     public static Date convertDate(String dateString, String format) {
         Date date = null;
+
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
             date = simpleDateFormat.parse(dateString);
         } catch (Exception ex) {
             // nothing now
         }
+
         return date;
     }
 
@@ -204,6 +202,7 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
     class SpinnerSelectedListener implements OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
             if (parent == mSpinnerYears) {
                 mDateSplit[0] = (String) parent.getSelectedItem();
                 mDays = generateMonthDays(mDateSplit[0], mDateSplit[1]);

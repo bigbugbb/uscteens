@@ -28,12 +28,12 @@ class RawLabel implements Serializable, Comparable<RawLabel> {
             date = new Date();
         }
 
-        mHour = date.getHours();
-        mMinute = date.getMinutes();
-        mSecond = date.getSeconds();
+        mHour      = date.getHours();
+        mMinute    = date.getMinutes();
+        mSecond    = date.getSeconds();
         mTimeInSec = mHour * 3600 + mMinute * 60 + mSecond;
-        mDate = dateTime.split(" ")[0];
-        mName = name;
+        mDate      = dateTime.split(" ")[0];
+        mName      = name;
     }
 
     public String getName() {
@@ -52,6 +52,7 @@ class RawLabel implements Serializable, Comparable<RawLabel> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+
         sb.append(mDate);
         sb.append(mHour < 10 ? " 0" : " ");
         sb.append(mHour);
@@ -62,6 +63,7 @@ class RawLabel implements Serializable, Comparable<RawLabel> {
         sb.append(", ");
         sb.append(mName);
         sb.append("\n");
+
         return sb.toString();
     }
 }

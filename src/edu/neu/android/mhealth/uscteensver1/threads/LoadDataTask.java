@@ -20,11 +20,11 @@ public class LoadDataTask extends AsyncTask<String, Void, Void> {
     private int mResult;
     private Handler mHandler;
     private LoadingDialog mLoadingDialog = null;
-    private static Object sLock = new Object();
+    private static final Object sLock = new Object();
 
     public LoadDataTask(Context context, Handler handler) {
         mContext = context;
-        mResult = DataSource.LOADING_SUCCEEDED;
+        mResult  = DataSource.LOADING_SUCCEEDED;
         mHandler = handler;
 
         mLoadingDialog = new LoadingDialog(mContext);
@@ -35,13 +35,11 @@ public class LoadDataTask extends AsyncTask<String, Void, Void> {
         mLoadingDialog.setIndeterminate(false);
         mLoadingDialog.setCancelable(false);
         mLoadingDialog.setButton("Never mind", new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 DataSource.cancelLoading();
                 dialog.cancel();
             }
-
         });
     }
 
@@ -54,7 +52,6 @@ public class LoadDataTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        // TODO Auto-generated method stub
         super.onPostExecute(result);
 
         Message msg = mHandler.obtainMessage();

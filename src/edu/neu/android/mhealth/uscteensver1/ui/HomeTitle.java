@@ -17,7 +17,7 @@ public class HomeTitle extends AppObject {
 
     @Override
     public void onSizeChanged(int width, int height) {
-        mWidth = mImages.get(0).getWidth();
+        mWidth  = mImages.get(0).getWidth();
         mHeight = mImages.get(0).getHeight();
         mX = (width - mWidth) / 2;
         mY = (height - mHeight) * 0.45f;

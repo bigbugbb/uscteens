@@ -40,7 +40,7 @@ public class TeensSetupActivity extends BaseActivity {
     private Button mBtnFinishStudy;
     private Button mBtnSetupDone;
 
-    private final static String PROMPT_TYPE_CS_TEST = "CS-Test";
+    private final static String PROMPT_TYPE_CS_TEST     = "CS-Test";
     private final static String PROMPT_TYPE_RANDOM_TEST = "Random-Test";
 
     private void displayToastMessage(String aMsg) {
@@ -83,12 +83,12 @@ public class TeensSetupActivity extends BaseActivity {
 
         mBtnSetStartDate = (Button) findViewById(R.id.setstartdate);
         mBtnStartService = (Button) findViewById(R.id.startservice);
-        mBtnCSEMA = (Button) findViewById(R.id.csema);
-        mBtnRandomEMA = (Button) findViewById(R.id.randomema);
-        mBtnUpdateInfo = (Button) findViewById(R.id.updateinfo);
-        mBtnRewards = (Button) findViewById(R.id.rewards);
-        mBtnFinishStudy = (Button) findViewById(R.id.buttonfinishstudy);
-        mBtnSetupDone = (Button) findViewById(R.id.setupdone);
+        mBtnCSEMA        = (Button) findViewById(R.id.csema);
+        mBtnRandomEMA    = (Button) findViewById(R.id.randomema);
+        mBtnUpdateInfo   = (Button) findViewById(R.id.updateinfo);
+        mBtnRewards      = (Button) findViewById(R.id.rewards);
+        mBtnFinishStudy  = (Button) findViewById(R.id.buttonfinishstudy);
+        mBtnSetupDone    = (Button) findViewById(R.id.setupdone);
 
         mBtnSetStartDate.setOnClickListener(new OnClickListener() {
             @Override

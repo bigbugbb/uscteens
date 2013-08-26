@@ -49,9 +49,9 @@ public class TeensSurveyActivity extends SurveyActivity {
     @Override
     protected void onSurveyNotCompleted() {
         mPromptSender.addPromptEvent(
-                "Q" + mQuestIndex + " was not answered in " +
-                        (mQuestIndex == 1 ? MINUTES_FOR_FIRST_QUESTION : MINUTES_FOR_OTHER_QUESTION) + " min" + (mQuestIndex == 1 ? "s" : ""),
-                new Date(mPromptEvent.getPromptTime()), mPromptEvent.getPromptType(), new Date()
+            "Q" + mQuestIndex + " was not answered in " +
+                    (mQuestIndex == 1 ? MINUTES_FOR_FIRST_QUESTION : MINUTES_FOR_OTHER_QUESTION) + " min" + (mQuestIndex == 1 ? "s" : ""),
+            new Date(mPromptEvent.getPromptTime()), mPromptEvent.getPromptType(), new Date()
         );
     }
 
@@ -59,20 +59,20 @@ public class TeensSurveyActivity extends SurveyActivity {
     public void onQuestionLifeExpired(int whichQuestion) {
         Log.i(TAG, "onQuestionLifeExpired");
         switch (whichQuestion) {
-            case 1:
-                if (getSurveyPromptEvent().isReprompt()) {
-                    finish();
-                    Toast.makeText(mContext, "Survey timed out!", Toast.LENGTH_SHORT).show();
-                    Log.i(TAG, "first question life expired");
-                } else {
-                    moveTaskToBack(false);
-                    Log.i(TAG, "move task to back");
-                }
-                break;
-            default:
+        case 1:
+            if (getSurveyPromptEvent().isReprompt()) {
                 finish();
                 Toast.makeText(mContext, "Survey timed out!", Toast.LENGTH_SHORT).show();
-                break;
+                Log.i(TAG, "first question life expired");
+            } else {
+                moveTaskToBack(false);
+                Log.i(TAG, "move task to back");
+            }
+            break;
+        default:
+            finish();
+            Toast.makeText(mContext, "Survey timed out!", Toast.LENGTH_SHORT).show();
+            break;
         }
     }
 
@@ -101,7 +101,7 @@ public class TeensSurveyActivity extends SurveyActivity {
 
     private boolean isLocationQuestion(String questionID) {
         final String locationQuestionIDs[] = {
-                "Q3_m_Where", "Q3_n_WhereOther",
+            "Q3_m_Where", "Q3_n_WhereOther",
         };
 
         for (String locationQuestionID : locationQuestionIDs) {
@@ -115,7 +115,7 @@ public class TeensSurveyActivity extends SurveyActivity {
 
     private boolean isWhoAreYouWithQuestion(String questionID) {
         final String whoAreYouWithQuestionIDs[] = {
-                "Q2_l_Accompanies", "Q3_q_Accompanies", "Q4_m_Accompanies", "Q5_m_Accompanies",
+            "Q2_l_Accompanies", "Q3_q_Accompanies", "Q4_m_Accompanies", "Q5_m_Accompanies",
         };
 
         for (String whoAreYouWithQuestionID : whoAreYouWithQuestionIDs) {

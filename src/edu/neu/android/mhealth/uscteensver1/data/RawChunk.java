@@ -17,25 +17,27 @@ class RawChunk implements Serializable {
     protected String mModifyTime;
     protected Action mAction;
 
+    private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
     /*
      * seconds from the beginning of a day
      */
     public RawChunk(String date, int startTime, int stopTime) {
-        mStartDate = date + " " + getStringTimeFromSecond(startTime);
-        mStopDate = date + " " + getStringTimeFromSecond(stopTime);
-        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+        String now  = mDateFormat.format(new Date());
+        mStartDate  = date + " " + getStringTimeFromSecond(startTime);
+        mStopDate   = date + " " + getStringTimeFromSecond(stopTime);
         mCreateTime = now;
         mModifyTime = now;
-        mAction = Action.createUnlabelledAction();
+        mAction     = Action.createUnlabelledAction();
     }
 
     public RawChunk(String startDate, String stopDate,
                     Action action, String createTime, String modifyTime) {
-        mStartDate = startDate;
-        mStopDate = stopDate;
+        mStartDate  = startDate;
+        mStopDate   = stopDate;
         mCreateTime = createTime;
         mModifyTime = modifyTime;
-        mAction = action;
+        mAction     = action;
     }
 
     public boolean isLabelled() {
@@ -46,7 +48,7 @@ class RawChunk implements Serializable {
     }
 
     public boolean isModified() {
-        return mCreateTime.compareTo(mModifyTime) != 0;
+        return !mCreateTime.equals(mModifyTime);
     }
 
     public void setAction(Action action) {
@@ -111,11 +113,11 @@ class RawChunk implements Serializable {
     protected int getTimeInSecond(String time) {
         // 2013-02-20 03:00:00.000
         String[] result = time.split(" ");
-        String[] times = result[result.length - 1].split(":");
+        String[] times  = result[result.length - 1].split(":");
 
         return Integer.parseInt(times[0]) * 3600 + // hour
-                Integer.parseInt(times[1]) * 60 +   // minute
-                (int) Float.parseFloat(times[2]);   // second
+               Integer.parseInt(times[1]) * 60 +   // minute
+               (int) Float.parseFloat(times[2]);   // second
     }
 
     public String getCreateTime() {

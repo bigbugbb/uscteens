@@ -15,8 +15,6 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 public class BackButton extends CustomButton {
 
     protected int mColor = 0xff0066ff;
-    protected float mTextX = 0;
-    protected float mTextY = 0;
     protected Paint mPaintText = null;
 
     public BackButton(Resources res) {
@@ -36,12 +34,12 @@ public class BackButton extends CustomButton {
         if (mCanvasWidth == width && mCanvasHeight == height) {
             return;
         }
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
 
         Rect bounds = new Rect();
         mPaintText.getTextBounds("BACK", 0, 4, bounds);
-        mWidth = bounds.width();
+        mWidth  = bounds.width();
         mHeight = bounds.height();
         mX = width * 0.07f;
         mY = height * 0.96f;
@@ -49,9 +47,9 @@ public class BackButton extends CustomButton {
 
     @Override
     public boolean contains(float x, float y) {
-        float left = mX - mWidth;
-        float right = mX + mWidth;
-        float upper = mY - mHeight * 2f;
+        float left   = mX - mWidth;
+        float right  = mX + mWidth;
+        float upper  = mY - mHeight * 2f;
         float bottom = mY + mHeight;
 
         return left < x && x < right && upper < y && y < bottom;

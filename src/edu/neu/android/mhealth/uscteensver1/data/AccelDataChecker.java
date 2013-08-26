@@ -47,11 +47,11 @@ public class AccelDataChecker {
 
     private static int[] getData(long from, long to) {
         Date dateFrom = new Date(from);
-        Date dateTo = new Date(to);
+        Date dateTo   = new Date(to);
         // read the whole piece of data according to the input time
         String date = DateHelper.getServerDateString(new Date());
         String[] hourDirs = FileHelper.getFilePathsDir(
-                TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + TeensGlobals.SENSOR_FOLDER + date
+            TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + File.separator + TeensGlobals.SENSOR_FOLDER + date
         );
         if (hourDirs == null) {
             // no data to get
@@ -59,7 +59,7 @@ public class AccelDataChecker {
         }
 
         int hourFrom = dateFrom.getHours();
-        int hourTo = dateTo.getHours();
+        int hourTo   = dateTo.getHours();
         AccelDataWrap accelDataWrap = new AccelDataWrap();
 
         for (String hourDir : hourDirs) {

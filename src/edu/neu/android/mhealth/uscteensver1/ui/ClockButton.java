@@ -22,8 +22,8 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class ClockButton extends ChunkButton {
 
-    protected static Paint sPaint = new Paint();
-    protected static Paint sTimePaint = new Paint();
+    protected static Paint   sPaint     = new Paint();
+    protected static Paint   sTimePaint = new Paint();
     protected static boolean sPaintCreated = false;
 
     protected static void createPaint() {
@@ -81,18 +81,18 @@ public class ClockButton extends ChunkButton {
     public ClockButton(Resources res, Chunk host, OnClickListener listener) {
         super(res, host);
         loadImages(res, new int[]{R.drawable.clock});
-        mWidth = sImages.get(0).getWidth();
-        mHeight = sImages.get(0).getHeight();
-        mID = UIID.CLOCK;
+        mWidth    = sImages.get(0).getWidth();
+        mHeight   = sImages.get(0).getHeight();
+        mID       = UIID.CLOCK;
         mListener = listener;
-        mVisible = false;
+        mVisible  = false;
 
         createPaint();
     }
 
     @Override
     public void measureSize(int width, int height) {
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
         mY = height * 0.083f;
     }
@@ -102,7 +102,7 @@ public class ClockButton extends ChunkButton {
         if (mCanvasWidth == width && mCanvasHeight == height) {
             return;
         }
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
         mY = height * 0.083f;
     }

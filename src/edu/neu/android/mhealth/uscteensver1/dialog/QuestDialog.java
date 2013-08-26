@@ -55,12 +55,12 @@ public class QuestDialog extends Activity {
     static public String CHUNK_STOP_TIME = "CHUNK_STOP_TIME";
 
     protected HeaderView mHeaderView;
-    protected Button mBackButton;
-    protected ImageView mTopArrow;
-    protected ImageView mBottomArrow;
-    protected View mTopLine;
-    protected View mBottomLine;
-    protected ViewGroup mListWrap;
+    protected Button     mBackButton;
+    protected ImageView  mTopArrow;
+    protected ImageView  mBottomArrow;
+    protected View       mTopLine;
+    protected View       mBottomLine;
+    protected ViewGroup  mListWrap;
     protected ActionListView mListView;
 
     protected ActionAdapter mAdapter;
@@ -76,7 +76,7 @@ public class QuestDialog extends Activity {
 
         mAdapter = new ActionAdapter(this);
         loadImages(new int[]{
-                R.drawable.popup_wind_arrow_ops, R.drawable.popup_wind_arrow, R.drawable.back_blue
+            R.drawable.popup_wind_arrow_ops, R.drawable.popup_wind_arrow, R.drawable.back_blue
         });
 
         setupViews();
@@ -122,7 +122,7 @@ public class QuestDialog extends Activity {
 
         mHeaderView = (HeaderView) findViewById(R.id.view_quest_header);
         int start = getIntent().getIntExtra(CHUNK_START_TIME, 0);
-        int stop = getIntent().getIntExtra(CHUNK_STOP_TIME, 0);
+        int stop  = getIntent().getIntExtra(CHUNK_STOP_TIME, 0);
         mHeaderView.setTime(start, stop);
 
         mBackButton = (Button) findViewById(R.id.button_back);
@@ -218,35 +218,35 @@ public class QuestDialog extends Activity {
         // adjust the layout according to the screen resolution				   
         LayoutParams laParams = null;
         laParams = mHeaderView.getLayoutParams();
-        laParams.width = mHeaderView.getExpectedWidth();
+        laParams.width  = mHeaderView.getExpectedWidth();
         laParams.height = mHeaderView.getExpectedHeight();
         mHeaderView.setLayoutParams(laParams);
 
         int h1 = (int) AppScale.doScaleH(50);
         laParams = mTopArrow.getLayoutParams();
-        laParams.width = mHeaderView.getExpectedWidth();
+        laParams.width  = mHeaderView.getExpectedWidth();
         laParams.height = h1;
         mTopArrow.setLayoutParams(laParams);
 
         laParams = mBottomArrow.getLayoutParams();
-        laParams.width = mHeaderView.getExpectedWidth();
+        laParams.width  = mHeaderView.getExpectedWidth();
         laParams.height = h1;
         mBottomArrow.setLayoutParams(laParams);
 
         int h2 = Math.round(AppScale.doScaleH(1 * density));
         h2 = h2 > 1 ? h2 : 1;
         laParams = mTopLine.getLayoutParams();
-        laParams.width = mHeaderView.getExpectedWidth();
+        laParams.width  = mHeaderView.getExpectedWidth();
         laParams.height = h2;
         mTopLine.setLayoutParams(laParams);
 
         laParams = mBottomLine.getLayoutParams();
-        laParams.width = mHeaderView.getExpectedWidth();
+        laParams.width  = mHeaderView.getExpectedWidth();
         laParams.height = h2;
         mBottomLine.setLayoutParams(laParams);
 
         laParams = mListWrap.getLayoutParams();
-        laParams.width = mHeaderView.getExpectedWidth();
+        laParams.width  = mHeaderView.getExpectedWidth();
         laParams.height = metrics.heightPixels - (h1 * 2 + h2) - mHeaderView.getExpectedHeight();
         mListWrap.setLayoutParams(laParams);
     }
@@ -272,10 +272,8 @@ public class QuestDialog extends Activity {
             Bitmap origin = BitmapFactory.decodeResource(TeensAppManager.getAppResources(), id, options);
             Bitmap scaled = null;
             // scale the image according to the current screen resolution
-            float dstWidth = origin.getWidth(),
-                    dstHeight = origin.getHeight();
-            dstWidth = AppScale.doScaleW(dstWidth);
-            dstHeight = AppScale.doScaleH(dstHeight);
+            float dstWidth  = AppScale.doScaleW(origin.getWidth());
+            float dstHeight = AppScale.doScaleH(origin.getHeight());
             if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
                 scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
             }
@@ -302,15 +300,15 @@ public class QuestDialog extends Activity {
         private ArrayList<Action> mActions;
         private ArrayList<Action> mRecents;
         private LayoutInflater mInflater;
-        private Typeface mTypeface;
+        private Typeface  mTypeface;
         private Resources mResources;
 
         public ActionAdapter(Activity activity) {
             mResources = activity.getResources();
-            mActions = ActionManager.getActivatedActions();
-            mRecents = ActionManager.getMostRecentActions();
-            mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mTypeface = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
+            mActions   = ActionManager.getActivatedActions();
+            mRecents   = ActionManager.getMostRecentActions();
+            mInflater  = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mTypeface  = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
         }
 
         public int getCount() {
@@ -343,9 +341,9 @@ public class QuestDialog extends Activity {
                 view.setBackgroundDrawable(background);
             }
 
-            TextView name = (TextView) view.findViewById(R.id.action_name);
+            TextView name    = (TextView) view.findViewById(R.id.action_name);
             TextView subname = (TextView) view.findViewById(R.id.action_subname);
-            ImageView image = (ImageView) view.findViewById(R.id.action_image);
+            ImageView image  = (ImageView) view.findViewById(R.id.action_image);
 
             // set all values in listview
             name.setText(action.getActionName());

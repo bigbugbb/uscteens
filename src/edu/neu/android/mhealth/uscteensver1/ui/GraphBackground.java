@@ -8,7 +8,7 @@ import edu.neu.android.mhealth.uscteensver1.R;
 
 public class GraphBackground extends Background {
 
-    protected int mCanvasWidth = 0;
+    protected int mCanvasWidth  = 0;
     protected int mCanvasHeight = 0;
 
     public GraphBackground(Resources res) {
@@ -22,7 +22,7 @@ public class GraphBackground extends Background {
             return;
         }
         float radio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();
-        float dstWidth = width;
+        float dstWidth  = width;
         float dstHeight = width * radio;
 
         Bitmap newImage =
@@ -30,9 +30,9 @@ public class GraphBackground extends Background {
         mImages.get(0).recycle(); // explicit call to avoid out of memory
         mImages.set(0, newImage);
 
-        mWidth = mImages.get(0).getWidth();
+        mWidth  = mImages.get(0).getWidth();
         mHeight = mImages.get(0).getHeight();
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
         mX = 0;
         mY = mCanvasHeight - mHeight;

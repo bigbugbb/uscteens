@@ -20,9 +20,9 @@ import edu.neu.android.wocketslib.utils.WOCKETSException;
 public class RewardManager {
     private final static String TAG = "RewardManager";
     // result code
-    public final static int LOADING_SUCCEEDED = 0;
-    public final static int ERR_CANCELLED = -1;
-    public final static int ERR_NO_REWARD_DATA = -2;
+    public final static int LOADING_SUCCEEDED    = 0;
+    public final static int ERR_CANCELLED        = -1;
+    public final static int ERR_NO_REWARD_DATA   = -2;
     public final static int ERR_NO_EXTERNAL_DATA = -3;
 
     private final static String ASSETS_DIR = "rewards";
@@ -187,10 +187,10 @@ public class RewardManager {
         }
         // copy each file from assets to external storage
         for (String filename : files) {
-            InputStream in = null;
+            InputStream  in  = null;
             OutputStream out = null;
             try {
-                in = TeensAppManager.getAppAssets().open(ASSETS_DIR + File.separator + filename);
+                in  = TeensAppManager.getAppAssets().open(ASSETS_DIR + File.separator + filename);
                 out = new FileOutputStream(outfilePath + filename);
                 copyFile(in, out);
                 in.close();

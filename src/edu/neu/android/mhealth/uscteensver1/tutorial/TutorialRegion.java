@@ -13,16 +13,16 @@ public class TutorialRegion implements Serializable {
     private static final String TAG = "TutorialRegion";
     private static final long serialVersionUID = 6449582139173269271L;
 
-    protected RectF mRect;
+    protected RectF  mRect;
     protected String mTargetID;
 
     public TutorialRegion(RectF rect, String targetID) {
-        mRect = rect;
+        mRect     = rect;
         mTargetID = targetID;
     }
 
     public TutorialRegion(float left, float top, float right, float bottom, String targetID) {
-        mRect = new RectF(left, top, right, bottom);
+        mRect     = new RectF(left, top, right, bottom);
         mTargetID = targetID;
     }
 

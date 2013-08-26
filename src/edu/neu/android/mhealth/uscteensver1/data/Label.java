@@ -22,7 +22,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 public class Label extends AppObject {
 
     public final static int MAXIMUM_LABEL_WIDTH = 300;
-    public final static int MAXIMUM_TEXT_WIDTH = 250;
+    public final static int MAXIMUM_TEXT_WIDTH  = 250;
 
     public int mX;
     public int mY;
@@ -82,9 +82,9 @@ public class Label extends AppObject {
                 sImages.add(origin);
             }
         }
-        sImgWidth = sImages.get(0).getWidth();
-        sImgHeight = sImages.get(0).getHeight();
-        sMaxTxtWidth = AppScale.doScaleT(MAXIMUM_TEXT_WIDTH);
+        sImgWidth      = sImages.get(0).getWidth();
+        sImgHeight     = sImages.get(0).getHeight();
+        sMaxTxtWidth   = AppScale.doScaleT(MAXIMUM_TEXT_WIDTH);
         sMaxLabelWidth = AppScale.doScaleW(MAXIMUM_LABEL_WIDTH);
     }
 
@@ -114,7 +114,7 @@ public class Label extends AppObject {
 
         int pos[] = {x, y};
         LabelManager.adjustLabelCoordinate(
-                pos, mRect.width(), mRect.height(), (int) sImgWidth, (int) sImgHeight
+            pos, mRect.width(), mRect.height(), (int) sImgWidth, (int) sImgHeight
         );
         mX = pos[0];
         mY = pos[1];

@@ -17,18 +17,18 @@ public class TutorialCard implements Serializable {
     protected ArrayList<String> mPrevIDs;
 
     public TutorialCard(String id, String fileName) {
-        mID = id;
+        mID       = id;
         mFileName = fileName;
-        mRegions = null;
-        mPrevIDs = null;
+        mRegions  = null;
+        mPrevIDs  = null;
     }
 
     public TutorialCard(String id, String fileName,
                         ArrayList<TutorialRegion> regions, ArrayList<String> prevIDs) {
-        mID = id;
+        mID       = id;
         mFileName = fileName;
-        mRegions = regions;
-        mPrevIDs = prevIDs;
+        mRegions  = regions;
+        mPrevIDs  = prevIDs;
     }
 
     public void addRegion(TutorialRegion region) {

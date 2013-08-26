@@ -11,7 +11,7 @@ public class Labeler {
     private static final String TAG = "Labeler";
 
     private RawLabelWrap mRawLabels = new RawLabelWrap();
-    private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat mDateFormat     = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat mDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final long TWO_MINUTE = 120 * 1000;

@@ -21,7 +21,7 @@ public class ArrowButton extends CustomButton {
         loadImages(new int[]{R.drawable.popup_wind_arrow, R.drawable.popup_wind_arrow_ops});
         setKind(BUTTON);
         setZOrder(ZOrders.BUTTON);
-        mWidth = mImages.get(0).getWidth();
+        mWidth  = mImages.get(0).getWidth();
         mHeight = mImages.get(0).getHeight();
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -39,9 +39,9 @@ public class ArrowButton extends CustomButton {
 
     @Override
     public void onSizeChanged(int width, int height) {
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
-        mWidth = mCanvasWidth;
+        mWidth  = mCanvasWidth;
         mHeight = AppScale.doScaleH(50);
     }
 

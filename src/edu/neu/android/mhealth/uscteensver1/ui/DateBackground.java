@@ -30,7 +30,7 @@ public class DateBackground extends Background {
 
     @Override
     public void onSizeChanged(int width, int height) {
-        mWidth = width;
+        mWidth  = width;
         mHeight = height;
     }
 

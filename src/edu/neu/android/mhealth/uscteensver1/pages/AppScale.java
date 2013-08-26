@@ -9,7 +9,7 @@ public class AppScale {
     protected static float sExpectW = 1280;
     protected static float sExpectH = 720;
 
-    protected static boolean sCreated = false;
+    protected static boolean  sCreated = false;
     protected static AppScale sUiScale = null;
 
     public static float doScaleW(float srcWidth) {

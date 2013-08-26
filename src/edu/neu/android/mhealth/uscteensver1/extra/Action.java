@@ -27,27 +27,27 @@ public class Action implements Serializable {
     protected boolean mImageLoaded = false;
 
     public Action(String actID, String actName, String icoName, String icoPath) {
-        mActID = actID;
-        mActName = actName;
-        mIcoName = icoName;
-        mIcoPath = icoPath;
+        mActID    = actID;
+        mActName  = actName;
+        mIcoName  = icoName;
+        mIcoPath  = icoPath;
         mActImage = null;
 
         if (mActName.indexOf('|') != -1) {
             mActSubName = mActName.substring(mActName.indexOf('|') + 1, mActName.length()).trim();
-            mActName = mActName.substring(0, mActName.indexOf('|')).trim();
+            mActName    = mActName.substring(0, mActName.indexOf('|')).trim();
         }
     }
 
     public Action(String actID, String actName, String icoName, Bitmap actImage) {
-        mActID = actID;
-        mActName = actName;
-        mIcoName = icoName;
+        mActID    = actID;
+        mActName  = actName;
+        mIcoName  = icoName;
         mActImage = actImage;
 
         if (mActName.indexOf('|') != -1) {
             mActSubName = mActName.substring(mActName.indexOf('|') + 1, mActName.length()).trim();
-            mActName = mActName.substring(0, mActName.indexOf('|')).trim();
+            mActName    = mActName.substring(0, mActName.indexOf('|')).trim();
         }
     }
 
@@ -64,10 +64,8 @@ public class Action implements Serializable {
         Bitmap origin = BitmapFactory.decodeFile(mIcoPath, options);
         Bitmap scaled = null;
         // scale the image according to the current screen resolution
-        float dstWidth = origin.getWidth(),
-                dstHeight = origin.getHeight();
-        dstWidth = AppScale.doScaleW(dstWidth);
-        dstHeight = AppScale.doScaleH(dstHeight);
+        float dstWidth  = AppScale.doScaleW(origin.getWidth());
+        float dstHeight = AppScale.doScaleH(origin.getHeight());
         if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
             scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
         }

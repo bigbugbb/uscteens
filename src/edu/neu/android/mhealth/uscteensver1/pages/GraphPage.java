@@ -53,15 +53,13 @@ public class GraphPage extends AppPage implements OnClickListener,
         OnSlideBarChangeListener,
         OnBoundaryScaleListener {
 
-    protected GraphBackground mBackground = null;
-    protected MotionGraph mMotionGraph = null;
-    protected BackButton mBtnBack = null;
-    protected NextButton mBtnNext = null;
-    protected SlideBar mSlideBar = null;
+    protected MotionGraph     mMotionGraph = null;
+    protected BackButton      mBtnBack     = null;
+    protected NextButton      mBtnNext     = null;
+    protected SlideBar        mSlideBar    = null;
+    protected GraphBackground mBackground  = null;
 
     protected View mView = null;
-
-    protected boolean mScrolling = false; // indicate whether we are scrolling the chunk
 
     public GraphPage(Context context, View view, Handler handler) {
         super(context, handler);
@@ -290,27 +288,27 @@ public class GraphPage extends AppPage implements OnClickListener,
     public void onClick(AppObject obj) {
 
         switch (obj.getID()) {
-            case UIID.BACK:
-                tryToBack((BackButton) obj);
-                break;
-            case UIID.NEXT:
-                tryToNext((NextButton) obj);
-                break;
-            case UIID.QUEST:
-                tryToQuest((QuestButton) obj);
-                break;
-            case UIID.SPLIT:
-                tryToSplit((SplitButton) obj);
-                break;
-            case UIID.MERGE:
-                tryToMerge((MergeButton) obj);
-                break;
-            case UIID.CLOCK:
-                Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-                vibrator.vibrate(20);
-                break;
-            default:
-                break;
+        case UIID.BACK:
+            tryToBack((BackButton) obj);
+            break;
+        case UIID.NEXT:
+            tryToNext((NextButton) obj);
+            break;
+        case UIID.QUEST:
+            tryToQuest((QuestButton) obj);
+            break;
+        case UIID.SPLIT:
+            tryToSplit((SplitButton) obj);
+            break;
+        case UIID.MERGE:
+            tryToMerge((MergeButton) obj);
+            break;
+        case UIID.CLOCK:
+            Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(20);
+            break;
+        default:
+            break;
         }
     }
 
@@ -396,7 +394,7 @@ public class GraphPage extends AppPage implements OnClickListener,
         } else {
             actions.add("None");
             Message msg = mHandler.obtainMessage();
-            msg.obj = actions;
+            msg.obj  = actions;
             msg.what = AppCmd.MERGE;
             mHandler.sendMessage(msg);
         }
@@ -475,7 +473,7 @@ public class GraphPage extends AppPage implements OnClickListener,
     }
 
     private int getCountOfDayFromStartDate() {
-        String startDate = DataStorage.getStartDate(getContext(), "");
+        String startDate    = DataStorage.getStartDate(getContext(), "");
         String selectedDate = DataSource.getCurrentSelectedDate();
 
         for (int i = 1; i <= 14; ++i) {

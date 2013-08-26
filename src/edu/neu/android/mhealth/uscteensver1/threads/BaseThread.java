@@ -8,7 +8,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppEvent;
 
 public class BaseThread extends Thread {
 
-    protected boolean mRun = false;
+    protected boolean mRun     = false;
     protected Handler mHandler = null;
     protected ConcurrentLinkedQueue<AppEvent> mEventQueue;
 

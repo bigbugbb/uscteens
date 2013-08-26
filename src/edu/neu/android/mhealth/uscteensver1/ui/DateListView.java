@@ -21,7 +21,7 @@ import edu.neu.android.wocketslib.utils.WeekdayHelper;
 public class DateListView extends ListView {
 
     static String[] sWeekdays = {
-            "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+        "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
     };
 
     public DateListView(Resources res, int week, String startDate) {
@@ -205,7 +205,7 @@ public class DateListView extends ListView {
             ListItem li = mItems.get(i);
             li.mX = mX;
             li.mY = mY + (mItemHeight + mBorderWidth) * i;
-            li.mWidth = mItemWidth;
+            li.mWidth  = mItemWidth;
             li.mHeight = mItemHeight;
         }
     }
@@ -215,19 +215,19 @@ public class DateListView extends ListView {
         if (mCanvasWidth == width && mCanvasHeight == height) {
             return;
         }
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
 
-        mWidth = width / 2;
+        mWidth  = width / 2;
         mHeight = height - AppScale.doScaleH(128 + 100) - (2 * mBorderWidth + 1);
-        mItemWidth = (int) mWidth;
+        mItemWidth  = (int) mWidth;
         mItemHeight = (int) (mHeight - 3 * mBorderWidth) / 4;
 
         for (int i = 0; i < mItems.size(); ++i) {
             ListItem li = mItems.get(i);
             li.mX = mX;
             li.mY = mY + (mItemHeight + mBorderWidth) * i;
-            li.mWidth = mItemWidth;
+            li.mWidth  = mItemWidth;
             li.mHeight = mItemHeight;
         }
 

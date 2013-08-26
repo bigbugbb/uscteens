@@ -33,13 +33,14 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
         OnListViewScrollingListener {
 
     private final static String TAG = "WeekdayPage";
-    protected DateBackground mBackground = null;
-    protected DateListView mListViewWeek1 = null;
-    protected DateListView mListViewWeek2 = null;
-    protected ArrowButton mArrowLeftUp = null;
-    protected ArrowButton mArrowRightUp = null;
-    protected ArrowButton mArrowLeftBottom = null;
-    protected ArrowButton mArrowRightBottom = null;
+
+    protected DateBackground mBackground       = null;
+    protected DateListView   mListViewWeek1    = null;
+    protected DateListView   mListViewWeek2    = null;
+    protected ArrowButton    mArrowLeftUp      = null;
+    protected ArrowButton    mArrowRightUp     = null;
+    protected ArrowButton    mArrowLeftBottom  = null;
+    protected ArrowButton    mArrowRightBottom = null;
 
     protected View mView = null;
 
@@ -134,12 +135,12 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
     }
 
     public void stop() {
-        mBackground = null;
-        mListViewWeek1 = null;
-        mListViewWeek2 = null;
-        mArrowLeftUp = null;
-        mArrowRightUp = null;
-        mArrowLeftBottom = null;
+        mBackground       = null;
+        mListViewWeek1    = null;
+        mListViewWeek2    = null;
+        mArrowLeftUp      = null;
+        mArrowRightUp     = null;
+        mArrowLeftBottom  = null;
         mArrowRightBottom = null;
 
         release();
@@ -218,7 +219,7 @@ public class DatePage extends AppPage implements edu.neu.android.mhealth.uscteen
         String strDate = WeekdayHelper.afterNDayFrom(date, posn);
 
         Message msg = mHandler.obtainMessage();
-        msg.obj = strDate;
+        msg.obj  = strDate;
         msg.what = AppCmd.BEGIN_LOADING;
         mHandler.sendMessage(msg);
     }

@@ -17,14 +17,14 @@ public class RewardState {
 
     // constructor
     public RewardState(int id, String date, String state) {
-        mID = id;
-        mDate = date;
+        mID    = id;
+        mDate  = date;
         mState = state;
     }
 
     // constructor
     public RewardState(String date, String state) {
-        mDate = date;
+        mDate  = date;
         mState = state;
     }
 

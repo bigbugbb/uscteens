@@ -7,47 +7,71 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AppObject {
-    public final static int UNKNOWN = 0;
+    public final static int UNKNOWN    = 0;
     public final static int BACKGROUND = 1;
-    public final static int TITLE = 2;
-    public final static int CHUNK = 3;
-    public final static int BUTTON = 4;
-    public final static int LABEL = 5;
-    public final static int TEXTVIEW = 6;
-    public final static int SLIDERBAR = 7;
+    public final static int TITLE      = 2;
+    public final static int CHUNK      = 3;
+    public final static int BUTTON     = 4;
+    public final static int LABEL      = 5;
+    public final static int TEXTVIEW   = 6;
+    public final static int SLIDERBAR  = 7;
 
-    protected float mX = 0;
-    protected float mY = 0;
-    protected float mWidth = 0;
-    protected float mHeight = 0;
-    protected float mSpeedX = 0;
-    protected float mSpeedY = 0;
-    protected float mMinSpeedX = 0;
-    protected float mMinSpeedY = 0;
-    protected float mMaxSpeedX = 0;
-    protected float mMaxSpeedY = 0;
-    protected float mAccSpeedX = 0;
-    protected float mAccSpeedY = 0;
-    protected int mID = -1;
-    protected int mKind = UNKNOWN;
-    protected int mZOrder = 0;
-    protected boolean mVisible = true;
-    protected boolean mMovable = false;
+    protected float mX;
+    protected float mY;
+
+    protected float mWidth;
+    protected float mHeight;
+
+    protected float mSpeedX;
+    protected float mSpeedY;
+    protected float mMinSpeedX;
+    protected float mMinSpeedY;
+    protected float mMaxSpeedX;
+    protected float mMaxSpeedY;
+    protected float mAccSpeedX;
+    protected float mAccSpeedY;
+
+    protected int     mID = -1;
+    protected int     mKind   = UNKNOWN;
+    protected int     mZOrder = 0;
+    protected boolean mVisible  = true;
+    protected boolean mMovable  = false;
     protected boolean mSelected = false;
     protected Resources mRes = null;
     protected boolean mImageLoaded = false;
     protected List<Bitmap> mImages = new ArrayList<Bitmap>();
 
     protected AppObject(Resources res) {
-        //setResources(res);
         mRes = res;
+
+        mX = 0;
+        mY = 0;
+
+        mWidth  = 0;
+        mHeight = 0;
+
+        mSpeedX = 0;
+        mSpeedY = 0;
+        mMinSpeedX = 0;
+        mMinSpeedY = 0;
+        mMaxSpeedX = 0;
+        mMaxSpeedY = 0;
+        mAccSpeedX = 0;
+        mAccSpeedY = 0;
+
+        mID          = -1;
+        mKind        = UNKNOWN;
+        mZOrder      = 0;
+        mVisible     = true;
+        mMovable     = false;
+        mSelected    = false;
+        mRes         = res;
+        mImageLoaded = false;
+        mImages = new ArrayList<Bitmap>();
     }
 
     public void loadImages(int[] resIDs) {
@@ -57,17 +81,14 @@ public abstract class AppObject {
         mImageLoaded = true;
 
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPurgeable = true;
+        options.inPurgeable  = true;
         options.inPreferredConfig = Config.RGB_565;
         for (int id : resIDs) {
             Bitmap origin = BitmapFactory.decodeResource(mRes, id, options);
             Bitmap scaled = null;
             // scale the image according to the current screen resolution
-            float dstWidth = origin.getWidth(),
-                    dstHeight = origin.getHeight();
-
-            dstWidth = AppScale.doScaleW(dstWidth);
-            dstHeight = AppScale.doScaleH(dstHeight);
+            float dstWidth  = AppScale.doScaleW(origin.getWidth());
+            float dstHeight = AppScale.doScaleH(origin.getHeight());
             if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
                 scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
             }
@@ -260,61 +281,6 @@ public abstract class AppObject {
         return mID;
     }
 
-    public String toJSONString() {
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put("x", mX);
-            obj.put("y", mY);
-            obj.put("width", mWidth);
-            obj.put("height", mHeight);
-            obj.put("speed_x", mSpeedX);
-            obj.put("speed_y", mSpeedY);
-            obj.put("min_speed_x", mMinSpeedX);
-            obj.put("min_speed_y", mMinSpeedY);
-            obj.put("max_speed_x", mMaxSpeedX);
-            obj.put("max_speed_y", mMaxSpeedY);
-            obj.put("acc_speed_x", mAccSpeedX);
-            obj.put("acc_speed_y", mAccSpeedY);
-            obj.put("kind", mKind);
-            obj.put("z_order", mZOrder);
-            obj.put("visible", mVisible);
-            obj.put("movable", mMovable);
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return obj.toString();
-    }
-
-    public void fromJSONString(String strJSON) {
-        JSONObject obj;
-
-        try {
-            obj = new JSONObject(strJSON);
-            mX = (float) obj.getDouble("x");
-            mY = (float) obj.getDouble("y");
-            mWidth = (float) obj.getDouble("width");
-            mHeight = (float) obj.getDouble("height");
-            mSpeedX = (float) obj.getDouble("speed_x");
-            mSpeedY = (float) obj.getDouble("speed_y");
-            mMinSpeedX = (float) obj.getDouble("min_speed_x");
-            mMinSpeedY = (float) obj.getDouble("min_speed_y");
-            mMaxSpeedX = (float) obj.getDouble("max_speed_x");
-            mMaxSpeedY = (float) obj.getDouble("max_speed_y");
-            mAccSpeedX = (float) obj.getDouble("acc_speed_x");
-            mAccSpeedY = (float) obj.getDouble("acc_speed_y");
-            mKind = obj.getInt("kind");
-            mZOrder = obj.getInt("z_order");
-            mVisible = obj.getBoolean("visible");
-            mMovable = obj.getBoolean("movable");
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
     public boolean isVisible() {
         return mVisible;
     }
@@ -344,18 +310,14 @@ public abstract class AppObject {
         // invoked when the surface size is changed
     }
 
-    public interface IDrawer {
-        void doDraw(Canvas c);
-    }
-
     public class ZOrders {
         public static final int BACKGROUND = 0;
-        public static final int TITLE = 1;
-        public static final int LABEL = 1;
-        public static final int CHUNK = 2;
-        public static final int BUTTON = 4;
-        public static final int TEXTVIEW = 4;
-        public static final int SLIDERBAR = 4;
+        public static final int TITLE      = 1;
+        public static final int LABEL      = 1;
+        public static final int CHUNK      = 2;
+        public static final int BUTTON     = 4;
+        public static final int TEXTVIEW   = 4;
+        public static final int SLIDERBAR  = 4;
     }
 
     public boolean contains(float x, float y) {

@@ -31,10 +31,8 @@ public class MergeButton extends ChunkButton {
             Bitmap origin = BitmapFactory.decodeResource(res, id, options);
             Bitmap scaled = null;
             // scale the image according to the current screen resolution
-            float dstWidth = origin.getWidth(),
-                    dstHeight = origin.getHeight();
-            dstWidth = AppScale.doScaleW(dstWidth);
-            dstHeight = AppScale.doScaleH(dstHeight);
+            float dstWidth  = AppScale.doScaleW(origin.getWidth());
+            float dstHeight = AppScale.doScaleH(origin.getHeight());
             if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
                 scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
             }
@@ -51,16 +49,16 @@ public class MergeButton extends ChunkButton {
     public MergeButton(Resources res, Chunk host, OnClickListener listener) {
         super(res, host);
         loadImages(res, new int[]{R.drawable.merge_btn});
-        mWidth = sImages.get(0).getWidth();
-        mHeight = sImages.get(0).getHeight();
-        mID = UIID.MERGE;
+        mWidth    = sImages.get(0).getWidth();
+        mHeight   = sImages.get(0).getHeight();
+        mID       = UIID.MERGE;
         mListener = listener;
-        mVisible = false;
+        mVisible  = false;
     }
 
     @Override
     public void measureSize(int width, int height) {
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
         mY = height * 0.25f;
     }
@@ -70,7 +68,7 @@ public class MergeButton extends ChunkButton {
         if (mCanvasWidth == width && mCanvasHeight == height) {
             return;
         }
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
 
         mY = height * 0.25f;
@@ -79,8 +77,7 @@ public class MergeButton extends ChunkButton {
     @Override
     public void onDraw(Canvas c) {
         if (mVisible) {
-            c.drawBitmap(sImages.get(0), mX + mOffsetX,
-                    mY + mOffsetY, null);
+            c.drawBitmap(sImages.get(0), mX + mOffsetX, mY + mOffsetY, null);
         }
     }
 

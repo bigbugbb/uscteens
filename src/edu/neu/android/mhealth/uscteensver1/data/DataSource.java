@@ -506,9 +506,8 @@ public class DataSource {
     }
 
     private static int createRawChunkData(int startSecond, int stopSecond, ArrayList<RawChunk> rawChunks) {
-        ArrayList<Integer> chunkPos = ChunkingAlgorithm.getInstance().doChunking(
-                startSecond, stopSecond, sAccelDataWrap.getDrawableData()
-        );
+        ArrayList<Integer> chunkPos =
+                ChunkingAlgorithm.getInstance().doChunking(startSecond, stopSecond, sAccelDataWrap.getDrawableData());
 
         if (chunkPos == null) {
             return 0;

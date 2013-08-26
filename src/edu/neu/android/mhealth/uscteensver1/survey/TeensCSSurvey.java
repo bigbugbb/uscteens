@@ -16,9 +16,9 @@ import edu.neu.android.wocketslib.emasurvey.rule.QuesFromAns;
 public class TeensCSSurvey extends QuestionSet {
 
     public static String INTERNAL_START_TIME = "INTERNAL_START_TIME";
-    public static String INTERNAL_STOP_TIME = "INTERNAL_STOP_TIME";
+    public static String INTERNAL_STOP_TIME  = "INTERNAL_STOP_TIME";
 
-    public static String INTERNAL_LENGTH = "INTERNAL_LENGTH";
+    public static String INTERNAL_LENGTH          = "INTERNAL_LENGTH";
     public static String ADJUSTED_INTERVAL_LENGTH = "ADJUSTED_INTERVAL_LENGTH";
 
     private ArrayList<SurveyQuestion> mDefaultQuestionSet;
@@ -32,15 +32,15 @@ public class TeensCSSurvey extends QuestionSet {
         if (spe != null) {
             HashMap<String, String> mapTime = spe.getSurveySpecifiedRecord();
             mStartTime = mapTime.get(INTERNAL_START_TIME);
-            mStopTime = mapTime.get(INTERNAL_STOP_TIME);
+            mStopTime  = mapTime.get(INTERNAL_STOP_TIME);
             // Get rid of the overlapped time period
             long internalLength = Long.parseLong(mapTime.get(INTERNAL_LENGTH));
             long adjustedLength = Long.parseLong(mapTime.get(ADJUSTED_INTERVAL_LENGTH));
         } else {
             Date startDate = new Date(System.currentTimeMillis() - 30 * 60 * 1000);
-            Date stopDate = new Date();
+            Date stopDate  = new Date();
             mStartTime = getStringTime(startDate);
-            mStopTime = getStringTime(stopDate);
+            mStopTime  = getStringTime(stopDate);
         }
 
         setQuestions();
@@ -60,7 +60,7 @@ public class TeensCSSurvey extends QuestionSet {
         if (time == null) {
             return "undefined";
         }
-        int hour = time.getHours();
+        int hour   = time.getHours();
         int minute = time.getMinutes();
         String postfix = hour >= 12 ? " PM" : " AM";
         hour = hour > 12 ? hour - 12 : hour;
@@ -891,7 +891,7 @@ public class TeensCSSurvey extends QuestionSet {
     public String[] getAllQuestionIDs() {
         // TODO Auto-generated method stub
         String[] IDs = new String[mDefaultQuestionSet.size()];
-        for (int i = 0; i < IDs.length; i++) {
+        for (int i = 0; i < IDs.length; ++i) {
             IDs[i] = mDefaultQuestionSet.get(i).getAliasID();
         }
         return IDs;

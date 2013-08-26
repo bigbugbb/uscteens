@@ -20,12 +20,12 @@ public class UpdateRewardTask extends AsyncTask<Void, Void, Boolean> {
     private final static String TAG = "UpdateAppDataTask";
 
     private Context mContext;
-    private String mLocalDirPath;
-    private String mRemoteDirPath;
+    private String  mLocalDirPath;
+    private String  mRemoteDirPath;
 
     public UpdateRewardTask(Context context) {
         mContext = context;
-        mLocalDirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.REWARD_FOLDER;
+        mLocalDirPath  = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY + TeensGlobals.REWARD_FOLDER;
         mRemoteDirPath = "/home/sftpdownload/USCTeensDownloads/" + TeensAppManager.getParticipantId(context) + File.separator + "download";
         //mRemoteDirPath = "/home/bigBug/100012/download/";
     }

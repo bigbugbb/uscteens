@@ -29,18 +29,17 @@ import edu.neu.android.wocketslib.utils.WeekdayHelper;
 public class RewardPage extends AppPage implements OnClickListener {
 
     protected RewardBackground mBackground = null;
-    protected FixButton mBtnFix = null;
-    protected DoneButton mBtnDone = null;
-    protected RewardButton mBtnReward = null;
-    protected RewardView mRewardView = null;
+    protected FixButton        mBtnFix     = null;
+    protected DoneButton       mBtnDone    = null;
+    protected RewardButton     mBtnReward  = null;
+    protected RewardView       mRewardView = null;
 
-    protected final static int BAR = 0;
-    protected final static int BKGND = 1;
-    protected final static int FIX = 2;
-    protected final static int DONE = 3;
-    protected final static int REWARD = 4;
+    protected final static int BKGND  = 0;
+    protected final static int FIX    = 1;
+    protected final static int DONE   = 2;
+    protected final static int REWARD = 3;
 
-    protected View mView = null;
+    protected View   mView   = null;
     protected Reward mReward = null;
 
     public RewardPage(Context context, View view, Handler handler) {
@@ -94,7 +93,7 @@ public class RewardPage extends AppPage implements OnClickListener {
         }
 
         // get days between the start date and the selected date
-        String startDate = DataStorage.getStartDate(mContext, "");
+        String startDate    = DataStorage.getStartDate(mContext, "");
         String selectedDate = DataStorage.GetValueString(mContext, TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01");
         Date aStartDate = null;
         try {
@@ -154,29 +153,29 @@ public class RewardPage extends AppPage implements OnClickListener {
     @Override
     public void onClick(AppObject obj) {
         Message msg = mHandler.obtainMessage();
+
         switch (obj.getID()) {
-            case DONE:
-                msg.what = AppCmd.DONE;
-                mHandler.sendMessage(msg);
-                break;
-            case FIX:
-                msg.what = AppCmd.BEGIN_LOADING;
-                msg.obj = DataSource.getCurrentSelectedDate();
-                mHandler.sendMessage(msg);
-                break;
-            case REWARD:
-                msg.what = AppCmd.REWARD;
-                msg.obj = (mReward == null) ? null : mReward.getLink();
-                mHandler.sendMessage(msg);
-                break;
-            default:
-                break;
+        case DONE:
+            msg.what = AppCmd.DONE;
+            mHandler.sendMessage(msg);
+            break;
+        case FIX:
+            msg.what = AppCmd.BEGIN_LOADING;
+            msg.obj  = DataSource.getCurrentSelectedDate();
+            mHandler.sendMessage(msg);
+            break;
+        case REWARD:
+            msg.what = AppCmd.REWARD;
+            msg.obj  = (mReward == null) ? null : mReward.getLink();
+            mHandler.sendMessage(msg);
+            break;
+        default:
+            break;
         }
     }
 
     @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-                            float distanceY) {
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         boolean ret = false;
 
         if (mSelObject != null) {

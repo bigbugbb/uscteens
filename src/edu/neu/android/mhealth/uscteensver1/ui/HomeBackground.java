@@ -15,9 +15,9 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class HomeBackground extends Background {
 
-    private Paint mPaint;
+    private Paint  mPaint;
     private String mVersion;
-    private Rect mRect = new Rect();
+    private Rect   mRect = new Rect();
 
     public HomeBackground(Resources res) {
         super(res);
@@ -35,7 +35,7 @@ public class HomeBackground extends Background {
 
     @Override
     public void onSizeChanged(int width, int height) {
-        mWidth = mImages.get(0).getWidth();
+        mWidth  = mImages.get(0).getWidth();
         mHeight = mImages.get(0).getHeight();
         mX = (width - mWidth) / 2;
         mY = (height - mHeight) / 2;
