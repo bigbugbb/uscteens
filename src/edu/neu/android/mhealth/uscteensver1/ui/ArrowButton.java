@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
@@ -18,7 +17,7 @@ public class ArrowButton extends CustomButton {
 
     public ArrowButton(Resources res) {
         super(res);
-        loadImages(new int[]{R.drawable.popup_wind_arrow, R.drawable.popup_wind_arrow_ops});
+        loadImages(new int[]{ R.drawable.popup_wind_arrow, R.drawable.popup_wind_arrow_ops });
         setKind(BUTTON);
         setZOrder(ZOrders.BUTTON);
         mWidth  = mImages.get(0).getWidth();

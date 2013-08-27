@@ -1,9 +1,8 @@
 package edu.neu.android.mhealth.uscteensver1.threads;
 
-import android.os.Handler;
-
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import android.os.Handler;
 import edu.neu.android.mhealth.uscteensver1.pages.AppEvent;
 
 public class BaseThread extends Thread {

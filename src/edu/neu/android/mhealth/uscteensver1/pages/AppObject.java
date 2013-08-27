@@ -1,14 +1,14 @@
 package edu.neu.android.mhealth.uscteensver1.pages;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AppObject {
     public final static int UNKNOWN    = 0;

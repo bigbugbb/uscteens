@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -21,7 +20,7 @@ public class DoneButton extends CustomButton {
 
     public DoneButton(Resources res) {
         super(res);
-        loadImages(new int[]{R.drawable.done_btn});
+        loadImages(new int[]{ R.drawable.done_btn });
 
         mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintText.setColor(Color.WHITE);

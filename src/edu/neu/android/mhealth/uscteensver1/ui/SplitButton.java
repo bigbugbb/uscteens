@@ -1,14 +1,13 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import java.util.ArrayList;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-
-import java.util.ArrayList;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -31,10 +30,8 @@ public class SplitButton extends ChunkButton {
             Bitmap origin = BitmapFactory.decodeResource(res, id, options);
             Bitmap scaled = null;
             // scale the image according to the current screen resolution
-            float dstWidth = origin.getWidth(),
-                    dstHeight = origin.getHeight();
-            dstWidth = AppScale.doScaleW(dstWidth);
-            dstHeight = AppScale.doScaleH(dstHeight);
+            float dstWidth  = AppScale.doScaleW(origin.getWidth());
+            float dstHeight = AppScale.doScaleH(origin.getHeight());
             if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
                 scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
             }
@@ -50,17 +47,19 @@ public class SplitButton extends ChunkButton {
 
     public SplitButton(Resources res, Chunk host, OnClickListener listener) {
         super(res, host);
-        loadImages(res, new int[]{R.drawable.split_btn});
-        mWidth = sImages.get(0).getWidth();
-        mHeight = sImages.get(0).getHeight();
-        mID = UIID.SPLIT;
+        
+        loadImages(res, new int[]{ R.drawable.split_btn });
+        
+        mWidth    = sImages.get(0).getWidth();
+        mHeight   = sImages.get(0).getHeight();
+        mID       = UIID.SPLIT;
         mListener = listener;
-        mVisible = false;
+        mVisible  = false;
     }
 
     @Override
     public void measureSize(int width, int height) {
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
         mY = height * 0.25f;
     }
@@ -70,7 +69,7 @@ public class SplitButton extends ChunkButton {
         if (mCanvasWidth == width && mCanvasHeight == height) {
             return;
         }
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
         mY = height * 0.25f;
     }

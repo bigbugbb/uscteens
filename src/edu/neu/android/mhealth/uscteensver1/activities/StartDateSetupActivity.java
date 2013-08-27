@@ -1,5 +1,10 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -10,12 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;

@@ -1,8 +1,5 @@
 package edu.neu.android.mhealth.uscteensver1;
 
-import android.content.Context;
-import android.os.Environment;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Date;
 
+import android.content.Context;
+import android.os.Environment;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensSurveyScheduler;
 import edu.neu.android.mhealth.uscteensver1.threads.UpdateRewardTask;
 import edu.neu.android.wocketslib.Globals;

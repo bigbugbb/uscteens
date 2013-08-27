@@ -1,5 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import java.util.ArrayList;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -10,9 +12,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
-
-import java.util.ArrayList;
-
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -41,18 +40,21 @@ public class ListView extends AppObject {
     protected OnListViewScrollingListener mOnListViewScrollingListener = null;
 
     public class ListItem {
-        protected float mX;
-        protected float mY;
-        protected float mWidth;
-        protected float mHeight;
-        protected int   mPosn;
-        protected String mText;
-        protected Bitmap mImage;
-        protected int mDrawable;
-        protected boolean mSelected;
-        protected Paint mPaintBkg;
-        protected Paint mPaintTxt;
-        protected Paint mPaintLine;
+        protected float    mX;
+        protected float    mY;
+        protected float    mWidth;
+        protected float    mHeight;
+        protected int      mPosn;
+        
+        protected String   mText;
+        protected Bitmap   mImage;
+        protected int      mDrawable;        
+        protected boolean  mSelected;
+        
+        protected Paint    mPaintBkg;
+        protected Paint    mPaintTxt;
+        protected Paint    mPaintLine;
+        
         protected ListView mParent;
 
         public ListItem(ListView parent, String text, int drawable, Bitmap image) {
@@ -79,7 +81,7 @@ public class ListView extends AppObject {
 
         protected boolean contains(float x, float y) {
             return x > mX && x < mX + mWidth &&
-                    y > mY + mOffsetY && y < mY + mOffsetY + mHeight;
+                   y > mY + mOffsetY && y < mY + mOffsetY + mHeight;
         }
 
         protected void register() {
@@ -184,13 +186,13 @@ public class ListView extends AppObject {
 
     public void addItem(String text, int drawable) {
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPurgeable       = true;
+        options.inPurgeable = true;
         options.inPreferredConfig = Config.RGB_565;
 
         Bitmap origin = BitmapFactory.decodeResource(mRes, drawable, options);
         Bitmap scaled = null;
         // scale the image according to the current screen resolution
-        float dstWidth = AppScale.doScaleW(origin.getWidth());
+        float dstWidth  = AppScale.doScaleW(origin.getWidth());
         float dstHeight = AppScale.doScaleH(origin.getHeight());
         if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
             scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
@@ -314,7 +316,7 @@ public class ListView extends AppObject {
                            float velocityY) { // up: -
         mSpeedY = Math.min(Math.abs(velocityY / AppScale.doScaleH(60)), 80);
         mSpeedY = velocityY > 0 ? mSpeedY : -mSpeedY;
-        mAccSpeedY = AppScale.doScaleH(mSpeedY > 0 ? -2.5f : 2.5f);
+        mAccSpeedY  = AppScale.doScaleH(mSpeedY > 0 ? -2.5f : 2.5f);
         mLastAction = e2.getAction();
         return true;
     }

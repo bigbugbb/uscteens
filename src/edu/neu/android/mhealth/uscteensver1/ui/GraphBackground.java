@@ -3,7 +3,6 @@ package edu.neu.android.mhealth.uscteensver1.ui;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 
 public class GraphBackground extends Background {
@@ -13,7 +12,7 @@ public class GraphBackground extends Background {
 
     public GraphBackground(Resources res) {
         super(res);
-        loadImages(new int[]{R.drawable.menubar_background});
+        loadImages(new int[]{ R.drawable.menubar_background });
     }
 
     @Override

@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.extra.Action;
@@ -41,14 +40,14 @@ public class QuestButton extends ChunkButton {
     }
 
     public String getStringAnswer() {
-        String actName = getHost().getAction().getActionName();
+        String actName    = getHost().getAction().getActionName();
         String actSubName = getHost().getAction().getActionSubName();
         return actName + (actSubName != null ? "|" + actSubName : "");
     }
 
     @Override
     public void measureSize(int width, int height) {
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
         mY = height * 0.64f;
     }
@@ -58,9 +57,8 @@ public class QuestButton extends ChunkButton {
         if (mCanvasWidth == width && mCanvasHeight == height) {
             return;
         }
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
-
         mY = height * 0.64f;
     }
 

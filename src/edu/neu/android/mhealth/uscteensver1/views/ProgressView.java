@@ -15,7 +15,6 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -24,16 +23,20 @@ public class ProgressView extends View {
 
     private final static int PROGRESS_SPEED = 10;
 
-    private Paint mPaint;
-    private String mText = "Loading...";
-    private RectF mRect;
-    private Bitmap mImage;
-    private int mOffset = 0;
-    private int mBkColor = Color.argb(150, 0, 0, 0);
+    private Paint  mPaint;
+    private String mText;
+    private RectF  mRect;
+    private Bitmap mImage;    
+    private int    mOffset;
+    private int    mBkColor;
 
     public ProgressView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setVisibility(View.GONE);
+        
+        mOffset  = 0;
+        mText    = "Loading...";
+        mBkColor = Color.argb(150, 0, 0, 0);
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.WHITE);
@@ -68,7 +71,7 @@ public class ProgressView extends View {
         // draw lines in the rectangle
         int imgW = mImage.getWidth();
         int imgH = mImage.getHeight();
-        Rect src = new Rect(imgW - mOffset, 0, imgW, imgH);
+        Rect  src = new Rect(imgW - mOffset, 0, imgW, imgH);
         RectF dst = new RectF(mRect.left + 2, mRect.top, mRect.left + mOffset - 2, mRect.bottom);
         canvas.drawBitmap(mImage, src, dst, null);
         src = new Rect(0, 0, imgW - mOffset, imgH);
@@ -88,7 +91,6 @@ public class ProgressView extends View {
             }
             invalidate();
         }
-
     }
 
     @Override
@@ -104,9 +106,9 @@ public class ProgressView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
 
         mRect = new RectF();
-        mRect.left = w * 0.2f;
-        mRect.right = w * 0.8f;
-        mRect.top = h * 0.556f;
+        mRect.left   = w * 0.2f;
+        mRect.right  = w * 0.8f;
+        mRect.top    = h * 0.556f;
         mRect.bottom = h * 0.61f;
 
         BitmapFactory.Options options = new BitmapFactory.Options();

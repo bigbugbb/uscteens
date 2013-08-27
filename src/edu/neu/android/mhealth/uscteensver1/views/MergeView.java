@@ -1,5 +1,8 @@
 package edu.neu.android.mhealth.uscteensver1.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -15,10 +18,6 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -36,9 +35,9 @@ public class MergeView extends View {
     protected Paint mPaintText3 = null;
     protected List<RectF> mAreas = new ArrayList<RectF>();
     protected int mSelection = 0;
-    protected OnItemClickListener mItemListener = null;
+    protected OnItemClickListener   mItemListener = null;
     protected OnBackClickedListener mBackListener = null;
-    protected RectF mBackArea = new RectF();
+    protected RectF  mBackArea  = new RectF();
     protected PointF mBackTxtPt = new PointF();
     protected int mWidth = 0;
     protected int mHeight = 0;
@@ -49,7 +48,7 @@ public class MergeView extends View {
 
         mRes = context.getResources();
         loadImages(new int[]{
-                R.drawable.warning_back, R.drawable.arrow_warning, R.drawable.selection, R.drawable.selection_circle
+            R.drawable.warning_back, R.drawable.arrow_warning, R.drawable.selection, R.drawable.selection_circle
         });
 
         Typeface tf = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
@@ -84,9 +83,9 @@ public class MergeView extends View {
         mPaintText3.setTextSize(AppScale.doScaleT(27));
         mPaintText3.setTextAlign(Paint.Align.CENTER);
 
-        mBackArea.left = AppScale.doScaleW(10);
-        mBackArea.right = mBackArea.left + mImages.get(1).getWidth();
-        mBackArea.top = AppScale.doScaleH(5);
+        mBackArea.left   = AppScale.doScaleW(10);
+        mBackArea.right  = mBackArea.left + mImages.get(1).getWidth();
+        mBackArea.top    = AppScale.doScaleH(5);
         mBackArea.bottom = mBackArea.top + mImages.get(1).getHeight();
 
         mBackTxtPt.x = mBackArea.left + AppScale.doScaleW(33);
@@ -118,10 +117,8 @@ public class MergeView extends View {
             Bitmap origin = BitmapFactory.decodeResource(mRes, id, options);
             Bitmap scaled = null;
             // scale the image according to the current screen resolution
-            float dstWidth = origin.getWidth(),
-                    dstHeight = origin.getHeight();
-            dstWidth = AppScale.doScaleW(dstWidth);
-            dstHeight = AppScale.doScaleH(dstHeight);
+            float dstWidth  = AppScale.doScaleW(origin.getWidth());
+            float dstHeight = AppScale.doScaleH(origin.getHeight());
             if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
                 scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
             }
@@ -174,7 +171,7 @@ public class MergeView extends View {
         if (mWidth == w && mHeight == h) {
             return;
         }
-        mWidth = w;
+        mWidth  = w;
         mHeight = h;
 
         mAreas.clear();

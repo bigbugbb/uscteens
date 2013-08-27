@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -18,7 +17,7 @@ public class DateBackground extends Background {
 
     public DateBackground(Resources res) {
         super(res);
-        loadImages(new int[]{R.drawable.weeksbar1, R.drawable.weeksbar2});
+        loadImages(new int[]{ R.drawable.weeksbar1, R.drawable.weeksbar2 });
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.WHITE);

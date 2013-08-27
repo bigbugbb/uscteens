@@ -1,14 +1,5 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
-import android.util.Log;
-import android.util.Pair;
-
-import org.dom4j.Attribute;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -23,6 +14,14 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+import android.util.Log;
+import android.util.Pair;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;

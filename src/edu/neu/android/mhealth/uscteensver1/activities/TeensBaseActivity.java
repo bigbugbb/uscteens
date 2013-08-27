@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.widget.Toast;
-
 import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.AlertPlayer;

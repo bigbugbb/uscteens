@@ -3,7 +3,6 @@ package edu.neu.android.mhealth.uscteensver1.dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.KeyEvent;
-
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 
 public class LoadingDialog extends ProgressDialog {
