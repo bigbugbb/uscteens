@@ -17,9 +17,9 @@ public class TeensSurveyActivity extends SurveyActivity {
     @Override
     public void onStop() {
         if (isResponded()) {
-            final SurveyPromptEvent promptEvent = getSurveyPromptEvent();
-            if (promptEvent != null) {
-                Labeler.getInstance().addLabel(new Date(), "Answer " + promptEvent.getPromptType());
+            final SurveyPromptEvent spe = getSurveyPromptEvent();
+            if (spe != null) {
+                Labeler.getInstance().addLabel(new Date(), "Answer " + spe.getPromptType());
             }
         }
 

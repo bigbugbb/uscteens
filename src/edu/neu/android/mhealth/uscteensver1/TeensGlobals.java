@@ -80,19 +80,19 @@ public class TeensGlobals {
         Globals.DEFAULT_CC = "projectmobile@usc.edu";
         Globals.HOTLINE_NUMBER = "3234428206";
 
-        Globals.IS_WOCKETS_ENABLED = false;
-        Globals.IS_BLUETOOTH_ENABLED = false;
-        Globals.IS_LOCATION_ENABLED = true;
-        Globals.IS_READING_SENSOR_ENABLED = true; // true for debug
-        Globals.IS_LOG_PHONE_BATTERY_ENABLED = true;
+        Globals.IS_WOCKETS_ENABLED               = false;
+        Globals.IS_BLUETOOTH_ENABLED             = false;
+        Globals.IS_LOCATION_ENABLED              = true;
+        Globals.IS_READING_SENSOR_ENABLED        = true; // true for debug
+        Globals.IS_LOG_PHONE_BATTERY_ENABLED     = true;
         Globals.IS_RECORDING_PHONE_ACCEL_ENABLED = true;
 
-        Globals.IS_ANNOTATION_EXTERNAL = true;
+        Globals.IS_ANNOTATION_EXTERNAL  = true;
         Globals.IS_SENSOR_DATA_EXTERNAL = true;
 
         Globals.DEFAULT_MAIL_USERNAME = "wocketssmtp@gmail.com";
         Globals.DEFAULT_MAIL_PASSWORD = "W0CKET$mtp";
-        Globals.DEFAULT_PING_ADDRESS = "http://wockets.ccs.neu.edu/ping.php";
+        Globals.DEFAULT_PING_ADDRESS  = "http://wockets.ccs.neu.edu/ping.php";
         Globals.DEFAULT_SAMPLING_RATE = 40;
 
         // Send the status information once per hour
@@ -116,19 +116,19 @@ public class TeensGlobals {
         Globals.URL_FILE_UPLOAD_SERVLET = Globals.DEFAULT_SERVER_ADDR + "FileUploader/Commonsfileuploadservlet";
         Globals.URL_GET_WOCKETS_DETAIL = Globals.DEFAULT_SERVER_ADDR + "Wockets/android/getWocketsDetail.html?pId=6809";
 
-        Globals.PW_STAFF_PASSWORD = "uscteen";
+        Globals.PW_STAFF_PASSWORD   = "uscteen";
         Globals.PW_SUBJECT_PASSWORD = "setup";
 
         Globals.SFTP_SERVER_USER_NAME = "sftpdownload";
-        Globals.SFTP_SERVER_PASSWORD = "$parRow1ark";
-        Globals.SFTP_SERVER_URL = "wockets.ccs.neu.edu";
+        Globals.SFTP_SERVER_PASSWORD  = "$parRow1ark";
+        Globals.SFTP_SERVER_URL       = "wockets.ccs.neu.edu";
 
         // Survey prompting parameters
         Globals.AUDIO_PROMPT_START_HOUR = 15;
-        Globals.AUDIO_PROMPT_END_HOUR = 22;
+        Globals.AUDIO_PROMPT_END_HOUR   = 22;
         Globals.DEFAULT_PROMPTS_PER_DAY = 7;
-        Globals.DEFAULT_START_HOUR = 15;
-        Globals.DEFAULT_END_HOUR = 22;
+        Globals.DEFAULT_START_HOUR      = 15;
+        Globals.DEFAULT_END_HOUR        = 23;
         Globals.REPROMPT_DELAY_MS = 3 * Globals.MINUTES_1_IN_MS;
         Globals.MIN_MS_BETWEEN_SCHEDULED_PROMPTS = Globals.MINUTES_30_IN_MS;
         Globals.MAX_TIME_ALLOWED_BETWEEN_PROMPT_AND_COMPLETION_MS = 5 * Globals.MINUTES_1_IN_MS;
