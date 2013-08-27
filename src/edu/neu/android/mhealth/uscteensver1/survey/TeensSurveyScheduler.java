@@ -1,13 +1,13 @@
 package edu.neu.android.mhealth.uscteensver1.survey;
 
-import android.content.Context;
-
-import com.google.gson.Gson;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Random;
+
+import android.content.Context;
+
+import com.google.gson.Gson;
 
 import edu.neu.android.mhealth.uscteensver1.activities.TeensSurveyActivity;
 import edu.neu.android.mhealth.uscteensver1.data.AccelDataChecker;
@@ -143,9 +143,9 @@ public class TeensSurveyScheduler extends SurveyScheduler {
         long startDayTime = DateHelper.getDailyTime(0, 0); // Midnight
 
         StringBuilder promptSchedule = new StringBuilder();
-        promptSchedule.append("Scheduled prompts today: " + promptsPerDay + NEWLINE);
-        promptSchedule.append("Start hour: " + startTimeHour + NEWLINE);
-        promptSchedule.append("End hour: " + endTimeHour + NEWLINE);
+        promptSchedule.append("Scheduled prompts today: " + promptsPerDay + "\n");
+        promptSchedule.append("Start hour: " + startTimeHour + "\n");
+        promptSchedule.append("End hour: " + endTimeHour + "\n");
 
         Random r = new Random();
         for (int i = 0; i < promptsPerDay; i++) {
@@ -162,7 +162,7 @@ public class TeensSurveyScheduler extends SurveyScheduler {
         }
 
         for (int i = 0; i < promptsPerDay; i++) {
-            promptSchedule.append("Prompt: " + DateHelper.getDate(promptTimes[i]) + NEWLINE);
+            promptSchedule.append("Prompt: " + DateHelper.getDate(promptTimes[i]) + "\n");
             // Create the corresponding prompt event for the random prompts
             SurveyPromptEvent spe = new SurveyPromptEvent(promptTimes[i]);
             spe.setPromptType("Random");

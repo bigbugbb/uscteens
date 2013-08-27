@@ -1,14 +1,13 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import java.util.ArrayList;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-
-import java.util.ArrayList;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Chunk;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
@@ -48,7 +47,7 @@ public class MergeButton extends ChunkButton {
 
     public MergeButton(Resources res, Chunk host, OnClickListener listener) {
         super(res, host);
-        loadImages(res, new int[]{R.drawable.merge_btn});
+        loadImages(res, new int[]{ R.drawable.merge_btn });
         mWidth    = sImages.get(0).getWidth();
         mHeight   = sImages.get(0).getHeight();
         mID       = UIID.MERGE;

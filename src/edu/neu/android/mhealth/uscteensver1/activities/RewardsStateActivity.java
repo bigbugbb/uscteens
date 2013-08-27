@@ -1,16 +1,15 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-import android.webkit.WebView;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.webkit.WebView;
 import edu.neu.android.mhealth.uscteensver1.database.DatabaseHandler;
 import edu.neu.android.mhealth.uscteensver1.database.RewardState;
 import edu.neu.android.wocketslib.support.DataStorage;

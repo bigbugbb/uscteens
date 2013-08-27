@@ -8,20 +8,21 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
-
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class TutorialButton extends CustomButton {
 
-    private int mColor = 0xff0066ff;
-    private Paint mPaint;
+    private int    mColor;
+    private Paint  mPaint;
     private String mTutorial;
-    private Rect mRect;
+    private Rect   mRect;
 
     public TutorialButton(Resources res) {
         super(res);
 
+        mColor = 0xff0066ff;
+        		
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.LTGRAY);
         mPaint.setStyle(Style.STROKE);

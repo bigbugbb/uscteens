@@ -1,5 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.data;
 
+import java.util.ArrayList;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -10,9 +12,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-
-import java.util.ArrayList;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
@@ -26,7 +25,7 @@ public class Label extends AppObject {
 
     public int mX;
     public int mY;
-    public Rect mRect = new Rect();
+    public Rect   mRect;
     public String mText;
 
     protected float mDispOffsetX;
@@ -89,17 +88,17 @@ public class Label extends AppObject {
     }
 
     static public ArrayList<Bitmap> getLabelImages(Resources res) {
-        loadImages(res, new int[]{R.drawable.label_marker});
+        loadImages(res, new int[]{ R.drawable.label_marker });
         return sImages;
     }
 
     public Label(Resources res) {
         super(res);
-        mKind = LABEL;
+        mKind   = LABEL;
         mZOrder = ZOrders.LABEL;
 
         createPaint();
-        loadImages(res, new int[]{R.drawable.label_marker});
+        loadImages(res, new int[]{ R.drawable.label_marker });
     }
 
     public boolean load(int x, int y, String text) {
@@ -110,6 +109,7 @@ public class Label extends AppObject {
         if (count < mText.length()) {
             mText = mText.subSequence(0, count) + "...";
         }
+        mRect = new Rect();
         sPaint.getTextBounds(mText, 0, mText.length(), mRect);
 
         int pos[] = {x, y};

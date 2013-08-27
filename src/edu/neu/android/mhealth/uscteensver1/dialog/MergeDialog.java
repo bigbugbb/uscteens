@@ -1,5 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.dialog;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +11,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-
-import java.util.ArrayList;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;

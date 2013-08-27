@@ -1,11 +1,10 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
-import android.util.Log;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.util.Log;
+import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
@@ -60,7 +59,7 @@ public class TeensSurveyActivity extends SurveyActivity {
         Log.i(TAG, "onQuestionLifeExpired");
         switch (whichQuestion) {
         case 1:
-            if (getSurveyPromptEvent().isReprompt()) {
+            if (getSurveyPromptEvent().getRepromptCount() > 1) {
                 finish();
                 Toast.makeText(mContext, "Survey timed out!", Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "first question life expired");

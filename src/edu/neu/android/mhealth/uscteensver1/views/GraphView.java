@@ -1,28 +1,31 @@
 package edu.neu.android.mhealth.uscteensver1.views;
 
+import java.util.List;
+
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import java.util.List;
-
 import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 
 public class GraphView extends SurfaceView implements SurfaceHolder.Callback {
 
-    protected SurfaceHolder mHolder = null;
-    protected Handler mHandler = null;
-    protected GraphDrawer mDrawer = null;
-    protected List<AppPage> mPages = null;
+    protected SurfaceHolder mHolder;
+    protected Handler       mHandler;
+    protected GraphDrawer   mDrawer;
+    protected List<AppPage> mPages;
 
     // constructor must have AttributeSet to create from XML
     public GraphView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mHolder = getHolder();
         mHolder.addCallback(this);
+        
+        mHandler = null;
+        mDrawer  = null;
+        mPages   = null;
     }
 
     public void onStop() {

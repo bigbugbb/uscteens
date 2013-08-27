@@ -1,5 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import java.util.ArrayList;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -9,9 +11,6 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
-
-import java.util.ArrayList;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
@@ -47,7 +46,7 @@ public class SlideBar extends AppObject {
 
     public SlideBar(Resources res) {
         super(res);
-        loadImages(new int[]{R.drawable.slidebar_btn});
+        loadImages(new int[]{ R.drawable.slidebar_btn });
 
         mPaint1.setAntiAlias(true);
         mPaint1.setARGB(255, 230, 230, 230);

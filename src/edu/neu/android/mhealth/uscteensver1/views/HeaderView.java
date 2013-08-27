@@ -1,5 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.views;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -12,9 +14,6 @@ import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
-
-import java.util.ArrayList;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
@@ -31,13 +30,13 @@ public class HeaderView extends View {
     protected Paint mPaintTime = null;
     protected int mWidth = 0;
     protected int mHeight = 0;
-    protected int mExpectedWidth = 0;
+    protected int mExpectedWidth  = 0;
     protected int mExpectedHeight = 0;
 
     public HeaderView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        loadImages(new int[]{R.drawable.popup_win_background, R.drawable.back_blue});
+        loadImages(new int[]{ R.drawable.popup_win_background, R.drawable.back_blue });
 
         Typeface tf = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
 
@@ -80,11 +79,9 @@ public class HeaderView extends View {
         for (int id : resIDs) {
             Bitmap origin = BitmapFactory.decodeResource(getContext().getResources(), id, options);
             Bitmap scaled = null;
-            // scale the image according to the current screen resolution
-            float dstWidth = origin.getWidth(),
-                    dstHeight = origin.getHeight();
-            dstWidth = AppScale.doScaleW(dstWidth);
-            dstHeight = AppScale.doScaleH(dstHeight);
+            // scale the image according to the current screen resolution         
+            float dstWidth = AppScale.doScaleW(origin.getWidth());
+            float dstHeight = AppScale.doScaleH(origin.getHeight());
             if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
                 scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
             }
@@ -97,16 +94,16 @@ public class HeaderView extends View {
             }
         }
 
-        mExpectedWidth = mImages.get(0).getWidth();
+        mExpectedWidth  = mImages.get(0).getWidth();
         mExpectedHeight = mImages.get(0).getHeight();
     }
 
     public void setTime(int start, int stop) {
         String s[] = {"", ""};
-        int hour = 0;
+        int hour   = 0;
         int minute = 0;
-
         int times[] = {start, stop};
+        
         for (int i = 0; i < 2; ++i) {
             hour = times[i] / 3600;
             minute = (times[i] - hour * 3600) / 60;
@@ -127,7 +124,7 @@ public class HeaderView extends View {
 
     private String convertDateToDisplayFormat(String date) {
         String[] months = {
-                "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"
+            "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"
         };
         String[] times = date.split("-");
         String weekday = WeekdayHelper.getWeekday(date);

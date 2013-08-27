@@ -7,28 +7,36 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class RewardBackground extends Background {
 
-    protected float mText1X = 0;
-    protected float mText1Y = 0;
-    protected float mText2X = 0;
-    protected float mText2Y = 0;
-    protected float mBarHeight = 0;
-    protected float mCanvasWidth = 0;
-    protected float mCanvasHeight = 0;
-    protected Paint mPaintText1 = null;
-    protected Paint mPaintText2 = null;
+    protected float mText1X;
+    protected float mText1Y;
+    protected float mText2X;
+    protected float mText2Y;
+    protected float mBarHeight;
+    protected float mCanvasWidth;
+    protected float mCanvasHeight;
+    protected Paint mPaintText1;
+    protected Paint mPaintText2;
 
     public RewardBackground(Resources res) {
         super(res);
+        
         loadImages(
-                new int[]{R.drawable.congratulations_bar, R.drawable.win_background}
+            new int[]{ R.drawable.congratulations_bar, R.drawable.win_background }
         );
+        
+        mText1X = 0;
+        mText1Y = 0;
+        mText2X = 0;
+        mText2Y = 0;
+        mBarHeight = 0;
+        mCanvasWidth  = 0;
+        mCanvasHeight = 0;        
 
         mPaintText1 = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintText1.setColor(Color.WHITE);
@@ -59,16 +67,15 @@ public class RewardBackground extends Background {
                 continue;
             }
 
-            Bitmap newImage =
-                    Bitmap.createScaledBitmap(mImages.get(i), dstWidth, dstHeight, true);
+            Bitmap newImage = Bitmap.createScaledBitmap(mImages.get(i), dstWidth, dstHeight, true);
             mImages.get(i).recycle(); // explicit call to avoid out of memory
             mImages.set(i, newImage);
             System.gc();
         }
 
-        mWidth = mImages.get(1).getWidth();
+        mWidth  = mImages.get(1).getWidth();
         mHeight = mImages.get(1).getHeight();
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
         mBarHeight = mImages.get(0).getHeight();
 

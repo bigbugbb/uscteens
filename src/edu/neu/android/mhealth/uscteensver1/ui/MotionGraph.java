@@ -1,5 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.ui;
 
+import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -11,9 +13,6 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.Pair;
 import android.view.MotionEvent;
-
-import java.util.ArrayList;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
@@ -29,40 +28,53 @@ import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
 public class MotionGraph extends AppObject {
 
-    protected int mStart = 0;  // the virtual pixel offset on the left side of the screen
-    protected int mEnd = 0;  // the virtual pixel offset on the right side of the screen
-    protected int mCanvasWidth = 0;
-    protected int mCanvasHeight = 0;
-    protected int mRightBound = 0;
-    protected Paint mBackgroundGray  = null;
-    protected Paint mBackgroundWhite = null;
-    protected Paint mPaint = null;
-    protected Paint mDataPaint = null;
-    protected Paint mSlashPaint = null;
-    protected Paint mMarkedPaint = null;
-    protected Paint mSelChunkPaint = null;
-    protected Paint mSelChunkBackPaint = null;
-    protected Paint mPaintTxt = null;
-    protected Paint mPaintDate = null;
-    protected RectF mSelectedRegion = new RectF();
-    protected float[] mPTS = null;
-    protected int[] mScaledData = null;
-    protected int mDataLengthInPixel = 0; // total activity data length in pixel(already scaled)
-    protected String mDate = "";
+    protected int   mStart;  // the virtual pixel offset on the left side of the screen
+    protected int   mEnd;    // the virtual pixel offset on the right side of the screen
+    protected int   mCanvasWidth;
+    protected int   mCanvasHeight;
+    protected int   mRightBound;
+    
+    protected Paint mBackgroundGray;
+    protected Paint mBackgroundWhite;
+    protected Paint mPaint;
+    protected Paint mDataPaint;
+    protected Paint mSlashPaint;
+    protected Paint mMarkedPaint;
+    protected Paint mSelChunkPaint;
+    protected Paint mSelChunkBackPaint;
+    protected Paint mPaintTxt;
+    protected Paint mPaintDate;
+    
+    protected RectF   mSelectedRegion;
+    protected float[] mPTS;
+    protected int[]   mScaledData;
+    protected int     mDataLengthInPixel; // total activity data length in pixel(already scaled)
+    protected String  mDate;
 
-    protected float mOffsetSpeedX = 0;
-    protected float mOffsetSpeedY = 0;
-    protected float mAspectRatio  = 1;
+    protected float mOffsetSpeedX;
+    protected float mOffsetSpeedY;
+    protected float mAspectRatio;
 
     public MotionGraph(Resources res) {
         super(res);
+        
+        mStart = 0;
+        mEnd   = 0;    // the virtual pixel offset on the right side of the screen
+        mCanvasWidth  = 0;
+        mCanvasHeight = 0;
+        mRightBound   = 0;
+        
+        mOffsetSpeedX = 0;
+        mOffsetSpeedY = 0;        
+        mSelectedRegion = new RectF();
+        mDate = convertDateToDisplayFormat(DataSource.getCurrentSelectedDate());  
 
         mDataLengthInPixel = DataSource.getDrawableDataLengthInPixel();
 //		mScaledData = Arrays.copyOf(DataSource.getDrawableData(), mDataLengthInPixel);
         mScaledData = DataSource.getDrawableData().clone();
+        mPTS = null;
 
-
-        loadImages(new int[]{R.drawable.menubar_background});
+        loadImages(new int[]{ R.drawable.menubar_background });
         mAspectRatio = mImages.get(0).getHeight() / (float) mImages.get(0).getWidth();
         mImages.get(0).recycle();
         mImages.remove(0);
@@ -70,6 +82,7 @@ public class MotionGraph extends AppObject {
         mBackgroundGray = new Paint();
         mBackgroundGray.setColor(Color.rgb(179, 181, 181));
         mBackgroundGray.setStyle(Style.FILL);
+        
         mBackgroundWhite = new Paint();
         mBackgroundWhite.setColor(Color.rgb(255, 255, 255));
         mBackgroundWhite.setStyle(Style.FILL);
@@ -112,13 +125,8 @@ public class MotionGraph extends AppObject {
         mPaintDate.setStyle(Style.STROKE);
         mPaintDate.setTypeface(Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf"));
         mPaintDate.setTextSize(AppScale.doScaleT(38));
-        mPaintDate.setFakeBoldText(false);
-
-        mOffsetSpeedX = 0;
-        mOffsetSpeedY = 0;
-
-        mDate = convertDateToDisplayFormat(DataSource.getCurrentSelectedDate());
-
+        mPaintDate.setFakeBoldText(false);                     
+        	
         ChunkManager.setDisplayOffset(0, 0);
         LabelManager.setDisplayOffset(0, 0);
     }
@@ -297,10 +305,10 @@ public class MotionGraph extends AppObject {
         if (mCanvasWidth == width && mCanvasHeight == height) {
             return;
         }
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
         // get the region size
-        mWidth = width;
+        mWidth  = width;
         mHeight = height - (int) (width * mAspectRatio);
 
         // for drawing lines

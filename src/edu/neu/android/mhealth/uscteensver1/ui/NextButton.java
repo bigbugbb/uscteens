@@ -8,19 +8,22 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
-
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class NextButton extends CustomButton {
 
-    protected int   mColor = 0xff0066ff;
-    protected float mTextX = 0;
-    protected float mTextY = 0;
-    protected Paint mPaintText = null;
+    protected int   mColor;
+    protected float mTextX;
+    protected float mTextY;
+    protected Paint mPaintText;
 
     public NextButton(Resources res) {
         super(res);
+        
+        mColor = 0xff0066ff;
+        mTextX = 0;
+        mTextY = 0;
 
         mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintText.setColor(Color.YELLOW);
@@ -36,12 +39,12 @@ public class NextButton extends CustomButton {
         if (mCanvasWidth == width && mCanvasHeight == height) {
             return;
         }
-        mCanvasWidth = width;
+        mCanvasWidth  = width;
         mCanvasHeight = height;
 
         Rect bounds = new Rect();
         mPaintText.getTextBounds("NEXT", 0, 4, bounds);
-        mWidth = bounds.width();
+        mWidth  = bounds.width();
         mHeight = bounds.height();
         mX = width * (1 - 0.07f);
         mY = height * 0.96f;
@@ -49,9 +52,9 @@ public class NextButton extends CustomButton {
 
     @Override
     public boolean contains(float x, float y) {
-        float left = mX - mWidth;
-        float right = mX + mWidth;
-        float upper = mY - mHeight * 2f;
+        float left   = mX - mWidth;
+        float right  = mX + mWidth;
+        float upper  = mY - mHeight * 2f;
         float bottom = mY + mHeight;
 
         return left < x && x < right && upper < y && y < bottom;

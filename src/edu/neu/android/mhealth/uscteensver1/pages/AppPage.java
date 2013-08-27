@@ -1,5 +1,10 @@
 package edu.neu.android.mhealth.uscteensver1.pages;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
@@ -7,11 +12,6 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 
 public abstract class AppPage implements OnGestureListener {

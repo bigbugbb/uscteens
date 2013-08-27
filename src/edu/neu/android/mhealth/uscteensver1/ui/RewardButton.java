@@ -7,22 +7,25 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class RewardButton extends CustomButton {
 
-    protected int mColor = 0xff0066ff;
-    protected float mTextX = 0;
-    protected float mTextY = 0;
-    protected Paint mPaintText = null;
+    protected int   mColor;
+    protected float mTextX;
+    protected float mTextY;
+    protected Paint mPaintText;
 
     public RewardButton(Resources res) {
         super(res);
-        loadImages(new int[]{R.drawable.reward_btn, R.drawable.reward_disable_btn});
+        loadImages(new int[]{ R.drawable.reward_btn, R.drawable.reward_disable_btn });
 
+        mColor = 0xff0066ff;
+        mTextX = 0;
+        mTextY = 0;
+        		
         mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintText.setColor(Color.WHITE);
         mPaintText.setStyle(Style.FILL);
