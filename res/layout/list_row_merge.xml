@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_merge_list"
+    android:orientation="horizontal" >
+ 
+    <!--  ListRow Left side Thumbnail image -->
+    <LinearLayout android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:background="@color/white">
+ 
+        <ImageView
+            android:id="@+id/selection_image"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:src="@drawable/selection"/>
+ 
+    </LinearLayout>
+ 
+    <LinearLayout 
+        android:id="@+id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"               
+		android:layout_gravity="center_vertical"      
+        android:orientation="vertical" >
+        
+	    <TextView
+	        android:id="@+id/action_name"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"	
+	        android:gravity="center"  		
+	        android:text="dummy"	       
+	        android:textColor="@color/black"        
+	        android:textSize="22sp" />
+	 
+	    <TextView
+	        android:id="@+id/action_subname"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:gravity="center"
+	        android:textColor="@color/black"
+	        android:textSize="14sp"
+	        android:text="dummy" />
+	    
+    </LinearLayout>
+    
+</LinearLayout>

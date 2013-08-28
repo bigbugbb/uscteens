@@ -27,13 +27,13 @@ public class StartDateSetupActivity extends BaseActivity implements OnClickListe
     private static final String TAG = "StartDateSetupActivity";
     private static final int TOTAL_DAYS = 14;
     // buttons
-    private Button mBtnSet;
-    private Button mBtnCancel;
+    private Button   mBtnSet;
+    private Button   mBtnCancel;
     // date selection spinner
-    private Spinner mSpinnerYears;
-    private Spinner mSpinnerMonths;
-    private Spinner mSpinnerDays;
-    private Spinner mSpinnerWindows;
+    private Spinner  mSpinnerYears;
+    private Spinner  mSpinnerMonths;
+    private Spinner  mSpinnerDays;
+    private Spinner  mSpinnerWindows;
     // years, months and days
     private String[] mYears  = {"2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"};
     private String[] mMonths = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};

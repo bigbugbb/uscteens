@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -20,8 +21,10 @@ import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
@@ -44,25 +47,26 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.utils.NoteSender;
 import edu.neu.android.mhealth.uscteensver1.views.ActionListView;
 import edu.neu.android.mhealth.uscteensver1.views.ActionListView.OnOverScrolledListener;
-import edu.neu.android.mhealth.uscteensver1.views.HeaderView;
+import edu.neu.android.mhealth.uscteensver1.views.QuestHeader;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.support.DataStorage;
 
 public class QuestDialog extends Activity {
 
     static public String CHUNK_START_TIME = "CHUNK_START_TIME";
-    static public String CHUNK_STOP_TIME = "CHUNK_STOP_TIME";
+    static public String CHUNK_STOP_TIME  = "CHUNK_STOP_TIME";
 
-    protected HeaderView mHeaderView;
-    protected Button     mBackButton;
-    protected ImageView  mTopArrow;
-    protected ImageView  mBottomArrow;
-    protected View       mTopLine;
-    protected View       mBottomLine;
-    protected ViewGroup  mListWrap;
+    protected QuestHeader    mQuestHeader;
+    protected Button         mBackButton;
+    protected ImageView      mTopArrow;
+    protected ImageView      mBottomArrow;
+    protected View           mTopLine;
+    protected View           mBottomLine;
+    protected ViewGroup      mListWrap;
     protected ActionListView mListView;
 
-    protected ActionAdapter mAdapter;
+    protected Typeface 		 mTypeface;    
+    protected ActionAdapter  mAdapter;
     protected HashMap<Integer, Action> mItemData = new HashMap<Integer, Action>();
 
     protected boolean mImageLoaded;
@@ -77,6 +81,8 @@ public class QuestDialog extends Activity {
         loadImages(new int[]{
             R.drawable.popup_wind_arrow_ops, R.drawable.popup_wind_arrow, R.drawable.back_blue
         });
+        
+        mTypeface = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
 
         setupViews();
         adjustLayout();
@@ -119,15 +125,27 @@ public class QuestDialog extends Activity {
 
     private void setupViews() {
 
-        mHeaderView = (HeaderView) findViewById(R.id.view_quest_header);
+    	mQuestHeader = (QuestHeader) findViewById(R.id.view_quest_header);
         int start = getIntent().getIntExtra(CHUNK_START_TIME, 0);
         int stop  = getIntent().getIntExtra(CHUNK_STOP_TIME, 0);
-        mHeaderView.setTime(start, stop);
+        mQuestHeader.setTime(start, stop);
 
         mBackButton = (Button) findViewById(R.id.button_back);
+        mBackButton.setText("BACK");
+        mBackButton.setTypeface(mTypeface);
         mBackButton.setBackgroundDrawable(mImages.get(2));
+        mBackButton.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (mBackButton.isPressed()) {
+					mBackButton.setTextColor(getResources().getColor(R.color.pressed_blue));
+				} else {
+					mBackButton.setTextColor(Color.WHITE);
+				}
+				return false;
+			}        	
+        });
         mBackButton.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 finish();
@@ -142,7 +160,7 @@ public class QuestDialog extends Activity {
 
         mListWrap = (ViewGroup) findViewById(R.id.list_wrap);
 
-        mListView = (ActionListView) findViewById(R.id.view_action_list);
+        mListView = (ActionListView) findViewById(R.id.listview_action);
         mListView.setAdapter(mAdapter);
         mListView.setOnOverScrolledListener(new OnOverScrolledListener() {
 
@@ -192,8 +210,7 @@ public class QuestDialog extends Activity {
         mListView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Action action = mItemData.get(position);
 
@@ -216,37 +233,37 @@ public class QuestDialog extends Activity {
 
         // adjust the layout according to the screen resolution				   
         LayoutParams laParams = null;
-        laParams = mHeaderView.getLayoutParams();
-        laParams.width  = mHeaderView.getExpectedWidth();
-        laParams.height = mHeaderView.getExpectedHeight();
-        mHeaderView.setLayoutParams(laParams);
+        laParams = mQuestHeader.getLayoutParams();
+        laParams.width  = mQuestHeader.getExpectedWidth();
+        laParams.height = mQuestHeader.getExpectedHeight();
+        mQuestHeader.setLayoutParams(laParams);
 
         int h1 = (int) AppScale.doScaleH(50);
         laParams = mTopArrow.getLayoutParams();
-        laParams.width  = mHeaderView.getExpectedWidth();
+        laParams.width  = mQuestHeader.getExpectedWidth();
         laParams.height = h1;
         mTopArrow.setLayoutParams(laParams);
 
         laParams = mBottomArrow.getLayoutParams();
-        laParams.width  = mHeaderView.getExpectedWidth();
+        laParams.width  = mQuestHeader.getExpectedWidth();
         laParams.height = h1;
         mBottomArrow.setLayoutParams(laParams);
 
         int h2 = Math.round(AppScale.doScaleH(1 * density));
         h2 = h2 > 1 ? h2 : 1;
         laParams = mTopLine.getLayoutParams();
-        laParams.width  = mHeaderView.getExpectedWidth();
+        laParams.width  = mQuestHeader.getExpectedWidth();
         laParams.height = h2;
         mTopLine.setLayoutParams(laParams);
 
         laParams = mBottomLine.getLayoutParams();
-        laParams.width  = mHeaderView.getExpectedWidth();
+        laParams.width  = mQuestHeader.getExpectedWidth();
         laParams.height = h2;
         mBottomLine.setLayoutParams(laParams);
 
         laParams = mListWrap.getLayoutParams();
-        laParams.width  = mHeaderView.getExpectedWidth();
-        laParams.height = metrics.heightPixels - (h1 * 2 + h2) - mHeaderView.getExpectedHeight();
+        laParams.width  = mQuestHeader.getExpectedWidth();
+        laParams.height = metrics.heightPixels - (h1 * 2 + h2) - mQuestHeader.getExpectedHeight();
         mListWrap.setLayoutParams(laParams);
     }
 
@@ -326,23 +343,23 @@ public class QuestDialog extends Activity {
             View view = convertView;
 
             if (view == null) {
-                view = mInflater.inflate(R.layout.action_list_row, null);
+                view = mInflater.inflate(R.layout.list_row_action, null);
             }
 
             Action action = null;
             if (position < ActionManager.MOST_RECENT_ACTIONS_COUNT) {
                 action = mRecents.get(position);
-                Drawable background = mResources.getDrawable(R.drawable.action_list_highlight_selector);
+                Drawable background = mResources.getDrawable(R.drawable.selector_action_list_highlight);
                 view.setBackgroundDrawable(background);
             } else {
                 action = mActions.get(position - ActionManager.MOST_RECENT_ACTIONS_COUNT);
-                Drawable background = mResources.getDrawable(R.drawable.action_list_selector);
+                Drawable background = mResources.getDrawable(R.drawable.selector_action_list);
                 view.setBackgroundDrawable(background);
             }
 
-            TextView name    = (TextView) view.findViewById(R.id.action_name);
-            TextView subname = (TextView) view.findViewById(R.id.action_subname);
-            ImageView image  = (ImageView) view.findViewById(R.id.action_image);
+            TextView  name    = (TextView) view.findViewById(R.id.action_name);
+            TextView  subname = (TextView) view.findViewById(R.id.action_subname);
+            ImageView image   = (ImageView) view.findViewById(R.id.action_image);
 
             // set all values in listview
             name.setText(action.getActionName());

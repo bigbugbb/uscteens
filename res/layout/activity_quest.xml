@@ -1,17 +1,3 @@
-<!-- <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-       	   
-	<edu.neu.android.mhealth.uscteensver1.views.QuestView
-	    android:id="@+id/view_quest"	    
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/bk_gray" />
-
-</LinearLayout> -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
@@ -23,7 +9,7 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content" >
 	    
-	   	<edu.neu.android.mhealth.uscteensver1.views.HeaderView
+	   	<edu.neu.android.mhealth.uscteensver1.views.QuestHeader
 	   	    android:id="@+id/view_quest_header"
 	   	    android:layout_width="fill_parent"
 	        android:layout_height="wrap_content" />
@@ -47,8 +33,7 @@
    	    android:layout_width="fill_parent"
         android:layout_height="wrap_content"
    	    android:paddingTop="2dp"
-   	    android:paddingBottom="3dp"
-   	    android:background="@color/white" />
+   	    android:paddingBottom="3dp" />
    	    
    	<View
    	    android:id="@+id/view_line_top"
@@ -64,7 +49,7 @@
 	    android:background="@color/bk_gray" >
 	    
 	   	<edu.neu.android.mhealth.uscteensver1.views.ActionListView
-	   	    android:id="@+id/view_action_list"	    
+	   	    android:id="@+id/listview_action"	    
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
 	        android:fastScrollEnabled="false"        
@@ -84,7 +69,6 @@
    	    android:layout_width="fill_parent"
         android:layout_height="wrap_content"
    	    android:paddingTop="3dp"
-   	    android:paddingBottom="2dp"
-   	    android:background="@color/white" />
+   	    android:paddingBottom="2dp" />
    	
 </LinearLayout>
