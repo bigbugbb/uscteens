@@ -83,9 +83,9 @@ public class ChunkManager {
     }
 
     protected static void saveChunks() {
-        Context context  = TeensAppManager.getAppContext();
-        String selDate   = DataSource.getCurrentSelectedDate();
-        String startDate = DataStorage.getStartDate(context, "");
+        Context context   = TeensAppManager.getAppContext();
+        String  selDate   = DataSource.getCurrentSelectedDate();
+        String  startDate = DataStorage.getStartDate(context, "");
         // start date is less than or equal to the current date
         try {
             int diff = WeekdayHelper.daysBetween(startDate, selDate);
