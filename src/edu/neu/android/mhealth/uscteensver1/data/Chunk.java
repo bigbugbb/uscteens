@@ -28,7 +28,8 @@ public class Chunk extends AppObject {
     public int mStart;  // in pixel, has been scaled by DataSource.PIXEL_SCALE
     public int mStop;   // in pixel, has been scaled by DataSource.PIXEL_SCALE
     public int mOffset; // plus to reconstruct the real world value, the offset has not been scaled
-    public GraphPage mParent;
+    
+    public GraphPage   mParent;
     public QuestButton mQuest;
     public ClockButton mClock;
     public MergeButton mMerge;
@@ -58,15 +59,15 @@ public class Chunk extends AppObject {
 
     public Chunk(Resources res, Action action) {
         super(res);
-        mKind = CHUNK;
+        mKind   = CHUNK;
         mZOrder = ZOrders.CHUNK;
 
         mAction = action;
         mParent = (GraphPage) ChunkManager.getUserData();
-        mQuest = new QuestButton(res, this, mParent);
-        mClock = new ClockButton(res, this, mParent);
-        mMerge = new MergeButton(res, this, mParent);
-        mSplit = new SplitButton(res, this, mParent);
+        mQuest  = new QuestButton(res, this, mParent);
+        mClock  = new ClockButton(res, this, mParent);
+        mMerge  = new MergeButton(res, this, mParent);
+        mSplit  = new SplitButton(res, this, mParent);
 
         mCreateTime = Globals.mHealthTimestampFormat.format(new Date());
 
@@ -82,19 +83,16 @@ public class Chunk extends AppObject {
     public RawChunk toRawChunk() {
         String startDate = toDateTime(mStart / TeensGlobals.PIXEL_PER_DATA + mOffset);
         String stopDate = toDateTime(mStop / TeensGlobals.PIXEL_PER_DATA + mOffset);
-        RawChunk rawChunk = new RawChunk(
-                startDate, stopDate, mAction, mCreateTime, mModifyTime);
-
+        RawChunk rawChunk = new RawChunk(startDate, stopDate, mAction, mCreateTime, mModifyTime);
         return rawChunk;
     }
 
     private String toDateTime(int time) {
         StringBuilder sb = new StringBuilder();
-        sb.append(DataSource.getCurrentSelectedDate());
-        sb.append(" ");
+        sb.append(DataSource.getCurrentSelectedDate());   
 
         int hour = time / 3600;
-        sb.append(hour > 9 ? "" : "0");
+        sb.append(hour > 9 ? " " : " 0");
         sb.append(hour);
         time -= hour * 3600;
         int minute = time / 60;
@@ -148,8 +146,8 @@ public class Chunk extends AppObject {
     }
 
     public String getChunkRealStartTimeInString() {
-        int time = mStart / TeensGlobals.PIXEL_PER_DATA + mOffset;
-        int hour = time / 3600;
+        int time   = mStart / TeensGlobals.PIXEL_PER_DATA + mOffset;
+        int hour   = time / 3600;
         int minute = (time - 3600 * hour) / 60;
 
         sStringBuilder.delete(0, sStringBuilder.length());
@@ -195,8 +193,8 @@ public class Chunk extends AppObject {
             updateModifyTime();
         }
 
-        mStart = start;
-        mStop = stop;
+        mStart  = start;
+        mStop   = stop;
         mOffset = offset;
         // move quest button to the center of the chunk
         float centerX = (start + stop - mQuest.getWidth()) / 2;
@@ -219,7 +217,7 @@ public class Chunk extends AppObject {
     @Override
     public boolean contains(float x, float y) {
         return x >= mStart + mDispOffsetX + AppScale.doScaleW(60) &&
-                x <= mStop + mDispOffsetX - AppScale.doScaleW(60);
+               x <= mStop + mDispOffsetX - AppScale.doScaleW(60);
     }
 
     public void setDisplayOffset(float offsetX, float offsetY) {

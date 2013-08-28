@@ -664,7 +664,7 @@ public class TeensRandomSurvey extends QuestionSet {
 
         // set up branching questions and rules
         ArrayList<SurveyQuestion> questionSection_1 = new ArrayList<SurveyQuestion>(2);
-        questionSection_1.add(Q2_a_HowLong);    // 2a
+        questionSection_1.add(Q2_a_HowLong);   	// 2a
         questionSection_1.add(Q2_c_WherePhone);    // 2c
         Q1_MainActivity.addRules(new QuesFromAns(new int[]{0, 1, 2, 4, 5}, questionSection_1));
 

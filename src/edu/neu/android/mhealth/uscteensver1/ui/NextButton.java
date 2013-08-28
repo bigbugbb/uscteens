@@ -8,12 +8,12 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
+import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class NextButton extends CustomButton {
 
-    protected int   mColor;
     protected float mTextX;
     protected float mTextY;
     protected Paint mPaintText;
@@ -21,7 +21,6 @@ public class NextButton extends CustomButton {
     public NextButton(Resources res) {
         super(res);
         
-        mColor = 0xff0066ff;
         mTextX = 0;
         mTextY = 0;
 
@@ -67,7 +66,7 @@ public class NextButton extends CustomButton {
 
     @Override
     public boolean onDown(MotionEvent e) {
-        mPaintText.setColor(mColor);
+        mPaintText.setColor(mRes.getColor(R.color.pressed_blue));
         return true;
     }
 

@@ -13,7 +13,6 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class BeginButton extends CustomButton {
 
-    protected int   mColor = 0xff0066ff;
     protected float mTextX = 0;
     protected float mTextY = 0;
     protected Paint mPaintText = null;
@@ -49,7 +48,7 @@ public class BeginButton extends CustomButton {
 
     @Override
     public boolean onDown(MotionEvent e) {
-        mPaintText.setColor(mColor);
+        mPaintText.setColor(mRes.getColor(R.color.pressed_blue));
         return true;
     }
 

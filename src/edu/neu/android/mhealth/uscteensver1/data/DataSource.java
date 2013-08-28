@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -48,7 +49,7 @@ public class DataSource {
     public final static String INTERNAL_LABEL_DATA_CSVFILEHEADER = "DateTime, Text\n";
 
     // boolean to indicate whether the loading should be cancelled
-    protected static boolean sCancelled = false;
+    protected static AtomicBoolean sCanceled = new AtomicBoolean(false);
     // raw chunk data
     protected static RawChunksWrap sRawChksWrap = new RawChunksWrap();
     // raw accelerometer sensor data
@@ -64,7 +65,7 @@ public class DataSource {
     }
 
     public static void cancelLoading() {
-        sCancelled = true;
+    	sCanceled.set(true);
     }
 
     public static boolean updateRawData() {
@@ -75,7 +76,7 @@ public class DataSource {
         if (currentTime - lastLoadingTime > TeensGlobals.REFRESH_DATA_TIME_THRESHOLD) {
             try {
                 String select = DataStorage.GetValueString(
-                        TeensAppManager.getAppContext(), TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
+                    TeensAppManager.getAppContext(), TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01"
                 );
                 Date curDate = new Date(currentTime);
                 Date loadDate = new Date(lastLoadingTime);
@@ -96,21 +97,27 @@ public class DataSource {
 
         return result;
     }
+    
+    public static int loadRawData(String date) {
+    	sCanceled.set(false);
+    	return loadRawData(date, sAccelDataWrap, sRawChksWrap, sRawLabelsWrap, sCanceled);
+    }
 
     /**
      * @param date YYYY-MM-DD
      * @return
      */
-    public static int loadRawData(String date) {
-        DataStorage.SetValue(TeensAppManager.getAppContext(), TeensGlobals.CURRENT_SELECTED_DATE, date);
+    public static int loadRawData(String date, AccelDataWrap accelDataWrap, 
+    		RawChunksWrap rawChksWrap, RawLabelWrap rawLabelsWrap, AtomicBoolean canceled) {
+        DataStorage.SetValue(TeensAppManager.getAppContext(), TeensGlobals.CURRENT_SELECTED_DATE, date);        
 
-        sCancelled = false;
-
-        clearRawData();
+        rawChksWrap.clear();
+        accelDataWrap.clear();
+        
         /*
 		 * first load the accelerometer sensor data
 		 */
-        int result = loadRawAccelData(date);
+        int result = loadRawAccelData(date, accelDataWrap, canceled);
         if (result != LOADING_SUCCEEDED && result != ERR_NO_SENSOR_DATA) {
             return result;
         }
@@ -124,14 +131,14 @@ public class DataSource {
             // the previous day's data are all available, just read it.
             // create the annotation file if it does not exist.
             if (!loadRawChunkData(date) &&
-                    createRawChunkData(0, TeensGlobals.DAILY_LAST_SECOND, sRawChksWrap) <= 0) {
+                    createRawChunkData(0, TeensGlobals.DAILY_LAST_SECOND, rawChksWrap) <= 0) {
                 return ERR_NO_CHUNK_DATA;
             }
         } else {
             if (loadRawChunkData(date)) {
-                assert (sRawChksWrap.size() > 0);
-                RawChunk lastRawChunk = sRawChksWrap.get(sRawChksWrap.size() - 1);
-                RawChunk lastPrevRawChunk = sRawChksWrap.size() > 1 ? sRawChksWrap.get(sRawChksWrap.size() - 2) : null;
+                assert (rawChksWrap.size() > 0);
+                RawChunk lastRawChunk     = rawChksWrap.get(rawChksWrap.size() - 1);
+                RawChunk lastPrevRawChunk = rawChksWrap.size() > 1 ? rawChksWrap.get(rawChksWrap.size() - 2) : null;
                 boolean updateFromLastPrev = lastPrevRawChunk != null && !lastPrevRawChunk.isLabelled();
 
                 int startTime = updateFromLastPrev ? lastPrevRawChunk.getStartTime() : lastRawChunk.getStartTime();
@@ -141,21 +148,21 @@ public class DataSource {
                 if (rawChunks.size() > 0) {
                     assert (rawChunks.get(0).getStartTime() == startTime);
                     // remove the last
-                    sRawChksWrap.remove(sRawChksWrap.size() - 1);
+                    rawChksWrap.remove(rawChksWrap.size() - 1);
                     if (updateFromLastPrev) {
-                        sRawChksWrap.remove(sRawChksWrap.size() - 1);
+                    	rawChksWrap.remove(rawChksWrap.size() - 1);
                     }
                     // add new raw chunks
-                    sRawChksWrap.addAll(rawChunks);
+                    rawChksWrap.addAll(rawChunks);
                 }
             } else {
-                if (createRawChunkData(0, TeensGlobals.DAILY_LAST_SECOND, sRawChksWrap) <= 0) {
+                if (createRawChunkData(0, TeensGlobals.DAILY_LAST_SECOND, rawChksWrap) <= 0) {
                     return ERR_NO_CHUNK_DATA;
                 }
             }
         }
 
-        if (sCancelled) {
+        if (canceled != null && canceled.get()) {
             return ERR_CANCELLED;
         }
 		
@@ -163,7 +170,7 @@ public class DataSource {
 		 * finally load the label data if it exists, we use it to draw text 
 		 * hints on the graph for helping user remember what he/she did before
 		 */
-        loadLabelData(date);
+        loadLabelData(date, rawLabelsWrap);
 		
 		/* 
 		 * note the last time for loading data, used to indicate whether
@@ -205,7 +212,7 @@ public class DataSource {
         return sRawChksWrap;
     }
 
-    public static int loadHourlyRawAccelData(String filePath, ArrayList<AccelData> hourlyAccelData, boolean cancelable) {
+    public static int loadHourlyRawAccelData(String filePath, ArrayList<AccelData> hourlyAccelData) {
 
         CSVReader csvReader = null;
         try {
@@ -235,8 +242,8 @@ public class DataSource {
 
         return hourlyAccelData.size();
     }
-
-    private static int loadRawAccelData(String date) {
+    
+    private static int loadRawAccelData(String date, AccelDataWrap accelDataWrap, AtomicBoolean canceled) {
         String[] hourDirs = FileHelper.getFilePathsDir(
             TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + TeensGlobals.SENSOR_FOLDER + date
         );
@@ -257,12 +264,12 @@ public class DataSource {
                 String filePath = hourDir + File.separator + fileNames[0];
                 // load the hourly data from .bin file
                 ArrayList<AccelData> hourlyAccelData = new ArrayList<AccelData>();
-                loadHourlyRawAccelData(filePath, hourlyAccelData, true);
-                if (sCancelled) {
+                loadHourlyRawAccelData(filePath, hourlyAccelData);
+                if (canceled != null && canceled.get()) {
                     return ERR_CANCELLED;
                 }
                 // add the houly data the data wrap
-                sAccelDataWrap.add(hourlyAccelData);
+                accelDataWrap.add(hourlyAccelData);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -270,9 +277,9 @@ public class DataSource {
 
         // now we have a loaded daily accelerometer sensor data in the data wrap,
         // we convert it into the data structure that can be drawn easily.
-        sAccelDataWrap.updateDrawableData();
+        accelDataWrap.updateDrawableData();
 
-        if (sAccelDataWrap.size() == 0) {
+        if (accelDataWrap.size() == 0) {
             String today = DateHelper.serverDateFormat.format(new Date());
             if (date.compareTo(today) == 0) {
                 return ERR_WAITING_SENSOR_DATA;
@@ -283,12 +290,16 @@ public class DataSource {
 
         return LOADING_SUCCEEDED;
     }
+    
+    private static boolean loadRawChunkData(String date) {
+    	return loadRawChunkData(date, sRawChksWrap);
+    }
 
     /**
      * @param date
      * @return
      */
-    private static boolean loadRawChunkData(String date) {
+    public static boolean loadRawChunkData(String date, RawChunksWrap rawChksWrap) {
         String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.DATA_DIRECTORY + TeensGlobals.SENSOR_FOLDER + date;
         String[] fileNames = new File(path).list(new FilenameFilter() {
             @Override
@@ -398,10 +409,6 @@ public class DataSource {
         }
 
         return rawLabelWrap.size() > 0;
-    }
-
-    private static boolean loadLabelData(String date) {
-        return loadLabelData(date, sRawLabelsWrap);
     }
 
     /**
@@ -521,11 +528,6 @@ public class DataSource {
         }
 
         return rawChunks.size();
-    }
-
-    public static void clearRawData() {
-        sRawChksWrap.clear();
-        sAccelDataWrap.clear();
     }
 
     public static final String DATASET   = "chunks";

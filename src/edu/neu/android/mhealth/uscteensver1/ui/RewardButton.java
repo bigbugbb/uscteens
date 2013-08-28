@@ -13,7 +13,6 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class RewardButton extends CustomButton {
 
-    protected int   mColor;
     protected float mTextX;
     protected float mTextY;
     protected Paint mPaintText;
@@ -22,7 +21,6 @@ public class RewardButton extends CustomButton {
         super(res);
         loadImages(new int[]{ R.drawable.reward_btn, R.drawable.reward_disable_btn });
 
-        mColor = 0xff0066ff;
         mTextX = 0;
         mTextY = 0;
         		
@@ -56,7 +54,7 @@ public class RewardButton extends CustomButton {
 
     @Override
     public boolean onDown(MotionEvent e) {
-        mPaintText.setColor(mColor);
+        mPaintText.setColor(mRes.getColor(R.color.pressed_blue));
         return true;
     }
 

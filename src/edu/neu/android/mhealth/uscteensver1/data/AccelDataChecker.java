@@ -88,7 +88,7 @@ public class AccelDataChecker {
                 String filePath = hourDir + File.separator + fileNames[0];
                 // load the hourly data from .bin file
                 ArrayList<AccelData> hourlyAccelData = new ArrayList<AccelData>();
-                DataSource.loadHourlyRawAccelData(filePath, hourlyAccelData, false);
+                DataSource.loadHourlyRawAccelData(filePath, hourlyAccelData);
                 accelDataWrap.add(hourlyAccelData);
             } catch (Exception e) {
                 e.printStackTrace();

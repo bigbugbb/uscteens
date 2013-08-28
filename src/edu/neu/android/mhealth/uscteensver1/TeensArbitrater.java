@@ -6,10 +6,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.content.Context;
 import android.os.Environment;
+import edu.neu.android.mhealth.uscteensver1.data.AccelDataWrap;
+import edu.neu.android.mhealth.uscteensver1.data.RawChunk;
+import edu.neu.android.mhealth.uscteensver1.data.RawChunksWrap;
+import edu.neu.android.mhealth.uscteensver1.data.RawLabelWrap;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensSurveyScheduler;
 import edu.neu.android.mhealth.uscteensver1.threads.UpdateRewardTask;
 import edu.neu.android.wocketslib.Globals;
@@ -64,8 +70,9 @@ public class TeensArbitrater extends Arbitrater {
     private void tryToUpdateAppData() {
         final String KEY = "LAST_REWARD_DATA_UPDATE_TIME";
         long lastUpdateTime = DataStorage.GetValueLong(mContext, KEY, 0);
-
-        if (Math.abs(System.currentTimeMillis() - lastUpdateTime) > Globals.HOURS24_MS) {
+        long currentTime = System.currentTimeMillis();
+       
+        if (Math.abs(currentTime - lastUpdateTime) > Globals.HOURS24_MS) {
             new UpdateRewardTask(mContext).execute();
             DataStorage.SetValue(mContext, KEY, System.currentTimeMillis());
         }

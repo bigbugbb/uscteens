@@ -7,4 +7,5 @@
     <string name="no_data">There is no data for this entire day!</string>
     <string name="wait_data">You need to wait a little before you can start to label your day!</string>
     <string name="chunk_error">Fail to generate the chunks!</string>
+    <string name="merge_hint">Do you want to merge\nthese activities to:</string>
 </resources>

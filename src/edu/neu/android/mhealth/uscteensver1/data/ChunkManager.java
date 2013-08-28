@@ -64,7 +64,7 @@ public class ChunkManager {
             }
             // load each chunk
             int start = (rawChunk.getStartTime() - timeOffset) * TeensGlobals.PIXEL_PER_DATA;
-            int stop = (rawChunk.getStopTime() - timeOffset) * TeensGlobals.PIXEL_PER_DATA;
+            int stop  = (rawChunk.getStopTime()  - timeOffset) * TeensGlobals.PIXEL_PER_DATA;
             String createTime = rawChunk.getCreateTime();
             String modifyTime = rawChunk.getModifyTime();
             chunk.load(start, stop, timeOffset, createTime, modifyTime);
@@ -83,8 +83,8 @@ public class ChunkManager {
     }
 
     protected static void saveChunks() {
-        Context context = TeensAppManager.getAppContext();
-        String selDate = DataSource.getCurrentSelectedDate();
+        Context context  = TeensAppManager.getAppContext();
+        String selDate   = DataSource.getCurrentSelectedDate();
         String startDate = DataStorage.getStartDate(context, "");
         // start date is less than or equal to the current date
         try {

@@ -1,11 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-   
-	<edu.neu.android.mhealth.uscteensver1.views.MergeView
-	    android:id="@+id/view_merge"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent" />
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
+    <FrameLayout
+        android:id="@+id/header"
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" >
+	    
+	   	<edu.neu.android.mhealth.uscteensver1.views.MergeHeader
+	   	    android:id="@+id/view_merge_header"
+	   	    android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" />
+	        
+ 		<Button
+	        android:id="@+id/button_back"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="14dp"
+	        android:layout_marginLeft="3dp"
+	        android:layout_gravity="center_vertical"
+	        android:gravity="center" 	        
+	        android:text="BACK"
+	        android:textColor="@color/white"
+			android:textSize="17sp" />			
+	   	
+   	</FrameLayout>
+   	
+    <TextView
+        android:id="@+id/textview_merge"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:lineSpacingMultiplier="1.4"
+        android:gravity="center"
+        android:textColor="@color/black"
+    	android:textSize="24sp" />
+    
+    <ListView
+   	    android:id="@+id/listview_merge"	    
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"         
+        android:layout_gravity="center_horizontal" 
+        android:fastScrollEnabled="false"        
+        android:divider="@color/black" />
+           	
 </LinearLayout>

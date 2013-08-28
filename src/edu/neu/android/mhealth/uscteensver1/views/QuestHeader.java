@@ -20,23 +20,25 @@ import edu.neu.android.mhealth.uscteensver1.data.DataSource;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.wocketslib.utils.WeekdayHelper;
 
-public class HeaderView extends View {
+public class QuestHeader extends View {
 
     protected boolean mImageLoaded = false;
     protected ArrayList<Bitmap> mImages = new ArrayList<Bitmap>();
+    
     protected String mDate = "";
     protected String mTime = "";
-    protected Paint mPaintDate = null;
-    protected Paint mPaintTime = null;
-    protected int mWidth = 0;
+    protected Paint  mPaintDate = null;
+    protected Paint  mPaintTime = null;
+    
+    protected int mWidth  = 0;
     protected int mHeight = 0;
     protected int mExpectedWidth  = 0;
     protected int mExpectedHeight = 0;
 
-    public HeaderView(Context context, AttributeSet attrs) {
+    public QuestHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        loadImages(new int[]{ R.drawable.popup_win_background, R.drawable.back_blue });
+        loadImages(new int[]{ R.drawable.popup_win_background });
 
         Typeface tf = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
 
@@ -59,9 +61,7 @@ public class HeaderView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawBitmap(mImages.get(0), 0, 0, null);
-        //canvas.drawBitmap(mImages.get(1), mBackArea.left, mBackArea.top, null);
-        //canvas.drawText("BACK", mBackTxtPt.x, mBackTxtPt.y, mPaintText);
+        canvas.drawBitmap(mImages.get(0), 0, 0, null); 
         canvas.drawText(mDate, getWidth() / 2, AppScale.doScaleH(65), mPaintDate);
         mPaintTime.setTextSize(AppScale.doScaleT(35));
         canvas.drawText(mTime, getWidth() / 2, AppScale.doScaleH(115), mPaintTime);

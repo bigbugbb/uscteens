@@ -8,12 +8,12 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
+import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class BackButton extends CustomButton {
 
-    protected int mColor = 0xff0066ff;
     protected Paint mPaintText = null;
 
     public BackButton(Resources res) {
@@ -61,7 +61,7 @@ public class BackButton extends CustomButton {
 
     @Override
     public boolean onDown(MotionEvent e) {
-        mPaintText.setColor(mColor);
+        mPaintText.setColor(mRes.getColor(R.color.pressed_blue));
         return true;
     }
 
