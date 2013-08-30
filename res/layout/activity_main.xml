@@ -22,9 +22,4 @@
             android:visibility="gone"
             android:background="@color/white" />
 
-    <!--     <edu.neu.android.mhealth.uscteensver1.views.ProgressView
-            android:id="@+id/view_progress"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" /> -->
-	
 </FrameLayout>

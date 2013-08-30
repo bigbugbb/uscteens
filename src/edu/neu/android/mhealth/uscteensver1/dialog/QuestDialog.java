@@ -3,6 +3,7 @@ package edu.neu.android.mhealth.uscteensver1.dialog;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,11 +32,16 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupCollapseListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
@@ -63,7 +69,10 @@ public class QuestDialog extends Activity {
     protected View           mTopLine;
     protected View           mBottomLine;
     protected ViewGroup      mListWrap;
+    protected ViewGroup		 mLayoutDialog;
     protected ActionListView mListView;
+    
+    private int mListItemHeight;
 
     protected Typeface 		 mTypeface;    
     protected ActionAdapter  mAdapter;
@@ -124,6 +133,8 @@ public class QuestDialog extends Activity {
     }
 
     private void setupViews() {
+    	
+    	mLayoutDialog = (ViewGroup) findViewById(R.id.layout_quest_dialog); 
 
     	mQuestHeader = (QuestHeader) findViewById(R.id.view_quest_header);
         int start = getIntent().getIntExtra(CHUNK_START_TIME, 0);
@@ -137,11 +148,8 @@ public class QuestDialog extends Activity {
         mBackButton.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if (mBackButton.isPressed()) {
-					mBackButton.setTextColor(getResources().getColor(R.color.pressed_blue));
-				} else {
-					mBackButton.setTextColor(Color.WHITE);
-				}
+				mBackButton.setTextColor(mBackButton.isPressed() ? 
+						getResources().getColor(R.color.pressed_blue) : Color.WHITE);
 				return false;
 			}        	
         });
@@ -149,6 +157,10 @@ public class QuestDialog extends Activity {
             @Override
             public void onClick(View v) {
                 finish();
+                // Send note to server graph
+                NoteSender noteSender = new NoteSender(TeensAppManager.getAppContext());
+                noteSender.addNote(new Date(), "Cancel labeling", Globals.NO_PLOT);
+                noteSender.send();
             }
         });
 
@@ -162,6 +174,9 @@ public class QuestDialog extends Activity {
 
         mListView = (ActionListView) findViewById(R.id.listview_action);
         mListView.setAdapter(mAdapter);
+        mListView.expandGroup(0);
+        mListView.expandGroup(1);
+        //mListView.setIndicatorBounds(getPixelFromDip(24), getPixelFromDip(30));
         mListView.setOnOverScrolledListener(new OnOverScrolledListener() {
 
             @Override
@@ -193,7 +208,7 @@ public class QuestDialog extends Activity {
                 View v = mListView.getChildAt(0);
                 int top = (v == null) ? 0 : v.getTop();
 
-                if (mAdapter.getCount() > 4) {
+                if (mAdapter.getChildrenCount(1) > 4) { // TODO:
                     Drawable image = mTopArrow.getDrawable();
                     if (top < 0 && image == null) {
                         mTopArrow.setImageDrawable(mImages.get(0));
@@ -207,12 +222,33 @@ public class QuestDialog extends Activity {
             }
 
         });
-        mListView.setOnItemClickListener(new OnItemClickListener() {
+        mListView.setOnGroupExpandListener(new OnGroupExpandListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			@Override
+			public void onGroupExpand(int groupPosition) {
+				mListWrap.getLayoutParams().height = mListItemHeight << 2;
+				mLayoutDialog.requestLayout();
+			}
+		});
 
-                Action action = mItemData.get(position);
+		// Listview Group collasped listener
+        mListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+
+			@Override
+			public void onGroupCollapse(int groupPosition) {
+				if (!mListView.isGroupExpanded(0) && !mListView.isGroupExpanded(1)) {
+			        mListWrap.getLayoutParams().height = mListItemHeight;
+                    mLayoutDialog.requestLayout();
+				}
+			}
+		});
+        mListView.setOnChildClickListener(new OnChildClickListener() {
+
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				int key = groupPosition == 0 ? childPosition : childPosition + ActionManager.MOST_RECENT_ACTIONS_COUNT;				
+				Action action = mItemData.get(key);
 
                 // update the most recent selected activity
                 ActionManager.setMostRecentAction(action);
@@ -221,13 +257,14 @@ public class QuestDialog extends Activity {
                 Labeler.getInstance().addLabel(new Date(), "Labeling");
 
                 setResultAndExit(action.getActionID());
-            }
-        });
+                
+				return true;
+			}
+		});       
     }
 
     private void adjustLayout() {
-        final DisplayMetrics metrics = getResources().getDisplayMetrics();
-        final float density = metrics.density;
+    	final DisplayMetrics metrics = getResources().getDisplayMetrics();
         Display display = getWindowManager().getDefaultDisplay();
         display.getMetrics(metrics);
 
@@ -236,43 +273,36 @@ public class QuestDialog extends Activity {
         laParams = mQuestHeader.getLayoutParams();
         laParams.width  = mQuestHeader.getExpectedWidth();
         laParams.height = mQuestHeader.getExpectedHeight();
-        mQuestHeader.setLayoutParams(laParams);
 
         int h1 = (int) AppScale.doScaleH(50);
         laParams = mTopArrow.getLayoutParams();
         laParams.width  = mQuestHeader.getExpectedWidth();
         laParams.height = h1;
-        mTopArrow.setLayoutParams(laParams);
 
         laParams = mBottomArrow.getLayoutParams();
         laParams.width  = mQuestHeader.getExpectedWidth();
         laParams.height = h1;
-        mBottomArrow.setLayoutParams(laParams);
 
-        int h2 = Math.round(AppScale.doScaleH(1 * density));
-        h2 = h2 > 1 ? h2 : 1;
+        int h2 = Math.max(1, getPixelFromDip(1));        
         laParams = mTopLine.getLayoutParams();
         laParams.width  = mQuestHeader.getExpectedWidth();
         laParams.height = h2;
-        mTopLine.setLayoutParams(laParams);
 
         laParams = mBottomLine.getLayoutParams();
         laParams.width  = mQuestHeader.getExpectedWidth();
         laParams.height = h2;
-        mBottomLine.setLayoutParams(laParams);
 
         laParams = mListWrap.getLayoutParams();
         laParams.width  = mQuestHeader.getExpectedWidth();
         laParams.height = metrics.heightPixels - (h1 * 2 + h2) - mQuestHeader.getExpectedHeight();
-        mListWrap.setLayoutParams(laParams);
+        
+        mListItemHeight = laParams.height / 4;
     }
-
-    public void onBackClicked() {
-        finish();
-        // Send note to server graph
-        NoteSender noteSender = new NoteSender(TeensAppManager.getAppContext());
-        noteSender.addNote(new Date(), "Cancel labeling", Globals.NO_PLOT);
-        noteSender.send();
+    
+    private int getPixelFromDip(int pixel) {
+    	final DisplayMetrics metrics = getResources().getDisplayMetrics();
+        final float density = metrics.density;
+        return Math.round(pixel * density);
     }
 
     public void loadImages(int[] resIDs) {
@@ -310,83 +340,7 @@ public class QuestDialog extends Activity {
         TeensGlobals.sGlobalHandler.sendMessage(msg);
         finish();
     }
-
-    protected class ActionAdapter extends BaseAdapter {
-
-        private ArrayList<Action> mActions;
-        private ArrayList<Action> mRecents;
-        private LayoutInflater mInflater;
-        private Typeface  mTypeface;
-        private Resources mResources;
-
-        public ActionAdapter(Activity activity) {
-            mResources = activity.getResources();
-            mActions   = ActionManager.getActivatedActions();
-            mRecents   = ActionManager.getMostRecentActions();
-            mInflater  = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mTypeface  = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
-        }
-
-        public int getCount() {
-            return mActions.size() + mRecents.size();
-        }
-
-        public Object getItem(int position) {
-            return position;
-        }
-
-        public long getItemId(int position) {
-            return position;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = convertView;
-
-            if (view == null) {
-                view = mInflater.inflate(R.layout.list_row_action, null);
-            }
-
-            Action action = null;
-            if (position < ActionManager.MOST_RECENT_ACTIONS_COUNT) {
-                action = mRecents.get(position);
-                Drawable background = mResources.getDrawable(R.drawable.selector_action_list_highlight);
-                view.setBackgroundDrawable(background);
-            } else {
-                action = mActions.get(position - ActionManager.MOST_RECENT_ACTIONS_COUNT);
-                Drawable background = mResources.getDrawable(R.drawable.selector_action_list);
-                view.setBackgroundDrawable(background);
-            }
-
-            TextView  name    = (TextView) view.findViewById(R.id.action_name);
-            TextView  subname = (TextView) view.findViewById(R.id.action_subname);
-            ImageView image   = (ImageView) view.findViewById(R.id.action_image);
-
-            // set all values in listview
-            name.setText(action.getActionName());
-            subname.setText(action.getActionSubName());
-            subname.setVisibility(action.getActionSubName() == null ? View.GONE : View.VISIBLE);
-            image.setImageBitmap(action.getActionImage());
-
-            name.setTypeface(mTypeface);
-            subname.setTypeface(mTypeface);
-
-            // attach the action to the item
-            mItemData.put(position, action);
-
-            final DisplayMetrics metrics = TeensAppManager.getAppResources().getDisplayMetrics();
-            final float density = metrics.density;
-
-            LayoutParams laParams = null;
-            laParams = mListWrap.getLayoutParams();
-            int itemHeight = laParams.height >> 2;
-            laParams = image.getLayoutParams();
-            laParams.height = (int) (itemHeight - 4 * density);
-            image.setLayoutParams(laParams);
-
-            return view;
-        }
-    }
-
+    
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -396,4 +350,141 @@ public class QuestDialog extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    protected class ActionAdapter extends BaseExpandableListAdapter {
+
+        private ArrayList<Action> mActions;
+        private ArrayList<Action> mRecents;        
+        private LayoutInflater    mInflater;
+        private Typeface          mTypeface;
+        private Resources         mResources;
+        
+        private List<String> mGroupData;
+        private HashMap<String, List<Action>> mChildData;
+
+        public ActionAdapter(Activity activity) {
+            mResources = activity.getResources();            
+            mActions   = ActionManager.getActivatedActions();
+            mRecents   = ActionManager.getMostRecentActions();
+            mInflater  = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mTypeface  = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
+            
+            mGroupData = new ArrayList<String>();
+            mGroupData.add("Most recent");
+            mGroupData.add("All");
+            
+            mChildData = new HashMap<String, List<Action>>();
+            mChildData.put("Most recent", mRecents);
+            mChildData.put("All", mActions);
+        }
+ 
+		@Override
+		public int getGroupCount() {
+			// TODO Auto-generated method stub
+			return mGroupData.size();
+		}
+
+		@Override
+		public int getChildrenCount(int groupPosition) {
+			// TODO Auto-generated method stub
+			return mChildData.get(mGroupData.get(groupPosition)).size();
+		}
+
+		@Override
+		public Object getGroup(int groupPosition) {
+			// TODO Auto-generated method stub
+			return mGroupData.get(groupPosition);
+		}
+
+		@Override
+		public Object getChild(int groupPosition, int childPosition) {
+			// TODO Auto-generated method stub
+			return mChildData.get(mGroupData.get(groupPosition)).get(childPosition);
+		}
+
+		@Override
+		public long getGroupId(int groupPosition) {
+			// TODO Auto-generated method stub
+			return groupPosition;
+		}
+
+		@Override
+		public long getChildId(int groupPosition, int childPosition) {
+			// TODO Auto-generated method stub
+			return childPosition;
+		}
+
+		@Override
+		public boolean hasStableIds() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public View getGroupView(int groupPosition, boolean isExpanded,
+				View convertView, ViewGroup parent) {
+			
+			if (convertView == null) {
+				convertView = mInflater.inflate(R.layout.list_group_action, null);
+			}
+
+			String text = (String) getGroup(groupPosition);
+			TextView group = (TextView) convertView.findViewById(R.id.action_group_name);
+			group.setTypeface(mTypeface, Typeface.BOLD);
+			group.setText(text);	
+
+            LayoutParams laParams = group.getLayoutParams();
+            laParams.height = (mListItemHeight >> 1) - getPixelFromDip(8);
+            group.setLayoutParams(laParams);  
+    
+			return convertView;
+		}
+
+		@Override
+		public View getChildView(int groupPosition, int childPosition,
+				boolean isLastChild, View convertView, ViewGroup parent) {
+
+            if (convertView == null) {
+            	convertView = mInflater.inflate(R.layout.list_item_action, null);
+            }
+
+            Action action = null;
+            if (groupPosition == 0) {
+                action = mRecents.get(childPosition);
+                Drawable background = mResources.getDrawable(R.drawable.selector_action_list_highlight);
+                convertView.setBackgroundDrawable(background);
+            } else {
+                action = mActions.get(childPosition);// - ActionManager.MOST_RECENT_ACTIONS_COUNT);
+                Drawable background = mResources.getDrawable(R.drawable.selector_action_list);
+                convertView.setBackgroundDrawable(background);
+            }
+
+            TextView  name    = (TextView) convertView.findViewById(R.id.action_name);
+            TextView  subname = (TextView) convertView.findViewById(R.id.action_subname);
+            ImageView image   = (ImageView) convertView.findViewById(R.id.action_image);
+            
+            name.setTypeface(mTypeface);
+            subname.setTypeface(mTypeface);
+
+            // set all values in listview
+            name.setText(action.getActionName());
+            subname.setText(action.getActionSubName());
+            subname.setVisibility(action.getActionSubName() == null ? View.GONE : View.VISIBLE);
+            image.setImageBitmap(action.getActionImage());           
+
+            // attach the action to the item
+            int key = groupPosition == 0 ? childPosition : childPosition + ActionManager.MOST_RECENT_ACTIONS_COUNT;
+            mItemData.put(key, action);        
+            
+            LayoutParams laParams = image.getLayoutParams();
+            laParams.height = (int) (mListItemHeight - getPixelFromDip(4));
+            
+            return convertView;
+		}
+
+		@Override
+		public boolean isChildSelectable(int groupPosition, int childPosition) {
+			return true;
+		}
+    }    
 }

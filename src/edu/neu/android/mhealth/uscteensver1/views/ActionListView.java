@@ -2,42 +2,27 @@ package edu.neu.android.mhealth.uscteensver1.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
-public class ActionListView extends ListView {
+public class ActionListView extends ExpandableListView {
 
-    private static final int MAX_Y_OVERSCROLL_DISTANCE = 60;
-
-    private int mMaxYOverscrollDistance;
     private OnOverScrolledListener mListener;
 
     public ActionListView(Context context) {
         super(context);
-        initBounceListView();
     }
 
     public ActionListView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initBounceListView();
+        super(context, attrs);                
     }
 
     public ActionListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initBounceListView();
-    }
-
-    private void initBounceListView() {
-        // get the density of the screen and do some maths with it on the max
-        // overscroll distance variable so that you get similar behaviors no
-        // matter what the screen size
-
-        final DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        final float density = metrics.density;
-
-        mMaxYOverscrollDistance = (int) (density * AppScale.doScaleH(MAX_Y_OVERSCROLL_DISTANCE));
     }
 
     public void setOnOverScrolledListener(OnOverScrolledListener listener) {
@@ -52,7 +37,7 @@ public class ActionListView extends ListView {
         // This is where the magic happens, we have replaced the incoming
         // maxOverScrollY with our own custom variable mMaxYOverscrollDistance;
         return super.overScrollBy(deltaX, deltaY, scrollX, scrollY,
-                scrollRangeX, scrollRangeY, maxOverScrollX, mMaxYOverscrollDistance, isTouchEvent);
+                scrollRangeX, scrollRangeY, maxOverScrollX, getHeight() >> 2, isTouchEvent);
     }
 
     @SuppressLint("NewApi")

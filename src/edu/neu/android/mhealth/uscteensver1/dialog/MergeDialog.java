@@ -256,7 +256,7 @@ public class MergeDialog extends Activity {
             View view = convertView;
 
             if (view == null) {
-                view = mInflater.inflate(R.layout.list_row_merge, null);
+                view = mInflater.inflate(R.layout.list_item_merge, null);
                 view.setOnTouchListener(new OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {                        
