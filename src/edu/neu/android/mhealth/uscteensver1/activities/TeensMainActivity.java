@@ -262,8 +262,8 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 
         // after onPause the surface will be destroyed, 
         // so we should stop the drawing thread here instead of in the onStop.
-        mCurPage.pause();
-        mGraphView.onPause(); 
+        mGraphView.onPause();
+        mCurPage.pause();        
         super.onPause();
         Log.d("TeensMainActivity", "onPause out");
     }
@@ -278,9 +278,9 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         );
         
         popSurveyBack();
-
-        mGraphView.onResume(mCurPage);
+        
         mCurPage.resume();
+        mGraphView.onResume();
         Log.d("TeensMainActivity", "onResume out");
     }
 
@@ -294,7 +294,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         }
 
         mCurPage.start();
-        mGraphView.onStart();
+        mGraphView.onStart(mCurPage);
         super.onStart();
         Log.d("TeensMainActivity", "onStart out");
     }

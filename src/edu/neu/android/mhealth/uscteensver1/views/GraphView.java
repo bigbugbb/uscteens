@@ -28,23 +28,25 @@ public class GraphView extends SurfaceView implements SurfaceHolder.Callback {
         mPages   = null;
     }
 
-    public void onStop() {        
-    }
-
-    public void onStart() {        
-    }
-
-    public void onPause() {    	
+    public void onStop() {
     	if (mDrawer != null) {
             mDrawer.end();
             mDrawer = null;
         }
     }
 
-    public void onResume(AppPage page) {
+    public void onStart(AppPage page) {
     	if (mDrawer == null) {
     		mDrawer = new GraphDrawer(this, page, mHandler);
     	}
+    }
+
+    public void onPause() {    	
+    	mDrawer.pause(true);
+    }
+
+    public void onResume() {
+    	mDrawer.pause(false);
     }
 
     public void setHandler(Handler handler) {
