@@ -46,6 +46,7 @@ import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
+import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.AppUsageLogger;
@@ -56,16 +57,16 @@ import edu.neu.android.wocketslib.views.DummyView;
 public class TeensMainActivity extends TeensBaseActivity implements OnTouchListener {
 
     // the view for drawing anything
-    protected GraphView mGraphView = null;
+    private GraphView mGraphView = null;
     // the view for displaying reward information
-    protected RewardView mRewardView = null;
+    private RewardView mRewardView = null;
     // the view covering the screen if not authorized
-    protected DummyView mDummyView = null;
+    private DummyView mDummyView = null;
     // the view for display loading progress
     //protected ProgressView mProgressView = null;
     // all of the pages
-    protected AppPage mCurPage = null;
-    protected List<AppPage> mPages = new ArrayList<AppPage>();
+    private AppPage mCurPage = null;
+    private List<AppPage> mPages = new ArrayList<AppPage>();
     // data loader
     private LoadDataTask mDataLoader = null;
     // audio text speech
@@ -273,6 +274,8 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         mDummyView.setVisibility(
             AuthorizationChecker.isAuthorized(TeensMainActivity.this) ? View.GONE : View.VISIBLE
         );
+        
+        popSurveyBack();
 
         mGraphView.onResume();
         mCurPage.resume();
@@ -303,9 +306,20 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         super.onStop();
         Log.d("TeensMainActivity", "onStop out");
     }
+    
+    private void popSurveyBack() {
+    	SurveyActivity activity = SurveyActivity.getSelf(TeensSurveyActivity.class);
+        if (activity != null) {        	
+    		Intent i = activity.getIntent();
+    		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    		i.putExtra(SurveyActivity.FORCE_POP_BACK, true);
+    		i.putExtra(SurveyActivity.FORCE_UPDATE_QUESTION_LIFE, true);
+    		getApplicationContext().startActivity(i);
+        }
+    }
 
     // use main looper as the default
-    protected final Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler() {
         @SuppressWarnings("unchecked")
         public void handleMessage(Message msg) {
             Intent i = null;

@@ -80,7 +80,7 @@ public class QuestHeader extends View {
             Bitmap origin = BitmapFactory.decodeResource(getContext().getResources(), id, options);
             Bitmap scaled = null;
             // scale the image according to the current screen resolution         
-            float dstWidth = AppScale.doScaleW(origin.getWidth());
+            float dstWidth  = AppScale.doScaleW(origin.getWidth());
             float dstHeight = AppScale.doScaleH(origin.getHeight());
             if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
                 scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
@@ -99,9 +99,9 @@ public class QuestHeader extends View {
     }
 
     public void setTime(int start, int stop) {
-        String s[] = {"", ""};
-        int hour   = 0;
-        int minute = 0;
+        String s[]  = { "", "" };
+        int hour    = 0;
+        int minute  = 0;
         int times[] = {start, stop};
         
         for (int i = 0; i < 2; ++i) {

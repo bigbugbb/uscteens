@@ -151,7 +151,7 @@ public class QuestDialog extends Activity {
 				mBackButton.setTextColor(mBackButton.isPressed() ? 
 						getResources().getColor(R.color.pressed_blue) : Color.WHITE);
 				return false;
-			}        	
+			}
         });
         mBackButton.setOnClickListener(new OnClickListener() {
             @Override

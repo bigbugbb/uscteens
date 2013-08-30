@@ -70,7 +70,7 @@ public class MergeDialog extends Activity {
                 
         mActions  = getIntent().getStringArrayListExtra(KEY);
         mNames    = new String[mActions.size()];
-        mSubnames = new String[mActions.size()]; 
+        mSubnames = new String[mActions.size()];
         for (int i = 0; i < mActions.size(); ++i) {
         	String[] split = mActions.get(i).split("[|]");
         	mNames[i]    = split[0];
