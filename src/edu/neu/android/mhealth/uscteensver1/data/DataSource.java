@@ -425,7 +425,8 @@ public class DataSource {
         String folderPath = String.format("/%04d-%02d-%02d", calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
 
-        String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.LOG_DIRECTORY + folderPath;
+        //String path = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.LOG_DIRECTORY + folderPath;
+        String path = Globals.INTERNAL_DIRECTORY_PATH + File.separator + Globals.LOG_DIRECTORY + folderPath;
 
         File folder = new File(path);
         folder.mkdirs();
@@ -437,7 +438,7 @@ public class DataSource {
                 file.createNewFile();
                 writer = new CSVWriter(new FileWriter(file), ',', CSVWriter.NO_QUOTE_CHARACTER);
                 writer.writeNext(new String[]{
-                        "TIMESTAMP", "LABEL", "CHUNK_START_TIME", "CHUNK_STOP_TIME", "LABELED_CHUNKS", "TOTAL_CHUNKS", "LABELED_PERCENTAGE"
+                	"TIMESTAMP", "DATE_TIME", "LABEL", "CHUNK_START_TIME", "CHUNK_STOP_TIME", "LABELED_CHUNKS", "TOTAL_CHUNKS", "LABELED_PERCENTAGE"
                 });
             } else {
                 writer = new CSVWriter(new FileWriter(file, true), ',', CSVWriter.NO_QUOTE_CHARACTER);
@@ -455,6 +456,7 @@ public class DataSource {
             Date stopTime = new Date(chunk.getChunkRealStopTime() * 1000 + selectedDate.getTime());
             Log.i("bigbug", startTime + " " + stopTime);
             writer.writeNext(new String[] {
+            	calendar.getTimeInMillis() + "",
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.US).format(calendar.getTime()),
                 chunk.getAction().toString(),
                 Globals.mHealthTimestampFormat.format(startTime),
