@@ -468,14 +468,8 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
     private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//    	if (mProgressView.getVisibility() == View.VISIBLE) {
-//    		if (keyCode == KeyEvent.KEYCODE_BACK) {
-//    			DataSource.cancelLoading();
-//    			return true;
-//    		}
-//    		return mProgressView.onKeyDown(keyCode, event);
-//    	}    	
+    public boolean onKeyDown(int keyCode, KeyEvent event) {  
+    	
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
