@@ -451,10 +451,8 @@ public class DataSource {
                 e.printStackTrace();
                 return false;
             }
-            Log.i("bigbug", selectedDate + "");
             Date startTime = new Date(chunk.getChunkRealStartTime() * 1000 + selectedDate.getTime());
             Date stopTime = new Date(chunk.getChunkRealStopTime() * 1000 + selectedDate.getTime());
-            Log.i("bigbug", startTime + " " + stopTime);
             writer.writeNext(new String[] {
             	calendar.getTimeInMillis() + "",
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.US).format(calendar.getTime()),
