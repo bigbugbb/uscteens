@@ -307,14 +307,25 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         Log.d("TeensMainActivity", "onStop out");
     }
     
+<<<<<<< HEAD
     private void popSurveyBack() {
     	SurveyActivity activity = SurveyActivity.getSelf(TeensSurveyActivity.class);
         if (activity != null) {        	
+=======
+    protected void popSurveyBack() {
+    	SurveyActivity activity = SurveyActivity.getSelf(TeensSurveyActivity.class);
+        if (activity != null) {        	
+        	Context context = getApplicationContext();
+>>>>>>> origin/master
     		Intent i = activity.getIntent();
     		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     		i.putExtra(SurveyActivity.FORCE_POP_BACK, true);
     		i.putExtra(SurveyActivity.FORCE_UPDATE_QUESTION_LIFE, true);
+<<<<<<< HEAD
     		getApplicationContext().startActivity(i);
+=======
+    		context.startActivity(i);
+>>>>>>> origin/master
         }
     }
 
