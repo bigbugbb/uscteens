@@ -46,6 +46,7 @@ import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.wocketsnews.StaffSetupActivity;
+import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.AppUsageLogger;
@@ -273,6 +274,8 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         mDummyView.setVisibility(
             AuthorizationChecker.isAuthorized(TeensMainActivity.this) ? View.GONE : View.VISIBLE
         );
+        
+        popSurveyBack();
 
         mGraphView.onResume();
         mCurPage.resume();
@@ -302,6 +305,18 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 
         super.onStop();
         Log.d("TeensMainActivity", "onStop out");
+    }
+    
+    protected void popSurveyBack() {
+    	SurveyActivity activity = SurveyActivity.getSelf(TeensSurveyActivity.class);
+        if (activity != null) {        	
+        	Context context = getApplicationContext();
+    		Intent i = activity.getIntent();
+    		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    		i.putExtra(SurveyActivity.FORCE_POP_BACK, true);
+    		i.putExtra(SurveyActivity.FORCE_UPDATE_QUESTION_LIFE, true);
+    		context.startActivity(i);
+        }
     }
 
     // use main looper as the default
