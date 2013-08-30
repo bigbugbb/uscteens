@@ -57,7 +57,7 @@ public class TeensGlobals {
 
     public static void initGlobals(Context context) {
         // By default the logging will go to the apps internal storage, not the external directory
-        Globals.IS_DEBUG = true;
+        Globals.IS_DEBUG = false;
         Globals.IS_LOG_EXTERNAL = false;
         Globals.APP_DIRECTORY = "uscteens";
 

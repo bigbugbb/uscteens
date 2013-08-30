@@ -260,8 +260,10 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         Log.d("TeensMainActivity", "onPause in");
         DataSource.cancelLoading();
 
+        // after onPause the surface will be destroyed, 
+        // so we should stop the drawing thread here instead of in the onStop.
         mCurPage.pause();
-        mGraphView.onPause();
+        mGraphView.onPause(); 
         super.onPause();
         Log.d("TeensMainActivity", "onPause out");
     }
@@ -277,7 +279,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         
         popSurveyBack();
 
-        mGraphView.onResume();
+        mGraphView.onResume(mCurPage);
         mCurPage.resume();
         Log.d("TeensMainActivity", "onResume out");
     }
@@ -292,7 +294,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         }
 
         mCurPage.start();
-        mGraphView.onStart(mCurPage);
+        mGraphView.onStart();
         super.onStart();
         Log.d("TeensMainActivity", "onStart out");
     }
@@ -307,35 +309,18 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         Log.d("TeensMainActivity", "onStop out");
     }
     
-<<<<<<< HEAD
     private void popSurveyBack() {
     	SurveyActivity activity = SurveyActivity.getSelf(TeensSurveyActivity.class);
-        if (activity != null) {        	
-=======
-<<<<<<< HEAD
-    private void popSurveyBack() {
-    	SurveyActivity activity = SurveyActivity.getSelf(TeensSurveyActivity.class);
-        if (activity != null) {        	
-=======
-    protected void popSurveyBack() {
-    	SurveyActivity activity = SurveyActivity.getSelf(TeensSurveyActivity.class);
-        if (activity != null) {        	
-        	Context context = getApplicationContext();
->>>>>>> origin/master
->>>>>>> origin/master
+        if (activity != null) {     
+        	if (activity.isFinishing()) {
+        		Log.i("TeensMainActivity", "SurveyActivity is finishing");
+        		return;
+        	}
     		Intent i = activity.getIntent();
     		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     		i.putExtra(SurveyActivity.FORCE_POP_BACK, true);
     		i.putExtra(SurveyActivity.FORCE_UPDATE_QUESTION_LIFE, true);
-<<<<<<< HEAD
     		getApplicationContext().startActivity(i);
-=======
-<<<<<<< HEAD
-    		getApplicationContext().startActivity(i);
-=======
-    		context.startActivity(i);
->>>>>>> origin/master
->>>>>>> origin/master
         }
     }
 
