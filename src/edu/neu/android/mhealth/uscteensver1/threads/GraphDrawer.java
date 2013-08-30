@@ -1,5 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.threads;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.view.SurfaceHolder;
@@ -16,9 +18,9 @@ public class GraphDrawer extends BaseThread {
     // the app page to draw
     protected AppPage mPage = null;
     // flag to indicate whether the drawer should be paused
-    protected boolean mPause = false;
+    protected AtomicBoolean mPause = new AtomicBoolean(false);
     // for pause synchronization
-    protected boolean mPaused = false;
+    protected AtomicBoolean mPaused = new AtomicBoolean(false);
     // idle time after each drawing
     protected int mIdleTime = DEFAULT_IDLE_TIME;
 
@@ -43,11 +45,11 @@ public class GraphDrawer extends BaseThread {
     }
 
     public void pause(boolean pause) {
-        mPause = pause;
+        mPause.set(pause);
         // wait until the thread is paused
-        while (mPause && !mPaused) {
+        while (mPause.get() && !mPaused.get()) {
             if (!mRun) {
-                mPause = false;
+                mPause.set(false);
                 break;
             }
 
@@ -97,19 +99,19 @@ public class GraphDrawer extends BaseThread {
             }
 
             // handle pause logic
-            while (mPause) {
-                mPaused = true;
+            while (mPause.get()) {
+                mPaused.set(true);
                 try {
                     sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 if (!mRun) {
-                    mPause = false;
+                    mPause.set(false);
                     break;
                 }
             }
-            mPaused = false;
+            mPaused.set(false);
         }
 
         super.run();
