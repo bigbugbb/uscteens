@@ -68,7 +68,7 @@ public class TeensArbitrater extends Arbitrater {
        
         if (Math.abs(currentTime - lastUpdateTime) > Globals.HOURS24_MS) {
             new UpdateRewardTask(mContext).execute();
-            DataStorage.SetValue(mContext, KEY, System.currentTimeMillis());
+            DataStorage.SetValue(mContext, KEY, currentTime);
         }
     }
 

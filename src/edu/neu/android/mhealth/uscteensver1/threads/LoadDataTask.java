@@ -16,7 +16,7 @@ import edu.neu.android.wocketslib.support.DataStorage;
 
 public class LoadDataTask extends AsyncTask<String, Void, Void> {
     private Context mContext;
-    private int mResult;
+    private int     mResult;
     private Handler mHandler;
     private LoadingDialog mLoadingDialog = null;
     private static final Object sLock = new Object();
