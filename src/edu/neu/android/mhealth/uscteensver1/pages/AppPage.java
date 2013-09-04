@@ -16,27 +16,35 @@ import android.view.MotionEvent;
 
 public abstract class AppPage implements OnGestureListener {
     // app context
-    protected Context mContext = null;
+    protected Context mContext;
     // message handler
-    protected Handler mHandler = null;
+    protected Handler mHandler;
     // flag to indicate whether this page is enabled
-    protected boolean mEnable = true;
+    protected boolean mEnable;
     // size of the page
     protected int mWidth = 0;
     protected int mHeight = 0;
     // UI or game objects
-    protected List<AppObject> mObjects = new ArrayList<AppObject>();
+    protected List<AppObject> mObjects;
     // gesture detector
-    protected GestureDetector mGestureDetector = new GestureDetector(this);
+    protected GestureDetector mGestureDetector;
     // the current selected object
-    protected AppObject mSelObject = null;
+    protected AppObject mSelObject;
     // the last selected object
-    protected AppObject mLastSelObject = null;
+    protected AppObject mLastSelObject;
 
     protected AppPage(Context context, Handler handler) {
         mContext = context;
         mHandler = handler;
-        mObjects.clear();
+        mEnable  = true;
+        mWidth   = 0;
+        mHeight  = 0;        
+        
+        mGestureDetector = new GestureDetector(this);        
+        mObjects = new ArrayList<AppObject>();        
+        
+        mSelObject     = null;
+        mLastSelObject = null;
     }
 
     public void resume() {
@@ -94,7 +102,7 @@ public abstract class AppPage implements OnGestureListener {
     }
 
     public void onSizeChanged(int width, int height) {
-        mWidth = width;
+        mWidth  = width;
         mHeight = height;
 
         for (AppObject obj : mObjects) {
