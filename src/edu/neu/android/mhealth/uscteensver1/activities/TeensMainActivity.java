@@ -278,7 +278,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         );
         
         popSurveyBack();
-                
+
         mCurPage.resume();
         mGraphView.onResume();
         Log.d("TeensMainActivity", "onResume out");
