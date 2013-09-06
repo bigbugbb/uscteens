@@ -62,7 +62,6 @@ public class TextView extends AppObject {
     }
 
     public boolean onDown(MotionEvent e) {
-        //mPaintBkg.setColor(Color.rgb(198, 235, 245));
         return true;
     }
 
@@ -70,7 +69,6 @@ public class TextView extends AppObject {
         if (mListener != null) {
             mListener.onClick(this);
         }
-        //mPaintBkg.setColor(Color.WHITE);
         return true;
     }
 

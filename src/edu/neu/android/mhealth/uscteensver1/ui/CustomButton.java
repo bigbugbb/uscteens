@@ -6,16 +6,26 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppObject;
 
 public abstract class CustomButton extends AppObject {
 
-    protected Object  mUserData = null;
-    protected boolean mEnable   = true;
-    protected int mCanvasWidth  = 0;
-    protected int mCanvasHeight = 0;
-    protected OnClickListener mListener = null;
+    protected Object  mUserData;
+    protected boolean mEnable;
+    protected String  mText;
+    protected int mCanvasWidth;
+    protected int mCanvasHeight;
+    protected OnClickListener mListener;
 
     public CustomButton(Resources res) {
         super(res);
         mKind   = BUTTON;
         mZOrder = ZOrders.BUTTON;
+        
+        mEnable   = true;
+        mUserData = null;
+        mText     = "";
+        
+        mCanvasWidth  = 0;
+        mCanvasHeight = 0;
+        
+        mListener = null;
     }
 
     public void setEnable(boolean enable) {
@@ -24,6 +34,14 @@ public abstract class CustomButton extends AppObject {
 
     public void setUserData(Object data) {
         mUserData = data;
+    }
+    
+    public void setText(String text) {
+    	mText = text;
+    }
+    
+    public String getText() {
+    	return mText;
     }
 
     public Object getUserData() {

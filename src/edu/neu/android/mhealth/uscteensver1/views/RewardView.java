@@ -15,7 +15,8 @@ import edu.neu.android.wocketslib.utils.DateHelper;
 
 public class RewardView extends WebView {
     protected final static String DEFAULT_URL = "file:///android_asset/rewards/default.html";
-
+    protected String mClaimCode;
+    
     public RewardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setVisibility(View.GONE);
@@ -24,6 +25,8 @@ public class RewardView extends WebView {
         getSettings().setJavaScriptEnabled(true);
         addJavascriptInterface(jsInterface, "JSInterface");
         loadUrl(DEFAULT_URL);
+        
+        mClaimCode = "";
     }
 
     @Override
@@ -31,10 +34,22 @@ public class RewardView extends WebView {
         // TODO Auto-generated method stub
         return super.onTouchEvent(event);
     }
+    
+    public void setClaimCode(String claimCode) {
+    	mClaimCode = claimCode;
+    }
+    
+    public String getClaimCode() {
+    	return mClaimCode;
+    }
 
     public class JavaScriptInterface {
 
         public JavaScriptInterface() {
+        }
+        
+        public String getClaimCode() {
+        	return mClaimCode;
         }
 
         public String getCountOfDayFromStartDate() {

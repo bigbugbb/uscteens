@@ -37,12 +37,21 @@
 </style>
 
 <script>	
-	window.onresize = window.onload = function() {	
+	window.onresize = window.onload = function() {
+        
+        var i = setInterval(function() {
+            clearInterval(i);
+            document.getElementById("msg").innerHTML =
+                "Redeem your gift card with claim code<br><br>" +
+                JSInterface.getClaimCode();
+        }, 3500);
+        
         document.getElementById("msg").innerHTML =
             "You have completed day " + JSInterface.getCountOfDayFromStartDate() + "<br><br>" +
             "of the Teen Activity labeling in time<br><br>" +
-            "to receive a reward.";
+            "to receive a reward.";        
 	}
+    
 </script>
 
 </head>

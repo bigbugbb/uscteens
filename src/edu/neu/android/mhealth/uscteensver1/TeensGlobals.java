@@ -52,6 +52,8 @@ public class TeensGlobals {
 
     // Tutorial video id
     public static final String TUTORIAL_VIDEO_URI = "ytv://eXs3YeyIZTo";
+    
+    public static final String APPLY_GIFT_CARD_URL = "https://www.amazon.com/gp/css/gc/payment/ref=gc_ya_subnav_view-gc-balance?";
 
     public static String DIRECTORY_PATH = "";
 
