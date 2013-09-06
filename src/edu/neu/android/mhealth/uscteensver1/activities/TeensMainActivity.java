@@ -12,8 +12,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.text.ClipboardManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -451,11 +453,25 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
             Log.d("Insert: ", "Inserting ..");
             db.addRewardState(new RewardState(select, RewardState.ACHIEVED));
         }
-
+        
+        saveToClipBoard(mRewardView.getClaimCode());
+                             
         if (msg.obj != null) {
-            Intent i = new Intent("android.intent.action.VIEW", Uri.parse((String) msg.obj));
+            Intent i = new Intent("android.intent.action.VIEW", Uri.parse(TeensGlobals.APPLY_GIFT_CARD_URL));
             startActivity(i);
-        }
+        }                
+    }
+    
+    private void saveToClipBoard(String content) {
+    	ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+//    	ClipData clip = ClipData.newPlainText("label", "Text to copy");
+//    	clipboard.setPrimaryClip(clip);
+    	clipboard.setText(content);
+
+    	String msg = content + " has been copied to clipboard.";
+    	Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
     }
 
     @Override

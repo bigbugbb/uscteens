@@ -20,6 +20,11 @@ public class FixButton extends CustomButton {
     public FixButton(Resources res) {
         super(res);
         loadImages(new int[]{ R.drawable.fix_btn });
+        
+        mText = "Fix";
+        
+        mTextX = 0;
+        mTextY = 0;
 
         mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintText.setColor(Color.WHITE);
@@ -43,7 +48,7 @@ public class FixButton extends CustomButton {
         mTextX = mX + mWidth / 2;
         mTextY = mY + mHeight * 0.675f;
         c.drawBitmap(mImages.get(0), mX, mY, null);
-        c.drawText("Fix", mTextX, mTextY, mPaintText);
+        c.drawText(mText, mTextX, mTextY, mPaintText);
     }
 
     @Override

@@ -20,16 +20,16 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class SlideBar extends AppObject {
     // canvas size
-    protected int mCanvasWidth = 0;
+    protected int mCanvasWidth  = 0;
     protected int mCanvasHeight = 0;
     // all paints and rects
     protected Paint mPaintText = null;
     protected Paint mPaint1 = new Paint();
     protected Paint mPaint2 = new Paint();
     protected Paint mPaint3 = new Paint();
-    protected RectF mRect1 = new RectF();
-    protected RectF mRect2 = new RectF();
-    protected RectF mRect3 = new RectF();
+    protected RectF mRect1  = new RectF();
+    protected RectF mRect2  = new RectF();
+    protected RectF mRect3  = new RectF();
     // range for unmarked chunks
     protected ArrayList<Float> mRange = null;
     // points for drawing separate lines

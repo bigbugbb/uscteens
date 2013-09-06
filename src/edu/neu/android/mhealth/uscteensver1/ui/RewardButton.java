@@ -21,8 +21,10 @@ public class RewardButton extends CustomButton {
         super(res);
         loadImages(new int[]{ R.drawable.reward_btn, R.drawable.reward_disable_btn });
 
+        mText = "Get reward";
+        
         mTextX = 0;
-        mTextY = 0;
+        mTextY = 0;      
         		
         mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintText.setColor(Color.WHITE);
@@ -35,7 +37,7 @@ public class RewardButton extends CustomButton {
 
     @Override
     public void onSizeChanged(int width, int height) {
-        mWidth = mImages.get(0).getWidth();
+        mWidth  = mImages.get(0).getWidth();
         mHeight = mImages.get(0).getHeight();
         mX = width * 0.93f - mWidth;
         mY = height * 0.84f;
@@ -49,7 +51,7 @@ public class RewardButton extends CustomButton {
         mTextX = mX + mWidth / 2;
         mTextY = mY + mHeight * 0.675f;
         c.drawBitmap(mImages.get(mEnable ? 0 : 1), mX, mY, null);
-        c.drawText("Get reward", mTextX, mTextY, mPaintText);
+        c.drawText(mText, mTextX, mTextY, mPaintText);
     }
 
     @Override

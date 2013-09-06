@@ -14,10 +14,12 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class BackButton extends CustomButton {
 
-    protected Paint mPaintText = null;
+    protected Paint mPaintText;
 
     public BackButton(Resources res) {
         super(res);
+        
+        mText = "BACK";
 
         mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintText.setColor(Color.YELLOW);
@@ -56,7 +58,7 @@ public class BackButton extends CustomButton {
 
     @Override
     public void onDraw(Canvas c) {
-        c.drawText("BACK", mX, mY, mPaintText);
+        c.drawText(mText, mX, mY, mPaintText);
     }
 
     @Override

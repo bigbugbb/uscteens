@@ -25,10 +25,10 @@ public class QuestHeader extends View {
     protected boolean mImageLoaded = false;
     protected ArrayList<Bitmap> mImages = new ArrayList<Bitmap>();
     
-    protected String mDate = "";
-    protected String mTime = "";
-    protected Paint  mPaintDate = null;
-    protected Paint  mPaintTime = null;
+    protected String mDate;
+    protected String mTime;
+    protected Paint  mPaintDate;
+    protected Paint  mPaintTime;
     
     protected int mWidth  = 0;
     protected int mHeight = 0;
@@ -56,7 +56,8 @@ public class QuestHeader extends View {
         mPaintTime.setTextAlign(Align.CENTER);
         mPaintTime.setFakeBoldText(false);
 
-        mDate = convertDateToDisplayFormat(DataSource.getCurrentSelectedDate());
+        mTime = "";
+        mDate = convertDateToDisplayFormat(DataSource.getCurrentSelectedDate());                
     }
 
     @Override

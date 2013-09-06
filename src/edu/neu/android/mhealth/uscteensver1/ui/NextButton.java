@@ -21,6 +21,8 @@ public class NextButton extends CustomButton {
     public NextButton(Resources res) {
         super(res);
         
+        mText = "NEXT";
+        
         mTextX = 0;
         mTextY = 0;
 
@@ -61,7 +63,7 @@ public class NextButton extends CustomButton {
 
     @Override
     public void onDraw(Canvas c) {
-        c.drawText("NEXT", mX, mY, mPaintText);
+        c.drawText(mText, mX, mY, mPaintText);
     }
 
     @Override

@@ -13,13 +13,18 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class DoneButton extends CustomButton {
 
-    protected float mTextX = 0;
-    protected float mTextY = 0;
-    protected Paint mPaintText = null;
+    protected float mTextX;
+    protected float mTextY;
+    protected Paint mPaintText;
 
     public DoneButton(Resources res) {
         super(res);
         loadImages(new int[]{ R.drawable.done_btn });
+        
+        mText = "Done";
+        
+        mTextX = 0;
+        mTextY = 0;
 
         mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintText.setColor(Color.WHITE);
@@ -43,7 +48,7 @@ public class DoneButton extends CustomButton {
         mTextX = mX + mWidth / 2;
         mTextY = mY + mHeight * 0.675f;
         c.drawBitmap(mImages.get(0), mX, mY, null);
-        c.drawText("Done", mTextX, mTextY, mPaintText);
+        c.drawText(mText, mTextX, mTextY, mPaintText);
     }
 
     @Override

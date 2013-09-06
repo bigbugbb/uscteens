@@ -87,10 +87,6 @@ public class RewardPage extends AppPage implements OnClickListener {
             obj.onSizeChanged(mView.getWidth(), mView.getHeight());
         }
 
-        if (mRewardView != null) {
-            mRewardView.setVisibility(View.VISIBLE);
-        }
-
         // get days between the start date and the selected date
         String startDate    = DataStorage.getStartDate(mContext, "");
         String selectedDate = DataStorage.GetValueString(mContext, TeensGlobals.CURRENT_SELECTED_DATE, "2013-01-01");
@@ -115,7 +111,13 @@ public class RewardPage extends AppPage implements OnClickListener {
             mBtnDone.setX(mWidth * 0.2f);
             mBtnFix.setX(mWidth * 0.8f - mBtnFix.getWidth());
         } else {
+        	int index = mReward.getLink().indexOf("code=");
+            if (index != -1) {
+            	String claimCode = mReward.getLink().substring(index + 5);        
+            	mRewardView.setClaimCode(claimCode);
+            }
             mRewardView.loadUrl(mReward.getHtml());
+            mRewardView.setVisibility(View.VISIBLE);
         }
     }
 

@@ -18,7 +18,7 @@ public class QuestButton extends ChunkButton {
             mHost.getAction().loadIcon();
             actImage = mHost.getAction().getActionImage();
         }
-        mWidth = actImage.getWidth();
+        mWidth  = actImage.getWidth();
         mHeight = actImage.getHeight();
         mListener = listener;
         mID = UIID.QUEST;
