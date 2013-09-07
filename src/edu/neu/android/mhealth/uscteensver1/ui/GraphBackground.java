@@ -7,12 +7,15 @@ import edu.neu.android.mhealth.uscteensver1.R;
 
 public class GraphBackground extends Background {
 
-    protected int mCanvasWidth  = 0;
-    protected int mCanvasHeight = 0;
+    protected int mCanvasWidth;
+    protected int mCanvasHeight;
 
     public GraphBackground(Resources res) {
         super(res);
         loadImages(new int[]{ R.drawable.menubar_background });
+        
+        mCanvasWidth  = 0;
+        mCanvasHeight = 0;
     }
 
     @Override

@@ -11,9 +11,9 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 
 public class ArrowButton extends CustomButton {
 
-    protected Paint mPaint = null;
-    protected boolean mDown = true;
-    protected boolean mAlignCenter = true;
+    protected Paint   mPaint;
+    protected boolean mDown;
+    protected boolean mAlignCenter;
 
     public ArrowButton(Resources res) {
         super(res);
@@ -26,6 +26,9 @@ public class ArrowButton extends CustomButton {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(Color.WHITE);
         mPaint.setStyle(Style.FILL);
+        
+        mDown = true;
+        mAlignCenter = true;
     }
 
     public void alignCenter(boolean alignCenter) {
