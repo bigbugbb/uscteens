@@ -81,7 +81,7 @@ public class QuestHeader extends View {
             Bitmap origin = BitmapFactory.decodeResource(getContext().getResources(), id, options);
             Bitmap scaled = null;
             // scale the image according to the current screen resolution         
-            float dstWidth  = AppScale.doScaleW(origin.getWidth());
+            float dstWidth  = Math.max(AppScale.doScaleW(origin.getWidth()), 400);
             float dstHeight = AppScale.doScaleH(origin.getHeight());
             if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
                 scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
