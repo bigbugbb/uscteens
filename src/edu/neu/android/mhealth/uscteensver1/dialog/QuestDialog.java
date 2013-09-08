@@ -65,23 +65,26 @@ public class QuestDialog extends Activity {
     protected QuestHeader    mQuestHeader;
     protected Button         mBackButton;
     protected ImageView      mTopArrow;
-    protected ImageView      mBottomArrow;
-    protected View           mTopLine;
+    protected ImageView      mBottomArrow;    
+
+	protected View           mTopLine;
     protected View           mBottomLine;
     protected ViewGroup      mListWrap;
     protected ViewGroup		 mLayoutDialog;
     protected ActionListView mListView;
-    
-    private int mListItemHeight;
+        
+    protected int mListItemHeight;
 
     protected Typeface 		 mTypeface;    
     protected ActionAdapter  mAdapter;
     protected HashMap<Integer, Action> mItemData = new HashMap<Integer, Action>();
 
     protected boolean mImageLoaded;
-    protected ArrayList<Drawable> mImages = new ArrayList<Drawable>();
+    protected ArrayList<Drawable> mImages = new ArrayList<Drawable>();           
     
-    protected static boolean sIsFirst = true;
+    protected static boolean sIsFirst = true;    
+    protected static int sOffset;
+    protected static int sPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +97,7 @@ public class QuestDialog extends Activity {
         });
         
         mTypeface = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
-
+		
         setupViews();
         adjustLayout();
     }
@@ -134,7 +137,7 @@ public class QuestDialog extends Activity {
         super.onDestroy();
         sIsFirst = false;
     }
-
+    
     private void setupViews() {
     	
     	mLayoutDialog = (ViewGroup) findViewById(R.id.layout_quest_dialog); 
@@ -188,6 +191,7 @@ public class QuestDialog extends Activity {
 	        	}
             }
         }
+        mListView.setSelectionFromTop(sPosition, sOffset);
         //mListView.setIndicatorBounds(getPixelFromDip(24), getPixelFromDip(30));
         mListView.setOnOverScrolledListener(new OnOverScrolledListener() {
 
@@ -216,20 +220,17 @@ public class QuestDialog extends Activity {
                 Log.d("ActionListView", "firstVisibleItem: " + firstVisibleItem +
                         "\tvisibleItemCount: " + visibleItemCount + "\ttotalItemCount: " + totalItemCount);
                 // save index and top position
-                // int index = mListView.getFirstVisiblePosition();
                 View v = mListView.getChildAt(0);
                 int top = (v == null) ? 0 : v.getTop();
 
-                if (mAdapter.getChildrenCount(1) > 4) { // TODO:
-                    Drawable image = mTopArrow.getDrawable();
-                    if (top < 0 && image == null) {
-                        mTopArrow.setImageDrawable(mImages.get(0));
-                    }
-                    mBottomArrow.setImageDrawable(mImages.get(1));
-                } else {
-                    mTopArrow.setImageDrawable(null);
-                    mBottomArrow.setImageDrawable(null);
+                Drawable image = mTopArrow.getDrawable();
+                if (top < 0 && image == null) {
+                    mTopArrow.setImageDrawable(mImages.get(0));
                 }
+                mBottomArrow.setImageDrawable(mImages.get(1));
+                
+                sOffset   = top;
+                sPosition = firstVisibleItem;                
                 // mListView.setSelectionFromTop(index, top);
             }
 
@@ -331,11 +332,10 @@ public class QuestDialog extends Activity {
     		}
     		height += mListItemHeight / 2;
     	}
-    	Log.i("bbb", "" + height);
     	
     	return height;
     }
-    
+
     private int getPixelFromDip(int pixel) {
     	final DisplayMetrics metrics = getResources().getDisplayMetrics();
         final float density = metrics.density;
