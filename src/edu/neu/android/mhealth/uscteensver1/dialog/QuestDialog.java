@@ -331,11 +331,10 @@ public class QuestDialog extends Activity {
     		}
     		height += mListItemHeight / 2;
     	}
-    	Log.i("bbb", "" + height);
     	
     	return height;
     }
-    
+
     private int getPixelFromDip(int pixel) {
     	final DisplayMetrics metrics = getResources().getDisplayMetrics();
         final float density = metrics.density;
