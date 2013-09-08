@@ -23,31 +23,24 @@ public class Action implements Serializable {
     protected String mIcoPath;
     protected String mActSubName;
     protected Bitmap mActImage;
+    
     protected boolean mImageLoaded = false;
 
-    public Action(String actID, String actName, String icoName, String icoPath) {
-        mActID    = actID;
-        mActName  = actName;
-        mIcoName  = icoName;
-        mIcoPath  = icoPath;
-        mActImage = null;
-
-        if (mActName.indexOf('|') != -1) {
-            mActSubName = mActName.substring(mActName.indexOf('|') + 1, mActName.length()).trim();
-            mActName    = mActName.substring(0, mActName.indexOf('|')).trim();
-        }
+    public Action(String actID, String actName, String actSubName, String icoName, String icoPath) {
+        mActID      = actID;
+        mActName    = actName;
+        mActSubName = actSubName;
+        mIcoName    = icoName;
+        mIcoPath    = icoPath;
+        mActImage   = null;
     }
 
-    public Action(String actID, String actName, String icoName, Bitmap actImage) {
-        mActID    = actID;
-        mActName  = actName;
-        mIcoName  = icoName;
-        mActImage = actImage;
-
-        if (mActName.indexOf('|') != -1) {
-            mActSubName = mActName.substring(mActName.indexOf('|') + 1, mActName.length()).trim();
-            mActName    = mActName.substring(0, mActName.indexOf('|')).trim();
-        }
+    public Action(String actID, String actName, String actSubName, String icoName, Bitmap actImage) {
+        mActID      = actID;
+        mActName    = actName;
+        mActSubName = actSubName;
+        mIcoName    = icoName;
+        mActImage   = actImage;
     }
 
     public void loadIcon() {
@@ -134,10 +127,8 @@ public class Action implements Serializable {
         Bitmap origin = BitmapFactory.decodeResource(TeensAppManager.getAppResources(), R.drawable.question_btn, options);
         Bitmap scaled = null;
         // scale the image according to the current screen resolution
-        float dstWidth = origin.getWidth(),
-                dstHeight = origin.getHeight();
-        dstWidth = AppScale.doScaleW(dstWidth);
-        dstHeight = AppScale.doScaleH(dstHeight);
+        float dstWidth  = AppScale.doScaleW(origin.getWidth());
+        float dstHeight = AppScale.doScaleH(origin.getHeight());
         if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
             scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
         }
@@ -149,7 +140,7 @@ public class Action implements Serializable {
             image = origin;
         }
 
-        return new Action(TeensGlobals.UNLABELLED_GUID, "Unlabelled", "question_btn.png", image);
+        return new Action(TeensGlobals.UNLABELLED_GUID, "Unlabelled", "", "question_btn.png", image);
     }
 
     @Override

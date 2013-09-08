@@ -2,15 +2,22 @@ package edu.neu.android.mhealth.uscteensver1.extra;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import android.content.Context;
 import android.util.Log;
-import au.com.bytecode.opencsv.CSVReader;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.wocketslib.Globals;
@@ -31,10 +38,17 @@ public class ActionManager {
 
     private final static String ASSETS_DIR = "activities";
 
-    protected static boolean sCopied = false;
-    protected static ActionWrap sActionWrap = new ActionWrap();
-    protected static ArrayList<Action> sActivatedActions  = new ArrayList<Action>();
-    protected static ArrayList<Action> sMostRecentActions = new ArrayList<Action>();
+    protected static boolean sCopied;
+    protected static ActionWrap sActionWrap;
+    protected static ArrayList<Action> sMostRecentActions;
+    protected static HashMap<String, ArrayList<Action>> sActivatedActions;
+    
+    static {
+    	sCopied = false;
+    	sActionWrap = new ActionWrap();
+    	sMostRecentActions = new ArrayList<Action>();
+    	sActivatedActions  = new LinkedHashMap<String, ArrayList<Action>>();
+    }
 
     public static void start() {
         loadActions();
@@ -52,34 +66,39 @@ public class ActionManager {
         return sActionWrap;
     }
 
-    public static ArrayList<Action> getActivatedActions() {
+    public static HashMap<String, ArrayList<Action>> getActivatedActions() {
         return sActivatedActions;
     }
 
     public static ArrayList<Action> getMostRecentActions() {
         sMostRecentActions.clear();
-        ArrayList<Action> activated = getActivatedActions();
+        HashMap<String, ArrayList<Action>> activated = getActivatedActions();
+        ArrayList<Action> actions = new ArrayList<Action>();
+        
+        for (Map.Entry<String, ArrayList<Action>> entry : activated.entrySet()) {
+        	actions.addAll(entry.getValue());
+        }
 
         // try to get the most recent actions as much as possible
         for (int i = 0; i < MOST_RECENT_ACTIONS_COUNT; ++i) {
             String actID = DataStorage.GetValueString(TeensAppManager.getAppContext(), MOST_RECENT_ACTION_ID + i, null);
-            if (actID != null) {
-                for (Action action : activated) {
+            if (actID != null) {            	
+            	for (Action action : actions) {
                     if (action.getActionID().equals(actID)) {
                         sMostRecentActions.add(action);
                         break;
                     }
-                }
+            	}
             }
         }
 
         // if the actions got are not enough, add the last several
         // actions from the activated action list for convenience
-        for (int j = activated.size() - 1; j >= 0; --j) {
+        for (int j = actions.size() - 1; j >= 0; --j) {
             if (sMostRecentActions.size() >= MOST_RECENT_ACTIONS_COUNT) {
                 break;
             }
-            Action action = activated.get(j);
+            Action action = actions.get(j);
             // check whether the current action has already been added
             boolean isExistent = false;
             for (Action recent : sMostRecentActions) {
@@ -144,50 +163,50 @@ public class ActionManager {
         sActionWrap.put(TeensGlobals.UNLABELLED_GUID, Action.createUnlabelledAction());
 
         File aMappingFile = getMappingFile(dirPath);
-        CSVReader csvReader = null;
+        SAXReader saxReader = new SAXReader();
         try {
-            csvReader = new CSVReader(new FileReader(aMappingFile));
-            String[] row = csvReader.readNext();
-            while ((row = csvReader.readNext()) != null) {
-                Action action = new Action(row[0].trim(), row[1].trim(), row[2].trim(), dirPath + row[2].trim());
-                sActionWrap.put(row[0].trim(), action); // key = actID, value = Action
+            Document document = saxReader.read(aMappingFile);
+            Element activities = document.getRootElement();
+            for (Iterator i = activities.elementIterator(); i.hasNext(); ) {
+                Element activity = (Element) i.next();
+                Element id      = activity.element("ID");
+                Element name    = activity.element("NAME");
+                Element subname = activity.element("SUBNAME");
+                Element icon    = activity.element("ICON");
+                Action action = new Action(id.getTextTrim(), name.getText(), subname.getText(), 
+                		icon.getText(), dirPath + icon.getText());
+                sActionWrap.put(id.getTextTrim(), action); // key = actID, value = Action
             }
-        } catch (Exception e) {
+        } catch (DocumentException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (csvReader != null) {
-                    csvReader.close();
-                }
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
+        
+        sActivatedActions.clear();
 
         // load the activated activities
         File aActivatedFile = getActivatedFile(dirPath);
         try {
-            csvReader = new CSVReader(new FileReader(aActivatedFile));
-            String[] row = csvReader.readNext();
-            while ((row = csvReader.readNext()) != null) {
-                Action action = getActions().get(row[0].trim());
-                if (action != null) {
-                    action.loadIcon();
-                    sActivatedActions.add(action);
-                }
+        	Document document = saxReader.read(aActivatedFile);
+            Element activated = document.getRootElement();
+            for (Iterator i = activated.elementIterator(); i.hasNext(); ) {
+            	Element category = (Element) i.next();
+            	String name = category.attributeValue("NAME");
+            	ArrayList<Action> actions = new ArrayList<Action>();
+            	for (Iterator j = category.elementIterator(); j.hasNext(); ) {
+            		Element item = (Element) j.next();
+            		Element id = item.element("ID");
+            		Action action = getActions().get(id.getTextTrim());
+            		if (action != null) {
+            			action.loadIcon();
+            			actions.add(action);
+            		}
+            	}            	
+            	sActivatedActions.put(name, actions);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (csvReader != null) {
-                    csvReader.close();
-                }
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            
         }
 
         return LOADING_SUCCEEDED;
