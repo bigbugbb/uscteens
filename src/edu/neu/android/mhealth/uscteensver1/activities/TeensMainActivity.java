@@ -1,5 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -52,6 +53,7 @@ import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.AppUsageLogger;
+import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
 import edu.neu.android.wocketslib.views.DummyView;
@@ -129,11 +131,11 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         String newVersion = AppUsageLogger.getVersion(context, "USCTeens");
         DataStorage.setVersion(context, newVersion);
         TeensGlobals.sUpdateConfig = !newVersion.equals(oldVersion);
-//		if (TeensGlobals.sUpdateConfig) {
-//			String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY;
-//			FileHelper.deleteDir(dirPath + TeensGlobals.ICON_FOLDER);	
+		if (TeensGlobals.sUpdateConfig) {
+			String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY;
+			FileHelper.deleteDir(dirPath + TeensGlobals.ICON_FOLDER);	
 //			FileHelper.deleteDir(dirPath + TeensGlobals.REWARD_FOLDER);
-//		}
+		}
     }
 
     private void setupScale() {

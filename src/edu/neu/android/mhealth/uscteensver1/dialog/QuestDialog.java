@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,18 +31,15 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupCollapseListener;
-import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupCollapseListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
@@ -61,6 +59,8 @@ public class QuestDialog extends Activity {
 
     static public String CHUNK_START_TIME = "CHUNK_START_TIME";
     static public String CHUNK_STOP_TIME  = "CHUNK_STOP_TIME";
+    
+    static private final String KEY_GROUP_EXPAND_STATE = "GROUP_EXPAND_STATE";
 
     protected QuestHeader    mQuestHeader;
     protected Button         mBackButton;
@@ -175,7 +175,12 @@ public class QuestDialog extends Activity {
         mListView = (ActionListView) findViewById(R.id.listview_action);
         mListView.setAdapter(mAdapter);
         mListView.expandGroup(0);
-        mListView.expandGroup(1);
+        for (int i = 1; i < mAdapter.getGroupCount(); ++i) {
+        	boolean isExpanded = DataStorage.GetValueBoolean(getApplicationContext(), KEY_GROUP_EXPAND_STATE + i, false);
+        	if (isExpanded) {
+        		mListView.expandGroup(i);
+        	}
+        }
         //mListView.setIndicatorBounds(getPixelFromDip(24), getPixelFromDip(30));
         mListView.setOnOverScrolledListener(new OnOverScrolledListener() {
 
@@ -226,8 +231,11 @@ public class QuestDialog extends Activity {
 
 			@Override
 			public void onGroupExpand(int groupPosition) {
-				mListWrap.getLayoutParams().height = mListItemHeight << 2;
-				mLayoutDialog.requestLayout();
+				// set the state first so calculateListHeight can get the right result
+				DataStorage.SetValue(getApplicationContext(), KEY_GROUP_EXPAND_STATE + groupPosition, true);
+				
+				mListWrap.getLayoutParams().height = Math.min(calculateListHeight(), mListItemHeight * 4);
+				mLayoutDialog.requestLayout();								
 			}
 		});
 
@@ -236,10 +244,11 @@ public class QuestDialog extends Activity {
 
 			@Override
 			public void onGroupCollapse(int groupPosition) {
-				if (!mListView.isGroupExpanded(0) && !mListView.isGroupExpanded(1)) {
-			        mListWrap.getLayoutParams().height = mListItemHeight;
-                    mLayoutDialog.requestLayout();
-				}
+				// set the state first so calculateListHeight can get the right result
+				DataStorage.SetValue(getApplicationContext(), KEY_GROUP_EXPAND_STATE + groupPosition, false);
+				
+		        mListWrap.getLayoutParams().height = Math.min(calculateListHeight(), mListItemHeight * 4);
+                mLayoutDialog.requestLayout();								
 			}
 		});
         mListView.setOnChildClickListener(new OnChildClickListener() {
@@ -299,6 +308,23 @@ public class QuestDialog extends Activity {
         mListItemHeight = laParams.height / 4;
     }
     
+    private int calculateListHeight() {
+    	int height = 0;
+    	
+    	for (int i = 0; i < mAdapter.getGroupCount(); ++i) {
+    		boolean isExpanded = DataStorage.GetValueBoolean(getApplicationContext(), KEY_GROUP_EXPAND_STATE + i, false);
+    		if (isExpanded) {
+    			for (int j = 0; j < mAdapter.getChildrenCount(i); ++j) {
+    				height += mListItemHeight;
+    			}
+    		}
+    		height += mListItemHeight / 2;
+    	}
+    	Log.i("bbb", "" + height);
+    	
+    	return height;
+    }
+    
     private int getPixelFromDip(int pixel) {
     	final DisplayMetrics metrics = getResources().getDisplayMetrics();
         final float density = metrics.density;
@@ -352,9 +378,7 @@ public class QuestDialog extends Activity {
     }
 
     protected class ActionAdapter extends BaseExpandableListAdapter {
-
-        private ArrayList<Action> mActions;
-        private ArrayList<Action> mRecents;        
+                
         private LayoutInflater    mInflater;
         private Typeface          mTypeface;
         private Resources         mResources;
@@ -363,19 +387,21 @@ public class QuestDialog extends Activity {
         private HashMap<String, List<Action>> mChildData;
 
         public ActionAdapter(Activity activity) {
-            mResources = activity.getResources();            
-            mActions   = ActionManager.getActivatedActions();
-            mRecents   = ActionManager.getMostRecentActions();
+            mResources = activity.getResources();                        
             mInflater  = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mTypeface  = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
             
             mGroupData = new ArrayList<String>();
             mGroupData.add("Most recent");
-            mGroupData.add("All");
+            for (Map.Entry<String, ArrayList<Action>> entry : ActionManager.getActivatedActions().entrySet()) {  
+            	mGroupData.add(entry.getKey());
+            }
             
             mChildData = new HashMap<String, List<Action>>();
-            mChildData.put("Most recent", mRecents);
-            mChildData.put("All", mActions);
+            mChildData.put("Most recent", ActionManager.getMostRecentActions());
+            for (Map.Entry<String, ArrayList<Action>> entry : ActionManager.getActivatedActions().entrySet()) {       
+            	mChildData.put(entry.getKey(), entry.getValue());
+            }
         }
  
 		@Override
@@ -448,16 +474,11 @@ public class QuestDialog extends Activity {
             	convertView = mInflater.inflate(R.layout.list_item_action, null);
             }
 
-            Action action = null;
-            if (groupPosition == 0) {
-                action = mRecents.get(childPosition);
-                Drawable background = mResources.getDrawable(R.drawable.selector_action_list_highlight);
-                convertView.setBackgroundDrawable(background);
-            } else {
-                action = mActions.get(childPosition);// - ActionManager.MOST_RECENT_ACTIONS_COUNT);
-                Drawable background = mResources.getDrawable(R.drawable.selector_action_list);
-                convertView.setBackgroundDrawable(background);
-            }
+        	String category = mGroupData.get(groupPosition);
+        	Action action   = mChildData.get(category).get(childPosition);
+            Drawable background = mResources.getDrawable(groupPosition == 0 ? 
+            		R.drawable.selector_action_list_highlight : R.drawable.selector_action_list);
+            convertView.setBackgroundDrawable(background);            
 
             TextView  name    = (TextView) convertView.findViewById(R.id.action_name);
             TextView  subname = (TextView) convertView.findViewById(R.id.action_subname);
@@ -469,7 +490,7 @@ public class QuestDialog extends Activity {
             // set all values in listview
             name.setText(action.getActionName());
             subname.setText(action.getActionSubName());
-            subname.setVisibility(action.getActionSubName() == null ? View.GONE : View.VISIBLE);
+            subname.setVisibility(action.getActionSubName().equals("") ? View.GONE : View.VISIBLE);
             image.setImageBitmap(action.getActionImage());           
 
             // attach the action to the item
