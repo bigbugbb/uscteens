@@ -225,7 +225,7 @@ public class ActionManager {
 
         for (String path : filePaths) {
             String extName = path.substring(path.lastIndexOf("/") + 1, path.length());
-            if (extName.equals("activity_mapping.csv")) {
+            if (extName.equals("activity_mapping.xml")) {
                 filePath = path;
                 break;
             }
@@ -240,7 +240,7 @@ public class ActionManager {
 
         for (String path : filePaths) {
             String extName = path.substring(path.lastIndexOf("/") + 1, path.length());
-            if (extName.equals("activity_activated.csv")) {
+            if (extName.equals("activity_activated.xml")) {
                 filePath = path;
                 break;
             }

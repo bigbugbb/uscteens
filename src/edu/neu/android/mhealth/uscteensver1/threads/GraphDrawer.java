@@ -1,6 +1,7 @@
 package edu.neu.android.mhealth.uscteensver1.threads;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import android.graphics.Canvas;
 import android.os.Handler;
@@ -11,6 +12,10 @@ import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 public class GraphDrawer extends BaseThread {
     // default idle time
     protected final static int DEFAULT_IDLE_TIME = 10;
+    // normal idle time
+    protected final static int NORMAL_IDLE_TIME = 5000;
+    // longest active time
+    protected final static int MAX_ACTIVE_TIME = 10000;
     // the holder of the SurfaceView
     protected SurfaceHolder mHolder = null;
     // the app surface view
@@ -21,12 +26,16 @@ public class GraphDrawer extends BaseThread {
     protected AtomicBoolean mPause = new AtomicBoolean(false);
     // for pause synchronization
     protected AtomicBoolean mPaused = new AtomicBoolean(false);
+ // accumulated working time
+    protected int mWorkTime = 0;
     // idle time after each drawing
-    protected int mIdleTime = DEFAULT_IDLE_TIME;
+    protected int mIdleTime = DEFAULT_IDLE_TIME;    
+    // object for synchronization
+    protected final static Object sLock = new Object(); 
 
     public GraphDrawer(GraphView view, AppPage page, Handler handler) {
-        mView = view;
-        mPage = page;
+        mView   = view;
+        mPage   = page;
         mHolder = view.getHolder();
         setHandler(handler);
     }
@@ -35,13 +44,6 @@ public class GraphDrawer extends BaseThread {
         synchronized (mHolder) {
             mPage = page;
         }
-    }
-
-    public void setIdleTime(int idleTime) {
-        if (idleTime < 1 || idleTime > 1000) {
-            idleTime = DEFAULT_IDLE_TIME;
-        }
-        mIdleTime = idleTime;
     }
 
     public void pause(boolean pause) {
@@ -60,6 +62,15 @@ public class GraphDrawer extends BaseThread {
                 e.printStackTrace();
             }
         }
+    }
+    
+    @Override
+    public void interrupt() {
+    	super.interrupt();
+    	synchronized (sLock) {
+    		mWorkTime = 0;
+    		mIdleTime = DEFAULT_IDLE_TIME;
+    	}    	
     }
 
     @Override
@@ -91,10 +102,17 @@ public class GraphDrawer extends BaseThread {
 
             synchronized (this) {
                 try {
-                    wait(mIdleTime);
+                    wait(mIdleTime);                                        
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
+                }
+            }
+            
+            synchronized (sLock) {
+            	mWorkTime += mIdleTime;
+            	if (mWorkTime > MAX_ACTIVE_TIME) {
+            		mIdleTime = NORMAL_IDLE_TIME;
                 }
             }
 

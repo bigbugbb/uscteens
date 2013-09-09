@@ -479,6 +479,10 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (mCurPage != null) {
+        	GraphDrawer drawer = mGraphView.getDrawer();
+            if (drawer != null) {
+                drawer.interrupt();
+            }
             return mCurPage.onTouch(event);
         }
         return false;
