@@ -48,6 +48,7 @@ public class GraphDrawer extends BaseThread {
 
     public void pause(boolean pause) {
         mPause.set(pause);
+        interrupt();
         // wait until the thread is paused
         while (mPause.get() && !mPaused.get()) {
             if (!mRun) {
