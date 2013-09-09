@@ -25,8 +25,8 @@ public class GraphDrawer extends BaseThread {
     protected AtomicBoolean mPause = new AtomicBoolean(false);
     // for pause synchronization
     protected AtomicBoolean mPaused = new AtomicBoolean(false);
-    // accumulated working time
-    protected int mWorkTime = 0;
+    // last time for updating idle time
+    protected long mUpdateTime = 0;
     // idle time after each drawing
     protected int mIdleTime = DEFAULT_IDLE_TIME;    
     // object for synchronization
@@ -68,7 +68,7 @@ public class GraphDrawer extends BaseThread {
     public void interrupt() {
     	super.interrupt();
     	synchronized (sLock) {
-    		mWorkTime = 0;
+    		mUpdateTime = System.currentTimeMillis();
     		mIdleTime = DEFAULT_IDLE_TIME;
     	}    	
     }
@@ -109,9 +109,8 @@ public class GraphDrawer extends BaseThread {
                 }
             }
             
-            synchronized (sLock) {
-            	mWorkTime += mIdleTime;
-            	if (mWorkTime > MAX_ACTIVE_TIME) {
+            synchronized (sLock) {            	
+            	if (Math.abs(mUpdateTime - System.currentTimeMillis()) > MAX_ACTIVE_TIME) {
             		mIdleTime = NORMAL_IDLE_TIME;
                 }
             }
