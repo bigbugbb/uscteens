@@ -1,7 +1,6 @@
 package edu.neu.android.mhealth.uscteensver1.threads;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import android.graphics.Canvas;
 import android.os.Handler;
