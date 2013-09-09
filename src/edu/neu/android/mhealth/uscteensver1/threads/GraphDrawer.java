@@ -26,7 +26,7 @@ public class GraphDrawer extends BaseThread {
     protected AtomicBoolean mPause = new AtomicBoolean(false);
     // for pause synchronization
     protected AtomicBoolean mPaused = new AtomicBoolean(false);
- // accumulated working time
+    // accumulated working time
     protected int mWorkTime = 0;
     // idle time after each drawing
     protected int mIdleTime = DEFAULT_IDLE_TIME;    
