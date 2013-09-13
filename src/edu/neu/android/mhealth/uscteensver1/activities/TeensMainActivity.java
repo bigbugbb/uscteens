@@ -494,6 +494,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
     private PasswordChecker mPwdSetup     = new PasswordChecker("sss");
     private PasswordChecker mPwdTeens     = new PasswordChecker("teens");
     private PasswordChecker mPwdEternal   = new PasswordChecker("eternal");
+    private PasswordChecker mPwdMortal    = new PasswordChecker("mortal");
     private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
 
     @Override
@@ -544,8 +545,15 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         } else if (mPwdTeens.isMatch(keyCode)) {
             mText2Speech.speak("Welcome to use teens activity game!", TextToSpeech.QUEUE_FLUSH, null);
         } else if (mPwdEternal.isMatch(keyCode)) {
-        	Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = Globals.MINUTES_1_IN_MS;
-        	mText2Speech.speak("Record data every second", TextToSpeech.QUEUE_FLUSH, null);
+        	Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 59000;
+        	DataStorage.SetValue(getApplicationContext(), "MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN", 
+        			Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN);
+        	mText2Speech.speak("Record raw data per second", TextToSpeech.QUEUE_FLUSH, null);
+        } else if (mPwdMortal.isMatch(keyCode)) {
+        	Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 21000;
+        	DataStorage.SetValue(getApplicationContext(), "MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN", 
+        			Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN);
+        	mText2Speech.speak("Record 20 seconds of raw data per minute", TextToSpeech.QUEUE_FLUSH, null);
         }
 
         return super.onKeyDown(keyCode, event);
