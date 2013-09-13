@@ -9,6 +9,7 @@ import android.os.Handler;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.activities.helpcomment.GetHelpActivity;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
+import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.FileHelper;
 
 /**
@@ -151,8 +152,9 @@ public class TeensGlobals {
         Globals.ALL_APP_KEYS = new String[2];
         Globals.ALL_APP_KEYS[0] = Globals.GETHELP;
         Globals.ALL_APP_KEYS[1] = Globals.SURVEY;
-
-        Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 21000;
+        
+        Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 
+        		(int) DataStorage.GetValueLong(TeensAppManager.getAppContext(), "MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN", 21000);
 
         try {
             String packageName = context.getPackageName();
