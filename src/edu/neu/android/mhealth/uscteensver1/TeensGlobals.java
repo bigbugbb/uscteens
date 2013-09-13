@@ -88,6 +88,7 @@ public class TeensGlobals {
         Globals.IS_READING_SENSOR_ENABLED        = true; // true for debug
         Globals.IS_LOG_PHONE_BATTERY_ENABLED     = true;
         Globals.IS_RECORDING_PHONE_ACCEL_ENABLED = true;
+        Globals.IS_RECORDING_RAW_PHONE_ACCEL_DATA_ENABLED = true;
 
         Globals.IS_ANNOTATION_EXTERNAL  = true;
         Globals.IS_SENSOR_DATA_EXTERNAL = true;

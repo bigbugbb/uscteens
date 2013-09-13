@@ -493,6 +493,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
     private PasswordChecker mPwdSubject   = new PasswordChecker(Globals.PW_SUBJECT_PASSWORD);
     private PasswordChecker mPwdSetup     = new PasswordChecker("sss");
     private PasswordChecker mPwdTeens     = new PasswordChecker("teens");
+    private PasswordChecker mPwdEternal   = new PasswordChecker("eternal");
     private PasswordChecker mPwdUninstall = new PasswordChecker("uninstall");
 
     @Override
@@ -542,6 +543,9 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
             startActivity(i);
         } else if (mPwdTeens.isMatch(keyCode)) {
             mText2Speech.speak("Welcome to use teens activity game!", TextToSpeech.QUEUE_FLUSH, null);
+        } else if (mPwdEternal.isMatch(keyCode)) {
+        	Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = Globals.MINUTES_1_IN_MS;
+        	mText2Speech.speak("Record data every second", TextToSpeech.QUEUE_FLUSH, null);
         }
 
         return super.onKeyDown(keyCode, event);
