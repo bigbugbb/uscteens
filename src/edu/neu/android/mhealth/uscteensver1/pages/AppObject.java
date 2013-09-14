@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 public abstract class AppObject {
+	
     public final static int UNKNOWN    = 0;
     public final static int BACKGROUND = 1;
     public final static int TITLE      = 2;
@@ -35,18 +36,17 @@ public abstract class AppObject {
     protected float mAccSpeedX;
     protected float mAccSpeedY;
 
-    protected int     mID = -1;
-    protected int     mKind   = UNKNOWN;
-    protected int     mZOrder = 0;
-    protected boolean mVisible  = true;
-    protected boolean mMovable  = false;
-    protected boolean mSelected = false;
-    protected Resources mRes = null;
-    protected boolean mImageLoaded = false;
-    protected List<Bitmap> mImages = new ArrayList<Bitmap>();
+    protected int       mID;
+    protected int       mKind;
+    protected int       mZOrder;
+    protected boolean   mVisible;
+    protected boolean   mMovable;
+    protected boolean   mSelected;
+    protected Resources mRes;
+    protected boolean   mImageLoaded;
+    protected List<Bitmap> mImages;
 
     protected AppObject(Resources res) {
-        mRes = res;
 
         mX = 0;
         mY = 0;
@@ -54,8 +54,8 @@ public abstract class AppObject {
         mWidth  = 0;
         mHeight = 0;
 
-        mSpeedX = 0;
-        mSpeedY = 0;
+        mSpeedX    = 0;
+        mSpeedY    = 0;
         mMinSpeedX = 0;
         mMinSpeedY = 0;
         mMaxSpeedX = 0;

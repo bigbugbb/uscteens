@@ -17,13 +17,12 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 public class Action implements Serializable {
     private static final long serialVersionUID = -6124174446308636095L;
 
-    protected String mActID;
-    protected String mActName;
-    protected String mIcoName;
-    protected String mIcoPath;
-    protected String mActSubName;
-    protected Bitmap mActImage;
-    
+    protected String  mActID;
+    protected String  mActName;
+    protected String  mIcoName;
+    protected String  mIcoPath;
+    protected String  mActSubName;
+    protected Bitmap  mActImage;    
     protected boolean mImageLoaded = false;
 
     public Action(String actID, String actName, String actSubName, String icoName, String icoPath) {

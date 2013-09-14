@@ -39,7 +39,7 @@ public class BackButton extends CustomButton {
         mCanvasHeight = height;
 
         Rect bounds = new Rect();
-        mPaintText.getTextBounds("BACK", 0, 4, bounds);
+        mPaintText.getTextBounds(mText, 0, 4, bounds);
         mWidth  = bounds.width();
         mHeight = bounds.height();
         mX = width * 0.07f;

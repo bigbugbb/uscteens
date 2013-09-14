@@ -44,7 +44,7 @@ public class NextButton extends CustomButton {
         mCanvasHeight = height;
 
         Rect bounds = new Rect();
-        mPaintText.getTextBounds("NEXT", 0, 4, bounds);
+        mPaintText.getTextBounds(mText, 0, 4, bounds);
         mWidth  = bounds.width();
         mHeight = bounds.height();
         mX = width * (1 - 0.07f);

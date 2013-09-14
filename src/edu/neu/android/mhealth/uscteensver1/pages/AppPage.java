@@ -22,8 +22,8 @@ public abstract class AppPage implements OnGestureListener {
     // flag to indicate whether this page is enabled
     protected boolean mEnable;
     // size of the page
-    protected int mWidth = 0;
-    protected int mHeight = 0;
+    protected int mWidth;
+    protected int mHeight;
     // UI or game objects
     protected List<AppObject> mObjects;
     // gesture detector

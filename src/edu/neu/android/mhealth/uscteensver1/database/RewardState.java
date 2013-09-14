@@ -2,11 +2,11 @@ package edu.neu.android.mhealth.uscteensver1.database;
 
 public class RewardState {
 
-    public final static String LOCKED = "LOCKED";
+    public final static String LOCKED   = "LOCKED";
     public final static String ACHIEVED = "ACHIEVED";
 
     //private variables
-    private int mID;
+    private int    mID;
     private String mDate;
     private String mState;
 

@@ -5,10 +5,11 @@ public class AppEvent {
     public static final int EVENT_CONTROL = 1;
     public static final int EVENT_SCENE   = 2;
     public static final int SENSOR_ACCELEROMETER = 1;
-    public int mEventType;
-    public int mWhat = 0;
-    public long mEventTime;
-    public Object mExtra = null;
+    
+    public int    mEventType;
+    public int    mWhat;
+    public long   mEventTime;
+    public Object mExtra;
 
     public AppEvent(int eventType) {
         setEventType(eventType);
