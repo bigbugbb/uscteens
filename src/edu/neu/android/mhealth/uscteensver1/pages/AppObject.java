@@ -292,10 +292,7 @@ public abstract class AppObject {
     public boolean isSelected() {
         return mSelected;
     }
-
-    public void operate(AppCtrl ctrl) {
-    }
-
+    
     public void update() {
     }
 

@@ -60,10 +60,8 @@ public class ClockButton extends ChunkButton {
             Bitmap origin = BitmapFactory.decodeResource(res, id, options);
             Bitmap scaled = null;
             // scale the image according to the current screen resolution
-            float dstWidth = origin.getWidth(),
-                    dstHeight = origin.getHeight();
-            dstWidth = AppScale.doScaleW(dstWidth);
-            dstHeight = AppScale.doScaleH(dstHeight);
+            float dstHeight = AppScale.doScaleH(origin.getHeight());
+            float dstWidth  = dstHeight;
             if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
                 scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
             }
