@@ -25,6 +25,7 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
@@ -104,7 +105,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         for (AppPage page : mPages) {
             try {
                 page.release();
-            } catch (NullPointerException e) { // not good, remove in the future
+            } catch (Exception e) { // not good, remove in the future
                 e.printStackTrace();
             }
         }
@@ -134,7 +135,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 		if (TeensGlobals.sUpdateConfig) {
 			String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY;
 			FileHelper.deleteDir(dirPath + TeensGlobals.ICON_FOLDER);	
-//			FileHelper.deleteDir(dirPath + TeensGlobals.REWARD_FOLDER);
+			FileHelper.deleteDir(dirPath + TeensGlobals.REWARD_FOLDER);
 		}
     }
 

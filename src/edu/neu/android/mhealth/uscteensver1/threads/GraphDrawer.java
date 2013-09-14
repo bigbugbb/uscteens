@@ -10,27 +10,27 @@ import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 
 public class GraphDrawer extends BaseThread {
     // default idle time
-    protected final static int DEFAULT_IDLE_TIME = 10;
+    private final static int DEFAULT_IDLE_TIME = 10;
     // normal idle time
-    protected final static int NORMAL_IDLE_TIME = 5000;
+    private final static int NORMAL_IDLE_TIME = 5000;
     // longest active time
-    protected final static int MAX_ACTIVE_TIME = 10000;
+    private final static int MAX_ACTIVE_TIME = 10000;
     // the holder of the SurfaceView
-    protected SurfaceHolder mHolder = null;
+    private SurfaceHolder mHolder = null;
     // the app surface view
-    protected GraphView mView = null;
+    private GraphView mView = null;
     // the app page to draw
-    protected AppPage mPage = null;
+    private AppPage mPage = null;
     // flag to indicate whether the drawer should be paused
-    protected AtomicBoolean mPause = new AtomicBoolean(false);
+    private AtomicBoolean mPause = new AtomicBoolean(false);
     // for pause synchronization
-    protected AtomicBoolean mPaused = new AtomicBoolean(false);
+    private AtomicBoolean mPaused = new AtomicBoolean(false);
     // last time for updating idle time
-    protected long mUpdateTime = 0;
+    private long mUpdateTime = 0;
     // idle time after each drawing
-    protected int mIdleTime = DEFAULT_IDLE_TIME;    
+    private int mIdleTime = DEFAULT_IDLE_TIME;    
     // object for synchronization
-    protected final static Object sLock = new Object(); 
+    private final static Object sLock = new Object(); 
 
     public GraphDrawer(GraphView view, AppPage page, Handler handler) {
         mView   = view;

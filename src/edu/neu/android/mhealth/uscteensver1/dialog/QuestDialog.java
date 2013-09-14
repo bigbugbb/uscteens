@@ -390,11 +390,11 @@ public class QuestDialog extends Activity {
 
     protected class ActionAdapter extends BaseExpandableListAdapter {
                 
-        private LayoutInflater    mInflater;
-        private Typeface          mTypeface;
-        private Resources         mResources;
+        private LayoutInflater mInflater;
+        private Typeface       mTypeface;
+        private Resources      mResources;
         
-        private List<String> mGroupData;
+        private List<String>                  mGroupData;
         private HashMap<String, List<Action>> mChildData;
 
         public ActionAdapter(Activity activity) {
