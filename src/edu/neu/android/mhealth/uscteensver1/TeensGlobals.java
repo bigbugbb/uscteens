@@ -47,7 +47,6 @@ public class TeensGlobals {
 
     public static final String ANNOTATION_GUID = "2F996145-7EB0-4E25-935C-10D53B15012D";
     public static final String UNLABELLED_GUID = "03F9A375-C162-4B24-AB74-BF23CD07B358";
-    public static final String UNLABELLED_STRING = "Unlabelled";
 
     public static final int DAILY_LAST_SECOND = 3600 * 24 - 1;
 

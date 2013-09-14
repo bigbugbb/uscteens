@@ -36,6 +36,8 @@ import android.widget.TextView;
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
+import edu.neu.android.mhealth.uscteensver1.extra.Action;
+import edu.neu.android.mhealth.uscteensver1.extra.ActionManager;
 import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 import edu.neu.android.mhealth.uscteensver1.utils.NoteSender;
@@ -58,7 +60,7 @@ public class MergeDialog extends Activity {
     protected String[] mNames;
     protected String[] mSubnames;    
     protected Typeface mTypeface;
-    protected ArrayList<String> mActions;
+    protected ArrayList<String> mAnswers;
     
     protected boolean mImageLoaded;
     protected ArrayList<Drawable> mImages = new ArrayList<Drawable>();
@@ -68,13 +70,15 @@ public class MergeDialog extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_merge);
                 
-        mActions  = getIntent().getStringArrayListExtra(KEY);
-        mNames    = new String[mActions.size()];
-        mSubnames = new String[mActions.size()];
-        for (int i = 0; i < mActions.size(); ++i) {
-        	String[] split = mActions.get(i).split("[|]");
-        	mNames[i]    = split[0];
-        	mSubnames[i] = split.length > 1 ? split[1] : null;
+        mAnswers  = getIntent().getStringArrayListExtra(KEY);
+        mNames    = new String[mAnswers.size()];
+        mSubnames = new String[mAnswers.size()];
+        for (int i = 0; i < mAnswers.size(); ++i) {
+        	Action action = ActionManager.getAction(mAnswers.get(i));
+        	mNames[i]    = action.getActionName();
+        	mSubnames[i] = action.getActionSubName();
+        	// do a little change about the text
+        	mNames[i] = action.getActionID().equals(TeensGlobals.UNLABELLED_GUID) ? "None" : mNames[i];
         }
         
         mAdapter = new MergeAdapter(this);
@@ -84,7 +88,7 @@ public class MergeDialog extends Activity {
         
         mTypeface = Typeface.createFromAsset(TeensAppManager.getAppAssets(), "font/arial.ttf");
         
-        if (mActions != null) {
+        if (mAnswers != null) {
             setupViews();
             adjustLayout();
         } else {
@@ -170,9 +174,9 @@ public class MergeDialog extends Activity {
         mListView.setAdapter(mAdapter);        
         mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				DataStorage.SetValue(getApplicationContext(), TeensGlobals.MERGE_SELECTION, mActions.get(position));
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Action action = ActionManager.getAction(mAnswers.get(position));
+				DataStorage.SetValue(getApplicationContext(), TeensGlobals.MERGE_SELECTION, action.getActionID());
 		        Message msg = TeensGlobals.sGlobalHandler.obtainMessage();
 		        msg.what = AppCmd.MERGE_FINISHING;
 		        TeensGlobals.sGlobalHandler.sendMessage(msg);
@@ -241,7 +245,7 @@ public class MergeDialog extends Activity {
         }
 
         public int getCount() {
-            return mActions.size();
+            return mAnswers.size();
         }
 
         public Object getItem(int position) {
@@ -277,7 +281,7 @@ public class MergeDialog extends Activity {
             // set all values in listview
             name.setText(mNames[position]);
             subname.setText(mSubnames[position]);
-            subname.setVisibility(mSubnames[position] == null ? View.GONE : View.VISIBLE);
+            subname.setVisibility(mSubnames[position].equals("") ? View.GONE : View.VISIBLE);
             image.setImageDrawable(mImages.get(1));
 
             name.setTypeface(mTypeface);

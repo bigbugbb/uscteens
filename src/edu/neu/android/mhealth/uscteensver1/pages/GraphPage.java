@@ -377,23 +377,23 @@ public class GraphPage extends AppPage implements OnClickListener,
     private void tryToMerge(MergeButton merge) {
         // get the chunks to merge according to the pressed merge button
         ArrayList<Chunk> mChunksToMerge = ChunkManager.getMergingChunks(merge);
-        String actionL = mChunksToMerge.get(0).mQuest.getStringAnswer();
-        String actionR = mChunksToMerge.get(1).mQuest.getStringAnswer();
-        ArrayList<String> actions = new ArrayList<String>();
-        if (!actionL.equals(TeensGlobals.UNLABELLED_STRING)) {
-            actions.add(actionL);
+        String answerL = mChunksToMerge.get(0).mQuest.getAnswer(); // action id
+        String answerR = mChunksToMerge.get(1).mQuest.getAnswer(); // action id
+        ArrayList<String> answers = new ArrayList<String>();
+        if (!answerL.equals(TeensGlobals.UNLABELLED_GUID)) {
+        	answers.add(answerL);
         }
-        if (!actionR.equals(TeensGlobals.UNLABELLED_STRING)) {
-            actions.add(actionR);
+        if (!answerR.equals(TeensGlobals.UNLABELLED_GUID)) {
+        	answers.add(answerR);
         }
         // the left and right chunks are both unlabelled or are the same, merge them directly
-        if (actions.size() == 0 || actionL.equals(actionR)) {
+        if (answers.size() == 0 || answerL.equals(answerR)) {
             ChunkManager.mergeChunk(mChunksToMerge.get(0), mChunksToMerge.get(1), null);
             mSlideBar.updateUnmarkedRange();
-        } else {
-            actions.add("None");
+        } else {        	
+        	answers.add(TeensGlobals.UNLABELLED_GUID);
             Message msg = mHandler.obtainMessage();
-            msg.obj  = actions;
+            msg.obj  = answers;
             msg.what = AppCmd.MERGE;
             mHandler.sendMessage(msg);
         }
@@ -445,12 +445,12 @@ public class GraphPage extends AppPage implements OnClickListener,
         String selection = (String) params[0];
         Chunk maintain = null;
         ArrayList<Chunk> mChunksToMerge = ChunkManager.getMergingChunks(merge);
-        String actionL = mChunksToMerge.get(0).mQuest.getStringAnswer();
-        String actionR = mChunksToMerge.get(1).mQuest.getStringAnswer();
+        String answerL = mChunksToMerge.get(0).mQuest.getAnswer(); // action id
+        String answerR = mChunksToMerge.get(1).mQuest.getAnswer(); // action id
 
-        if (actionL.equals(selection)) {
+        if (answerL.equals(selection)) {
             maintain = mChunksToMerge.get(0);
-        } else if (actionR.equals(selection)) {
+        } else if (answerR.equals(selection)) {
             maintain = mChunksToMerge.get(1);
         } else { // "None"
             maintain = mChunksToMerge.get(0);
