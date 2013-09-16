@@ -1,8 +1,5 @@
 package edu.neu.android.mhealth.uscteensver1.dialog;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +30,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Date;
+
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensAppManager;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
@@ -223,6 +224,9 @@ public class MergeDialog extends Activity {
             // scale the image according to the current screen resolution
             float dstWidth  = AppScale.doScaleW(origin.getWidth());
             float dstHeight = AppScale.doScaleH(origin.getHeight());
+            if (id != R.drawable.arrow_warning) {
+                dstWidth = dstHeight;
+            }
             if (dstWidth != origin.getWidth() || dstHeight != origin.getHeight()) {
                 scaled = Bitmap.createScaledBitmap(origin, (int) dstWidth, (int) dstHeight, true);
             }
