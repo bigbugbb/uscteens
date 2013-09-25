@@ -91,7 +91,9 @@ public class GraphDrawer extends BaseThread {
                         }
                     }
                 }
-            } finally {
+            } catch (Exception e) {
+            	e.printStackTrace();
+        	} finally {
                 // do this in a finally so that if an exception is thrown
                 // during the above, we don't leave the Surface in an
                 // inconsistent state
