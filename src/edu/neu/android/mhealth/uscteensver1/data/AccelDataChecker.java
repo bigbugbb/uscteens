@@ -42,7 +42,9 @@ public class AccelDataChecker {
         }
 
         // Analyze data to get the state for context sensitive prompt
-        return MotionDetectAlgorithm.getInstance().doMotionDetection(sensorData, chunkPos, startTime, stopTime);
+        MotionDetectAlgorithm mda = MotionDetectAlgorithm.getInstance();
+        mda.MOTION_DURATION_THRESHOLD = 15 * 60;
+        return mda.doMotionDetection(sensorData, chunkPos, startTime, stopTime);
     }
 
     private static int[] getData(long from, long to) {
