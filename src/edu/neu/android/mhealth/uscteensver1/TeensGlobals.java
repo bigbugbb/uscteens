@@ -153,7 +153,7 @@ public class TeensGlobals {
         Globals.ALL_APP_KEYS[1] = Globals.SURVEY;
         
         Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 
-        		(int) DataStorage.GetValueLong(TeensAppManager.getAppContext(), "MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN", 21000);
+        	(int) DataStorage.GetValueLong(TeensAppManager.getAppContext(), "MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN", 21000);
 
         try {
             String packageName = context.getPackageName();

@@ -482,10 +482,24 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
     }
     
     private void sendMail(String email, String subject, String messageBody) {
-        Session session = createSessionObject();
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("numobileappdevelopment@gmail.com", "killerapp5");
+            }
+        });
      
         try {
-            javax.mail.Message message = createMessage(email, subject, messageBody, session);
+            javax.mail.Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("numobileappdevelopment@gmail.com", "Teen Activity Game"));
+            message.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(email, email));
+            message.setSubject(subject);
+            message.setText(messageBody); 
             new SendEmailTask().execute(message);
         } catch (AddressException e) {
             e.printStackTrace();
@@ -494,29 +508,6 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-    }
-    
-    private javax.mail.Message createMessage(String email, String subject, String messageBody, Session session) throws MessagingException, UnsupportedEncodingException {
-    	javax.mail.Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress("numobileappdevelopment@gmail.com", "Teen Activity Game"));
-        message.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(email, email));
-        message.setSubject(subject);
-        message.setText(messageBody);
-        return message;
-    }
-
-    private Session createSessionObject() {
-        Properties properties = new Properties();
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
-
-        return Session.getInstance(properties, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("numobileappdevelopment@gmail.com", "killerapp5");
-            }
-        });
     }
     
     private void saveToClipBoard(String content) {
@@ -600,7 +591,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         } else if (mPwdTeens.isMatch(keyCode)) {
             mText2Speech.speak("Welcome to use teens activity game!", TextToSpeech.QUEUE_FLUSH, null);
         } else if (mPwdEternal.isMatch(keyCode)) {
-        	Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 60000;
+        	Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 58000;
         	DataStorage.SetValue(getApplicationContext(), "MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN", 
         			Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN);
         	mText2Speech.speak("Record raw data per second", TextToSpeech.QUEUE_FLUSH, null);
