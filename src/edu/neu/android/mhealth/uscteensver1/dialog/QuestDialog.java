@@ -284,7 +284,7 @@ public class QuestDialog extends Activity {
     	final DisplayMetrics metrics = getResources().getDisplayMetrics();
         Display display = getWindowManager().getDefaultDisplay();
         display.getMetrics(metrics);
-
+        
         // adjust the layout according to the screen resolution				   
         LayoutParams laParams = null;
         laParams = mQuestHeader.getLayoutParams();

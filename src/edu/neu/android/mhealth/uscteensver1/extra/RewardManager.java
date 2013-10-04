@@ -120,8 +120,10 @@ public class RewardManager {
                 while ((result = br.readLine()) != null) {
                     // parse the line
                     String[] split = result.split("[,]");
-                    Reward reward = new Reward(split[0].trim(), "file:///" + dirPath + split[1].trim(),
-                            split.length == 3 ? split[2].trim() : "");
+                    Reward reward = new Reward(
+                    	split[0].trim(), "file:///" + dirPath + split[1].trim(), split[2].trim(),                    	
+                        split.length == 4 ? split[3].trim() : ""
+                    );
                     sRewardWrap.put(split[0].trim(), reward);
                 }
             } catch (IOException e) {

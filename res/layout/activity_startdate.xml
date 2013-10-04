@@ -171,7 +171,6 @@
 		        android:layout_height="2sp" />
 
 			<LinearLayout 
-			    style="?pageBackground"
 			    android:layout_width="fill_parent"
 			    android:layout_height="fill_parent"
 			    android:layout_marginTop="20dp"
@@ -181,10 +180,7 @@
 			        style="@style/test"
 			        android:layout_width="80dp"
 			        android:layout_height="50dp"        
-			        android:layout_margin="2pt"
-			        android:shadowDx="1"
-			        android:shadowDy="-1"
-			        android:shadowRadius="1.5"
+			        android:layout_margin="2pt"			
 			        android:layout_weight="1"
 			        android:text="Cancel"
 			        android:textColor="@color/black"
@@ -195,10 +191,7 @@
 			        style="@style/test"
 			        android:layout_width="80dp"
 			        android:layout_height="50dp"        
-			        android:layout_margin="2pt"
-			        android:shadowDx="1"
-			        android:shadowDy="-1"
-			        android:shadowRadius="1.5"
+			        android:layout_margin="2pt"			   
 			        android:layout_weight="1"
 			        android:text="Set"
 			        android:textColor="@color/black"

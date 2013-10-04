@@ -34,14 +34,6 @@ public class RewardView extends WebView {
         // TODO Auto-generated method stub
         return super.onTouchEvent(event);
     }
-    
-    public void setClaimCode(String claimCode) {
-    	mClaimCode = claimCode;
-    }
-    
-    public String getClaimCode() {
-    	return mClaimCode;
-    }
 
     public class JavaScriptInterface {
 

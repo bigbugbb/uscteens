@@ -74,14 +74,14 @@ public class GraphDrawer extends BaseThread {
     }
 
     @Override
-    public void run() {
-        Canvas c = null;
+    public void run() {        
 
         while (mRun) {
 
             handleEvent(mEventQueue.poll());
 
-            try {
+            Canvas c = null;
+            try {            	
                 c = mHolder.lockCanvas(null);
                 synchronized (mHolder) {
                     if (c != null) {
@@ -91,9 +91,7 @@ public class GraphDrawer extends BaseThread {
                         }
                     }
                 }
-            } catch (Exception e) {
-            	e.printStackTrace();
-        	} finally {
+            } finally {
                 // do this in a finally so that if an exception is thrown
                 // during the above, we don't leave the Surface in an
                 // inconsistent state

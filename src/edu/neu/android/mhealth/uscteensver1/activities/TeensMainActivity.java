@@ -1,9 +1,18 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
+
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +34,6 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
-
 import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
@@ -46,6 +54,7 @@ import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
 import edu.neu.android.mhealth.uscteensver1.pages.RewardPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
+import edu.neu.android.mhealth.uscteensver1.threads.SendEmailTask;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 import edu.neu.android.wocketslib.Globals;
@@ -54,7 +63,6 @@ import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.AppUsageLogger;
-import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
 import edu.neu.android.wocketslib.views.DummyView;
@@ -455,14 +463,60 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         if (!isContained) {
             Log.d("Insert: ", "Inserting ..");
             db.addRewardState(new RewardState(select, RewardState.ACHIEVED));
+            if (msg.obj != null) {
+	            String email = DataStorage.GetValueString(
+	            	getApplicationContext(), TeensGlobals.KEY_EMAIL_ADDRESS, "example@gmail.com"
+	            );
+	            String[] rewardInfo = (String[]) msg.obj;
+	            sendMail(email, "Your Redeem Code For Amazon Gift Card!", rewardInfo[0]);
+            }
         }
-               
-        saveToClipBoard(mRewardView.getClaimCode());
-                             
+                       
+        //saveToClipBoard(mRewardView.getClaimCode());
+
         if (msg.obj != null) {
-            Intent i = new Intent("android.intent.action.VIEW", Uri.parse(TeensGlobals.APPLY_GIFT_CARD_URL));
-            startActivity(i);
+        	String[] rewardInfo = (String[]) msg.obj;
+            Intent i = new Intent("android.intent.action.VIEW", Uri.parse(rewardInfo[1]));            
+            startActivity(i);            
         }                
+    }
+    
+    private void sendMail(String email, String subject, String messageBody) {
+        Session session = createSessionObject();
+     
+        try {
+            javax.mail.Message message = createMessage(email, subject, messageBody, session);
+            new SendEmailTask().execute(message);
+        } catch (AddressException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private javax.mail.Message createMessage(String email, String subject, String messageBody, Session session) throws MessagingException, UnsupportedEncodingException {
+    	javax.mail.Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("numobileappdevelopment@gmail.com", "Teen Activity Game"));
+        message.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(email, email));
+        message.setSubject(subject);
+        message.setText(messageBody);
+        return message;
+    }
+
+    private Session createSessionObject() {
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+
+        return Session.getInstance(properties, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("numobileappdevelopment@gmail.com", "killerapp5");
+            }
+        });
     }
     
     private void saveToClipBoard(String content) {
@@ -546,7 +600,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         } else if (mPwdTeens.isMatch(keyCode)) {
             mText2Speech.speak("Welcome to use teens activity game!", TextToSpeech.QUEUE_FLUSH, null);
         } else if (mPwdEternal.isMatch(keyCode)) {
-        	Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 59000;
+        	Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 60000;
         	DataStorage.SetValue(getApplicationContext(), "MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN", 
         			Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN);
         	mText2Speech.speak("Record raw data per second", TextToSpeech.QUEUE_FLUSH, null);

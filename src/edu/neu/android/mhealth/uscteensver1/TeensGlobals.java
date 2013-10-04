@@ -42,6 +42,8 @@ public class TeensGlobals {
     public static Handler sGlobalHandler = null;
     public static boolean sUpdateConfig = false;
     public static int MAX_LABEL_WINDOW = 2;
+    
+    public static final String KEY_EMAIL_ADDRESS = "KEY_EMAIL_ADDRESS";
 
     public static final boolean IS_CALIBRATION_ENABLED = false;
 
@@ -52,8 +54,6 @@ public class TeensGlobals {
 
     // Tutorial video id
     public static final String TUTORIAL_VIDEO_URI = "ytv://eXs3YeyIZTo";
-    
-    public static final String APPLY_GIFT_CARD_URL = "https://www.amazon.com/gp/css/gc/payment/ref=gc_ya_subnav_view-gc-balance?";
 
     public static String DIRECTORY_PATH = "";
 

@@ -106,16 +106,11 @@ public class RewardPage extends AppPage implements OnClickListener {
         } // 0-13
 
         mReward = RewardManager.getReward(daysAfterStarting + 1); // from 1-14
-        if (mReward == null || mReward.getLink().equals("")) {
+        if (mReward == null || mReward.getLink().equals("") || mReward.getCode().equals("")) {
             mBtnReward.setVisible(false);
             mBtnDone.setX(mWidth * 0.2f);
             mBtnFix.setX(mWidth * 0.8f - mBtnFix.getWidth());
-        } else {
-        	int index = mReward.getLink().indexOf("code=");
-            if (index != -1) {
-            	String claimCode = mReward.getLink().substring(index + 5);        
-            	mRewardView.setClaimCode(claimCode);
-            }
+        } else {    
             mRewardView.loadUrl(mReward.getHtml());
             mRewardView.setVisibility(View.VISIBLE);
         }
@@ -167,7 +162,7 @@ public class RewardPage extends AppPage implements OnClickListener {
             break;
         case REWARD:
             msg.what = AppCmd.REWARD;
-            msg.obj  = (mReward == null) ? null : mReward.getLink();
+            msg.obj  = (mReward == null) ? null : new String[] { mReward.getCode(), mReward.getLink() };
             mHandler.sendMessage(msg);
             break;
         default:

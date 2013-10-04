@@ -86,9 +86,31 @@
 	                    android:textColor="@color/black"
 	                    android:textSize="18sp" />
 	            </TableRow>
-	
+	            
 	            <TableRow
 	                android:id="@+id/tableRow3"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:baselineAligned="false"
+	                android:gravity="center_horizontal" >
+	
+	                <Button
+	                    android:id="@+id/setemail"
+	                    style="@style/test"
+	                    android:layout_width="120dp"
+	                    android:layout_height="50dp"
+	                    android:layout_margin="2pt"
+	                    android:layout_weight="1"
+	                    android:shadowDx="1"
+	                    android:shadowDy="-1"
+	                    android:shadowRadius="1.5"
+	                    android:text="Set Email"
+	                    android:textColor="@color/black"
+	                    android:textSize="18sp" />
+	            </TableRow>
+	
+	            <TableRow
+	                android:id="@+id/tableRow4"
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
 	                android:baselineAligned="false"
@@ -110,7 +132,7 @@
 	            </TableRow>
 	
 	            <TableRow
-	                android:id="@+id/tableRow4"
+	                android:id="@+id/tableRow5"
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
 	                android:baselineAligned="false"
@@ -132,7 +154,7 @@
 	            </TableRow>
 	            
 	            <TableRow
-	                android:id="@+id/tableRow5"
+	                android:id="@+id/tableRow6"
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
 	                android:baselineAligned="false"
@@ -154,7 +176,7 @@
 	            </TableRow>	            
 	            
 	            <TableRow
-	                android:id="@+id/tableRow6"
+	                android:id="@+id/tableRow7"
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
 	                android:baselineAligned="false"
@@ -176,7 +198,7 @@
 	            </TableRow>
 	
 	            <TableRow
-	                android:id="@+id/tableRow7"
+	                android:id="@+id/tableRow8"
 	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
 	                android:baselineAligned="false"
@@ -215,10 +237,7 @@
 		        android:layout_height="50dp"  
 		        android:layout_gravity="center"	      
 		        android:layout_margin="2pt"
-		        android:text="Done"
-		        android:shadowDx="1"
-		        android:shadowDy="-1"
-		        android:shadowRadius="1.5"
+		        android:text="Done"		        
 		        android:textColor="@color/black"
 		        android:textSize="18sp" />
 			

@@ -32,6 +32,7 @@ public class TeensSetupActivity extends BaseActivity {
 
     private Button mBtnStartService;
     private Button mBtnSetStartDate;
+    private Button mBtnEmail;
     private Button mBtnRandomEMA;
     private Button mBtnCSEMA;
     private Button mBtnRewards;
@@ -82,6 +83,7 @@ public class TeensSetupActivity extends BaseActivity {
 
         mBtnSetStartDate = (Button) findViewById(R.id.setstartdate);
         mBtnStartService = (Button) findViewById(R.id.startservice);
+        mBtnEmail        = (Button) findViewById(R.id.setemail);       
         mBtnCSEMA        = (Button) findViewById(R.id.csema);
         mBtnRandomEMA    = (Button) findViewById(R.id.randomema);
         mBtnUpdateInfo   = (Button) findViewById(R.id.updateinfo);
@@ -110,6 +112,14 @@ public class TeensSetupActivity extends BaseActivity {
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
             }
+        });
+        
+        mBtnEmail.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getApplicationContext(), EmailSetupActivity.class);
+				startActivity(i);
+			}        	
         });
 
         mBtnFinishStudy.setOnClickListener(new OnClickListener() {

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?pageBackground"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >   
+	
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        
+        <LinearLayout 
+		    style="?pageBackground"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:layout_marginTop="20dp"
+		    android:orientation="vertical" >
+		                
+            <TextView                    
+                style="@style/test"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_margin="2pt"
+                android:paddingLeft="16dp"
+                android:shadowDx="1"
+                android:shadowDy="-1"
+                android:shadowRadius="1.5"
+                android:text="Email Address: "
+                android:textColor="@color/black"
+                android:textSize="18dp" /> 
+                
+           	<EditText
+           	    android:id="@+id/edit_email"
+           	    android:layout_width="fill_parent"
+           	    android:layout_height="50dp"
+           	    android:layout_margin="2pt"
+                android:padding="16dp"                
+                android:shadowDx="1"
+                android:shadowDy="-1"
+                android:shadowRadius="1.5"
+           	    android:maxLines="1"           	    
+           	    android:text="example@gmail.com"
+           	    android:textColor="@color/black"
+           	    android:textSize="18dp" />
+           	
+           	<LinearLayout 			
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"
+			    android:orientation="horizontal" >
+			    
+           	    <Button 
+			        android:id="@+id/setemail_cancel"
+			        style="@style/test"
+			        android:layout_width="80dp"
+			        android:layout_height="50dp"        
+			        android:layout_margin="2pt"			       
+			        android:layout_weight="1"
+			        android:text="Cancel"
+			        android:textColor="@color/black"
+			        android:textSize="18dp" />
+           	    
+           	    <Button 
+			        android:id="@+id/setemail_set"
+			        style="@style/test"
+			        android:layout_width="80dp"
+			        android:layout_height="50dp"        
+			        android:layout_margin="2pt"			        
+			        android:layout_weight="1"
+			        android:text="Set"
+			        android:textColor="@color/black"
+			        android:textSize="18dp" />
+			    
+           	</LinearLayout>
+            
+		</LinearLayout>
+	
+    </ScrollView>              
+	
+</LinearLayout>
