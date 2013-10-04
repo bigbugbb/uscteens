@@ -3,16 +3,48 @@ package edu.neu.android.mhealth.uscteensver1.activities;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
+import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.data.Labeler;
 import edu.neu.android.wocketslib.Globals;
 import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyAnswer;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyPromptEvent;
 import edu.neu.android.wocketslib.emasurvey.model.SurveyQuestion;
+import edu.neu.android.wocketslib.support.DataStorage;
 
 public class TeensSurveyActivity extends SurveyActivity {
+	
+	private static final String KEY_COUNT_TIME       = "KEY_COUNT_TIME";
+	private static final String KEY_TOTAL_SURVEY     = "KEY_TOTAL_SURVEY"; 
+	private static final String KEY_COMPLETED_SURVEY = "KEY_COMPLETED_SURVEY";	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		Context context = getApplicationContext();
+		
+		// clear the count for the previous day	
+		long lastTime = DataStorage.GetValueLong(context, KEY_COUNT_TIME, System.currentTimeMillis());
+		Date lastDate = new Date(lastTime);
+		Date now = new Date();
+		if (now.getDay() != lastDate.getDay()) {
+			DataStorage.SetValue(context, KEY_TOTAL_SURVEY, 0);
+			DataStorage.SetValue(context, KEY_COMPLETED_SURVEY, 0);
+		}
+		DataStorage.SetValue(context, KEY_COUNT_TIME, System.currentTimeMillis());
+				
+		// count the total survey for the current day		
+		long total = DataStorage.GetValueLong(context, KEY_TOTAL_SURVEY, 0);
+		DataStorage.SetValue(context, KEY_TOTAL_SURVEY, ++total);
+	}
 
     @Override
     public void onStop() {
@@ -41,7 +73,28 @@ public class TeensSurveyActivity extends SurveyActivity {
                 }
             }
         }
+        
+        // count the completed survey for the current day
+        Context context = getApplicationContext();
+		long complete = DataStorage.GetValueLong(context, KEY_COMPLETED_SURVEY, 0);
+		DataStorage.SetValue(context, KEY_COMPLETED_SURVEY, isCompleted() ? ++complete : complete);
+		
+		long total = DataStorage.GetValueLong(context, KEY_TOTAL_SURVEY, 1);
+		// notifies the user of their compliance (percentage or ratio, 
+		// e.g. 14/16 surveys completed or 14 completed, 2 missed).
+		// Build notification
+		Notification notification = new NotificationCompat.Builder(context)
+		        .setContentTitle("Survey answered status")
+		        .setWhen(System.currentTimeMillis())
+		        .setContentText(String.format("%d completed, %d missed", complete, total - complete))
+		        .setSmallIcon(R.drawable.ic_launcher).build();		    		  				
+		// Hide the notification after its selected
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
+		NotificationManager notificationManager = 
+				(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		notificationManager.notify(0, notification);
+		
         super.onDestroy();
     }
 

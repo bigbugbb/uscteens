@@ -46,12 +46,12 @@ public class EmailSetupActivity extends BaseActivity {
 					return;
 				}
 				
-				if (email.contains("gmail")) {					
+				if (email.contains("@gmail.com")) {					
 					DataStorage.SetValue(getApplicationContext(), TeensGlobals.KEY_EMAIL_ADDRESS, email);
 					finish();
 				} else {
 					Toast.makeText(
-						getApplicationContext(), "You should set a gmail!", Toast.LENGTH_LONG
+						getApplicationContext(), "Sorry, but it should be a Gmail :-(", Toast.LENGTH_LONG
 					).show();		
 				}
 			}        	

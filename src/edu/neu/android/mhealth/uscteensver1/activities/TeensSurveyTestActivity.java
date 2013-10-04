@@ -10,5 +10,5 @@ package edu.neu.android.mhealth.uscteensver1.activities;
  * @author bigbug
  */
 public class TeensSurveyTestActivity extends TeensSurveyActivity {
-
+	// Do not delete this class even there is nothing here
 }
