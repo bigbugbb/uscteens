@@ -63,6 +63,7 @@ import edu.neu.android.wocketslib.emasurvey.SurveyActivity;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.AppUsageLogger;
+import edu.neu.android.wocketslib.utils.FileHelper;
 import edu.neu.android.wocketslib.utils.PasswordChecker;
 import edu.neu.android.wocketslib.video.openyoutubeplayer.OpenYouTubePlayerActivity;
 import edu.neu.android.wocketslib.views.DummyView;
@@ -143,7 +144,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 		if (TeensGlobals.sUpdateConfig) {
 			String dirPath = TeensGlobals.DIRECTORY_PATH + File.separator + Globals.APP_DATA_DIRECTORY;
 			//FileHelper.deleteDir(dirPath + TeensGlobals.ICON_FOLDER);	
-			//FileHelper.deleteDir(dirPath + TeensGlobals.REWARD_FOLDER);
+			FileHelper.deleteDir(dirPath + TeensGlobals.REWARD_FOLDER);
 		}
     }
 
@@ -477,7 +478,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         if (msg.obj != null) {
         	String[] rewardInfo = (String[]) msg.obj;
             Intent i = new Intent("android.intent.action.VIEW", Uri.parse(rewardInfo[1]));            
-            startActivity(i);            
+            startActivity(i);
         }                
     }
     
@@ -510,17 +511,17 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         }
     }
     
-    private void saveToClipBoard(String content) {
-    	ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);    	
-//    	ClipData clip = ClipData.newPlainText("label", "Text to copy");
-//    	clipboard.setPrimaryClip(clip);
-    	clipboard.setText(content);
-
-    	String msg = content + " has been copied to clipboard.";
-    	Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.show();
-    }
+//    private void saveToClipBoard(String content) {
+//    	ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);    	
+////    	ClipData clip = ClipData.newPlainText("label", "Text to copy");
+////    	clipboard.setPrimaryClip(clip);
+//    	clipboard.setText(content);
+//
+//    	String msg = content + " has been copied to clipboard.";
+//    	Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+//        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+//        toast.show();
+//    }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -568,7 +569,6 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
             }
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_MENU) {
-
             // pop up the keyboard only in the home page
             if (mCurPage == mPages.get(indexOfPage(PageType.HOME_PAGE))) {
                 imm.toggleSoftInput(0, 0);

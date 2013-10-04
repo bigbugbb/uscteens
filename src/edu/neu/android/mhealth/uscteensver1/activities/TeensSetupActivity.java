@@ -25,6 +25,7 @@ import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
+import edu.neu.android.wocketslib.utils.PhoneNotifier;
 
 
 public class TeensSetupActivity extends BaseActivity {
@@ -43,7 +44,7 @@ public class TeensSetupActivity extends BaseActivity {
     private final static String PROMPT_TYPE_CS_TEST     = "CS-Test";
     private final static String PROMPT_TYPE_RANDOM_TEST = "Random-Test";
 
-    private void displayToastMessage(String aMsg) {
+    private void showToastMessage(String aMsg) {
         Toast toast = Toast.makeText(getApplicationContext(), aMsg, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.show();
@@ -102,15 +103,13 @@ public class TeensSetupActivity extends BaseActivity {
 
         mBtnStartService.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
+            public void onClick(View v) {            
+            	PhoneNotifier.setIcon(R.drawable.ic_notification);
+            	
                 Intent i = new Intent(MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
                 sendBroadcast(i);
-                Toast toast = Toast.makeText(
-                        getApplicationContext(), "Starting the service...", Toast.LENGTH_LONG
-                );
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
+              
+                showToastMessage("Starting the service...");
             }
         });
         
@@ -130,7 +129,7 @@ public class TeensSetupActivity extends BaseActivity {
                 DataManager.listFilesExternalStorage();
 
                 Log.o(TAG, Log.USER_ACTION, "Send all data and log files");
-                displayToastMessage("Request to finish this study, sending all data to the server now.");
+                showToastMessage("Request to finish this study, sending all data to the server now.");
                 mBtnFinishStudy.setEnabled(false);
                 new MySendAllFilesToServerTask(getApplicationContext()).execute();
             }
@@ -212,7 +211,7 @@ public class TeensSetupActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Log.o(TAG, Log.USER_ACTION, "Get udpate info");
-                displayToastMessage("Request to get update info, receiving all data from the server now.");
+                showToastMessage("Request to get update info, receiving all data from the server now.");
                 mBtnUpdateInfo.setEnabled(false);
                 new MyUpdateRewardTask(getApplicationContext()).execute();
             }

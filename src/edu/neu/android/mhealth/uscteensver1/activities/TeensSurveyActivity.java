@@ -5,7 +5,9 @@ import java.util.Date;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -29,21 +31,19 @@ public class TeensSurveyActivity extends SurveyActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Context context = getApplicationContext();
-		
 		// clear the count for the previous day	
-		long lastTime = DataStorage.GetValueLong(context, KEY_COUNT_TIME, System.currentTimeMillis());
+		long lastTime = DataStorage.GetValueLong(mContext, KEY_COUNT_TIME, System.currentTimeMillis());
 		Date lastDate = new Date(lastTime);
 		Date now = new Date();
 		if (now.getDay() != lastDate.getDay()) {
-			DataStorage.SetValue(context, KEY_TOTAL_SURVEY, 0);
-			DataStorage.SetValue(context, KEY_COMPLETED_SURVEY, 0);
+			DataStorage.SetValue(mContext, KEY_TOTAL_SURVEY, 0);
+			DataStorage.SetValue(mContext, KEY_COMPLETED_SURVEY, 0);
 		}
-		DataStorage.SetValue(context, KEY_COUNT_TIME, System.currentTimeMillis());
+		DataStorage.SetValue(mContext, KEY_COUNT_TIME, System.currentTimeMillis());
 				
 		// count the total survey for the current day		
-		long total = DataStorage.GetValueLong(context, KEY_TOTAL_SURVEY, 0);
-		DataStorage.SetValue(context, KEY_TOTAL_SURVEY, ++total);
+		long total = DataStorage.GetValueLong(mContext, KEY_TOTAL_SURVEY, 0);
+		DataStorage.SetValue(mContext, KEY_TOTAL_SURVEY, ++total);
 	}
 
     @Override
@@ -84,16 +84,17 @@ public class TeensSurveyActivity extends SurveyActivity {
 		// e.g. 14/16 surveys completed or 14 completed, 2 missed).
 		// Build notification
 		Notification notification = new NotificationCompat.Builder(context)
-		        .setContentTitle("Survey answered status")
-		        .setWhen(System.currentTimeMillis())
-		        .setContentText(String.format("%d completed, %d missed", complete, total - complete))
-		        .setSmallIcon(R.drawable.ic_launcher).build();		    		  				
-		// Hide the notification after its selected
-		notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
+			.setSmallIcon(R.drawable.ic_launcher)
+	        .setContentTitle("Survey answered status")
+	        .setWhen(System.currentTimeMillis())
+	        .setContentText(String.format("%d completed, %d missed", complete, total - complete))	        
+	        .setContentIntent(PendingIntent.getActivity(mContext, 0, new Intent(), 0))
+	        .setAutoCancel(true)
+	        .build();		    		  				
+				    
 		NotificationManager notificationManager = 
 				(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		notificationManager.notify(0, notification);
+		notificationManager.notify(100, notification);
 		
         super.onDestroy();
     }
