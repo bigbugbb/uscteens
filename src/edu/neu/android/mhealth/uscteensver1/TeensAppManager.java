@@ -10,6 +10,7 @@ import android.telephony.TelephonyManager;
 import edu.neu.android.wocketslib.ApplicationManager;
 import edu.neu.android.wocketslib.support.AuthorizationChecker;
 import edu.neu.android.wocketslib.support.DataStorage;
+import edu.neu.android.wocketslib.utils.PhoneNotifier;
 
 /**
  * The entry of the whole application.
@@ -24,6 +25,7 @@ public class TeensAppManager extends ApplicationManager {
     public void onCreate() {
         super.onCreate();
 
+        PhoneNotifier.setIcon(R.drawable.ic_notification);
         TeensGlobals.initGlobals(getAppContext());
     }
 

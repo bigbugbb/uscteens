@@ -103,8 +103,7 @@ public class TeensSetupActivity extends BaseActivity {
 
         mBtnStartService.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {            
-            	PhoneNotifier.setIcon(R.drawable.ic_notification);
+            public void onClick(View v) {                        	
             	
                 Intent i = new Intent(MonitorServiceBroadcastReceiver.TYPE_START_SENSOR_MONITOR_SERVICE_NOW);
                 sendBroadcast(i);
