@@ -74,16 +74,15 @@ public class TeensSurveyActivity extends SurveyActivity {
             }
         }
         
-        // count the completed survey for the current day
-        Context context = getApplicationContext();
-		long complete = DataStorage.GetValueLong(context, KEY_COMPLETED_SURVEY, 0);
-		DataStorage.SetValue(context, KEY_COMPLETED_SURVEY, isCompleted() ? ++complete : complete);
+        // count the completed survey for the current day      
+		long complete = DataStorage.GetValueLong(mContext, KEY_COMPLETED_SURVEY, 0);
+		DataStorage.SetValue(mContext, KEY_COMPLETED_SURVEY, isCompleted() ? ++complete : complete);
 		
-		long total = DataStorage.GetValueLong(context, KEY_TOTAL_SURVEY, 1);
+		long total = DataStorage.GetValueLong(mContext, KEY_TOTAL_SURVEY, 1);
 		// notifies the user of their compliance (percentage or ratio, 
 		// e.g. 14/16 surveys completed or 14 completed, 2 missed).
 		// Build notification
-		Notification notification = new NotificationCompat.Builder(context)
+		Notification notification = new NotificationCompat.Builder(mContext)
 			.setSmallIcon(R.drawable.ic_notification)
 	        .setContentTitle("TeenGame")
 	        .setWhen(System.currentTimeMillis())
@@ -92,8 +91,7 @@ public class TeensSurveyActivity extends SurveyActivity {
 	        .setAutoCancel(true)
 	        .build();		    		  				
 				    
-		NotificationManager notificationManager = 
-				(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		notificationManager.notify(100, notification);
 		
         super.onDestroy();
