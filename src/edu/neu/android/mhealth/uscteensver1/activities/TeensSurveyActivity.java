@@ -84,10 +84,10 @@ public class TeensSurveyActivity extends SurveyActivity {
 		// e.g. 14/16 surveys completed or 14 completed, 2 missed).
 		// Build notification
 		Notification notification = new NotificationCompat.Builder(context)
-			.setSmallIcon(R.drawable.ic_launcher)
-	        .setContentTitle("Survey answered status")
+			.setSmallIcon(R.drawable.ic_notification)
+	        .setContentTitle("TeenGame")
 	        .setWhen(System.currentTimeMillis())
-	        .setContentText(String.format("%d completed, %d missed", complete, total - complete))	        
+	        .setContentText(String.format("Survey: %d completed, %d missed", complete, total - complete))	        
 	        .setContentIntent(PendingIntent.getActivity(mContext, 0, new Intent(), 0))
 	        .setAutoCancel(true)
 	        .build();		    		  				
