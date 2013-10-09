@@ -9,11 +9,11 @@ import edu.neu.android.mhealth.uscteensver1.pages.AppScale;
 public class LabelManager {
     protected static ArrayList<Label> sLabels = null;
 
-    protected static float sDispOffsetX = 0;
-    protected static float sDispOffsetY = 0;
-    protected static float sViewWidth = 0; // the area to draw the activity data
-    protected static float sViewHeight = 0;
-    protected static float sCanvasWidth = 0;
+    protected static float sDispOffsetX  = 0;
+    protected static float sDispOffsetY  = 0;
+    protected static float sViewWidth    = 0; // the area to draw the activity data
+    protected static float sViewHeight   = 0;
+    protected static float sCanvasWidth  = 0;
     protected static float sCanvasHeight = 0;
 
     // used for adjusting the label's y coordinate

@@ -591,7 +591,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         } else if (mPwdTeens.isMatch(keyCode)) {
             mText2Speech.speak("Welcome to use teens activity game!", TextToSpeech.QUEUE_FLUSH, null);
         } else if (mPwdEternal.isMatch(keyCode)) {
-        	Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 58000;
+        	Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN = 50000;
         	DataStorage.SetValue(getApplicationContext(), "MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN", 
         			Globals.MIN_MS_FOR_SENSING_WHEN_PHONE_PLUGGED_IN);
         	mText2Speech.speak("Record raw data per second", TextToSpeech.QUEUE_FLUSH, null);
