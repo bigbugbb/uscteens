@@ -23,7 +23,7 @@ public class EmailSetupActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, TAG);
-        setContentView(R.layout.activity_setemail);
+        setContentView(R.layout.activity_setemail);                
         
         setupViews();
     }
@@ -32,6 +32,11 @@ public class EmailSetupActivity extends BaseActivity {
         mEditText  = (EditText) findViewById(R.id.edit_email);
         mBtnSet    = (Button) findViewById(R.id.setemail_set);
         mBtnCancel = (Button) findViewById(R.id.setemail_cancel);
+        
+        String email = DataStorage.GetValueString(
+        	getApplicationContext(), TeensGlobals.KEY_EMAIL_ADDRESS, "example@gmail.com"
+        );
+        mEditText.setText(email);
         
         mBtnSet.setOnClickListener(new OnClickListener() {
 			@Override

@@ -1,18 +1,9 @@
 package edu.neu.android.mhealth.uscteensver1.activities;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
-
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,8 +27,6 @@ import edu.neu.android.mhealth.uscteensver1.R;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.ChunkManager;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
-import edu.neu.android.mhealth.uscteensver1.database.DatabaseHandler;
-import edu.neu.android.mhealth.uscteensver1.database.RewardState;
 import edu.neu.android.mhealth.uscteensver1.dialog.MergeDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuestDialog;
 import edu.neu.android.mhealth.uscteensver1.dialog.QuitDialog;
@@ -52,7 +41,6 @@ import edu.neu.android.mhealth.uscteensver1.pages.HomePage;
 import edu.neu.android.mhealth.uscteensver1.pages.RewardPage;
 import edu.neu.android.mhealth.uscteensver1.threads.GraphDrawer;
 import edu.neu.android.mhealth.uscteensver1.threads.LoadDataTask;
-import edu.neu.android.mhealth.uscteensver1.threads.SendEmailTask;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 import edu.neu.android.mhealth.uscteensver1.views.RewardView;
 import edu.neu.android.wocketslib.Globals;
@@ -441,73 +429,14 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         }
     }
 
-    private void onReward(Message msg) {
-        DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-
-        /**
-         * CRUD Operations
-         * */
-        // Inserting the reward state which is not contained in the table
-        // Reading all states
-        boolean isContained = false;
-        String select = DataSource.getCurrentSelectedDate();
-        Log.d("Reading: ", "Reading all states..");
-        List<RewardState> states = db.getAllRewardStates();
-        for (RewardState s : states) {
-            if (s.getDate().equals(select)) {
-                isContained = true;
-                break;
-            }
-        }
-        if (!isContained) {
-            Log.d("Insert: ", "Inserting ..");
-            db.addRewardState(new RewardState(select, RewardState.ACHIEVED));
-            if (msg.obj != null) {
-	            String email = DataStorage.GetValueString(
-	            	getApplicationContext(), TeensGlobals.KEY_EMAIL_ADDRESS, "example@gmail.com"
-	            );
-	            String[] rewardInfo = (String[]) msg.obj;
-	            sendMail(email, "Your Redeem Code For Amazon Gift Card!", rewardInfo[0]);
-            }
-        }
-                       
+    private void onReward(Message msg) {                               
         //saveToClipBoard(mRewardView.getClaimCode());
-
         if (msg.obj != null) {
         	String[] rewardInfo = (String[]) msg.obj;
             Intent i = new Intent("android.intent.action.VIEW", Uri.parse(rewardInfo[1]));            
             startActivity(i);
         }                
-    }
-    
-    private void sendMail(String email, String subject, String messageBody) {
-        Properties properties = new Properties();
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
-
-        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("numobileappdevelopment@gmail.com", "killerapp5");
-            }
-        });
-     
-        try {
-            javax.mail.Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("numobileappdevelopment@gmail.com", "Teen Activity Game"));
-            message.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(email, email));
-            message.setSubject(subject);
-            message.setText(messageBody); 
-            new SendEmailTask().execute(message);
-        } catch (AddressException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
+    }        
     
 //    private void saveToClipBoard(String content) {
 //    	ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);    	

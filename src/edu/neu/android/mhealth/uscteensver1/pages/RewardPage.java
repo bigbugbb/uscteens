@@ -1,20 +1,33 @@
 package edu.neu.android.mhealth.uscteensver1.pages;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import edu.neu.android.mhealth.uscteensver1.TeensGlobals;
 import edu.neu.android.mhealth.uscteensver1.data.DataSource;
+import edu.neu.android.mhealth.uscteensver1.database.DatabaseHandler;
+import edu.neu.android.mhealth.uscteensver1.database.RewardState;
 import edu.neu.android.mhealth.uscteensver1.extra.Reward;
 import edu.neu.android.mhealth.uscteensver1.extra.RewardManager;
+import edu.neu.android.mhealth.uscteensver1.threads.SendEmailTask;
 import edu.neu.android.mhealth.uscteensver1.ui.DoneButton;
 import edu.neu.android.mhealth.uscteensver1.ui.FixButton;
 import edu.neu.android.mhealth.uscteensver1.ui.OnClickListener;
@@ -114,6 +127,34 @@ public class RewardPage extends AppPage implements OnClickListener {
             mRewardView.loadUrl(mReward.getHtml());
             mRewardView.setVisibility(View.VISIBLE);
         }
+        
+        DatabaseHandler db = new DatabaseHandler(mContext);
+
+        /**
+         * CRUD Operations
+         * */
+        // Inserting the reward state which is not contained in the table
+        // Reading all states
+        boolean isContained = false;
+        String select = DataSource.getCurrentSelectedDate();
+        Log.d("Reading: ", "Reading all states..");
+        List<RewardState> states = db.getAllRewardStates();
+        for (RewardState s : states) {
+            if (s.getDate().equals(select)) {
+                isContained = true;
+                break;
+            }
+        }
+        if (!isContained) {
+            Log.d("Insert: ", "Inserting ..");
+            db.addRewardState(new RewardState(select, RewardState.ACHIEVED));
+            if (mReward.getCode() != null) {
+	            String email = DataStorage.GetValueString(
+	            	mContext, TeensGlobals.KEY_EMAIL_ADDRESS, "example@gmail.com"
+	            );
+	            sendMail(email, "Your Redeem Code For Amazon Gift Card!", mReward.getCode());
+            }
+        }
     }
 
     public void stop() {
@@ -181,5 +222,34 @@ public class RewardPage extends AppPage implements OnClickListener {
         }
 
         return ret;
+    }
+    
+    private void sendMail(String email, String subject, String messageBody) {
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("numobileappdevelopment@gmail.com", "killerapp5");
+            }
+        });
+     
+        try {
+            javax.mail.Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("numobileappdevelopment@gmail.com", "Teen Activity Game"));
+            message.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(email, email));
+            message.setSubject(subject);
+            message.setText(messageBody); 
+            new SendEmailTask().execute(message);
+        } catch (AddressException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }

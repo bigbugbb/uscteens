@@ -82,7 +82,7 @@ public class TeensArbitrater extends Arbitrater {
     	long lastUpdateTime = DataStorage.GetValueLong(mContext, KEY, 0);
         long currentTime = System.currentTimeMillis();
         
-        if (Math.abs(currentTime - lastUpdateTime) > Globals.MINUTES_1_IN_MS * 5) {
+        if (Math.abs(currentTime - lastUpdateTime) > Globals.MINUTES_10_IN_MS) {
         	if (LocationManager.isLocationShifted()) {
             	Labeler.getInstance().addLabel(new Date(), "Location changed");
             }
