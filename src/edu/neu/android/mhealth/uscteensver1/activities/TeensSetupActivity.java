@@ -25,7 +25,6 @@ import edu.neu.android.wocketslib.support.AppInfo;
 import edu.neu.android.wocketslib.support.DataStorage;
 import edu.neu.android.wocketslib.utils.BaseActivity;
 import edu.neu.android.wocketslib.utils.Log;
-import edu.neu.android.wocketslib.utils.PhoneNotifier;
 
 
 public class TeensSetupActivity extends BaseActivity {

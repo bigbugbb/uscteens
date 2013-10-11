@@ -38,18 +38,16 @@
 
 <script>	
 	window.onresize = window.onload = function() {
-        
-//        var i = setInterval(function() {
-//            clearInterval(i);
-//            document.getElementById("msg").innerHTML =
-//                "Redeem your gift card with claim code<br><br>" +
-//                JSInterface.getClaimCode();
-//        }, 2500);
-
         document.getElementById("msg").innerHTML =
-            "You have completed day " + JSInterface.getCountOfDayFromStartDate() + "<br><br>" +
-            "of the Teen Activity labeling in time<br><br>" +
-            "to receive a reward.";        
+//            "Thank you for completing the end of the day<br>"
+//            "Mobile TEEN Game <date> <time> <br>" +
+//            "Please follow the link below to claim your $1.00 giftcard for Amazon<br><br>" +
+//            "You will also be getting a duplicate code in your email<br>" +
+//            "which you may redeem it at your convenience."
+            "You have completed day " + JSInterface.getCountOfDayFromStartDate() + "<br>" +
+            "of the Teen Activity labeling in time<br>" +
+            "to receive a reward.<br><br>" +
+            "(You will receive an email with a redeem code.<br> Click get reward to redeem right now.)"
 	}
     
 </script>

@@ -21,7 +21,7 @@ public class FixButton extends CustomButton {
         super(res);
         loadImages(new int[]{ R.drawable.fix_btn });
         
-        mText = "Fix";
+        mText = "Fix labels";
         
         mTextX = 0;
         mTextY = 0;

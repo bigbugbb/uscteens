@@ -10,6 +10,8 @@ import java.util.Date;
 
 import android.content.Context;
 import android.os.Environment;
+import edu.neu.android.mhealth.uscteensver1.data.Labeler;
+import edu.neu.android.mhealth.uscteensver1.data.LocationManager;
 import edu.neu.android.mhealth.uscteensver1.survey.TeensSurveyScheduler;
 import edu.neu.android.mhealth.uscteensver1.threads.UpdateRewardTask;
 import edu.neu.android.wocketslib.Globals;
@@ -45,6 +47,9 @@ public class TeensArbitrater extends Arbitrater {
 
         // Try to prompt the next survey if possible
         mScheduler.tryToPromptSurvey(isNewSoftwareVersion);
+        
+        // Try to detect location change from coarse gps data
+        tryToDetectLocationChange();
 
         // Try to update reward file from sftp server
         tryToUpdateAppData();
@@ -69,7 +74,21 @@ public class TeensArbitrater extends Arbitrater {
         if (Math.abs(currentTime - lastUpdateTime) > Globals.HOURS24_MS) {
             new UpdateRewardTask(mContext).execute();
             DataStorage.SetValue(mContext, KEY, currentTime);
-        }
+        }                
+    }
+    
+    private void tryToDetectLocationChange() {
+    	final String KEY = "LAST_COARSE_LOCATION_UPDATE_TIME";
+    	long lastUpdateTime = DataStorage.GetValueLong(mContext, KEY, 0);
+        long currentTime = System.currentTimeMillis();
+        
+        if (Math.abs(currentTime - lastUpdateTime) > Globals.MINUTES_1_IN_MS * 5) {
+        	if (LocationManager.isLocationShifted()) {
+            	Labeler.getInstance().addLabel(new Date(), "Location changed");
+            }
+        	DataStorage.SetValue(mContext, KEY, currentTime);
+        } 
+    	
     }
 
     public static void saveRecordsInLogcat(boolean isClear) {

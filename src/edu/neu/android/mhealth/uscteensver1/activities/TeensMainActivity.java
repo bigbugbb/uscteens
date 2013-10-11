@@ -22,10 +22,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
-import android.text.ClipboardManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -106,7 +104,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         // create app pages and all the UIs in the pages
         initPages();
         // load extra data
-        loadExtra();
+        loadExtra();           
     }
 
     @Override
