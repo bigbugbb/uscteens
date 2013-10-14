@@ -151,10 +151,10 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
     }
 
     private void adjustLayout() {
-        getWindow().setFlags(
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-        );
+//        getWindow().setFlags(
+//            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+//            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+//        );
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
