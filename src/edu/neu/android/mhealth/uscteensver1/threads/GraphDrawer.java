@@ -4,7 +4,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.graphics.Canvas;
 import android.os.Handler;
+import android.os.Message;
 import android.view.SurfaceHolder;
+import edu.neu.android.mhealth.uscteensver1.pages.AppCmd;
 import edu.neu.android.mhealth.uscteensver1.pages.AppPage;
 import edu.neu.android.mhealth.uscteensver1.views.GraphView;
 
@@ -70,6 +72,7 @@ public class GraphDrawer extends BaseThread {
     	synchronized (sLock) {
     		mUpdateTime = System.currentTimeMillis();
     		mIdleTime = DEFAULT_IDLE_TIME;
+    		keepScreenOn(true);
     	}    	
     }
 
@@ -112,6 +115,7 @@ public class GraphDrawer extends BaseThread {
             synchronized (sLock) {            	
             	if (Math.abs(mUpdateTime - System.currentTimeMillis()) > MAX_ACTIVE_TIME) {
             		mIdleTime = NORMAL_IDLE_TIME;
+            		keepScreenOn(false);
                 }
             }
 
@@ -134,4 +138,10 @@ public class GraphDrawer extends BaseThread {
         super.run();
     } // end of run
 
+    private void keepScreenOn(boolean enabled) {
+    	Message msg = mHandler.obtainMessage();
+        msg.what = enabled ? AppCmd.SCREEN_ON : AppCmd.SCREEN_OFF;
+        mHandler.sendMessage(msg);
+    }
+    
 }

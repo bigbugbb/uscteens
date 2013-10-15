@@ -16,4 +16,6 @@ public class AppCmd {
     public final static int FIX             = 12;
     public final static int DONE            = 13;
     public final static int REWARD          = 14;
+    public final static int SCREEN_ON		= 15;
+    public final static int SCREEN_OFF	    = 16;
 }

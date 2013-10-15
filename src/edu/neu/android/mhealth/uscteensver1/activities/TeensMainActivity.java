@@ -151,10 +151,10 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
     }
 
     private void adjustLayout() {
-//        getWindow().setFlags(
-//            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-//            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-//        );
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        );
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -173,6 +173,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
         ((RewardPage) mPages.get(indexOfPage(PageType.REWARD_PAGE))).bindRewardView(mRewardView);
         // set pages to main view
         mGraphView.setPages(mPages);
+        mGraphView.setHandler(mHandler);
     }
 
     private void loadExtra() {
@@ -380,6 +381,14 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
             case AppCmd.REWARD:
                 onReward(msg);
                 break;
+            case AppCmd.SCREEN_ON:            	
+            	getWindow().setFlags(
+            		WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+            	);
+            	return;
+            case AppCmd.SCREEN_OFF:
+            	getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            	return;
             default:
                 break;
             }
@@ -451,7 +460,7 @@ public class TeensMainActivity extends TeensBaseActivity implements OnTouchListe
 //    }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    public boolean onTouch(View v, MotionEvent event) {    	
         if (mCurPage != null) {
         	GraphDrawer drawer = mGraphView.getDrawer();
             if (drawer != null) {
