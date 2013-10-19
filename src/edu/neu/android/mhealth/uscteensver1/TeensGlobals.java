@@ -38,6 +38,8 @@ public class TeensGlobals {
     public final static String REWARD_FOLDER = "/rewards/";
     public final static String SENSOR_TYPE = "InternalAccel";
     public final static String ANNOTATION_SET = "TeensActivities";
+    
+    public final static String EXCLUDED_ACTION_NAME = "Doing something else";
 
     public static Handler sGlobalHandler = null;
     public static boolean sUpdateConfig = false;

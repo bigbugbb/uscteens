@@ -132,7 +132,7 @@ public class RewardPage extends AppPage implements OnClickListener {
 
         /**
          * CRUD Operations
-         * */
+         **/
         // Inserting the reward state which is not contained in the table
         // Reading all states
         boolean isContained = false;
@@ -152,7 +152,14 @@ public class RewardPage extends AppPage implements OnClickListener {
 	            String email = DataStorage.GetValueString(
 	            	mContext, TeensGlobals.KEY_EMAIL_ADDRESS, "example@gmail.com"
 	            );
-	            sendMail(email, "Your Redeem Code For Amazon Gift Card!", mReward.getCode());
+	            String messageBody = String.format(
+	            	"Congratulations on earning a one dollar reward for labeling your day.\n\n" +
+	            	"To redeem the reward, use code %s on the Amazon Gift Card website.\n\n" +
+	            	"Please note that you can only redeem a code once, " +
+	            	"so if you already redeemed your reward for Day %d, then you can ignore this email.\n\n\n" +
+	            	"The USC Study Team", mReward.getCode(), daysAfterStarting + 1
+	            );
+	            sendMail(email, String.format("USCTeens Reward Code for Day %d", daysAfterStarting + 1), messageBody);
             }
         }
     }
@@ -233,7 +240,7 @@ public class RewardPage extends AppPage implements OnClickListener {
 
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("numobileappdevelopment@gmail.com", "killerapp5");
+                return new PasswordAuthentication("uscteens@gmail.com", "@uscteens@");
             }
         });
      
@@ -242,7 +249,7 @@ public class RewardPage extends AppPage implements OnClickListener {
             message.setFrom(new InternetAddress("numobileappdevelopment@gmail.com", "Teen Activity Game"));
             message.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(email, email));
             message.setSubject(subject);
-            message.setText(messageBody); 
+            message.setText(messageBody);
             new SendEmailTask().execute(message);
         } catch (AddressException e) {
             e.printStackTrace();

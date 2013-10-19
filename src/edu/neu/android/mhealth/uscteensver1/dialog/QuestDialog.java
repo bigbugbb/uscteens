@@ -268,7 +268,9 @@ public class QuestDialog extends Activity {
 				Action action = mItemData.get(key);
 
                 // update the most recent selected activity
-                ActionManager.setMostRecentAction(action);
+				if (!action.getActionName().contains(TeensGlobals.EXCLUDED_ACTION_NAME)) {
+					ActionManager.setMostRecentAction(action);
+				}
 
                 // add labeling
                 Labeler.getInstance().addLabel(new Date(), "Labeling");

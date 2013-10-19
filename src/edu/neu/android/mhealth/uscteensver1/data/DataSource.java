@@ -645,7 +645,9 @@ public class DataSource {
 
             for (RawChunk rawChunk : sRawChksWrap) {
                 Action action = rawChunk.getAction();
-                String[] content = {rawChunk.mStartDate, rawChunk.mStopDate, action.getActionName()};
+                String[] content = {
+                	rawChunk.mStartDate, rawChunk.mStopDate, action.getActionName() + " " + action.getActionSubName()
+                };
                 writer.writeNext(content);
             }
             writer.flush();
